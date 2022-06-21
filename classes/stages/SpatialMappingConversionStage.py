@@ -43,7 +43,7 @@ class SpatialMappingConversionStage(Stage):
             raise ValueError(f"Missing core allocation for {layer}.")
         if not layer.user_spatial_mapping:
             logger.critical(f"Layer {layer} has no user-defined spatial mapping.")
-            raise ValueError("Missing spatial mapping for spatial mapping conversion")
+            raise ValueError("Missing spatial mapping for {layer}. Please provide 'spatial_mapping' for {layer}.")
 
         return True
 
