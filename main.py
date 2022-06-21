@@ -17,11 +17,13 @@ mainstage = MainStage([
     WorkloadStage,
     SpatialMappingConversionStage,
     TemporalOrderingConversionStage,
+    # LomaStage,
     CostModelStage
 ],
     accelerator_path=args.accelerator,
     workload_path=args.workload,
     dump_filename_pattern="outputs_workshop/{datetime}.json",
-    plot_filename_pattern="outputs_workshop/temporal_mappings.png"
+    plot_filename_pattern="outputs_workshop/temporal_mappings.png",
+    loma_lpf_limit=6
 )
 mainstage.run()
