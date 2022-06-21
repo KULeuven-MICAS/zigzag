@@ -14,13 +14,9 @@ _logging.basicConfig(level=_logging_level,
 mainstage = MainStage([
     WorkloadAndAcceleratorParserStage,
     CompleteSaveStage,
-    # SimpleSaveStage,
     WorkloadStage,
     SpatialMappingConversionStage,
-    # SpatialMappingGeneratorStage,
     TemporalOrderingConversionStage,
-    # PlotTemporalMappingsStage,
-    # LomaStage,
     CostModelStage
 ],
     accelerator_path=args.accelerator,
