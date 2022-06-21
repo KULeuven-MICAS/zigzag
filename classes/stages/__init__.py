@@ -31,6 +31,7 @@ Parameter consumers: these parameters are no longer provided to substages after 
  - df_tilesize_y: DepthFirstStage
  - df_vertical_caching: DepthFirstStage
  - dump_filename_pattern: DumpStage
+ - plot_filename_pattern: PlotTemporalMappingsStage
  - general_parameter_iterations: GeneralParameterIteratorStage
  - multiprocessing_callback: MultiProcessingSpawnStage
  - workload: DepthFirstStage, WorkloadStage
@@ -41,6 +42,7 @@ Parameters required: these stages require the following parameters:
  - WorkloadStage: workload
  - DepthFirstStage: accelerator, workload, df_tilesize_x, df_tilesize_y, df_horizontal_caching, df_vertical_caching
  - DumpStage: dump_filename_pattern
+ - PlotTemporalMappingsStage: plot_filename_pattern
  - GeneralParameterIteratorStage: general_parameter_iterations
  - LomaStage: accelerator, layer, spatial_mapping
  - AcceleratorParserStage: accelerator_path
