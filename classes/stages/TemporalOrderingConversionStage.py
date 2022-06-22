@@ -38,8 +38,8 @@ class TemporalOrderingConversionStage(Stage):
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError()
         if not layer.user_temporal_ordering:
-            logger.critical(f"Layer {layer} has no user-defined spatial mapping.")
-            raise ValueError("Missing temporal ordering for temporal ordering conversion")
+            logger.critical(f"Layer {layer} has no user-defined temporal ordering.")
+            raise ValueError(f"Layer {layer} has no user-defined temporal ordering. Use LomaStage to generate automatically.")
 
         return True
 
