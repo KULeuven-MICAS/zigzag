@@ -48,26 +48,3 @@ class DNNWorkload(DiGraph):
             if node.id == id:
                 return node
         raise ValueError("DNNWorkload instance does not have a node with the requested id")
-
-if __name__ == "__main__":
-    from inputs.ICCAD.CS1.workload_fsrcnn_cs1 import workload
-
-    from visualization.graph.dnn import visualize_dnn_graph
-
-    ml_workload = DNNWorkload(workload)
-
-    # print layer size
-    weight_size = 0
-    for idx, layer in enumerate(ml_workload.layer_node_list):
-        print ()
-        weight_size += layer.operand_size_bit['W'] / 8 / 1024
-        for operand in layer.operand_list:
-            print('layer', idx,
-                  ' operand', operand,
-                  ' size (kB): ', layer.operand_size_bit[operand] / 8 / 1024)
-
-    print('\nTotal weight size (kB): ', weight_size)
-    # G = ml_workload
-    # visualize_dnn_graph(G)
-
-
