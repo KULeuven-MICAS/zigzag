@@ -4,13 +4,17 @@
 In this repository, we have modeled 5 well-known DNN accelerators, which are Ascend [1], Edge TPU [2],
 Meta prototype [3], Tesla NPU [4], and TPU [5], for our depth-first scheduling research.
 To make a fair and relevant comparison, we normalized all of them to have 1024 MACs and maximally 2MB global buffer (GB) 
-but kept their spatial unrolling and local buffer settings. (Table I Idx 1/3/5/7/9).
+but kept their spatial unrolling and local buffer settings, as shown in Table I Idx 1/3/5/7/9.
 Besides, we constructed a variant of every normalized architecture (by changing its on-chip memory hierarchy), denoted with ‘DF’ in the
-end of the name (Table I Idx 2/4/6/8/10).
+end of the name, as shown in Table I Idx 2/4/6/8/10.
 
 ## Specific settings
 
 Table I:
+![image](https://user-images.githubusercontent.com/55059827/183848886-c85b9950-5e49-47c9-8a47-ad05062debc3.png)
+Neural network layer dimension notation: 
+
+K is for output channel; C is for input channel; OX and OY are feature map spatial dimensions; FX and FY are weight spatial dimensions.
 
 
 
