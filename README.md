@@ -1,9 +1,10 @@
-# ZigZag-v2
+# ZigZag
 This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estination. 
 
 A crucial part in this is the mapping of the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that can automatically find optimal mapping points in this search space.
 
 In this novel version, we have: 
+- Added an interface with ONNX to directly parse ONNX models
 - Overhauled our HW architecture definition to:
     - include multi-dimensional (>2D) MAC arrays.
     - include accurate interconnection patterns.
