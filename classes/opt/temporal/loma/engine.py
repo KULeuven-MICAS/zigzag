@@ -135,6 +135,15 @@ class LomaEngine:
             temporal_loop_pf_counts[tl_dim] = tuple(counts)
             temporal_loop_pf_count_sums[tl_dim] = sum(counts)
 
+        # If there are no temporal LPFs generated, i.e. all loops are unrolled spatially,
+        # we manually insert a loop of size 1
+        if lpfs == []:
+            loop_dim = self.layer.loop_dim_list[0]
+            temporal_loop_pfs = {loop_dim: (1,)}
+            temporal_loop_pf_counts = {loop_dim: (1,)}
+            temporal_loop_pf_count_sums = {loop_dim: 1}
+            lpfs = [(loop_dim, 1)]
+
         logger.info(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
 
         self.temporal_loop_pfs = temporal_loop_pfs

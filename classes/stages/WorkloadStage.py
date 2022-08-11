@@ -3,6 +3,7 @@ import networkx as nx
 from classes.stages.Stage import Stage
 from classes.workload.dnn_workload import DNNWorkload
 import classes.io.input_config as inputs
+from classes.workload.dummy_layer_node import DummyNode
 
 
 class WorkloadStage(Stage):
@@ -18,7 +19,9 @@ class WorkloadStage(Stage):
         self.workload = workload
 
     def run(self):
-        for layer in  nx.topological_sort(self.workload):
+        for layer in nx.topological_sort(self.workload):
+            if type(layer) == DummyNode:
+                continue  # skip the DummyNodes
             kwargs = self.kwargs.copy()
             kwargs['layer'] = layer
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)

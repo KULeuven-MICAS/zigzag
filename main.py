@@ -22,8 +22,8 @@ mainstage = MainStage([
     CompleteSaveStage,
     WorkloadStage,
     SpatialMappingConversionStage,
-    TemporalOrderingConversionStage,
-    # LomaStage,
+    # TemporalOrderingConversionStage,
+    LomaStage,
     CostModelStage
 ],
     accelerator_path=args.accelerator,

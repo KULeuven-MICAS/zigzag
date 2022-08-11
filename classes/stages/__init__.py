@@ -6,6 +6,7 @@ from .SaveStage import CompleteSaveStage, SimpleSaveStage
 from .GeneralParameterIteratorStage import GeneralParameterIteratorStage
 from .LomaStage import LomaStage
 from .MainInputParserStages import AcceleratorParserStage, WorkloadParserStage, WorkloadAndAcceleratorParserStage
+from .ONNXModelParserStage import ONNXModelParserStage
 from .ReduceStages import MinimalEnergyStage, MinimalLatencyStage, SumStage
 from .RunOptStages import CacheBeforeYieldStage, RemoveExtraInfoStage, MultiProcessingGatherStage, MultiProcessingSpawnStage, SkipIfDumpExistsStage
 from .SpatialMappingConversionStage import SpatialMappingConversionStage
