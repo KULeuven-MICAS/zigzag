@@ -1,3 +1,5 @@
+# Mapping
+
 The mapping file is required for zigzag runs with the ONNX interface. Where as before the mapping information was encoded within the workload definition (see e.g. classes/inputs/workloads/resnet18.py), this mapping information is no longer present in the parsed ONNX model, and thus must be defined in a mapping file.
 
 ---
