@@ -34,7 +34,7 @@ mainstage = MainStage([  # Initialization of the MainStage which starts off stag
     accelerator_path=args.accelerator,  # accelerator argument, req by AcceleratorParserStage
     onnx_model_path=args.model,  # onnx model argumentm, req by ONNXModelParserStage
     mapping_path=args.mapping,  # mapping argument, req by ONNXModelParserStage
-    dump_filename_pattern="outputs_workshop/{datetime}.json",  # output file save pattern
+    dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
     loma_lpf_limit=6  # max number of lpfs, req by LomaStage
 )
 

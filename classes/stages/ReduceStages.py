@@ -62,8 +62,7 @@ class MinimalLatencyStage(Stage):
 
         other_cmes = []
         for cme, extra_info in substage.run():
-            self.energies.append(cme.energy_total)
-            if self.best_cme is None or cme.latency_total < self.best_cme.latency_total:
+            if self.best_cme is None or cme.latency_total2 < self.best_cme.latency_total2:
                 self.best_cme = cme
             if self.keep_others:
                 other_cmes.append((cme, extra_info))
