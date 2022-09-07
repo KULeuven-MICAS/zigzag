@@ -28,5 +28,5 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: directly build sphinx
         run: |
-          pip install -r requirements.txt
-          sphinx-build -D todo_include_todos=0 docs ./docs/_build/html/
+          pip install -r ./docs/requirements.txt
+          sphinx-build -D todo_include_todos=0 docs ./docs/build/html/

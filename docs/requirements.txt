@@ -1,0 +1,2 @@
+# Theme used by Sphinx (https://sphinx-book-theme.readthedocs.io/en/latest/index.html)
+sphinx-book-theme
