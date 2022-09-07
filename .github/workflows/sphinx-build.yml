@@ -28,6 +28,6 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: directly build sphinx
         run: |
-          pip install -r ./docs/requirements.txt
           cd docs
+          pip install -r requirements.txt
           make html
