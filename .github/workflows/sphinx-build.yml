@@ -29,4 +29,5 @@ jobs:
       - name: directly build sphinx
         run: |
           pip install -r ./docs/requirements.txt
-          sphinx-build -D todo_include_todos=0 docs ./docs/build/html/
+          echo pwd
+          sphinx-build -W -b html -D todo_include_todos=0 docs ./docs/build/html/
