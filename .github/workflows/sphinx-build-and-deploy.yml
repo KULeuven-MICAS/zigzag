@@ -38,4 +38,4 @@ jobs:
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs/build/html # The folder the action should deploy.
+          folder: docs/build/ # The folder the action should deploy.
