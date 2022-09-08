@@ -52,7 +52,7 @@ Lastly, the different read/write/read-write ports a memory instance has, are ass
 Internally, the MemoryHierarchy object extends the [NetworkX DiGraph](https://networkx.org/documentation/stable/reference/classes/digraph.html) object, so its methods are available. 
 
 The memory hierarchy object includes:
-- The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array's dimensions.
+- **operational_array**: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array's dimensions.
 Through the `add_memory()` calls it adds a new MemoryLevel to the graph. This requires for each call a:
 - **memory_instance**: A MemoryInstance object you are adding to the hierarchy.
 - **operands**: The virtual memory operands this MemoryLevel stores.

@@ -147,3 +147,10 @@ outputs*/*.json
 
 # result png files
 outputs*/*.png
+
+# nokia settings
+inputs/nokia/*
+
+# docs makefile and make.bat
+docs/Makefile
+docs/make.bat
