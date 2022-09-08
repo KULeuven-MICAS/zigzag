@@ -31,4 +31,4 @@ jobs:
           cd docs
           pip install -r requirements.txt
           sphinx-build --version
-          sphinx-build -W -b html source build
+          sphinx-build -b html source build
