@@ -1,20 +1,21 @@
-============
-Contribute
-============
+===========================
+Contribute to this project
+===========================
 
-Code guidelines
-================
+Contributing guidelines
+=======================
 
 When contributing to the framework, please consider the following guidelines:
-* Use Google's `Python Style Guide <https://google.github.io/styleguide/pyguide.html>` when writing your code
-* Use Google docstrings to document your classes, functions, methods, .... Examples can be found throughout the code and `here <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`
+
+* Use Google's `Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_
+* Use Google docstrings to document your classes, functions, methods, .... Examples can be found throughout the code and `here <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`_
 * Update the documentation accordingly
 
 Documentation
 =============
 
 When adding new functionality, it's mandatory to document what this does, how it achieves this, and how to use the newly added functionality.
-Explicit documentation resides in the `docs/` folder, using the `reStructuredText <https://docutils.sourceforge.io/rst.html>` format (.rst).
+Explicit documentation resides in the `docs/` folder, using the `reStructuredText <https://docutils.sourceforge.io/rst.html>`_ format (.rst).
 
 Writing new documentation
 -------------------------
@@ -24,5 +25,18 @@ When writing new documentation, decide if it would best fit in an existing docum
 Building the documentation
 --------------------------
 
+The documentation is build using Sphinx. You should install both sphinx and sphinx-press-theme, which is easy through the requirements.txt file provided in `docs/`.
 
 
+.. code-block:: sh
+
+    cd docs/
+    pip install -r requirements.txt
+
+After, you can build the documentation using the provide Makefile (Linux). For Windows, you can run the ``make.bat`` file.
+
+.. code-block:: sh
+
+    make html
+
+In the future, this will be automated through Github Actions.
