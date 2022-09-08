@@ -24,7 +24,7 @@ A `conda-spec-file-{platform}.txt` is provided to set up the environment for lin
 
 Alternatively, you can also install all packages directly through pip using the pip-requirements.txt with the command:
 
-`$ pip install -r pip-requirements.txt`
+`$ pip install -r requirements.txt`
 
 ## Example
 
