@@ -9,8 +9,8 @@ Zigzag is a hardware architecture (HW)-mapping design space exploration (DSE) fr
 
 A crucial part in this is mapping the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that automatically find optimal mapping points in this search space.
 
-Literature
-==========
+Related Publications
+====================
 
 `Mei, Linyan, et al. "ZigZag: Enlarging joint architecture-mapping design space exploration for DNN accelerators." IEEE Transactions on Computers 70.8 (2021): 1160-1174. <https://ieeexplore.ieee.org/abstract/document/9360462>`_
 
