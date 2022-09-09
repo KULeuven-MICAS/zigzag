@@ -4,7 +4,7 @@ import argparse
 # Get the onnx model, the mapping and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag inputs")
 parser.add_argument('--model', metavar='path', required=True, help='path to onnx model, e.g. inputs/examples/my_onnx_model.onnx')
-parser.add_argument('--mapping', metavar='path', required=True, help='path to mapping file, e.g., inputs.examples.my_mapping.py')
+parser.add_argument('--mapping', metavar='path', required=True, help='path to mapping file, e.g., inputs.examples.my_mapping')
 parser.add_argument('--accelerator', metavar='path', required=True, help='module path to the accelerator, e.g. inputs.examples.accelerator1')
 args = parser.parse_args()
 

@@ -26,7 +26,7 @@ def parse_mapping_from_path(mapping_path):
     return mapping
 
 def parse_onnx_model_from_path(onnx_model_path):
-    return onnx.load(onnx_model_path)
+    return onnx.load(onnx_model_path, load_external_data=False)
 
 
 def get_attribute_ints_with_name(name, attrs, default=None):
