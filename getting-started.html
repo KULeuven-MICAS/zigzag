@@ -23,7 +23,7 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
-  <link rel="next" title="Contribute to this project" href="contribute.html" />
+  <link rel="next" title="Stages" href="stages.html" />
   <link rel="prev" title="Installation" href="installation.html" /> 
   </head>
 
@@ -101,9 +101,38 @@
             
               <ul>
                 
-                  <li class="toctree-l2"><a href="#getting-started" class="reference internal">Getting Started</a></li>
+                  <li class="toctree-l2"><a href="#first-run" class="reference internal">First run</a></li>
+                
+                  <li class="toctree-l2"><a href="#analyzing-results" class="reference internal">Analyzing results</a></li>
                 
               </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="stages.html" class="reference internal ">Stages</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="hardware.html" class="reference internal ">Hardware Architecture Definition</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="mapping.html" class="reference internal ">Mapping</a>
+            
+
             
           </li>
 
@@ -139,8 +168,8 @@
        title="previous chapter">← Installation</a>
   </li>
   <li class="next">
-    <a href="contribute.html"
-       title="next chapter">Contribute to this project →</a>
+    <a href="stages.html"
+       title="next chapter">Stages →</a>
   </li>
 </ul>
   
@@ -150,6 +179,35 @@
             
   <section id="getting-started">
 <h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">¶</a></h1>
+<p>Zigzag is a very powerful and versatile tool. It can be used to estimate and optimize the HW cost of running a DL workload on a given HW design under a multitude of constraints and settings.</p>
+<p>As a first step, we use it to automatically optimize the way a NN is mapped onto a HW design.</p>
+<section id="first-run">
+<h2>First run<a class="headerlink" href="#first-run" title="Permalink to this heading">¶</a></h2>
+<p>The NN we are going to use for this first run is AlexNet. We provide an <a class="reference external" href="https://onnx.ai/">onnx</a> model of this network in <code class="docutils literal notranslate"><span class="pre">inputs/examples/workloads/alexnet_inferred.onnx</span></code>. The model has been shape inferred, which means that besied the input and output tensor shapes, all intermediate tensor shapes have been inferred, which is information required by zigzag.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Zigzag requires an inferred onnx model, as it needs to know the shapes of all intermediate tensors to correclty infer the layer shapes. You can find more information on how to infer an onnx model <a class="reference external" href="https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md#running-shape-inference-on-an-onnx-model">here</a>.</p>
+</div>
+<p>The hardware we will accelerate the inference of AlexNet with, is a TPU-like architecture defined in <code class="docutils literal notranslate"><span class="pre">inputs/examples/hardware/TPU_like.py</span></code>.</p>
+<p>Besides the workload and HW architecture, a mapping file must be provided which, as the name suggests, provides information on how the network’s layers will be mapped onto the hardware resources. The mapping is provided in <code class="docutils literal notranslate"><span class="pre">inputs/examples/mapping/alexnet_on_tpu_like.py</span></code>.</p>
+<p>The framework is generally ran through a main file which parses the provided inputs and contains the program flow through the stages defined in the main file.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You can find more information in the <a class="reference internal" href="stages.html"><span class="doc">Stages</span></a> document.</p>
+</div>
+<p>The following command starts the execution using the provided inputs:</p>
+<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>python main_onnx.py --model inputs/examples/workloads/alexnet_inferred.onnx --accelerator inputs.examples.hardware.TPU_like --mapping inputs.examples.mapping.alexnet_on_tpu_like
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Note the difference in input path construction between the onnx model and the accelerator and mapping. This is because the accelerator and mapping objects are defined in their respective files and imported as python modules.</p>
+</div>
+</section>
+<section id="analyzing-results">
+<h2>Analyzing results<a class="headerlink" href="#analyzing-results" title="Permalink to this heading">¶</a></h2>
+<p>During the run, results will be saved depending on the <code class="docutils literal notranslate"><span class="pre">dump_filename_pattern</span></code> provided in the main file. In total, five result files are saved, one for each supported onnx node the <code class="docutils literal notranslate"><span class="pre">ONNXModelParserStage</span></code> parsed (supported meaning it can be accelerated on one of the accelerator cores). Each result file contains the optimal energy and latency of running the onnx node on the core to which it was mapped through the <code class="docutils literal notranslate"><span class="pre">mapping</span></code> input file. Optimality is defined through the <code class="docutils literal notranslate"><span class="pre">MinimalLatencyStage</span></code>, for more information we refer you to <a class="reference internal" href="stages.html"><span class="doc">Stages</span></a>.</p>
+</section>
 </section>
 
 
@@ -161,8 +219,8 @@
        title="previous chapter">← Installation</a>
   </li>
   <li class="next">
-    <a href="contribute.html"
-       title="next chapter">Contribute to this project →</a>
+    <a href="stages.html"
+       title="next chapter">Stages →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2022, Arne Symons.

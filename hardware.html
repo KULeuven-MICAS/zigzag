@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html  lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+      <title>Hardware Architecture Definition</title>
+    
+          <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+          <link rel="stylesheet" href="_static/theme.css " type="text/css" />
+      
+      <!-- sphinx script_files -->
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+
+      
+      <!-- bundled in js (rollup iife) -->
+      <!-- <script src="_static/theme-vendors.js"></script> -->
+      <script src="_static/theme.js" defer></script>
+    
+  <link rel="index" title="Index" href="genindex.html" />
+  <link rel="search" title="Search" href="search.html" />
+  <link rel="next" title="Mapping" href="mapping.html" />
+  <link rel="prev" title="Stages" href="stages.html" /> 
+  </head>
+
+  <body>
+    <div id="app">
+    <div class="theme-container" :class="pageClasses"><navbar @toggle-sidebar="toggleSidebar">
+  <router-link to="index.html" class="home-link">
+    
+      <span class="site-name">zigzag</span>
+    
+  </router-link>
+
+  <div class="links">
+    <navlinks class="can-hide">
+
+
+
+    </navlinks>
+  </div>
+</navbar>
+
+      
+      <div class="sidebar-mask" @click="toggleSidebar(false)">
+      </div>
+        <sidebar @toggle-sidebar="toggleSidebar">
+          
+          <navlinks>
+            
+
+
+
+            
+          </navlinks><div id="searchbox" class="searchbox" role="search">
+  <div class="caption"><span class="caption-text">Quick search</span>
+    <div class="searchformwrapper">
+      <form class="search" action="search.html" method="get">
+        <input type="text" name="q" />
+        <input type="submit" value="Search" />
+        <input type="hidden" name="check_keywords" value="yes" />
+        <input type="hidden" name="area" value="default" />
+      </form>
+    </div>
+  </div>
+</div><div class="sidebar-links" role="navigation" aria-label="main navigation">
+  
+    <div class="sidebar-group">
+      <p class="caption">
+        <span class="caption-text"><a href="index.html#welcome-to-zigzag-s-documentation">Contents:</a></span>
+      </p>
+      <ul class="current">
+        
+          <li class="toctree-l1 ">
+            
+              <a href="zigzag.html" class="reference internal ">Zigzag Framework</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="installation.html" class="reference internal ">Installation</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="getting-started.html" class="reference internal ">Getting Started</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="stages.html" class="reference internal ">Stages</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 current">
+            
+              <a href="#" class="reference internal current">Hardware Architecture Definition</a>
+            
+
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#general-introduction" class="reference internal">General introduction</a></li>
+                
+                  <li class="toctree-l2"><a href="#modelled-examples" class="reference internal">Modelled examples</a></li>
+                
+                  <li class="toctree-l2"><a href="#references" class="reference internal">References</a></li>
+                
+              </ul>
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="mapping.html" class="reference internal ">Mapping</a>
+            
+
+            
+          </li>
+
+        
+          <li class="toctree-l1 ">
+            
+              <a href="contribute.html" class="reference internal ">Contribute to this project</a>
+            
+
+            
+          </li>
+
+        
+      </ul>
+    </div>
+  
+</div>
+        </sidebar>
+
+      <page>
+          <div class="body-header" role="navigation" aria-label="navigation">
+  
+  <ul class="breadcrumbs">
+    <li><a href="index.html">Docs</a> &raquo;</li>
+    
+    <li>Hardware Architecture Definition</li>
+  </ul>
+  
+
+  <ul class="page-nav">
+  <li class="prev">
+    <a href="stages.html"
+       title="previous chapter">← Stages</a>
+  </li>
+  <li class="next">
+    <a href="mapping.html"
+       title="next chapter">Mapping →</a>
+  </li>
+</ul>
+  
+</div>
+<hr>
+          <div class="content" role="main" v-pre>
+            
+  <section id="hardware-architecture-definition">
+<h1>Hardware Architecture Definition<a class="headerlink" href="#hardware-architecture-definition" title="Permalink to this heading">¶</a></h1>
+<section id="general-introduction">
+<h2>General introduction<a class="headerlink" href="#general-introduction" title="Permalink to this heading">¶</a></h2>
+<p>In this section we introduce the general concept of how HW accelerators are modelled within zigzag and the different well-known accelerators we provide as examples. We start from the smallest building block defined in zigzag and work our way up towards an accelerator.</p>
+<section id="operational-unit">
+<h3>Operational Unit<a class="headerlink" href="#operational-unit" title="Permalink to this heading">¶</a></h3>
+<p>Accelerating inference of a NN requires execution of multiplications and summations (accumulations) across multiple intermediate data (activations) using trained parameters (weights). The operational unit, typically a Multiplier, executes the multiplication of two data elements, typically an activation and a weight.</p>
+<p>The operational unit object has following attributes:
+- <strong>input_precision</strong>: List of input operand (data) precision in number of bits for each input operand (typically 2 for Multiplier).
+- <strong>output_precision</strong>: The bit precision of the operation’s output.
+- <strong>energy_cost</strong>: Energy of executing a single multiplication.
+- <strong>area</strong>: The HW area overhead of a single multiplier.</p>
+</section>
+<section id="operational-array">
+<h3>Operational Array<a class="headerlink" href="#operational-array" title="Permalink to this heading">¶</a></h3>
+<p>Inferencing a NN typically requires millions of operations, and an accelerator typically includes an array of operational units that can execute these operations. This can speed significantly up the computations, as well as increase energy efficiency which is covered later.</p>
+<p>The array has multiple dimensions, each with a size. The importance of these dimensions is explained in the introduction of the memory hierarchy.</p>
+<p>The operational array object has:
+- The operational unit from which the array is built.
+- The dimensions of the array. This should be defined as a dict, with the keys being the identifier of each dimension of the array (typically ‘D1’, ‘D2, …) and the values being the size of this dimension (i.e. the size of the array along that dimension).</p>
+</section>
+<section id="memory-instance">
+<h3>Memory Instance<a class="headerlink" href="#memory-instance" title="Permalink to this heading">¶</a></h3>
+<p>In order to store the different activations and weights used for the computations in the operational array, different memory instances are attached in a hierarchical fashion. The instances define how big each memory is in terms of capacity and area overhead, what the cost of writing and reading from these memories is, what it’s bandwidth is, and how many read/write/read-write ports it includes.</p>
+<p>The memory instance object has:
+- <strong>name</strong>: A name for the instance
+- <strong>size</strong>: The memory size in bits.
+- <strong>r_bw/w_bw</strong>: A read and write bandwidth in number of bits per cycle.
+- <strong>r_cost/w_cost</strong>: A read and write energy cost.
+- <strong>area</strong>: Area overhead of the instance.
+- <strong>r_port/w_port/rw_port</strong>: The number of read/write/read-write ports the instance has available.
+- <strong>latency</strong>: The latency of an access in number of cycles.</p>
+</section>
+<section id="memory-hierarchy">
+<h3>Memory Hierarchy<a class="headerlink" href="#memory-hierarchy" title="Permalink to this heading">¶</a></h3>
+<p>Besides knowing what the specs of each memory instance are, the memory hierarchy encodes information with respect to the interconnection of the memories to the operational array, and to the other memory instances.
+This interconnection is achieved through multiple calls to the <cite>add_memory()</cite>, where the first call(s) adds the first level of memories, which connects to the operational array, and later calls connect to the lower memory levels. This builds a hierarchy of memories.</p>
+<p>To know if the memory should connect to the operational array or another lower memory level, it needs to know which data will be stored within the memories. To decouple the algorithmic side from the hardware side, this is achieved through the concept of ‘memory operands’ (as opposed to ‘algorithmic operands which are typicall the I/O activations and weights W). You can think of the memory operands as virtual operands, which will later be linked to the actual algorithmic operands in the mapping file through the <cite>memory_operand_links</cite> attribute.</p>
+<p>Similarly to how the operational unit can be unrolled (forming an operational array), the memories can also be unrolled, where each memory accompanies either a single operational unit or all the operational units in one or more dimensions of the operational array. This is encoded through the <cite>served_dimensions</cite> attribute, which specifies if a single memory instance of this memory level serves all operational units in that dimension. This should be a set of one-hot-encoded tuples.</p>
+<p>Lastly, the different read/write/read-write ports a memory instance has, are assigned to the different data movevements possible in the hierarchy. There are four types of data movements in a hierarchy: from high (<em>fh</em>), to high (<em>th</em>), from low (<em>fl</em>), to low (<em>tl</em>). At the time of writing, these can be manually linked to one of the read/write/read-write ports through the following syntax: <cite>{port_type}_port_{port_number}</cite>, <em>port_type</em> being <em>r</em>, <em>w</em> or <em>rw</em> and <em>port_number</em> equal to the port number, starting from 1, which allows to allocate multiple ports of the same type. Alternatively, these are automatically generated as a default if not probided to the <cite>add_memory()</cite> call.</p>
+<p>Internally, the MemoryHierarchy object extends the [NetworkX DiGraph](<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html">https://networkx.org/documentation/stable/reference/classes/digraph.html</a>) object, so its methods are available.</p>
+<p>The memory hierarchy object includes:
+- <strong>operational_array</strong>: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array’s dimensions.
+Through the <cite>add_memory()</cite> calls it adds a new MemoryLevel to the graph. This requires for each call a:
+- <strong>memory_instance</strong>: A MemoryInstance object you are adding to the hierarchy.
+- <strong>operands</strong>: The virtual memory operands this MemoryLevel stores.
+- <strong>port_alloc</strong>: The directionality of the memory instance’s different ports, as described above.
+- <strong>served_dimensions</strong>: The different dimensions that this memory level will serve, as described above.</p>
+</section>
+<section id="core">
+<h3>Core<a class="headerlink" href="#core" title="Permalink to this heading">¶</a></h3>
+<p>The operational array and the memory hierarchy together form a core of the accelerator.</p>
+<p>The core object includes:
+- <strong>id</strong>: The id of this core.
+- <strong>operational_array</strong>: The operational array of this core.
+- <strong>memory_hierarchy</strong>: The memory hierarchy of this core.</p>
+</section>
+<section id="hw-accelerator-model">
+<h3>HW Accelerator Model<a class="headerlink" href="#hw-accelerator-model" title="Permalink to this heading">¶</a></h3>
+<p>Multiple cores are combined together into the HW Accelerator, which is the main object modelling the HW behaviour.</p>
+<p>The accelerator object includes:
+- <strong>name</strong>: A user-defined name for this accelerator.
+- <strong>core_set</strong>: The set of cores comprised within the accelerator.
+- <strong>global_buffer</strong>: A memory instance shared across cores. This is currently un-used.</p>
+</section>
+</section>
+<section id="modelled-examples">
+<h2>Modelled examples<a class="headerlink" href="#modelled-examples" title="Permalink to this heading">¶</a></h2>
+<p>In this repository, we have modeled 5 well-known DNN accelerators, which are Meta prototype [1], TPU [2], Edge TPU [3],
+Ascend [4], Tesla NPU [5], and, for our depth-first scheduling research.
+To make a fair and relevant comparison, we normalized all of them to have 1024 MACs and maximally 2MB global buffer (GB)
+but kept their spatial unrolling and local buffer settings, as shown in Table I Idx 1/3/5/7/9.
+Besides, we constructed a variant of every normalized architecture (by changing its on-chip memory hierarchy), denoted with ‘DF’ in the
+end of the name, as shown in Table I Idx 2/4/6/8/10.</p>
+<section id="specific-settings">
+<h3>Specific settings<a class="headerlink" href="#specific-settings" title="Permalink to this heading">¶</a></h3>
+<a class="reference internal image-reference" href="https://user-images.githubusercontent.com/55059827/183848886-c85b9950-5e49-47c9-8a47-ad05062debc3.png"><img alt="Alternative text" src="https://user-images.githubusercontent.com/55059827/183848886-c85b9950-5e49-47c9-8a47-ad05062debc3.png" style="width: 800px;" /></a>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>K is for output channel; C is for input channel; OX and OY are the output feature map’s spatial dimensions; FX and FY are the weight’s spatial dimensions.</p>
+</div>
+</section>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">¶</a></h2>
+<p>[1] H. E. Sumbul, T. F. Wu, Y. Li, S. S. Sarwar, W. Koven, E. Murphy-
+Trotzky, X. Cai, E. Ansari, D. H. Morris, H. Liu, D. Kim, E. Beigne,
+R. Labs, and Meta, “System-level design and integration of a prototype
+ar/vr hardware featuring a custom low-power dnn accelerator chip in
+7nm technology for codec avatars,” in 2022 IEEE Custom Integrated
+Circuits Conference (CICC), 2022, pp. 01–08.</p>
+<p>[2] N. P. Jouppi, C. Young, N. Patil, D. Patterson, G. Agrawal, R. Bajwa,
+S. Bates, S. Bhatia, N. Boden, A. Borchers, R. Boyle, P.-l. Cantin,
+C. Chao, C. Clark, J. Coriell, M. Daley, M. Dau, J. Dean, B. Gelb, T. V.
+Ghaemmaghami, R. Gottipati, W. Gulland, R. Hagmann, C. R. Ho,
+D. Hogberg, J. Hu, R. Hundt, D. Hurt, J. Ibarz, A. Jaffey, A. Jaworski,
+A. Kaplan, H. Khaitan, D. Killebrew, A. Koch, N. Kumar, S. Lacy,
+J. Laudon, J. Law, D. Le, C. Leary, Z. Liu, K. Lucke, A. Lundin,
+G. MacKean, A. Maggiore, M. Mahony, K. Miller, R. Nagarajan,
+R. Narayanaswami, R. Ni, K. Nix, T. Norrie, M. Omernick,
+N. Penukonda, A. Phelps, J. Ross, M. Ross, A. Salek, E. Samadiani,
+C. Severn, G. Sizikov, M. Snelham, J. Souter, D. Steinberg, A. Swing,
+M. Tan, G. Thorson, B. Tian, H. Toma, E. Tuttle, V. Vasudevan,
+R. Walter, W. Wang, E. Wilcox, and D. H. Yoon, “In-datacenter
+performance analysis of a tensor processing unit,” SIGARCH Comput.
+Archit. News, vol. 45, no. 2, p. 1–12, jun 2017.</p>
+<p>[3] A. Yazdanbakhsh, K. Seshadri, B. Akin, J. Laudon, and
+R. Narayanaswami, “An Evaluation of Edge TPU Accelerators for
+Convolutional Neural Networks,” arXiv e-prints, p. arXiv:2102.10423,
+Feb. 2021.</p>
+<p>[4] H. Liao, J. Tu, J. Xia, H. Liu, X. Zhou, H. Yuan, and Y. Hu,
+“Ascend: a scalable and unified architecture for ubiquitous deep neural
+network computing : Industry track paper,” in 2021 IEEE International
+Symposium on High-Performance Computer Architecture (HPCA), 2021,
+pp. 789–801.</p>
+<p>[5] E. Talpes, D. D. Sarma, G. Venkataramanan, P. Bannon, B. McGee,
+B. Floering, A. Jalote, C. Hsiong, S. Arora, A. Gorti, and G. S. Sachdev,
+“Compute solution for tesla’s full self-driving computer,” IEEE Micro,
+vol. 40, no. 2, pp. 25–35, 2020.</p>
+</section>
+</section>
+
+
+          </div>
+          <div class="page-nav">
+            <div class="inner"><ul class="page-nav">
+  <li class="prev">
+    <a href="stages.html"
+       title="previous chapter">← Stages</a>
+  </li>
+  <li class="next">
+    <a href="mapping.html"
+       title="next chapter">Mapping →</a>
+  </li>
+</ul><div class="footer" role="contentinfo">
+      &#169; Copyright 2022, Arne Symons.
+    <br>
+    Created using <a href="http://sphinx-doc.org/">Sphinx</a> 5.1.1 with <a href="https://github.com/schettino72/sphinx_press_theme">Press Theme</a> 0.8.0.
+</div>
+            </div>
+          </div>
+      </page>
+    </div></div>
+    
+    
+  </body>
+</html>

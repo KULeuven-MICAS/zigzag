@@ -13,6 +13,9 @@ Welcome to zigzag's documentation!
    zigzag
    installation
    getting-started
+   stages
+   hardware
+   mapping
    contribute
 
 

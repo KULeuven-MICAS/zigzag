@@ -21,8 +21,10 @@ Clone the repository
 
     git clone git@github.com:ZigZag-Project/zigzag.git
 
-Install requirements through pip. Alternatively, conda envs are also provided.
+Install requirements through pip. Alternatively, anaconda spec file is also provided.
 
 .. code-block:: sh
 
     pip install -r requirements.txt
+
+Once the dependencies are installed, zigzag can be run through the main file with provided arguments. More details are provided in :doc:`getting-started`.

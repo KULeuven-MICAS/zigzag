@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-      <title>Installation</title>
+      <title>Mapping</title>
     
           <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
           <link rel="stylesheet" href="_static/theme.css " type="text/css" />
@@ -23,8 +23,8 @@
     
   <link rel="index" title="Index" href="genindex.html" />
   <link rel="search" title="Search" href="search.html" />
-  <link rel="next" title="Getting Started" href="getting-started.html" />
-  <link rel="prev" title="Zigzag Framework" href="zigzag.html" /> 
+  <link rel="next" title="Contribute to this project" href="contribute.html" />
+  <link rel="prev" title="Hardware Architecture Definition" href="hardware.html" /> 
   </head>
 
   <body>
@@ -84,17 +84,11 @@
           </li>
 
         
-          <li class="toctree-l1 current">
+          <li class="toctree-l1 ">
             
-              <a href="#" class="reference internal current">Installation</a>
+              <a href="installation.html" class="reference internal ">Installation</a>
             
 
-            
-              <ul>
-                
-                  <li class="toctree-l2"><a href="#linux" class="reference internal">Linux</a></li>
-                
-              </ul>
             
           </li>
 
@@ -126,11 +120,17 @@
           </li>
 
         
-          <li class="toctree-l1 ">
+          <li class="toctree-l1 current">
             
-              <a href="mapping.html" class="reference internal ">Mapping</a>
+              <a href="#" class="reference internal current">Mapping</a>
             
 
+            
+              <ul>
+                
+                  <li class="toctree-l2"><a href="#user-defined-mapping-constraints" class="reference internal">User-defined mapping constraints</a></li>
+                
+              </ul>
             
           </li>
 
@@ -156,18 +156,18 @@
   <ul class="breadcrumbs">
     <li><a href="index.html">Docs</a> &raquo;</li>
     
-    <li>Installation</li>
+    <li>Mapping</li>
   </ul>
   
 
   <ul class="page-nav">
   <li class="prev">
-    <a href="zigzag.html"
-       title="previous chapter">← Zigzag Framework</a>
+    <a href="hardware.html"
+       title="previous chapter">← Hardware Architecture Definition</a>
   </li>
   <li class="next">
-    <a href="getting-started.html"
-       title="next chapter">Getting Started →</a>
+    <a href="contribute.html"
+       title="next chapter">Contribute to this project →</a>
   </li>
 </ul>
   
@@ -175,30 +175,18 @@
 <hr>
           <div class="content" role="main" v-pre>
             
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h1>
-<section id="linux">
-<h2>Linux<a class="headerlink" href="#linux" title="Permalink to this heading">¶</a></h2>
-<section id="prerequisites">
-<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">¶</a></h3>
+  <section id="mapping">
+<h1>Mapping<a class="headerlink" href="#mapping" title="Permalink to this heading">¶</a></h1>
+<p>The mapping defines how the algorithmic operations are mapped onto the computational hardware resources. The zigzag framework automates (parts of) this mapping, but some aspects need to be (at the time of writing) user-defined. The mapping input file is required for running zigzag in combination with the onnx interface. When manually defining your algorithmic layers, the mapping information is encoded within the workload definition (e.g. classes/inputs/workloads/resnet18.py).</p>
+<section id="user-defined-mapping-constraints">
+<h2>User-defined mapping constraints<a class="headerlink" href="#user-defined-mapping-constraints" title="Permalink to this heading">¶</a></h2>
+<p>The mapping file should contain following aspects for every ONNX node that will be mapped onto the accelerator:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">git</span></code>: for cloning the repository</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">pip</span></code>: for installing the required packages</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python&gt;=3.7</span></code>: for running the framework</p></li>
+<li><p><strong>core_allocation</strong>: The accelerator core id onto which this ONNX node is mapped (the id provided when creating the core in the HW description file).</p></li>
+<li><p><strong>spatial_mapping</strong>: The spatial parallelization strategy to execute the node with (this can be automated through the SpatialMappingGeneratorStage).</p></li>
+<li><p><strong>memory_operand_links</strong>: The memory operand links, which link the memory operands (defined in the memory hierarchy of the core) to the layer operands (which are generated in the ONNXModelParserStage and are typically ‘O’, ‘I’, ‘W’ for a convolutional layer). This extra memory mapping is added to allow flexible memory allocation schemes, if you don’t know what to put here, a safe bet is copying the example mapping file’s memory mapping.</p></li>
 </ul>
-</section>
-<section id="id1">
-<h3>Installation<a class="headerlink" href="#id1" title="Permalink to this heading">¶</a></h3>
-<p>Clone the repository</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>git clone git@github.com:ZigZag-Project/zigzag.git
-</pre></div>
-</div>
-<p>Install requirements through pip. Alternatively, anaconda spec file is also provided.</p>
-<div class="highlight-sh notranslate"><div class="highlight"><pre><span></span>pip install -r requirements.txt
-</pre></div>
-</div>
-<p>Once the dependencies are installed, zigzag can be run through the main file with provided arguments. More details are provided in <a class="reference internal" href="getting-started.html"><span class="doc">Getting Started</span></a>.</p>
-</section>
+<p>A default entry can also be defined. This is useful if you don’t know the exact ONNX node names, or don’t want to customize this for every mapped node. The default entry is automatically detected under the <code class="docutils literal notranslate"><span class="pre">default</span></code> key of the mapping dictionary.</p>
 </section>
 </section>
 
@@ -207,12 +195,12 @@
           <div class="page-nav">
             <div class="inner"><ul class="page-nav">
   <li class="prev">
-    <a href="zigzag.html"
-       title="previous chapter">← Zigzag Framework</a>
+    <a href="hardware.html"
+       title="previous chapter">← Hardware Architecture Definition</a>
   </li>
   <li class="next">
-    <a href="getting-started.html"
-       title="next chapter">Getting Started →</a>
+    <a href="contribute.html"
+       title="next chapter">Contribute to this project →</a>
   </li>
 </ul><div class="footer" role="contentinfo">
       &#169; Copyright 2022, Arne Symons.
