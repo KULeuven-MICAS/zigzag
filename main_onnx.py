@@ -18,24 +18,21 @@ _logging.basicConfig(level=_logging_level,
 # Initialize the MainStage which will start execution.
 # The first argument of this init is the list of stages that will be executed in sequence.
 # The second argument of this init are the arguments required for these different stages.
-mainstage = MainStage([  # Initialization of the MainStage which starts off stages (1st arg) with parameters (2nd arg)
+mainstage = MainStage([  # Initializes the MainStage as entry point
     ONNXModelParserStage,  # Parses the ONNX Model into the workload
-    AcceleratorParserStage,  # Parses the Accelerator
-    CompleteSaveStage,  # Saves all CostModelEvaluation information to a json
+    AcceleratorParserStage,  # Parses the accelerator
+    SimpleSaveStage,  # Saves all received CMEs information to a json
     WorkloadStage,  # Iterates through the different layers in the workload
-    # MinimalEnergyStage,  # Reduces all CostModelEvaluations it receives, keeping the minimal energy one
-    MinimalLatencyStage,  # Reduces all CostModelEvaluations it receives, keeping the minimal latency one
-    SpatialMappingGeneratorStage,  # Generates multiple spatial mappings (SM)
-    # MinimalEnergyStage,  # Reduces all CostModelEvaluations it receives, keeping the minimal energy one
-    MinimalLatencyStage,  # Reduces all CostModelEvaluations it receives, keeping the minimal latency one
+    SpatialMappingConversionStage,  # Generates multiple spatial mappings (SM)
+    MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
     LomaStage,  # Generates multiple temporal mappings (TM)
-    CostModelStage  # Evaluates every SM + TM combination for all layers and returns the CostModelEvaluation
+    CostModelStage  # Evaluates generated SM and TM through cost model
 ],
-    accelerator_path=args.accelerator,  # accelerator argument, req by AcceleratorParserStage
-    onnx_model_path=args.model,  # onnx model argumentm, req by ONNXModelParserStage
-    mapping_path=args.mapping,  # mapping argument, req by ONNXModelParserStage
+    accelerator_path=args.accelerator,  # required by AcceleratorParserStage
+    onnx_model_path=args.model,  # required by ONNXModelParserStage
+    mapping_path=args.mapping,  # required by ONNXModelParserStage
     dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
-    loma_lpf_limit=6  # max number of lpfs, req by LomaStage
+    loma_lpf_limit=6  # required by LomaStage
 )
 
 # Launch the MainStage
