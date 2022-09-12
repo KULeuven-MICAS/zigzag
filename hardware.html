@@ -187,31 +187,37 @@
 <section id="operational-unit">
 <h3>Operational Unit<a class="headerlink" href="#operational-unit" title="Permalink to this heading">¶</a></h3>
 <p>Accelerating inference of a NN requires execution of multiplications and summations (accumulations) across multiple intermediate data (activations) using trained parameters (weights). The operational unit, typically a Multiplier, executes the multiplication of two data elements, typically an activation and a weight.</p>
-<p>The operational unit object has following attributes:
-- <strong>input_precision</strong>: List of input operand (data) precision in number of bits for each input operand (typically 2 for Multiplier).
-- <strong>output_precision</strong>: The bit precision of the operation’s output.
-- <strong>energy_cost</strong>: Energy of executing a single multiplication.
-- <strong>area</strong>: The HW area overhead of a single multiplier.</p>
+<p>The operational unit object has following attributes:</p>
+<ul class="simple">
+<li><p><strong>input_precision</strong>: List of input operand (data) precision in number of bits for each input operand (typically 2 for Multiplier).</p></li>
+<li><p><strong>output_precision</strong>: The bit precision of the operation’s output.</p></li>
+<li><p><strong>energy_cost</strong>: Energy of executing a single multiplication.</p></li>
+<li><p><strong>area</strong>: The HW area overhead of a single multiplier.</p></li>
+</ul>
 </section>
 <section id="operational-array">
 <h3>Operational Array<a class="headerlink" href="#operational-array" title="Permalink to this heading">¶</a></h3>
 <p>Inferencing a NN typically requires millions of operations, and an accelerator typically includes an array of operational units that can execute these operations. This can speed significantly up the computations, as well as increase energy efficiency which is covered later.</p>
 <p>The array has multiple dimensions, each with a size. The importance of these dimensions is explained in the introduction of the memory hierarchy.</p>
-<p>The operational array object has:
-- The operational unit from which the array is built.
-- The dimensions of the array. This should be defined as a dict, with the keys being the identifier of each dimension of the array (typically ‘D1’, ‘D2, …) and the values being the size of this dimension (i.e. the size of the array along that dimension).</p>
+<p>The operational array object has:</p>
+<ul class="simple">
+<li><p><strong>operational_unit</strong>: The operational unit from which the array is built.</p></li>
+<li><p><strong>dimensions</strong>: The dimensions of the array. This should be defined as a dict, with the keys being the identifier of each dimension of the array (typically ‘D1’, ‘D2, …) and the values being the size of this dimension (i.e. the size of the array along that dimension).</p></li>
+</ul>
 </section>
 <section id="memory-instance">
 <h3>Memory Instance<a class="headerlink" href="#memory-instance" title="Permalink to this heading">¶</a></h3>
 <p>In order to store the different activations and weights used for the computations in the operational array, different memory instances are attached in a hierarchical fashion. The instances define how big each memory is in terms of capacity and area overhead, what the cost of writing and reading from these memories is, what it’s bandwidth is, and how many read/write/read-write ports it includes.</p>
-<p>The memory instance object has:
-- <strong>name</strong>: A name for the instance
-- <strong>size</strong>: The memory size in bits.
-- <strong>r_bw/w_bw</strong>: A read and write bandwidth in number of bits per cycle.
-- <strong>r_cost/w_cost</strong>: A read and write energy cost.
-- <strong>area</strong>: Area overhead of the instance.
-- <strong>r_port/w_port/rw_port</strong>: The number of read/write/read-write ports the instance has available.
-- <strong>latency</strong>: The latency of an access in number of cycles.</p>
+<p>The memory instance object has:</p>
+<ul class="simple">
+<li><p><strong>name</strong>: A name for the instance</p></li>
+<li><p><strong>size</strong>: The memory size in bits.</p></li>
+<li><p><strong>r_bw/w_bw</strong>: A read and write bandwidth in number of bits per cycle.</p></li>
+<li><p><strong>r_cost/w_cost</strong>: A read and write energy cost.</p></li>
+<li><p><strong>area</strong>: Area overhead of the instance.</p></li>
+<li><p><strong>r_port/w_port/rw_port</strong>: The number of read/write/read-write ports the instance has available.</p></li>
+<li><p><strong>latency</strong>: The latency of an access in number of cycles.</p></li>
+</ul>
 </section>
 <section id="memory-hierarchy">
 <h3>Memory Hierarchy<a class="headerlink" href="#memory-hierarchy" title="Permalink to this heading">¶</a></h3>
@@ -221,39 +227,41 @@ This interconnection is achieved through multiple calls to the <cite>add_memory(
 <p>Similarly to how the operational unit can be unrolled (forming an operational array), the memories can also be unrolled, where each memory accompanies either a single operational unit or all the operational units in one or more dimensions of the operational array. This is encoded through the <cite>served_dimensions</cite> attribute, which specifies if a single memory instance of this memory level serves all operational units in that dimension. This should be a set of one-hot-encoded tuples.</p>
 <p>Lastly, the different read/write/read-write ports a memory instance has, are assigned to the different data movevements possible in the hierarchy. There are four types of data movements in a hierarchy: from high (<em>fh</em>), to high (<em>th</em>), from low (<em>fl</em>), to low (<em>tl</em>). At the time of writing, these can be manually linked to one of the read/write/read-write ports through the following syntax: <cite>{port_type}_port_{port_number}</cite>, <em>port_type</em> being <em>r</em>, <em>w</em> or <em>rw</em> and <em>port_number</em> equal to the port number, starting from 1, which allows to allocate multiple ports of the same type. Alternatively, these are automatically generated as a default if not probided to the <cite>add_memory()</cite> call.</p>
 <p>Internally, the MemoryHierarchy object extends the [NetworkX DiGraph](<a class="reference external" href="https://networkx.org/documentation/stable/reference/classes/digraph.html">https://networkx.org/documentation/stable/reference/classes/digraph.html</a>) object, so its methods are available.</p>
-<p>The memory hierarchy object includes:
-- <strong>operational_array</strong>: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array’s dimensions.
-Through the <cite>add_memory()</cite> calls it adds a new MemoryLevel to the graph. This requires for each call a:
-- <strong>memory_instance</strong>: A MemoryInstance object you are adding to the hierarchy.
-- <strong>operands</strong>: The virtual memory operands this MemoryLevel stores.
-- <strong>port_alloc</strong>: The directionality of the memory instance’s different ports, as described above.
-- <strong>served_dimensions</strong>: The different dimensions that this memory level will serve, as described above.</p>
+<p>The memory hierarchy object includes:</p>
+<ul class="simple">
+<li><p><strong>operational_array</strong>: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array’s dimensions. Through the <cite>add_memory()</cite> calls it adds a new MemoryLevel to the graph. This requires for each call a:</p></li>
+<li><p><strong>memory_instance</strong>: A MemoryInstance object you are adding to the hierarchy.</p></li>
+<li><p><strong>operands</strong>: The virtual memory operands this MemoryLevel stores.</p></li>
+<li><p><strong>port_alloc</strong>: The directionality of the memory instance’s different ports, as described above.</p></li>
+<li><p><strong>served_dimensions</strong>: The different dimensions that this memory level will serve, as described above.</p></li>
+</ul>
 </section>
 <section id="core">
 <h3>Core<a class="headerlink" href="#core" title="Permalink to this heading">¶</a></h3>
 <p>The operational array and the memory hierarchy together form a core of the accelerator.</p>
-<p>The core object includes:
-- <strong>id</strong>: The id of this core.
-- <strong>operational_array</strong>: The operational array of this core.
-- <strong>memory_hierarchy</strong>: The memory hierarchy of this core.</p>
+<p>The core object includes:</p>
+<ul class="simple">
+<li><p><strong>id</strong>: The id of this core.</p></li>
+<li><p><strong>operational_array</strong>: The operational array of this core.</p></li>
+<li><p><strong>memory_hierarchy</strong>: The memory hierarchy of this core.</p></li>
+</ul>
 </section>
 <section id="hw-accelerator-model">
 <h3>HW Accelerator Model<a class="headerlink" href="#hw-accelerator-model" title="Permalink to this heading">¶</a></h3>
 <p>Multiple cores are combined together into the HW Accelerator, which is the main object modelling the HW behaviour.</p>
-<p>The accelerator object includes:
-- <strong>name</strong>: A user-defined name for this accelerator.
-- <strong>core_set</strong>: The set of cores comprised within the accelerator.
-- <strong>global_buffer</strong>: A memory instance shared across cores. This is currently un-used.</p>
+<p>The accelerator object includes:</p>
+<ul class="simple">
+<li><p><strong>name</strong>: A user-defined name for this accelerator.</p></li>
+<li><p><strong>core_set</strong>: The set of cores comprised within the accelerator.</p></li>
+<li><p><strong>global_buffer</strong>: A memory instance shared across cores. This is currently un-used.</p></li>
+</ul>
 </section>
 </section>
 <section id="modelled-examples">
 <h2>Modelled examples<a class="headerlink" href="#modelled-examples" title="Permalink to this heading">¶</a></h2>
-<p>In this repository, we have modeled 5 well-known DNN accelerators, which are Meta prototype [1], TPU [2], Edge TPU [3],
-Ascend [4], Tesla NPU [5], and, for our depth-first scheduling research.
-To make a fair and relevant comparison, we normalized all of them to have 1024 MACs and maximally 2MB global buffer (GB)
-but kept their spatial unrolling and local buffer settings, as shown in Table I Idx 1/3/5/7/9.
-Besides, we constructed a variant of every normalized architecture (by changing its on-chip memory hierarchy), denoted with ‘DF’ in the
-end of the name, as shown in Table I Idx 2/4/6/8/10.</p>
+<p>In this repository, we have modeled 5 well-known DNN accelerators, which are Meta prototype [1], TPU [2], Edge TPU [3], Ascend [4], Tesla NPU [5], and, for our depth-first scheduling research.
+To make a fair and relevant comparison, we normalized all of them to have 1024 MACs and maximally 2MB global buffer (GB) but kept their spatial unrolling and local buffer settings, as shown in Table I Idx 1/3/5/7/9.
+Besides, we constructed a variant of every normalized architecture (by changing its on-chip memory hierarchy), denoted with ‘DF’ in the end of the name, as shown in Table I Idx 2/4/6/8/10.</p>
 <section id="specific-settings">
 <h3>Specific settings<a class="headerlink" href="#specific-settings" title="Permalink to this heading">¶</a></h3>
 <a class="reference internal image-reference" href="https://user-images.githubusercontent.com/55059827/183848886-c85b9950-5e49-47c9-8a47-ad05062debc3.png"><img alt="Alternative text" src="https://user-images.githubusercontent.com/55059827/183848886-c85b9950-5e49-47c9-8a47-ad05062debc3.png" style="width: 800px;" /></a>
