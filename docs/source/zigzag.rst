@@ -9,7 +9,7 @@ Zigzag is a hardware architecture (HW)-mapping design space exploration (DSE) fr
 
 A crucial part in this is mapping the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that automatically find optimal mapping points in this search space.
 
-
+`Link to repository <https://www.github.com/ZigZag-Project/zigzag>`_
 
 
 Related Publications
