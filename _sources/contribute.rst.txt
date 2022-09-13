@@ -1,6 +1,8 @@
 ===========================
-Contribute to this project
+Contribute
 ===========================
+
+.. _contributing guidelines:
 
 Contributing guidelines
 =======================
