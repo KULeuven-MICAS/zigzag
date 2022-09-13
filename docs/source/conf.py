@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'zigzag'
+project = 'ZigZag'
 copyright = '2022, Arne Symons'
 author = 'Arne Symons'
 
@@ -50,6 +50,9 @@ exclude_patterns = []
 #
 html_theme = "sphinx_material"
 
+# Logo
+html_logo = "zigzag_logo_white.svg"
+
 # Material theme options
 html_theme_options = {
     'base_url': 'http://zigzag-project.github.io/zigzag/',
@@ -59,7 +62,7 @@ html_theme_options = {
     'html_minify': True,
     'css_minify': True,
     'nav_title': 'ZigZag Framework',
-    'logo_icon': '&#xe869',
+    # 'logo_icon': '&#x1D56B',  # '&#x2124',
     'globaltoc_depth': 2,
     'color_primary': "blue-grey",
     'color_accent': "grey"
