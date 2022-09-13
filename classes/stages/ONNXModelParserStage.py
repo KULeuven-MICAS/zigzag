@@ -2,6 +2,7 @@ from typing import Generator
 import importlib
 import onnx
 
+from utils import pickle_deepcopy
 from classes.stages.Stage import Stage
 from classes.workload.dummy_layer_node import DummyNode
 from classes.workload.layer_node import LayerNode
@@ -197,6 +198,9 @@ def generate_layer_node_for_qlinearconv(node_id, node, nodes_outputs, mapping, o
             node_mapping = mapping["default"]
         except:
             raise ValueError(f"There is no mapping provided for node {node.name}, nor a default one.")
+
+    # Take a deepcopy of the mapping, otherwise it will be changed for other layers if using default
+    node_mapping = pickle_deepcopy(node_mapping)
 
     node_attrs = get_layer_node_input_format(kernel_shape, strides, dilations, 
                                             ia_dimension_shape, oa_dimension_shape, ia_data_type, oa_data_type, w_data_type,

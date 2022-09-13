@@ -60,7 +60,13 @@ html_theme_options = {
     'css_minify': True,
     'nav_title': 'ZigZag Framework',
     'logo_icon': '&#xe869',
-    'globaltoc_depth': 2
+    'globaltoc_depth': 2,
+    'color_primary': "blue-grey",
+    'color_accent': "grey"
+}
+
+html_sidebars = {
+    "**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]
 }
 
 # Add any paths that contain custom static files (such as style sheets) here,

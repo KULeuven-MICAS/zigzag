@@ -37,7 +37,8 @@ The following command starts the execution using the provided inputs:
 
 .. raw:: html
 
-    <script id="asciicast-eANq7AaNZLW8QP0ZHQR2BFNn3" src="https://asciinema.org/a/eANq7AaNZLW8QP0ZHQR2BFNn3.js" async></script>
+    <script id="asciicast-98iTemkB6bddkMSl0TxtsDrLF" src="https://asciinema.org/a/98iTemkB6bddkMSl0TxtsDrLF.js" async></script>
+
 
 Analyzing results
 =================
