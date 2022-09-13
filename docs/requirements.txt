@@ -1,4 +1,4 @@
 # Sphinx
 sphinx
 # Sphinx Theme
-sphinx-press-theme
+git+https://github.com/bashtage/sphinx-material.git

@@ -48,7 +48,20 @@ exclude_patterns = []
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "press"
+html_theme = "sphinx_material"
+
+# Material theme options
+html_theme_options = {
+    'base_url': 'http://zigzag-project.github.io/zigzag/',
+    'repo_url': 'https://github.com/ZigZag-Project/zigzag',
+    'repo_name': 'ZigZag Framework',
+    'google_analytics_account': 'UA-XXXXX',
+    'html_minify': True,
+    'css_minify': True,
+    'nav_title': 'ZigZag Framework',
+    'logo_icon': '&#xe869',
+    'globaltoc_depth': 2
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,

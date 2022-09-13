@@ -35,6 +35,10 @@ The following command starts the execution using the provided inputs:
 
     Note the difference in input path construction between the onnx model and the accelerator and mapping. This is because the accelerator and mapping objects are defined in their respective files and imported as python modules.
 
+.. raw:: html
+
+    <script id="asciicast-eANq7AaNZLW8QP0ZHQR2BFNn3" src="https://asciinema.org/a/eANq7AaNZLW8QP0ZHQR2BFNn3.js" async></script>
+
 Analyzing results
 =================
 
