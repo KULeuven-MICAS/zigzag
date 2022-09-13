@@ -1,9 +1,5 @@
-================================
-Hardware Architecture Definition
-================================
-
-General introduction
-====================
+Hardware Architecture
+=====================
 
 In this section we introduce the general concept of how HW accelerators are modelled within zigzag and the different well-known accelerators we provide as examples. We start from the smallest building block defined in zigzag and work our way up towards an accelerator.
 
@@ -59,7 +55,7 @@ Similarly to how the operational unit can be unrolled (forming an operational ar
 
 Lastly, the different read/write/read-write ports a memory instance has, are assigned to the different data movevements possible in the hierarchy. There are four types of data movements in a hierarchy: from high (*fh*), to high (*th*), from low (*fl*), to low (*tl*). At the time of writing, these can be manually linked to one of the read/write/read-write ports through the following syntax: `{port_type}_port_{port_number}`, *port_type* being *r*, *w* or *rw* and *port_number* equal to the port number, starting from 1, which allows to allocate multiple ports of the same type. Alternatively, these are automatically generated as a default if not probided to the `add_memory()` call.
 
-Internally, the MemoryHierarchy object extends the [NetworkX DiGraph](https://networkx.org/documentation/stable/reference/classes/digraph.html) object, so its methods are available. 
+Internally, the MemoryHierarchy object extends the `NetworkX DiGraph <https://networkx.org/documentation/stable/reference/classes/digraph.html>`_ object, so its methods are available. 
 
 The memory hierarchy object includes:
 
@@ -95,7 +91,7 @@ The accelerator object includes:
 * **global_buffer**: A memory instance shared across cores. This is currently un-used.
 
 Modelled examples
-=================
+-----------------
 
 In this repository, we have modeled 5 well-known DNN accelerators, which are Meta prototype [1], TPU [2], Edge TPU [3], Ascend [4], Tesla NPU [5], and, for our depth-first scheduling research.
 To make a fair and relevant comparison, we normalized all of them to have 1024 MACs and maximally 2MB global buffer (GB) but kept their spatial unrolling and local buffer settings, as shown in Table I Idx 1/3/5/7/9.
@@ -115,7 +111,7 @@ Specific settings
 
 
 References
-==========
+----------
 
 [1] H. E. Sumbul, T. F. Wu, Y. Li, S. S. Sarwar, W. Koven, E. Murphy-
 Trotzky, X. Cai, E. Ansari, D. H. Morris, H. Liu, D. Kim, E. Beigne,
