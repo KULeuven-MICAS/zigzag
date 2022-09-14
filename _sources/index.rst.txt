@@ -27,6 +27,7 @@ Contents
    installation
    getting-started
    user-guide
+   future
    contribute
 
 
