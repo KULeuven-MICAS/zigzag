@@ -51,7 +51,10 @@ exclude_patterns = []
 html_theme = "sphinx_material"
 
 # Logo
-html_logo = "zigzag_logo_white.svg"
+html_logo = "zigzag_logo_white_32x32.svg"
+
+# Favicon
+html_favicon = "zigzag_logo_white_32x32.svg"
 
 # Material theme options
 html_theme_options = {
