@@ -2,7 +2,7 @@
 User Guide
 ==========
 
-The following documents provide more information regarding the building blocks of zigzag.
+The following documents provide more information regarding the building blocks of ZigZag.
 
 .. toctree::
    :maxdepth: 1

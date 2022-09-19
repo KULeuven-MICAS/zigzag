@@ -2,12 +2,12 @@
 Stages
 ======
 
-This document explains the concept of stages within the zigzag framework. It details the different implemented stages and explains how to create your own.
+This document explains the concept of stages within the ZigZag framework. It details the different implemented stages and explains how to create your own.
 
 Introduction
 ============
 
-Stages within zigzag are used to modularly and easily adapt the functionality of the framework. The different stages and their sequence of execution determine the goal of running the framework. The sequence of stages the framework will run through are defined in the main file. An example as follows:
+Stages within ZigZag are used to modularly and easily adapt the functionality of the framework. The different stages and their sequence of execution determine the goal of running the framework. The sequence of stages the framework will run through are defined in the main file. An example as follows:
 
 .. code-block:: python
 

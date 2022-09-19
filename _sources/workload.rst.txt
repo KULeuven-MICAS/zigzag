@@ -1,19 +1,32 @@
 Workload
 ========
 
-The recommended way of defining an algorithmic workload is through an onnx model. An onnx model can contain multiple operator types, which in the context of ML are often referred to as layers, some of which are automatically recognised and parsed by zigzag. Alternatively, the layers can be manually defined for more customization.
+The recommended way of defining an algorithmic workload is through an onnx model. An onnx model can contain multiple operator types, which in the context of ML are often referred to as layers, some of which are automatically recognised and parsed by ZigZag. Alternatively, the layers can be manually defined for more customization.
 
 Supported onnx operators
 ------------------------
 
 A complete list of all onnx operators can be found `here <https://github.com/onnx/onnx/blob/main/docs/Operators.md>`_.
 
-Following operators are supported by zigzag and will automatically be parsed into ``LayerNode`` objects when using your onnx model within the framework:
+Following operators are supported by ZigZag and will automatically be parsed into ``LayerNode`` objects when using your onnx model within the framework:
 
 * `QLinearConv <https://github.com/onnx/onnx/blob/main/docs/Operators.md#QLinearConv>`_
 * `MatMul <https://github.com/onnx/onnx/blob/main/docs/Operators.md#MatMul>`_
 
 All other operators will be parsed into a ``DummyNode`` object, which is assumed to not be accelerateable, incurring 0 hardware cost. If you have an onnx operator you would like to see supported, feel free to `open an issue <https://github.com/ZigZag-Project/zigzag/issues/new>`_ or manually add it yourself in the `ONNXModelParserStage <https://github.com/ZigZag-Project/zigzag/blob/8bce029a4284b720d8957357db74d629bd894dc6/classes/stages/ONNXModelParserStage.py#L314>`_ taking into account the :ref:`contributing guidelines`.
+
+Inferencing an onnx model
+-------------------------
+
+ZigZag requires an inferred onnx model, as it needs to know the shapes of all intermediate tensors to correctly infer the layer shapes. If you have an onnx model that is not shape inferred, you can do so by the following commands:
+
+.. code:: python
+
+    import onnx
+    from onnx import shape_inference
+    model = onnx.load("my_model.onnx")
+    inferred_model = shape_inference.infer_shapes(model)
+    onnx.save(inferred_model, "my_inferred_model.onnx")
 
 
 Manual layer definition
@@ -32,5 +45,5 @@ Each layer definition is represented as a dict which should have the following a
 * **operand_source**: The layer id the input operands of this layer come from. This is important to correctly build the NN graph edges.
 * **constant_operands**: The operands of this layer which are constants and do not depend on prior computations.
 * **core_allocation**: The core that will execute this layer.
-* **spatial_mapping**: The spatial parallelization strategy used for this layer. If none is provided, the SpatialMappingGeneratorStage should be used within zigzag's execution pipeline.
+* **spatial_mapping**: The spatial parallelization strategy used for this layer. If none is provided, the SpatialMappingGeneratorStage should be used within ZigZag's execution pipeline.
 * **memory_operand_links**: The link between the virtual memory operands and the actual algorithmic operands. For more information, read the hardware readme.

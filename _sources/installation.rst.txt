@@ -1,5 +1,5 @@
 ===================
-Installating zigzag
+Installating ZigZag
 ===================
 
 Linux
@@ -27,4 +27,4 @@ Install requirements through pip. Alternatively, anaconda spec file is also prov
 
     pip install -r requirements.txt
 
-Once the dependencies are installed, zigzag can be run through the main file with provided arguments. More details are provided in :doc:`getting-started`.
+Once the dependencies are installed, ZigZag can be run through the main file with provided arguments. More details are provided in :doc:`getting-started`.
