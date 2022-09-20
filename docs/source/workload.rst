@@ -15,8 +15,21 @@ Following operators are supported by ZigZag and will automatically be parsed int
 
 All other operators will be parsed into a ``DummyNode`` object, which is assumed to not be accelerateable, incurring 0 hardware cost. If you have an onnx operator you would like to see supported, feel free to `open an issue <https://github.com/ZigZag-Project/zigzag/issues/new>`_ or manually add it yourself in the `ONNXModelParserStage <https://github.com/ZigZag-Project/zigzag/blob/8bce029a4284b720d8957357db74d629bd894dc6/classes/stages/ONNXModelParserStage.py#L314>`_ taking into account the :ref:`contributing guidelines`.
 
-Inferencing an onnx model
--------------------------
+Saving your onnx model with external data
+-----------------------------------------
+
+If your onnx model is rather large, and you want to avoid having it inside of your ZigZag repo, you can save it with external data, which saves the weights as an external file, which can be discarded as ZigZag doesn't require the weight values. You can do so as follows:
+
+.. code:: python
+
+    import onnx
+    # onnx_model is an in-memory ModelProto
+    onnx_model = ...
+    onnx.save_model(onnx_model, 'path/to/save/the/model.onnx', save_as_external_data=True, all_tensors_to_one_file=True, location='filename', size_threshold=1024, convert_attribute=False)
+    # Then the onnx_model has converted raw data as external data and saved to specific directory
+
+Inferring an onnx model's shapes
+--------------------------------
 
 ZigZag requires an inferred onnx model, as it needs to know the shapes of all intermediate tensors to correctly infer the layer shapes. If you have an onnx model that is not shape inferred, you can do so by the following commands:
 
