@@ -150,6 +150,7 @@ outputs*/*.png
 
 # nokia settings
 inputs/nokia/*
+outputs_nokia/*
 
 # docs makefile and make.bat
 docs/Makefile
