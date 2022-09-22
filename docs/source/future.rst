@@ -8,6 +8,7 @@ Framework
 
 * Support more onnx operators
 * Make ancestor class for LayerNode and DummyNode
+* Add fixed temporal loop order to mapping input
 
 Documentation
 -------------
