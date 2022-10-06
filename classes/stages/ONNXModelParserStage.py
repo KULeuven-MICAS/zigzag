@@ -4,7 +4,7 @@ import onnx
 
 from utils import pickle_deepcopy
 from classes.stages.Stage import Stage
-from classes.workload.dummy_layer_node import DummyNode
+from classes.workload.dummy_node import DummyNode
 from classes.workload.layer_node import LayerNode
 from classes.workload.onnx_workload import ONNXWorkload
 
@@ -50,7 +50,7 @@ def get_attribute_ints_with_name(name, attrs, default=None):
 def get_node_input_output_dimension_shapes(node, model):
         value_info = model.graph.value_info
         if not value_info:
-            raise ValueError("value_info of model is empty. Make sure you are loading in an inferred model." \
+            raise ValueError("value_info of model is empty. Make sure you are loading in an inferred model. " \
             "See https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md#running-shape-inference-on-an-onnx-model")
         # get tensor names of the inputs and outputs of the model
         model_input_names = [input.name for input in model.graph.input]
@@ -77,10 +77,6 @@ def get_node_input_output_dimension_shapes(node, model):
         else:
             oa_index = shapes_names.index(oa_name)
             oa_dimension_shape = [dim.dim_value for dim in value_info[oa_index].type.tensor_type.shape.dim]
-
-        # For some reason there can be 0-valued elements in the list. Prune them
-        ia_dimension_shape = [val for val in ia_dimension_shape if val != 0]
-        oa_dimension_shape = [val for val in oa_dimension_shape if val != 0]
 
         return ia_dimension_shape, oa_dimension_shape
 
@@ -138,7 +134,7 @@ def generate_layer_node_for_qlinearconv(node_id, node, nodes_outputs, mapping, o
 
         # Equation
         d = {}
-        d["equation"] = 'O[b][k][oy][ox]+=W[k][c][fy][fx]*I[b][c][ix][iy]'
+        d["equation"] = 'O[b][k][ox][oy]+=W[k][c][fy][fx]*I[b][c][ix][iy]'
 
         # Get dimension sizes from input parameters
         assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
@@ -206,7 +202,7 @@ def generate_layer_node_for_qlinearconv(node_id, node, nodes_outputs, mapping, o
                                             ia_dimension_shape, oa_dimension_shape, ia_data_type, oa_data_type, w_data_type,
                                             node_mapping, nodes_outputs)
 
-    node_obj = LayerNode(node_id, node_attrs)
+    node_obj = LayerNode(node_id, node_attrs, node_name=node.name)
     
     logger.info(f"Parsed QLinearConv node {node.name}")
 
@@ -215,21 +211,22 @@ def generate_layer_node_for_qlinearconv(node_id, node, nodes_outputs, mapping, o
 
 def generate_layer_node_for_matmul(node_id, node, nodes_outputs, mapping, onnx_model):
     
-    def get_layer_node_input_format(C, K, node_mapping, nodes_outputs):
+    def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
         """
-        Generate the necessary dictionary items required for the LayerNode creation.
+        Generate the necessary dictionary items required for the Node creation.
         """
         # convert the data types to precisions based on the onnx definition
 
 
         # Equation
         d = {}
-        d["equation"] = 'O[k]+=B[k][c]*A[c]'
+        d["equation"] = 'O[b][k]+=B[k][c]*A[b][c]'
 
         # Get dimension sizes from input parameters
         K = K
         C = C
-        d["loop_dim_size"] = {'K': K, 'C': C}
+        B = B  # Not to be confused with operand 'B' which is the weights
+        d["loop_dim_size"] = {'K': K, 'C': C, 'B': B}
         d["dimension_relations"] = []
         d["operand_precision"] =  {'O': 16, 'O_final': 8, 'B': 8, 'A': 8}
         d["operand_source"] =  {'B': [], 'A': []}
@@ -252,9 +249,16 @@ def generate_layer_node_for_matmul(node_id, node, nodes_outputs, mapping, onnx_m
     
     ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(node, onnx_model)
 
-    assert len(ia_dimension_shape) == len(oa_dimension_shape) == 1  # Could also be larger for different MatMuls but assuming this for now
-    C = ia_dimension_shape[0]
-    K = oa_dimension_shape[0]
+    assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2  # First element is batch size, second is input/output channel
+    assert ia_dimension_shape[0] == oa_dimension_shape[0]  # Batch size should be the same for input and output
+    # If the batch size is 0, we discard it by setting it to 1 internally inside ZigZag
+    batch_size = ia_dimension_shape[0]
+    if batch_size == 0:
+        B = 1
+    else:
+        B = batch_size
+    C = ia_dimension_shape[1]
+    K = oa_dimension_shape[1]
 
     # Get the hw mapping of this node. 
     if node.name in mapping:
@@ -265,7 +269,7 @@ def generate_layer_node_for_matmul(node_id, node, nodes_outputs, mapping, onnx_m
         except:
             raise ValueError(f"There is no mapping provided for node {node.name}, nor a default one.")
 
-    node_attrs = get_layer_node_input_format(C, K, node_mapping, nodes_outputs)
+    node_attrs = get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs)
     node_obj = LayerNode(node_id, node_attrs)
 
     return node_obj
@@ -278,7 +282,7 @@ def generate_dummy_node(node_id, node, nodes_outputs):
             if node_input in nodes_outputs[n]:
                 preds.append(n)
     
-    node_obj = DummyNode(node_id, preds)
+    node_obj = DummyNode(node_id, preds, node_name=node.name)
 
     return node_obj
 
@@ -337,7 +341,7 @@ class ONNXModelParserStage(Stage):
         onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
         mapping = parse_mapping_from_path(self.mapping_path)
         workload = parse_workload_from_onnx_model_and_mapping(onnx_model, mapping)
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], workload=workload, **self.kwargs)
+        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], onnx_model=onnx_model, workload=workload, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 

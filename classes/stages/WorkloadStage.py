@@ -3,7 +3,7 @@ import networkx as nx
 from classes.stages.Stage import Stage
 from classes.workload.dnn_workload import DNNWorkload
 import classes.io.input_config as inputs
-from classes.workload.dummy_layer_node import DummyNode
+from classes.workload.dummy_node import DummyNode
 
 
 class WorkloadStage(Stage):

@@ -11,7 +11,7 @@ from collections import defaultdict
 
 class LayerNode:
 
-    def __init__(self, layer_id, layer_attrs):
+    def __init__(self, layer_id, layer_attrs, node_name=""):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -19,6 +19,7 @@ class LayerNode:
 
         :param layer_id: The identifier (key) of the layer, as defined in the workload
         :param layer_attrs: contains attributes specified below:
+        :param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
         *equation: core computation equation, e.g. 'O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]',
         'Y[i][j] += A[i][k] * B[k][j]', 'Y[i][j] += A[i][k][l] * B[k][j] * C[l][j]', etc.
         *loop_dim_size: size of each computation loop, e.g. {'B': 1, 'K': 32, 'C': 64, 'OY': 28, 'OX': 28,
@@ -50,6 +51,8 @@ class LayerNode:
         """
 
         self.id = layer_id
+        self.layer_attrs = layer_attrs
+        self.name = node_name
 
         # equation_relations has been replaced by dimension_relations.
         # Check if layer has equation_relations and notify user.
