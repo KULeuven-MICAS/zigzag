@@ -1,4 +1,3 @@
-import classes.io.input_config as inputs
 from classes.cost_model.cost_model import CostModelEvaluation
 from classes.stages.cost_model_pipeline import CostModelPipeline
 from classes.stages.salsa import SalsaStage

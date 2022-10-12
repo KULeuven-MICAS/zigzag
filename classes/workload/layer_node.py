@@ -2,10 +2,7 @@ from math import gcd, prod
 import re
 from collections import defaultdict
 from typing import Dict, List
-from types import FunctionType
 from copy import deepcopy
-from typing import Callable, Any
-import classes.io.input_config as inputs
 from classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from collections import defaultdict
 

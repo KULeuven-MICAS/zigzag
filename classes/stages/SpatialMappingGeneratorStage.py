@@ -14,7 +14,6 @@ from classes.mapping.spatial.spatial_mapping import SpatialMapping
 from classes.stages.Stage import Stage
 from classes.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
 
 logger = logging.getLogger(__name__)
 

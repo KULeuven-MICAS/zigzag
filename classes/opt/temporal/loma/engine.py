@@ -16,7 +16,6 @@ import numpy as np
 from sympy.ntheory import factorint
 import logging
 
-import classes.io.input_config as inputs
 from classes.hardware.architecture.accelerator import Accelerator
 from classes.mapping.temporal.temporal_mapping import TemporalMapping
 from classes.workload.layer_node import LayerNode

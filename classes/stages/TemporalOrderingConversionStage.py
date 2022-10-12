@@ -8,7 +8,8 @@ from classes.mapping.temporal.temporal_mapping import TemporalMapping
 from classes.opt.temporal.loma.memory_allocator import MemoryAllocator
 from classes.stages.Stage import Stage
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
+
+
 logger = logging.getLogger(__name__)
 
 

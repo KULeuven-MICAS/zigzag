@@ -2,7 +2,6 @@ from utils import pickle_deepcopy
 from classes.opt.temporal.loma.memory_allocator import MemoryAllocator
 from classes.cost_model.cost_model import CostModelEvaluation
 
-import classes.io.input_config as inputs
 from classes.hardware.architecture.accelerator import Accelerator
 from classes.workload.layer_node import LayerNode
 from classes.mapping.spatial.spatial_mapping import SpatialMapping

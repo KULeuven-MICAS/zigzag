@@ -14,7 +14,6 @@ from classes.workload.dnn_workload import DNNWorkload
 from classes.workload.layer_node import LayerNode
 from utils import pickle_deepcopy
 from classes.stages.WorkloadStage import WorkloadStage
-import classes.io.input_config as inputs
 from  math import prod
 
 logger = logging.getLogger(__name__)

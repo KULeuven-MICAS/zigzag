@@ -2,7 +2,6 @@ from classes.hardware.architecture.accelerator import Accelerator
 from classes.mapping.spatial.spatial_mapping import SpatialMapping
 from classes.opt.temporal.loma.engine import LomaEngine
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
 from typing import Generator, Callable, List, Tuple, Any
 from classes.stages.Stage import Stage
 from classes.cost_model.cost_model import CostModelEvaluation

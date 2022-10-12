@@ -1,15 +1,13 @@
 from typing import Generator, Callable, List, Tuple, Any
+
 from classes.stages.Stage import Stage
-
-import numpy as np
-import logging
-
 from classes.cost_model.cost_model import CostModelEvaluation
 from classes.hardware.architecture.accelerator import Accelerator
 from classes.mapping.spatial.spatial_mapping import SpatialMapping
 from classes.mapping.temporal.temporal_mapping import TemporalMapping
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
+
+import logging
 logger = logging.getLogger(__name__)
 
 

@@ -4,7 +4,6 @@ import random
 
 from sympy.ntheory import factorint
 
-import classes.io.input_config as inputs
 from classes.hardware.architecture.accelerator import Accelerator
 from classes.workload.layer_node import LayerNode
 from classes.mapping.spatial.spatial_mapping import SpatialMapping

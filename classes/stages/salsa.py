@@ -1,7 +1,6 @@
 from classes.hardware.architecture.accelerator import Accelerator
 from classes.mapping.spatial.spatial_mapping import SpatialMapping
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
 from classes.opt.temporal.salsa.engine import SalsaEngine
 
 

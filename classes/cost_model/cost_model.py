@@ -9,7 +9,6 @@ from classes.mapping.temporal.temporal_mapping import TemporalMapping
 from classes.mapping.combined_mapping import Mapping
 from classes.mapping.combined_mapping import FourWayDataMoving
 from classes.workload.layer_node import LayerNode
-import classes.io.input_config as inputs
 
 logger = logging.getLogger(__name__)
 

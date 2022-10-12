@@ -1,6 +1,5 @@
 from typing import List
 import numpy as np
-import classes.io.input_config as inputs
 from classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from classes.hardware.architecture.memory_level import MemoryLevel
 from classes.mapping.spatial.spatial_mapping import SpatialMapping

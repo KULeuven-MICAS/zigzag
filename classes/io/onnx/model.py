@@ -1,7 +1,7 @@
 from classes.io.onnx.default import DefaultNodeParser
 from classes.io.onnx.matmul import MatMulParser
-from classes.io.onnx.qlinearconv import QLinearConvParser
-from classes.io.onnx.utils import parse_mapping_from_path, parse_onnx_model_from_path, parse_workload_from_onnx_model_and_mapping
+from classes.io.onnx.conv import ConvParser
+from classes.io.onnx.utils import parse_mapping_from_path, parse_onnx_model_from_path
 from classes.workload.onnx_workload import ONNXWorkload
 
 
@@ -27,11 +27,12 @@ class ONNXModelParser:
         - iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes
         """
         onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
-        mapping = parse_mapping_from_path(self.mapping_path)
-        workload = parse_workload_from_onnx_model_and_mapping(onnx_model, mapping)
-
         self.onnx_model = onnx_model
+
+        mapping = parse_mapping_from_path(self.mapping_path)
         self.mapping = mapping
+
+        workload = self.parse_workload_from_onnx_model_and_mapping()
         self.workload = workload
 
     def parse_workload_from_onnx_model_and_mapping(self):
@@ -63,8 +64,8 @@ class ONNXModelParser:
             nodes_inputs[node_id] = node.input
             nodes_outputs[node_id] = node.output
 
-            if node.op_type in ["QLinearConv"]:
-                parser = QLinearConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+            if node.op_type in ["QLinearConv", "Conv"]:
+                parser = ConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             elif node.op_type in ["MatMul"]:
                 parser = MatMulParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             else:  # it is not a convolutional node, so create a DummyNode

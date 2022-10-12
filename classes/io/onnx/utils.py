@@ -1,5 +1,6 @@
 import importlib
 import onnx
+from onnx import AttributeProto
 
 import logging
 logger = logging.getLogger(__name__)
@@ -26,19 +27,28 @@ def parse_onnx_model_from_path(onnx_model_path):
 def get_attribute_ints_with_name(name, attrs, default=None):
     """
     Retrieves the attrs[name_idx].ints from attrs.
-    If it does not exist, the default provided by the caller is used.
+    If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
+    If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
+    If name does not exist in attrs, the default provided by the caller is used.
     If the caller doesn't supply a default, an error is thrown.
     """
     attrs_names = [attr.name for attr in attrs]
     try:
         name_idx = attrs_names.index(name)
-        return attrs[name_idx].ints
+        attr_type = attrs[name_idx].type
+        if attr_type == AttributeProto.AttributeType.INT:
+            return attrs[name_idx].i
+        elif attr_type == AttributeProto.AttributeType.INTS:
+            return attrs[name_idx].ints
+        else:
+            raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
     except ValueError:
         if default is not None:
             return default
         else:
-            raise ValueError(f"attrs has no attribute called {name}. Names = {attrs_names}.")
+            raise ValueError(f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}.")
 
+from onnx import AttributeProto
 
 def get_node_input_output_dimension_shapes(node, model):
         value_info = model.graph.value_info

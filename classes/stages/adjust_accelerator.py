@@ -1,7 +1,6 @@
 import logging
 from utils import pickle_deepcopy
 from typing import Callable, Any
-import classes.io.input_config as inputs
 from classes.hardware.architecture.accelerator import Accelerator
 
 logger = logging.getLogger(__name__)
