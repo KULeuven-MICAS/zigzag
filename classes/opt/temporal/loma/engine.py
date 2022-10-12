@@ -106,7 +106,15 @@ class LomaEngine:
                 del temporal_loop_dim_size[spatial_loop_dim]
             else:
                 temporal_loop_dim_size[spatial_loop_dim] = q
-        self.temporal_loop_dim_size = temporal_loop_dim_size
+
+        # Remove all dimensions with a temporal loop size of 1
+        temporal_loop_dim_size_no_1s = {key: val for (key, val) in temporal_loop_dim_size.items() if val > 1}
+
+        self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
+        min_nb_temporal_loops = len(self.temporal_loop_dim_size)
+        if self.lpf_limit < min_nb_temporal_loops:
+            logger.info(f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs.")
+            self.lpf_limit = min_nb_temporal_loops
 
     def get_prime_factors(self):
         """
