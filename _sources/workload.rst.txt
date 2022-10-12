@@ -10,6 +10,7 @@ A complete list of all onnx operators can be found `here <https://github.com/onn
 
 Following operators are supported by ZigZag and will automatically be parsed into ``LayerNode`` objects when using your onnx model within the framework:
 
+* `Conv <https://github.com/onnx/onnx/blob/main/docs/Operators.md#Conv>`_
 * `QLinearConv <https://github.com/onnx/onnx/blob/main/docs/Operators.md#QLinearConv>`_
 * `MatMul <https://github.com/onnx/onnx/blob/main/docs/Operators.md#MatMul>`_
 
