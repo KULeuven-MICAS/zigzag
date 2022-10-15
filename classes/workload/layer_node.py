@@ -218,7 +218,7 @@ class LayerNode:
         equation = equation.replace('*', ' * ')
         equation = equation.replace('=', ' = ')
         equation = equation.replace('+', ' + ')
-        equation_disassembly = re.findall('[a-zA-Z,=,*,+]+', equation)
+        equation_disassembly = re.findall('[a-zA-Z,0-9,=,*,+]+', equation)
         # filter out + that directly precedes an = (+=) or another + (++) to make this work for concat and add
         prev_char = None
         for i, char in enumerate(equation_disassembly):
