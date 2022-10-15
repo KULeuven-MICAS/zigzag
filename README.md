@@ -28,8 +28,4 @@ Alternatively, you can also install all packages directly through pip using the 
 
 ## Example
 
-The inputs folder provides some example accelerator/workload/settings.
-
-For example, the xception snippet running on a single core accelerator using loma:
-
-`$ python main.py --workload inputs.workshop.workload --accelerator inputs.workshop.accelerator`
+Please take a look at the [Getting Started](https://zigzag-project.github.io/zigzag/getting-started.html) page of our documentation.
