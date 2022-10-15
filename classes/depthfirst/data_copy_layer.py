@@ -394,32 +394,3 @@ class DataCopyLayer:
         mul.latency_total1 *= number
 
         return mul
-
-
-if __name__ == "__main__":
-    from inputs.examples.hardware.accelerator_latency_test1 import accelerator
-
-    layer_id = 1
-    core_id = 1
-    core = accelerator.get_core(core_id)
-
-    data_amount1 = 8600  # bit
-    data_source1 = ('O', 0)
-    data_destination1 = ('I1', 1)
-
-    data_amount2 = 11200  # bit
-    data_source2 = ('I1', 2)
-    data_destination2 = ('I1', 1)
-
-    data_amount3 = 7000  # bit
-    data_source3 = ('O', 1)
-    data_destination3 = ('O', 2)
-
-    data_copy_action1 = DataCopyAction(data_amount1, data_source1, data_destination1, core)
-    data_copy_action2 = DataCopyAction(data_amount2, data_source2, data_destination2, core)
-    data_copy_action3 = DataCopyAction(data_amount3, data_source3, data_destination3, core)
-
-    data_copy_actions = [data_copy_action1, data_copy_action2, data_copy_action3]
-
-    dcl = DataCopyLayer(layer_id, data_copy_actions, core)
-    a = 1

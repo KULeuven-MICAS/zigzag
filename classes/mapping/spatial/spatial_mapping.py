@@ -145,28 +145,3 @@ class SpatialMapping:
         # Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels.
         op = self.layer_node.input_operands[0]
         self.spatial_loop_dim_size = [loop for spatial_loops in self.mapping_dict_origin[op] for loop in spatial_loops]
-
-
-if __name__ == "__main__":
-    from inputs.examples.workload1 import workload
-
-    layer = workload[1]
-    layer_node = LayerNode(layer)
-
-    # # mapping case 1 for debug
-    # spatial_mapping_dic = {'W': [[], [('C', 10), ('K', 8)], [], []],
-    #                        'I': [[], [('C', 10), ('K', 8)], [], []],
-    #                        'O': [[], [('C', 10), ('K', 8)], []]}
-
-    # # mapping case 2 for debug
-    # spatial_mapping_dic = {'W': [[('B', 14)], [('C', 2), ('K', 8)], [], []],
-    #                        'I': [[('K', 8)], [('B', 14)], [('C', 2)], []],
-    #                        'O': [[('C', 2)], [('B', 14), ('K', 8)], []]}
-
-    # mapping case 3 for debug
-    spatial_mapping_dic = {'W': [[('OX', 14), ('OY', 7)], [('FX', 3)], [], []],
-                           'I': [[], [('OX', 14), ('FX', 3)], [('OY', 7)], []],
-                           'O': [[('FX', 3)], [('OX', 14), ('OY', 7)], []]}
-
-    spatial_mapping = SpatialMapping(spatial_mapping_dic, layer_node)
-    a=1
