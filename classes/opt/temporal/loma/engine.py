@@ -252,29 +252,3 @@ class LomaEngine:
         """
         # The lpfs are stored in self.lpfs
         return permutations(self.lpfs)
-
-
-if __name__ == "__main__":
-    from inputs.examples.workload1 import workload
-    from classes.hardware.architecture.memory_hierarchy import memory_hierarchy_example1
-    from classes.hardware.architecture.operational_array import multiplier_array_example1
-
-
-    layer = workload[1]
-    layer_node = LayerNode(layer)
-
-    '''This dictionary should be generated automatically from the user provided spatial mapping if there is one'''
-    spatial_mapping_dic = {'W': [[('OX', 14), ('OY', 7)], [('FX', 3)], [], []],
-                           'I': [[], [('OX', 14), ('FX', 3)], [('OY', 7)], []],
-                           'O': [[('FX', 3)], [('OX', 14), ('OY', 7)], []]}
-
-    spatial_mapping = SpatialMapping(spatial_mapping_dict=spatial_mapping_dic, layer_node=layer_node)
-
-    multiplier_array = multiplier_array_example1()
-    memory_hierarchy = memory_hierarchy_example1(multiplier_array)
-
-    loma_engine = LomaEngine(layer=layer_node,
-                                    spatial_mapping=spatial_mapping,
-                                    memory_hierarchy=memory_hierarchy)
-    loma_engine.run()
-    a = 1
