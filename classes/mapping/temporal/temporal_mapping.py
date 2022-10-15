@@ -139,24 +139,3 @@ class TemporalMapping:
 
         self.top_r_loop_size = top_r_loop_size
         self.top_ir_loop_size = top_ir_loop_size
-
-
-if __name__ == "__main__":
-    from inputs.examples.workloads.workload1 import workload
-
-    layer = workload[1]
-    layer_node = LayerNode(1, layer)
-
-    # # mapping case 1 for debug
-    # temporal_mapping_dic = {'W': [[], [('FX', 3), ('OX', 3)], [('OX', 7), ('FX', 3)], [('OX', 2)]],
-    #                         'I': [[('FX', 3)], [('OX', 3)], [('OX', 7), ('FX', 3)], [('OX', 2)]],
-    #                         'O': [[('FX', 3)], [('OX', 3)], [('OX', 7), ('FX', 3), ('OX', 2)], []]}
-
-    # mapping case 2 for debug
-    temporal_mapping_dic = \
-        {'W': [[('K', 4)], [('FX', 3), ('OX', 3), ('C', 2)], [('OX', 7), ('FX', 3), ('OY', 3)], [('OX', 2), ('B', 2)], [('OX', 4)]],
-         'I': [[('K', 4), ('FX', 3)], [('OX', 3), ('C', 2)], [('OX', 7), ('FX', 3), ('OY', 3)], [('OX', 2), ('B', 2), ('OX', 4)]],
-         'O': [[('K', 4), ('FX', 3)], [('OX', 3)], [('C', 2), ('OX', 7), ('FX', 3), ('OY', 3), ('OX', 2)], [('B', 2), ('OX', 4)]]}
-
-    temporal_mapping = TemporalMapping(temporal_mapping_dic, layer_node)
-    a = 1
