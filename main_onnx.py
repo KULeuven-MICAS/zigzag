@@ -33,7 +33,8 @@ mainstage = MainStage([  # Initializes the MainStage as entry point
     onnx_model_path=args.model,  # required by ONNXModelParserStage
     mapping_path=args.mapping,  # required by ONNXModelParserStage
     dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
-    loma_lpf_limit=6  # required by LomaStage
+    loma_lpf_limit=6,  # required by LomaStage
+    loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
 )
 
 # Launch the MainStage

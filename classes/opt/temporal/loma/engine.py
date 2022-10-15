@@ -9,8 +9,10 @@ TODO: (optional) Write even memory allocator
 TODO: Once we have allocated the loops to the different hierarchy levels, call the cost model to get energy, latency
 TODO: Save the best found loop order (and its associated allocated mapping)
 """
+from math import factorial
 import operator
 from typing import Generator
+from tqdm import tqdm
 
 import numpy as np
 from sympy.ntheory import factorint
@@ -66,6 +68,7 @@ class LomaEngine:
         core_id = layer.core_allocation
         self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(core_id).memory_hierarchy
 
+        self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
 
 
     def run(self):
@@ -75,17 +78,28 @@ class LomaEngine:
         """
         self.get_temporal_loops()  # get all the temporal loops
         self.get_prime_factors()  # convert these to LPFs (loop prime factors)
+
+        if self.show_progress_bar:
+            pbar = tqdm(total=self.nb_permutations)
+        else:
+            pbar = None
+
         yielded = False
         for ordering in self.og():  # ordering generator
             allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
-            # using try catch here because in the depth-first mode the highest level might not be big enough,
-            # which
+            # using try catch here because in the depth-first mode the highest level might not be big enough
             try:
                 temporal_mapping = allocator.run()  # allocate this ordering to the memories
                 yielded = True
                 yield temporal_mapping
             except MemHierarchyTooSmallException:
                 pass
+            if self.show_progress_bar:
+                pbar.update(1)
+
+        if self.show_progress_bar:
+            pbar.close()
+
         if not yielded:
             raise MemHierarchyTooSmallException("No loop ordering was found that did not exceed memory capacity")
 
@@ -160,6 +174,19 @@ class LomaEngine:
 
         # Limit the number of lpfs (if this is set in the settings)
         self.limit_lpfs()
+
+        # Compute how many total permuatations we will have to consider
+        self.compute_nb_permutations()
+
+    def compute_nb_permutations(self):
+        """Compute the number of permutations that will have to be considered given the LPF distribution.
+        """
+        nb_permutations = factorial(sum(self.temporal_loop_pf_count_sums.values()))
+        for nb_pf_sum in self.temporal_loop_pf_count_sums.values():
+            nb_permutations = int(nb_permutations / factorial(nb_pf_sum))
+        self.nb_permutations = nb_permutations
+        logger.info(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
+        
 
     def limit_lpfs(self):
         """
