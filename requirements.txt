@@ -3,3 +3,4 @@ networkx
 sympy
 matplotlib
 onnx
+tqdm
