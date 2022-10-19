@@ -3,6 +3,16 @@ This repository presents the novel version of our tried-and-tested HW Architectu
 
 A crucial part in this is the mapping of the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that can automatically find optimal mapping points in this search space.
 
+## Installation
+
+Please take a look at the [Installation](https://zigzag-project.github.io/zigzag/installation.html) page of our documentation.
+
+## Getting Started
+
+Please take a look at the [Getting Started](https://zigzag-project.github.io/zigzag/getting-started.html) page on how to get started using ZigZag.
+
+## Recent changes
+
 In this novel version, we have: 
 - Added an interface with ONNX to directly parse ONNX models
 - Overhauled our HW architecture definition to:
@@ -14,18 +24,3 @@ In this novel version, we have:
 - Written the project with OOP paradigms to facilitate user-friendly extensions and interfaces.
 
 
-## Environment
-
-We recommend setting up an anaconda environment.
-
-A `conda-spec-file-{platform}.txt` is provided to set up the environment for linux64 and win64.
-
-`$ conda create --name myzigzagenv --file conda-spec-file-{platform}.txt`
-
-Alternatively, you can also install all packages directly through pip using the pip-requirements.txt with the command:
-
-`$ pip install -r requirements.txt`
-
-## Example
-
-Please take a look at the [Getting Started](https://zigzag-project.github.io/zigzag/getting-started.html) page of our documentation.
