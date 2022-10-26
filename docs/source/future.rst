@@ -9,6 +9,10 @@ Framework
 * Support more onnx operators
 * Make ancestor class for LayerNode and DummyNode
 * Add fixed temporal loop order to mapping input
+* Add support for multi-dimensional unrolling of same loop (including fractional spatial mapping)
+* Take into account energy, bandwidth in LOMA's MemoryAllocated besides accesses
+* Take into account memory capacity in LOMA's lpf limiting
+* Take into account memory latency in cost model
 
 Documentation
 -------------
