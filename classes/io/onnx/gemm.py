@@ -1,14 +1,12 @@
-import onnx
+from classes.io.onnx.utils import get_node_input_output_dimension_shapes, get_attribute_ints_with_name
+from classes.workload.layer_node import LayerNode
 
 import logging
-
-from classes.io.onnx.utils import get_node_input_output_dimension_shapes
-from classes.workload.layer_node import LayerNode
 logger = logging.getLogger(__name__)
 
 
-class MatMulParser:
-    """Parses an ONNX MatMul operator into a LayerNode
+class GemmParser:
+    """Parses an ONNX Gemm operator into a LayerNode
     """
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
         self.node_id = node_id
@@ -20,10 +18,10 @@ class MatMulParser:
     def run(self):
         """Run the parser
         """
-        layer_node = self.generate_layer_node_for_matmul()
+        layer_node = self.generate_layer_node_for_gemm()
         return layer_node
 
-    def generate_layer_node_for_matmul(self):
+    def generate_layer_node_for_gemm(self):
     
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
             """
@@ -62,6 +60,13 @@ class MatMulParser:
             return d
         
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
+
+        # The Gemm node includes flags for transpose of both of its inputs.
+        # If the first input is transposed, we need to transpose its shape here.
+        transA = get_attribute_ints_with_name("transA", self.node.attribute, default=0)
+        if transA:
+            assert len(ia_dimension_shape == 2)
+            ia_dimension_shape = (ia_dimension_shape[1], ia_dimension_shape[0])
 
         assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2  # First element is batch size, second is input/output channel
         assert ia_dimension_shape[0] == oa_dimension_shape[0]  # Batch size should be the same for input and output

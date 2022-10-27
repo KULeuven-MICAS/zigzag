@@ -1,4 +1,5 @@
 from classes.io.onnx.default import DefaultNodeParser
+from classes.io.onnx.gemm import GemmParser
 from classes.io.onnx.matmul import MatMulParser
 from classes.io.onnx.conv import ConvParser
 from classes.io.onnx.utils import parse_mapping_from_path, parse_onnx_model_from_path
@@ -68,6 +69,8 @@ class ONNXModelParser:
                 parser = ConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             elif node.op_type in ["MatMul"]:
                 parser = MatMulParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+            elif node.op_type in ["Gemm"]:
+                parser = GemmParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             else:  # it is not a convolutional node, so create a DummyNode
                 parser = DefaultNodeParser(node_id, node, nodes_outputs)
             node_obj = parser.run()
