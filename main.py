@@ -1,4 +1,4 @@
-from classes.stages import *
+from zigzag.classes.stages import *
 import argparse
 
 # Parse the workload and accelerator arguments

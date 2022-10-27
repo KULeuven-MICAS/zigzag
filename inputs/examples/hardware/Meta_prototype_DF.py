@@ -1,11 +1,11 @@
 import os
-from classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from classes.hardware.architecture.memory_level import MemoryLevel
-from classes.hardware.architecture.operational_unit import Multiplier
-from classes.hardware.architecture.operational_array import MultiplierArray
-from classes.hardware.architecture.memory_instance import MemoryInstance
-from classes.hardware.architecture.accelerator import Accelerator
-from classes.hardware.architecture.core import Core
+from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
+from zigzag.classes.hardware.architecture.operational_unit import Multiplier
+from zigzag.classes.hardware.architecture.operational_array import MultiplierArray
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
+from zigzag.classes.hardware.architecture.core import Core
 
 
 def memory_hierarchy_dut(multiplier_array):
@@ -86,7 +86,7 @@ def memory_hierarchy_dut(multiplier_array):
                                                   {'fh': 'rw_port_1', 'tl': 'rw_port_1', 'fl': 'rw_port_1', 'th': 'rw_port_1'},),
                                       served_dimensions='all')
 
-    from visualization.graph.memory_hierarchy import visualize_memory_hierarchy_graph
+    from zigzag.visualization.graph.memory_hierarchy import visualize_memory_hierarchy_graph
     # visualize_memory_hierarchy_graph(memory_hierarchy_graph)
     return memory_hierarchy_graph
 

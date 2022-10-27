@@ -1,4 +1,4 @@
-from classes.stages import *
+from zigzag.classes.stages import *
 import argparse
 
 # Get the onnx model, the mapping and accelerator arguments

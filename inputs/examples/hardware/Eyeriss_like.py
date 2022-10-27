@@ -1,10 +1,10 @@
-from classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from classes.hardware.architecture.memory_level import MemoryLevel
-from classes.hardware.architecture.operational_unit import Multiplier
-from classes.hardware.architecture.operational_array import MultiplierArray
-from classes.hardware.architecture.memory_instance import MemoryInstance
-from classes.hardware.architecture.accelerator import Accelerator
-from classes.hardware.architecture.core import Core
+from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
+from zigzag.classes.hardware.architecture.operational_unit import Multiplier
+from zigzag.classes.hardware.architecture.operational_array import MultiplierArray
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
+from zigzag.classes.hardware.architecture.core import Core
 
 
 def memory_hierarchy_latency_test1(multiplier_array):
