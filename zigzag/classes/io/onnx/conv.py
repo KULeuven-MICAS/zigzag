@@ -1,3 +1,5 @@
+from math import ceil
+
 from zigzag.classes.io.onnx.utils import get_attribute_ints_with_name, get_node_input_output_dimension_shapes
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
@@ -96,10 +98,10 @@ class ConvParser:
             assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
             B = oa_shape[0]
             G = groups
-            K = oa_shape[1]/G
+            K = ceil(oa_shape[1]/G)
             OX = oa_shape[2]
             OY = oa_shape[3]
-            C = ia_shape[1]/G
+            C = ceil(ia_shape[1]/G)
             IX = ia_shape[2]
             IY = ia_shape[3]
             FX = kernel_shape[0]
