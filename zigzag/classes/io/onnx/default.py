@@ -1,13 +1,13 @@
+from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.workload.dummy_node import DummyNode
 
 
-class DefaultNodeParser:
+class DefaultNodeParser(Parser):
     """Parse an ONNX node into a DummyNode.
     """
     def __init__(self, node_id, node, nodes_outputs) -> None:
-        self.node_id = node_id
-        self.node = node
-        self.nodes_outputs = nodes_outputs
+        super().__init__(node_id, node, nodes_outputs, mapping=None, onnx_model=None)
+
     def run(self):
         """Run the parser
         """

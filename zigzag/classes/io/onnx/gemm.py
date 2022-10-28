@@ -1,3 +1,4 @@
+from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import get_node_input_output_dimension_shapes, get_attribute_ints_with_name
 from zigzag.classes.workload.layer_node import LayerNode
 
@@ -5,15 +6,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class GemmParser:
+class GemmParser(Parser):
     """Parses an ONNX Gemm operator into a LayerNode
     """
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
-        self.node_id = node_id
-        self.node = node
-        self.nodes_outputs = nodes_outputs
-        self.mapping = mapping
-        self.onnx_model = onnx_model
+        super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
     
     def run(self):
         """Run the parser

@@ -1,5 +1,6 @@
 from math import ceil
 
+from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import get_attribute_ints_with_name, get_node_input_output_dimension_shapes
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
@@ -8,15 +9,11 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-class ConvParser:
+class ConvParser(Parser):
     """Parser for ONNX Conv and QLinearConv nodes into LayerNode.
     """
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
-        self.node_id = node_id
-        self.node = node
-        self.nodes_outputs = nodes_outputs
-        self.mapping = mapping
-        self.onnx_model = onnx_model
+        super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
     
     def run(self):
         """Run the parser and return the created LayerNode object.
