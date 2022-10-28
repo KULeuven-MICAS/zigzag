@@ -14,10 +14,10 @@ def parse_mapping_from_path(mapping_path):
     module = importlib.import_module(mapping_path)
     mapping = module.mapping
     if "default" in mapping:
-        logger_str = ""
+        default_present = "\u2705"
     else:
-        logger_str = "not "
-    logger.info(f"Parsed mapping with {len(mapping)} different entries. Default is {logger_str}present.")
+        default_present = "\u274C"
+    logger.info(f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}.")
     return mapping
 
 def parse_onnx_model_from_path(onnx_model_path):
