@@ -83,7 +83,10 @@ class LayerNode:
         self.constant_operands = constant_operands
 
         ''' Step1: extract partially-relevant data dimension and its relation to loop dimensions. '''
-        pr_loop, pr_loop_list, equation = self.build_pr_funcs()
+        pr_loop, pr_loop_list, pr_scaling_factors, padding = self.build_pr_funcs()
+        self.pr_loop = pr_loop
+        self.pr_scaling_factors = pr_scaling_factors
+        self.padding = padding
 
         ''' Step2: extract relevant and irrelevant loop dimensions. '''
         operand_loop_dim, operand_loop_dim_reform, operand_list = \
@@ -103,16 +106,12 @@ class LayerNode:
         # 1 long dimensions are removed in self.loop_dim_size but required in extract_pr_loop_info
         loop_dim_size = defaultdict(lambda: 1)
         loop_dim_size.update(self.loop_dim_size)
-        equation = self.equation
-        if self.equation_relations:
-            pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(self.equation_relations)
+        if self.dimension_relations:
+            pr_loop, pr_loop_list, pr_scaling_factors, padding = self.extract_pr_loop_info(self.dimension_relations)
         else:
-            pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
+            pr_loop, pr_loop_list, pr_scaling_factors, padding = {}, [], {}, {}
 
-        self.pr_loop = pr_loop
-        self.pr_scaling_factors = pr_scaling_factors
-
-        return pr_loop, pr_loop_list, equation
+        return pr_loop, pr_loop_list, pr_scaling_factors, padding
 
     def get_core_allocation(self):
         return self.core_allocation
@@ -178,11 +177,11 @@ class LayerNode:
     def return_lambda(equal_sign_right):
         return eval("lambda n: " + equal_sign_right)
 
-    @staticmethod
-    def extract_pr_loop_info(equation_relations):
+    def extract_pr_loop_info(self, equation_relations):
         pr_loop: Dict[str, list] = {}
         pr_loop_list: List[str] = []
         pr_scaling_factors: Dict[str, list] = {}
+        padding: Dict[str, int] = {}
         for relation in equation_relations:
             relation_disassembly = re.findall('[a-zA-Z]+', relation)
             
@@ -207,8 +206,20 @@ class LayerNode:
             #scaling_factors = re.findall('[0-9]+', relation)
             assert len(scaling_factors) == 2, f"Please remove any constants in the equation relation {relation}."
             pr_scaling_factors[key] = scaling_factors
-        return pr_loop, pr_loop_list, pr_scaling_factors
 
+            # Get the defined padding for this equation if there is any.
+            # This will be defined as e.g. ix = 1*ox+1*fx-px
+            # TODO This should be done differently, through both a left/right and top/bottom side padding that's defined
+            # separately and parsed separately
+            relation_split = relation.split('-')
+            if len(relation_split) == 1:  # there is no padding in the equation, set to 0
+                padding[key] = 0
+            elif len(relation_split) == 2:
+                padding[key] = relation_split[-1]
+            else:
+                raise ValueError(f"There is more than one - sign in the pr equation {relation} for node {self}.")
+        
+        return pr_loop, pr_loop_list, pr_scaling_factors, padding
 
 
     @staticmethod
