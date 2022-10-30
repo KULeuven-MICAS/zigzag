@@ -119,7 +119,7 @@ class LayerNode:
         if self.dimension_relations:
             pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(self.dimension_relations)
         else:
-            pr_loop, pr_loop_list, pr_scaling_factors, padding = {}, [], {},
+            pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
