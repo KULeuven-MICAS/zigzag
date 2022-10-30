@@ -69,6 +69,8 @@ class LayerNode:
         operand_source_dimension_mapping: Dict[Dict[str, str]] = layer_attrs.get('operand_source_dimension_mapping', {})
         constant_operands: List[str] = layer_attrs.get('constant_operands', [])
         input_operand_source: Dict[str, list] = layer_attrs.get('operand_source', dict())
+        # Save the padding for different tensor dimensions
+        padding: Dict[str, tuple] = layer_attrs.get('padding', {})  # Empty dict signals no padding in any dimension
 
         self.equation = equation
         self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
@@ -82,12 +84,12 @@ class LayerNode:
         self.source_storage_level = source_storage_level
         self.operand_source_dimension_mapping = operand_source_dimension_mapping
         self.constant_operands = constant_operands
+        self.padding = padding
 
         ''' Step1: extract partially-relevant data dimension and its relation to loop dimensions. '''
-        pr_loop, pr_loop_list, pr_scaling_factors, padding = self.build_pr_funcs()
+        pr_loop, pr_loop_list, pr_scaling_factors = self.build_pr_funcs()
         self.pr_loop = pr_loop
         self.pr_scaling_factors = pr_scaling_factors
-        self.padding = padding
 
         ''' Step2: extract relevant and irrelevant loop dimensions. '''
         operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order = \
@@ -100,6 +102,12 @@ class LayerNode:
         self.input_operand_source = input_operand_source
         self.operand_dimensionality_order = operand_dimensionality_order
 
+        # Save the variable (non-constant) input operands
+        self.variable_input_operands: list = list(set(self.input_operands) - set(self.constant_operands))
+        # Save the way an operand's tensor should be reshaped for interaction with other nodes.
+        self.operand_tensor_reshape: Dict[str, list] = layer_attrs.get('operand_tensor_reshape',  {op: [] for op in self.operand_list})
+        
+
         ''' Step3: extract layer info, e.g. total operand size, total operand data reuse, total MAC operation, etc. '''
         self.extract_layer_info()
 
@@ -109,11 +117,11 @@ class LayerNode:
         loop_dim_size = defaultdict(lambda: 1)
         loop_dim_size.update(self.loop_dim_size)
         if self.dimension_relations:
-            pr_loop, pr_loop_list, pr_scaling_factors, padding = self.extract_pr_loop_info(self.dimension_relations)
+            pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(self.dimension_relations)
         else:
-            pr_loop, pr_loop_list, pr_scaling_factors, padding = {}, [], {}, {}
+            pr_loop, pr_loop_list, pr_scaling_factors, padding = {}, [], {},
 
-        return pr_loop, pr_loop_list, pr_scaling_factors, padding
+        return pr_loop, pr_loop_list, pr_scaling_factors
 
     def get_core_allocation(self):
         return self.core_allocation
@@ -209,19 +217,7 @@ class LayerNode:
             assert len(scaling_factors) == 2, f"Please remove any constants in the equation relation {relation}."
             pr_scaling_factors[key] = scaling_factors
 
-            # Get the defined padding for this equation if there is any.
-            # This will be defined as e.g. ix = 1*ox+1*fx-px
-            # TODO This should be done differently, through both a left/right and top/bottom side padding that's defined
-            # separately and parsed separately
-            relation_split = relation.split('-')
-            if len(relation_split) == 1:  # there is no padding in the equation, set to 0
-                padding[key] = 0
-            elif len(relation_split) == 2:
-                padding[key] = relation_split[-1]
-            else:
-                raise ValueError(f"There is more than one - sign in the pr equation {relation} for node {self}.")
-        
-        return pr_loop, pr_loop_list, pr_scaling_factors, padding
+        return pr_loop, pr_loop_list, pr_scaling_factors
 
     @staticmethod
     def extract_r_ir_loop_info(equation, loop_dim_size, pr_loop, pr_loop_list):

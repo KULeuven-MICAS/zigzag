@@ -80,7 +80,8 @@ class ConvParser(Parser):
 
             return ia_elem_type, oa_elem_type, w_data_type
 
-        def get_layer_node_input_format(kernel_shape, strides, dilations, groups, ia_shape, oa_shape, node_mapping):
+
+        def get_layer_node_input_format(kernel_shape, strides, dilations, groups, padding, ia_shape, oa_shape, node_mapping):
             """
             Generate the necessary dictionary items required for the LayerNode creation.
             """
@@ -89,7 +90,9 @@ class ConvParser(Parser):
 
             # Equation
             d = {}
-            d["equation"] = 'O[b][g][k][ox][oy]+=W[k][c][fy][fx]*I[b][g][c][ix][iy]'
+            # IMPORTANT: If any of the input loops require padding, they should be defined as the rightmost dimensions in the equation
+            # This is because we construct the dimensionality order and then add the padding to those last dimensions in the order
+            d["equation"] = 'O[b][g][k][oy][ox]+=W[k][c][fy][fx]*I[b][g][c][iy][ix]'
 
             # Get dimension sizes from input parameters
             assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
@@ -122,6 +125,10 @@ class ConvParser(Parser):
                         preds.append(n)
             d["operand_source"] = {'I': preds}
 
+            # Add padding information
+            
+            d["padding"] = {'IY': (padding[0], padding[2]), 'IX': (padding[1], padding[3])}
+
             return d
 
 
@@ -134,6 +141,8 @@ class ConvParser(Parser):
         dilations = get_attribute_ints_with_name("dilations", attrs, default=[1, 1])
         # Find number of groups in attrs
         groups = get_attribute_ints_with_name("group", attrs, default=1)
+        # Find padding in attrs
+        padding = get_attribute_ints_with_name("pads", attrs, default=[0,0,0,0])
         
         # Get the input and output activation shapes
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
@@ -153,7 +162,7 @@ class ConvParser(Parser):
         # Take a deepcopy of the mapping, otherwise it will be changed for other layers if using default
         node_mapping = pickle_deepcopy(node_mapping)
 
-        node_attrs = get_layer_node_input_format(kernel_shape, strides, dilations, groups,
+        node_attrs = get_layer_node_input_format(kernel_shape, strides, dilations, groups, padding,
                                                 ia_dimension_shape, oa_dimension_shape,
                                                 node_mapping)
 
