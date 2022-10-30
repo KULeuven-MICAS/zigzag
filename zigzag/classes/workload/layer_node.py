@@ -154,15 +154,19 @@ class LayerNode:
         return prod(self.calc_tensor_dims(layer_op, loop_sizes).values())
         # Initialize the tensor size as 1
 
-    def calc_tensor_dim(self, layer_op, loop_sizes, dim):
+    def calc_tensor_dim(self, loop_sizes, dim):
         if dim in loop_sizes:
             return loop_sizes[dim]
-        elif dim in self.operand_loop_dim[layer_op]['pr']:
+        elif dim in self.pr_loop:
             related_dimension_sizes = [loop_sizes[dimension] for dimension in self.pr_loop[dim]]
             scaling_factors = list(self.pr_scaling_factors[dim].values())
             assert len(related_dimension_sizes) == len(scaling_factors) == 2, "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
             args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
-            return self.calc_pr_dimension_size(*args)
+            total_pr_dim_size = self.calc_pr_dimension_size(*args)
+            # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and subtract
+            padding = self.padding.get(dim, (0, 0))  # default = (0, 0)
+            total_pr_dim_size_without_padding = int(total_pr_dim_size - sum(padding))
+            return total_pr_dim_size_without_padding
         else:
             assert False
 
@@ -170,7 +174,7 @@ class LayerNode:
         out = {}
         op_dimensions = self.operand_loop_dim[layer_op]
         for dim in op_dimensions['r'] + list(op_dimensions['pr'].keys()):
-            out[dim] = self.calc_tensor_dim(layer_op, loop_sizes, dim)
+            out[dim] = self.calc_tensor_dim(loop_sizes, dim)
         return out
 
     @staticmethod

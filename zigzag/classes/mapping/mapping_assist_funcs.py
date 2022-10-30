@@ -89,7 +89,7 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: 'LayerNode'):
 
                         ''' compute pr related data dimension size and data dimension reuse at current and below joint levels
                         based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled into r and ir loops. '''
-                        pr_loop_combined_to_r = layer_node.calc_tensor_dim(operand, cabl_pr_lp_size[pr_data_dim], pr_data_dim)
+                        pr_loop_combined_to_r = layer_node.calc_tensor_dim(cabl_pr_lp_size[pr_data_dim], pr_data_dim)
                         pr_loop_combined_to_ir = prod(cabl_pr_lp_size[pr_data_dim].values()) / pr_loop_combined_to_r
                         cabl_pr_data_size[operand][pr_data_dim][level].append(pr_loop_combined_to_r)
                         cabl_pr_data_reuse[operand][pr_data_dim][level].append(pr_loop_combined_to_ir)
