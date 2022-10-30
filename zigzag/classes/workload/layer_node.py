@@ -73,7 +73,7 @@ class LayerNode:
         self.equation = equation
         self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
         self.operand_precision = operand_precision
-        self.equation_relations = dimension_relations
+        self.dimension_relations = dimension_relations
         self.loop_dim_list = list(loop_dim_size.keys())
         self.user_spatial_mapping = user_spatial_mapping
         self.user_temporal_ordering = user_temporal_ordering
@@ -129,7 +129,7 @@ class LayerNode:
         JSON representation used for saving this object to a json file.
         """
         return {"equation": self.equation,
-                "equation_relations": self.equation_relations,
+                "equation_relations": self.dimension_relations,
                 "loop_dimensions": self.loop_dim_size,
                 "operand_precision": self.operand_precision,
                 "core_allocation": self.core_allocation,
