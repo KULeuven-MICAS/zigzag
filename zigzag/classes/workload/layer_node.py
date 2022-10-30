@@ -68,6 +68,7 @@ class LayerNode:
         source_storage_level: int = layer_attrs.get('source_storage_level', {})
         operand_source_dimension_mapping: Dict[Dict[str, str]] = layer_attrs.get('operand_source_dimension_mapping', {})
         constant_operands: List[str] = layer_attrs.get('constant_operands', [])
+        input_operand_source: Dict[str, list] = layer_attrs.get('operand_source', dict())
 
         self.equation = equation
         self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
@@ -89,14 +90,15 @@ class LayerNode:
         self.padding = padding
 
         ''' Step2: extract relevant and irrelevant loop dimensions. '''
-        operand_loop_dim, operand_loop_dim_reform, operand_list = \
+        operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order = \
             self.extract_r_ir_loop_info(equation, loop_dim_size, pr_loop, pr_loop_list)
         self.operand_loop_dim = operand_loop_dim
         self.operand_loop_dim_reform = operand_loop_dim_reform
         self.output_operand = operand_list[0]
         self.input_operands = operand_list[1:]
         self.operand_list = operand_list
-        self.input_operand_source = dict()
+        self.input_operand_source = input_operand_source
+        self.operand_dimensionality_order = operand_dimensionality_order
 
         ''' Step3: extract layer info, e.g. total operand size, total operand data reuse, total MAC operation, etc. '''
         self.extract_layer_info()
@@ -221,7 +223,6 @@ class LayerNode:
         
         return pr_loop, pr_loop_list, pr_scaling_factors, padding
 
-
     @staticmethod
     def extract_r_ir_loop_info(equation, loop_dim_size, pr_loop, pr_loop_list):
         operand_loop_dim: Dict[str, Dict] = {}
@@ -240,6 +241,7 @@ class LayerNode:
             len(equation_disassembly)]
         dimension_list = list(loop_dim_size.keys())
         begin_idx = 0
+        operand_dimensionality_order = {}
         for split_loc in split_location:
             operand = equation_disassembly[begin_idx]
             operand_list.append(operand)
@@ -250,7 +252,7 @@ class LayerNode:
             pr_loop_remove_flag = any(loop in list(pr_loop.keys()) for loop in r_loop_list)
             if pr_loop_remove_flag:
                 operand_loop_dim[operand]['r'] = [loop for loop in r_loop_list if
-                                                  loop not in pr_loop_list and loop_dim_size[loop] != 1]
+                                                  loop not in pr_loop_list] #  and loop_dim_size[loop] != 1]
                 operand_loop_dim[operand]['ir'] = [loop for loop in ir_loop_list if
                                                    loop not in pr_loop_list and loop_dim_size[loop] != 1]
                 operand_loop_dim[operand]['pr'] = pr_loop
@@ -259,6 +261,9 @@ class LayerNode:
                 operand_loop_dim[operand]['ir'] = [loop for loop in ir_loop_list if loop_dim_size[loop] != 1]
                 operand_loop_dim[operand]['pr'] = {}
             begin_idx = split_loc + 1
+
+            # Add the dimensionality order of all relevant (including partially relevant) dimensions of this operand
+            operand_dimensionality_order[operand] = r_loop_list
 
         ''' operand_loop_dim_reform remove the pr loop dict, and put the pr-related data dimension (e.g. IX and IY)
          to r and ir dict with "_r" and "_ir" suffix. It brings benefits to loop info extraction after pr loop decoupling step. '''
@@ -271,8 +276,9 @@ class LayerNode:
                 operand_loop_dim_reform[operand]['r'] += r_extend_list
                 operand_loop_dim_reform[operand]['ir'] += ir_extend_list
 
-        return operand_loop_dim, operand_loop_dim_reform, operand_list
+        return operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order
 
+  
     def extract_layer_info(self):
         """
         This function extract basic information for each layer node.
