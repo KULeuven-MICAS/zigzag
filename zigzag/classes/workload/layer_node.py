@@ -90,6 +90,7 @@ class LayerNode:
         pr_loop, pr_loop_list, pr_scaling_factors = self.build_pr_funcs()
         self.pr_loop = pr_loop
         self.pr_scaling_factors = pr_scaling_factors
+        self.pr_loop_dim_size = {dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop}
 
         ''' Step2: extract relevant and irrelevant loop dimensions. '''
         operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order = \
@@ -162,11 +163,10 @@ class LayerNode:
             scaling_factors = list(self.pr_scaling_factors[dim].values())
             assert len(related_dimension_sizes) == len(scaling_factors) == 2, "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
             args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
-            total_pr_dim_size = self.calc_pr_dimension_size(*args)
-            # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and subtract
-            padding = self.padding.get(dim, (0, 0))  # default = (0, 0)
-            total_pr_dim_size_without_padding = int(total_pr_dim_size - sum(padding))
-            return total_pr_dim_size_without_padding
+            pr_dim_size = self.calc_pr_dimension_size(*args)
+            # Clip this to the largest possible size for this partially relevant dimension (computed at initialization based on padding)
+            pr_dim_size = min(self.pr_loop_dim_size[dim], pr_dim_size)
+            return pr_dim_size
         else:
             assert False
 
@@ -176,6 +176,26 @@ class LayerNode:
         for dim in op_dimensions['r'] + list(op_dimensions['pr'].keys()):
             out[dim] = self.calc_tensor_dim(loop_sizes, dim)
         return out
+
+    def calc_pr_dimension_size_total(self, dim):
+        """Compute the total pr dimension size of this node, taking padding into account.
+
+        Args:
+            dim (str): The partially relevant dimension, e.g. 'IX'.
+
+        Returns:
+            int: The total partially relevant dimension size
+        """
+        related_dimension_sizes = [self.loop_dim_size[related_dim] for related_dim in self.pr_loop[dim]]
+        scaling_factors = list(self.pr_scaling_factors[dim].values())  # assumes this dict is ordered
+        assert len(related_dimension_sizes) == len(scaling_factors) == 2, "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
+        args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
+        total_pr_dim_size = self.calc_pr_dimension_size(*args)
+        # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and subtract
+        padding = self.padding.get(dim, (0, 0))  # default = (0, 0)
+        total_pr_dim_size_without_padding = int(total_pr_dim_size - sum(padding))
+        return total_pr_dim_size_without_padding
+
 
     @staticmethod
     def calc_pr_dimension_size(sa, A, sb, B):
