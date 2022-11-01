@@ -23,6 +23,11 @@ class OperationalUnit:
         """
         return self.__dict__
 
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, OperationalUnit):
+            return False
+        return self.precision == __o.precision and self.cost == __o.cost and self.area == __o.area
+
 
 class Multiplier(OperationalUnit):
     def __init__(self, input_precision: List[int], energy_cost: float, area: float):

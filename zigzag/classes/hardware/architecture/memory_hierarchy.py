@@ -33,7 +33,12 @@ class MemoryHierarchy(DiGraph):
         JSON Representation of this object to save it to a json file.
         """
         return {"memory_levels": [node for node in nx.topological_sort(self)]}
-      
+
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, MemoryHierarchy):
+            return False
+        return all([self_ml == __o_ml for (self_ml, __o_ml) in zip(self.nodes(), __o.nodes())])
+
     def add_memory(self, 
                 memory_instance: MemoryInstance, 
                 operands: Tuple[str, ...], 

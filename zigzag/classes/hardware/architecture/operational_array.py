@@ -29,6 +29,11 @@ class OperationalArray:
         """
         return {"operational_unit": self.unit, "dimensions": self.dimensions}
 
+    def __eq__(self, __o: object) -> bool:
+        if not isinstance(__o, OperationalArray):
+            return False
+        return self.unit == __o.unit and self.dimensions == __o.dimensions
+
 
 class MultiplierArray(OperationalArray):
     pass
