@@ -198,7 +198,7 @@ class CostModelEvaluation:
         self.run()
 
     def __str__(self):
-        return f"CostModelEvaluation(layer={self.layer})"
+        return f"CostModelEvaluation(layer={self.layer}, core={self.core_id})"
 
     def __repr__(self):
         return str(self)
