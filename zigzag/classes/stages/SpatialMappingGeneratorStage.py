@@ -130,7 +130,10 @@ class SpatialMappingGeneratorStage(Stage):
                         if layer_dim in irrelevant_dimensions:
                             continue
                         # If not irrelevant, it is (partially) relevant. Limit based on BW and operand precision.
-                        max_multicast_elements = mem_bandwidth // precision
+                        try:
+                            max_multicast_elements = mem_bandwidth // precision
+                        except ZeroDivisionError:
+                            max_multicast_elements = unrolling_size
                         oa_dim_unrolling[oa_dim][layer_dim] = min(max_multicast_elements, unrolling_size)
 
         # At this point the unrolled layer dimensions are maximal (wrt the served dimensions and bandwidth of the lowest memory level).
