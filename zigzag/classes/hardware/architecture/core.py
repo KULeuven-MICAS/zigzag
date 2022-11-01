@@ -15,6 +15,12 @@ class Core:
         
         self.recalculate_memory_hierarchy_information()
 
+    def __str__(self) -> str:
+        return f"Core({self.id})"
+
+    def __repr__(self) -> str:
+        return str(self)
+
     def __jsonrepr__(self):
         """
         JSON representation used for saving this object to a json file.
