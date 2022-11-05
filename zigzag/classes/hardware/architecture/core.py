@@ -27,13 +27,16 @@ class Core:
         """
         return self.__dict__
 
+    def __hash__(self) -> int:
+        return hash(self.id)
+
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, Core):
             return False
-        return self.operational_array == __o.operational_array and self.memory_hierarchy == __o.memory_hierarchy
+        return self.id == __o.id and self.operational_array == __o.operational_array and self.memory_hierarchy == __o.memory_hierarchy
 
-    def __hash__(self) -> int:
-        return hash(self.id)
+    def equals(self, other: object) -> bool:
+        return isinstance(other, Core) and self.operational_array == other.operational_array and self.memory_hierarchy == other.memory_hierarchy
 
     def check_valid(self):
         # TODO
