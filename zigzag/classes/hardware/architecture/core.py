@@ -30,7 +30,7 @@ class Core:
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, Core):
             return False
-        return self.id == __o.id and self.operational_array == __o.operational_array and self.memory_hierarchy == __o.memory_hierarchy
+        return self.operational_array == __o.operational_array and self.memory_hierarchy == __o.memory_hierarchy
 
     def __hash__(self) -> int:
         return hash(self.id)

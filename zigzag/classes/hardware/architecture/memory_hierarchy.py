@@ -27,6 +27,7 @@ class MemoryHierarchy(DiGraph):
         self.operands = set()  # Initialize the set that will store all memory operands
         self.nb_levels = {}  # Initialize the dict that will store how many memory levels an operand has
         self.mem_instance_list = []
+        self.memory_level_id = 0
 
     def __jsonrepr__(self):
         """
@@ -60,6 +61,8 @@ class MemoryHierarchy(DiGraph):
 
         if port_alloc is None:
             # Define the standard port allocation scheme (this assumes one read port and one write port)
+            if not (memory_instance.r_port == 1 and memory_instance.w_port == 1 and memory_instance.rw_port == 0):
+                raise ValueError(f"No port allocation was provided for memory level of instance {memory_instance} and doesn't match with standard port allocation generation of 1 read and 1 write port.")
             port_alloc = []
             for operand in operands:
                 if operand == 'O':
@@ -96,8 +99,10 @@ class MemoryHierarchy(DiGraph):
                                    mem_level_of_operands=mem_level_of_operands,
                                    port_alloc=port_alloc,
                                    served_dimensions=served_dimensions_repl,
-                                   operational_array=self.operational_array)
+                                   operational_array=self.operational_array,
+                                   id=self.memory_level_id)
         self.mem_instance_list.append(memory_level)
+        self.memory_level_id += 1
 
         # Precompute appropriate edges
         to_edge_from = set()
@@ -218,8 +223,3 @@ class MemoryHierarchy(DiGraph):
 
         return to_remove, self.nb_levels[operand]
 
-    def get_memorylevel_with_id(self, id):
-        for n in self.nodes():
-            if n.get_id() == id:
-                return n
-        raise ValueError(f"No memorylevel with id {id} in this memory hierarchy")

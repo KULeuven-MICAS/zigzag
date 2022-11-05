@@ -16,10 +16,10 @@ class MemoryPort:
         :param port_attr: read_only (r), write_only (w), read_write (rw)
         :param served_op_and_dir: [(I1, rd_out_to_low), (O, wr_in_by_low), (O, rd_out_to_low)]
         """
-        self.port_name = port_name
-        self.port_bw = port_bw
-        self.port_bw_min = port_bw_min
-        self.port_attr = port_attr
+        self.name = port_name
+        self.bw = port_bw
+        self.bw_min = port_bw_min
+        self.attr = port_attr
         self.served_op_lv_dir = []
 
         ''' to give each port a unique id number '''
@@ -34,22 +34,21 @@ class MemoryPort:
         self.served_op_lv_dir.append(operand_level_direction)
 
     def __str__(self):
-        return str(self.port_name)
+        return str(self.name)
 
     def __repr__(self):
-        return str(self.port_name)
+        return str(self.name)
 
     def __eq__(self, other) -> bool:
-        return str(self) == str(other)
+        return isinstance(other, MemoryPort) and self.bw == other.bw and self.bw_min == other.bw_min and self.attr == other.attr
 
     def __hash__(self):
         return self.port_id
 
 class MemoryLevel:
-    identifier_counter = 0
 
     def __init__(self, memory_instance: MemoryInstance, operands: List[str], mem_level_of_operands: Dict,
-                 port_alloc: Tuple[dict, ...], served_dimensions: set or str, operational_array: OperationalArray, id=None):
+                 port_alloc: Tuple[dict, ...], served_dimensions: set or str, operational_array: OperationalArray, id):
         """
         Initialize the memory level in the hierarchy with the physical memory instance.
 
@@ -57,7 +56,7 @@ class MemoryLevel:
         :param operands:
         :param port_alloc: memory port allocation (physical memory port -> functional memory port)
         :param served_dimensions:
-        :id: an identifier used for equality check. Use None to automatically use a new identifier
+        :id: an identifier used for reference check.
         """
         self.memory_instance = memory_instance
         self.name = self.memory_instance.name
@@ -67,6 +66,7 @@ class MemoryLevel:
         self.dimensions = operational_array.dimensions
         self.nb_dimensions = operational_array.nb_dimensions
         self.dimension_sizes = operational_array.dimension_sizes
+        self.id = id
         self.check_served_dimensions()
         self.assert_valid()
 
@@ -90,19 +90,6 @@ class MemoryLevel:
         # Todo: not consider systolic array for now.
         self.calc_fanout()
 
-        a = 1
-        self.__last_formatted_string_inputs = (None, None, None)
-        self.__update_formatted_string()
-        if id is not None:
-            self.__identifier = id
-            MemoryLevel.identifier_counter = max(id, MemoryLevel.identifier_counter) + 1
-        else:
-            self.__identifier = MemoryLevel.identifier_counter
-            MemoryLevel.identifier_counter += 1
-
-    def get_id(self):
-        return self.__identifier
-
     def __update_formatted_string(self):
         self.formatted_string = f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands},served_dimensions={self.served_dimensions})"
 
@@ -114,11 +101,11 @@ class MemoryLevel:
         return str(self)
 
     def __eq__(self, other) -> bool:
-        return isinstance(other, MemoryLevel) and self.__identifier == other.__identifier
+        return isinstance(other, MemoryLevel) and self.memory_instance == other.memory_instance and self.operands == other.operands and \
+            self.mem_level_of_operands == other.mem_level_of_operands and self.port_list == other.port_list and self.served_dimensions_vec == other.served_dimensions_vec
 
     def __hash__(self) -> int:
-        # must remain constant
-        return self.__identifier
+        return hash(self.id)
 
     def port_allocation(self):
         """ Create port object """
@@ -152,6 +139,7 @@ class MemoryLevel:
             port_attr = 'rw'
             new_port = MemoryPort(port_name, port_bw, port_bw_min, port_attr)
             port_list.append(new_port)
+        port_names = [port.name for port in port_list]
 
         ''' 
         Step 2: add operand, memory level, and served data movement direction for each port.
@@ -162,7 +150,7 @@ class MemoryLevel:
             for mov, port in self.port_alloc_raw[idx].items():
                 if port is None:
                     continue
-                port_idx = port_list.index(port)
+                port_idx = port_names.index(port)
                 port_list[port_idx].add_port_function((op, lv, mov_LUT[mov]))
 
         self.port_list = port_list

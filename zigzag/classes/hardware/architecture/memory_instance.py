@@ -45,3 +45,6 @@ class MemoryInstance:
         JSON Representation of this class to save it to a json file.
         """
         return self.__dict__
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__

@@ -37,7 +37,7 @@ class SpatialMappingConversionStage(Stage):
         If not, a ValueError is raised.
         :return: True
         """
-        if not layer.core_allocation:
+        if not isinstance(layer.core_allocation, int):
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError(f"Missing core allocation for {layer}.")
         if not layer.user_spatial_mapping:
