@@ -78,8 +78,8 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
             total_energy += bottom
             x += 1
             highest_bar = max(bottom, highest_bar)
-        ax1.text(x * 0.5 + startx_of_layer * 0.5, highest_bar, "tot:{:,d}".format(int(total_energy)),
-                 horizontalalignment='center', verticalalignment='top', weight='bold')
+        ax1.text(x * 0.5 + startx_of_layer * 0.5, 1.05*highest_bar, "tot:{:,d}".format(int(total_energy)),
+                 horizontalalignment='center', verticalalignment='bottom', weight='bold')
         x += len(all_mems) / 4
 
     for op, h in zip(all_ops, hues):
@@ -88,9 +88,9 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
     for dir_i, dir in enumerate(memory_word_access_summed[d][operand][mem]):
         ax1.bar([0], [0], width=1, bottom=0, facecolor=(1, 1, 1), hatch=hatches[dir_i], label=dir)
 
-    ax1.legend()
+    ax1.legend(loc="upper left")
     ax1.set_xticks(list(xticks.keys()), list(xticks.values()), rotation=90)
-    ax1.set_ylim(0.1, ax1.get_ylim()[1])
+    ax1.set_ylim(0, 1.1*ax1.get_ylim()[1])
 
     ax1.set_ylabel("Energy (pJ)", fontsize=15)
 
@@ -113,11 +113,11 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
             li_pre = [x + y for x, y in zip(li_pre, va)]
 
     for x in x2:
-        ax2.text(x, la_tot[x] * 0.6, "tot:{:,d}".format(int(la_tot[x])),
-                 horizontalalignment='center', verticalalignment='top', weight='bold')
+        ax2.text(x, la_tot[x] * 1.05, "tot:{:,d}".format(int(la_tot[x])),
+                 horizontalalignment='center', verticalalignment='bottom', weight='bold')
     ax2.legend()
-
-    ax2.set_xlabel("Temporal mapping ids", fontsize=15)
+    ax2.set_ylim(0, 1.1*ax2.get_ylim()[1])
+    ax2.set_xlabel("Layers", fontsize=15)
     ax2.set_ylabel("Latency (cycle)", fontsize=15)
 
     fig.tight_layout()
@@ -125,7 +125,6 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
 
 
 if __name__ == '__main__':
-    with open('list_of_cme.pkl', 'rb') as f:
-        list_of_cme = pickle.load(f)
-    f.close()
-    plot_cost_model_evaluations(list_of_cme)
+    with open('list_of_cmes.pickle', 'rb') as handle:
+        list_of_cme = pickle.load(handle)
+    plot_cost_model_evaluations(list_of_cme, 'plot.png')
