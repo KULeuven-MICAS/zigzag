@@ -13,6 +13,12 @@ class Accelerator:
         self.cores = sorted([core for core in core_set], key=lambda core: core.id)
         self.global_buffer = global_buffer
 
+    def __str__(self) -> str:
+        return f"Accelerator({self.name})"
+
+    def __repr__(self) -> str:
+        return str(self)
+
     def __jsonrepr__(self):
         """
         JSON representation used for saving this object to a json file.

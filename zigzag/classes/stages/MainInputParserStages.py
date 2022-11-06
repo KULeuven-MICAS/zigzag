@@ -1,8 +1,6 @@
-from pprint import pprint
-from typing import Generator, Callable, List, Tuple, Any
-from onnx.helper import make_tensor_value_info
 import importlib
 
+from zigzag.classes.io.accelerator.parser import AcceleratorParser
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.workload.dnn_workload import DNNWorkload
 
@@ -10,33 +8,22 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def parse_accelerator_from_path(accelerator_path):
-    """
-    Parse the input accelerator residing in accelerator_path.
-    """
-    global module
-    module = importlib.import_module(accelerator_path)
-    accelerator = module.accelerator
-    logger.info(f"Parsed accelerator with cores {[core.id for core in accelerator.cores]}.")
-    return accelerator
-
 class AcceleratorParserStage(Stage):
-    def __init__(self, list_of_callables, *, accelerator_path, **kwargs):
+    def __init__(self, list_of_callables, *, accelerator, **kwargs):
         super().__init__(list_of_callables, **kwargs)
-        self.accelerator_path = accelerator_path
+        self.accelerator_parser = AcceleratorParser(accelerator)
 
     def run(self):
-        accelerator = parse_accelerator_from_path(self.accelerator_path)
+        self.accelerator_parser.run()
+        accelerator = self.accelerator_parser.get_accelerator()
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
 
-
-
 def parse_workload_from_path(workload_path):
     """
-    Parse the input workload residing in accelerator_path.
+    Parse the input workload residing in workload_path.
     The "workload" dict is converted to a NetworkX graph.
     """
     module = importlib.import_module(workload_path)
@@ -74,7 +61,9 @@ class WorkloadAndAcceleratorParserStage(Stage):
 
     def run(self):
         workload = parse_workload_from_path(self.workload_path)
-        accelerator = parse_accelerator_from_path(self.accelerator_path)
+        accelerator_parser = AcceleratorParser(self.accelerator_path)
+        accelerator_parser.run()
+        accelerator = accelerator_parser.get_accelerator()
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, workload=workload, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info

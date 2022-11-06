@@ -1,4 +1,5 @@
 import importlib
+from os import path
 import onnx
 from onnx import AttributeProto
 
@@ -10,6 +11,13 @@ def parse_mapping_from_path(mapping_path):
     """
     Parse the input accelerator residing in accelerator_path.
     """
+    # Sanity check on mapping_path
+    if mapping_path is None:
+        # Update the mapping_path to the default mapping file
+        if path.exists("inputs/examples/mapping/default.py"):
+            mapping_path = "zigzag.inputs.examples.mapping.default"
+        else:
+            raise ValueError("No mapping path/dict provided, and default was not found.")
     global module
     module = importlib.import_module(mapping_path)
     mapping = module.mapping

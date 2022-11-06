@@ -1,3 +1,5 @@
+from onnx import ModelProto
+
 from zigzag.classes.io.onnx.default import DefaultNodeParser
 from zigzag.classes.io.onnx.gemm import GemmParser
 from zigzag.classes.io.onnx.matmul import MatMulParser
@@ -13,12 +15,29 @@ logger = logging.getLogger(__name__)
 class ONNXModelParser:
     """Parse the ONNX model into a workload.
     """
-    def __init__(self, onnx_model_path, mapping_path, ) -> None:
-        self.onnx_model_path = onnx_model_path
-        self.mapping_path = mapping_path
+    def __init__(self, onnx_model, mapping_path) -> None:
+        # Sanity checks on given onnx_model
+        if isinstance(onnx_model, str):
+            self.onnx_model_path = onnx_model
+            self.onnx_model = None
+        elif isinstance(onnx_model, ModelProto):
+            self.onnx_model_path = None
+            self.onnx_model = onnx_model
+        else:
+            raise TypeError(f"Given onnx_model is of type {type(onnx_model)}.")
+        # Sanity checks on given mapping
+        if isinstance(mapping_path, str):
+            self.mapping_path = mapping_path
+            self.mapping = None
+        elif isinstance(mapping_path, dict):
+            self.mapping_path = None
+            self.mapping = mapping_path
+        elif mapping_path is None:
+            self.mapping_path = None
+            self.mapping = None
+        else:
+            raise TypeError(f"Given mapping is of type {type(mapping_path)}.")
 
-        self.onnx_model = None
-        self.mapping = None
         self.workload = None
 
     def run(self):
@@ -27,11 +46,13 @@ class ONNXModelParser:
         - parse the mapping_path into a mapping dict
         - iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes
         """
-        onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
-        self.onnx_model = onnx_model
+        if not self.onnx_model:
+            onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
+            self.onnx_model = onnx_model
 
-        mapping = parse_mapping_from_path(self.mapping_path)
-        self.mapping = mapping
+        if not self.mapping:
+            mapping = parse_mapping_from_path(self.mapping_path)
+            self.mapping = mapping
 
         workload = self.parse_workload_from_onnx_model_and_mapping()
         self.workload = workload

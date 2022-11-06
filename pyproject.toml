@@ -1,0 +1,61 @@
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["."]  # ["."] by default
+include = ["*"]  # ["*"] by default
+exclude = ["inputs*", "outputs*", "docs*"]
+namespaces = true  # true by default
+
+[project]
+name = "zigzag-dse"
+version = "2.0.0"
+description = "ZigZag - Deep Learning Hardware Design Space Exploration"
+readme = "README.md"
+authors = [{ name = "Arne Symons", email = "arne.symons@kuleuven.be" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python",
+]
+keywords = ["zigzag", "dse", "design-space-exploration", "machine-learning", "deep-learning", "mapping"]
+dependencies = [
+    'numpy',
+    'networkx',
+    'sympy',
+    'matplotlib',
+    'onnx',
+    'tqdm',
+    'tomli; python_version < "3.11"',
+]
+requires-python = ">=3.9"
+
+
+[project.optional-dependencies]
+dev = ["bumpver", "pip-tools", "build", "twine"]
+
+[project.urls]
+Homepage = "https://github.com/ZigZag-Project/zigzag"
+
+[project.scripts]
+realpython = "zigzag.__main__:main"
+
+[tool.bumpver]
+current_version = "2.0.0"
+version_pattern = "MAJOR.MINOR.PATCH"
+commit_message = "bump version {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"', 
+    'version = "{version}"'
+]
+"zigzag/__init__.py" = ["{version}"]
+
+
+

@@ -799,55 +799,51 @@ class CostModelEvaluation:
     def __add__(self, other):
         sum = pickle_deepcopy(self)
 
-        # Energy
+        ## Energy
         sum.MAC_energy += other.MAC_energy
         sum.mem_energy += other.mem_energy
         for op in sum.energy_breakdown.keys():
-            l = []
-            for i in range(min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))):
-                l.append(self.energy_breakdown[op][i] + other.energy_breakdown[op][i])
-            i = min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))
-            l += self.energy_breakdown[op][i:]
-            l += other.energy_breakdown[op][i:]
-            sum.energy_breakdown[op] = l
-        for op in sum.energy_breakdown_further.keys():
-            l = []
-            for i in range(min(len(self.energy_breakdown_further[op]), len(other.energy_breakdown_further[op]))):
-                l.append(self.energy_breakdown_further[op][i] + other.energy_breakdown_further[op][i])
-            i = min(len(self.energy_breakdown_further[op]), len(other.energy_breakdown_further[op]))
-            l += self.energy_breakdown_further[op][i:]
-            l += other.energy_breakdown_further[op][i:]
-            sum.energy_breakdown_further[op] = l
+            if op in other.energy_breakdown.keys():
+                l = []
+                for i in range(min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))):
+                    l.append(self.energy_breakdown[op][i] + other.energy_breakdown[op][i])
+                i = min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))
+                l += self.energy_breakdown[op][i:]
+                l += other.energy_breakdown[op][i:]
+                sum.energy_breakdown[op] = l
 
-        # sum.energy_breakdown = {
-        #     op: [
-        #         sum.energy_breakdown[op][i] + other.energy_breakdown[op][i] for i in range(len(sum.energy_breakdown[op]))
-        #     ] for op in sum.energy_breakdown.keys()
-        # }
-        # sum.energy_breakdown_further = {
-        #     op: [
-        #         sum.energy_breakdown_further[op][i] + other.energy_breakdown_further[op][i] for i in range(len(sum.energy_breakdown_further[op]))
-        #     ] for op in sum.energy_breakdown_further.keys()
-        # }
+        for op in sum.energy_breakdown_further.keys():
+            if op in other.energy_breakdown_further.keys():
+                l = []
+                for i in range(min(len(self.energy_breakdown_further[op]), len(other.energy_breakdown_further[op]))):
+                    l.append(self.energy_breakdown_further[op][i] + other.energy_breakdown_further[op][i])
+                i = min(len(self.energy_breakdown_further[op]), len(other.energy_breakdown_further[op]))
+                l += self.energy_breakdown_further[op][i:]
+                l += other.energy_breakdown_further[op][i:]
+                sum.energy_breakdown_further[op] = l
+
+        # Get all the operands from other that are not in self and add them to the energy breakdown aswell
+        op_diff = set(other.energy_breakdown.keys()) - set(self.energy_breakdown.keys())
+        for op in op_diff:
+            sum.energy_breakdown[op] = other.energy_breakdown[op]
+            sum.energy_breakdown_further[op] = other.energy_breakdown_further[op]
+
         sum.energy_total += other.energy_total
 
-        # Memory access
+        ## Memory access
         for op in sum.memory_word_access.keys():
-            l = []
-            for i in range(min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))):
-                l.append(self.memory_word_access[op][i] + other.memory_word_access[op][i])
-            i = min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))
-            l += self.memory_word_access[op][i:]
-            l += other.memory_word_access[op][i:]
-            sum.memory_word_access[op] = l
+            if op in other.memory_word_access.keys():
+                l = []
+                for i in range(min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))):
+                    l.append(self.memory_word_access[op][i] + other.memory_word_access[op][i])
+                i = min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))
+                l += self.memory_word_access[op][i:]
+                l += other.memory_word_access[op][i:]
+                sum.memory_word_access[op] = l
+        for op in op_diff:
+            sum.memory_word_access[op] = other.memory_word_access[op]
 
-        # sum.memory_word_access = {
-        #     op: [
-        #         sum.memory_word_access[op][i] + other.memory_word_access[op][i] for i in range(len(sum.memory_word_access[op]))
-        #     ] for op in sum.memory_word_access.keys()
-        # }
-
-        # Latency
+        ## Latency
         sum.data_loading_cycle += other.data_loading_cycle
         sum.data_offloading_cycle += other.data_offloading_cycle
         sum.ideal_cycle += other.ideal_cycle
@@ -856,13 +852,13 @@ class CostModelEvaluation:
         sum.latency_total1 += other.latency_total1
         sum.latency_total2 += other.latency_total2
 
-        # MAC utilization
+        ## MAC utilization
         sum.MAC_spatial_utilization = sum.ideal_cycle / sum.ideal_temporal_cycle
         sum.MAC_utilization0 = sum.ideal_cycle / sum.latency_total0
         sum.MAC_utilization1 = sum.ideal_cycle / sum.latency_total1
         sum.MAC_utilization2 = sum.ideal_cycle / sum.latency_total2
 
-        # Not addable
+        ## Not addable
         func = ['calc_allowed_and_real_data_transfer_cycle_per_DTL', 'calc_data_loading_offloading_latency', 'calc_double_buffer_flag',
                 'calc_overall_latency', 'calc_MAC_energy_cost', 'calc_energy', 'calc_latency', 'calc_memory_energy_cost',
                 'calc_memory_utilization', 'calc_memory_word_access', 'combine_data_transfer_rate_per_physical_port', 'run']

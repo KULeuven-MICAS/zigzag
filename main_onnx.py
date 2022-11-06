@@ -11,7 +11,6 @@ args = parser.parse_args()
 # Initialize the logger
 import logging as _logging
 _logging_level = _logging.INFO
-# _logging_format = '%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
 _logging_format = '%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
 _logging.basicConfig(level=_logging_level,
                      format=_logging_format)
@@ -24,13 +23,13 @@ mainstage = MainStage([  # Initializes the MainStage as entry point
     AcceleratorParserStage,  # Parses the accelerator
     SimpleSaveStage,  # Saves all received CMEs information to a json
     WorkloadStage,  # Iterates through the different layers in the workload
-    SpatialMappingConversionStage,  # Generates multiple spatial mappings (SM)
+    SpatialMappingGeneratorStage,  # Generates multiple spatial mappings (SM)
     MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
     LomaStage,  # Generates multiple temporal mappings (TM)
     CostModelStage  # Evaluates generated SM and TM through cost model
 ],
     accelerator_path=args.accelerator,  # required by AcceleratorParserStage
-    onnx_model_path=args.model,  # required by ONNXModelParserStage
+    onnx_model=args.model,  # required by ONNXModelParserStage
     mapping_path=args.mapping,  # required by ONNXModelParserStage
     dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
     loma_lpf_limit=6,  # required by LomaStage

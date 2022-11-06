@@ -94,7 +94,8 @@ class SpatialMappingConversionStage(Stage):
             # Set the adjusted unrolling size in the original user_spatial_mapping dict
             user_spatial_mapping[spatial_dim_name] = (loop_dim_unrolled, loop_size_unrolled)
 
-        logger.info(f"User-provided spatial mapping converted to: {user_spatial_mapping}")
+        user_spatial_mapping_for_log = {array_dim: (loop_dim, f"{loop_size:.2f}") for (array_dim, (loop_dim, loop_size)) in user_spatial_mapping.items()}
+        logger.info(f"User-provided spatial mapping converted to: {user_spatial_mapping_for_log}")
 
         spatial_mapping_dict = {}
         layer_to_mem_op = self.layer.memory_operand_links
