@@ -1,7 +1,7 @@
 from zigzag.classes.stages import *
 
 
-def get_hardware_performance(onnx_model, accelerator, mapping=None):
+def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filename_pattern="outputs/{datetime}.json", pickle_filename="outputs/list_of_cmes.pickle"):
     
     # Initialize the logger
     import logging as _logging
@@ -15,6 +15,7 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None):
         ONNXModelParserStage,  # Parse the ONNX Model into the workload
         AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
         SimpleSaveStage,  # Save the summed CME to a json
+        PickleSaveStage,  # Save all received CMEs in a list to a pickle file
         SumStage,  # Sum up the received best CME across all layers of he workload
         WorkloadStage,  # Iterate through the different layers in the workload
         MinimalLatencyStage,  # Reduce all CMEs, returning minimal latency one
@@ -26,7 +27,8 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None):
         accelerator=accelerator,  # required by AcceleratorParserStage
         onnx_model=onnx_model,  # required by ONNXModelParserStage
         mapping_path=mapping,  # required by ONNXModelParserStage
-        dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
+        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6  # required by LomaStage
     )
 

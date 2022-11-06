@@ -14,9 +14,10 @@ if __name__ == "__main__":
     # Call the zigzag api, using a provided accelerator and mapping
     # energy, latency = get_hardware_performance(onnx_model, accelerator, mapping)
     energy, latency = get_hardware_performance(onnx_model, "tpu", mapping)
-    print(f"Total onnx model (energy, latency) performance = ({energy}, {latency}).")
+    print(f"Total onnx model (energy, latency) performance = ({energy:.3e}, {latency:.3e}).")
 
     # Plot the cost model evaluations that were saved in the above run
-    # with open("zigzag/visualization/results/list_of_cme.pkl", 'rb') as fp:
-    #     cmes = pickle.load(fp)
+    with open("outputs/list_of_cmes.pickle", 'rb') as fp:
+        cmes = pickle.load(fp)
+    print(cmes)
     # plot_cost_model_evaluations(cmes, filename="outputs/saved_plot.png")

@@ -1,7 +1,7 @@
 from .CostModelStage import CostModelStage
 from .DumpStage import DumpStage
 from .PlotTemporalMappingsStage import PlotTemporalMappingsStage
-from .SaveStage import CompleteSaveStage, SimpleSaveStage
+from .SaveStage import CompleteSaveStage, SimpleSaveStage, PickleSaveStage
 from .GeneralParameterIteratorStage import GeneralParameterIteratorStage
 from .LomaStage import LomaStage
 from .MainInputParserStages import AcceleratorParserStage, WorkloadParserStage, WorkloadAndAcceleratorParserStage
