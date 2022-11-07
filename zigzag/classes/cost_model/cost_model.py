@@ -208,12 +208,6 @@ class CostModelEvaluation:
         JSON representation used for saving this object to a json file.
         """
         return {
-            "inputs": {
-                "accelerator": self.accelerator,
-                "layer": self.layer,
-                "spatial_mapping": self.spatial_mapping,
-                "temporal_mapping": self.temporal_mapping,
-            },
             "outputs": {
                 "memory": {
                     "utilization": self.mem_utili_shared,
@@ -231,7 +225,13 @@ class CostModelEvaluation:
                     "latency_with_onloading_without_offloading": self.latency_total1,
                     "latency_with_onloading_with_offloading": self.latency_total2
                 }
-            }
+            },
+            "inputs": {
+                "accelerator": self.accelerator,
+                "layer": self.layer,
+                "spatial_mapping": self.spatial_mapping,
+                "temporal_mapping": self.temporal_mapping,
+            },
         }
 
     def __simplejsonrepr__(self):

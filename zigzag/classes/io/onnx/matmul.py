@@ -83,4 +83,6 @@ class MatMulParser(Parser):
         node_attrs = get_layer_node_input_format(B, C, K, node_mapping, self.nodes_outputs)
         node_obj = LayerNode(self.node_id, node_attrs, node_name=self.node.name)
 
+        logger.info(f"Parsed MatMul node {self.node.name}")
+
         return node_obj

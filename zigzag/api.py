@@ -14,10 +14,11 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filenam
     mainstage = MainStage([  # Initialize the MainStage as entry point
         ONNXModelParserStage,  # Parse the ONNX Model into the workload
         AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-        SimpleSaveStage,  # Save the summed CME to a json
+        SimpleSaveStage,  # Save the summed CME energy and latency to a json
         PickleSaveStage,  # Save all received CMEs in a list to a pickle file
         SumStage,  # Sum up the received best CME across all layers of he workload
         WorkloadStage,  # Iterate through the different layers in the workload
+        CompleteSaveStage,  # Save each processed layer to a json
         MinimalLatencyStage,  # Reduce all CMEs, returning minimal latency one
         SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
         MinimalLatencyStage,  # Reduce all CMEs, returning minimal latency one

@@ -30,6 +30,7 @@ class CompleteSaveStage(Stage):
         """
         Run the complete save stage by running the substage and saving the CostModelEvaluation json representation.
         """
+        self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         
         for id, (cme, extra_info) in enumerate(substage.run()):
@@ -78,6 +79,7 @@ class SimpleSaveStage(Stage):
         """
         Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
         """
+        self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         
         for id, (cme, extra_info) in enumerate(substage.run()):
