@@ -134,13 +134,7 @@ dmypy.json
 
 # result pickle files
 output*/*.pkl
-
-inputs/ICCAD/*/result*
-inputs/ICCAD/CS1/*.sh
-inputs/ICCAD/CS1/figure/
-inputs/ICCAD/CS1/settings
-inputs/ICCAD/CS1/*.pkl
-inputs/ICCAD/CS1/*.pickle*
+output*/*.pickle
 
 # result json files
 outputs*/*.json
@@ -148,9 +142,6 @@ outputs*/*.json
 # result png files
 outputs*/*.png
 
-# nokia settings
-inputs/nokia/*
-outputs_nokia/*
 
 # docs makefile and make.bat
 docs/Makefile
