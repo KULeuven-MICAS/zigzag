@@ -38,7 +38,8 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None, opt='latency
         mapping_path=mapping,  # required by ONNXModelParserStage
         dump_filename_pattern=dump_filename_pattern,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6  # required by LomaStage
+        loma_lpf_limit=6,  # required by LomaStage
+        loma_show_progress_bar=True,
     )
 
     # Launch the MainStage

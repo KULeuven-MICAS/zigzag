@@ -87,7 +87,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: List[CostModelEvaluation], s
     ''' plotting start '''
     ''' Energy part '''
 
-    fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(0.75*10, 0.75*8))
+    fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(10, 8))
     hues = np.linspace(0, 1, len(all_ops) + 1)[:-1]
     hatches = ['////', '\\\\\\\\', 'xxxx', '++++']
     x = 0

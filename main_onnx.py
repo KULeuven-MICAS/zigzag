@@ -28,7 +28,7 @@ mainstage = MainStage([  # Initializes the MainStage as entry point
     LomaStage,  # Generates multiple temporal mappings (TM)
     CostModelStage  # Evaluates generated SM and TM through cost model
 ],
-    accelerator_path=args.accelerator,  # required by AcceleratorParserStage
+    accelerator=args.accelerator,  # required by AcceleratorParserStage
     onnx_model=args.model,  # required by ONNXModelParserStage
     mapping_path=args.mapping,  # required by ONNXModelParserStage
     dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern

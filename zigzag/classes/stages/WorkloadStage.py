@@ -1,9 +1,12 @@
 import networkx as nx
+import logging
 
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.workload.dnn_workload import DNNWorkload
 from zigzag.classes.workload.dummy_node import DummyNode
 
+
+logger = logging.getLogger(__name__)
 
 class WorkloadStage(Stage):
     """
@@ -23,6 +26,7 @@ class WorkloadStage(Stage):
                 continue  # skip the DummyNodes
             kwargs = self.kwargs.copy()
             kwargs['layer'] = layer
+            logger.info(f"Processing layer {layer.name}...")
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
             for cme, extra_info in sub_stage.run():
                 yield cme, (layer, extra_info)

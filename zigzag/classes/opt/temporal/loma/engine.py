@@ -125,7 +125,7 @@ class LomaEngine:
         self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
         if self.lpf_limit < min_nb_temporal_loops:
-            logger.info(f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs.")
+            logger.debug(f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs.")
             self.lpf_limit = min_nb_temporal_loops
 
     def get_prime_factors(self):
@@ -163,7 +163,7 @@ class LomaEngine:
             temporal_loop_pf_count_sums = {loop_dim: 1}
             lpfs = [(loop_dim, 1)]
 
-        logger.info(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
+        logger.debug(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
 
         self.temporal_loop_pfs = temporal_loop_pfs
         self.temporal_loop_pf_counts = temporal_loop_pf_counts
@@ -183,7 +183,7 @@ class LomaEngine:
         for nb_pf_sum in self.temporal_loop_pf_count_sums.values():
             nb_permutations = int(nb_permutations / factorial(nb_pf_sum))
         self.nb_permutations = nb_permutations
-        logger.info(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
+        logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
         
 
     def limit_lpfs(self):
@@ -195,7 +195,7 @@ class LomaEngine:
         """
         n_pf = sum(self.temporal_loop_pf_count_sums.values())
         if n_pf <= self.lpf_limit:
-            logger.info(f"No lpf limiting performed for layer {self.layer}")
+            logger.debug(f"No lpf limiting performed for layer {self.layer}")
             return
         while n_pf > self.lpf_limit:
             # Find the loop dimension with the most lpfs
@@ -241,7 +241,7 @@ class LomaEngine:
                 lpfs += list(((dim, pf),) * count)
         self.lpfs = lpfs
 
-        logger.info(f"Limited layer {self.layer} to {len(self.lpfs)} lpfs.")
+        logger.debug(f"Limited layer {self.layer} to {len(self.lpfs)} lpfs.")
         return
 
     def og(self):

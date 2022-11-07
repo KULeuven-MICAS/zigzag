@@ -25,7 +25,7 @@ def parse_mapping_from_path(mapping_path):
         default_present = "\u2705"
     else:
         default_present = "\u274C"
-    logger.info(f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}.")
+    logger.debug(f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}.")
     return mapping
 
 def parse_onnx_model_from_path(onnx_model_path):
