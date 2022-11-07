@@ -21,12 +21,16 @@ class WorkloadStage(Stage):
         self.workload = workload
 
     def run(self):
-        for layer in nx.topological_sort(self.workload):
+        for id, layer in enumerate(nx.topological_sort(self.workload)):
             if type(layer) == DummyNode:
                 continue  # skip the DummyNodes
             kwargs = self.kwargs.copy()
             kwargs['layer'] = layer
-            logger.info(f"Processing layer {layer.name}...")
+            if layer.name:
+                layer_name = layer.name
+            else:
+                layer_name = id
+            logger.info(f"Processing layer {layer_name}...")
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
             for cme, extra_info in sub_stage.run():
                 yield cme, (layer, extra_info)
