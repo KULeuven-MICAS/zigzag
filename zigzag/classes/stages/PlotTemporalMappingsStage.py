@@ -2,7 +2,7 @@ import pickle
 from typing import Generator, Any, Tuple
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-from zigzag.visualization.results.plot_cme import plot_cost_model_evaluations
+from zigzag.visualization.results.plot_cme import bar_plot_cost_model_evaluations_breakdown
 import os
 
 class PlotTemporalMappingsStage(Stage):
@@ -31,4 +31,4 @@ class PlotTemporalMappingsStage(Stage):
             cmes.append(cme)
             yield cme, extra_info
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        plot_cost_model_evaluations(cmes, filename)
+        bar_plot_cost_model_evaluations_breakdown(cmes, filename)

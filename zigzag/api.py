@@ -1,7 +1,7 @@
 from zigzag.classes.stages import *
 
 
-def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filename_pattern="outputs/{datetime}.json", pickle_filename="outputs/list_of_cmes.pickle"):
+def get_hardware_performance(onnx_model, accelerator, mapping=None, opt='latency', dump_filename_pattern="outputs/{datetime}.json", pickle_filename="outputs/list_of_cmes.pickle"):
     
     # Initialize the logger
     import logging as _logging
@@ -11,6 +11,14 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filenam
     _logging.basicConfig(level=_logging_level,
                         format=_logging_format)
 
+    # Sanity check on the optimization criterion
+    if opt == 'energy':
+        opt_stage = MinimalEnergyStage
+    elif opt == 'latency':
+        opt_stage = MinimalLatencyStage
+    else:
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency'.")
+
     mainstage = MainStage([  # Initialize the MainStage as entry point
         ONNXModelParserStage,  # Parse the ONNX Model into the workload
         AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
@@ -19,9 +27,9 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filenam
         SumStage,  # Sum up the received best CME across all layers of he workload
         WorkloadStage,  # Iterate through the different layers in the workload
         CompleteSaveStage,  # Save each processed layer to a json
-        MinimalLatencyStage,  # Reduce all CMEs, returning minimal latency one
+        opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
         SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
-        MinimalLatencyStage,  # Reduce all CMEs, returning minimal latency one
+        opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
         LomaStage,  # Generate multiple temporal mappings (TM)
         CostModelStage  # Evaluate generated SM and TM through cost model
     ],
@@ -40,4 +48,4 @@ def get_hardware_performance(onnx_model, accelerator, mapping=None, dump_filenam
     # Get CME from answer
     cme = answers[0][0]
 
-    return cme.energy_total, cme.latency_total2
+    return cme.energy_total, cme.latency_total2, cme

@@ -9,8 +9,45 @@ import numpy as np
 from zigzag.classes.mapping.combined_mapping import FourWayDataMoving
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
+def bar_plot_cost_model_evaluations_total(cmes: List[CostModelEvaluation], labels, fig_title: str="cost model evaluation comparison", save_path: str="plot.png"):
+    """Plot total energy and latency of each cost model evaluation in a bar chart.
 
-def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str):
+    Args:
+        cmes (List[CostModelEvaluation]): List of CostModelEvaluations to compare.
+        save_path (str): Path to save the plot to.
+    """
+    assert len(cmes) == len(labels), "Please match a label for each cost model evaluation."
+    energies = [cme.energy_total for cme in cmes]
+    latencies = [cme.latency_total2 for cme in cmes]
+
+    x = np.arange(len(labels))  # the label locations
+    width = 0.35  # the width of the bars
+
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twinx()
+
+    h1 = rects1 = ax1.bar(x - width/2, energies, width, label='Energy (pJ)', color='maroon')
+    h2 = rects2 = ax2.bar(x + width/2, latencies, width, label='Latency (cycle)', color='indigo')
+
+    # Add some text for labels, title and custom x-axis tick labels, etc.
+    ax1.set_ylabel('Energy (pJ)', fontsize=15)
+    ax2.set_ylabel('Latency (cycle)', fontsize=15)
+    ax1.set_title('Scores by group and gender', fontsize=15)
+    ax1.set_xticks(x, labels)
+    # hs = h1 + h2
+    # labs = [h.get_label() for h in hs]
+    # ax1.legend(hs, labs, loc='best')
+
+    ax1.bar_label(rects1, padding=3, fmt='%.2e')
+    ax2.bar_label(rects2, padding=3, fmt='%.2e')
+
+    ax1.set_title(fig_title)
+    fig.tight_layout()
+    plt.savefig(save_path)
+
+
+
+def bar_plot_cost_model_evaluations_breakdown(cmes: List[CostModelEvaluation], save_path: str):
     memory_word_access_summed = {d: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for d in range(len(cmes))}
     mac_costs = defaultdict(lambda: 0)
     memory_instances = {}
@@ -50,7 +87,7 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
     ''' plotting start '''
     ''' Energy part '''
 
-    fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(10, 8))
+    fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(0.75*10, 0.75*8))
     hues = np.linspace(0, 1, len(all_ops) + 1)[:-1]
     hatches = ['////', '\\\\\\\\', 'xxxx', '++++']
     x = 0
@@ -121,10 +158,10 @@ def plot_cost_model_evaluations(cmes: List['CostModelEvaluation'], filename: str
     ax2.set_ylabel("Latency (cycle)", fontsize=15)
 
     fig.tight_layout()
-    plt.savefig(filename)
+    plt.savefig(save_path)
 
 
 if __name__ == '__main__':
     with open('list_of_cmes.pickle', 'rb') as handle:
         list_of_cme = pickle.load(handle)
-    plot_cost_model_evaluations(list_of_cme, 'plot.png')
+    bar_plot_cost_model_evaluations_breakdown(list_of_cme, 'plot.png')

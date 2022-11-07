@@ -80,21 +80,25 @@ class SpatialMappingConversionStage(Stage):
         mem_hierarchy = core.memory_hierarchy
         oa_dims = core.operational_array.dimensions
         layer_dim_sizes = self.layer.loop_dim_size
+        limited_user_spatial_mapping = {}  # init dict we will be filling
         for spatial_dim_name, spatial_loop in user_spatial_mapping.items():
+            (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
+            # Check 0: Skip this spatial dimension if it doesn't exist in the layer
+            if loop_dim_unrolled not in layer_dim_sizes.keys():
+                continue
             # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
             oa_dim_size = next((oa_dim for oa_dim in oa_dims if oa_dim.name == spatial_dim_name)).size
-            (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
             loop_size_unrolled = min(oa_dim_size, loop_size_unrolled)
-            # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling
-            layer_dim_size = layer_dim_sizes[loop_dim_unrolled]
+            # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
+            layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
             loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
             # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
             temporal_remainder = int(np.ceil(layer_dim_size/loop_size_unrolled))
             loop_size_unrolled = layer_dim_size / temporal_remainder
-            # Set the adjusted unrolling size in the original user_spatial_mapping dict
-            user_spatial_mapping[spatial_dim_name] = (loop_dim_unrolled, loop_size_unrolled)
+            # Set the adjusted unrolling size in the original user_spatial_mapping dict if it is greater than 1
+            limited_user_spatial_mapping[spatial_dim_name] = (loop_dim_unrolled, loop_size_unrolled)
 
-        user_spatial_mapping_for_log = {array_dim: (loop_dim, f"{loop_size:.2f}") for (array_dim, (loop_dim, loop_size)) in user_spatial_mapping.items()}
+        user_spatial_mapping_for_log = {array_dim: (loop_dim, f"{loop_size:.2f}") for (array_dim, (loop_dim, loop_size)) in limited_user_spatial_mapping.items()}
         logger.info(f"User-provided spatial mapping converted to: {user_spatial_mapping_for_log}")
 
         spatial_mapping_dict = {}
@@ -103,7 +107,7 @@ class SpatialMappingConversionStage(Stage):
         core_id = self.layer.core_allocation
         mem_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
         for mem_op, layer_op in mem_to_layer_op.items():
-            user_sm_copy = user_spatial_mapping.copy()
+            user_sm_copy = limited_user_spatial_mapping.copy()
             # layer_op = mem_to_layer_op[mem_op]
             spatial_mapping_dict[layer_op] = []
             memory_levels = mem_hierarchy.get_memory_levels(mem_op, )
