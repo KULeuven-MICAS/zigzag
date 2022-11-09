@@ -2,8 +2,19 @@
 Installating ZigZag
 ===================
 
-Linux
-=====
+Installing as a package
+=======================
+
+If you're interested in using the ZigZag framework as an end user, and not interested in making any modifications to its internals, you can make ZigZag available by directly installing it using pip in your ``venv`` or ``conda`` environment:
+
+.. code-block:: sh
+
+    pip install zigzag-dse
+
+Manual clone
+============
+
+If you want to add custom functionality to the framework, you can clone the repository manually:
 
 Prerequisites
 -------------

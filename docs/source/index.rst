@@ -26,6 +26,7 @@ Contents
 
    installation
    getting-started
+   api
    user-guide
    future
    contribute
