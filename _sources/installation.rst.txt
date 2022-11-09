@@ -11,6 +11,8 @@ If you're interested in using the ZigZag framework as an end user, and not inter
 
     pip install zigzag-dse
 
+After installation, you can take a look at the :doc:`api` documentation on how to use the api.
+
 Manual clone
 ============
 
