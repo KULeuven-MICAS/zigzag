@@ -59,6 +59,7 @@ class LayerNode:
         '''Get required attributes from layer_attrs'''
         equation: str = layer_attrs.get('equation')
         loop_dim_size: Dict[str, int] = layer_attrs.get('loop_dim_size')
+        pr_loop_dim_size: Dict[str, int] = layer_attrs.get('pr_loop_dim_size', None)
         operand_precision: Dict[str, int] = layer_attrs.get('operand_precision')
         dimension_relations: List[str] = layer_attrs.get('dimension_relations', [])
         user_spatial_mapping: Dict[str, tuple] = layer_attrs.get('spatial_mapping', None)
@@ -74,6 +75,7 @@ class LayerNode:
 
         self.equation = equation
         self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
+        self.pr_loop_dim_size = pr_loop_dim_size
         self.operand_precision = operand_precision
         self.dimension_relations = dimension_relations
         self.loop_dim_list = list(loop_dim_size.keys())
@@ -90,7 +92,8 @@ class LayerNode:
         pr_loop, pr_loop_list, pr_scaling_factors = self.build_pr_funcs()
         self.pr_loop = pr_loop
         self.pr_scaling_factors = pr_scaling_factors
-        self.pr_loop_dim_size = {dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop}
+        if not self.pr_loop_dim_size:
+            self.pr_loop_dim_size = {dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop}
 
         ''' Step2: extract relevant and irrelevant loop dimensions. '''
         operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order = \

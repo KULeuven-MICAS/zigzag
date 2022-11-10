@@ -107,6 +107,7 @@ class ConvParser(Parser):
             FX = kernel_shape[0]
             FY = kernel_shape[1]
             d["loop_dim_size"] = {'B': B, 'K': K, 'G': G, "OX": OX, "OY": OY, "C": C, "FX": FX, "FY": FY}
+            d["pr_loop_dim_size"] = {'IX': IX, 'IY': IY}
             d["dimension_relations"] = [f'ix={strides[0]}*ox+{dilations[0]}*fx', f'iy={strides[1]}*oy+{dilations[1]}*fy']
             d["operand_precision"] =  {'O': 16, 'O_final': 8, 'W': 8, 'I': 8}
             # d["operand_source"] =  {'W': [], 'I': []}
