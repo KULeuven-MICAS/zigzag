@@ -7,10 +7,11 @@ class Core:
     The Core class houses the array of multipliers and the attached memory hierarchy.
     This class supports a singular multiplier array and memory hierarchy, runtime flexibility should be implemented on top.
     """
-    def __init__(self, id: int, operational_array: OperationalArray, memory_hierarchy: MemoryHierarchy):
+    def __init__(self, id: int, operational_array: OperationalArray, memory_hierarchy: MemoryHierarchy, dataflows: list=None):
         self.id = id
         self.operational_array = operational_array
         self.memory_hierarchy = memory_hierarchy
+        self.dataflows = dataflows  # save the possible spatial dataflows inside the Core
         self.check_valid()
         
         self.recalculate_memory_hierarchy_information()
