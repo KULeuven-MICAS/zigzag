@@ -616,6 +616,7 @@ class CostModelEvaluation:
                 if len(port_activity) == 1:
                     MUW_union_collect[idx][port_name] = port_activity[0].allowed_cycle
                     SS_comb_collect[idx][port_name] = port_activity[0].SS
+                    SS_comb_list.append(port_activity[0].SS)
                 elif len(port_activity) != 0:
                     MUW_union_collect[idx][port_name] = calc_MUW_union(port_activity)
                     SS_positive_sum = 0
