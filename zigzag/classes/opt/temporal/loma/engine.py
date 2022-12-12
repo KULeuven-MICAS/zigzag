@@ -23,9 +23,14 @@ from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.opt.temporal.loma.multipermute import permutations
-from zigzag.classes.opt.temporal.loma.memory_allocator import MemHierarchyTooSmallException, MemoryAllocator
+from zigzag.classes.opt.temporal.loma.memory_allocator import MemoryHierarchyTooSmallException, MemoryTooSmallException, MemoryAllocator
 
 logger = logging.getLogger(__name__)
+
+
+class NoValidLoopOrderingFoundException(Exception):
+    pass
+
 
 class LomaEngine:
     """
@@ -90,8 +95,10 @@ class LomaEngine:
                 temporal_mapping = allocator.run()  # allocate this ordering to the memories
                 yielded = True
                 yield temporal_mapping
-            except MemHierarchyTooSmallException:
+            except MemoryHierarchyTooSmallException:
                 pass
+            except MemoryTooSmallException:
+                pass  # Skip the ordering that crashed due to ordering (+su) not fitting in memory
             if self.show_progress_bar:
                 pbar.update(1)
 
@@ -99,7 +106,7 @@ class LomaEngine:
             pbar.close()
 
         if not yielded:
-            raise MemHierarchyTooSmallException("No loop ordering was found that did not exceed memory capacity")
+            raise NoValidLoopOrderingFoundException(f"No valid loop ordering was found for layer {self.layer}. {self.layer.loop_dim_size}")
 
 
     def get_temporal_loops(self):

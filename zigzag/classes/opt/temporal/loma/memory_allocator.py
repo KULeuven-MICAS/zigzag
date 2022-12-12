@@ -8,7 +8,10 @@ from zigzag.classes.opt.temporal.loma.loop import Loop
 from zigzag.classes.workload.layer_node import LayerNode
 from math import prod
 
-class MemHierarchyTooSmallException(Exception):
+class MemoryHierarchyTooSmallException(Exception):
+    pass
+
+class MemoryTooSmallException(Exception):
     pass
 
 class MemoryAllocator:
@@ -139,7 +142,7 @@ class MemoryAllocator:
             # Check if this node (i.e. MemoryLevel) is the highest level of memory hierarchy.
             # If this is the case and we haven't allocated all loops, raise an exception.
             if node == top_levels[mem_op] and self.unallocated[mem_op]:  # if top level and unallocated not empty
-                raise MemHierarchyTooSmallException(f"Highest MemoryLevel for {mem_op} = {node} too small to store all loops.")
+                raise MemoryHierarchyTooSmallException(f"Highest MemoryLevel for {mem_op} = {node} too small to store all loops.")
 
             # Increment the mem_level we are currently at for this layer_op by 1
             self.mem_level[layer_op] += 1
@@ -165,7 +168,7 @@ class MemoryAllocator:
                 sizes.append(size)
             else:
                 if i == 0:  # This means we can't even store the already allocated loops
-                    raise Exception(f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} mem_capacity={mem_capacity}")
+                    raise MemoryTooSmallException(f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} mem_capacity={mem_capacity}")
                 break  # Stop as soon as we have added a loop that overflows the memory
         return sizes
 
@@ -262,6 +265,8 @@ class MemoryAllocator:
                 size_comb += all_sizes[mem_op][current_loop_idx]
                 accesses_comb += all_accesses[mem_op][current_loop_idx]
             if size_comb > mem_capacity:
+                if i == 0:
+                    raise MemoryTooSmallException("The memory can't store all loops assigned to lower level memories. Likely due to spatial unrolling.")
                 continue
             if accesses_comb <= best_accesses:
                 best_accesses = accesses_comb
