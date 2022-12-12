@@ -79,15 +79,15 @@ class SpatialMappingConversionStage(Stage):
         core = self.accelerator.get_core(core_id)
         mem_hierarchy = core.memory_hierarchy
         oa_dims = core.operational_array.dimensions
-        layer_dim_sizes = self.layer.loop_dim_size
+        layer_dim_sizes = self.layer.loop_dim_size.copy()
         limited_user_spatial_mapping = {}  # init dict we will be filling
-        for spatial_dim_name, spatial_loop in user_spatial_mapping.items():
+        for oa_dim_name, spatial_loop in user_spatial_mapping.items():
             (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
             # Check 0: Skip this spatial dimension if it doesn't exist in the layer
             if loop_dim_unrolled not in layer_dim_sizes.keys():
                 continue
             # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
-            oa_dim_size = next((oa_dim for oa_dim in oa_dims if oa_dim.name == spatial_dim_name)).size
+            oa_dim_size = next((oa_dim for oa_dim in oa_dims if oa_dim.name == oa_dim_name)).size
             loop_size_unrolled = min(oa_dim_size, loop_size_unrolled)
             # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
             layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
@@ -96,7 +96,12 @@ class SpatialMappingConversionStage(Stage):
             temporal_remainder = int(np.ceil(layer_dim_size/loop_size_unrolled))
             loop_size_unrolled = layer_dim_size / temporal_remainder
             # Set the adjusted unrolling size in the original user_spatial_mapping dict if it is greater than 1
-            limited_user_spatial_mapping[spatial_dim_name] = (loop_dim_unrolled, loop_size_unrolled)
+            limited_user_spatial_mapping[oa_dim_name] = (loop_dim_unrolled, loop_size_unrolled)
+            # Update the layer_dim_size to support multiple oa dims unrolling the same loop dim but not unrolling it more than the total layer dim
+            if temporal_remainder == 1:  # Remove it from the dict if we have unrolled the entirely layer dim onto the array dimension(s)
+                del layer_dim_sizes[loop_dim_unrolled]
+            else: # Update the dict if we have some layer dims left to potentially unroll onto the next oa dims
+                layer_dim_sizes[loop_dim_unrolled] = temporal_remainder
 
         user_spatial_mapping_for_log = {array_dim: (loop_dim, f"{loop_size:.2f}") for (array_dim, (loop_dim, loop_size)) in limited_user_spatial_mapping.items()}
         logger.debug(f"User-provided spatial mapping converted to: {user_spatial_mapping_for_log}")

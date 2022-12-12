@@ -73,8 +73,8 @@ class SpatialMappingGeneratorStage(Stage):
 
             # Get all the USMs by running the generator
             user_spatial_mappings = list(self.generate_user_spatial_mappings())
+            logger.debug(f"No user-provided spatial mappings found. Auto-generating..")
         nb_user_spatial_mappings = len(user_spatial_mappings)
-        logger.debug(f"Generated {nb_user_spatial_mappings} spatial mappings.")
 
         for i, user_spatial_mapping in enumerate(user_spatial_mappings):
             logger.info(f"Launching spatial mapping {i+1}/{nb_user_spatial_mappings}: {user_spatial_mapping}.")
