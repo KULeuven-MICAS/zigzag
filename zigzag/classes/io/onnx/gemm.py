@@ -62,7 +62,7 @@ class GemmParser(Parser):
         # If the first input is transposed, we need to transpose its shape here.
         transA = get_attribute_ints_with_name("transA", self.node.attribute, default=0)
         if transA:
-            assert len(ia_dimension_shape == 2)
+            assert len(ia_dimension_shape) == 2
             ia_dimension_shape = (ia_dimension_shape[1], ia_dimension_shape[0])
 
         assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2  # First element is batch size, second is input/output channel
