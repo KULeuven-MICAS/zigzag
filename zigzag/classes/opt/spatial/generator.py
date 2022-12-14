@@ -15,7 +15,7 @@ class UserSpatialMappingGenerator:
         self.accelerator = accelerator
 
     def run(self):
-        yield self.generate_user_spatial_mappings()
+        return self.generate_user_spatial_mappings()
 
     def generate_user_spatial_mappings(self):
         """

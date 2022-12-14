@@ -11,6 +11,7 @@ from zigzag.classes.hardware.architecture.dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
 from zigzag.classes.workload.layer_node import LayerNode
@@ -70,9 +71,9 @@ class SpatialMappingGeneratorStage(Stage):
             user_spatial_mappings = user_provided_spatial_mappings
         else:  # There is no USM provided
             # Initialize the UserSpatialMappingGenerator which will automatically generate SMs
-
+            user_spatial_mapping_generator = UserSpatialMappingGenerator(self.layer, self.accelerator)
             # Get all the USMs by running the generator
-            user_spatial_mappings = list(self.generate_user_spatial_mappings())
+            user_spatial_mappings = list((usm for usm in user_spatial_mapping_generator.run()))
             logger.debug(f"No user-provided spatial mappings found. Auto-generating..")
         nb_user_spatial_mappings = len(user_spatial_mappings)
 
