@@ -102,9 +102,6 @@ class UserSpatialMappingGenerator:
         # Now we have for each operational array dimension the layer dimensions and size they can be unrolled without fractional remainder.
         # Now we have to combine them into user-defined spatial mappings.
         for combination in itertools.product(*unrollings):
-            # If the combination has two oa dimensions that unroll the same layer dimension, skip it as this is impossible.
-            if not self.all_unique([loop_dimension for (loop_dimension, loop_size) in (c for c in combination if c is not None)]):
-                continue
             # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
             oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
             user_spatial_mapping = {oa_dim_name: unrolling for (oa_dim_name, unrolling) in zip(oa_dim_names, combination) if unrolling is not None}
