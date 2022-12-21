@@ -13,10 +13,13 @@ class LomaStage(Stage):
     the loop order based memory allocation (loma) engine
     """
     def __init__(self, list_of_callables: List[Callable], *, accelerator, layer, spatial_mapping, **kwargs):
-        """
-        Note: Initially the engine is set to None.
-        When the stage is ran through the run() method, this will be set
-        to the loma engine with parameters present in the inputs.
+        """Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
+
+        Args:
+            list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
+            accelerator (Accelerator): The accelerator object.
+            layer (Layer): The layer object.
+            spatial_mapping (SpatialMapping): The spatial mapping object.
         """
         super().__init__(list_of_callables, **kwargs)
         self.accelerator, self.layer, self.spatial_mapping = accelerator, layer, spatial_mapping
