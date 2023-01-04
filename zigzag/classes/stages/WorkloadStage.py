@@ -24,8 +24,6 @@ class WorkloadStage(Stage):
         for id, layer in enumerate(nx.topological_sort(self.workload)):
             if type(layer) == DummyNode:
                 continue  # skip the DummyNodes
-            if layer.loop_dim_size.get('G', 1) > 1:
-                continue
             kwargs = self.kwargs.copy()
             kwargs['layer'] = layer
             if layer.name:
