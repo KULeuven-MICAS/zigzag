@@ -81,6 +81,9 @@ class SalsaStage(Stage):
         """
         Set up and start salsa engine, then collect and return the best cost model evaluation
         """
+
+        logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
+
         self.engine = SalsaEngine(accelerator=self.accelerator, 
                                     layer=self.layer, 
                                     spatial_mapping=self.spatial_mapping, 
@@ -101,7 +104,7 @@ class SalsaStage(Stage):
 
         # Start the processes
         for core_id in range(0,self.number_of_core):
-            logger.info(f"Starting SALSA Process #{core_id}.")
+            logger.debug(f"Starting SALSA Process #{core_id}.")
             self.worker_list[core_id].start()
 
         # For every core we gather the ouput
