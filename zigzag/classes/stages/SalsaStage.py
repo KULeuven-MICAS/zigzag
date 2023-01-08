@@ -136,7 +136,9 @@ class SalsaStage(Stage):
 
         if self.best_cme is None:
             self.best_cme = cme
-        elif cme.latency_total0 < self.best_cme.latency_total0:
+        elif cme.latency_total2 == self.best_cme.latency_total2 and cme.energy_total < self.best_cme.energy_total:
+            self.best_cme = cme
+        elif cme.latency_total2 < self.best_cme.latency_total2:
             self.best_cme = cme
 
 
@@ -146,6 +148,8 @@ class SalsaStage(Stage):
         Then replace the best cme if the current cme has a lower energy.
         """
         if self.best_cme is None:
+            self.best_cme = cme
+        elif cme.energy_total == self.best_cme.energy_total and cme.latency_total2 < self.best_cme.latency_total2:
             self.best_cme = cme
         elif cme.energy_total < self.best_cme.energy_total:
             self.best_cme = cme

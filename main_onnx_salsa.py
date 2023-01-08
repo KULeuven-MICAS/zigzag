@@ -26,7 +26,6 @@
 #  
 
 from zigzag.classes.stages import *
-from zigzag.classes.stages.SalsaStage import *
 import argparse
 
 
