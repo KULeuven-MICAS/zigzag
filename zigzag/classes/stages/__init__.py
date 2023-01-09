@@ -4,6 +4,7 @@ from .PlotTemporalMappingsStage import PlotTemporalMappingsStage
 from .SaveStage import CompleteSaveStage, SimpleSaveStage, PickleSaveStage
 from .GeneralParameterIteratorStage import GeneralParameterIteratorStage
 from .LomaStage import LomaStage
+from .SalsaStage import SalsaStage
 from .MainInputParserStages import AcceleratorParserStage, WorkloadParserStage, WorkloadAndAcceleratorParserStage
 from .ONNXModelParserStage import ONNXModelParserStage
 from .ReduceStages import MinimalEnergyStage, MinimalLatencyStage, SumStage
