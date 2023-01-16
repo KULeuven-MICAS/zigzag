@@ -193,6 +193,17 @@ class MemoryHierarchy(DiGraph):
         top_level = max(level_to_mems.keys()) if level_to_mems else -1
         return level_to_mems[top_level], top_level
 
+    def get_operand_top_level(self, operand) -> MemoryLevel:
+        """
+        Finds the highest level of memory that have the given operand assigned to, and returns the MemoryLevel
+        """
+        top_lv = self.nb_levels[operand] - 1
+        for mem in reversed(self.mem_instance_list):
+            if operand in mem.mem_level_of_operands.keys():
+                if mem.mem_level_of_operands[operand] == top_lv:
+                    return mem
+        raise ValueError("Something wrong in the memory hierarchy definition!")
+
     def remove_operator_top_level(self, operand):
         """
         Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
