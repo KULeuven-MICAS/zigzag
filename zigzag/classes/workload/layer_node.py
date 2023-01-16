@@ -107,7 +107,7 @@ class LayerNode:
         self.operand_dimensionality_order = operand_dimensionality_order
 
         # Save the variable (non-constant) input operands
-        self.variable_input_operands: list = list(set(self.input_operands) - set(self.constant_operands))
+        self.variable_input_operands: list = [op for op in self.input_operands if op not in self.constant_operands]
         # Save the way an operand's tensor should be reshaped for interaction with other nodes.
         self.operand_tensor_reshape: Dict[str, list] = layer_attrs.get('operand_tensor_reshape',  {op: [] for op in self.operand_list})
         
