@@ -79,6 +79,8 @@ class LomaEngine:
         :returns : Generator that yields all temporal mappings
         TODO: add the criterion(s) as inputs to this function.
         """
+        logger.info('Running temporal mapping search engine...')
+
         self.get_temporal_loops()  # get all the temporal loops
         self.get_prime_factors()  # convert these to LPFs (loop prime factors)
 
