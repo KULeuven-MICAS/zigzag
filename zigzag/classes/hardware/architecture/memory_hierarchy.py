@@ -202,7 +202,7 @@ class MemoryHierarchy(DiGraph):
             if operand in mem.mem_level_of_operands.keys():
                 if mem.mem_level_of_operands[operand] == top_lv:
                     return mem
-        raise ValueError("Something wrong in the memory hierarchy definition!")
+        raise ValueError(f"Operand {operand} not found in any of the memory instances.")
 
     def remove_operator_top_level(self, operand):
         """
