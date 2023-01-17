@@ -117,6 +117,7 @@ class ConvParser(Parser):
 
             d["core_allocation"] =  node_mapping["core_allocation"]
             d["spatial_mapping"] =  node_mapping["spatial_mapping"]
+            d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] =  node_mapping["memory_operand_links"]
 
             # Find the previous layer(s) that should be this node's parent(s)

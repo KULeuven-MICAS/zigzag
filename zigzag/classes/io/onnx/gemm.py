@@ -43,6 +43,7 @@ class GemmParser(Parser):
 
             d["core_allocation"] =  node_mapping["core_allocation"]
             d["spatial_mapping"] =  node_mapping["spatial_mapping"]
+            d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] =  {'O': 'O', 'B': 'I2', 'A': 'I1'}
 
             # Find the previous layer(s) that should be this node's parent(s)
