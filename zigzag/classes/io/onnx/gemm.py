@@ -66,6 +66,26 @@ class GemmParser(Parser):
             assert len(ia_dimension_shape) == 2
             ia_dimension_shape = (ia_dimension_shape[1], ia_dimension_shape[0])
 
+        # If the input activations are empty (which can happen if there is a shape operator in the path)
+        # we try to extract the weights from the model graph initializer to get the correct input activation size
+        if not ia_dimension_shape:
+            weight_name = self.node.input[1]
+            initializer_names = [i.name for i in self.onnx_model.graph.initializer]
+            weight_name_index = initializer_names.index(weight_name)
+            # Get the weight dimensions
+            weights = self.onnx_model.graph.initializer[weight_name_index]
+            weight_dims = list(weights.dims)
+            assert len(weight_dims) == 2, f"There are {len(weight_dims)} weight dimensions for Gemm node {self.node.name}"
+            # Check if the weights are transposed
+            transB = get_attribute_ints_with_name("transB", self.node.attribute, default=0)
+            if transB:
+                weight_dims = [weight_dims[1], weight_dims[0]]
+            assert len(oa_dimension_shape) == 2, "Can't infer ia_dimension_shape if oa_dimension_shape is also not known."
+            B = oa_dimension_shape[0]
+            C = weight_dims[0]
+            ia_dimension_shape = [B, C]
+
+
         assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2  # First element is batch size, second is input/output channel
         assert ia_dimension_shape[0] == oa_dimension_shape[0]  # Batch size should be the same for input and output
         # If the batch size is 0, we discard it by setting it to 1 internally inside ZigZag

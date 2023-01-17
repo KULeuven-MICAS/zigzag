@@ -108,7 +108,7 @@ class LomaEngine:
             pbar.close()
 
         if not yielded:
-            raise NoValidLoopOrderingFoundException(f"No valid loop ordering was found for layer {self.layer}. {self.layer.loop_dim_size}")
+            raise NoValidLoopOrderingFoundException(f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is compatible with the architecture.")
 
 
     def get_temporal_loops(self):
