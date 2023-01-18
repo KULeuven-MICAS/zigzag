@@ -57,9 +57,9 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: List[CostModelEvaluation], s
     for d, cme in enumerate(cmes):
         mh = cme.accelerator.get_core(cme.layer.core_allocation).memory_hierarchy
         mac_costs[d] = cme.MAC_energy
-        la_break_down[d]['Ideal Computation'] = cme.ideal_cycle
-        la_break_down[d]['Spatial Stall'] = (cme.ideal_temporal_cycle - cme.ideal_cycle)
-        la_break_down[d]['Temporal Stall'] = (cme.latency_total0 - cme.ideal_temporal_cycle)
+        la_break_down[d]['Ideal computation'] = cme.ideal_cycle
+        la_break_down[d]['Spatial stall'] = (cme.ideal_temporal_cycle - cme.ideal_cycle)
+        la_break_down[d]['Temporal stall'] = (cme.latency_total0 - cme.ideal_temporal_cycle)
         la_break_down[d]['Data loading'] = (cme.latency_total1 - cme.latency_total0)
         la_break_down[d]['Data off-loading'] = (cme.latency_total2 - cme.latency_total1)
         la_tot[d] = cme.latency_total2
