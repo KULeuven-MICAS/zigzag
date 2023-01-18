@@ -84,10 +84,11 @@ class UserSpatialMappingGenerator:
                 # but the layer dimension size is 14, this would result in a temporal remainder of 14/10.
                 # In that case we change the unrolling size to 7 (to be a factor of 14).
                 # We have to make sure the unrolling size is a divisor of the layer dimension size:
-                while layer_dim_size % unrolling_size != 0:
-                    unrolling_size -= 1  # decrement the unrolling by 1
+                # Jan 18 2023: Commented this out as LomaStage allows greedy mapping by adding one more temporal iteration
+                # while layer_dim_size % unrolling_size != 0:
+                #     unrolling_size -= 1  # decrement the unrolling by 1
 
-                # If the unrolling_size is not 1, don't add it to the unrollings for this oa_dim
+                # If the unrolling_size is not 1, add it to the unrollings for this oa_dim
                 if unrolling_size != 1:
                     oa_dim_unrollings.append((layer_dim, unrolling_size))
 
