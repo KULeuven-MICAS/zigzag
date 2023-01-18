@@ -14,7 +14,7 @@ name = "zigzag-dse"
 version = "2.0.6"
 description = "ZigZag - Deep Learning Hardware Design Space Exploration"
 readme = "README.md"
-authors = [{ name = "Arne Symons", email = "arne.symons@kuleuven.be" }]
+authors = [{ name = "Arne Symons", email = "arne.symons@kuleuven.be" }, { name = "Linyan Mei", email = "linyan.mei@kuleuven.be" }]
 license = { file = "LICENSE" }
 classifiers = [
     "License :: OSI Approved :: BSD License",
