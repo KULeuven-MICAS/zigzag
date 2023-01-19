@@ -53,8 +53,8 @@ class SpatialMappingGeneratorStage(Stage):
         :return: True if layer is set correctly
         """
         if layer is None:
-            return False
-        if not layer.core_allocation:
+            raise ValueError()
+        if layer.core_allocation is None:
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError()
         return True
