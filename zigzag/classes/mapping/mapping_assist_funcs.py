@@ -35,7 +35,7 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: 'LayerNode'):
     It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
     """
 
-    operand_loop_dim = layer_node.operand_loop_dim
+    operand_loop_dim = {op: layer_node.operand_loop_dim[op] for op in mapping_dict.keys()}
     r_ir_operand_loop_LUT = {op: relevance['r']+relevance['ir'] for (op, relevance) in operand_loop_dim.items()}
     pr_operand_loop_LUT = {op: relevance['pr'] for (op, relevance) in operand_loop_dim.items() if relevance['pr'] != {}}
     pr_operand_list = list(pr_operand_loop_LUT.keys())
