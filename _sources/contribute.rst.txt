@@ -13,6 +13,25 @@ When contributing to the framework, please consider the following guidelines:
 * Use Google docstrings to document your classes, functions, methods, .... Examples can be found throughout the code and `here <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`_
 * Update the documentation accordingly
 
+Upgrading the project version (for ZigZag developers)
+=====================================================
+
+In order to upgrade the project version, we use Python packages called bumpver, build and twine. These can be installed as follows:
+
+.. code-block:: sh
+
+    pip install bumpver
+    pip install build
+    pip install twine
+
+ First, pull to make sure you have all the remote cahnges. Merge any conflicts with your new changes, and commit. Then, execute the following commands:
+
+.. code-block:: sh
+
+    bumpver update --patch
+    python -m build
+    twine upload dist/zigzag_dse-x.y.z-<...>.whl dist/zigzag-dse-x.y.z.tar.gz
+
 Documentation
 =============
 
