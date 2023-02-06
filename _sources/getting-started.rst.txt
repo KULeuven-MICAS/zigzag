@@ -50,7 +50,7 @@ Other ZigZag runs examples:
 
 .. code:: sh
 
-    python main.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.alexnet_on_tpu_like
+    python main_onnx_salsa.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.alexnet_on_tpu_like
 
 Analyzing results
 =================
