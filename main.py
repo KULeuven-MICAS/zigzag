@@ -4,7 +4,7 @@ import re
 
 # Parse the workload and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag-v2 inputs")
-parser.add_argument('--workload', metavar='path', required=True, help='module path to workload, e.g. inputs.examples.workloads.resnet18')
+parser.add_argument('--model', metavar='path', required=True, help='module path to workload, e.g. inputs.examples.workloads.resnet18')
 parser.add_argument('--accelerator', metavar='path', required=True, help='module path to the accelerator, e.g. inputs.examples.hardware.TPU_like')
 args = parser.parse_args()
 
@@ -16,9 +16,9 @@ _logging.basicConfig(level=_logging_level,
                      format=_logging_format)
 
 hw_name = args.accelerator.split(".")[-1]
-wl_name = re.split(r"/|\.", args.workload)[-1]
+wl_name = re.split(r"/|\.", args.model)[-1]
 if wl_name == 'onnx':
-    wl_name = re.split(r"/|\.", args.workload)[-2]
+    wl_name = re.split(r"/|\.", args.model)[-2]
 experiment_id = f"{hw_name}-{wl_name}"
 pkl_name = f'{experiment_id}-saved_list_of_cmes'
 
@@ -39,7 +39,7 @@ mainstage = MainStage([
     CostModelStage,
 ],
     accelerator=args.accelerator,
-    workload=args.workload,
+    workload=args.model,
     dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",
     pickle_filename=f"outputs/{pkl_name}.pickle",
     loma_lpf_limit=6,

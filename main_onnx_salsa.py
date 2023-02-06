@@ -32,7 +32,7 @@ import re
 
 # Get the onnx model, the mapping and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag inputs")
-parser.add_argument('--workload', metavar='path', required=True, help='path to onnx model, e.g. inputs/examples/my_onnx_model.onnx')
+parser.add_argument('--model', metavar='path', required=True, help='path to onnx model, e.g. inputs/examples/my_onnx_model.onnx')
 parser.add_argument('--mapping', metavar='path', required=True, help='path to mapping file, e.g., inputs.examples.my_mapping')
 parser.add_argument('--accelerator', metavar='path', required=True, help='module path to the accelerator, e.g. inputs.examples.accelerator1')
 args = parser.parse_args()
@@ -45,9 +45,9 @@ _logging.basicConfig(level=_logging_level,
                      format=_logging_format)
 
 hw_name = args.accelerator.split(".")[-1]
-wl_name = re.split(r"/|\.", args.workload)[-1]
+wl_name = re.split(r"/|\.", args.model)[-1]
 if wl_name == 'onnx':
-    wl_name = re.split(r"/|\.", args.workload)[-2]
+    wl_name = re.split(r"/|\.", args.model)[-2]
 experiment_id = f"{hw_name}-{wl_name}"
 pkl_name = f'{experiment_id}-saved_list_of_cmes'
 
@@ -65,7 +65,7 @@ mainstage = MainStage([  # Initializes the MainStage as entry point
     CostModelStage  # Evaluates generated SM and TM through cost model
 ],
     accelerator=args.accelerator,  # required by AcceleratorParserStage
-    workload=args.workload,  # required by ONNXModelParserStage
+    workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
     dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",  # output file save pattern
     loma_lpf_limit=6,  # required by LomaStage
