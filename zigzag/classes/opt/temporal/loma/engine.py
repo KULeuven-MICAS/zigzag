@@ -189,8 +189,9 @@ class LomaEngine:
         """Compute the number of permutations that will have to be considered given the LPF distribution.
         """
         nb_permutations = factorial(sum(self.temporal_loop_pf_count_sums.values()))
-        for nb_pf_sum in self.temporal_loop_pf_count_sums.values():
-            nb_permutations = int(nb_permutations / factorial(nb_pf_sum))
+        for nb_duplicated_pfs in self.temporal_loop_pf_counts.values():
+            for nb_duplicated_pf in nb_duplicated_pfs:
+                nb_permutations = int(nb_permutations / factorial(nb_duplicated_pf))
         self.nb_permutations = nb_permutations
         logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
         
