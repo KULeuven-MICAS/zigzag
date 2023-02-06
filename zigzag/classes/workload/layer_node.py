@@ -170,8 +170,11 @@ class LayerNode:
             # Clip this to the largest possible size for this partially relevant dimension (computed at initialization based on padding)
             pr_dim_size = min(self.pr_loop_dim_size[dim], pr_dim_size)
             return pr_dim_size
+        elif dim in self.loop_dim_size:
+            assert self.loop_dim_size[dim] == 1, "This line should only be reached when the dim has a size of 1 in the layer."
+            return 1
         else:
-            assert False
+            raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")
 
     def calc_tensor_dims(self, layer_op, loop_sizes):
         out = {}
