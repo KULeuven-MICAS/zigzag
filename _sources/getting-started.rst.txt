@@ -38,6 +38,19 @@ The following command starts the execution using the provided inputs:
 
     <script id="asciicast-zdbEqPoE4odh1QsqAIVSWPi6M" src="https://asciinema.org/a/zdbEqPoE4odh1QsqAIVSWPi6M.js" async></script>
 
+Other ZigZag runs examples:
+
+- ZigZag can also run with user-defined workload:
+
+.. code:: sh
+
+    python main.py --model zigzag.inputs.examples.workload.resnet18 --accelerator zigzag.inputs.examples.hardware.TPU_like
+
+- ZigZag can also run with SALSA temporal mapping search engine:
+
+.. code:: sh
+
+    python main.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.alexnet_on_tpu_like
 
 Analyzing results
 =================
