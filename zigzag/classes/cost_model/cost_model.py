@@ -859,18 +859,28 @@ class CostModelEvaluation:
         sum.MAC_utilization1 = sum.ideal_cycle / sum.latency_total1
         sum.MAC_utilization2 = sum.ideal_cycle / sum.latency_total2
 
+        ## layer
+        if type(sum.layer) != list:
+            sum.layer = [sum.layer.id]
+        if type(other.layer) != list:
+            other_layer = [other.layer.id]
+        sum.layer += other_layer
+
+        ## core_id
+        if type(sum.core_id) != list:
+            sum.core_id = [sum.core_id]
+        if type(other.layer) != list:
+            other_core_id = [other.core_id]
+        sum.core_id += other_core_id
+
         ## Not addable
         func = ['calc_allowed_and_real_data_transfer_cycle_per_DTL', 'calc_data_loading_offloading_latency', 'calc_double_buffer_flag',
                 'calc_overall_latency', 'calc_MAC_energy_cost', 'calc_energy', 'calc_latency', 'calc_memory_energy_cost',
                 'calc_memory_utilization', 'calc_memory_word_access', 'combine_data_transfer_rate_per_physical_port', 'run']
         add_attr = ['MAC_energy', 'mem_energy', 'energy_breakdown', 'energy_breakdown_further', 'energy_total', 'memory_word_access',
                     'data_loading_cycle', 'data_offloading_cycle', 'ideal_cycle', 'ideal_temporal_cycle', 'latency_total0', 'latency_total1',
-                    'latency_total2', 'MAC_spatial_utilization', 'MAC_utilization0', 'MAC_utilization1', 'MAC_utilization2']
+                    'latency_total2', 'MAC_spatial_utilization', 'MAC_utilization0', 'MAC_utilization1', 'MAC_utilization2', 'layer', 'core_id']
 
-        if hasattr(self, 'layer') and hasattr(other, 'layer') and self.layer.id == other.layer.id:
-            add_attr.append('layer')
-        else:
-            pass
         if hasattr(self, 'accelerator') and hasattr(other, 'accelerator'):
             if self.accelerator.name.startswith(other.accelerator.name):
                 sum.accelerator = other.accelerator

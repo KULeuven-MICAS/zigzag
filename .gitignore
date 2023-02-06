@@ -133,6 +133,7 @@ dmypy.json
 .vscode/
 
 # result pickle files
+output*
 output*/*.pkl
 output*/*.pickle
 

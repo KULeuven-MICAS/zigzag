@@ -7,7 +7,7 @@ from .LomaStage import LomaStage
 from .SalsaStage import SalsaStage
 from .MainInputParserStages import AcceleratorParserStage, WorkloadParserStage, WorkloadAndAcceleratorParserStage
 from .ONNXModelParserStage import ONNXModelParserStage
-from .ReduceStages import MinimalEnergyStage, MinimalLatencyStage, SumStage
+from .ReduceStages import MinimalEnergyStage, MinimalLatencyStage, MinimalEDPStage, SumStage
 from .RunOptStages import CacheBeforeYieldStage, RemoveExtraInfoStage, MultiProcessingGatherStage, MultiProcessingSpawnStage, SkipIfDumpExistsStage
 from .SpatialMappingConversionStage import SpatialMappingConversionStage
 from .SpatialMappingGeneratorStage import SpatialMappingGeneratorStage

@@ -110,7 +110,6 @@ class LayerNode:
         self.variable_input_operands: list = [op for op in self.input_operands if op not in self.constant_operands]
         # Save the way an operand's tensor should be reshaped for interaction with other nodes.
         self.operand_tensor_reshape: Dict[str, list] = layer_attrs.get('operand_tensor_reshape',  {op: [] for op in self.operand_list})
-        
 
         ''' Step3: extract layer info, e.g. total operand size, total operand data reuse, total MAC operation, etc. '''
         self.extract_layer_info()

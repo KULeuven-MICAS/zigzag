@@ -39,9 +39,9 @@ def parse_workload_from_path(workload_path):
 
 
 class WorkloadParserStage(Stage):
-    def __init__(self, list_of_callables, *, workload_path, **kwargs):
+    def __init__(self, list_of_callables, *, workload, **kwargs):
         super().__init__(list_of_callables, **kwargs)
-        self.workload = workload_path
+        self.workload = workload
 
     def run(self):
         workload = parse_workload_from_path(self.workload)
