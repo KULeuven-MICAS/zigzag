@@ -46,4 +46,4 @@ S. Colleman, T. Verelst, L. Mei, T. Tuytelaars and M. Verhelst, "Processor Archi
 L. Mei, K. Goetschalckx, A. Symons and M. Verhelst, " DeFiNES: Enabling Fast Exploration of the Depth-first Scheduling Space for DNN Accelerators through Analytical Modeling," 2023 IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2023 [paper](https://arxiv.org/abs/2212.05344)
 
 #### Extend ZigZag to support multi-core layer-fused scheduling
-Symons, A., Mei, L., Colleman, S., Houshmand, P., Karl, S., and Verhelst, M., “Towards Heterogeneous Multi-core Accelerators Exploiting Fine-grained Scheduling of Layer-Fused Deep Neural Networks”, <i>arXiv e-prints</i>, 2022. doi:10.48550/arXiv.2212.10612. [paper](https://arxiv.org/abs/2212.10612)
+A. Symons, L. Mei, S. Colleman, P. Houshmand, S. Karl and M. Verhelst, “Towards Heterogeneous Multi-core Accelerators Exploiting Fine-grained Scheduling of Layer-Fused Deep Neural Networks”, <i>arXiv e-prints</i>, 2022. doi:10.48550/arXiv.2212.10612. [paper](https://arxiv.org/abs/2212.10612)
