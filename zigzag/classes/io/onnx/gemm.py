@@ -3,15 +3,17 @@ from zigzag.classes.io.onnx.utils import get_node_input_output_dimension_shapes,
 from zigzag.classes.workload.layer_node import LayerNode
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 class GemmParser(Parser):
     """Parses an ONNX Gemm operator into a LayerNode
     """
+
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
-    
+
     def run(self):
         """Run the parser
         """
@@ -19,17 +21,16 @@ class GemmParser(Parser):
         return layer_node
 
     def generate_layer_node_for_gemm(self):
-    
+
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
             """
             Generate the necessary dictionary items required for the Node creation.
             """
             # convert the data types to precisions based on the onnx definition
 
-
             # Equation
             d = {}
-            d["equation"] = 'O[b][k]+=B[k][c]*A[b][c]'
+            d["equation"] = 'O[b][k]+=W[k][c]*I[b][c]'
 
             # Get dimension sizes from input parameters
             K = K
@@ -37,14 +38,14 @@ class GemmParser(Parser):
             B = B  # Not to be confused with operand 'B' which is the weights
             d["loop_dim_size"] = {'K': K, 'C': C, 'B': B}
             d["dimension_relations"] = []
-            d["operand_precision"] =  {'O': 16, 'O_final': 8, 'B': 8, 'A': 8}
-            d["operand_source"] =  {'B': [], 'A': []}
-            d["constant_operands"] =  ['B']
+            d["operand_precision"] = {'O': 16, 'O_final': 8, 'W': 8, 'I': 8}
+            d["operand_source"] = {'W': [], 'I': []}
+            d["constant_operands"] = ['W']
 
-            d["core_allocation"] =  node_mapping["core_allocation"]
-            d["spatial_mapping"] =  node_mapping["spatial_mapping"]
+            d["core_allocation"] = node_mapping["core_allocation"]
+            d["spatial_mapping"] = node_mapping["spatial_mapping"]
             d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
-            d["memory_operand_links"] =  {'O': 'O', 'B': 'I2', 'A': 'I1'}
+            d["memory_operand_links"] = {'O': 'O', 'W': 'I2', 'I': 'I1'}
 
             # Find the previous layer(s) that should be this node's parent(s)
             node_inputs = self.node.input
@@ -53,10 +54,10 @@ class GemmParser(Parser):
                 for n in nodes_outputs:
                     if node_input in nodes_outputs[n]:
                         preds.append(n)
-            d["operand_source"] = {'A': preds}
+            d["operand_source"] = {'I': preds}
 
             return d
-        
+
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
         # The Gemm node includes flags for transpose of both of its inputs.
@@ -84,7 +85,6 @@ class GemmParser(Parser):
             B = oa_dimension_shape[0]
             C = weight_dims[0]
             ia_dimension_shape = [B, C]
-
 
         assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2  # First element is batch size, second is input/output channel
         assert ia_dimension_shape[0] == oa_dimension_shape[0]  # Batch size should be the same for input and output
