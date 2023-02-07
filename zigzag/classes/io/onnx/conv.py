@@ -172,7 +172,7 @@ class ConvParser(Parser):
 
         node_obj = LayerNode(self.node_id, node_attrs, node_name=self.node.name)
         
-        logger.info(f"Parsed convolutional node {self.node.name}")
+        logger.info(f"Parsed Conv node {self.node.name}")
 
         return node_obj
         
