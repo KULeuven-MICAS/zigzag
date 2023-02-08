@@ -3,6 +3,7 @@ import importlib
 from zigzag.classes.io.accelerator.parser import AcceleratorParser
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.workload.dnn_workload import DNNWorkload
+from zigzag.utils import pickle_deepcopy
 
 import logging
 logger = logging.getLogger(__name__)
@@ -34,7 +35,9 @@ def parse_workload_from_path_or_from_module(workload, mapping):
         module = importlib.import_module(mapping)
         mapping = module.mapping
 
-    workload = DNNWorkload(workload, mapping)
+    # make a copy here to prevent later it is being changed in the following stages
+    workload_copy = pickle_deepcopy(workload)
+    workload = DNNWorkload(workload_copy, mapping)
     logger.info(
         f"Created workload graph with {workload.number_of_nodes()} nodes and {workload.number_of_edges()} edges.")
 
