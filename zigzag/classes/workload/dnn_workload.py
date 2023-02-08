@@ -7,7 +7,7 @@ from networkx import DiGraph
 
 class DNNWorkload(DiGraph):
 
-    def __init__(self, workload: Dict[Any, Dict], **attr):
+    def __init__(self, workload: Dict[Any, Dict], mapping: Dict[Any, Dict], **attr):
         """
         Collect all the algorithmic workload information here.
         :param workload: user-defined workload file (py).
@@ -24,6 +24,12 @@ class DNNWorkload(DiGraph):
             #  What is special about max pooling?
             # elif type(layer_id) == str and layer_id[0:6] == 'concat':
             #     continue
+            if layer['operator_type'] in mapping.keys():
+                for attr_name, attr_va in mapping[layer['operator_type']].items():
+                    layer[attr_name] = attr_va
+            else:
+                for attr_name, attr_va in mapping['default'].items():
+                    layer[attr_name] = attr_va
             '''For each item in the dict generate the LayerNode and add it to the dnn graph G'''
             layer_node = LayerNode(layer_id, layer)
             '''Save this layer_id and LayerNode pair in the layer_id_to_obj dict'''

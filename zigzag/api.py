@@ -35,7 +35,7 @@ def get_hardware_performance_zigzag(workload,
         AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
         SimpleSaveStage,  # Save the summed CME energy and latency to a json
         PickleSaveStage,  # Save all received CMEs in a list to a pickle file
-        SumStage,  # Sum up the received best CME across all layers of he workload
+        SumStage,  # Sum up the received best CME across all layers of the workload
         WorkloadStage,  # Iterate through the different layers in the workload
         CompleteSaveStage,  # Save each processed layer to a json
         opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
@@ -62,10 +62,10 @@ def get_hardware_performance_zigzag(workload,
 
 
 if __name__ == "__main__":
-    # workload = 'inputs/examples/workload/mobilenetv2.onnx'
-    workload = 'inputs.examples.workload.resnet18'
+    workload = 'inputs/examples/workload/mobilenetv2.onnx'
+    # workload = 'inputs.examples.workload.resnet18'
     accelerator = 'inputs.examples.hardware.TPU_like'
-    mapping = 'inputs.examples.mapping.alexnet_on_tpu_like'
+    mapping = 'inputs.examples.mapping.tpu_like'
 
     hw_name = accelerator.split(".")[-1]
     wl_name = re.split(r"/|\.", workload)[-1]

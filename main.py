@@ -5,6 +5,7 @@ import re
 # Parse the workload and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag-v2 inputs")
 parser.add_argument('--model', metavar='path', required=True, help='module path to workload, e.g. inputs.examples.workloads.resnet18')
+parser.add_argument('--mapping', metavar='path', required=True, help='path to mapping file, e.g., inputs.examples.mapping.tpu_like')
 parser.add_argument('--accelerator', metavar='path', required=True, help='module path to the accelerator, e.g. inputs.examples.hardware.TPU_like')
 args = parser.parse_args()
 
@@ -40,6 +41,7 @@ mainstage = MainStage([
 ],
     accelerator=args.accelerator,
     workload=args.model,
+    mapping=args.mapping,
     dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",
     pickle_filename=f"outputs/{pkl_name}.pickle",
     loma_lpf_limit=6,
