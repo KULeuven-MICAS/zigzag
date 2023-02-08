@@ -23,6 +23,7 @@ Contents
    user-guide
    future
    contribute
+   publications
 
 
 Indices and tables
