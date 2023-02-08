@@ -17,7 +17,7 @@ def print_printing_block(printing_block):
         print(''.join(printing_block[i]))
 
 
-def print_good_tm_format(tm, mem_name, cme_name):
+def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
     op_list = list(tm.keys())
     tm_list = [tp for li in tm[op_list[0]] for tp in li]
 
@@ -36,9 +36,10 @@ def print_good_tm_format(tm, mem_name, cme_name):
     title = f' Temporal Mapping - {cme_name} '
     dash = '*' * int((tot_col - len(title)) / 2)
     tm_block = modify_printing_block(tm_block, 1, 0, dash + title + dash)
-    tm_block = modify_printing_block(tm_block, 2, 1, 'W: ' + str(tm['W']))
-    tm_block = modify_printing_block(tm_block, 3, 1, 'I: ' + str(tm['I']))
-    tm_block = modify_printing_block(tm_block, 4, 1, 'O: ' + str(tm['O']))
+    i = 2
+    for op in mem_op_to_layer_op.keys():
+        tm_block = modify_printing_block(tm_block, i, 1, f'{op} ({mem_op_to_layer_op[op]}): ' + str(tm[op]))
+        i += 1
     tm_block = modify_printing_block(tm_block, 6, 0, '-' * tot_col)
     tm_block = modify_printing_block(tm_block, 7, 1, 'Temporal Loops')
     tm_block = modify_printing_block(tm_block, 8, 0, '-' * tot_col)
@@ -65,8 +66,8 @@ def print_good_tm_format(tm, mem_name, cme_name):
 
 def print_mapping(cme):
     tm = cme.temporal_mapping.mapping_dic_stationary
-    su = cme.spatial_mapping.mapping_dict_origin
     mem_op_to_layer_op = cme.mem_op_to_layer_op
+    layer_op_to_mem_op = cme.layer_op_to_mem_op
     mem_name = {}
     for (mem_op, mems_all_levels) in cme.accelerator.cores[0].mem_hierarchy_dict.items():
         layer_op = mem_op_to_layer_op[mem_op]
@@ -75,9 +76,8 @@ def print_mapping(cme):
             mem_name[layer_op].append(mem_a_level.name)
         assert len(tm[layer_op]) == len(mem_name[layer_op]), \
             f"Temporal mapping level {len(tm[layer_op])} and memory hierarchy level {len(mem_name[layer_op])} of operand {layer_op} do not match."
-
     cme_name = str(cme)
-    print_good_tm_format(tm, mem_name, cme_name)
+    print_good_tm_format(tm, mem_name, cme_name, layer_op_to_mem_op)
 
 if __name__ == '__main__':
     import pickle

@@ -3,7 +3,7 @@ import re
 
 def get_hardware_performance_zigzag(workload,
                                     accelerator,
-                                    mapping=None,
+                                    mapping,
                                     opt='latency',
                                     dump_filename_pattern="outputs/{datetime}.json",
                                     pickle_filename="outputs/list_of_cmes.pickle"):
