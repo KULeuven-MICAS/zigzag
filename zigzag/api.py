@@ -25,9 +25,12 @@ def get_hardware_performance_zigzag(workload,
         raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if workload.split('.')[-1] == 'onnx':
-        workload_parser_stage = ONNXModelParserStage
-    else:
+    try:
+        if workload.split('.')[-1] == 'onnx':
+            workload_parser_stage = ONNXModelParserStage
+        else:
+            workload_parser_stage = WorkloadParserStage
+    except:
         workload_parser_stage = WorkloadParserStage
 
     mainstage = MainStage([  # Initialize the MainStage as entry point
@@ -45,8 +48,8 @@ def get_hardware_performance_zigzag(workload,
         CostModelStage  # Evaluate generated SM and TM through cost model
     ],
         accelerator=accelerator,  # required by AcceleratorParserStage
-        workload=workload,  # required by ONNXModelParserStage
-        mapping=mapping,  # required by ONNXModelParserStage
+        workload=workload,  # required by workload_parser_stage
+        mapping=mapping,  # required by workload_parser_stage
         dump_filename_pattern=dump_filename_pattern,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
