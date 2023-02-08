@@ -4,8 +4,10 @@ import networkx as nx
 
 def visualize_dnn_graph(G):
     pos = {}
+    pos_lb = {}
     for i_node, node in enumerate(G.nodes()):
-        pos[node] = (i_node, 0)
+        pos[node] = (i_node, -2*i_node)
+        pos_lb[node] = (i_node-1.5, -2*i_node-2)
     plt.figure(figsize=(15, 5))
     rad = 0.8
     ax = plt.gca()
@@ -20,7 +22,14 @@ def visualize_dnn_graph(G):
                                     connectionstyle=f"arc3,rad={edge_rad}",
                                     alpha=0.7,
                                     linewidth=5))
-    nx.draw_networkx_nodes(G, pos=pos, node_size=1000, node_color='black')
-    nx.draw_networkx_labels(G, pos=pos, font_color='white')
+    nx.draw_networkx_nodes(G, pos=pos, node_size=100, node_color='black')
+    nx.draw_networkx_labels(G, pos=pos_lb, font_color='black')
     plt.box(False)
     plt.show()
+
+
+if __name__ == '__main__':
+    import zigzag.classes.stages.MainInputParserStages as MainInputParserStages
+    workload = 'zigzag.inputs.examples.workload.resnet18'
+    parsed_workload = MainInputParserStages.parse_workload_from_path(workload)
+    visualize_dnn_graph(parsed_workload)

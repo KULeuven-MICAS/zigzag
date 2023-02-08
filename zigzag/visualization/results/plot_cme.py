@@ -1,5 +1,3 @@
-import pickle
-from copy import deepcopy
 from typing import Dict, List, Tuple
 from typing import TYPE_CHECKING
 from collections import defaultdict
@@ -162,6 +160,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: List[CostModelEvaluation], s
 
 
 if __name__ == '__main__':
-    with open('list_of_cmes.pickle', 'rb') as handle:
+    import pickle
+    with open('../list_of_cmes.pickle', 'rb') as handle:
         list_of_cme = pickle.load(handle)
     bar_plot_cost_model_evaluations_breakdown(list_of_cme, 'plot.png')
