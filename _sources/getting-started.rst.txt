@@ -44,7 +44,7 @@ Other ZigZag runs examples:
 
 .. code:: sh
 
-    python main.py --model zigzag.inputs.examples.workload.resnet18 --accelerator zigzag.inputs.examples.hardware.TPU_like
+    python main.py --model zigzag.inputs.examples.workload.resnet18 --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.tpu_like
 
 - ZigZag can also run with SALSA temporal mapping search engine:
 
