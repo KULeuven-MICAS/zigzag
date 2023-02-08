@@ -21,17 +21,18 @@ class AcceleratorParserStage(Stage):
             yield cme, extra_info
 
 
-def parse_workload_from_path(workload_path, mapping_path):
+def parse_workload_from_path_or_from_module(workload, mapping):
     """
     Parse the input workload residing in workload_path.
     The "workload" dict is converted to a NetworkX graph.
     """
-    module = importlib.import_module(workload_path)
-    workload = module.workload
-    module = importlib.import_module(mapping_path)
-    mapping = module.mapping
-    # Take only first dict element to start simple
-    # workload = {1: workload[1]}
+    if isinstance(workload, str):  # load from path
+        module = importlib.import_module(workload)
+        workload = module.workload
+
+    if isinstance(mapping, str):  # load from path
+        module = importlib.import_module(mapping)
+        mapping = module.mapping
 
     workload = DNNWorkload(workload, mapping)
     logger.info(
@@ -47,7 +48,7 @@ class WorkloadParserStage(Stage):
         self.mapping = mapping
 
     def run(self):
-        workload = parse_workload_from_path(self.workload, self.mapping)
+        workload = parse_workload_from_path_or_from_module(self.workload, self.mapping)
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], workload=workload, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
