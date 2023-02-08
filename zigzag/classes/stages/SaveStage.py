@@ -37,9 +37,9 @@ class CompleteSaveStage(Stage):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
-                filename = self.dump_filename_pattern.replace('?', 'overall')
+                filename = self.dump_filename_pattern.replace('?', 'overall_completeSave')
             else:
-                filename = self.dump_filename_pattern.replace('?', str(cme.layer))
+                filename = self.dump_filename_pattern.replace('?', str(cme.layer) + '_completeSave')
             self.save_to_json(cme, filename=filename)
             logger.info(f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}")
             yield cme, extra_info
@@ -90,9 +90,9 @@ class SimpleSaveStage(Stage):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
-                filename = self.dump_filename_pattern.replace('?', 'overall')
+                filename = self.dump_filename_pattern.replace('?', 'overall_simpleSave')
             else:
-                filename = self.dump_filename_pattern.replace('?', str(cme.layer))
+                filename = self.dump_filename_pattern.replace('?', str(cme.layer) + '_simpleSave')
             self.save_to_json(cme, filename=filename)
             logger.info(f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}")
             yield cme, extra_info
