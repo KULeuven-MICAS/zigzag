@@ -14,7 +14,7 @@ Detailed latency model explanation
 
 The new temporal mapping search engine
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* \A. Symons, L. Mei and M. Verhelst, "LOMA: Fast Auto-Scheduling on DNN Accelerators through Loop-Order-based Memory Allocation," 2021 IEEE 3rd International Conference on Artificial Intelligence Circuits and Systems (AICAS), Washington DC, DC, USA, 2021, pp. 1-4, doi: 10.1109/AICAS51828.2021.9458493. `[paper] <https://ieeexplore.ieee.org/document/9458493>`_ `[slides] <https://drive.google.com/file/d/1m_4YznH67mxngP3Mlmoj_c8ruRqrjdbq/view?usp=share_link>`_, `[video] <https://drive.google.com/file/d/1pK3hoy3znto7JfXHj3V_sWv4FdrcTgzA/view?usp=share_link>`_
+* \A. Symons, L. Mei and M. Verhelst, "LOMA: Fast Auto-Scheduling on DNN Accelerators through Loop-Order-based Memory Allocation," 2021 IEEE 3rd International Conference on Artificial Intelligence Circuits and Systems (AICAS), Washington DC, DC, USA, 2021, pp. 1-4, doi: 10.1109/AICAS51828.2021.9458493. `[paper] <https://ieeexplore.ieee.org/document/9458493>`_, `[slides] <https://drive.google.com/file/d/1m_4YznH67mxngP3Mlmoj_c8ruRqrjdbq/view?usp=share_link>`_, `[video] <https://drive.google.com/file/d/1pK3hoy3znto7JfXHj3V_sWv4FdrcTgzA/view?usp=share_link>`_
 
 Different design space exploration case studies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
