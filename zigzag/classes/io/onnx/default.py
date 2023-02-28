@@ -21,6 +21,6 @@ class DefaultNodeParser(Parser):
                 if node_input in self.nodes_outputs[n]:
                     preds.append(n)
         
-        node_obj = DummyNode(self.node_id, preds, node_name=self.node.name)
+        node_obj = DummyNode(self.node_id, preds, node_name=self.node.name, type=self.node.op_type.lower())
 
         return node_obj

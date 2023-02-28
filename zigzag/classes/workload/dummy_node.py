@@ -4,7 +4,7 @@ class DummyNode:
     This node is created to preserve the original ONNX model graph structure,
     but will be skipped by the underlying engines, treating it as a 0 HW cost node.
     """
-    def __init__(self, id, preds, node_name="") -> None:
+    def __init__(self, id, preds, node_name="", type=None) -> None:
         """Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
 
         Args:
@@ -15,6 +15,7 @@ class DummyNode:
         self.id = id
         self.input_operand_source = {'I': preds}
         self.name = node_name
+        self.type = type
         self.core_allocation = -1  # We assume these nodes are mapped on a core with id -1
         self.runtime = 0
         self.start = None

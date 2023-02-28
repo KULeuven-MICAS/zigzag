@@ -107,7 +107,7 @@ class GemmParser(Parser):
                 raise ValueError(f"There is no mapping provided for node {self.node.name}, nor a default one.")
 
         node_attrs = get_layer_node_input_format(B, C, K, node_mapping, self.nodes_outputs)
-        node_obj = LayerNode(self.node_id, node_attrs, node_name=self.node.name)
+        node_obj = LayerNode(self.node_id, node_attrs, node_name=self.node.name, type=self.node.op_type.lower())
 
         logger.info(f"Parsed Gemm node {self.node.name}")
 

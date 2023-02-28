@@ -8,7 +8,7 @@ from collections import defaultdict
 
 class LayerNode:
 
-    def __init__(self, layer_id, layer_attrs, node_name=""):
+    def __init__(self, layer_id, layer_attrs, node_name="", type=None):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -50,6 +50,7 @@ class LayerNode:
         self.id = layer_id
         self.layer_attrs = layer_attrs
         self.name = node_name
+        self.type = type
 
         # equation_relations has been replaced by dimension_relations.
         # Check if layer has equation_relations and notify user.
