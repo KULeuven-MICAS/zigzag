@@ -18,7 +18,8 @@ The new temporal mapping search engine
 
 Different design space exploration case studies
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* \P. Houshmand, S. Cosemans, L. Mei, I. Papistas, D. Bhattacharjee, P. Debacker, A. Mallik, D. Verkest, M. Verhelst, "Opportunities and Limitations of Emerging Analog in-Memory Compute DNN Architectures," 2020 IEEE International Electron Devices Meeting (IEDM), San Francisco, CA, USA, 2020, pp. 29.1.1-29.1.4, doi: 10.1109/IEDM13553.2020.9372006. `[paper] <https://ieeexplore.ieee.org/abstract/document/9372006>`_
+* \P. Houshmand, S. Cosemans, L. Mei, I. Papistas, D. Bhattacharjee, P. Debacker, A. Mallik, D. Verkest, M. Verhelst, "Opportunities and Limitations of Emerging Analog in-Memory Compute DNN Architectures," 2020 IEEE International Electron Devices Meeting (IEDM), San Francisco, CA, USA, 2020, pp. 29.1.1-29.1.4, doi: 10.1109/IEDM13553.2020.9372006. `[paper] <https://ieeexplore.ieee.org/abstract/document/9372006>`_,  `[slides] <https://docs.google.com/presentation/d/e/2PACX-1vRTB-KJemyLhrBmiZ9c7fL8gpnIevJzB2feNHeAGfcKchkFR698Df2_Wh0CXu8Qrg/pub?start=false&loop=false&delayms=3000>`_
+
 
 * \V. Jain, L. Mei and M. Verhelst, "Analyzing the Energy-Latency-Area-Accuracy Trade-off Across Contemporary Neural Networks," 2021 IEEE 3rd International Conference on Artificial Intelligence Circuits and Systems (AICAS), Washington DC, DC, USA, 2021, pp. 1-4, doi: 10.1109/AICAS51828.2021.9458553. `[paper] <https://ieeexplore.ieee.org/abstract/document/9458553>`_
 
