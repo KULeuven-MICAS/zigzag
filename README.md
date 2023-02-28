@@ -11,6 +11,8 @@ Please take a look at the [Installation](https://zigzag-project.github.io/zigzag
 
 Please take a look at the [Getting Started](https://zigzag-project.github.io/zigzag/getting-started.html) page on how to get started using ZigZag.
 
+Also, a Jupyter Notebook based demo is prepared for new users [here](https://github.com/ZigZag-Project/zigzag-demo).
+
 ## Recent changes
 
 In this novel version, we have: 
@@ -40,7 +42,9 @@ P. Houshmand, S. Cosemans, L. Mei, I. Papistas, D. Bhattacharjee, P. Debacker, A
 
 V. Jain, L. Mei and M. Verhelst, "Analyzing the Energy-Latency-Area-Accuracy Trade-off Across Contemporary Neural Networks," 2021 IEEE 3rd International Conference on Artificial Intelligence Circuits and Systems (AICAS), Washington DC, DC, USA, 2021, pp. 1-4, doi: 10.1109/AICAS51828.2021.9458553. [paper](https://ieeexplore.ieee.org/abstract/document/9458553), [slides](https://docs.google.com/presentation/d/1IIeNwIfunKE409SmlS3JEIAF-5GyhbCN/edit?usp=sharing&ouid=100287940751782809199&rtpof=true&sd=true), [video](https://drive.google.com/file/d/1SssJKLt89H1SCAeCOUX4ibsZ15ewLKPb/view?usp=sharing)
 
-S. Colleman, T. Verelst, L. Mei, T. Tuytelaars and M. Verhelst, "Processor Architecture Optimization for Spatially Dynamic Neural Networks," 2021 IFIP/IEEE 29th International Conference on Very Large Scale Integration (VLSI-SoC), Singapore, Singapore, 2021, pp. 1-6, doi: 10.1109/VLSI-SoC53125.2021.9607013. [paper](https://ieeexplore.ieee.org/abstract/document/9607013)
+S. Colleman, T. Verelst, L. Mei, T. Tuytelaars and M. Verhelst, "Processor Architecture Optimization for Spatially Dynamic Neural Networks," 2021 IFIP/IEEE 29th International Conference on Very Large Scale Integration (VLSI-SoC), Singapore, Singapore, 2021, pp. 1-6, doi: 10.1109/VLSI-SoC53125.2021.9607013. [paper](https://ieeexplore.ieee.org/abstract/document/9607013), [slides](https://drive.google.com/file/d/1to0IHQP30CUbjh37LrT_g4Tfjo6VhVx7/view?usp=sharing), [video](https://drive.google.com/file/d/1tjp_0OBiXSFOOF_u3cw9Zr-u4fcJRy9_/view?usp=sharing)
+
+S. Colleman, P. Zhu, W. Sun and M. Verhelst, "Optimizing Accelerator Configurability for Mobile Transformer Networks," 2022 IEEE 4th International Conference on Artificial Intelligence Circuits and Systems (AICAS), Incheon, Korea, Republic of, 2022, pp. 142-145, doi: 10.1109/AICAS54282.2022.9869945. [paper](https://ieeexplore.ieee.org/document/9869945), [slides](https://docs.google.com/presentation/d/1tp11akyAVGg3Y20Aupp2wlTRSgg9nKAQ/edit?usp=sharing&ouid=117150865143314519834&rtpof=true&sd=true), [video](https://drive.google.com/file/d/1tglc-BCGVclrWT-kNhWy02Vms5sjk1zt/view?usp=sharing)
 
 #### Extend ZigZag to support cross-layer depth-first scheduling
 L. Mei, K. Goetschalckx, A. Symons and M. Verhelst, " DeFiNES: Enabling Fast Exploration of the Depth-first Scheduling Space for DNN Accelerators through Analytical Modeling," 2023 IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2023 [paper](https://arxiv.org/abs/2212.05344), [github](https://github.com/ZigZag-Project/DeFiNES)
