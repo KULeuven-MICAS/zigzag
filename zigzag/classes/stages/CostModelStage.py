@@ -15,13 +15,13 @@ class CostModelStage(Stage):
     """
     Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
     """
-    def __init__(self, list_of_callables:List[Callable], *, accelerator, layer, spatial_mapping, temporal_mapping, **kwargs):
+    def __init__(self, list_of_callables:List[Callable], *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=False, **kwargs):
         """
         Initializes the cost model stage given main inputs
         """
         super().__init__(list_of_callables, **kwargs)
-        self.accelerator, self.layer, self.spatial_mapping, self.temporal_mapping =\
-            accelerator, layer, spatial_mapping, temporal_mapping
+        self.accelerator, self.layer, self.spatial_mapping, self.temporal_mapping, self.access_same_data_considered_as_no_access =\
+            accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access
 
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
         """
@@ -30,7 +30,9 @@ class CostModelStage(Stage):
         self.cme = CostModelEvaluation(accelerator=self.accelerator,
                                        layer=self.layer,
                                        spatial_mapping=self.spatial_mapping,
-                                       temporal_mapping=self.temporal_mapping)
+                                       temporal_mapping=self.temporal_mapping,
+                                       # the below parameter is optional
+                                       access_same_data_considered_as_no_access=self.access_same_data_considered_as_no_access)
         yield (self.cme, None)
 
     def is_leaf(self) -> bool:

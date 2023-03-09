@@ -151,7 +151,7 @@ class CostModelEvaluation:
     Class that stores inputs and runs them through the zigzag cost model.
     """
 
-    def __init__(self, *, accelerator, layer, spatial_mapping, temporal_mapping):
+    def __init__(self, *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=False):
         """
         Initialize the cost model evaluation with the following inputs:
         - accelerator: the accelerator that includes the core on which to run the layer
@@ -174,6 +174,7 @@ class CostModelEvaluation:
         self.layer = layer
         self.spatial_mapping = spatial_mapping
         self.temporal_mapping = temporal_mapping
+        self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
         self.core_id = layer.core_allocation
         self.mem_instance_list = accelerator.get_core(self.core_id).get_memory_hierarchy().mem_instance_list
@@ -189,8 +190,9 @@ class CostModelEvaluation:
         Later the fractional one is used for calculating energy, and the integer one is used for calculating latency'''
         self.spatial_mapping_dict_int = spatial_mapping_fractional_to_int(self.spatial_mapping.mapping_dict_origin)
 
-        self.mapping = Mapping(self.spatial_mapping, self.temporal_mapping, self.layer)
-        self.mapping_int = Mapping(self.spatial_mapping_dict_int, self.temporal_mapping, self.layer)
+        # For constructing Mapping object,  the last parameter "self.access_same_data_considered_as_no_access" is optional
+        self.mapping = Mapping(self.accelerator, self.spatial_mapping, self.temporal_mapping, self.layer, self.access_same_data_considered_as_no_access)
+        self.mapping_int = Mapping(self.accelerator, self.spatial_mapping_dict_int, self.temporal_mapping, self.layer, self.access_same_data_considered_as_no_access)
 
         self.active_mem_level = self.mapping.mem_level
 
