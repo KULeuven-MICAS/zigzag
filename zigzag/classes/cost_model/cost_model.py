@@ -210,7 +210,7 @@ class CostModelEvaluation:
         return {
             "outputs": {
                 "memory": {
-                    "utilization": self.mem_utili_shared,
+                    "utilization": self.mem_utili_shared if hasattr(self, "mem_utili_shared") else None,
                     "word_accesses": self.memory_word_access
                 },
                 "energy": {
@@ -229,8 +229,8 @@ class CostModelEvaluation:
             "inputs": {
                 "accelerator": self.accelerator,
                 "layer": self.layer,
-                "spatial_mapping": self.spatial_mapping,
-                "temporal_mapping": self.temporal_mapping,
+                "spatial_mapping": self.spatial_mapping if hasattr(self, "spatial_mapping") else None,
+                "temporal_mapping": self.temporal_mapping if hasattr(self, "temporal_mapping") else None,
             },
         }
 
