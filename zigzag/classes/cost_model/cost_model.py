@@ -352,13 +352,15 @@ class CostModelEvaluation:
                                           (self.spatial_mapping.unit_unique[layer_op][mem_lv] / self.spatial_mapping.unit_unique[layer_op][mem_lv + 1])
                         data_elem_move_per_cycle_in_a_period = min((another_side_bw/data_precision), (max_bw/data_precision), data_elem_move_per_period)
                         cycle_in_a_period = ceil(data_elem_move_per_period / data_elem_move_per_cycle_in_a_period)
+                        rd_out_to_low = ceil((data_elem_move_per_cycle_in_a_period * data_precision) / min_bw) * \
+                                        (min_bw / max_bw) * \
+                                        total_period_count * cycle_in_a_period * \
+                                        self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
                     else:
-                        data_elem_move_per_cycle_in_a_period = data_elem_move_per_period
-                        cycle_in_a_period = 1
-                    rd_out_to_low = ceil((data_elem_move_per_cycle_in_a_period * data_precision) / min_bw) * \
-                                    (min_bw / max_bw) * \
-                                    total_period_count * cycle_in_a_period * \
-                                    self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
+                        rd_out_to_low = ceil((data_elem_move_per_period * data_precision) / min_bw) * \
+                                        (min_bw / max_bw) * \
+                                        total_period_count * \
+                                        self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
 
                 ''' rd_out_to_high '''
                 data_elem_move_per_period = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_trans_amount_per_period.rd_out_to_high

@@ -527,8 +527,13 @@ class Mapping:
         This function calculates the average & instant required memory bw and the periodic data transfer pattern.
         """
 
-        ''' Add operational array level's 1 cycle in the below to align with the list length of data_each_level '''
-        cycle_each_level = {op: [1] + self.temporal_mapping.cycle_cabl_level[op] for op in self.operand_list}
+        if self.access_same_data_considered_as_no_access:
+            ''' For input operands, add operational array level's 'MAC_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level '''
+            cycle_each_level = {op: [self.temporal_mapping.MAC_level_data_stationary_cycle[op]] + self.temporal_mapping.cycle_cabl_level[op] for op in self.layer_node.input_operands}
+            ''' For output operands, add operational array level's 1 cycle in the below to align with the list length of data_each_level '''
+            cycle_each_level[self.layer_node.output_operand] = [1] + self.temporal_mapping.cycle_cabl_level[self.layer_node.output_operand]
+        else:
+            cycle_each_level = {op: [1] + self.temporal_mapping.cycle_cabl_level[op] for op in self.operand_list}
         data_each_level_unrolled = self.data_elem_per_level_unrolled
 
         ''' Add the mem BW boost factor 1 on the top (the memory BW boost factor from outside to top memory) 
