@@ -3,6 +3,7 @@ from math import prod
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
 
@@ -153,11 +154,12 @@ class Mapping:
     like memory bw, access cost, size and so on.
     """
 
-    def __init__(self, spatial_mapping: Dict or SpatialMapping, temporal_mapping: Dict or TemporalMapping,
-                 layer_node: LayerNode):
+    def __init__(self, accelerator: Accelerator, spatial_mapping: Dict or SpatialMapping, temporal_mapping: Dict or TemporalMapping,
+                 layer_node: LayerNode, access_same_data_considered_as_no_access: bool = False):
         """
         Mapping object can be initialized with separate spatial and temporal mappings
         """
+        self.accelerator = accelerator
         if type(spatial_mapping) is SpatialMapping:
             self.spatial_mapping = spatial_mapping
         else:
@@ -168,6 +170,7 @@ class Mapping:
             self.temporal_mapping = TemporalMapping(temporal_mapping, layer_node)
         self.layer_node = layer_node
         self.operand_list = layer_node.operand_list
+        self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
         self.mem_level = self.temporal_mapping.mem_level
         ''' Initialize unit_mem_data_movement, which collects all the important data movement info 
         related to each unit memory, such as data access count, data precision, required memory BW to 
@@ -452,7 +455,14 @@ class Mapping:
                 unit_mem_data_movement = DataMovePattern(operand, mem_level)
 
                 ''' data access count '''
-                rd_out_to_low = data_access_raw[operand][mem_level]
+                if self.access_same_data_considered_as_no_access and mem_level == 0 and \
+                        self.accelerator.get_core(self.layer_node.get_core_allocation()).mem_r_bw_dict[self.layer_node.memory_operand_links[operand]][mem_level] >= \
+                        self.data_bit_per_level[operand][mem_level] // self.spatial_mapping.unit_unique[operand][mem_level+1]:
+                    # If we need access the same input data multiple times from the innermost memory level and the data size is smaller than the memory read bw,
+                    # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
+                    rd_out_to_low = data_access_raw[operand][mem_level] // self.temporal_mapping.MAC_level_data_stationary_cycle[operand]
+                else:
+                    rd_out_to_low = data_access_raw[operand][mem_level]
                 wr_in_by_low = 0
                 rd_out_to_high = 0
                 wr_in_by_high = data_access_raw2[operand][mem_level + 1]
@@ -517,8 +527,13 @@ class Mapping:
         This function calculates the average & instant required memory bw and the periodic data transfer pattern.
         """
 
-        ''' Add operational array level's 1 cycle in the below to align with the list length of data_each_level '''
-        cycle_each_level = {op: [1] + self.temporal_mapping.cycle_cabl_level[op] for op in self.operand_list}
+        if self.access_same_data_considered_as_no_access:
+            ''' For input operands, add operational array level's 'MAC_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level '''
+            cycle_each_level = {op: [self.temporal_mapping.MAC_level_data_stationary_cycle[op]] + self.temporal_mapping.cycle_cabl_level[op] for op in self.layer_node.input_operands}
+            ''' For output operands, add operational array level's 1 cycle in the below to align with the list length of data_each_level '''
+            cycle_each_level[self.layer_node.output_operand] = [1] + self.temporal_mapping.cycle_cabl_level[self.layer_node.output_operand]
+        else:
+            cycle_each_level = {op: [1] + self.temporal_mapping.cycle_cabl_level[op] for op in self.operand_list}
         data_each_level_unrolled = self.data_elem_per_level_unrolled
 
         ''' Add the mem BW boost factor 1 on the top (the memory BW boost factor from outside to top memory) 

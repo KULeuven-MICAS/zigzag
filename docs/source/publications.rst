@@ -29,7 +29,7 @@ Different design space exploration case studies
 
 Extension to support cross-layer depth-first scheduling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-* \L. Mei, K. Goetschalckx, A. Symons and M. Verhelst, " DeFiNES: Enabling Fast Exploration of the Depth-first Scheduling Space for DNN Accelerators through Analytical Modeling," 2023 IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2023 `[paper] <https://arxiv.org/abs/2212.05344>`_, `[github] <https://github.com/ZigZag-Project/DeFiNES>`_
+* \L. Mei, K. Goetschalckx, A. Symons and M. Verhelst, " DeFiNES: Enabling Fast Exploration of the Depth-first Scheduling Space for DNN Accelerators through Analytical Modeling," 2023 IEEE International Symposium on High-Performance Computer Architecture (HPCA), 2023 `[paper] <https://arxiv.org/abs/2212.05344>`_, `[slides] <https://drive.google.com/file/d/1u_PG9ZhjUZVrH2wnMLDe-PYJeO0RUGLd/view?usp=sharing>`_, `[github] <https://github.com/ZigZag-Project/DeFiNES>`_
 
 Extension to support multi-core layer-fused scheduling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
