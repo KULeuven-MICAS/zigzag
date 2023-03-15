@@ -15,7 +15,7 @@ class CostModelStage(Stage):
     """
     Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
     """
-    def __init__(self, list_of_callables:List[Callable], *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=False, **kwargs):
+    def __init__(self, list_of_callables:List[Callable], *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=True, **kwargs):
         """
         Initializes the cost model stage given main inputs
         """

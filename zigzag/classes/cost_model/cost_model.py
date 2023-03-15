@@ -151,7 +151,7 @@ class CostModelEvaluation:
     Class that stores inputs and runs them through the zigzag cost model.
     """
 
-    def __init__(self, *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=False):
+    def __init__(self, *, accelerator, layer, spatial_mapping, temporal_mapping, access_same_data_considered_as_no_access=True):
         """
         Initialize the cost model evaluation with the following inputs:
         - accelerator: the accelerator that includes the core on which to run the layer
