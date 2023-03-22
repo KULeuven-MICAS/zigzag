@@ -11,6 +11,7 @@ parser.add_argument('--ex_rd_port')
 parser.add_argument('--ex_wr_port')
 parser.add_argument('--rd_wr_port')
 parser.add_argument('--bank_count')
+parser.add_argument('--mem_pool_path')
 args = parser.parse_args()
 
 # python cacti_top.py --cache_size 2056 --IO_bus_width 64 --ex_rd_port 1 --ex_wr_port 1 --rd_wr_port 0 --bank_count 1
@@ -51,6 +52,7 @@ ex_rd_port = args.ex_rd_port
 ex_wr_port = args.ex_wr_port
 rd_wr_port = args.rd_wr_port
 bank_count = args.bank_count
+mem_pool_path = args.mem_pool_path
 
 # print(mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, bank_count)
 technology = 0.090
@@ -101,7 +103,7 @@ for i in range(len(result[' Capacity (bytes)'])):
         'bank_count': 1, 
         'memory_type': mem_type
     }}
-    with open('./example_mem_pool.yaml', 'a+') as file:
-        yaml.dump(new_result, file)
-        file.write('\n')
-    file.close()
+    with open(mem_pool_path, 'a+') as fp:
+        yaml.dump(new_result, fp)
+        fp.write('\n')
+

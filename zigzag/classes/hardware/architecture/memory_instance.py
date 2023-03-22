@@ -37,7 +37,7 @@ class MemoryInstance:
                 r_port=r_port,
                 w_port=w_port,
                 rw_port=rw_port,
-                bank=1
+                bank=1,
             )
 
         self.name = name

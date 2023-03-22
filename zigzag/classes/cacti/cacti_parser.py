@@ -5,15 +5,18 @@ import subprocess
 import logging
 logger = logging.getLogger(__name__)
 
-CACTI_PATH = './zigzag/classes/cacti'
-
 class CactiParser:
+    
+    cacti_path = os.path.dirname(os.path.realpath(__file__))
+    MEM_POOL_PATH = f'{cacti_path}/cacti-master/example_mem_pool.yaml'  # Path to cached cacti simulated memories
+    CACTI_TOP_PATH = f'{cacti_path}/cacti-master/cacti_top.py'  # Path to cacti python script to extract costs
+
     def __init__(self):
         pass
 
-    def item_exists(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank):
-        memory_pool_file = open(f'{CACTI_PATH}/cacti-master/example_mem_pool.yaml')
-        memory_pool = yaml.full_load(memory_pool_file)
+    def item_exists(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path=MEM_POOL_PATH):
+        with open(mem_pool_path, 'r') as fp:
+            memory_pool = yaml.full_load(fp)
         
         if memory_pool != None:
             for instance in memory_pool:
@@ -33,23 +36,24 @@ class CactiParser:
 
         return False
 
-    def create_item(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank):
+    def create_item(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path=MEM_POOL_PATH, cacti_top_path=CACTI_TOP_PATH):
         # print("No match in Cacti memory pool found!", size, r_bw, r_port, w_port, rw_port, bank)
-        os.chdir(f'{CACTI_PATH}/cacti-master/')
+        # os.chdir(f'{CACTI_PATH}/cacti-master/')
 
-        p = subprocess.call(['python', 'cacti_top.py', 
+        p = subprocess.call(['python', cacti_top_path, 
                             '--mem_type', str(mem_type),
                             '--cache_size', str(int(size/8)),
                             '--IO_bus_width', str(r_bw), 
                             '--ex_rd_port', str(r_port), 
                             '--ex_wr_port', str(w_port),
                             '--rd_wr_port', str(rw_port),
-                            '--bank_count', str(bank)])
+                            '--bank_count', str(bank),
+                            '--mem_pool_path', str(mem_pool_path)])
 
-        os.chdir("../../../..")
+        # os.chdir("../../../..")
 
-    def get_item(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank):  
-        logger.info(f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}")
+    def get_item(self, mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path=MEM_POOL_PATH, cacti_top_path=CACTI_TOP_PATH):  
+        print(f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}")
 
         if mem_type == 'rf':
             mem_type = 'sram'
@@ -58,10 +62,10 @@ class CactiParser:
 
             print("mem_type is register file! Changed to 'sram' and size", size, "instead of", int(size/128))
 
-        if not self.item_exists(mem_type, size, r_bw, r_port, w_port, rw_port, bank):
-            self.create_item(mem_type, size, r_bw, r_port, w_port, rw_port, bank) 
+        if not self.item_exists(mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path):
+            self.create_item(mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path, cacti_top_path) 
 
-        memory_pool_file = open(f'{CACTI_PATH}/cacti-master/example_mem_pool.yaml')
+        memory_pool_file = open(mem_pool_path)
         memory_pool = yaml.full_load(memory_pool_file)
         
         if memory_pool != None:
