@@ -1,8 +1,10 @@
-from cacti_config_creator import CactiConfig
 import yaml
 import os
-
 import argparse
+
+from zigzag.classes.cacti.cacti_master.cacti_config_creator import CactiConfig
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--mem_type')
 parser.add_argument('--cache_size')
@@ -14,15 +16,17 @@ parser.add_argument('--bank_count')
 parser.add_argument('--mem_pool_path')
 args = parser.parse_args()
 
-# python cacti_top.py --cache_size 2056 --IO_bus_width 64 --ex_rd_port 1 --ex_wr_port 1 --rd_wr_port 0 --bank_count 1
 
-os.system('pwd')
+mem_pool_path = args.mem_pool_path
+cacti_master_path = os.path.dirname(mem_pool_path)
+print(f"{cacti_master_path=}")
 
-file_path = './self_gen'
-if not os.path.isdir('%s' % file_path):
-    os.system('mkdir %s' % file_path)
+self_gen_folder_name = 'self_gen'
+self_gen_path = os.path.join(cacti_master_path, self_gen_folder_name)
+if not os.path.isdir(self_gen_path):
+    os.mkdir(self_gen_path)
 
-os.system('rm -rf %s/*' % file_path)
+os.system(f'rm -rf {self_gen_path}/*')
 C = CactiConfig()
 
 '''Function 1: set default value'''
@@ -52,28 +56,26 @@ ex_rd_port = args.ex_rd_port
 ex_wr_port = args.ex_wr_port
 rd_wr_port = args.rd_wr_port
 bank_count = args.bank_count
-mem_pool_path = args.mem_pool_path
 
-# print(mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, bank_count)
 technology = 0.090
 
 
-C.cacti_auto(['single', [['mem_type', 'cache_size', 'IO_bus_width', 'ex_rd_port', 'ex_wr_port', 'rd_wr_port', 'technology'],[mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, technology]]], file_path+'/cache.cfg')
+C.cacti_auto(['single', [['mem_type', 'cache_size', 'IO_bus_width', 'ex_rd_port', 'ex_wr_port', 'rd_wr_port', 'technology'],[mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, technology]]], cacti_master_path, f'{self_gen_path}/cache.cfg')
 
-f = open('%s/cache.cfg.out' % file_path, 'r')
 result = {}
-raw_result = f.readlines()
-for ii, each_line in enumerate(raw_result):
-    if ii == 0:
-        attribute_list = each_line.split(',')
-        for each_attribute in attribute_list:
-            result[each_attribute] = []
-    else:
-        for jj, each_value in enumerate(each_line.split(',')):
-            try:
-                result[attribute_list[jj]].append(float(each_value))
-            except:
-                pass
+with open('%s/cache.cfg.out' % self_gen_path, 'r') as fp:
+    raw_result = fp.readlines()
+    for ii, each_line in enumerate(raw_result):
+        if ii == 0:
+            attribute_list = each_line.split(',')
+            for each_attribute in attribute_list:
+                result[each_attribute] = []
+        else:
+            for jj, each_value in enumerate(each_line.split(',')):
+                try:
+                    result[attribute_list[jj]].append(float(each_value))
+                except:
+                    pass
 
 
 for i in range(len(result[' Capacity (bytes)'])):

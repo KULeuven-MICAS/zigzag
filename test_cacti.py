@@ -2,7 +2,7 @@ from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 
 my_mem_instance = MemoryInstance(
     name="test_dram",
-    size=1000000*8,
+    size=1009001*8,
     r_bw=128,
     w_bw=128,
     auto_cost_extraction=True,
