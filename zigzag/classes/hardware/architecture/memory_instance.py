@@ -4,10 +4,24 @@ from zigzag.classes.cacti.cacti_parser import CactiParser
 
 
 class MemoryInstance:
-    def __init__(self, name: str, size: int, r_bw: int, w_bw: int=0, r_cost: float=0, w_cost: float=0, area: float=0,
-                 r_port: int=1, w_port: int=1, rw_port: int=0, latency: int=1,
-                 min_r_granularity=None, min_w_granularity=None,
-                 mem_type: str='sram', auto_cost_extraction: bool=False):
+    def __init__(
+        self,
+        name: str,
+        size: int,
+        r_bw: int,
+        w_bw: int = 0,
+        r_cost: float = 0,
+        w_cost: float = 0,
+        area: float = 0,
+        r_port: int = 1,
+        w_port: int = 1,
+        rw_port: int = 0,
+        latency: int = 1,
+        min_r_granularity=None,
+        min_w_granularity=None,
+        mem_type: str = "sram",
+        auto_cost_extraction: bool = False,
+    ):
         """
         Collect all the basic information of a physical memory module.
 
@@ -28,9 +42,22 @@ class MemoryInstance:
 
         if auto_cost_extraction:
             # Size must be a multiple of 8 when using CACTI
-            assert size % 8 == 0, "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
+            assert (
+                size % 8 == 0
+            ), "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
             cacti_parser = CactiParser()
-            size, r_bw, w_bw, r_cost, w_cost, area, bank, r_port, w_port, rw_port = cacti_parser.get_item(
+            (
+                _,
+                r_bw,
+                w_bw,
+                r_cost,
+                w_cost,
+                area,
+                bank,
+                r_port,
+                w_port,
+                rw_port,
+            ) = cacti_parser.get_item(
                 mem_type=mem_type,
                 size=size,
                 r_bw=r_bw,

@@ -530,3 +530,17 @@
   size_bit: 800000088
   size_byte: 100000011
 
+1280_Byte_8_BW_1_1_0:
+  IO_bus_width: 8
+  area: 0.0726528
+  bank_count: 1
+  cost:
+    read_word: 0.00408634
+    write_word: 0.00393455
+  ex_rd_port: '1'
+  ex_wr_port: '1'
+  memory_type: sram
+  rd_wr_port: '0'
+  size_bit: 10240
+  size_byte: 1280
+
