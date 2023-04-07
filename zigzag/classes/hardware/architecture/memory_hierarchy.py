@@ -14,7 +14,13 @@ class MemoryHierarchy(DiGraph):
     The memory hierarchy graph is directed, with the root nodes representing the lowest level
     in the memory hierarchy.
     """
-    def __init__(self, operational_array: OperationalArray, name: str = "Memory Hierarchy", **attr):
+
+    def __init__(
+        self,
+        operational_array: OperationalArray,
+        name: str = "Memory Hierarchy",
+        **attr,
+    ):
         """
         Initialize the memory hierarchy graph.
         The initialization sets the operational array this memory hierarchy will connect to.
@@ -25,7 +31,9 @@ class MemoryHierarchy(DiGraph):
         self.name = name
         self.operational_array = operational_array
         self.operands = set()  # Initialize the set that will store all memory operands
-        self.nb_levels = {}  # Initialize the dict that will store how many memory levels an operand has
+        self.nb_levels = (
+            {}
+        )  # Initialize the dict that will store how many memory levels an operand has
         self.mem_instance_list = []
         self.memory_level_id = 0
 
@@ -38,13 +46,17 @@ class MemoryHierarchy(DiGraph):
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, MemoryHierarchy):
             return False
-        return all([self_ml == __o_ml for (self_ml, __o_ml) in zip(self.nodes(), __o.nodes())])
+        return all(
+            [self_ml == __o_ml for (self_ml, __o_ml) in zip(self.nodes(), __o.nodes())]
+        )
 
-    def add_memory(self, 
-                memory_instance: MemoryInstance, 
-                operands: Tuple[str, ...], 
-                port_alloc: Tuple[dict, ...] = None,
-                served_dimensions: Set or str = "all"):
+    def add_memory(
+        self,
+        memory_instance: MemoryInstance,
+        operands: Tuple[str, ...],
+        port_alloc: Tuple[dict, ...] = None,
+        served_dimensions: Set or str = "all",
+    ):
         """
         Adds a memory to the memory hierarchy graph.
 
@@ -54,26 +66,43 @@ class MemoryHierarchy(DiGraph):
         Edges are added from all sink nodes in the graph to this node if the memory operands match
         :param memory_instance: The MemoryInstance containing the different memory characteristics.
         :param operands: The memory operands the memory level stores.
-        :param served_dimensions: The operational array dimensions this memory level serves. 
+        :param served_dimensions: The operational array dimensions this memory level serves.
         Each vector in the set is a direction that is served.
         Use 'all' to represent all dimensions (i.e. the memory level is not unrolled).
         """
 
         if port_alloc is None:
             # Define the standard port allocation scheme (this assumes one read port and one write port)
-            if not (memory_instance.r_port == 1 and memory_instance.w_port == 1 and memory_instance.rw_port == 0):
-                raise ValueError(f"No port allocation was provided for memory level of instance {memory_instance} and doesn't match with standard port allocation generation of 1 read and 1 write port.")
+            if not (
+                memory_instance.r_port == 1
+                and memory_instance.w_port == 1
+                and memory_instance.rw_port == 0
+            ):
+                raise ValueError(
+                    f"No port allocation was provided for memory level of instance {memory_instance} and doesn't match with standard port allocation generation of 1 read and 1 write port."
+                )
             port_alloc = []
             for operand in operands:
-                if operand == 'O':
-                    port_alloc.append({'fh': 'w_port_1', 'tl': 'r_port_1', 'fl': 'w_port_1', 'th': 'r_port_1'})
+                if operand == "O":
+                    port_alloc.append(
+                        {
+                            "fh": "w_port_1",
+                            "tl": "r_port_1",
+                            "fl": "w_port_1",
+                            "th": "r_port_1",
+                        }
+                    )
                 else:
-                    port_alloc.append({'fh': 'w_port_1', 'tl': 'r_port_1', 'fl': None, 'th': None})
+                    port_alloc.append(
+                        {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None}
+                    )
             port_alloc = tuple(port_alloc)
-        
+
         # Assert that if served_dimensions is a string, it is "all"
         if type(served_dimensions) == str:
-            assert served_dimensions == "all", "Served dimensions is a string, but is not all."
+            assert (
+                served_dimensions == "all"
+            ), "Served dimensions is a string, but is not all."
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
         for mem_op in operands:
@@ -86,21 +115,27 @@ class MemoryHierarchy(DiGraph):
 
         # Parse the served_dimensions by replicating it into a tuple for each memory operand
         # as the MemoryLevel constructor expects this.
-        served_dimensions_repl = tuple([served_dimensions for _ in range(len(operands))])
+        served_dimensions_repl = tuple(
+            [served_dimensions for _ in range(len(operands))]
+        )
 
         # Compute which memory level this is for all the operands
         mem_level_of_operands = {}
         for operand in operands:
-            nb_levels_so_far = len([node for node in self.nodes() if operand in node.operands])
+            nb_levels_so_far = len(
+                [node for node in self.nodes() if operand in node.operands]
+            )
             mem_level_of_operands[operand] = nb_levels_so_far
 
-        memory_level = MemoryLevel(memory_instance=memory_instance, 
-                                   operands=operands,
-                                   mem_level_of_operands=mem_level_of_operands,
-                                   port_alloc=port_alloc,
-                                   served_dimensions=served_dimensions_repl,
-                                   operational_array=self.operational_array,
-                                   id=self.memory_level_id)
+        memory_level = MemoryLevel(
+            memory_instance=memory_instance,
+            operands=operands,
+            mem_level_of_operands=mem_level_of_operands,
+            port_alloc=port_alloc,
+            served_dimensions=served_dimensions_repl,
+            operational_array=self.operational_array,
+            id=self.memory_level_id,
+        )
         self.mem_instance_list.append(memory_level)
         self.memory_level_id += 1
 
@@ -124,7 +159,9 @@ class MemoryHierarchy(DiGraph):
         The first entry in the returned list is the innermost memory level.
         """
         # Sort the nodes topologically and filter out all memories that don't store mem_op
-        memories = [node for node in nx.topological_sort(self) if mem_op in node.operands]
+        memories = [
+            node for node in nx.topological_sort(self) if mem_op in node.operands
+        ]
         return memories
 
     def get_operands(self):
@@ -155,7 +192,7 @@ class MemoryHierarchy(DiGraph):
         level it has across its assigned operands
         :return: (list_of_memories_on_top_level, top_level)
         """
-        level_to_mems = defaultdict(lambda: [] )
+        level_to_mems = defaultdict(lambda: [])
         for node in self.nodes():
             level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys())
@@ -174,8 +211,13 @@ class MemoryHierarchy(DiGraph):
             self.remove_node(tr)
 
         for k in self.nb_levels:
-            self.nb_levels[k] = len(set(node.mem_level_of_operands.get(k)
-                                        for node in self.nodes() if k in node.mem_level_of_operands))
+            self.nb_levels[k] = len(
+                set(
+                    node.mem_level_of_operands.get(k)
+                    for node in self.nodes()
+                    if k in node.mem_level_of_operands
+                )
+            )
         return to_remove, max(self.nb_levels.keys())
 
     def get_operator_top_level(self, operand) -> Tuple[List[MemoryLevel], int]:
@@ -186,7 +228,7 @@ class MemoryHierarchy(DiGraph):
         level it has across its assigned operands.
         :return: (list of MemoryLevel instances, top_level)
         """
-        level_to_mems = defaultdict(lambda: [] )
+        level_to_mems = defaultdict(lambda: [])
         for node in self.nodes():
             if operand in node.operands[:]:
                 level_to_mems[max(node.mem_level_of_operands.values())].append(node)
@@ -227,10 +269,13 @@ class MemoryHierarchy(DiGraph):
                 self.mem_instance_list.remove(tr)
                 self.remove_node(tr)
 
-
         for k in self.nb_levels:
-            self.nb_levels[k] = len(set(node.mem_level_of_operands.get(k)
-                                        for node in self.nodes() if k in node.mem_level_of_operands))
+            self.nb_levels[k] = len(
+                set(
+                    node.mem_level_of_operands.get(k)
+                    for node in self.nodes()
+                    if k in node.mem_level_of_operands
+                )
+            )
 
         return to_remove, self.nb_levels[operand]
-

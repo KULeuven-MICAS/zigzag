@@ -1,5 +1,3 @@
-from typing import Tuple
-
 from zigzag.classes.cacti.cacti_parser import CactiParser
 
 

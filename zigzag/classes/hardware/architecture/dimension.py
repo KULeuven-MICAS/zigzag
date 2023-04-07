@@ -24,7 +24,9 @@ class Dimension:
         return self.__dict__
 
     def __eq__(self, other):
-        return other.id == self.id and self.name == other.name and self.size == other.size
+        return (
+            other.id == self.id and self.name == other.name and self.size == other.size
+        )
 
     def __hash__(self):
         return hash(self.id) ^ hash(self.name)

@@ -4,6 +4,7 @@ class DummyNode:
     This node is created to preserve the original ONNX model graph structure,
     but will be skipped by the underlying engines, treating it as a 0 HW cost node.
     """
+
     def __init__(self, id, preds, node_name="", type=None) -> None:
         """Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
 
@@ -13,10 +14,12 @@ class DummyNode:
             node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
         """
         self.id = id
-        self.input_operand_source = {'I': preds}
+        self.input_operand_source = {"I": preds}
         self.name = node_name
         self.type = type
-        self.core_allocation = -1  # We assume these nodes are mapped on a core with id -1
+        self.core_allocation = (
+            -1
+        )  # We assume these nodes are mapped on a core with id -1
         self.runtime = 0
         self.start = None
         self.end = None
@@ -50,13 +53,11 @@ class DummyNode:
         self.end = end
 
     def get_start(self):
-        """Get the start time in cycles of this node.
-        """
+        """Get the start time in cycles of this node."""
         return self.start
-    
+
     def get_end(self):
-        """Get the end time in cycles of this node.
-        """
+        """Get the end time in cycles of this node."""
         return self.end
 
     def get_runtime(self):

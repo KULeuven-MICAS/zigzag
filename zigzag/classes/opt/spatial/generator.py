@@ -8,8 +8,8 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 
 
 class UserSpatialMappingGenerator:
-    """Class that generates valid user-format spatial mappings.
-    """
+    """Class that generates valid user-format spatial mappings."""
+
     def __init__(self, layer, accelerator) -> None:
         self.layer = layer
         self.accelerator = accelerator
@@ -43,20 +43,35 @@ class UserSpatialMappingGenerator:
 
         # For every operational array dimension, we initialize it by maximally unrolling all layer dimensions.
         # Later these will be restricted if the memory structure doesn't allow for this unrolling
-        oa_dim_unrolling = {oa_dim: {layer_dim: int(min(layer_size, oa_dim.size)) for layer_dim, layer_size in
-                                     self.layer.loop_dim_size.items()} for oa_dim in oa_dims}
+        oa_dim_unrolling = {
+            oa_dim: {
+                layer_dim: int(min(layer_size, oa_dim.size))
+                for layer_dim, layer_size in self.layer.loop_dim_size.items()
+            }
+            for oa_dim in oa_dims
+        }
 
         for memory_level in innermost_levels:
             served_dimensions: Set[Dimension] = memory_level.served_dimensions
             mem_ops = memory_level.operands
             for mem_op in mem_ops:
-                layer_op = self.layer.get_layer_operand(mem_op=mem_op)  # get the layer operand
-                if layer_op == 'O':
-                    mem_bandwidth = memory_level.write_bw  # partial outputs are written to the memory
+                layer_op = self.layer.get_layer_operand(
+                    mem_op=mem_op
+                )  # get the layer operand
+                if layer_op == "O":
+                    mem_bandwidth = (
+                        memory_level.write_bw
+                    )  # partial outputs are written to the memory
                 else:
-                    mem_bandwidth = memory_level.read_bw  # inputs are read from the memory
-                precision = self.layer.operand_precision[layer_op]  # bit precision of layer operand
-                irrelevant_dimensions = self.layer.get_operand_irrelevant_dimensions(layer_op)
+                    mem_bandwidth = (
+                        memory_level.read_bw
+                    )  # inputs are read from the memory
+                precision = self.layer.operand_precision[
+                    layer_op
+                ]  # bit precision of layer operand
+                irrelevant_dimensions = self.layer.get_operand_irrelevant_dimensions(
+                    layer_op
+                )
                 for oa_dim in oa_dims:
                     if oa_dim not in served_dimensions:
                         continue
@@ -70,7 +85,9 @@ class UserSpatialMappingGenerator:
                             max_multicast_elements = mem_bandwidth // precision
                         except ZeroDivisionError:
                             max_multicast_elements = unrolling_size
-                        oa_dim_unrolling[oa_dim][layer_dim] = min(max_multicast_elements, unrolling_size)
+                        oa_dim_unrolling[oa_dim][layer_dim] = min(
+                            max_multicast_elements, unrolling_size
+                        )
 
         # At this point the unrolled layer dimensions are maximal (wrt the served dimensions and bandwidth of the lowest memory level).
         # The unrolling size might not be a factor of the layer dimension size, which is required (for non greedy mapping).
@@ -105,7 +122,11 @@ class UserSpatialMappingGenerator:
         for combination in itertools.product(*unrollings):
             # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
             oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
-            user_spatial_mapping = {oa_dim_name: unrolling for (oa_dim_name, unrolling) in zip(oa_dim_names, combination) if unrolling is not None}
+            user_spatial_mapping = {
+                oa_dim_name: unrolling
+                for (oa_dim_name, unrolling) in zip(oa_dim_names, combination)
+                if unrolling is not None
+            }
             yield user_spatial_mapping
 
     @staticmethod

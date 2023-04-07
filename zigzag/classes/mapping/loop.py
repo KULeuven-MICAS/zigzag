@@ -5,12 +5,13 @@ class Loop(metaclass=ABCMeta):
     """Abstract base class that represents a loop.
     Could be spatial or temporal loop.
     """
+
     def __init__(self, dimension, size) -> None:
         """Initialize this Loop object.
 
         Args:
             dimension (str): The dimension, e.g. "K"
-            size (float): The loop size, e.g. 16.0 
+            size (float): The loop size, e.g. 16.0
 
         Returns:
             None: None

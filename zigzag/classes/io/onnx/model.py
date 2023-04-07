@@ -4,17 +4,21 @@ from zigzag.classes.io.onnx.default import DefaultNodeParser
 from zigzag.classes.io.onnx.gemm import GemmParser
 from zigzag.classes.io.onnx.matmul import MatMulParser
 from zigzag.classes.io.onnx.conv import ConvParser
-from zigzag.classes.io.onnx.utils import parse_mapping_from_path, parse_onnx_model_from_path
+from zigzag.classes.io.onnx.utils import (
+    parse_mapping_from_path,
+    parse_onnx_model_from_path,
+)
 from zigzag.classes.workload.onnx_workload import ONNXWorkload
 
 
 import logging
+
 logger = logging.getLogger(__name__)
 
 
 class ONNXModelParser:
-    """Parse the ONNX model into a workload.
-    """
+    """Parse the ONNX model into a workload."""
+
     def __init__(self, onnx_model, mapping_path) -> None:
         # Sanity checks on given onnx_model
         if isinstance(onnx_model, str):
@@ -87,11 +91,17 @@ class ONNXModelParser:
             nodes_outputs[node_id] = node.output
 
             if node.op_type in ["QLinearConv", "Conv"]:
-                parser = ConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+                parser = ConvParser(
+                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
+                )
             elif node.op_type in ["MatMul"]:
-                parser = MatMulParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+                parser = MatMulParser(
+                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
+                )
             elif node.op_type in ["Gemm"]:
-                parser = GemmParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+                parser = GemmParser(
+                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
+                )
             else:  # it is not a convolutional node, so create a DummyNode
                 parser = DefaultNodeParser(node_id, node, nodes_outputs)
             node_obj = parser.run()
@@ -99,15 +109,16 @@ class ONNXModelParser:
             workload.add(node_id, node_obj)
 
         logger.info(
-            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and {workload.number_of_edges()} edges.")
+            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and {workload.number_of_edges()} edges."
+        )
 
         return workload
 
     def get_onnx_model(self):
         return self.onnx_model
-    
+
     def get_mapping(self):
         return self.mapping
-    
+
     def get_workload(self):
         return self.workload

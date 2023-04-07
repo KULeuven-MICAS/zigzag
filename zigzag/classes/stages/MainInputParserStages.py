@@ -56,21 +56,3 @@ class WorkloadParserStage(Stage):
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
-
-class WorkloadAndAcceleratorParserStage(Stage):
-    """
-    Convenience class to parse both the workload and accelerator
-    """
-    def __init__(self, list_of_callables, *, workload_path, accelerator_path, **kwargs):
-        super().__init__(list_of_callables, **kwargs)
-        self.workload_path = workload_path
-        self.accelerator_path = accelerator_path
-
-    def run(self):
-        workload = parse_workload_from_path(self.workload_path)
-        accelerator_parser = AcceleratorParser(self.accelerator_path)
-        accelerator_parser.run()
-        accelerator = accelerator_parser.get_accelerator()
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, workload=workload, **self.kwargs)
-        for cme, extra_info in sub_stage.run():
-            yield cme, extra_info

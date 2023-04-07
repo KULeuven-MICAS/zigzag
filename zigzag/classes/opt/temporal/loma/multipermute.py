@@ -35,10 +35,12 @@ end while
 of Variables by Prefix Shifts."  Aaron Williams, 2009
 """
 
+
 class ListElement:
     def __init__(self, value, next):
         self.value = value
         self.next = next
+
     def nth(self, n):
         o = self
         i = 0
@@ -47,12 +49,14 @@ class ListElement:
             i += 1
         return o
 
+
 def init(multiset):
-    multiset.sort() # ensures proper non-increasing order
+    multiset.sort()  # ensures proper non-increasing order
     h = ListElement(multiset[0], None)
     for item in multiset[1:]:
         h = ListElement(item, h)
     return h, h.nth(len(multiset) - 2), h.nth(len(multiset) - 1)
+
 
 def visit(h):
     """Converts our bespoke linked list to a python list."""
@@ -62,6 +66,7 @@ def visit(h):
         l.append(o.value)
         o = o.next
     return l
+
 
 def permutations(multiset):
     """Generator providing all multiset permutations of a multiset."""
@@ -81,8 +86,26 @@ def permutations(multiset):
         h = t
         yield visit(h)
 
+
 if __name__ == "__main__":
-    multiset = [('OX', 2), ('OX', 2), ('OX', 3), ('OY', 2), ('K', 2), ('K', 2), ('K', 2), ('K', 3), ('K', 3), ('K', 3), ('K', 3), ('C', 2), ('C', 2), ('C', 2), ('C', 2), ('C', 2)]
+    multiset = [
+        ("OX", 2),
+        ("OX", 2),
+        ("OX", 3),
+        ("OY", 2),
+        ("K", 2),
+        ("K", 2),
+        ("K", 2),
+        ("K", 3),
+        ("K", 3),
+        ("K", 3),
+        ("K", 3),
+        ("C", 2),
+        ("C", 2),
+        ("C", 2),
+        ("C", 2),
+        ("C", 2),
+    ]
     i = 0
     for ordering in permutations(multiset):
         # print(ordering)
