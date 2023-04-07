@@ -4,11 +4,12 @@ from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 import os
 import pickle
 import json
-from datetime import datetime
 import numpy as np
 
 import logging
+
 logger = logging.getLogger(__name__)
+
 
 class CompleteSaveStage(Stage):
     """
@@ -32,21 +33,27 @@ class CompleteSaveStage(Stage):
         """
         self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
-        
+
         for id, (cme, extra_info) in enumerate(substage.run()):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
-                filename = self.dump_filename_pattern.replace('?', 'overall_completeSave')
+                filename = self.dump_filename_pattern.replace(
+                    "?", "overall_completeSave"
+                )
             else:
-                filename = self.dump_filename_pattern.replace('?', str(cme.layer) + '_completeSave')
+                filename = self.dump_filename_pattern.replace(
+                    "?", str(cme.layer) + "_completeSave"
+                )
             self.save_to_json(cme, filename=filename)
-            logger.info(f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}")
+            logger.info(
+                f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
+            )
             yield cme, extra_info
 
     def save_to_json(self, obj, filename):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, 'w') as fp:
+        with open(filename, "w") as fp:
             json.dump(obj, fp, default=self.complexHandler, indent=4)
 
     @staticmethod
@@ -56,10 +63,12 @@ class CompleteSaveStage(Stage):
             return list(obj)
         if isinstance(obj, np.int32):
             return int(obj)
-        if hasattr(obj, '__jsonrepr__'):
+        if hasattr(obj, "__jsonrepr__"):
             return obj.__jsonrepr__()
         else:
-            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __jsonrepr__ method.")
+            raise TypeError(
+                f"Object of type {type(obj)} is not serializable. Create a __jsonrepr__ method."
+            )
 
 
 class SimpleSaveStage(Stage):
@@ -85,24 +94,26 @@ class SimpleSaveStage(Stage):
         """
         self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
-        
+
         for id, (cme, extra_info) in enumerate(substage.run()):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
-                filename = self.dump_filename_pattern.replace('?', 'overall_simpleSave')
+                filename = self.dump_filename_pattern.replace("?", "overall_simpleSave")
             else:
-                filename = self.dump_filename_pattern.replace('?', str(cme.layer) + '_simpleSave')
+                filename = self.dump_filename_pattern.replace(
+                    "?", str(cme.layer) + "_simpleSave"
+                )
             self.save_to_json(cme, filename=filename)
-            logger.info(f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}")
+            logger.info(
+                f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
+            )
             yield cme, extra_info
-
 
     def save_to_json(self, obj, filename):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, 'w') as fp:
+        with open(filename, "w") as fp:
             json.dump(obj, fp, default=self.complexHandler, indent=4)
-
 
     @staticmethod
     def complexHandler(obj):
@@ -111,10 +122,12 @@ class SimpleSaveStage(Stage):
             return list(obj)
         if isinstance(obj, np.int32):
             return int(obj)
-        if hasattr(obj, '__simplejsonrepr__'):
+        if hasattr(obj, "__simplejsonrepr__"):
             return obj.__simplejsonrepr__()
         else:
-            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method.")
+            raise TypeError(
+                f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method."
+            )
 
 
 class PickleSaveStage(Stage):
@@ -146,4 +159,6 @@ class PickleSaveStage(Stage):
             os.makedirs(dirname)
         with open(self.pickle_filename, "wb") as handle:
             pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        logger.info(f"Saved pickled list of {len(all_cmes)} CMEs to {self.pickle_filename}.")
+        logger.info(
+            f"Saved pickled list of {len(all_cmes)} CMEs to {self.pickle_filename}."
+        )

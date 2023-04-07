@@ -4,6 +4,7 @@ from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 import os
 
+
 class DumpStage(Stage):
     """
     Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file
@@ -32,5 +33,5 @@ class DumpStage(Stage):
             list.append((cme, extra_info))
             yield cme, extra_info
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, 'wb') as f:
+        with open(filename, "wb") as f:
             pickle.dump(list, f, -1)

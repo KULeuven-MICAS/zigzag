@@ -3,7 +3,8 @@ from typing import Generator, Callable, List
 
 class Stage:
     """Abstract superclass for Runnables"""
-    def __init__(self, list_of_callables:List[Callable], **kwargs):
+
+    def __init__(self, list_of_callables: List[Callable], **kwargs):
         """
         :param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
         (list_of_callables, *, required_kwarg1, required_kwarg2, kwarg_with_default=default, **kwargs)
@@ -16,10 +17,10 @@ class Stage:
             raise ValueError("Leaf runnable received a non empty list_of_callables")
 
         if list_of_callables in ([], tuple(), set(), None) and not self.is_leaf():
-            raise ValueError("List of callables empty on a non leaf runnable, so nothing can be generated.\
-                              Final callable in list_of_callables must return Stage instances that have is_leaf() == True")
-
-
+            raise ValueError(
+                "List of callables empty on a non leaf runnable, so nothing can be generated.\
+                              Final callable in list_of_callables must return Stage instances that have is_leaf() == True"
+            )
 
     def run(self) -> Generator:
         """Runs the runnable.
@@ -39,17 +40,21 @@ class Stage:
         """
         return False
 
+
 class MainStage:
     """
     Not actually a Stage, as running it does return (not yields!) a list of results instead of a generator
     Can be used as the main entry point
     """
+
     def __init__(self, list_of_callables, **kwargs):
         self.kwargs = kwargs
         self.list_of_callables = list_of_callables
 
     def run(self):
         answers = []
-        for cme, extra_info in self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs).run():
+        for cme, extra_info in self.list_of_callables[0](
+            self.list_of_callables[1:], **self.kwargs
+        ).run():
             answers.append((cme, extra_info))
         return answers

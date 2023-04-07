@@ -1,20 +1,10 @@
-import itertools
 import logging
-from typing import Set
-import bisect
 
-from sympy import factorint
-
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.core import Core
-from zigzag.classes.hardware.architecture.dimension import Dimension
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.operational_array import OperationalArray
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
 from zigzag.classes.stages.Stage import Stage
-from zigzag.classes.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
-from zigzag.classes.workload.layer_node import LayerNode
+from zigzag.classes.stages.SpatialMappingConversionStage import (
+    SpatialMappingConversionStage,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -32,6 +22,7 @@ class SpatialMappingGeneratorStage(Stage):
 
     :param main_inputs: MainInputs, NOT copied
     """
+
     def __init__(self, list_of_callables, *, accelerator, layer, **kwargs):
         """
         Note: list_of_callables does NOT need to include SpatialMappingConversionStage. Although this is used,
@@ -41,7 +32,6 @@ class SpatialMappingGeneratorStage(Stage):
         self.accelerator = accelerator
         self.check_layer(layer)
         self.layer = layer
-
 
     @staticmethod
     def check_layer(layer):
@@ -65,27 +55,39 @@ class SpatialMappingGeneratorStage(Stage):
         to the memory-level based spatial mapping representation.
         """
         user_provided_spatial_mappings = self.layer.user_spatial_mapping
-        if isinstance(user_provided_spatial_mappings, dict):  # There is a single USM provided
+        if isinstance(
+            user_provided_spatial_mappings, dict
+        ):  # There is a single USM provided
             user_spatial_mappings = [user_provided_spatial_mappings]
-        elif isinstance(user_provided_spatial_mappings, list):  # There are multiple USMs provided
+        elif isinstance(
+            user_provided_spatial_mappings, list
+        ):  # There are multiple USMs provided
             user_spatial_mappings = user_provided_spatial_mappings
         else:  # There is no USM provided
             # Initialize the UserSpatialMappingGenerator which will automatically generate SMs
-            user_spatial_mapping_generator = UserSpatialMappingGenerator(self.layer, self.accelerator)
+            user_spatial_mapping_generator = UserSpatialMappingGenerator(
+                self.layer, self.accelerator
+            )
             # Get all the USMs by running the generator
-            user_spatial_mappings = list((usm for usm in user_spatial_mapping_generator.run()))
+            user_spatial_mappings = list(
+                (usm for usm in user_spatial_mapping_generator.run())
+            )
             logger.debug(f"No user-provided spatial mappings found. Auto-generating..")
         nb_user_spatial_mappings = len(user_spatial_mappings)
 
         for i, user_spatial_mapping in enumerate(user_spatial_mappings):
-            logger.info(f"Launching spatial mapping {i+1}/{nb_user_spatial_mappings}: {user_spatial_mapping}.")
+            logger.info(
+                f"Launching spatial mapping {i+1}/{nb_user_spatial_mappings}: {user_spatial_mapping}."
+            )
             # Set the user_spatial_mapping in the layer, as this is required by SpatialMappingConversionStage
             self.layer.user_spatial_mapping = user_spatial_mapping
             # Note: manual instantiation of spatial mapping conversion stage here. We let that class deal with
             # everything else, including instantion of the actual substages
-            spatial_mapping_conversion_stage = SpatialMappingConversionStage(self.list_of_callables,
-                                                                             accelerator=self.accelerator,
-                                                                             layer=self.layer,
-                                                                             **self.kwargs)
+            spatial_mapping_conversion_stage = SpatialMappingConversionStage(
+                self.list_of_callables,
+                accelerator=self.accelerator,
+                layer=self.layer,
+                **self.kwargs,
+            )
             for cme, extra_info in spatial_mapping_conversion_stage.run():
                 yield cme, (user_spatial_mapping, extra_info)

@@ -1,9 +1,12 @@
-import pickle
+import os
+
 from typing import Generator, Any, Tuple
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-from zigzag.visualization.results.plot_cme import bar_plot_cost_model_evaluations_breakdown
-import os
+from zigzag.visualization.results.plot_cme import (
+    bar_plot_cost_model_evaluations_breakdown,
+)
+
 
 class PlotTemporalMappingsStage(Stage):
     """

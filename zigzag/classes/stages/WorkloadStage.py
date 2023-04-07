@@ -2,16 +2,17 @@ import networkx as nx
 import logging
 
 from zigzag.classes.stages.Stage import Stage
-from zigzag.classes.workload.dnn_workload import DNNWorkload
 from zigzag.classes.workload.dummy_node import DummyNode
 
 
 logger = logging.getLogger(__name__)
 
+
 class WorkloadStage(Stage):
     """
     Class that iterates through the nodes in a given workload graph.
     """
+
     def __init__(self, list_of_callables, *, workload, **kwargs):
         """
         Initialization of self.workload.
@@ -25,7 +26,7 @@ class WorkloadStage(Stage):
             if type(layer) == DummyNode:
                 continue  # skip the DummyNodes
             kwargs = self.kwargs.copy()
-            kwargs['layer'] = layer
+            kwargs["layer"] = layer
             if layer.name:
                 layer_name = layer.name
             else:
