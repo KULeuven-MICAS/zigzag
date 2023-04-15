@@ -39,11 +39,11 @@ class CompleteSaveStage(Stage):
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
                 filename = self.dump_filename_pattern.replace(
-                    "?", "overall_completeSave"
+                    "?", "overall_complete"
                 )
             else:
                 filename = self.dump_filename_pattern.replace(
-                    "?", str(cme.layer) + "_completeSave"
+                    "?", f"{cme.layer}_complete"
                 )
             self.save_to_json(cme, filename=filename)
             logger.info(
@@ -99,10 +99,10 @@ class SimpleSaveStage(Stage):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
             if type(cme.layer) == list:
-                filename = self.dump_filename_pattern.replace("?", "overall_simpleSave")
+                filename = self.dump_filename_pattern.replace("?", "overall_simple")
             else:
                 filename = self.dump_filename_pattern.replace(
-                    "?", str(cme.layer) + "_simpleSave"
+                    "?", f"{cme.layer}_simple"
                 )
             self.save_to_json(cme, filename=filename)
             logger.info(
