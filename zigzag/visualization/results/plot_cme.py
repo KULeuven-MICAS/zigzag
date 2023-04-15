@@ -57,7 +57,7 @@ def bar_plot_cost_model_evaluations_total(
 
 
 def bar_plot_cost_model_evaluations_breakdown(
-    cmes: List[CostModelEvaluation], save_path: str
+    cmes: List[CostModelEvaluation], save_path: str, xtick_rotation=90
 ):
     memory_word_access_summed = {
         d: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0)))
@@ -149,6 +149,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             total_energy += bottom
             x += 1
             highest_bar = max(bottom, highest_bar)
+        x
         ax1.text(
             x * 0.5 + startx_of_layer * 0.5,
             1.05 * highest_bar,
@@ -174,7 +175,7 @@ def bar_plot_cost_model_evaluations_breakdown(
         )
 
     ax1.legend(loc="upper left")
-    ax1.set_xticks(list(xticks.keys()), list(xticks.values()), rotation=90)
+    ax1.set_xticks(list(xticks.keys()), list(xticks.values()), rotation=xtick_rotation)
     ax1.set_ylim(0, 1.1 * ax1.get_ylim()[1])
 
     ax1.set_ylabel("Energy (pJ)", fontsize=15)
@@ -220,6 +221,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             weight="bold",
         )
     ax2.legend()
+    ax2.set_xticks(x2, x2, rotation=xtick_rotation)
     ax2.set_ylim(0, 1.1 * ax2.get_ylim()[1])
     ax2.set_xlabel("Layers", fontsize=15)
     ax2.set_ylabel("Latency (cycle)", fontsize=15)
