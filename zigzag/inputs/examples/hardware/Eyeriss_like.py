@@ -187,7 +187,7 @@ def multiplier_array_latency_test1():
     return multiplier_array
 
 
-def cores():
+def cores_dut():
     multiplier_array1 = multiplier_array_latency_test1()
     memory_hierarchy1 = memory_hierarchy_latency_test1(multiplier_array1)
 
@@ -196,6 +196,5 @@ def cores():
     return {core1}
 
 
-cores = cores()
-global_buffer = None
-accelerator = Accelerator("Eyeriss-like-simple", cores, global_buffer)
+cores = cores_dut()
+accelerator = Accelerator("Eyeriss-like-simple", cores)

@@ -228,7 +228,7 @@ def multiplier_array_dut():
     return multiplier_array
 
 
-def cores():
+def cores_dut():
     multiplier_array1 = multiplier_array_dut()
     memory_hierarchy1 = memory_hierarchy_dut(multiplier_array1)
 
@@ -237,9 +237,6 @@ def cores():
     return {core1}
 
 
-cores = cores()
-global_buffer = None
+cores = cores_dut()
 acc_name = os.path.basename(__file__)[:-3]
-accelerator = Accelerator(acc_name, cores, global_buffer)
-
-a = 1
+accelerator = Accelerator(acc_name, cores)
