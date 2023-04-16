@@ -7,11 +7,25 @@ import numpy as np
 from zigzag.classes.mapping.combined_mapping import FourWayDataMoving
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
+# MPL FONT SIZES
+SMALLEST_SIZE = 10
+SMALLER_SIZE = 12
+SMALL_SIZE = 14
+MEDIUM_SIZE = 16
+BIG_SIZE = 18
+BIGGER_SIZE = 20
+plt.rc("font", size=SMALLEST_SIZE)  # controls default text sizes
+plt.rc("axes", titlesize=SMALL_SIZE)  # fontsize of the axes title
+plt.rc("axes", labelsize=BIGGER_SIZE)  # fontsize of the x and y labels
+plt.rc("xtick", labelsize=SMALLER_SIZE)  # fontsize of the tick labels
+plt.rc("ytick", labelsize=SMALLER_SIZE)  # fontsize of the tick labels
+plt.rc("legend", fontsize=SMALL_SIZE)  # legend fontsize
+plt.rc("figure", titlesize=MEDIUM_SIZE)  # fontsize of the figure title
+
 
 def bar_plot_cost_model_evaluations_total(
     cmes: List[CostModelEvaluation],
     labels,
-    fig_title: str = "cost model evaluation comparison",
     save_path: str = "plot.png",
 ):
     """Plot total energy and latency of each cost model evaluation in a bar chart.
@@ -32,26 +46,38 @@ def bar_plot_cost_model_evaluations_total(
     fig, ax1 = plt.subplots()
     ax2 = ax1.twinx()
 
+    colormap = plt.get_cmap("Set1")
+    color_energy = colormap.colors[0]
+    color_latency = colormap.colors[1]
+
     h1 = rects1 = ax1.bar(
-        x - width / 2, energies, width, label="Energy (pJ)", color="maroon"
+        x - width / 2, energies, width, label="Energy", color=color_energy
     )
     h2 = rects2 = ax2.bar(
-        x + width / 2, latencies, width, label="Latency (cycle)", color="indigo"
+        x + width / 2, latencies, width, label="Latency", color=color_latency
     )
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
-    ax1.set_ylabel("Energy (pJ)", fontsize=15)
-    ax2.set_ylabel("Latency (cycle)", fontsize=15)
-    ax1.set_title("Scores by group and gender", fontsize=15)
+    ax1.set_ylabel("Energy [pJ]", fontsize=15)
+    ax2.set_ylabel("Latency [cycle]", fontsize=15)
     ax1.set_xticks(x, labels)
-    # hs = h1 + h2
-    # labs = [h.get_label() for h in hs]
-    # ax1.legend(hs, labs, loc='best')
+    handles1, labels1 = ax1.get_legend_handles_labels()
+    handles2, labels2 = ax2.get_legend_handles_labels()
+    ax2.legend(
+        handles1 + handles2,
+        labels1 + labels2,
+        bbox_to_anchor=(0.5, 1.1),
+        loc="lower center",
+        borderaxespad=0,
+        ncol=2,
+    )
 
-    ax1.bar_label(rects1, padding=3, fmt="%.2e")
-    ax2.bar_label(rects2, padding=3, fmt="%.2e")
+    ax1.bar_label(rects1, padding=3, fmt="%.1e")
+    ax2.bar_label(rects2, padding=3, fmt="%.1e")
+    # ax1.figure.texts.append(ax1.texts.pop())
+    # ax2.figure.texts.append(ax2.texts.pop())
 
-    ax1.set_title(fig_title)
+    # ax1.set_title(fig_title)
     fig.tight_layout()
     plt.savefig(save_path)
 
