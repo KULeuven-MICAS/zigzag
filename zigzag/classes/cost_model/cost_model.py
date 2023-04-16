@@ -280,9 +280,9 @@ class CostModelEvaluation:
                     "energy_breakdown_per_level_per_operand": self.energy_breakdown_further,
                 },
                 "latency": {
-                    "latency_without_onloading_without_offloading": self.latency_total0,
-                    "latency_with_onloading_without_offloading": self.latency_total1,
-                    "latency_with_onloading_with_offloading": self.latency_total2,
+                    "data_onloading": self.latency_total1 - self.latency_total0,
+                    "computation": self.latency_total0,
+                    "data_offloading": self.latency_total2 - self.latency_total1,
                 },
             },
             "inputs": {
