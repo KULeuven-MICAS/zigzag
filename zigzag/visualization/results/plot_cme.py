@@ -66,7 +66,7 @@ def bar_plot_cost_model_evaluations_total(
     ax2.legend(
         handles1 + handles2,
         labels1 + labels2,
-        bbox_to_anchor=(0.5, 1.1),
+        bbox_to_anchor=(0.5, 1.035),
         loc="lower center",
         borderaxespad=0,
         ncol=2,
