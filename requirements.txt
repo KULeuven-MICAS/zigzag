@@ -5,3 +5,4 @@ matplotlib
 onnx
 tqdm
 multiprocessing_on_dill
+pyyaml
