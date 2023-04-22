@@ -113,14 +113,14 @@ class CactiParser:
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
         logger.info(
-            f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}"
+            f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}."
         )
 
         if mem_type == "rf":
             new_mem_type = "sram"
             new_size = int(size * 128)
             new_r_bw = int(r_bw)
-            logger.info(
+            logger.warning(
                 f"Type {mem_type} -> {new_mem_type}. Size {size} -> {new_size}. BW {r_bw} -> {new_r_bw}."
             )
             mem_type = new_mem_type
