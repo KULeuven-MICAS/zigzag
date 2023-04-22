@@ -29,6 +29,7 @@ dependencies = [
     'onnx',
     'tqdm',
     'multiprocessing_on_dill',
+    'pyyaml',
     'tomli; python_version < "3.11"',
 ]
 requires-python = ">=3.9"
