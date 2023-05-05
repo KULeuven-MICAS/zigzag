@@ -12,17 +12,18 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+
+sys.path.insert(0, os.path.abspath("."))
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'ZigZag'
-copyright = '2022, Arne Symons'
-author = 'Arne Symons'
+project = "ZigZag"
+copyright = "2022, Arne Symons"
+author = "Arne Symons"
 
 # The full version, including alpha/beta/rc tags
-release = '2.0.0'
+release = "2.0.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,12 +31,10 @@ release = '2.0.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc'
-]
+extensions = ["sphinx.ext.autodoc"]
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['_templates']
+templates_path = ["_templates"]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -58,17 +57,17 @@ html_favicon = "./zigzag_logo_white_32x32.svg"
 
 # Material theme options
 html_theme_options = {
-    'base_url': 'http://zigzag-project.github.io/zigzag/',
-    'repo_url': 'https://github.com/ZigZag-Project/zigzag',
-    'repo_name': 'ZigZag Framework',
-    'google_analytics_account': 'UA-XXXXX',
-    'html_minify': True,
-    'css_minify': True,
-    'nav_title': 'ZigZag Framework',
+    "base_url": "http://kuleuven-micas.github.io/zigzag/",
+    "repo_url": "https://github.com/kuleuven-micas/zigzag",
+    "repo_name": "ZigZag Framework",
+    "google_analytics_account": "UA-XXXXX",
+    "html_minify": True,
+    "css_minify": True,
+    "nav_title": "ZigZag Framework",
     # 'logo_icon': '&#x1D56B',  # '&#x2124',
-    'globaltoc_depth': 2,
-    'color_primary': "blue-grey",
-    'color_accent': "grey"
+    "globaltoc_depth": 2,
+    "color_primary": "blue-grey",
+    "color_accent": "grey",
 }
 
 html_sidebars = {
@@ -78,4 +77,4 @@ html_sidebars = {
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = ["_static"]

@@ -48,7 +48,7 @@ Manual layer definition
 
 It is also possible to manually define your own workload layers. In that case there the ``main.py`` file should be executed instead of ``main_onnx.py``. Moreover, the workload file should be provided as input together with the accelerator, thus there is no onnx model and mapping file loaded. The mapping information is inserted for each layer alongside the layer shape definition, identically to how it was defined in the mapping file. 
 
-An example can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/ZigZag-Project/zigzag/blob/master/inputs/examples/workloads/resnet18.py>`_. 
+An example can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/kuleuven-micas/zigzag/blob/master/inputs/examples/workloads/resnet18.py>`_. 
 
 Each layer definition is represented as a dict which should have the following attributes:
 
