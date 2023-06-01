@@ -1,4 +1,4 @@
-# ZigZag
+# ZigZag [Documentation](https://kuleuven-micas.github.io/zigzag/) [Tutorial](https://www.youtube.com/watch?v=VgUuG4QaSQQ&list=PLUi74Rw4uFDIuK_6FCF9Bv7SMJlHfG4l3&index=1)
 This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation. 
 
 A crucial part in this is the mapping of the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that can automatically find optimal mapping points in this search space.
