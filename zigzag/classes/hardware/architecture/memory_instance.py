@@ -93,3 +93,12 @@ class MemoryInstance:
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__
+
+    def __hash__(self):
+        return id(self)  # unique for every object within its lifetime
+
+    def __str__(self):
+        return f"MemoryInstance({self.name})"
+
+    def __repr__(self):
+        return str(self)
