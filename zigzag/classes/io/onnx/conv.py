@@ -3,7 +3,7 @@ from math import ceil
 from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import (
     get_attribute_ints_with_name,
-    get_node_input_output_dimension_shapes,
+    get_node_input_output_dimension_shapes, get_onnx_tensor_type,
 )
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
@@ -44,50 +44,16 @@ class ConvParser(Parser):
             """
             Return the data type of the input, output and weight tensors of this node.
             """
-            value_info = model.graph.value_info
-            if not value_info:
-                raise ValueError(
-                    "value_info of model is empty. Make sure you are loading in an inferred model."
-                    "See https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md#running-shape-inference-on-an-onnx-model"
-                )
-            # get tensor names of the inputs and outputs of the model
-            model_input_names = [input.name for input in model.graph.input]
-            model_output_names = [output.name for output in model.graph.output]
-            # get tensor names of the tensors in shapes
-            shapes_names = [shape.name for shape in value_info]
-            # get input and output activation dimension sizes
-            # get input activation name
-            ia_name = node.input[
-                0
-            ]  # assumed it is the first input, don't see a way to otherwise know
-            # check if this is a global input of the model, if so, retrieve dimension shape from model inputs
-            if ia_name in model_input_names:
-                # Find index of this input in list of input names
-                ia_index = model_input_names.index(ia_name)
-                ia_elem_type = model.graph.input[ia_index].type.tensor_type.elem_type
-            else:  # it should be present in the shapes variable as it's not an input or output of the model
-                ia_index = shapes_names.index(ia_name)
-                ia_elem_type = value_info[ia_index].type.tensor_type.elem_type
 
-            # repeat the same for the output activation of this layer
-            oa_name = node.output[0]
-            if oa_name in model_output_names:
-                oa_index = model_output_names.index(oa_name)
-                oa_elem_type = model.graph.output[oa_index].type.tensor_type.elem_type
-            else:
-                oa_index = shapes_names.index(oa_name)
-                oa_elem_type = value_info[oa_index].type.tensor_type.elem_type
+            input_name = node.input[0]
+            output_name = node.output[0]
+            weight_name = get_weight_name(node)
 
-            # Get the weight name for this node (for QLinearConv this is the fourth input)
-            w_name = get_weight_name(node)
-            # w_name = node.input[3]
-            # Get the weight data type through the graph initializers
-            initializer_names = [i.name for i in model.graph.initializer]
-            w_data_type = model.graph.initializer[
-                initializer_names.index(w_name)
-            ].data_type
+            input_elem_type = get_onnx_tensor_type(input_name, model).elem_type
+            output_elem_type = get_onnx_tensor_type(output_name, model).elem_type
+            weight_elem_type = get_onnx_tensor_type(weight_name, model).elem_type
 
-            return ia_elem_type, oa_elem_type, w_data_type
+            return input_elem_type, output_elem_type, weight_elem_type
 
         def get_layer_node_input_format(
             kernel_shape,
