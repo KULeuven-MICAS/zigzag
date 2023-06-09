@@ -1,9 +1,10 @@
 import importlib
-from os import path
-import onnx
-from onnx import AttributeProto
-
 import logging
+from os import path
+from dataclasses import dataclass
+from typing import List
+
+import onnx
 
 logger = logging.getLogger(__name__)
 
@@ -70,49 +71,54 @@ def get_attribute_ints_with_name(name, attrs, default=None):
 from onnx import AttributeProto
 
 
-def get_node_input_output_dimension_shapes(node, model):
-    value_info = model.graph.value_info
-    if not value_info:
-        raise ValueError(
-            "value_info of model is empty. Make sure you are loading in an inferred model. "
-            "See https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md#running-shape-inference-on-an-onnx-model"
-        )
-    # get tensor names of the inputs and outputs of the model
+@dataclass
+class OnnxTensorType:
+    shape: List[int]
+    elem_type: int
+
+    @staticmethod
+    def from_tensor_type(tensor_type):
+        shape = [d.dim_value for d in tensor_type.shape.dim]
+        elem_type = tensor_type.elem_type
+
+        return OnnxTensorType(shape, elem_type)
+
+
+def get_onnx_tensor_type(name, model):
     model_input_names = [input.name for input in model.graph.input]
     model_output_names = [output.name for output in model.graph.output]
-    # get tensor names of the tensors in shapes
-    shapes_names = [shape.name for shape in value_info]
-    # get input and output activation dimension sizes
-    # get input activation name
-    ia_name = node.input[
-        0
-    ]  # assumed it is the first input, don't see a way to otherwise know
-    # check if this is a global input of the model, if so, retrieve dimension shape from model inputs
-    if ia_name in model_input_names:
-        # Find index of this input in list of input names
-        ia_index = model_input_names.index(ia_name)
-        ia_dimension_shape = [
-            dim.dim_value
-            for dim in model.graph.input[ia_index].type.tensor_type.shape.dim
-        ]
-    else:  # it should be present in the shapes variable as it's not an input or output of the model
-        ia_index = shapes_names.index(ia_name)
-        ia_dimension_shape = [
-            dim.dim_value for dim in value_info[ia_index].type.tensor_type.shape.dim
-        ]
 
-    # repeat the same for the output activation of this layer
-    oa_name = node.output[0]
-    if oa_name in model_output_names:
-        oa_index = model_output_names.index(oa_name)
-        oa_dimension_shape = [
-            dim.dim_value
-            for dim in model.graph.output[oa_index].type.tensor_type.shape.dim
-        ]
-    else:
-        oa_index = shapes_names.index(oa_name)
-        oa_dimension_shape = [
-            dim.dim_value for dim in value_info[oa_index].type.tensor_type.shape.dim
-        ]
+    for input in model.graph.input:
+        if input.name == name:
+            return OnnxTensorType.from_tensor_type(input.type.tensor_type)
 
-    return ia_dimension_shape, oa_dimension_shape
+    for output in model.graph.output:
+        if output.name == name:
+            return OnnxTensorType.from_tensor_type(output.type.tensor_type)
+
+    for value_info in model.graph.value_info:
+        if value_info.name == name:
+            return OnnxTensorType.from_tensor_type(value_info.type.tensor_type)
+
+    for init in model.graph.initializer:
+        if init.name == name:
+            # initializers are represented a bit differently from other tensors
+            return OnnxTensorType(list(init.dims), init.data_type)
+
+    raise KeyError(
+        f""
+        f"Could not find type for value {name} in model. "
+        f"Make sure you are loading in an inferred model, "
+        f"see https://github.com/onnx/onnx/blob/main/docs/PythonAPIOverview.md#running-shape-inference-on-an-onnx-model"
+    )
+
+
+def get_node_input_output_dimension_shapes(node, model):
+    # assumed it is the first input, don't see a way to otherwise know
+    input_name = node.input[0]
+    input_shape = get_onnx_tensor_type(input_name, model).shape
+
+    output_name = node.output[0]
+    output_shape = get_onnx_tensor_type(output_name, model).shape
+
+    return input_shape, output_shape
