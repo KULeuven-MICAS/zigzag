@@ -100,7 +100,7 @@ class SpatialMapping:
         unit_count = {
             op: [
                 round(
-                    round(prod(self.unroll_size_total[op][lv : self.arch_level[op]])), 3
+                    round(prod(self.unroll_size_total[op][lv : self.arch_level[op]]), 3)
                 )
                 for lv in range(self.arch_level[op])
             ]
