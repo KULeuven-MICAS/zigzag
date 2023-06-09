@@ -99,7 +99,9 @@ class SpatialMapping:
         # Added round call as number doesn't remain integer due to self.mapping_dict_reform number instability
         unit_count = {
             op: [
-                round(prod(self.unroll_size_total[op][lv : self.arch_level[op]]))
+                round(
+                    round(prod(self.unroll_size_total[op][lv : self.arch_level[op]])), 3
+                )
                 for lv in range(self.arch_level[op])
             ]
             for op in self.operand_list
