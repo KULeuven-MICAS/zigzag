@@ -1,3 +1,4 @@
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 import networkx as nx
@@ -171,3 +172,10 @@ class Core:
         raise Exception(
             f"{mem_op1}'s level {mem_lv1} and {mem_op2}'s level {mem_lv2} don't have a shared memory above!"
         )
+
+    def get_top_memory_instance(self, mem_op) -> MemoryInstance:
+        if mem_op not in self.memory_hierarchy.get_operands():
+            raise ValueError(f"Memory operand {mem_op} not in {self}.")
+        mem_level = self.memory_hierarchy.get_operand_top_level(mem_op)
+        mem_instance = mem_level.memory_instance
+        return mem_instance
