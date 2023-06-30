@@ -424,14 +424,25 @@ class CostModelEvaluation:
                     else:
                         data_elem_move_per_cycle_in_a_period = data_elem_move_per_period
                         cycle_in_a_period = 1
+                    #wr_in_by_low = (
+                    #    ceil(
+                    #        (data_elem_move_per_cycle_in_a_period * data_precision)
+                    #        / min_bw
+                    #    )
+                    #    * (min_bw / max_bw)
+                    #    * total_period_count
+                    #    * cycle_in_a_period
+                    #    * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
+                    #)
+
+                    # 2023/06/30, solve the memory access granuarity issue - Jiacong Sun, Linyan Mei
+                    # Originally we used the cycle_in_a_period to compute the memory word access.
+                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access). 
+                    # Now we changed to calculation based on min_bw.
                     wr_in_by_low = (
-                        ceil(
-                            (data_elem_move_per_cycle_in_a_period * data_precision)
-                            / min_bw
-                        )
+                        ceil((data_elem_move_per_period * data_precision) / min_bw)
                         * (min_bw / max_bw)
                         * total_period_count
-                        * cycle_in_a_period
                         * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
                     )
 
@@ -470,27 +481,30 @@ class CostModelEvaluation:
                             data_elem_move_per_period
                             / data_elem_move_per_cycle_in_a_period
                         )
-                        rd_out_to_low = (
-                            ceil(
-                                (data_elem_move_per_cycle_in_a_period * data_precision)
-                                / min_bw
-                            )
-                            * (min_bw / max_bw)
-                            * total_period_count
-                            * cycle_in_a_period
-                            * self.mapping.spatial_mapping.unit_count[layer_op][
-                                mem_lv + 1
-                            ]
-                        )
-                    else:
-                        rd_out_to_low = (
-                            ceil((data_elem_move_per_period * data_precision) / min_bw)
-                            * (min_bw / max_bw)
-                            * total_period_count
-                            * self.mapping.spatial_mapping.unit_count[layer_op][
-                                mem_lv + 1
-                            ]
-                        )
+                        #rd_out_to_low = (
+                        #    ceil(
+                        #        (data_elem_move_per_cycle_in_a_period * data_precision)
+                        #        / min_bw
+                        #    )
+                        #    * (min_bw / max_bw)
+                        #    * total_period_count
+                        #    * cycle_in_a_period
+                        #    * self.mapping.spatial_mapping.unit_count[layer_op][
+                        #        mem_lv + 1
+                        #    ]
+                        #)
+                    #else:
+
+                    # 2023/06/30, solve the memory access granuarity issue - Jiacong Sun, Linyan Mei
+                    # Originally we used the cycle_in_a_period to compute the memory word access.
+                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access). 
+                    # Now we changed to calculation based on min_bw.
+                    rd_out_to_low = (
+                        ceil((data_elem_move_per_period * data_precision) / min_bw)
+                        * (min_bw / max_bw)
+                        * total_period_count
+                        * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
+                    )
 
                 """ rd_out_to_high """
                 data_elem_move_per_period = self.mapping.unit_mem_data_movement[
