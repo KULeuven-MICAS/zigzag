@@ -9,7 +9,7 @@ Please take a look at the [Installation](https://zigzag-project.github.io/zigzag
 
 ## Getting Started
 
-Please take a look at the [Getting Started](https://zigzag-project.github.io/zigzag/getting-started.html) page on how to get started using ZigZag.
+Please take a look at the [Getting Started](https://kuleuven-micas.github.io/zigzag/getting-started.html) page on how to get started using ZigZag.
 
 Also, a Jupyter Notebook based demo is prepared for new users [here](https://github.com/ZigZag-Project/zigzag-demo).
 
