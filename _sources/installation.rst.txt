@@ -1,5 +1,5 @@
 ===================
-Installating ZigZag
+Installing ZigZag
 ===================
 
 Installing as a package
@@ -32,7 +32,13 @@ Clone the repository
 
 .. code-block:: sh
 
-    git clone git@github.com:ZigZag-Project/zigzag.git
+    git clone git@github.com:KULeuven-MICAS/zigzag.git
+
+or 
+
+.. code-block:: sh
+
+    git clone https://github.com/KULeuven-MICAS/zigzag.git
 
 Install requirements through pip. Alternatively, anaconda spec file is also provided.
 
