@@ -11,4 +11,32 @@ Once ZigZag is available in your Python path, you can import the api in any Pyth
 get_hardware_performance_zigzag()
 ==========================
 
-This function takes in an workload (can be in onnx format or zigzag workload format), a hardware architecture and a mapping file and returns the hardware performance of executing the model's layers on the architecture under the given mapping constraints. We demonstrate how to use this api function in multiple `demos <https://github.com/KULeuven-MICAS/zigzag-demo>`_.
+This function takes in an workload, a hardware architecture and a mapping file and returns the hardware performance of executing the model's layers on the architecture under the given mapping constraints.
+
+.. code:: python
+
+    energy, latency, cme = get_hardware_performance_zigzag(
+        workload,
+        accelerator,
+        mapping,
+        opt="latency",
+        dump_filename_pattern="outputs/{datetime}.json",
+        pickle_filename="outputs/list_of_cmes.pickle"
+    )
+
+The inputs of the function are
+
+* **workload**: A neural network model defined in ONNX format or ZigZag's own format.
+* **accelerator**: A high-level HW architecture description (in ZigZag's own format).
+* **mapping**: A file that specifies core allocation, spatial mapping (optional), temporal ordering (optional), and memory operand link.
+* **opt (optional)**: Optimization target. It can be 'energy', 'latency', or 'EDP' (energy-delay-product).
+* **dump_filename_pattern (optional)**: The name of the result file.
+* **pickle_filename (optional)**: The name of the file which includes all the detailed metadata for analysing and debugging.
+
+The outputs of the function are
+
+* **energy**: A number that indicates the overall consumed energy for running the workload on the accelerator in the user-defined optimized way.
+* **latency**: A number that indicates the overall latency (cycle count) for running the workload on the accelerator in the user-defined optimized way.
+* **cme**: A collection of all the detailed cost model evaluation results. "cme" stands for "cost model evaluation".
+
+We demonstrate how to use this api function in multiple `demos <https://github.com/KULeuven-MICAS/zigzag-demo>`_.

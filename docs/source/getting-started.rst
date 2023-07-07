@@ -29,7 +29,7 @@ The following command starts the execution using the provided inputs:
 
 .. code:: sh
 
-    python main_onnx.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.alexnet_on_tpu_like
+    python main_onnx.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.tpu_like
 .. note::
 
     Note the difference in input path construction between the onnx model and the accelerator and mapping. This is because the accelerator and mapping objects are defined in their respective files and imported as python modules.
@@ -50,7 +50,7 @@ Other ZigZag runs examples:
 
 .. code:: sh
 
-    python main_onnx_salsa.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.alexnet_on_tpu_like
+    python main_onnx_salsa.py --model zigzag/inputs/examples/workload/alexnet.onnx --accelerator zigzag.inputs.examples.hardware.TPU_like --mapping zigzag.inputs.examples.mapping.tpu_like
 
 Analyzing results
 =================
