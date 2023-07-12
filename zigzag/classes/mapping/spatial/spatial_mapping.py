@@ -163,7 +163,7 @@ class SpatialMapping:
         """ mem_bw_boost can calculated by either dividing unit_unique at current level by unit_count at one level above. """
         mem_bw_boost = {
             op: [
-                int(self.unit_unique[op][lv] / self.unit_unique[op][lv + 1])
+                round(self.unit_unique[op][lv] / self.unit_unique[op][lv + 1])
                 for lv in range(self.arch_level[op] - 1)
             ]
             for op in self.operand_list
