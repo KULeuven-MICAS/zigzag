@@ -28,7 +28,7 @@ The inputs of the function are
 
 * **workload**: A neural network model defined in ONNX format or ZigZag's own format.
 * **accelerator**: A high-level HW architecture description (in ZigZag's own format).
-* **mapping**: A file that specifies core allocation, spatial mapping (optional), temporal ordering (optional), and memory operand link.
+* **mapping**: A file that specifies core allocation, spatial mapping (optional), temporal ordering (optional), and memory operand link (in ZigZag's own format).
 * **opt (optional)**: Optimization target. It can be 'energy', 'latency', or 'EDP' (energy-delay-product).
 * **dump_filename_pattern (optional)**: The name of the result file.
 * **pickle_filename (optional)**: The name of the file which includes all the detailed metadata for analysing and debugging.

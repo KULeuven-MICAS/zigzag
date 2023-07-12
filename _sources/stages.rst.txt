@@ -45,7 +45,7 @@ So far, we have only discussed the sequential calling of stages from first to la
 Implemented stages
 ==================
 
-This section is still being updated. For a missing description, please look at the stages requirements in `__init__.py <https://github.com/ZigZag-Project/zigzag/blob/master/classes/stages/__init__.py>`_ and the stage implementation in the `stages <https://github.com/ZigZag-Project/zigzag/tree/master/classes/stages>`_ folder.
+This section is still being updated. For a missing description, please look at the stages requirements in `__init__.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/__init__.py>`_ and the stage implementation in the `stages <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages>`_ folder.
 
 
 .. _custom-stages-label:

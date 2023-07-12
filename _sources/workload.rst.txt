@@ -1,7 +1,11 @@
+========
 Workload
 ========
 
 The recommended way of defining an algorithmic workload is through an onnx model. An onnx model can contain multiple operator types, which in the context of ML are often referred to as layers, some of which are automatically recognised and parsed by ZigZag. Alternatively, the layers can be manually defined for more customization.
+
+Onnx models
+===========
 
 Supported onnx operators
 ------------------------
@@ -44,11 +48,11 @@ ZigZag requires an inferred onnx model, as it needs to know the shapes of all in
 
 
 Manual layer definition
------------------------
+=======================
 
 It is also possible to manually define your own workload layers. In that case there the ``main.py`` file should be executed instead of ``main_onnx.py``. Moreover, the workload file should be provided as input together with the accelerator, thus there is no onnx model and mapping file loaded. The mapping information is inserted for each layer alongside the layer shape definition, identically to how it was defined in the mapping file. 
 
-An example can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/kuleuven-micas/zigzag/blob/master/inputs/examples/workloads/resnet18.py>`_. 
+An example can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/workload/resnet18.py>`_. 
 
 Each layer definition is represented as a dict which should have the following attributes:
 
