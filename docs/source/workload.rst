@@ -52,8 +52,6 @@ Manual layer definition
 
 It is also possible to manually define your own workload layers. In that case there the ``main.py`` file should be executed instead of ``main_onnx.py``. Moreover, the workload file should be provided as input together with the accelerator, thus there is no onnx model and mapping file loaded. The mapping information is inserted for each layer alongside the layer shape definition, identically to how it was defined in the mapping file. 
 
-An example can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/workload/resnet18.py>`_. 
-
 Each layer definition is represented as a dict which should have the following attributes:
 
 * **equation**: The operational equation for this layer. The dimensions should be small letters, where as the operands are large letters. 'O' should always be used for the output operand, the input operands can be named freely.
@@ -65,3 +63,15 @@ Each layer definition is represented as a dict which should have the following a
 * **core_allocation**: The core that will execute this layer.
 * **spatial_mapping**: The spatial parallelization strategy used for this layer. If none is provided, the SpatialMappingGeneratorStage should be used within ZigZag's execution pipeline.
 * **memory_operand_links**: The link between the virtual memory operands and the actual algorithmic operands. For more information, read the hardware readme.
+
+The following loop notation has to be used to describe a layer of the workload (see loop notation in `this paper <https://ieeexplore.ieee.org/document/9360462>`_):
+
+* **B**: Batch size
+* **K**: Output channels
+* **C**: Input channels
+* **OY**: Output rows
+* **OX**: Output columns
+* **FY**: Kernel rows
+* **FX**: Kernel columns
+
+An example of this manual layer defintion can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/workload/resnet18.py>`_. 

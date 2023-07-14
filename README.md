@@ -5,7 +5,7 @@ A crucial part in this is the mapping of the algorithmic computations onto the c
 
 ## Installation
 
-Please take a look at the [Installation](https://zigzag-project.github.io/zigzag/installation.html) page of our documentation.
+Please take a look at the [Installation](https://kuleuven-micas.github.io/zigzag/installation.html) page of our documentation.
 
 ## Getting Started
 
