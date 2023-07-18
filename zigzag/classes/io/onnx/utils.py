@@ -77,6 +77,22 @@ class OnnxTensorCategory(enum.Enum):
     Hidden = auto()
     Constant = auto()
 
+    @property
+    def is_output(self):
+        return self == OnnxTensorCategory.Output
+
+    @property
+    def is_input(self):
+        return self == OnnxTensorCategory.Input
+
+    @property
+    def is_hidden(self):
+        return self == OnnxTensorCategory.Hidden
+
+    @property
+    def is_constant(self):
+        return self == OnnxTensorCategory.Constant
+
 
 @dataclass
 class OnnxTensorType:
