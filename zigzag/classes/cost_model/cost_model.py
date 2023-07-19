@@ -284,6 +284,14 @@ class CostModelEvaluation:
                     "computation": self.latency_total0,
                     "data_offloading": self.latency_total2 - self.latency_total1,
                 },
+                "spatial": {
+                    "mac_utilization": {
+                        "ideal": self.MAC_spatial_utilization,
+                        "stalls": self.MAC_utilization0,
+                        "stalls_onloading": self.MAC_utilization1,
+                        "stalls_onloading_offloading": self.MAC_utilization2,
+                    }
+                }
             },
             "inputs": {
                 "accelerator": self.accelerator,
