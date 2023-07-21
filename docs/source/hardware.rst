@@ -8,6 +8,9 @@ Operational Unit
 
 Accelerating inference of a NN requires execution of multiplications and summations (accumulations) across multiple intermediate data (activations) using trained parameters (weights). The operational unit, typically a Multiplier, executes the multiplication of two data elements, typically an activation and a weight. 
 
+.. image:: images/hardware-architecture/operational-unit.jpg
+  :width: 400
+
 The operational unit object has following attributes:
 
 * **input_precision**: List of input operand (data) precision in number of bits for each input operand (typically 2 for Multiplier).
@@ -22,6 +25,9 @@ Inferencing a NN typically requires millions of operations, and an accelerator t
 
 The array has multiple dimensions, each with a size. The importance of these dimensions is explained in the introduction of the memory hierarchy.
 
+.. image:: images/hardware-architecture/operational-array.jpg
+  :width: 400
+
 The operational array object has:
 
 * **operational_unit**: The operational unit from which the array is built.
@@ -32,6 +38,9 @@ Memory Instance
 ---------------
 
 In order to store the different activations and weights used for the computations in the operational array, different memory instances are attached in a hierarchical fashion. The instances define how big each memory is in terms of capacity and area overhead, what the cost of writing and reading from these memories is, what it's bandwidth is, and how many read/write/read-write ports it includes.
+
+.. image:: images/hardware-architecture/memory-instance.jpg
+  :width: 400
 
 The memory instance object has:
 
@@ -57,6 +66,9 @@ Lastly, the different read/write/read-write ports a memory instance has, are ass
 
 Internally, the MemoryHierarchy object extends the `NetworkX DiGraph <https://networkx.org/documentation/stable/reference/classes/digraph.html>`_ object, so its methods are available. 
 
+.. image:: images/hardware-architecture/memory-hierarchy.jpg
+  :width: 800
+
 The memory hierarchy object includes:
 
 * **operational_array**: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array's dimensions. Through the `add_memory()` calls it adds a new MemoryLevel to the graph. This requires for each call a:
@@ -71,6 +83,9 @@ Core
 ----
 
 The operational array and the memory hierarchy together form a core of the accelerator.
+
+.. image:: images/hardware-architecture/core.jpg
+  :width: 400
 
 The core object includes:
 
