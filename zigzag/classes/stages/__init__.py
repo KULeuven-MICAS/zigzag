@@ -28,8 +28,8 @@ from .WorkloadStage import WorkloadStage
 
 """
 Parameter providers: these parameters are provided to substages by the following classes:
- - accelerator: AcceleratorParserStage, WorkloadAndAcceleratorParserStage
- - workload: WorkloadParserStage, WorkloadAndAcceleratorParserStage
+ - accelerator: AcceleratorParserStage
+ - workload: WorkloadParserStage
  - temporal_mapping: LomaStage, TemporalMappingConversionStage
  - spatial_mapping: SpatialMappingGenerationStage, SpatialMappingConversionStage
  - layer: WorkloadStage
@@ -54,7 +54,6 @@ Parameters required: these stages require the following parameters:
  - LomaStage: accelerator, layer, spatial_mapping
  - AcceleratorParserStage: accelerator_path
  - WorkloadParserStage: workload_path
- - WorkloadAndAcceleratorParserStage: workload_path, accelerator_path
  - MultiProcessingSpawnStage: multiprocessing_callback
  - SpatialMappingConversionStage: accelerator, layer
  - SpatialMappingGeneratorStage: accelerator, layer
