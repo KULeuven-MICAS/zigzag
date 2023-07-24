@@ -43,8 +43,8 @@ Writing new documentation
 
 When writing new documentation, decide if it would best fit in an existing document, or in a new one. If you decide to create a new file, create this file under docs/source/ and use lower-case letters with a hyphen (-) in between words. After writing the new file, you need to add it to the `toctree` in `docs/source/index.rst`.
 
-Building the documentation
---------------------------
+Building the documentation locally
+----------------------------------
 
 The documentation is build using Sphinx. You should install both sphinx and sphinx-press-theme, which is easy through the requirements.txt file provided in `docs/`.
 
@@ -60,4 +60,3 @@ After, you can build the documentation using the provide Makefile (Linux). For W
 
     make html
 
-In the future, this will be automated through Github Actions.
