@@ -100,20 +100,20 @@ Save and dump stages
 * `CompleteSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L14>`_: Class that passes through all results yielded by substages, but saves the results as a json list to a file at the end of the iteration.
 * `SimpleSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L74>`_: Class that passes through results yielded by substages, but saves the results as a json list to a file at the end of the iteration. In this simple version, only the energy total and latency total are saved.
 * `PickleSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L133>`_: Class that dumps all received CMEs into a list and saves that list to a pickle file.
-* `DumpStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/DumbStage.py#L>`_: Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file at the end of the iteration
+* `DumpStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/DumpStage.py#L8>`_: Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file at the end of the iteration
 
-Temporal Mapping stages
+Temporal mapping stages
 -----------------------
 * `LomaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/LomaStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
-* `SalsaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SalsaStage.py#L49>`_: Class that return the best temporal mapping found by the Simulated Annealing Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
+* `SalsaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SalsaStage.py#L47>`_: Class that return the best temporal mapping found by the Simulated Annealing Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 * `TemporalOrderingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalOrderingConversionStage.py#L10>`_: Run this stage by converting the user-defined temporal loop ordering to the memory-level based temporal mapping representation.
 
-Spatial Mapping stages
+Spatial mapping stages
 ----------------------
 * `SpatialMappingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SpatialMappingConversionStage.py#L11>`_: Pipeline stage that converts the spatial mapping from auser-provided spatial mapping across operational array dimensions to the internal spatial mapping representation used in the cost model.
 * `SpatialMappingGeneratorStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SpatialMappingGeneratorStage.py#L12>`_:     Pipeline stage that finds spatial mappings given a accelerator, core allocation, interconnection pattern on the allocated core and a layer. The spatial mappings are found using the interconnection pattern present on the core. The inner-most memory level served dimensions is used, as this is how the memories connect to the operational array.
 
-Cost model Stages
+Cost model stages
 -----------------
 * `CostModelStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/CostModelStage.py#L15>`_: Pipeline stage that calls a cost model to evaluate a (temporal and spatial) mapping on a HW config.
 
