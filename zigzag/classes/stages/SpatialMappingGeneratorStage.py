@@ -5,6 +5,7 @@ from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
+import copy
 
 logger = logging.getLogger(__name__)
 
@@ -86,7 +87,7 @@ class SpatialMappingGeneratorStage(Stage):
             spatial_mapping_conversion_stage = SpatialMappingConversionStage(
                 self.list_of_callables,
                 accelerator=self.accelerator,
-                layer=self.layer,
+                layer=copy.copy(self.layer),
                 **self.kwargs,
             )
             for cme, extra_info in spatial_mapping_conversion_stage.run():
