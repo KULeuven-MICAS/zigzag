@@ -1,6 +1,8 @@
 import logging
 
 from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
+from zigzag.classes.hardware.architecture.core import Core
+from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
@@ -56,10 +58,23 @@ class SpatialMappingGeneratorStage(Stage):
         to the memory-level based spatial mapping representation.
         """
         user_provided_spatial_mappings = self.layer.user_spatial_mapping
+        core_id = self.layer.core_allocation
+        core: Core = self.accelerator.get_core(core_id=core_id)     
+        oa_dims = core.operational_array.dimensions
+
         if isinstance(
             user_provided_spatial_mappings, dict
         ):  # There is a single USM provided
-            user_spatial_mappings = [user_provided_spatial_mappings]
+            if(len(user_provided_spatial_mappings) < len(oa_dims)):
+                user_spatial_mapping_generator = UserSpatialMappingGenerator(
+                    self.layer, self.accelerator, user_provided_spatial_mappings
+                )
+                # Get all the USMs by running the generator
+                user_spatial_mappings = list(
+                    (usm for usm in user_spatial_mapping_generator.run())
+                )
+            else:
+                user_spatial_mappings = [user_provided_spatial_mappings]
         elif isinstance(
             user_provided_spatial_mappings, list
         ):  # There are multiple USMs provided
