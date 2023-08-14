@@ -9,10 +9,19 @@ from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
 
+## @package cost_model Additional explaination missing
 
+##  Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link).
 class PortActivity:
-    """Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link)."""
 
+    ## The class constructor
+    # @param real_cycle     (int)     Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
+    # @param allowed_cycle  (int)
+    # @param period         (int)     The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
+    # @param period_count   (int)     The total number of period across the whole NN layer computation.
+    # @param layer_op       (str)
+    # @param mem_lv         (int)
+    # @param mov_dir        (str)
     def __init__(
         self,
         real_cycle: int,
@@ -23,18 +32,12 @@ class PortActivity:
         mem_lv: int,
         mov_dir: str,
     ):
-        """
-        - real_cycle: within each period, the actual number of cycles used for transferring the amount of data,
-                      depended on the memory bw and the data amount to be transferred at that memory level.
-        - required_cycle: within each period, the maximal allowed number of cycles for transferring the amount of data,
-                          depended on temporal mapping, effective data size and memory size at that memory level.
-        - period: the turnaround cycle at that memory level, which equals to the product of all the temporal loops
-                  of current and below memory level.
-        - period_count: the total number of period across the whole NN layer computation.
-        """
+        ## Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
         self.real_cycle = real_cycle
-        self.allowed_cycle = allowed_cycle
+        self.allowed_cycle = allowed_cycle 
+        ## The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
         self.period = period
+        ## The total number of period across the whole NN layer computation.
         self.period_count = period_count
         self.served_op_lv_dir = (layer_op, mem_lv, mov_dir)
         """ stalling (+) or slacking (-) cycle in one period """
@@ -57,9 +60,18 @@ class PortActivity:
         return str(self.served_op_lv_dir)
 
 
+## Class that collects all the data transfer rate information for each DTL (data transfer link).
 class PortBeginOrEndActivity:
-    """Class that collects all the data transfer rate information for each DTL (data transfer link)."""
 
+
+    ## The class constructor
+    # @param real_cycle     (int)   the actual number of cycles used for transferring the amount of data,
+    #                               depended on the memory bw and the data amount to be transferred at that memory level
+    # @param data_in_charge (int)   one-period data transfer amount (bit)
+    # @param mem_bw         (int)   bit/cycle
+    # @param layer_op       (str)
+    # @param mem_lv         (int)
+    # @param mov_dir        (str)   data moving direction
     def __init__(
         self,
         real_cycle: int,
@@ -69,15 +81,12 @@ class PortBeginOrEndActivity:
         mem_lv: int,
         mov_dir: str,
     ):
-        """
-        - real_cycle: the actual number of cycles used for transferring the amount of data,
-                      depended on the memory bw and the data amount to be transferred at that memory level
-        - data_in_change: one-period data transfer amount (bit)
-        - mem_bw: bit/cycle
-        - mov_dir: data moving direction
-        """
+        ## the actual number of cycles used for transferring the amount of data, 
+        # depended on the memory bw and the data amount to be transferred at that memory level
         self.real_cycle = real_cycle
+        ## one-period data transfer amount (bit)
         self.data_in_charge = data_in_charge
+        ## bit/cycle
         self.mem_bw = mem_bw
         self.served_op_lv_dir = (layer_op, mem_lv, mov_dir)
 
@@ -88,19 +97,18 @@ class PortBeginOrEndActivity:
         return str(self.served_op_lv_dir)
 
 
+## Given a certain operand's storage level (e.g. (A,1): operand A's 1st memory level), 
+# return a list of the rest operand's storage levels that share physical memory with the former one (A1)
 def get_shared_mem_list(mem_op, mem_lv, memory_sharing_list) -> List[Tuple]:
-    """Given a certain operand's storage level (e.g. (A,1): operand A's 1st memory level),
-    return a list of the rest operand's storage levels that share physical memory with the former one (A1)"""
     for mem_share_group in memory_sharing_list:
         mem_share_grp = list(mem_share_group.items())
         mem_target = (mem_op, mem_lv)
         if mem_target in mem_share_grp:
             return mem_share_grp
 
-
+## Generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support). 
+# Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
 def spatial_mapping_fractional_to_int(spatial_mapping: Dict):
-    """generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
-    Later the fractional one is used for calculating energy, and the integer one is used for calculating latency"""
     spatial_mapping_int = pickle_deepcopy(spatial_mapping)
     for op, su_all_lv in spatial_mapping.items():
         if not su_all_lv:
@@ -112,17 +120,17 @@ def spatial_mapping_fractional_to_int(spatial_mapping: Dict):
 
     return spatial_mapping_int
 
-
+##  This function calculates the union length of all the share-port MUW (memory updating window).
+#   The following encoding has to be used: 
+#   - 'P' for single period length
+#   - 'A' for allowed MUW per period
+#   - 'PC' for period count within the whole layer computation 
+#   
+#   Pre-process the port_duty_list to generate input_dict, which looks like:
+#   - input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}
+#   
+#   @param port_duty_list List of port activity objects
 def calc_MUW_union(port_duty_list):
-    """
-    This function calculates the union length of all the share-port MUW (memory updating window).
-    'P' for single period length
-    'A' for allowed MUW per period
-    'PC' for period count within the whole layer computation
-    """
-
-    """ pre-process the port_duty_list to generate input_dict, which looks like:
-    input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}"""
 
     input_dict = {}
     for port_duty in port_duty_list:
@@ -165,11 +173,32 @@ def calc_MUW_union(port_duty_list):
     return union * input_dict[max_period_operand]["PC"]
 
 
+## Class that stores inputs and runs them through the zigzag cost model.
+#
+# Initialize the cost model evaluation with the following inputs:
+# - accelerator: the accelerator that includes the core on which to run the layer
+# - layer: the layer to run
+# - spatial_mapping: the spatial mapping
+# - temporal_mapping: the temporal mapping
+#
+# From these parameters, the following attributes are computed:
+# * core: The core on which the layer is ran. This should be specified in the LayerNode attributes.
+# * mapping: The combined spatial and temporal mapping object where access patterns are computed.
+#
+# The following cost model attributes are also initialized:
+# - energy_breakdown: The energy breakdown for all operands
+# - energy: The total energy
+#
+# After initialization, the cost model evaluation is run.
 class CostModelEvaluation:
-    """
-    Class that stores inputs and runs them through the zigzag cost model.
-    """
-
+    
+    ## The class constructor
+    # After initialization, the cost model evaluation is run
+    # @param accelerator the accelerator that includes the core on which to run the 
+    # @param layer the layer to run
+    # @param spatial_mapping the spatial mapping
+    # @param temporal_mapping the temporal mapping
+    # @param access_same_data_considered_as_no_access (optional)
     def __init__(
         self,
         *,
@@ -179,24 +208,6 @@ class CostModelEvaluation:
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
     ):
-        """
-        Initialize the cost model evaluation with the following inputs:
-        - accelerator: the accelerator that includes the core on which to run the layer
-        - layer: the layer to run
-        - spatial_mapping: the spatial mapping
-        - temporal_mapping: the temporal mapping
-
-        From these parameters, the following attributes are computed:
-        * core: The core on which the layer is ran. This should be specified in the LayerNode attributes.
-        * mapping: The combined spatial and temporal mapping object where access patterns are computed.
-
-        The following cost model attributes are also initialized:
-        - energy_breakdown: The energy breakdown for all operands
-        - energy: The total energy
-
-        After initialization, the cost model evaluation is run.
-        """
-
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
@@ -260,10 +271,8 @@ class CostModelEvaluation:
     def __repr__(self):
         return str(self)
 
+    # JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
-        """
-        JSON representation used for saving this object to a json file.
-        """
         return {
             "outputs": {
                 "memory": {
@@ -305,16 +314,13 @@ class CostModelEvaluation:
             },
         }
 
+    ## Simple JSON representation used for saving this object to a simple json file.
     def __simplejsonrepr__(self):
-        """
-        Simple JSON representation used for saving this object to a simple json file.
-        """
         return {"energy": self.energy_total, "latency": self.latency_total2}
 
+    ## Run the cost model evaluation.
     def run(self):
         """
-        Run the cost model evaluation.
-        - Energy breakdown and energy total through calculate_energy_cost()
         - TODO: Latency calculation
         """
         self.calc_memory_utilization()
@@ -322,9 +328,9 @@ class CostModelEvaluation:
         self.calc_energy()
         self.calc_latency()
 
+    ## Calculate occupancy for each physical memory based on the mapping.
     def calc_memory_utilization(self):
         """
-        Calculate occupancy for each physical memory based on the mapping.
         mem_utili_individual: the memory utilization of each operand individually.
         mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
         """
@@ -386,10 +392,8 @@ class CostModelEvaluation:
         self.effective_mem_utili_individual = effective_mem_utili_individual
         self.effective_mem_utili_shared = effective_mem_utili_shared
 
+    ## Calculates the memory word access based on unit memory's data element move count and the physical memory bw.
     def calc_memory_word_access(self):
-        """
-        Calculates the memory word access based on unit memory's data element move count and the physical memory bw.
-        """
         memory_word_access = {}
         for layer_op in self.layer.operand_list:
             memory_word_access[layer_op] = []
@@ -574,28 +578,27 @@ class CostModelEvaluation:
 
         self.memory_word_access = memory_word_access
 
+    ## Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy.
     def calc_energy(self):
         """
-        Calculates the energy cost of this cost model evaluation by:
-        - calculating the memory reading/writing energy
         - TODO: Interconnection energy
         """
         self.calc_MAC_energy_cost()
         self.calc_memory_energy_cost()
 
+    ## Calculate the dynamic MAC energy
     def calc_MAC_energy_cost(self):
-        """Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
         single_MAC_energy = core.operational_array.unit.cost
         self.MAC_energy = single_MAC_energy * self.layer.total_MAC_count
 
+    ## Computes the memories reading/writing energy by converting the access patterns in self.mapping to 
+    # energy breakdown using the memory hierarchy of the core on which the layer is mapped.
+    #
+    # The energy breakdown is saved in self.energy_breakdown.
+    #
+    # The energy total consumption is saved in self.energy_total.
     def calc_memory_energy_cost(self):
-        """
-        Computes the memories reading/writing energy by converting the access patterns in self.mapping to
-        energy breakdown using the memory hierarchy of the core on which the layer is mapped.
-        The energy breakdown is saved in self.energy_breakdown.
-        The energy total consumption is saved in self.energy_total.
-        """
         core = self.accelerator.get_core(self.core_id)
         mem_hierarchy = core.memory_hierarchy
 
@@ -659,24 +662,23 @@ class CostModelEvaluation:
         self.energy_total = self.mem_energy + self.MAC_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
 
+
+    ##  Calculate latency in 4 steps
+    #
+    # 1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
+    # here we start with calculating the required (or allowed) memory updating window by comparing the effective
+    # data size with the physical memory size at each level. If the effective data size is smaller than 50%
+    # of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect);
+    # otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
+    #
+    # 2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,
+    # assuming we have enough memory ports.
+    #
+    # 3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
+    # data transfer attributes per physical memory port.
+    # 
+    # 4) Finally, we combine the stall/slack of each memory port to get the final latency.
     def calc_latency(self):
-        """
-        Calculate latency in 4 steps:
-
-        1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
-        here we start with calculating the required (or allowed) memory updating window by comparing the effective
-        data size with the physical memory size at each level. If the effective data size is smaller than 50%
-        of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect);
-        otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
-
-        2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,
-        assuming we have enough memory ports.
-
-        3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
-        data transfer attributes per physical memory port.
-
-        4) Finally, we combine the stall/slack of each memory port to get the final latency.
-        """
         self.calc_double_buffer_flag()
         self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
         self.combine_data_transfer_rate_per_physical_port()
@@ -719,11 +721,10 @@ class CostModelEvaluation:
 
         self.double_buffer_true = double_buffer_true
 
+
+    ## Construct a 4-way data transfer pattern for each unit mem, calculate
+    # {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
     def calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
-        """
-        Construct a 4-way data transfer pattern for each unit mem, calculate
-        {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
-        """
         allowed_mem_updat_cycle = {}
         real_data_trans_cycle = {}
         """ stall (+) or slack (-) cycle within each period per virtual data transfer link (DTL) """
@@ -832,6 +833,9 @@ class CostModelEvaluation:
         self.allowed_mem_updat_cycle = allowed_mem_updat_cycle
         self.real_data_trans_cycle = real_data_trans_cycle
 
+    ## Consider memory sharing and port sharing, combine the data transfer activity
+    # Step 1: collect port activity per memory instance per physical memory port
+    # Step 2: calculate SS combine and MUW union parameters per physical memory port
     def combine_data_transfer_rate_per_physical_port(self):
         """Consider memory sharing and port sharing, combine the data transfer activity"""
 
@@ -919,11 +923,10 @@ class CostModelEvaluation:
         """ Assuming all the memory ports can work in parallel """
         self.SS_comb = max(SS_comb_list)
 
+    ## Calculate the initial/final data loading/off-loading cycle by separating out
+    # the first-time input operands' / the last-time output operand's data movement
+    # on corresponding ports.
     def calc_data_loading_offloading_latency(self):
-        """Calculate the initial/final data loading/off-loading cycle by separating out
-        the first-time input operands' / the last-time output operand's data movement
-        on corresponding ports."""
-
         """ Collect ports' initial data-loading and final data-offloading activities """
         data_loading_per_mem_inst = []
         data_loading_cc_per_op = {op: {} for op in self.layer.input_operands}
@@ -1107,9 +1110,8 @@ class CostModelEvaluation:
         self.data_offloading_cc_pair_combined = data_offloading_cc_pair_combined
         self.data_offloading_cycle = data_offloading_cycle
 
+    ## This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency
     def calc_overall_latency(self):
-        """This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency"""
-
         """ the ideal cycle count assuming the MAC array is 100% utilized """
         ideal_cycle = ceil(
             self.layer.total_MAC_count

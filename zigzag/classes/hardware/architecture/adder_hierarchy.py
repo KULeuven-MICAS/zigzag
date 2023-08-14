@@ -16,7 +16,6 @@ class Adder:
         output_precision: int,
     ):
         """
-        Initiate Adder class. The adder can be used in aggregation (AG) adder level or accumulation (AC) adder level.
         :param fan_in: the number of input data to be added together.
         :param unit_cost: one addition energy.
         :param unit_area: one adder area.
