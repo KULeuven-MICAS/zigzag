@@ -35,7 +35,9 @@ end while
 of Variables by Prefix Shifts."  Aaron Williams, 2009
 """
 
+## @package multipermute This module encodes functions to generate the permutations of a multiset
 
+## Description missing
 class ListElement:
     def __init__(self, value, next):
         self.value = value
@@ -58,8 +60,8 @@ def init(multiset):
     return h, h.nth(len(multiset) - 2), h.nth(len(multiset) - 1)
 
 
+## Converts our bespoke linked list to a python list.
 def visit(h):
-    """Converts our bespoke linked list to a python list."""
     o = h
     l = []
     while o is not None:
@@ -68,8 +70,8 @@ def visit(h):
     return l
 
 
+## Generator providing all multiset permutations of a multiset.
 def permutations(multiset):
-    """Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
     yield visit(h)
     while j.next is not None or j.value < h.value:

@@ -6,10 +6,14 @@ from zigzag.classes.hardware.architecture.dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 
+## @package generator Description missing
 
+## Class that generates valid user-format spatial mappings.
 class UserSpatialMappingGenerator:
-    """Class that generates valid user-format spatial mappings."""
 
+    ## The class constructor
+    # @param layer
+    # @param accelerator
     def __init__(self, layer, accelerator) -> None:
         self.layer = layer
         self.accelerator = accelerator
@@ -17,23 +21,23 @@ class UserSpatialMappingGenerator:
     def run(self):
         return self.generate_user_spatial_mappings()
 
+    ## Generator that yields user-defined spatial mappings.
+    # User-defined means across operational array dimensions.
+    # For example, this might yield {'D1': (C, 16), 'D2': (K,16)}
+    # In essence it works as follows:
+    # \code{.py} 
+    # for each operational array dimension oa_dim (D1, D2, ...):
+    #      for each layer operand layer_op (W, I, O, ...):
+    #       if oa_dim not in served_dimensions(layer_op):
+    #           continue
+    #       else:
+    #           for layer dimensions layer_dim (B, K, ...) in the layer:
+    #               if layer_dim is irrelevant for layer_op:
+    #                   layer_dim can be unrolled maximally
+    #                 if layer_dim is not irrelevant for layer_op:
+    #                   layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
+    # \endcode
     def generate_user_spatial_mappings(self):
-        """
-        Generator that yields user-defined spatial mappings.
-        User-defined means across operational array dimensions.
-        For example, this might yield {'D1': (C, 16), 'D2': (K,16)}
-        In essence it works as follows:
-        for each operational array dimension oa_dim (D1, D2, ...):
-          for each layer operand layer_op (W, I, O, ...):
-            if oa_dim not in served_dimensions(layer_op):
-                continue
-            else:
-                for layer dimensions layer_dim (B, K, ...) in the layer:
-                    if layer_dim is irrelevant for layer_op:
-                            layer_dim can be unrolled maximally
-                    if layer_dim is not irrelevant for layer_op:
-                      layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
-        """
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
         operational_array: OperationalArray = core.operational_array
