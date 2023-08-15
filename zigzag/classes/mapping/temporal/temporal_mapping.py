@@ -3,33 +3,35 @@ from math import prod
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 
+## @package temporal_mapping Description missing
 
+## Class that collect all the info related to temporal mapping.
 class TemporalMapping:
-    """
-    Class that collect all the info related to temporal mapping.
-    """
 
+    ## The class constructor
+    # @param temporal_mapping_dict
+    # @param layer_node
     def __init__(self, temporal_mapping_dict: Dict, layer_node: LayerNode):
         self.mapping_dic_origin = temporal_mapping_dict
         self.layer_node = layer_node
         self.operand_list = layer_node.operand_list
 
-        """ Extract memory hierarchy level count for each operand from temporal mapping definition """
+        # Extract memory hierarchy level count for each operand from temporal mapping definition
         self.mem_level = {op: len(tmap) for (op, tmap) in temporal_mapping_dict.items()}
 
-        """ For each memory level, if the innermost/bottom loop is ir loop, merge it down to the below level """
+        # For each memory level, if the innermost/bottom loop is ir loop, merge it down to the below level
         self.innermost_stationary_loop_merge_down()
 
-        """ Calculate the current and below level (cabl) iteration cycle for each memory level, 
-        i.e., each memory level refreshes once, how many cycles it covers """
+        # Calculate the current and below level (cabl) iteration cycle for each memory level, 
+        # i.e., each memory level refreshes once, how many cycles it covers
         self.calc_cycle_cabl_level()
 
-        # ''' Calculate the current and below loop (cabl) iteration cycle for each loop,
+        # Calculate the current and below loop (cabl) iteration cycle for each loop,
         # i.e., each loop iterates once, how many cycles it covers '''
         # self.calc_cycle_cabl_loop()
 
-        """ Calculate the top-ir loop size at each memory level, which will be used 
-        to compute instant required memory BW in combined_mapping.py """
+        # Calculate the top-ir loop size at each memory level, which will be used 
+        # to compute instant required memory BW in combined_mapping.py """
         self.calc_top_r_and_ir_loop()
 
     def __str__(self):
@@ -38,18 +40,14 @@ class TemporalMapping:
     def __repr__(self):
         return str(self)
 
+    ## JSON representation of this object to save it to a json file.
     def __jsonrepr__(self):
-        """
-        JSON representation of this object to save it to a json file.
-        """
         return {"temporal_mapping": self.mapping_dic_stationary}
 
+    ## Iteratively merging down the ir loops which located at the bottom position of each memory level.
+    # Also calculate the MAC level data stationary cycle, i,e., the innermost memory level's bottom ir loops.
     def innermost_stationary_loop_merge_down(self):
-        """
-        Iteratively merging down the ir loops which located at the bottom position of each memory level.
-        Also calculate the MAC level data stationary cycle, i,e., the innermost memory level's bottom ir loops.
-        """
-        """ Initialization """
+        # Initialization
         mapping_current = pickle_deepcopy(self.mapping_dic_origin)
         mapping_previous = pickle_deepcopy(self.mapping_dic_origin)
         done = False
@@ -101,11 +99,9 @@ class TemporalMapping:
         self.mapping_dic_stationary = mapping_st
         self.MAC_level_data_stationary_cycle = MAC_level_st
 
+    ## Calculate the iteration cycles that each memory level covers
     def calc_cycle_cabl_level(self):
-        """
-        Calculate the iteration cycles that each memory level covers
-        """
-        """ iteration_each_level only counts for the current level for-loops """
+        # iteration_each_level only counts for the current level for-loops
         iteration_each_level = {
             op: [
                 prod(
@@ -115,7 +111,7 @@ class TemporalMapping:
             ]
             for op in self.operand_list
         }
-        """ cycle_per_level count for current and below levels' for-loops """
+        # cycle_per_level count for current and below levels' for-loops
         cycle_cabl_level = {
             op: [
                 prod(iteration_each_level[op][0 : lv + 1])
@@ -124,7 +120,7 @@ class TemporalMapping:
             for op in self.operand_list
         }
 
-        """ ASSERT: The total cycle count must be the same for all operand """
+        # ASSERT: The total cycle count must be the same for all operand
         total_cycle = [cycle_cabl_level[op][-1] for op in self.operand_list]
         assert all(
             x == total_cycle[0] for x in total_cycle
@@ -134,12 +130,11 @@ class TemporalMapping:
         self.total_cycle = total_cycle[0]
 
     def calc_top_r_and_ir_loop(self):
-        """
-        top_ir_loop_size: For each memory level, from top to bottom, the product of top few irrelevant loops.
-        top_ir is used for later required instant memory bandwidth calculation.
-        """
-        """ Initialization """
-        """ self.mem_level[op] + 1 to add the placeholder for operational array level """
+        # top_ir_loop_size: For each memory level, from top to bottom, the product of top few irrelevant loops.
+        # top_ir is used for later required instant memory bandwidth calculation.
+    
+        # Initialization
+        # self.mem_level[op] + 1 to add the placeholder for operational array level
         top_r_loop_size = {
             op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list
         }
@@ -148,7 +143,7 @@ class TemporalMapping:
             op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list
         }
 
-        """ Check and extract the top ir loops """
+        # Check and extract the top ir loops
         for operand in self.operand_list:
             for level, current_level_loops in enumerate(
                 self.mapping_dic_stationary[operand]

@@ -11,11 +11,12 @@ from onnx import AttributeProto
 
 logger = logging.getLogger(__name__)
 
+## @package utils Missing description
 
+
+## Parse the input accelerator residing in accelerator_path.
+# @param mapping_path
 def parse_mapping_from_path(mapping_path):
-    """
-    Parse the input accelerator residing in accelerator_path.
-    """
     # Sanity check on mapping_path
     if mapping_path is None:
         # Update the mapping_path to the default mapping file
@@ -42,14 +43,15 @@ def parse_onnx_model_from_path(onnx_model_path):
     return onnx.load(onnx_model_path, load_external_data=False)
 
 
+## Retrieves the attrs[name_idx].ints from attrs.
+# If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
+# If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
+# If name does not exist in attrs, the default provided by the caller is used.
+# If the caller doesn't supply a default, an error is thrown.
+# @param name
+# @param attrs
+# @param default
 def get_attribute_ints_with_name(name, attrs, default=None):
-    """
-    Retrieves the attrs[name_idx].ints from attrs.
-    If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
-    If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
-    If name does not exist in attrs, the default provided by the caller is used.
-    If the caller doesn't supply a default, an error is thrown.
-    """
     attrs_names = [attr.name for attr in attrs]
     try:
         name_idx = attrs_names.index(name)
@@ -71,6 +73,7 @@ def get_attribute_ints_with_name(name, attrs, default=None):
             )
 
 
+## Description missing
 class OnnxTensorCategory(enum.Enum):
     Input = auto()
     Output = auto()
@@ -95,6 +98,7 @@ class OnnxTensorCategory(enum.Enum):
 
 
 @dataclass
+## Description missing
 class OnnxTensorType:
     shape: List[int]
     elem_type: int
