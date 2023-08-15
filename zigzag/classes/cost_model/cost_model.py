@@ -9,7 +9,7 @@ from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
 
-## @package cost_model Additional explaination missing
+## @package cost_model This package contains the analytic cost model as the core of the framework.
 
 ##  Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link).
 class PortActivity:
@@ -97,8 +97,12 @@ class PortBeginOrEndActivity:
         return str(self.served_op_lv_dir)
 
 
-## Given a certain operand's storage level (e.g. (A,1): operand A's 1st memory level), 
+## Given a certain operand's storage level (for example (A,1): operand A's 1st memory level), 
 # return a list of the rest operand's storage levels that share physical memory with the former one (A1)
+# @param mem_op
+# @param mem_lv
+# @param memory_sharing_list
+# @return mem_share_grp
 def get_shared_mem_list(mem_op, mem_lv, memory_sharing_list) -> List[Tuple]:
     for mem_share_group in memory_sharing_list:
         mem_share_grp = list(mem_share_group.items())
@@ -108,6 +112,8 @@ def get_shared_mem_list(mem_op, mem_lv, memory_sharing_list) -> List[Tuple]:
 
 ## Generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support). 
 # Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
+# @param spatial_mapping
+# @return spatial_mapping_int
 def spatial_mapping_fractional_to_int(spatial_mapping: Dict):
     spatial_mapping_int = pickle_deepcopy(spatial_mapping)
     for op, su_all_lv in spatial_mapping.items():
@@ -130,6 +136,7 @@ def spatial_mapping_fractional_to_int(spatial_mapping: Dict):
 #   - input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}
 #   
 #   @param port_duty_list List of port activity objects
+#   @reutrn 
 def calc_MUW_union(port_duty_list):
 
     input_dict = {}
@@ -685,10 +692,10 @@ class CostModelEvaluation:
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
 
+    ## This function checks the double-buffer possibility for each operand at each memory level
+    # (minimal memory BW requirement case) by comparing the physical memory size with the effective
+    # data size, taking into account the memory sharing between operands.
     def calc_double_buffer_flag(self):
-        """This function checks the double-buffer possibility for each operand at each memory level
-        (minimal memory BW requirement case) by comparing the physical memory size with the effective
-        data size, taking into account the memory sharing between operands."""
         double_buffer_true = {}
         for layer_op in self.layer.operand_list:
             mem_op = self.layer_op_to_mem_op[layer_op]

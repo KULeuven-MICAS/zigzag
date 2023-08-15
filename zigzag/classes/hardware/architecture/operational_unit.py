@@ -1,7 +1,15 @@
 from typing import List
 
+## @package operational_unit Description missing
 
+## General class for a unit that performs a certain operation. For example: a multiplier unit.
 class OperationalUnit:
+    
+    ## The class constructor
+    # @param input_precision: The bit precision of the operation inputs.
+    # @param output_precision: The bit precision of the operation outputs.
+    # @param unit_cost: The energy cost of performing a single operation.
+    # @param unit_area: The area of a single operational unit.
     def __init__(
         self,
         input_precision: List[int],
@@ -9,24 +17,14 @@ class OperationalUnit:
         unit_cost: float,
         unit_area: float,
     ):
-        """
-        General class for a unit that performs a certain operation. For example: a multiplier unit.
-
-        :param input_precision: The bit precision of the operation inputs.
-        :param output_precision: The bit precision of the operation outputs.
-        :param unit_cost: The energy cost of performing a single operation.
-        :param unit_area: The area of a single operational unit.
-        """
         self.input_precision = input_precision
         self.output_precision = output_precision
         self.precision = input_precision + [output_precision]
         self.cost = unit_cost
         self.area = unit_area
 
+    ## JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
-        """
-        JSON Representation of this class to save it to a json file.
-        """
         return self.__dict__
 
     def __eq__(self, __o: object) -> bool:
@@ -39,15 +37,13 @@ class OperationalUnit:
         )
 
 
+## Description missing
 class Multiplier(OperationalUnit):
-    def __init__(self, input_precision: List[int], energy_cost: float, area: float):
-        """
-        Initialize the Multiplier object.
 
-        :param input_precision: The bit precision of the multiplication inputs.
-        :param output_precision: The bit precision of the multiplication outputs.
-        :param energy_cost: The energy cost of performing a single multiplication.
-        :param area: The area of a single multiplier.
-        """
+    ## The class constructor
+    # @param input_precision: The bit precision of the multiplication inputs.
+    # @param energy_cost: The energy cost of performing a single multiplication.
+    # @param area: The area of a single multiplier.
+    def __init__(self, input_precision: List[int], energy_cost: float, area: float):
         output_precision = sum(input_precision)
         super().__init__(input_precision, output_precision, energy_cost, area)

@@ -1,7 +1,25 @@
 from zigzag.classes.cacti.cacti_parser import CactiParser
 
+## @package memory_instance Description missing
 
+## Description missing
 class MemoryInstance:
+
+    ## The class constructor
+    # Collect all the basic information of a physical memory module.
+    # @param name: memory module name, e.g. 'SRAM_512KB_BW_16b', 'I_RF'.
+    # @param size: total memory capacity (unit: bit).
+    # @param r_bw/w_bw: memory bandwidth (or wordlength) (unit: bit/cycle).
+    # @param r_cost/w_cost: memory unit data access energy.
+    # @param area: memory area (unit can be whatever user-defined unit).
+    # @param r_port: number of memory read port.
+    # @param w_port: number of memory write port (rd_port and wr_port can work in parallel).
+    # @param rw_port: number of memory port for both read and write (read and write cannot happen in parallel).
+    # @param latency: memory access latency (unit: number of cycles).
+    # @param min_r_granularity (int): The minimal number of bits than can be read in a clock cycle (can be a less than r_bw)
+    # @param min_w_granularity (int): The minimal number of bits that can be written in a clock cycle (can be less than w_bw)
+    # @param mem_type (str): The type of memory. Used for CACTI cost extraction.
+    # @param auto_cost_extraction (bool): Automatically extract the read cost, write cost and area using CACTI.
     def __init__(
         self,
         name: str,
@@ -20,24 +38,6 @@ class MemoryInstance:
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
     ):
-        """
-        Collect all the basic information of a physical memory module.
-
-        :param name: memory module name, e.g. 'SRAM_512KB_BW_16b', 'I_RF'.
-        :param size: total memory capacity (unit: bit).
-        :param r_bw/w_bw: memory bandwidth (or wordlength) (unit: bit/cycle).
-        :param r_cost/w_cost: memory unit data access energy.
-        :param area: memory area (unit can be whatever user-defined unit).
-        :param r_port: number of memory read port.
-        :param w_port: number of memory write port (rd_port and wr_port can work in parallel).
-        :param rw_port: number of memory port for both read and write (read and write cannot happen in parallel).
-        :param latency: memory access latency (unit: number of cycles).
-        min_r_granularity (int): The minimal number of bits than can be read in a clock cycle (can be a less than r_bw)
-        min_w_granularity (int): The minimal number of bits that can be written in a clock cycle (can be less than w_bw)
-        mem_type (str): The type of memory. Used for CACTI cost extraction.
-        auto_cost_extraction (bool): Automatically extract the read cost, write cost and area using CACTI.
-        """
-
         if auto_cost_extraction:
             # Size must be a multiple of 8 when using CACTI
             assert (
@@ -85,10 +85,8 @@ class MemoryInstance:
         else:
             self.w_bw_min = min_w_granularity
 
+    ## JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
-        """
-        JSON Representation of this class to save it to a json file.
-        """
         return self.__dict__
 
     def __eq__(self, other: object) -> bool:

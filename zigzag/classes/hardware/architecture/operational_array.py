@@ -6,17 +6,15 @@ from zigzag.classes.hardware.architecture.operational_unit import (
     Multiplier,
 )
 
+## @package operational_array Description missing
 
+## This class captures multi-dimensional operational array size.
 class OperationalArray:
+    ## The class constructor
+    # @param operational_unit: an OperationalUnit object including precision and single operation energy, later we
+    # can add idle energy also (e.g. for situations that one or two of the input operands is zero).
+    # @param dimensions: define the name and size of each multiplier array dimensions, e.g. {'D1': 3, 'D2': 5}.
     def __init__(self, operational_unit: OperationalUnit, dimensions: Dict[str, int]):
-        """
-        This class captures multi-dimensional operational array size.
-
-        :param operational_unit: an OperationalUnit object including precision and single operation energy, later we
-                           can add idle energy also (e.g. for situations that one or two of the input operands is zero).
-
-        :param dimensions: define the name and size of each multiplier array dimensions, e.g. {'D1': 3, 'D2': 5}.
-        """
         self.unit = operational_unit
         self.total_unit_count = int(np.prod(list(dimensions.values())))
         self.total_area = operational_unit.area * self.total_unit_count
@@ -29,10 +27,8 @@ class OperationalArray:
         self.dimension_sizes = [dim.size for dim in base_dims]
         self.nb_dimensions = len(base_dims)
 
+    # JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
-        """
-        JSON Representation of this class to save it to a json file.
-        """
         return {"operational_unit": self.unit, "dimensions": self.dimensions}
 
     def __eq__(self, __o: object) -> bool:
@@ -41,6 +37,7 @@ class OperationalArray:
         return self.unit == __o.unit and self.dimensions == __o.dimensions
 
 
+## Description missing
 class MultiplierArray(OperationalArray):
     pass
 

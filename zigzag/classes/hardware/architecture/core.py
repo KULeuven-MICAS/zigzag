@@ -4,12 +4,17 @@ from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarch
 import networkx as nx
 
 
-class Core:
-    """
-    The Core class houses the array of multipliers and the attached memory hierarchy.
-    This class supports a singular multiplier array and memory hierarchy, runtime flexibility should be implemented on top.
-    """
+## @package core This packages allows the user to create a core which can be used in a accelerator.
 
+## The Core class houses the array of multipliers and the attached memory hierarchy.
+## This class supports a singular multiplier array and memory hierarchy, runtime flexibility should be implemented on top.
+class Core:
+
+    ## The class constructor
+    # @param id
+    # @param operational_array
+    # @param memory_hierarchy
+    # @param dataflows
     def __init__(
         self,
         id: int,
@@ -33,10 +38,8 @@ class Core:
     def __repr__(self) -> str:
         return str(self)
 
+    # JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
-        """
-        JSON representation used for saving this object to a json file.
-        """
         return self.__dict__
 
     def __hash__(self) -> int:
@@ -112,10 +115,8 @@ class Core:
         self.mem_r_bw_min_dict = mem_r_bw_min_dict
         self.mem_w_bw_min_dict = mem_w_bw_min_dict
 
+    ## Generates a list of dictionary that indicates which operand's which memory levels are sharing the same physical memory
     def generate_memory_sharing_list(self):
-        """
-        Generates a list of dictionary that indicates which operand's which memory levels are sharing the same physical memory
-        """
         memory_sharing_list = []
         for mem_lv in self.mem_hierarchy_dict.values():
             for mem in mem_lv:
@@ -146,10 +147,8 @@ class Core:
     def get_memory_sharing_list(self):
         return self.mem_sharing_list
 
+    ## Returns a specific memory level in the memory hierarchy for the memory operand
     def get_memory_level(self, mem_op: str, mem_lv: int):
-        """
-        Returns a specific memory level in the memory hierarchy for the memory operand.
-        """
         # Sort the nodes topologically and filter out all memories that don't store mem_op
         memory = [
             node
@@ -158,10 +157,8 @@ class Core:
         ]
         return memory[mem_lv]
 
+    ## Get the lowest shared memory level between mem_op1 (>= mem_lv1) and mem_op2 (>= mem_lv2).
     def get_lowest_shared_mem_level_above(self, mem_op1, mem_lv1, mem_op2, mem_lv2):
-        """
-        Get the lowest shared memory level between mem_op1 (>= mem_lv1) and mem_op2 (>= mem_lv2).
-        """
         for lv, mem in enumerate(self.mem_hierarchy_dict[mem_op1][mem_lv1:]):
             if (
                 mem_op2 in mem.operands
