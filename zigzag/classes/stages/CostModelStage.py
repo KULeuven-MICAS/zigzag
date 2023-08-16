@@ -11,8 +11,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## @package CostModelStage Description missing
+## @defgroup Stages
 
+## @ingroup Stages
 ##  Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
 class CostModelStage(Stage):
 

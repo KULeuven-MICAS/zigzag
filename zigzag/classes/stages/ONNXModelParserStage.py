@@ -8,6 +8,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+## Description missing
 class ONNXModelParserStage(Stage):
     def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
         super().__init__(list_of_callables, **kwargs)

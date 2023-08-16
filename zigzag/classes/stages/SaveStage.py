@@ -11,26 +11,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+## Class that passes through all results yielded by substages, but saves the results as a json list to a file
+# at the end of the iteration.
 class CompleteSaveStage(Stage):
-    """
-    Class that passes through all results yielded by substages, but saves the results as a json list to a file
-    at the end of the iteration.
-    """
 
+    ## The class constructor
+    # @param list_of_callables: see Stage
+    # @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
+    # in kwargs (thus supplied by higher level runnables)
+    # @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
     def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
-        """
-        :param list_of_callables: see Stage
-        :param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables)
-        :param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
-        """
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
 
+    ## Run the complete save stage by running the substage and saving the CostModelEvaluation json representation.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the complete save stage by running the substage and saving the CostModelEvaluation json representation.
-        """
         self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
 
@@ -71,27 +66,22 @@ class CompleteSaveStage(Stage):
             )
 
 
+## Class that passes through results yielded by substages, but saves the results as a json list to a file
+# at the end of the iteration.
+# In this simple version, only the energy total and latency total are saved.
 class SimpleSaveStage(Stage):
-    """
-    Class that passes through results yielded by substages, but saves the results as a json list to a file
-    at the end of the iteration.
-    In this simple version, only the energy total and latency total are saved.
-    """
 
+    ## The class constructor
+    # @param list_of_callables: see Stage
+    # @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
+    # in kwargs (thus supplied by higher level runnables)
+    # @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
     def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
-        """
-        :param list_of_callables: see Stage
-        :param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables)
-        :param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
-        """
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
 
+    ## Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
-        """
         self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
 
@@ -129,26 +119,20 @@ class SimpleSaveStage(Stage):
                 f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method."
             )
 
-
+## Class that dumps all received CMEs into a list and saves that list to a pickle file.
 class PickleSaveStage(Stage):
-    """
-    Class that dumps all received CMEs into a list and saves that list to a pickle file.
-    """
 
+    ## The class constructor
+    # @param list_of_callables: see Stage
+    # @param pickle_filename: output pickle filename
+    # @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
     def __init__(self, list_of_callables, *, pickle_filename, **kwargs):
-        """
-        :param list_of_callables: see Stage
-        :param pickle_filename: output pickle filename
-        :param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
-        """
         super().__init__(list_of_callables, **kwargs)
         self.pickle_filename = pickle_filename
 
+    ## Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
+    # This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is passed as extra_info
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
-        This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is passed as extra_info
-        """
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         for id, (cme, extra_info) in enumerate(substage.run()):
             all_cmes = [cme for (cme, extra) in extra_info]

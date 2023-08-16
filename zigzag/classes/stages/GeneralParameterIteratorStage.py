@@ -6,8 +6,6 @@ from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
 logger = logging.getLogger(__name__)
 
-## @package GeneralParameterIteratorStage
-
 ## General iterator over any parameter whose values can be set from a predetermined list
 class GeneralParameterIteratorStage(Stage):
 
@@ -59,24 +57,24 @@ class GeneralParameterIteratorStage(Stage):
         return self.recursive_run(self.param_iters, self.kwargs)
 
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
 
-    class Dummy(Stage):
-        def is_leaf(self):
-            return True
+#     class Dummy(Stage):
+#         def is_leaf(self):
+#             return True
 
-        def run(self):
-            yield None, self.kwargs
+#         def run(self):
+#             yield None, self.kwargs
 
-    from zigzag.classes.stages.Stage import MainStage
+#     from zigzag.classes.stages.Stage import MainStage
 
-    DUT = MainStage(
-        [GeneralParameterIteratorStage, Dummy],
-        general_parameter_iterations={
-            ("arg1.1", "arg1.2"): ((111, 121), (112, 122), (113, 123)),
-            "arg2": (21, 22, 23, 24, 25),
-            "arg3": (31, 32),
-        },
-    )
-    for l in DUT.run():
-        print(l)
+#     DUT = MainStage(
+#         [GeneralParameterIteratorStage, Dummy],
+#         general_parameter_iterations={
+#             ("arg1.1", "arg1.2"): ((111, 121), (112, 122), (113, 123)),
+#             "arg2": (21, 22, 23, 24, 25),
+#             "arg3": (31, 32),
+#         },
+#     )
+#     for l in DUT.run():
+#         print(l)
