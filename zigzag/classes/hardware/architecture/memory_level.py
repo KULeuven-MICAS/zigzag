@@ -136,10 +136,8 @@ class MemoryLevel:
 
     ## Create port object
     def port_allocation(self):
-        """ 
-        Step 1: according to the port count of the memory instance, initialize the physical port object 
-        (so far, we don't know what the port will be used for. But we do know the port's id/bw/attribute) 
-        """
+        # Step 1: according to the port count of the memory instance, initialize the physical port object 
+        # (so far, we don't know what the port will be used for. But we do know the port's id/bw/attribute) 
         port_list = []
         r_port = self.memory_instance.r_port
         w_port = self.memory_instance.w_port
@@ -169,9 +167,7 @@ class MemoryLevel:
             port_list.append(new_port)
         port_names = [port.name for port in port_list]
 
-        """ 
-        Step 2: add operand, memory level, and served data movement direction for each port.
-        """
+        # Step 2: add operand, memory level, and served data movement direction for each port.
         mov_LUT = {
             "fh": "wr_in_by_high",
             "fl": "wr_in_by_low",

@@ -87,10 +87,6 @@ class AdderHierarchy:
     # This function updates self.output_reduction_size and self.output_non_reduction_size.
     # @param multiplier_array: MultiplierArray object, check in "architecture/operational_array.py" for more info.
     def calc_output_reduction_size(self, multiplier_array: MultiplierArray):
-        """
-        :param 
-        :return: 
-        """
         total_dimension_size = multiplier_array.total_unit_count
         output_reduction_size = 1
         for os in multiplier_array.operand_spatial_sharing:

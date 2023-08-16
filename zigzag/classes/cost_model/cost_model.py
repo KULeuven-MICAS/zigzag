@@ -267,7 +267,7 @@ class CostModelEvaluation:
 
         self.active_mem_level = self.mapping.mem_level
 
-        """ Run the cost model evaluation """
+        # Run the cost model evaluation
         self.run()
 
     def __str__(self):
@@ -325,9 +325,7 @@ class CostModelEvaluation:
 
     ## Run the cost model evaluation.
     def run(self):
-        """
-        - TODO: Latency calculation
-        """
+        # - TODO: Latency calculation
         self.calc_memory_utilization()
         self.calc_memory_word_access()
         self.calc_energy()
@@ -335,10 +333,8 @@ class CostModelEvaluation:
 
     ## Calculate occupancy for each physical memory based on the mapping.
     def calc_memory_utilization(self):
-        """
-        mem_utili_individual: the memory utilization of each operand individually.
-        mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
-        """
+        # mem_utili_individual: the memory utilization of each operand individually.
+        # mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
         mem_utili_individual = {}
         effective_mem_utili_individual = {}
         for layer_op in self.layer.operand_list:
@@ -585,9 +581,7 @@ class CostModelEvaluation:
 
     ## Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy.
     def calc_energy(self):
-        """
-        - TODO: Interconnection energy
-        """
+        # - TODO: Interconnection energy
         self.calc_MAC_energy_cost()
         self.calc_memory_energy_cost()
 
@@ -842,9 +836,7 @@ class CostModelEvaluation:
     # Step 1: collect port activity per memory instance per physical memory port
     # Step 2: calculate SS combine and MUW union parameters per physical memory port
     def combine_data_transfer_rate_per_physical_port(self):
-        """Consider memory sharing and port sharing, combine the data transfer activity"""
-
-        """ Step 1: collect port activity per memory instance per physical memory port """
+        # Step 1: collect port activity per memory instance per physical memory port
         port_activity_collect = []
         for mem_instance in self.mem_instance_list:
             port_activity_single = {}
@@ -863,7 +855,7 @@ class CostModelEvaluation:
                         mov_dir,
                     )
                     if period_count == 0:
-                        """skip the inactive data movement activities because they won't impact SS"""
+                        # skip the inactive data movement activities because they won't impact SS
                         continue
                     period = getattr(
                         self.mapping_int.unit_mem_data_movement[layer_op][
@@ -890,7 +882,7 @@ class CostModelEvaluation:
             port_activity_collect.append(port_activity_single)
         self.port_activity_collect = port_activity_collect
 
-        """ Step 2: calculate SS combine and MUW union parameters per physical memory port """
+        # Step 2: calculate SS combine and MUW union parameters per physical memory port
         SS_comb_collect = [
             {port: None for port in mem_ports} for mem_ports in port_activity_collect
         ]
@@ -925,14 +917,14 @@ class CostModelEvaluation:
 
         self.MUW_union_collect = MUW_union_collect
         self.SS_comb_collect = SS_comb_collect
-        """ Assuming all the memory ports can work in parallel """
+        # Assuming all the memory ports can work in parallel
         self.SS_comb = max(SS_comb_list)
 
     ## Calculate the initial/final data loading/off-loading cycle by separating out
     # the first-time input operands' / the last-time output operand's data movement
     # on corresponding ports.
     def calc_data_loading_offloading_latency(self):
-        """ Collect ports' initial data-loading and final data-offloading activities """
+        # Collect ports' initial data-loading and final data-offloading activities
         data_loading_per_mem_inst = []
         data_loading_cc_per_op = {op: {} for op in self.layer.input_operands}
         data_offloading_per_mem_inst = []
@@ -960,7 +952,7 @@ class CostModelEvaluation:
                         mov_dir,
                     )
                     if period_count == 0:
-                        """skip for the inactive data movement"""
+                        # skip for the inactive data movement
                         continue
                     if mem_op in ["I1", "I2"]:
                         real_cycle = getattr(
@@ -995,7 +987,7 @@ class CostModelEvaluation:
                         ] = (real_cycle, port_is_shared_by_two_input_operands)
                     else:
                         if mov_dir in ["rd_out_to_low", "wr_in_by_high"]:
-                            """don't consider partial sum flowing in the final data off-loading stage"""
+                            # don't consider partial sum flowing in the final data off-loading stage
                             continue
                         real_cycle = getattr(
                             self.real_data_trans_cycle[layer_op][mem_lv], mov_dir
@@ -1035,7 +1027,7 @@ class CostModelEvaluation:
         self.data_offloading_per_mem_inst = data_offloading_per_mem_inst
         self.data_offloading_per_op = data_offloading_cc_per_op
 
-        """ Combine ports' initial data-loading activities to get the data loading cycle amount """
+        # Combine ports' initial data-loading activities to get the data loading cycle amount 
         data_loading_cc_pair_combined_per_op = {
             op: [] for op in self.layer.input_operands
         }
@@ -1053,7 +1045,7 @@ class CostModelEvaluation:
                 completely_shared = elem1[1] and elem2[1]
                 completely_separate = not (elem1[1]) and not (elem2[1])
                 longest_loading_cc = max(elem1[0], elem2[0])
-                """ for the ports that serve the same data movement purpose, take the longest data loading cycle """
+                # for the ports that serve the same data movement purpose, take the longest data loading cycle
                 data_loading_cc_pair_combined = longest_loading_cc
                 data_loading_cc_pair_combined_per_op[layer_op].append(
                     data_loading_cc_pair_combined
@@ -1063,9 +1055,9 @@ class CostModelEvaluation:
                 elif completely_shared:
                     data_loading_shared_part[layer_op] += longest_loading_cc
                 else:
-                    """the data transfer link between two memory levels is half-shared,
-                    i.e. on one memory side, the port is shared, while on another memory side,
-                    there are different memories with separate ports"""
+                    # the data transfer link between two memory levels is half-shared,
+                    # i.e. on one memory side, the port is shared, while on another memory side,
+                    # there are different memories with separate ports
                     data_loading_half_shared_part[layer_op] = longest_loading_cc
 
         if len(self.layer.input_operands) == 1:
@@ -1095,7 +1087,7 @@ class CostModelEvaluation:
         self.data_loading_shared_part = data_loading_shared_part
         self.data_loading_cycle = data_loading_cycle
 
-        """ Combine ports' final data-offloading activities to get the data offloading cycle amount """
+        # Combine ports' final data-offloading activities to get the data offloading cycle amount 
         # TODO Only considered the worst case for now
         #  (assumed that all the ports are working in series during the final data off-loading phase)
         data_offloading_cc_pair_combined = []
@@ -1108,7 +1100,7 @@ class CostModelEvaluation:
                 layer_op + str(mem_lv + 1) + "_" + "wr_in_by_low"
             ]
             longest_offloading_cc = max(elem1, elem2)
-            """ for the ports that serve the same data movement purpose, take the longest data loading cycle """
+            # for the ports that serve the same data movement purpose, take the longest data loading cycle 
             data_offloading_cc_pair_combined.append(longest_offloading_cc)
         data_offloading_cycle = sum(data_offloading_cc_pair_combined)
 
@@ -1117,25 +1109,25 @@ class CostModelEvaluation:
 
     ## This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency
     def calc_overall_latency(self):
-        """ the ideal cycle count assuming the MAC array is 100% utilized """
+        # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = ceil(
             self.layer.total_MAC_count
             / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
         )
 
-        """ the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal) """
+        # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
         ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle
         MAC_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 
-        """ Total latency without the initial data loading and the final data off-loading """
+        # Total latency without the initial data loading and the final data off-loading
         latency_total0 = ideal_temporal_cycle + self.SS_comb
         MAC_utilization0 = ideal_cycle / latency_total0
 
-        """ Total latency with the initial data loading, but without the final data off-loading """
+        # Total latency with the initial data loading, but without the final data off-loading
         latency_total1 = ideal_temporal_cycle + self.SS_comb + self.data_loading_cycle
         MAC_utilization1 = ideal_cycle / latency_total1
 
-        """ Total latency with both the initial data loading and the final data off-loading """
+        # Total latency with both the initial data loading and the final data off-loading
         latency_total2 = (
             ideal_temporal_cycle
             + self.SS_comb
