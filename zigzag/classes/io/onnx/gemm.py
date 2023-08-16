@@ -9,9 +9,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
-## @package gemm Description missing
-
 ## Parses an ONNX Gemm operator into a LayerNode
 class GemmParser(Parser):
 

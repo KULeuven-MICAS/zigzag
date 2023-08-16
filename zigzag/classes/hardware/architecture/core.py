@@ -3,9 +3,6 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 import networkx as nx
 
-
-## @package core This packages allows the user to create a core which can be used in a accelerator.
-
 ## The Core class houses the array of multipliers and the attached memory hierarchy.
 ## This class supports a singular multiplier array and memory hierarchy, runtime flexibility should be implemented on top.
 class Core:

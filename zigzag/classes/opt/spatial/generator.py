@@ -6,8 +6,6 @@ from zigzag.classes.hardware.architecture.dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 
-## @package generator Description missing
-
 ## Class that generates valid user-format spatial mappings.
 class UserSpatialMappingGenerator:
 

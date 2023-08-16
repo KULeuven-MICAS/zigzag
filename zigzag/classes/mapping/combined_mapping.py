@@ -6,8 +6,6 @@ from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
-## @package combined_mapping Description missing
-
 ## The standard four-way data moving attribute of a memory interface.
 class FourWayDataMoving:
 

@@ -8,8 +8,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## @package matmul Missing description
-
 ## Parses an ONNX MatMul operator into a LayerNode
 class MatMulParser(Parser):
 

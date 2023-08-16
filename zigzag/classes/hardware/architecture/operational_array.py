@@ -6,8 +6,6 @@ from zigzag.classes.hardware.architecture.operational_unit import (
     Multiplier,
 )
 
-## @package operational_array Description missing
-
 ## This class captures multi-dimensional operational array size.
 class OperationalArray:
     ## The class constructor

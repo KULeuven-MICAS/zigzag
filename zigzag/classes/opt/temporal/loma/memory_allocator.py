@@ -7,8 +7,6 @@ from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.opt.temporal.loma.loop import Loop
 
-## @package memory_allocator Missing description
-
 ## Missing description
 class MemoryHierarchyTooSmallException(Exception):
     pass

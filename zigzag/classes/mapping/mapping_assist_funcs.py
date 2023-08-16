@@ -8,8 +8,6 @@ from zigzag.utils import pickle_deepcopy
 if TYPE_CHECKING:
     from zigzag.classes.workload.layer_node import LayerNode
 
-## @package mapping_assist_funcs Description Missing
-
 ## Collect information of each single loop tuple in mapping.
 # Applied range: from the lowest architectural level to the current level.
 class Loop:

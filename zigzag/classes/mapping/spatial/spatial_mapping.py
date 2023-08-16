@@ -6,8 +6,6 @@ if TYPE_CHECKING:
     from zigzag.classes.workload.layer_node import LayerNode
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
-## @package spatial_mapping Description missing
-
 ## Class that collect all the info related to spatial mapping.
 class SpatialMapping:
 

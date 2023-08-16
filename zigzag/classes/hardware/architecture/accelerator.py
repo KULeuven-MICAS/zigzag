@@ -2,8 +2,6 @@ from typing import Set
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 
-## @package accelerator This packages allows the user to define a accelerator.
-
 ##  The Accelerator class houses a set of Cores with an additional Global Buffer.
 # This Global Buffer sits above the cores, and can optionally be disabled.
 class Accelerator:

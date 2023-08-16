@@ -4,8 +4,6 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 from math import prod
 import numpy as np
 
-## @package memory_level Description missing
-
 ## Description missing
 class MemoryPort:
     port_id_counter = 0

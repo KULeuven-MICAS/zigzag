@@ -15,8 +15,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## @package model Missing description
-
 ## Parse the ONNX model into a workload.
 class ONNXModelParser:
 

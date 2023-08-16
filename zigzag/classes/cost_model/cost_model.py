@@ -9,8 +9,6 @@ from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
 
-## @package cost_model This package contains the analytic cost model as the core of the framework.
-
 ##  Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link).
 class PortActivity:
 

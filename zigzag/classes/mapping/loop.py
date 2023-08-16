@@ -1,7 +1,5 @@
 from abc import ABCMeta
 
-## @package loop Description missing
-
 ## Abstract base class that represents a loop. Could be spatial or temporal loop.
 class Loop(metaclass=ABCMeta):
 

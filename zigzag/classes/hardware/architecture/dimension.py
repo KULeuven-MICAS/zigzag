@@ -1,5 +1,3 @@
-## @package dimension Description missing
-
 ## Description missing
 class Dimension:
 

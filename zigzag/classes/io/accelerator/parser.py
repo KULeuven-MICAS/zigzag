@@ -5,8 +5,6 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 import logging
 logger = logging.getLogger(__name__)
 
-## @package parser Description missing
-
 ## Parse an accelerator module path into an accelerator object
 class AcceleratorParser:
 

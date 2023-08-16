@@ -35,8 +35,6 @@ from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 
-## @package state This package contains the state class that represents a state of SALSA's makrov chain.
-
 ## State of SALSA, storing an ordering, his temporal mapping and his energy value.
 class SalsaState:
 

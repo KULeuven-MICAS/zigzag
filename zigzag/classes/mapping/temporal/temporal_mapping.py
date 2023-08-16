@@ -3,8 +3,6 @@ from math import prod
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 
-## @package temporal_mapping Description missing
-
 ## Class that collect all the info related to temporal mapping.
 class TemporalMapping:
 

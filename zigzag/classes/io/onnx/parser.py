@@ -1,8 +1,5 @@
 from abc import ABCMeta, abstractmethod
 
-## @package parser
-
-
 ## Abstract base class that represents a parser of an onnx operator. Example: Conv, MatMul, etc.
 class Parser(metaclass=ABCMeta):
 

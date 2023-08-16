@@ -42,8 +42,6 @@ from zigzag.classes.opt.temporal.salsa.state import SalsaState
 
 logger = logging.getLogger(__name__)
 
-## @package engine This package contains the engine class that handles the optimization of temporal mapping of SALSA.
-
 ## Class that handles optimization of temporal mapping given a:
 # - layer
 # - spatial mapping

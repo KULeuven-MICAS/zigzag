@@ -6,8 +6,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## @package cacti_parser This package allows the user to utilize CACTI7 for automatic cost estimation of memories.
-
 ##  Class that provides the interface between ZigZag and CACTI.
 class CactiParser:
 

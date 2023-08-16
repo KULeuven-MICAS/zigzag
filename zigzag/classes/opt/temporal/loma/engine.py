@@ -15,8 +15,6 @@ from zigzag.classes.opt.temporal.loma.memory_allocator import (
 
 logger = logging.getLogger(__name__)
 
-## @package engine Description missing
-
 ## Description missing
 class NoValidLoopOrderingFoundException(Exception):
     pass

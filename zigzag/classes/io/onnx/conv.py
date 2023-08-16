@@ -12,8 +12,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## @package conv Description missing
-
 ## Parser for ONNX Conv and QLinearConv nodes into LayerNode.
 class ConvParser(Parser):
 

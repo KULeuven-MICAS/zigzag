@@ -1,7 +1,5 @@
 from zigzag.classes.cacti.cacti_parser import CactiParser
 
-## @package memory_instance Description missing
-
 ## Description missing
 class MemoryInstance:
 

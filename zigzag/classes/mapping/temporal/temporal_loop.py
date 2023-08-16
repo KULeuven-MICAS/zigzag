@@ -1,7 +1,5 @@
 from zigzag.classes.mapping.loop import Loop
 
-## @package temporal_loop Description missing
-
 ## Class that represents a temporal loop.
 class TemporalLoop(Loop):
 

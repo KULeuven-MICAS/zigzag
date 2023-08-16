@@ -1,5 +1,3 @@
-## @package loop Description missing
-
 ## Class that stores a single for loop's information.
 class Loop:
 

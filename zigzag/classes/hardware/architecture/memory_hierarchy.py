@@ -7,8 +7,6 @@ from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 
-## @package memory_hierarchy This package allows the user to build a hierarchy of memories.
-
 ## Class that represents a memory hierarchy as a directed networkx graph.
 # The memory hierarchy graph is directed, with the root nodes representing the lowest level
 # in the memory hierarchy.

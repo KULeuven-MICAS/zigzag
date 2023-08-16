@@ -1,7 +1,5 @@
 from typing import List
 
-## @package operational_unit Description missing
-
 ## General class for a unit that performs a certain operation. For example: a multiplier unit.
 class OperationalUnit:
     

@@ -5,8 +5,6 @@ from zigzag.classes.hardware.architecture.operational_array import (
     MultiplierArray,
 )
 
-## @package adder_hierarchy This packages allows the user to build a hierarchy of adders.
-
 ## This class represents one single adder.
 class Adder:
 
