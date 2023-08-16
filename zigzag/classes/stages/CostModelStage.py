@@ -11,12 +11,20 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+## @package CostModelStage Description missing
 
+##  Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
 class CostModelStage(Stage):
-    """
-    Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
-    """
 
+    ## The class constructor 
+    # Initializes the cost model stage given main inputs
+    # @param list_of_callables
+    # @param accelerator
+    # @param layer
+    # @param spatial_mapping
+    # @param temporal_mapping
+    # @param access_same_data_considered_as_no_access
+    # @param kwargs
     def __init__(
         self,
         list_of_callables: List[Callable],
@@ -28,9 +36,6 @@ class CostModelStage(Stage):
         access_same_data_considered_as_no_access=True,
         **kwargs
     ):
-        """
-        Initializes the cost model stage given main inputs
-        """
         super().__init__(list_of_callables, **kwargs)
         (
             self.accelerator,
@@ -46,10 +51,8 @@ class CostModelStage(Stage):
             access_same_data_considered_as_no_access,
         )
 
+    ## Run the cost model stage by calling the internal zigzag cost model with the correct inputs.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the cost model stage by calling the internal zigzag cost model with the correct inputs.
-        """
         self.cme = CostModelEvaluation(
             accelerator=self.accelerator,
             layer=self.layer,

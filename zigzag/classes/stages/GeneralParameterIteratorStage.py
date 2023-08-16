@@ -6,24 +6,21 @@ from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
 logger = logging.getLogger(__name__)
 
+## @package GeneralParameterIteratorStage
 
+## General iterator over any parameter whose values can be set from a predetermined list
 class GeneralParameterIteratorStage(Stage):
-    """
-    General iterator over any parameter whose values can be set from a predetermined list
-    """
 
+    ## The class constructor
+    # @param list_of_callables: see Stage
+    # @param general_parameter_iterations: dictionary with:
+    #    - keys: variables to iterate over, or tuples of variables to iterate over
+    #        - With K1 and K2 both keys, all combinations of K1 values and K2 values are tried.
+    #        - With K1 and K2 together in a tuple as key, their values are paired and the dictionary value
+    #        must be a list (or other iterable) with tuples containing the values for K1 and K2
+    #    - values: a list of values (single arg key) or a list of tuples of values (multi arg keys)
+    # @param kwargs: see Stage
     def __init__(self, list_of_callables, *, general_parameter_iterations, **kwargs):
-        """
-
-        :param list_of_callables: see Stage
-        :param general_parameter_iterations: dictionary with:
-                - keys: variables to iterate over, or tuples of variables to iterate over
-                        With K1 and K2 both keys, all combinations of K1 values and K2 values are tried.
-                        With K1 and K2 together in a tuple as key, their values are paired and the dictionary value
-                        must be a list (or other iterable) with tuples containing the values for K1 and K2
-               - values: a list of values (single arg key) or a list of tuples of values (multi arg keys)
-        :param kwargs: see Stage
-        """
         super().__init__(list_of_callables, **kwargs)
         self.param_iters = general_parameter_iterations
 

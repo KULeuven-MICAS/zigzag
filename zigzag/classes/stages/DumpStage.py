@@ -4,28 +4,23 @@ from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 import os
 
+## @package DumpStage Description missing
 
+## Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file
+# at the end of the iteration
 class DumpStage(Stage):
-    """
-    Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file
-    at the end of the iteration
-    """
 
+    ## The class constructor
+    # @param list_of_callables: see Stage
+    # @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
+    # in kwargs (thus supplied by higher level runnables)
+    # @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
     def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
-        """
-
-        :param list_of_callables: see Stage
-        :param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables)
-        :param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
-        """
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
 
+    ## Run the compare stage by comparing a new cost model output with the current best found result.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the compare stage by comparing a new cost model output with the current best found result.
-        """
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         list = []
         filename = self.dump_filename_pattern.format(**self.kwargs)

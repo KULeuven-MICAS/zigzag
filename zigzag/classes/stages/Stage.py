@@ -1,16 +1,16 @@
 from typing import Generator, Callable, List
 
+## @package Stage Description missing
 
+## Abstract superclass for Runnables
 class Stage:
-    """Abstract superclass for Runnables"""
 
+    ## The class constructor
+    # @param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
+    # (list_of_callables, *, required_kwarg1, required_kwarg2, kwarg_with_default=default, **kwargs)
+    # and return a Stage instance. This is used to flexibly build iterators upon other iterators.
+    # @param kwargs: any keyword arguments, irrelevant to the specific class in question but passed on down
     def __init__(self, list_of_callables: List[Callable], **kwargs):
-        """
-        :param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
-        (list_of_callables, *, required_kwarg1, required_kwarg2, kwarg_with_default=default, **kwargs)
-        and return a Stage instance. This is used to flexibly build iterators upon other iterators.
-        :param kwargs: any keyword arguments, irrelevant to the specific class in question but passed on down
-        """
         self.kwargs = kwargs
         self.list_of_callables = list_of_callables
         if self.is_leaf() and list_of_callables not in ([], tuple(), set(), None):
@@ -40,12 +40,9 @@ class Stage:
         """
         return False
 
-
+## Not actually a Stage, as running it does return (not yields!) a list of results instead of a generator
+# Can be used as the main entry point
 class MainStage:
-    """
-    Not actually a Stage, as running it does return (not yields!) a list of results instead of a generator
-    Can be used as the main entry point
-    """
 
     def __init__(self, list_of_callables, **kwargs):
         self.kwargs = kwargs
