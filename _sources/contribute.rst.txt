@@ -35,7 +35,7 @@ In order to upgrade the project version, we use Python packages called bumpver, 
 Documentation
 =============
 
-The ZigZag project provides several different ways of documentation. Firstly, there are many :doc:`publications` available which are related to the project. Secondly, the `general documentation <https://google.github.io/styleguide/pyguide.html>`_ allows everyone to get familiar with the framework. Lastly, the code of the framework allows to genereate additional documentation by using Doxygen.
+The ZigZag project provides several different ways of documentation. Firstly, there are many :doc:`publications` available which are related to the project. Secondly, the `general documentation <https://kuleuven-micas.github.io/zigzag/index.html>`_ allows everyone to get familiar with the framework. Lastly, the code of the framework allows to genereate `additional documentation <https://kuleuven-micas.github.io/zigzag/contribute.html#building-the-code-documentation-locally>`_ by using Doxygen. 
 
 Writing new documentation
 -------------------------
@@ -56,7 +56,7 @@ The general documentation (same as on this webpage) is build using Sphinx. You s
     cd docs/
     pip install -r requirements.txt
 
-After, you can build the documentation using the provide Makefile (Linux). For Windows, you can run the ``make.bat`` file.
+After, you can build the documentation using the provided Makefile (Linux). For Windows, you can run the ``make.bat`` file.
 
 .. code-block:: sh
 
@@ -67,7 +67,7 @@ Building the code documentation locally
 
 The code documentation of the ZigZag project can be build using Doxygen. You have to download and install Doxygen as described on `this page. <https://www.doxygen.nl/download.html>`_
 
-After successfully installing Doxygen, you can use the provided `configuration file <https://github.com/KULeuven-MICAS/zigzag/blob/doxygen-documentation/doxygen-conf>`_ to generate the code documentation locally. This can be done either through importing the configuration file into the `GUI of Doxygen <https://github.com/KULeuven-MICAS/zigzag/blob/doxygen-documentation/doxygen-conf>`_ or through running
+After successfully installing Doxygen, you can use the provided `configuration file <https://github.com/KULeuven-MICAS/zigzag/blob/doxygen-documentation/doxygen-conf>`_ to generate the code documentation locally. This can be done either through importing the configuration file into the `GUI of Doxygen <https://www.doxygen.nl/manual/doxywizard_usage.html>`_ or through running
 
 .. code-block:: sh
 
@@ -75,4 +75,4 @@ After successfully installing Doxygen, you can use the provided `configuration f
 
 Please follow the `general guidlines <https://www.doxygen.nl/manual/docblocks.html#pythonblocks:~:text=Here%20is%20the%20same%20example%20again%20but%20now%20using%20doxygen%20style%20comments%3A>`_ to document new code added to the ZigZag project.
 
-NOTE: Depending on the state of the code documentation, the configuration file and the formatted code might be only available on the `doxygen-documentation <https://github.com/KULeuven-MICAS/zigzag/tree/doxygen-documentation>`_ of the ZigZag project. This part of the documentation will be merged as soon as it is completely finished.
+NOTE: Depending on the state of the code documentation, the configuration file and the formatted code might be only available on the `doxygen-documentation branch <https://github.com/KULeuven-MICAS/zigzag/tree/doxygen-documentation>`_ of the ZigZag project. This part of the documentation will be merged as soon as it is completely finished.
