@@ -1,0 +1,4 @@
+<map id="add_memory" name="add_memory">
+<area shape="rect" id="node1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,5,113,32"/>
+<area shape="rect" id="node2" href="$classmemory__hierarchy_1_1MemoryHierarchy.html#aef00069480b036b23b084084db944430" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="161,5,333,32"/>
+</map>

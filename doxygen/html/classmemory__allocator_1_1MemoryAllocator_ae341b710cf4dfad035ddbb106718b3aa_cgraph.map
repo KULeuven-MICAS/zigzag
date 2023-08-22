@@ -1,0 +1,4 @@
+<map id="calc_size_slices" name="calc_size_slices">
+<area shape="rect" id="node1" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="5,5,131,32"/>
+<area shape="rect" id="node2" href="$classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="179,5,301,32"/>
+</map>

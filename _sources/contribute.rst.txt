@@ -65,7 +65,9 @@ After, you can build the documentation using the provided Makefile (Linux). For 
 Building the code documentation locally
 ---------------------------------------
 
-The code documentation of the ZigZag project can be build using Doxygen. You have to download and install Doxygen as described on `this page. <https://www.doxygen.nl/download.html>`_
+Follow `this link <doxygen/html/index.html>`_  to the Doxygen code documentation!
+
+The code documentation of the ZigZag project can be build locally using Doxygen. You have to download and install Doxygen as described on `this page. <https://www.doxygen.nl/download.html>`_
 
 After successfully installing Doxygen, you can use the provided `configuration file <https://github.com/KULeuven-MICAS/zigzag/blob/doxygen-documentation/doxygen-conf>`_ to generate the code documentation locally. This can be done either through importing the configuration file into the `GUI of Doxygen <https://www.doxygen.nl/manual/doxywizard_usage.html>`_ or through running
 

@@ -1,0 +1,4 @@
+<map id="WorkloadStage" name="WorkloadStage">
+<area shape="rect" id="node1" title="Class that iterates through the nodes in a given workload graph." alt="" coords="5,80,125,107"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="36,5,95,32"/>
+</map>

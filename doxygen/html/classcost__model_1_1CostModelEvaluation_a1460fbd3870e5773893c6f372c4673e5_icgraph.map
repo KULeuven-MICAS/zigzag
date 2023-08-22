@@ -1,0 +1,6 @@
+<map id="combine_data_transfer_rate_per_physical_port" name="combine_data_transfer_rate_per_physical_port">
+<area shape="rect" id="node1" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="503,5,680,47"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
+<area shape="rect" id="node3" href="$classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>

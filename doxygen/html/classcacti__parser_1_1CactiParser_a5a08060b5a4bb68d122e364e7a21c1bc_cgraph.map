@@ -1,0 +1,5 @@
+<map id="get_item" name="get_item">
+<area shape="rect" id="node1" title="This functions checks first if the memory with the provided parameters was already simulated once." alt="" coords="5,31,85,57"/>
+<area shape="rect" id="node2" href="$classcacti__parser_1_1CactiParser.html#a008f45afab52d9a76a2f9817954903d9" title="This function simulates a new item by calling CACTI7 based on the provided parameters." alt="" coords="133,5,233,32"/>
+<area shape="rect" id="node3" href="$classcacti__parser_1_1CactiParser.html#ad42fec56158ba5c16d488968bd86f513" title="This function checks if the provided memory configuration was already used in the past." alt="" coords="134,56,233,83"/>
+</map>
