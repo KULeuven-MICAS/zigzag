@@ -46,7 +46,7 @@ The sequential call of stages
 
 After the ``MainStage`` initialization, the remaining stages are called in an sequential order. The ``ONNXModelParserStage`` will call the ``AcceleratorParserStage``, and so on. 
 
-The ``ONNXModelParserStage`` parses the ONNX model into the workload and the ``AcceleratorParserStage`` parses the accelerator based on the hardware architecture description. After this, the ``SimpleSaveStage`` is called, which will save the results of the design space exploration in a file in a later step. Further description about this step can be found in :ref:`back-passing-label`.
+The ``ONNXModelParserStage`` parses the ONNX model into the workload and the ``AcceleratorParserStage`` parses the accelerator based on the hardware architecture description. After this, the ``SimpleSaveStage`` is called, which will save the results of the design space exploration in a file in a later step. Further description about this step can be found in `back-passing-label`_.
 
 The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``LomaStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for HW cost evaluation. 
 
@@ -96,7 +96,7 @@ Optimization stages
 * `MultiProcessingGatherStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/RunOptStages.py#L159>`_: Multiprocessing support stage.
 
 Save and dump stages
------------
+--------------------
 * `CompleteSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L14>`_: Class that passes through all results yielded by substages, but saves the results as a json list to a file at the end of the iteration.
 * `SimpleSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L74>`_: Class that passes through results yielded by substages, but saves the results as a json list to a file at the end of the iteration. In this simple version, only the energy total and latency total are saved.
 * `PickleSaveStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SaveStage.py#L133>`_: Class that dumps all received CMEs into a list and saves that list to a pickle file.
