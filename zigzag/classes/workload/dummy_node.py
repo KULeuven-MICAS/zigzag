@@ -1,18 +1,15 @@
+
+## A class to represent an ONNX node that is not "accelerateable".
+# This node is created to preserve the original ONNX model graph structure,
+# but will be skipped by the underlying engines, treating it as a 0 HW cost node.
 class DummyNode:
-    """
-    A class to represent an ONNX node that is not "accelerateable".
-    This node is created to preserve the original ONNX model graph structure,
-    but will be skipped by the underlying engines, treating it as a 0 HW cost node.
-    """
 
+    ## The class constructor
+    # Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
+    # @param id (int): id for this node
+    # @param preds (list): list of ids of this node's predecessor nodes
+    # @param node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
     def __init__(self, id, preds, node_name="", type=None) -> None:
-        """Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
-
-        Args:
-            id (int): id for this node
-            preds (list): list of ids of this node's predecessor nodes
-            node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
-        """
         self.id = id
         self.input_operand_source = {"I": preds}
         self.name = node_name
@@ -30,46 +27,33 @@ class DummyNode:
     def __repr__(self) -> str:
         return str(self)
 
+    ## JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
-        """
-        JSON representation used for saving this object to a json file.
-        """
         return {"id": self.id}
 
+    ## Set the start time in ccyles of this node
+    # @param start (int): start time in cycles
     def set_start(self, start):
-        """Set the start time in ccyles of this node.
-
-        Args:
-            start (int): start time in cycles
-        """
         self.start = start
 
+    ## Set the end time in cycles of this node
+    # @param end (int): end time in cycles
     def set_end(self, end):
-        """Set the end time in cycles of this node.
-
-        Args:
-            end (int): end time in cycles
-        """
         self.end = end
 
+    ## Get the start time in cycles of this node.
     def get_start(self):
-        """Get the start time in cycles of this node."""
         return self.start
 
+    ## Get the end time in cycles of this node.
     def get_end(self):
-        """Get the end time in cycles of this node."""
         return self.end
 
+    ## Return the runtime of running this node.
     def get_runtime(self):
-        """
-        Return the runtime of running this node.
-        """
         return self.runtime
 
+    ## Check if this node has already been assigned an end time.
+    # @return (bool) True if this node has been assigned an end time
     def has_end(self) -> bool:
-        """Check if this node has already been assigned an end time.
-
-        Returns:
-            bool: True if this node has been assigned an end time
-        """
         return self.end is not None

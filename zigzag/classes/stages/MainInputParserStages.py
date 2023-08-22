@@ -8,7 +8,7 @@ from zigzag.utils import pickle_deepcopy
 import logging
 logger = logging.getLogger(__name__)
 
-
+## Description missing
 class AcceleratorParserStage(Stage):
     def __init__(self, list_of_callables, *, accelerator, **kwargs):
         super().__init__(list_of_callables, **kwargs)
@@ -22,11 +22,12 @@ class AcceleratorParserStage(Stage):
             yield cme, extra_info
 
 
+## @ingroup Stages
+## Parse the input workload residing in workload_path.
+## The "workload" dict is converted to a NetworkX graph.
+## @param workload
+## @param mapping
 def parse_workload_from_path_or_from_module(workload, mapping):
-    """
-    Parse the input workload residing in workload_path.
-    The "workload" dict is converted to a NetworkX graph.
-    """
     if isinstance(workload, str):  # load from path
         module = importlib.import_module(workload)
         workload = module.workload
@@ -43,7 +44,7 @@ def parse_workload_from_path_or_from_module(workload, mapping):
 
     return workload
 
-
+## Description missing
 class WorkloadParserStage(Stage):
     def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
         super().__init__(list_of_callables, **kwargs)

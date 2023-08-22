@@ -5,16 +5,13 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 import logging
 logger = logging.getLogger(__name__)
 
-
+## Parse an accelerator module path into an accelerator object
 class AcceleratorParser:
-    """Parse an accelerator module path into an accelerator object.
-    """
-    def __init__(self, accelerator) -> None:
-        """Initialize the parser by checking if the provided argument is a module path or accelerator object.
 
-        Args:
-            accelerator_path (str or Accelerator): The accelerator path or accelerator object.
-        """
+    ## The class constructor
+    # Initialize the parser by checking if the provided argument is a module path or accelerator object
+    # @param accelerator_path (str or Accelerator): The accelerator path or accelerator object
+    def __init__(self, accelerator) -> None:
         if isinstance(accelerator, str):
             self.accelerator_path = accelerator
             self.accelerator = None
@@ -46,10 +43,9 @@ class AcceleratorParser:
             self.accelerator = accelerator
 
     @staticmethod
+    ## Parse the input accelerator residing in accelerator_path
+    # @param accelerator_path
     def parse_accelerator_from_path(accelerator_path):
-        """
-        Parse the input accelerator residing in accelerator_path.
-        """
         global module
         module = importlib.import_module(accelerator_path)
         accelerator = module.accelerator

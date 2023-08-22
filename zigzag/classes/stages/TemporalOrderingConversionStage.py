@@ -6,15 +6,14 @@ from zigzag.classes.stages.Stage import Stage
 
 logger = logging.getLogger(__name__)
 
-
+## Description missing
 class TemporalOrderingConversionStage(Stage):
+
+    ## The class constructor
+    # Initialize the accelerator and layer attributes.
     def __init__(
         self, list_of_callables, *, accelerator, layer, spatial_mapping, **kwargs
     ):
-        """
-        Initialize the accelerator and layer attributes.
-        :param main_inputs: MainInputs, NOT copied
-        """
         super().__init__(list_of_callables, **kwargs)
         self.check_layer(layer)
         self.layer = layer
@@ -22,15 +21,16 @@ class TemporalOrderingConversionStage(Stage):
         self.accelerator = accelerator
 
     @staticmethod
+    ## Check the layer attribute of the main_inputs:
+    # 
+    # check that the layer includes:
+    # - the core which it is allocated to
+    # - the user-defined spatial mapping
+    # 
+    # If not, a ValueError is raised.
+    # 
+    # @return: True
     def check_layer(layer):
-        """
-        Check the layer attribute of the main_inputs:
-        check that the layer includes:
-        - the core which it is allocated to
-        - the user-defined spatial mapping
-        If not, a ValueError is raised.
-        :return: True
-        """
         if not layer.core_allocation:
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError()
@@ -42,13 +42,9 @@ class TemporalOrderingConversionStage(Stage):
 
         return True
 
+    ## Run this stage by converting the user-defined temporal loop ordering
+    # to the memory-level based temporal mapping representation.
     def run(self):
-        """
-        Run this stage by converting the user-defined temporal loop ordering
-        to the memory-level based temporal mapping representation.
-
-        :param user_spatial_mapping: The user-defined spatial mapping to be converted. If not provided, self.layer.user_spatial_mapping is used.
-        """
         temporal_mapping = self.convert_user_temporal_mapping(
             self.layer.user_temporal_ordering
         )
