@@ -148,5 +148,5 @@ outputs*/*.png
 docs/Makefile
 docs/make.bat
 
-# Doxygen documentation
+# documentation output
 html/
