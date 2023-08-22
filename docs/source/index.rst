@@ -22,6 +22,7 @@ A crucial part in this is mapping the algorithmic computations onto the computat
    future
    contribute
    publications
+   code-documentation
 
 
 Indices and tables
