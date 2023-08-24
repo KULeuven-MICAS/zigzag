@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="8.3630962mm"
+   height="8.4666405mm"
+   viewBox="0 0 8.3630961 8.4666406"
+   version="1.1"
+   id="svg129"
+   inkscape:export-filename="zigzag_logo_32.svg"
+   inkscape:export-xdpi="96.000206"
+   inkscape:export-ydpi="96.000206"
+   sodipodi:docname="zigzag_logo_white.svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview131"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm"
+     showgrid="false" />
+  <defs
+     id="defs126" />
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-95.366388,-103.92981)">
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:6.33455px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.158369"
+       x="81.888641"
+       y="129.73494"
+       id="text247"
+       transform="scale(1.1542619,0.86635449)"><tspan
+         sodipodi:role="line"
+         id="tspan245"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:13.5142px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Bold';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;fill:#ffffff;stroke-width:0.158369"
+         x="81.888641"
+         y="129.73494">ℤ</tspan></text>
+  </g>
+</svg>

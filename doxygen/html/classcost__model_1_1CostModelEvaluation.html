@@ -1,6 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.13-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link link rel=icon  href="zigzag_logo_white_32x32.svg" />
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
@@ -267,8 +269,8 @@ Public Attributes</h2></td></tr>
 <p>Initialize the cost model evaluation with the following inputs:</p><ul>
 <li>accelerator: the accelerator that includes the core on which to run the layer</li>
 <li>layer: the layer to run</li>
-<li><a class="el" href="namespacespatial__mapping.html">spatial_mapping</a>: the spatial mapping</li>
-<li><a class="el" href="namespacetemporal__mapping.html">temporal_mapping</a>: the temporal mapping</li>
+<li>spatial_mapping: the spatial mapping</li>
+<li>temporal_mapping: the temporal mapping</li>
 </ul>
 <p>From these parameters, the following attributes are computed:</p><ul>
 <li>core: The core on which the layer is ran. This should be specified in the LayerNode attributes.</li>
@@ -335,8 +337,8 @@ Public Attributes</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">accelerator</td><td>the accelerator that includes the core on which to run the </td></tr>
     <tr><td class="paramname">layer</td><td>the layer to run </td></tr>
-    <tr><td class="paramname"><a class="el" href="namespacespatial__mapping.html">spatial_mapping</a></td><td>the spatial mapping </td></tr>
-    <tr><td class="paramname"><a class="el" href="namespacetemporal__mapping.html">temporal_mapping</a></td><td>the temporal mapping </td></tr>
+    <tr><td class="paramname">spatial_mapping</td><td>the spatial mapping </td></tr>
+    <tr><td class="paramname">temporal_mapping</td><td>the temporal mapping </td></tr>
     <tr><td class="paramname">access_same_data_considered_as_no_access</td><td>(optional) </td></tr>
   </table>
   </dd>
@@ -634,7 +636,7 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Calculate latency in 4 steps. </p>
-<p>1) As we already calculated the ideal data transfer rate in <a class="el" href="combined__mapping_8py.html">combined_mapping.py</a> (in the Mapping class), here we start with calculating the required (or allowed) memory updating window by comparing the effective data size with the physical memory size at each level. If the effective data size is smaller than 50% of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect); otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.</p>
+<p>1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class), here we start with calculating the required (or allowed) memory updating window by comparing the effective data size with the physical memory size at each level. If the effective data size is smaller than 50% of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect); otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.</p>
 <p>2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair, assuming we have enough memory ports.</p>
 <p>3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real data transfer attributes per physical memory port.</p>
 <p>4) Finally, we combine the stall/slack of each memory port to get the final latency. </p>

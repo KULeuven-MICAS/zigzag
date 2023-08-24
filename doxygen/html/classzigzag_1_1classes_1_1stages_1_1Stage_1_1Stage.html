@@ -1,6 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- HTML header for doxygen 1.8.13-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+<link link rel=icon  href="zigzag_logo_white_32x32.svg" />
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
@@ -186,7 +188,7 @@ Public Attributes</h2></td></tr>
 <p>The class constructor. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">list_of_callables</td><td>a list of callables, that must have a signature compatible with this <b>init</b> function (list_of_callables, *, required_kwarg1, required_kwarg2, kwarg_with_default=default, **kwargs) and return a <a class="el" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables.">Stage</a> instance. This is used to flexibly build iterators upon other iterators. </td></tr>
+    <tr><td class="paramname">list_of_callables</td><td>a list of callables, that must have a signature compatible with this <b>init</b> function (list_of_callables, *, required_kwarg1, required_kwarg2, kwarg_with_default=default, **kwargs) and return a Stage instance. This is used to flexibly build iterators upon other iterators. </td></tr>
     <tr><td class="paramname">kwargs</td><td>any keyword arguments, irrelevant to the specific class in question but passed on down </td></tr>
   </table>
   </dd>
@@ -285,7 +287,7 @@ Here is the call graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>: Returns true if the runnable is a leaf runnable, meaning that it does not use (or thus need) any substages to be able to yield a result. Final element in list_of_callables must always have <a class="el" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#ac6481ca6973711826d5f2ca92f7ac633">is_leaf()</a> == True, except for that final element that has an empty list_of_callables </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>: Returns true if the runnable is a leaf runnable, meaning that it does not use (or thus need) any substages to be able to yield a result. Final element in list_of_callables must always have is_leaf() == True, except for that final element that has an empty list_of_callables </dd></dl>
 
 <p>Reimplemented in <a class="el" href="classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ac6481ca6973711826d5f2ca92f7ac633">CostModelStage</a>.</p>
 
