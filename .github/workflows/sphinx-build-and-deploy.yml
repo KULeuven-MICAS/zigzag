@@ -36,7 +36,7 @@ jobs:
           sphinx-build --version
           sphinx-build -b html source build
       
-      # Run doxygen
+      # Run doxygen, copy html files and enable ZigZag html icon
       - name: build doxygen    
         run: | 
           cd docs
@@ -44,6 +44,7 @@ jobs:
           doxygen doxygen-conf
           mkdir build/doxygen
           mv html/ build/doxygen/
+          cp source/zigzag_logo_white_32x32.svg build/doxygen/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4

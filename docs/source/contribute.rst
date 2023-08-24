@@ -71,9 +71,10 @@ Use the ``index.html`` file in the ``docs/build/`` folder as the entry point to 
 Writing code which supports the code documentation with Doxygen
 ----------------------------------------------------------------
 
-Please follow the `general guidlines <https://www.doxygen.nl/manual/docblocks.html#pythonblocks:~:text=Here%20is%20the%20same%20example%20again%20but%20now%20using%20doxygen%20style%20comments%3A>`_ to document new code added to the ZigZag project.
+Please follow the `general Doxygen guidlines <https://www.doxygen.nl/manual/docblocks.html#pythonblocks:~:text=Here%20is%20the%20same%20example%20again%20but%20now%20using%20doxygen%20style%20comments%3A>`_ to document new code added to the ZigZag project.
 
 The the following parts of your code should be documented with comments in the Doxygen format:
+
 1. Classes (including the parameter of the constructor)
 2. Functions (including the parameter of it)
 
@@ -82,7 +83,7 @@ Building the code documentation locally
 
 The `code documentation <doxygen/html/index.html>`_ of the ZigZag project can be build locally using Doxygen. You have to download and install Doxygen as described on `this page. <https://www.doxygen.nl/download.html>`_
 
-After successfully installing Doxygen, you can use the provided `configuration file <https://github.com/KULeuven-MICAS/zigzag/blob/doxygen-documentation/doxygen-conf>`_ to generate the code documentation locally. This can be done either through importing the configuration file into the `GUI of Doxygen <https://www.doxygen.nl/manual/doxywizard_usage.html>`_ or through running
+After successfully installing Doxygen, you can use the provided `configuration file <https://github.com/KULeuven-MICAS/zigzag/blob/master/docs/doxygen-conf>`_ to generate the code documentation locally. This can be done either through importing the configuration file into the `GUI of Doxygen <https://www.doxygen.nl/manual/doxywizard_usage.html>`_ or through running
 
 .. code-block:: sh
 
