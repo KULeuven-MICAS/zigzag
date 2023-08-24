@@ -44,7 +44,7 @@ jobs:
           doxygen doxygen-conf
           mkdir build/doxygen
           mv html/ build/doxygen/
-          cp source/zigzag_logo_white_32x32.svg build/doxygen/
+          cp source/zigzag_logo_white_32x32.svg build/doxygen/html/
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
