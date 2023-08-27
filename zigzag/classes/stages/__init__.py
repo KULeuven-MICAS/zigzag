@@ -1,5 +1,6 @@
 from .CostModelStage import CostModelStage
 from .DumpStage import DumpStage
+from .PEArrayScalingStage import PEArrayScalingStage
 from .PlotTemporalMappingsStage import PlotTemporalMappingsStage
 from .SaveStage import CompleteSaveStage, SimpleSaveStage, PickleSaveStage
 from .GeneralParameterIteratorStage import GeneralParameterIteratorStage
@@ -34,7 +35,7 @@ from .WorkloadStage import WorkloadStage
 #  - layer: WorkloadStage
 #  - multiprocessing_callback: MultiProcessingGatherStage
 #  - *:  GeneralParameterIteratorStage: can provide anything
- 
+
 # Parameter consumers: these parameters are no longer provided to substages after the following classes
 #  - accelerator_path: AcceleratorParserStage
 #  - dump_filename_pattern: DumpStage
@@ -43,7 +44,7 @@ from .WorkloadStage import WorkloadStage
 #  - multiprocessing_callback: MultiProcessingSpawnStage
 #  - workload: WorkloadStage
 #  - workload_path: WorkloadParserStage
- 
+
 # Parameters required: these stages require the following parameters:
 #  - CostModelStage: accelerator, layer, spatial_mapping, temporal_mapping
 #  - WorkloadStage: workload
