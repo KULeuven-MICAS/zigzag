@@ -32,7 +32,7 @@ class PortActivity:
     ):
         ## Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
         self.real_cycle = real_cycle
-        self.allowed_cycle = allowed_cycle 
+        self.allowed_cycle = allowed_cycle
         ## The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
         self.period = period
         ## The total number of period across the whole NN layer computation.
@@ -61,7 +61,6 @@ class PortActivity:
 ## Class that collects all the data transfer rate information for each DTL (data transfer link).
 class PortBeginOrEndActivity:
 
-
     ## The class constructor
     # @param real_cycle     (int)   the actual number of cycles used for transferring the amount of data,
     #                               depended on the memory bw and the data amount to be transferred at that memory level
@@ -79,7 +78,7 @@ class PortBeginOrEndActivity:
         mem_lv: int,
         mov_dir: str,
     ):
-        ## the actual number of cycles used for transferring the amount of data, 
+        ## the actual number of cycles used for transferring the amount of data,
         # depended on the memory bw and the data amount to be transferred at that memory level
         self.real_cycle = real_cycle
         ## one-period data transfer amount (bit)
@@ -95,7 +94,7 @@ class PortBeginOrEndActivity:
         return str(self.served_op_lv_dir)
 
 
-## Given a certain operand's storage level (for example (A,1): operand A's 1st memory level), 
+## Given a certain operand's storage level (for example (A,1): operand A's 1st memory level),
 # return a list of the rest operand's storage levels that share physical memory with the former one (A1)
 # @param mem_op
 # @param mem_lv
@@ -108,7 +107,8 @@ def get_shared_mem_list(mem_op, mem_lv, memory_sharing_list) -> List[Tuple]:
         if mem_target in mem_share_grp:
             return mem_share_grp
 
-## Generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support). 
+
+## Generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
 # Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
 # @param spatial_mapping
 # @return spatial_mapping_int
@@ -124,17 +124,18 @@ def spatial_mapping_fractional_to_int(spatial_mapping: Dict):
 
     return spatial_mapping_int
 
+
 ##  This function calculates the union length of all the share-port MUW (memory updating window).
-#   The following encoding has to be used: 
+#   The following encoding has to be used:
 #   - 'P' for single period length
 #   - 'A' for allowed MUW per period
-#   - 'PC' for period count within the whole layer computation 
-#   
+#   - 'PC' for period count within the whole layer computation
+#
 #   Pre-process the port_duty_list to generate input_dict, which looks like:
 #   - input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}
-#   
+#
 #   @param port_duty_list List of port activity objects
-#   @reutrn 
+#   @reutrn
 def calc_MUW_union(port_duty_list):
 
     input_dict = {}
@@ -196,10 +197,10 @@ def calc_MUW_union(port_duty_list):
 #
 # After initialization, the cost model evaluation is run.
 class CostModelEvaluation:
-    
+
     ## The class constructor
     # After initialization, the cost model evaluation is run
-    # @param accelerator the accelerator that includes the core on which to run the 
+    # @param accelerator the accelerator that includes the core on which to run the
     # @param layer the layer to run
     # @param spatial_mapping the spatial mapping
     # @param temporal_mapping the temporal mapping
@@ -222,8 +223,8 @@ class CostModelEvaluation:
         )
 
         self.core_id = layer.core_allocation
-        self.mem_instance_list = (
-            accelerator.get_core(self.core_id).get_memory_hierarchy().mem_instance_list
+        self.mem_level_list = (
+            accelerator.get_core(self.core_id).get_memory_hierarchy().mem_level_list
         )
         self.mem_hierarchy_dict = accelerator.get_core(
             self.core_id
@@ -305,7 +306,7 @@ class CostModelEvaluation:
                         "stalls_onloading": self.MAC_utilization1,
                         "stalls_onloading_offloading": self.MAC_utilization2,
                     }
-                }
+                },
             },
             "inputs": {
                 "accelerator": self.accelerator,
@@ -437,7 +438,7 @@ class CostModelEvaluation:
                     else:
                         data_elem_move_per_cycle_in_a_period = data_elem_move_per_period
                         cycle_in_a_period = 1
-                    #wr_in_by_low = (
+                    # wr_in_by_low = (
                     #    ceil(
                     #        (data_elem_move_per_cycle_in_a_period * data_precision)
                     #        / min_bw
@@ -446,11 +447,11 @@ class CostModelEvaluation:
                     #    * total_period_count
                     #    * cycle_in_a_period
                     #    * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
-                    #)
+                    # )
 
                     # 2023/06/30, solve the memory access granuarity issue - Jiacong Sun, Linyan Mei
                     # Originally we used the cycle_in_a_period to compute the memory word access.
-                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access). 
+                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access).
                     # Now we changed to calculation based on min_bw.
                     wr_in_by_low = (
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
@@ -494,7 +495,7 @@ class CostModelEvaluation:
                             data_elem_move_per_period
                             / data_elem_move_per_cycle_in_a_period
                         )
-                        #rd_out_to_low = (
+                        # rd_out_to_low = (
                         #    ceil(
                         #        (data_elem_move_per_cycle_in_a_period * data_precision)
                         #        / min_bw
@@ -505,12 +506,12 @@ class CostModelEvaluation:
                         #    * self.mapping.spatial_mapping.unit_count[layer_op][
                         #        mem_lv + 1
                         #    ]
-                        #)
-                    #else:
+                        # )
+                    # else:
 
                     # 2023/06/30, solve the memory access granuarity issue - Jiacong Sun, Linyan Mei
                     # Originally we used the cycle_in_a_period to compute the memory word access.
-                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access). 
+                    # This neglected the finer-grained memory access possibility (the min_bw, the minimal memory access granuarity, like half-word access).
                     # Now we changed to calculation based on min_bw.
                     rd_out_to_low = (
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
@@ -591,7 +592,7 @@ class CostModelEvaluation:
         single_MAC_energy = core.operational_array.unit.cost
         self.MAC_energy = single_MAC_energy * self.layer.total_MAC_count
 
-    ## Computes the memories reading/writing energy by converting the access patterns in self.mapping to 
+    ## Computes the memories reading/writing energy by converting the access patterns in self.mapping to
     # energy breakdown using the memory hierarchy of the core on which the layer is mapped.
     #
     # The energy breakdown is saved in self.energy_breakdown.
@@ -661,7 +662,6 @@ class CostModelEvaluation:
         self.energy_total = self.mem_energy + self.MAC_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
 
-
     ##  Calculate latency in 4 steps
     #
     # 1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
@@ -675,7 +675,7 @@ class CostModelEvaluation:
     #
     # 3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
     # data transfer attributes per physical memory port.
-    # 
+    #
     # 4) Finally, we combine the stall/slack of each memory port to get the final latency.
     def calc_latency(self):
         self.calc_double_buffer_flag()
@@ -719,7 +719,6 @@ class CostModelEvaluation:
                     double_buffer_true[layer_op].append(False)
 
         self.double_buffer_true = double_buffer_true
-
 
     ## Construct a 4-way data transfer pattern for each unit mem, calculate
     # {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
@@ -838,7 +837,7 @@ class CostModelEvaluation:
     def combine_data_transfer_rate_per_physical_port(self):
         # Step 1: collect port activity per memory instance per physical memory port
         port_activity_collect = []
-        for mem_instance in self.mem_instance_list:
+        for mem_instance in self.mem_level_list:
             port_activity_single = {}
             port_list = mem_instance.port_list
             for port in port_list:
@@ -929,7 +928,7 @@ class CostModelEvaluation:
         data_loading_cc_per_op = {op: {} for op in self.layer.input_operands}
         data_offloading_per_mem_inst = []
         data_offloading_cc_per_op = {}
-        for mem_inst_idx, mem_instance in enumerate(self.mem_instance_list):
+        for mem_inst_idx, mem_instance in enumerate(self.mem_level_list):
             data_loading_single = {}
             data_offloading_single = {}
             port_list = mem_instance.port_list
@@ -1027,7 +1026,7 @@ class CostModelEvaluation:
         self.data_offloading_per_mem_inst = data_offloading_per_mem_inst
         self.data_offloading_per_op = data_offloading_cc_per_op
 
-        # Combine ports' initial data-loading activities to get the data loading cycle amount 
+        # Combine ports' initial data-loading activities to get the data loading cycle amount
         data_loading_cc_pair_combined_per_op = {
             op: [] for op in self.layer.input_operands
         }
@@ -1087,7 +1086,7 @@ class CostModelEvaluation:
         self.data_loading_shared_part = data_loading_shared_part
         self.data_loading_cycle = data_loading_cycle
 
-        # Combine ports' final data-offloading activities to get the data offloading cycle amount 
+        # Combine ports' final data-offloading activities to get the data offloading cycle amount
         # TODO Only considered the worst case for now
         #  (assumed that all the ports are working in series during the final data off-loading phase)
         data_offloading_cc_pair_combined = []
@@ -1100,7 +1099,7 @@ class CostModelEvaluation:
                 layer_op + str(mem_lv + 1) + "_" + "wr_in_by_low"
             ]
             longest_offloading_cc = max(elem1, elem2)
-            # for the ports that serve the same data movement purpose, take the longest data loading cycle 
+            # for the ports that serve the same data movement purpose, take the longest data loading cycle
             data_offloading_cc_pair_combined.append(longest_offloading_cc)
         data_offloading_cycle = sum(data_offloading_cc_pair_combined)
 

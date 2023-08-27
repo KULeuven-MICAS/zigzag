@@ -30,7 +30,7 @@ class MemoryHierarchy(DiGraph):
         self.nb_levels = (
             {}
         )  # Initialize the dict that will store how many memory levels an operand has
-        self.mem_instance_list = []
+        self.mem_level_list = []
         self.memory_level_id = 0
 
     ## JSON Representation of this object to save it to a json file.
@@ -44,13 +44,12 @@ class MemoryHierarchy(DiGraph):
             [self_ml == __o_ml for (self_ml, __o_ml) in zip(self.nodes(), __o.nodes())]
         )
 
-    
     ## Adds a memory to the memory hierarchy graph.
-    # 
+    #
     # NOTE: memory level need to be added from bottom level (e.g., Reg) to top level (e.g., DRAM) for each operand !!!
-    # 
+    #
     # Internally a MemoryLevel object is built, which represents the memory node.
-    # 
+    #
     # Edges are added from all sink nodes in the graph to this node if the memory operands match
     # @param memory_instance: The MemoryInstance containing the different memory characteristics.
     # @param operands: The memory operands the memory level stores.
@@ -130,7 +129,7 @@ class MemoryHierarchy(DiGraph):
             operational_array=self.operational_array,
             id=self.memory_level_id,
         )
-        self.mem_instance_list.append(memory_level)
+        self.mem_level_list.append(memory_level)
         self.memory_level_id += 1
 
         # Precompute appropriate edges
@@ -187,7 +186,7 @@ class MemoryHierarchy(DiGraph):
     def remove_top_level(self) -> Tuple[List[MemoryLevel], int]:
         to_remove, top_level = self.get_top_memories()
         for tr in to_remove:
-            self.mem_instance_list.remove(tr)
+            self.mem_level_list.remove(tr)
             self.remove_node(tr)
 
         for k in self.nb_levels:
@@ -201,7 +200,7 @@ class MemoryHierarchy(DiGraph):
         return to_remove, max(self.nb_levels.keys())
 
     ## Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
-    # instance on this level that have the operand assigned to it. 
+    # instance on this level that have the operand assigned to it.
     # 'The' level of a MemoryLevel is considered to be the largest
     # level it has across its assigned operands.
     # @param operand
@@ -218,7 +217,7 @@ class MemoryHierarchy(DiGraph):
     # @param operand
     def get_operand_top_level(self, operand) -> MemoryLevel:
         top_lv = self.nb_levels[operand] - 1
-        for mem in reversed(self.mem_instance_list):
+        for mem in reversed(self.mem_level_list):
             if operand in mem.mem_level_of_operands.keys():
                 if mem.mem_level_of_operands[operand] == top_lv:
                     return mem
@@ -243,7 +242,7 @@ class MemoryHierarchy(DiGraph):
                     if so[0] == operand:
                         p.served_op_lv_dir.remove(so)
             if len(tr.mem_level_of_operands) == 0:
-                self.mem_instance_list.remove(tr)
+                self.mem_level_list.remove(tr)
                 self.remove_node(tr)
 
         for k in self.nb_levels:
