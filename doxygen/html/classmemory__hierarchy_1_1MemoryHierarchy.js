@@ -13,7 +13,7 @@ var classmemory__hierarchy_1_1MemoryHierarchy =
     [ "get_top_memories", "classmemory__hierarchy_1_1MemoryHierarchy.html#a544afc2738f7727e985fbfdc5aa5960c", null ],
     [ "remove_operator_top_level", "classmemory__hierarchy_1_1MemoryHierarchy.html#afa317998d8d167b6c4449710490ac76e", null ],
     [ "remove_top_level", "classmemory__hierarchy_1_1MemoryHierarchy.html#a9e34421b449cae5af5b30531fbe153e3", null ],
-    [ "mem_instance_list", "classmemory__hierarchy_1_1MemoryHierarchy.html#a2f56b7487b94cff4dd037a0fddec5b1b", null ],
+    [ "mem_level_list", "classmemory__hierarchy_1_1MemoryHierarchy.html#af329035d3add361f02f65c7add64435a", null ],
     [ "memory_level_id", "classmemory__hierarchy_1_1MemoryHierarchy.html#a153826093c22fce046d69281c7bd1137", null ],
     [ "name", "classmemory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151", null ],
     [ "nb_levels", "classmemory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8", null ],

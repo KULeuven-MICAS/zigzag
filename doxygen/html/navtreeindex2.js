@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"classmemory__instance_1_1MemoryInstance.html":[2,0,20,0],
+"classmemory__instance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d":[2,0,20,0,3],
 "classmemory__instance_1_1MemoryInstance.html#a23e8041ce1015febe4fdace3225714f9":[2,0,20,0,5],
 "classmemory__instance_1_1MemoryInstance.html#a295b3df57109f876156e4fbe1dabe8d4":[2,0,20,0,18],
 "classmemory__instance_1_1MemoryInstance.html#a3195ea87162f33a34d0079931a8194ca":[2,0,20,0,2],
@@ -238,16 +240,14 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a1e686737e25a49cf74fb7c5322abc762":[2,0,34,0,0,5,0,1],
 "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a4594e20a5ec8cf3449870da9265d5083":[2,0,34,0,0,5,0,2],
 "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a526aceb13044caff9d8b74fe75831e1b":[2,0,34,0,0,5,0,0],
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html":[2,0,34,0,0,6,0],
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a0b0a6e980a4e0ff783a63b7612926a16":[2,0,34,0,0,6,0,0],
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a6eea0bfdbe5111ee03de1a556e24b206":[2,0,34,0,0,6,0,2],
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,6,0,1],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html":[2,0,34,0,0,7,4],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html#a6bbb80367a84ef6bc36dcf82df1fea55":[2,0,34,0,0,7,4,2],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,7,4,1],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html#af8087e655824e4c2bc02dcd64ff5bf4c":[2,0,34,0,0,7,4,0],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1MinimalEDPStage.html":[2,0,34,0,0,7,2],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1MinimalEDPStage.html#a5f2233cfea94bb2e544e5c39fc35309c":[2,0,34,0,0,7,2,0],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1MinimalEDPStage.html#a8a3a7d4eeccd0fc4bff0c80ae2a366f7":[2,0,34,0,0,7,2,3],
-"classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1MinimalEDPStage.html#a9d28d6e41687d1bff5b72c941912a48b":[2,0,34,0,0,7,2,2]
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html":[2,0,34,0,0,6,0],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a28729f443b5f1d432887ef8ec2895033":[2,0,34,0,0,6,0,0],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a6c7d55a1e67b644ef53a59bad9e42a61":[2,0,34,0,0,6,0,1],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a9c3cdc2b10b34debb53d9719fbddc638":[2,0,34,0,0,6,0,3],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#abad7d445eb555517f300b6de6986a765":[2,0,34,0,0,6,0,4],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,6,0,2],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af35ad66cf3eab7948fa0d47859715671":[2,0,34,0,0,6,0,5],
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,6,0,6],
+"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html":[2,0,34,0,0,7,0],
+"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a0b0a6e980a4e0ff783a63b7612926a16":[2,0,34,0,0,7,0,0]
 };

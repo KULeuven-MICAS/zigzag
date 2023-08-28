@@ -139,6 +139,9 @@ var annotated_dup =
           [ "ONNXModelParserStage", "namespacezigzag_1_1classes_1_1stages_1_1ONNXModelParserStage.html", [
             [ "ONNXModelParserStage", "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage" ]
           ] ],
+          [ "PEArrayScalingStage", "namespacezigzag_1_1classes_1_1stages_1_1PEArrayScalingStage.html", [
+            [ "PEArrayScalingStage", "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html", "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage" ]
+          ] ],
           [ "PlotTemporalMappingsStage", "namespacezigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage.html", [
             [ "PlotTemporalMappingsStage", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
           ] ],

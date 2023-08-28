@@ -55,6 +55,7 @@ var hierarchy =
       [ "AcceleratorParserStage", "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1AcceleratorParserStage.html", null ],
       [ "WorkloadParserStage", "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html", null ],
       [ "ONNXModelParserStage", "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", null ],
+      [ "PEArrayScalingStage", "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html", null ],
       [ "PlotTemporalMappingsStage", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", null ],
       [ "ListifyStage", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html", null ],
       [ "MinimalEDPStage", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1MinimalEDPStage.html", null ],

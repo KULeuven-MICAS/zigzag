@@ -11,6 +11,7 @@ var dir_813b0b5d55370a4bafcda4a88896c600 =
     ] ],
     [ "MainInputParserStages.py", "MainInputParserStages_8py.html", "MainInputParserStages_8py" ],
     [ "ONNXModelParserStage.py", "ONNXModelParserStage_8py.html", "ONNXModelParserStage_8py" ],
+    [ "PEArrayScalingStage.py", "PEArrayScalingStage_8py.html", "PEArrayScalingStage_8py" ],
     [ "PlotTemporalMappingsStage.py", "PlotTemporalMappingsStage_8py.html", [
       [ "PlotTemporalMappingsStage", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
     ] ],

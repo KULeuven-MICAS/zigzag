@@ -57,7 +57,7 @@ var classcost__model_1_1CostModelEvaluation =
     [ "mapping_int", "classcost__model_1_1CostModelEvaluation.html#a101090259a61f41d52a1883afe70d735", null ],
     [ "mem_energy", "classcost__model_1_1CostModelEvaluation.html#abab06e56ef976744382680dadb157baf", null ],
     [ "mem_hierarchy_dict", "classcost__model_1_1CostModelEvaluation.html#aa192ec0feee472fb02654eb92fc5d878", null ],
-    [ "mem_instance_list", "classcost__model_1_1CostModelEvaluation.html#a2f56b7487b94cff4dd037a0fddec5b1b", null ],
+    [ "mem_level_list", "classcost__model_1_1CostModelEvaluation.html#af329035d3add361f02f65c7add64435a", null ],
     [ "mem_op_to_layer_op", "classcost__model_1_1CostModelEvaluation.html#a168721e599d133203c84ca119b0a50a0", null ],
     [ "mem_sharing_list", "classcost__model_1_1CostModelEvaluation.html#a11ac1508f800047958376085487533c3", null ],
     [ "mem_size_dict", "classcost__model_1_1CostModelEvaluation.html#a9de9f586c3351a83ff68606239babab3", null ],
