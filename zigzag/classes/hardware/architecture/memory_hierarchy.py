@@ -40,7 +40,7 @@ class MemoryHierarchy(DiGraph):
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, MemoryHierarchy):
             return False
-        return all(
+        return self.nb_levels == __o.nb_levels and all(
             [self_ml == __o_ml for (self_ml, __o_ml) in zip(self.nodes(), __o.nodes())]
         )
 
