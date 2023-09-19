@@ -94,11 +94,11 @@ class ConvParser(Parser):
                 B = 1
             G = groups
             K = ceil(oa_shape[1] / G)
-            OX = oa_shape[2]
-            OY = oa_shape[3]
+            OX = oa_shape[3]
+            OY = oa_shape[2]
             C = ceil(ia_shape[1] / G)
-            IX = ia_shape[2]
-            IY = ia_shape[3]
+            IX = ia_shape[3]
+            IY = ia_shape[2]
             FX = kernel_shape[0]
             FY = kernel_shape[1]
             d["loop_dim_size"] = {
