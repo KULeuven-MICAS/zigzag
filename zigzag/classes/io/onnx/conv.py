@@ -12,24 +12,27 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
+## Parser for ONNX Conv and QLinearConv nodes into LayerNode.
 class ConvParser(Parser):
-    """Parser for ONNX Conv and QLinearConv nodes into LayerNode."""
 
+    ## The class constructor
+    # @param node_id
+    # @param node
+    # @param nodes_outputs
+    # @param mapping
+    # @param onxx_model
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
+    ## Run the parser and return the created LayerNode object
     def run(self):
-        """Run the parser and return the created LayerNode object."""
         layer_node = self.generate_layer_node_for_conv()
         return layer_node
 
     def generate_layer_node_for_conv(self):
+        ## Return the name of the weight input of this node depending on its operator type
+        # @param node (NodeProto): The node
         def get_weight_name(node):
-            """Return the name of the weight input of this node depending on its operator type.
-            Args:
-                node (NodeProto): The node
-            """
             op_type = node.op_type  # 'Conv', 'QLinearConv', ...
             if op_type == "Conv":
                 return node.input[1]
@@ -40,11 +43,10 @@ class ConvParser(Parser):
                     f"Retrieving weight name for onnx node of type {op_type} is not supported."
                 )
 
+        ## Return the data type of the input, output and weight tensors of this node.
+        # @param node
+        # @param model
         def get_input_output_weight_data_type(node, model):
-            """
-            Return the data type of the input, output and weight tensors of this node.
-            """
-
             input_name = node.input[0]
             output_name = node.output[0]
             weight_name = get_weight_name(node)
@@ -55,6 +57,16 @@ class ConvParser(Parser):
 
             return input_elem_type, output_elem_type, weight_elem_type
 
+        ## Generate the necessary dictionary items required for the LayerNode creation.
+        # @param kernel_shape
+        # @param strides
+        # @param dilations
+        # @param groups
+        # @param padding
+        # @param padding
+        # @param ia_shape
+        # @param oa_shape
+        # @param node_mapping
         def get_layer_node_input_format(
             kernel_shape,
             strides,
@@ -65,9 +77,6 @@ class ConvParser(Parser):
             oa_shape,
             node_mapping,
         ):
-            """
-            Generate the necessary dictionary items required for the LayerNode creation.
-            """
             # convert the data types to precisions based on the onnx definition
 
             # Equation
@@ -85,11 +94,11 @@ class ConvParser(Parser):
                 B = 1
             G = groups
             K = ceil(oa_shape[1] / G)
-            OX = oa_shape[2]
-            OY = oa_shape[3]
+            OX = oa_shape[3]
+            OY = oa_shape[2]
             C = ceil(ia_shape[1] / G)
-            IX = ia_shape[2]
-            IY = ia_shape[3]
+            IX = ia_shape[3]
+            IY = ia_shape[2]
             FX = kernel_shape[0]
             FY = kernel_shape[1]
             d["loop_dim_size"] = {

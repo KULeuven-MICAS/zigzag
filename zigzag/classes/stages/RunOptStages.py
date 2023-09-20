@@ -7,22 +7,16 @@ import os
 
 logger = logging.getLogger(__name__)
 
-
+## Strips extra info for subcallables to save memory
 class RemoveExtraInfoStage(Stage):
-    """
-    Strips extra info for subcallables to save memory
-    """
 
+    ## The class constructor
+    # Initialize the remove extra info stage.
     def __init__(self, list_of_callables, **kwargs):
-        """
-        Initialize the remove extra info stage.
-        """
         super().__init__(list_of_callables, **kwargs)
 
+    ## Run the remove extra info stage by running the substage and discarding the extra_info.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the remove extra info stage by running the substage and discarding the extra_info.
-        """
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
@@ -30,22 +24,17 @@ class RemoveExtraInfoStage(Stage):
             yield cme, None
 
 
+## Caches results in a list and then yields them.
+# This breaks the yield flow from top to bottom.
 class CacheBeforeYieldStage(Stage):
-    """
-    Caches results in a list and then yields them.
-    This breaks the yield flow from top to bottom.
-    """
 
+    ## The class constructor
+    # Initialize the cache before yield stage.
     def __init__(self, list_of_callables, **kwargs):
-        """
-        Initialize the cache before yield stage.
-        """
         super().__init__(list_of_callables, **kwargs)
 
+    ## Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
-        """
-        Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything.
-        """
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
@@ -56,11 +45,10 @@ class CacheBeforeYieldStage(Stage):
             yield ty
 
 
+## Check if the output file is already generated, skip the run if so.
 class SkipIfDumpExistsStage(Stage):
-    """
-    Check if the output file is already generated, skip the run if so.
-    """
 
+    ## The class constructor
     def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
@@ -111,19 +99,26 @@ def raise_exception(e):
     raise e
 
 
+## Multiprocessing support stage.
+# 
+# Warning: does not yield (CostModelEvaluation, extra_info) pairs.
+#
+# Use as follows in a list_of_callables:
+# - [..., ..., MultiProcessingGatherStage, some stage(s) that loop over stuff and just yield (cme, extra_info) pairs
+#     every iteration without postprocessing it, MultiProcessingSpawnStage, ..., ...]
+# 
+# Note: list of callables may not contain lambda functions, as this will break pickling which is required for
+#         by multiprocessing
+# 
+# Note: there is quite some overhead in spawning these parallel processes (python...; it needs to copy through pickle
+#         all variables), so best to do this at some high level loop (early in list of callables)
 class MultiProcessingSpawnStage(Stage):
-    """
-    Multiprocessing support stage.
-    Warning: does not yield (CostModelEvaluation, extra_info) pairs.
-    Use as follows in a list_of_callables:
-    [..., ..., MultiProcessingGatherStage, some stage(s) that loop over stuff and just yield (cme, extra_info) pairs
-     every iteration without postprocessing it, MultiProcessingSpawnStage, ..., ...]
-    Note: list of callables may not contain lambda functions, as this will break pickling which is required for
-          by multiprocessing
-    Note: there is quite some overhead in spawning these parallel processes (python...; it needs to copy through pickle
-          all variables), so best to do this at some high level loop (early in list of callables)
-    """
 
+    ## The class constructor
+    # @param list_of_callables: may not contain lambda functions, as this will break pickling which is required for
+    # by multiprocessing.
+    # @param multiprocessing_callback: intended to be set by MultiProcessingGatherStage
+    # @param kwargs:
     def __init__(
         self,
         list_of_callables,
@@ -132,13 +127,6 @@ class MultiProcessingSpawnStage(Stage):
         nb_multiprocessing_threads=multiprocessing.cpu_count(),
         **kwargs,
     ):
-        """
-
-        :param list_of_callables: may not contain lambda functions, as this will break pickling which is required for
-          by multiprocessing.
-        :param multiprocessing_callback: intended to be set by MultiProcessingGatherStage
-        :param kwargs:
-        """
         super().__init__(list_of_callables, **kwargs)
         self.nb_multiprocessing_threads = nb_multiprocessing_threads
         self.callback = multiprocessing_callback
@@ -156,15 +144,15 @@ class MultiProcessingSpawnStage(Stage):
         yield None, None
 
 
+## Multiprocessing support stage.
+# 
+# Use as follows in a list_of_callables:
+# - [..., ..., MultiProcessingGatherStage, some stage(s) that loop over stuff and just yield (cme, extra_info) pairs
+#     every iteration without postprocessing it, MultiProcessingSpawnStage, ..., ...]
+# 
+# Note: list of callables may not contain lambda functions, as this will break pickling which is required for
+#         by multiprocessing
 class MultiProcessingGatherStage(Stage):
-    """
-    Multiprocessing support stage.
-    Use as follows in a list_of_callables:
-    [..., ..., MultiProcessingGatherStage, some stage(s) that loop over stuff and just yield (cme, extra_info) pairs
-     every iteration without postprocessing it, MultiProcessingSpawnStage, ..., ...]
-    Note: list of callables may not contain lambda functions, as this will break pickling which is required for
-          by multiprocessing
-    """
 
     def _callback(self, ans):
         self.queue.put(ans)

@@ -43,13 +43,16 @@ from zigzag.classes.stages.ReduceStages import MinimalLatencyStage
 
 logger = logging.getLogger(__name__)
 
-
+## Class that return the best temporal mapping found by the Simulated Annealing
+# Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 class SalsaStage(Stage):
-    """
-    Class that return the best temporal mapping found by the Simulated Annealing
-    Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
-    """
 
+    ## The class constructor
+    # Initialize the SalsaStage by setting the accelerator, layer, and spatial mapping.
+    # @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
+    # @param accelerator (Accelerator): The accelerator object.
+    # @param layer (Layer): The layer object.
+    # @param spatial_mapping (SpatialMapping): The spatial mapping object.
     def __init__(
         self,
         list_of_callables: List[Callable],
@@ -59,14 +62,6 @@ class SalsaStage(Stage):
         spatial_mapping,
         **kwargs,
     ):
-        """Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
-
-        Args:
-            list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
-            accelerator (Accelerator): The accelerator object.
-            layer (Layer): The layer object.
-            spatial_mapping (SpatialMapping): The spatial mapping object.
-        """
         super().__init__(list_of_callables, **kwargs)
         self.accelerator, self.layer, self.spatial_mapping = (
             accelerator,
@@ -92,10 +87,8 @@ class SalsaStage(Stage):
                 "Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'."
             )
 
+    ## Set up and start salsa engine, then collect and return the best cost model evaluation
     def run(self):
-        """
-        Set up and start salsa engine, then collect and return the best cost model evaluation
-        """
 
         logger.info(
             f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s)."
@@ -145,11 +138,9 @@ class SalsaStage(Stage):
         for cme, extra_info in sub_stage.run():
             yield cme, (self.best_cme.mapping.temporal_mapping, extra_info)
 
+    ## Compare the latency of the current cost model evaluation with the best latency found so far.
+    # Then replace the current best cme if the current cme has a lower latency.
     def compare_cme_latency(self, cme):
-        """
-        Compare the latency of the current cost model evaluation with the best latency found so far.
-        Then replace the current best cme if the current cme has a lower latency.
-        """
 
         if self.best_cme is None:
             self.best_cme = cme
@@ -161,11 +152,9 @@ class SalsaStage(Stage):
         elif cme.latency_total2 < self.best_cme.latency_total2:
             self.best_cme = cme
 
+    ## Compare the energy of the current cost model evaluation with the best energy found so far.
+    # Then replace the best cme if the current cme has a lower energy.
     def compare_cme_energy(self, cme):
-        """
-        Compare the energy of the current cost model evaluation with the best energy found so far.
-        Then replace the best cme if the current cme has a lower energy.
-        """
         if self.best_cme is None:
             self.best_cme = cme
         elif (

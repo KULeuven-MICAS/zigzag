@@ -1,4 +1,4 @@
 # Sphinx
-sphinx
+sphinx==7.1.2
 # Sphinx Theme
 git+https://github.com/bashtage/sphinx-material.git

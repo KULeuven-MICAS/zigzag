@@ -6,13 +6,16 @@ from typing import Generator, Callable, List, Tuple, Any
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
-
+## Class that iterates through the different temporal mappings generated through
+# the loop order based memory allocation (loma) engine
 class LomaStage(Stage):
-    """
-    Class that iterates through the different temporal mappings generated through
-    the loop order based memory allocation (loma) engine
-    """
 
+    ## The class constructor
+    # Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
+    # @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
+    # @param accelerator (Accelerator): The accelerator object.
+    # @param layer (Layer): The layer object.
+    # @param spatial_mapping (SpatialMapping): The spatial mapping object.
     def __init__(
         self,
         list_of_callables: List[Callable],
@@ -22,14 +25,6 @@ class LomaStage(Stage):
         spatial_mapping,
         **kwargs
     ):
-        """Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
-
-        Args:
-            list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
-            accelerator (Accelerator): The accelerator object.
-            layer (Layer): The layer object.
-            spatial_mapping (SpatialMapping): The spatial mapping object.
-        """
         super().__init__(list_of_callables, **kwargs)
         self.accelerator, self.layer, self.spatial_mapping = (
             accelerator,
@@ -47,6 +42,7 @@ class LomaStage(Stage):
         )
 
         for tm in self.engine.run():
+
             kwargs = self.kwargs.copy()
             kwargs["accelerator"] = self.accelerator
             kwargs["layer"] = self.layer

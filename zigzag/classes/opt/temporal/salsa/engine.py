@@ -42,20 +42,22 @@ from zigzag.classes.opt.temporal.salsa.state import SalsaState
 
 logger = logging.getLogger(__name__)
 
-
+## Class that handles optimization of temporal mapping given a:
+# - layer
+# - spatial mapping
+# - memory hierarchy
+# - number of iterations
+# - start temperature
+# This optimization is carried out through simulated annealing loop order based.
+# Each loop is broken down to the smallest possible part (prime factors), then a runtime
+# estimation is performed to choose the fastest engine to use (LOMA or SALSA).
 class SalsaEngine:
-    """
-    Class that handles optimization of temporal mapping given a:
-    - layer
-    - spatial mapping
-    - memory hierarchy
-    - number of iterations
-    - start temperature
-    This optimization is carried out through simulated annealing loop order based.
-    Each loop is broken down to the smallest possible part (prime factors), then a runtime
-    estimation is performed to choose the fastest engine to use (LOMA or SALSA).
-    """
 
+    ## The class constructor
+    # @param acceleartor
+    # @param layer
+    # @param spatial mapping
+    # @param kwargs
     def __init__(
         self,
         *,
@@ -66,15 +68,15 @@ class SalsaEngine:
     ):
 
         # iteration_number, start_temperature, opt_criterion_name
-        """
-        Initialize the engine with the given:
-        - LayerNode
-        - SpatialMapping
-        - Accelerator
-        - Number of iterations
-        - Start temperature
-        The memory hierarchy from the correct core is extracted from the accelerator.
-        """
+
+        # Initialize the engine with the given:
+        # - LayerNode
+        # - SpatialMapping
+        # - Accelerator
+        # - Number of iterations
+        # - Start temperature
+        # The memory hierarchy from the correct core is extracted from the accelerator.
+
         # Hardware and mapping related inputs
         self.accelerator = accelerator
         self.layer = layer
@@ -87,19 +89,15 @@ class SalsaEngine:
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.lpf_limit = kwargs.get("loma_lpf_limit", 4)
 
+    ## Call the necessary methods, start the processes and collect the best temporal mapping found during the run.
     def run(self, cme_queue):
-        """
-        Call the necessary methods, start the processes and collect the best temporal mapping found during the run.
-        """
         self.cme_queue = cme_queue
         self.get_temporal_loops()
         self.get_prime_factors()
         self.run_simulated_annealing_opt(self.cme_queue)
 
+    ## Run a simulated annealing optimiation on the loop ordering using a loma memory allocation strategy.
     def run_simulated_annealing_opt(self, cme_queue):
-        """
-        Run a simulated annealing optimiation on the loop ordering using a loma memory allocation strategy.
-        """
         temperature = self.start_temperature
         start_ordering = (
             self.temporal_mapping_lpf
@@ -157,10 +155,8 @@ class SalsaEngine:
 
         cme_queue.put(best_state.cme)
 
+    ## Get all loops that have to be temporally scheduled given layer and spatial mapping.
     def get_temporal_loops(self):
-        """
-        Get all loops that have to be temporally scheduled given layer and spatial mapping.
-        """
         temporal_loop_dim_size = (
             self.layer.loop_dim_size.copy()
         )  # init with all loop sizes
@@ -191,11 +187,9 @@ class SalsaEngine:
             )
             self.lpf_limit = min_nb_temporal_loops
 
+    ## Get the prime factors for all temporal loops in the following format:
+    # [('C', 2), ('OY', 2), ('OX', 2), ('K', 7), ...]
     def get_prime_factors(self):
-        """
-        Get the prime factors for all temporal loops in the following format:
-        [('C', 2), ('OY', 2), ('OX', 2), ('K', 7), ...]
-        """
         temporal_loop_pfs = {}
         temporal_loop_pf_counts = {}
         temporal_loop_pf_count_sums = {}

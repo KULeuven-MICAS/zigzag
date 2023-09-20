@@ -7,17 +7,12 @@ from zigzag.classes.workload.dummy_node import DummyNode
 
 logger = logging.getLogger(__name__)
 
-
+## Class that iterates through the nodes in a given workload graph.
 class WorkloadStage(Stage):
-    """
-    Class that iterates through the nodes in a given workload graph.
-    """
 
+    ## The class constructor
+    # Initialization of self.workload.
     def __init__(self, list_of_callables, *, workload, **kwargs):
-        """
-        Initialization of self.workload.
-        :param main_inputs: MainInputs, NOT copied
-        """
         super().__init__(list_of_callables, **kwargs)
         self.workload = workload
 

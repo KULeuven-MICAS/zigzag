@@ -6,16 +6,31 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-
+##  Class that provides the interface between ZigZag and CACTI.
 class CactiParser:
 
+    ## Path of current directory
     cacti_path = os.path.dirname(os.path.realpath(__file__))
-    MEM_POOL_PATH = f"{cacti_path}/cacti_master/example_mem_pool.yaml"  # Path to cached cacti simulated memories
-    CACTI_TOP_PATH = f"{cacti_path}/cacti_master/cacti_top.py"  # Path to cacti python script to extract costs
+    ## Path to cached cacti simulated memories
+    MEM_POOL_PATH = f"{cacti_path}/cacti_master/example_mem_pool.yaml"
+    ## Path to cacti python script to extract costs
+    CACTI_TOP_PATH = f"{cacti_path}/cacti_master/cacti_top.py"
 
+    ## The class constructor
     def __init__(self):
         pass
-
+    
+    ## This function checks if the provided memory configuration was already used in the past.
+    # @param mem_type
+    # @param size
+    # @param r_bw
+    # @param r_port
+    # @param w_port
+    # @param rw_port
+    # @param bank
+    # @param mem_pool_path  Path to cached cacti simulated memories
+    # @return True          The requested memory item has been simulated once.
+    # @return False         The requested memory item has not been simualted so far.
     def item_exists(
         self,
         mem_type,
@@ -54,6 +69,16 @@ class CactiParser:
 
         return False
 
+    ## This function simulates a new item by calling CACTI7 based on the provided parameters
+    # @param mem_type
+    # @param size
+    # @param r_bw
+    # @param r_port
+    # @param w_port
+    # @param rw_port
+    # @param bank
+    # @param mem_pool_path  Path to cached cacti simulated memories
+    # @param cacti_top_path Path to cacti python script to extract costs
     def create_item(
         self,
         mem_type,
@@ -97,6 +122,17 @@ class CactiParser:
                 f"Cacti subprocess call failed with return value {p}."
             )
 
+    ## This functions checks first if the memory with the provided parameters was already simulated once.
+    # In case it hasn't been simulated, then it will create a new memory item based on the provided parameters.
+    # @param mem_type
+    # @param size
+    # @param r_bw
+    # @param r_port
+    # @param w_port
+    # @param rw_port
+    # @param bank
+    # @param mem_pool_path  Path to cached cacti simulated memories
+    # @param cacti_top_path Path to cacti python script to extract costs
     def get_item(
         self,
         mem_type,
