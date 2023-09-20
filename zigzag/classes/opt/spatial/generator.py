@@ -10,7 +10,7 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 class UserSpatialMappingGenerator:
     """Class that generates valid user-format spatial mappings."""
 
-    def __init__(self, layer, accelerator, defined_mapping = None) -> None:
+    def __init__(self, layer, accelerator, defined_mapping=None) -> None:
         self.layer = layer
         self.accelerator = accelerator
         self.defined_mapping = defined_mapping
@@ -47,9 +47,9 @@ class UserSpatialMappingGenerator:
         # For every operational array dimension, we initialize it by maximally unrolling all layer dimensions.
         # Later these will be restricted if the memory structure doesn't allow for this unrolling
 
-        if(defined_mapping is not None):
+        if defined_mapping is not None:
             for oa_dim in oa_dims:
-                if(defined_mapping.get(oa_dim.name) is not None):
+                if defined_mapping.get(oa_dim.name) is not None:
                     oa_dims_copy.remove(oa_dim)
         oa_dim_unrolling = {
             oa_dim: {
