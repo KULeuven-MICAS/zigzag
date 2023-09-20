@@ -228,11 +228,15 @@ class MemoryAllocator:
         # For output it can be either the partial sum precision, or the final sum precision.
         # This depends on if all the irrelevant loops were allocated in a previous MemoryLevel.
         # Which in turn means all remaining unallocated loops for this MemoryLevel must not contain any ir loops.
+        # Moreover, there might be unallocated spatial loops.
         if mem_op == "O":
             ir_dims = op_dimensions["ir"]  # Irrelevant dimensions
-            unallocated_dims = [
+            layer_op = self.mem_to_layer_op[mem_op]
+            unallocated_spatial_dims = [dim for (dim, size) in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])]
+            unallocated_temporal_dims = [
                 unallocated_loop.dimension for unallocated_loop in all_unallocated_loops
             ]
+            unallocated_dims = unallocated_spatial_dims + unallocated_temporal_dims
             # If there is still an irrelevant unallocated loop dimension, pick the full precision
             if any([dim in ir_dims for dim in unallocated_dims]):
                 precision = self.precision["O"]

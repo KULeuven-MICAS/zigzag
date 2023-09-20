@@ -29,8 +29,8 @@ class SpatialMapping:
         # Calculate total/unique/duplicate unit count
         self.calc_unit_count()
 
-        # Calculate data serve scope: each data element serves/(is served by) how many unit at below level 
-        # NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.        
+        # Calculate data serve scope: each data element serves/(is served by) how many unit at below level
+        # NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.
         self.calc_data_serve_scope()
 
         # Calculate memory bandwidth incremental factor between architectural levels
@@ -56,6 +56,21 @@ class SpatialMapping:
     # @param level
     def get_unrolling(self, op: str, level: int):
         return self.mapping_dict_origin[op][level]
+
+    def get_unrolling_all(self, op: str, min_level: int) -> list:
+        """Return all the spatial loops at a given level and above for a given operand.
+
+        Args:
+            op (str): The layer operand for which to return the spatial loops.
+            min_level (int): The lowest level.
+
+        Returns:
+            list: A list of all spatial loops at given level and above.
+        """
+        spatial_loops = []
+        for level in range(min_level, self.arch_level[op]):
+            spatial_loops += self.get_unrolling(op, level)
+        return spatial_loops
 
     ## Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level
     def calc_unroll_size(self):
@@ -133,9 +148,9 @@ class SpatialMapping:
     ## Calculate data serve scope, i.e., for input operands, it means that each data element
     # is broadcast to how many unit at below level; for output operand, it means that how
     # many unit add/collect their output values to one result, and push it to above level
-    # 
+    #
     # NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.
-    # 
+    #
     # data_serve_scope is calculated by dividing unit_duplicate at current level by unit_count at one level above.
     def calc_data_serve_scope(self):
         data_serve_scope = {
@@ -149,9 +164,9 @@ class SpatialMapping:
         self.data_serve_scope = data_serve_scope
 
     ## Calculate memory bandwidth incremental factor between architectural levels.
-    # 
+    #
     # NOTE: mem_bw_boost doesn't include MAC level, thus is one level less than other spatial mapping attributes.
-    # 
+    #
     # mem_bw_boost can calculated by either dividing unit_unique at current level by unit_count at one level above.
     def calc_mem_bw_boost_factor(self):
         mem_bw_boost = {

@@ -19,15 +19,16 @@ logger = logging.getLogger(__name__)
 class NoValidLoopOrderingFoundException(Exception):
     pass
 
+
 ## Class that handles optimization of temporal mapping given a:
 # - layer
 # - spatial mapping
 # - a memory hierarchy
-# 
+#
 # This optimization is carried out through loop order based memory allocation.
 # For each ordering of the temporal loops, they are allocated bottom-up to the
 # levels in the memory hierarchy.
-# 
+#
 # See https://ieeexplore.ieee.org/document/9458493 for more details.
 class LomaEngine:
 
@@ -36,7 +37,7 @@ class LomaEngine:
     # - Accelerator
     # - LayerNode
     # - SpatialMapping
-    # 
+    #
     # The memory hierarchy from the correct core is extracted from the accelerator.
     #
     # param accelerator: accelerator to use the memory hierarchy of
@@ -104,6 +105,7 @@ class LomaEngine:
             raise NoValidLoopOrderingFoundException(
                 f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is compatible with the architecture."
             )
+
     ## Get all loops that have to be temporally scheduled given layer and spatial mapping.
     def get_temporal_loops(self):
         temporal_loop_dim_size = (
@@ -142,7 +144,7 @@ class LomaEngine:
         # temporal_loop_pfs: a dict that for each temporal loop dimension contains the prime factors
         # temporal_loop_pf_counts: a dict that for each temporal loop dimension contains the prime factor multiplicities
         # temporal_loop_pf_count_sums: a dict that for each temporal loop dimension contains the total amount of prime factors
-        
+
         temporal_loop_pfs = {}
         temporal_loop_pf_counts = {}
         temporal_loop_pf_count_sums = {}
