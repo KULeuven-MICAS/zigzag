@@ -138,9 +138,10 @@ var NAVTREEINDEX1 =
 "classgemm_1_1GemmParser.html#ae27d9fd8e9b2ad0945f2911589613d1a":[2,0,12,0,0],
 "classgenerator_1_1UserSpatialMappingGenerator.html":[2,0,13,0],
 "classgenerator_1_1UserSpatialMappingGenerator.html#a2a2ffdaffbf6ae042b5fa34ac64dd80d":[2,0,13,0,1],
-"classgenerator_1_1UserSpatialMappingGenerator.html#a4d42108f9f3c1303c8f04e41fd1ded28":[2,0,13,0,0],
-"classgenerator_1_1UserSpatialMappingGenerator.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,13,0,4],
+"classgenerator_1_1UserSpatialMappingGenerator.html#a3712ce71b60a3ed32f4f505cedfac9c2":[2,0,13,0,0],
+"classgenerator_1_1UserSpatialMappingGenerator.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,13,0,5],
 "classgenerator_1_1UserSpatialMappingGenerator.html#abad7d445eb555517f300b6de6986a765":[2,0,13,0,3],
+"classgenerator_1_1UserSpatialMappingGenerator.html#ac2977da64cbab300c95655d05c151c50":[2,0,13,0,4],
 "classgenerator_1_1UserSpatialMappingGenerator.html#ad22709b2e67308af35f55680d5a026e0":[2,0,13,0,2],
 "classlayer__node_1_1LayerNode.html":[2,0,14,0],
 "classlayer__node_1_1LayerNode.html#a042d8e555f499d12ca4569475e0e28a2":[2,0,14,0,39],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classmemory__hierarchy_1_1MemoryHierarchy.html#aef00069480b036b23b084084db944430":[2,0,19,0,8],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#af329035d3add361f02f65c7add64435a":[2,0,19,0,13],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#afa317998d8d167b6c4449710490ac76e":[2,0,19,0,11],
-"classmemory__hierarchy_1_1MemoryHierarchy.html#afe02a0af9609e5997af368b68f71a218":[2,0,19,0,9],
-"classmemory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8":[2,0,19,0,16]
+"classmemory__hierarchy_1_1MemoryHierarchy.html#afe02a0af9609e5997af368b68f71a218":[2,0,19,0,9]
 };

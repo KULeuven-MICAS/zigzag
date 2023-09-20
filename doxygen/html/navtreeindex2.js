@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classmemory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8":[2,0,19,0,16],
 "classmemory__instance_1_1MemoryInstance.html":[2,0,20,0],
 "classmemory__instance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d":[2,0,20,0,3],
 "classmemory__instance_1_1MemoryInstance.html#a23e8041ce1015febe4fdace3225714f9":[2,0,20,0,5],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#abad7d445eb555517f300b6de6986a765":[2,0,34,0,0,6,0,4],
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,6,0,2],
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af35ad66cf3eab7948fa0d47859715671":[2,0,34,0,0,6,0,5],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,6,0,6],
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html":[2,0,34,0,0,7,0]
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,6,0,6]
 };

@@ -51,9 +51,9 @@ var NAVTREEINDEX =
 [
 "CostModelStage_8py.html",
 "classcost__model_1_1CostModelEvaluation.html#a847d07c79a8fe220c4020f2f9dd280f2",
-"classmemory__instance_1_1MemoryInstance.html",
-"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a0b0a6e980a4e0ff783a63b7612926a16",
-"operational__array_8py.html#a444bda2271cd31133846a84754d503c6"
+"classmemory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8",
+"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html",
+"operational__array_8py.html#a32a062f8fea31179dbf3f641da646794"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html":[2,0,34,0,0,7,0],
 "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a0b0a6e980a4e0ff783a63b7612926a16":[2,0,34,0,0,7,0,0],
 "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#a6eea0bfdbe5111ee03de1a556e24b206":[2,0,34,0,0,7,0,2],
 "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,7,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "onnx_2parser_8py.html":[3,0,0,0,3,1,5],
 "onnx__workload_8py.html":[3,0,0,0,7,3],
 "operational__array_8py.html":[3,0,0,0,2,0,7],
-"operational__array_8py.html#a29fcc70d4c8968b3333504616685dd6d":[3,0,0,0,2,0,7,4],
-"operational__array_8py.html#a32a062f8fea31179dbf3f641da646794":[3,0,0,0,2,0,7,3]
+"operational__array_8py.html#a29fcc70d4c8968b3333504616685dd6d":[3,0,0,0,2,0,7,4]
 };
