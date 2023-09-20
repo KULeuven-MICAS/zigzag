@@ -36,7 +36,7 @@ var searchData=
   ['get_5fmemory_5fsharing_5flist_237',['get_memory_sharing_list',['../classcore_1_1Core.html#a2fec7f191ab06ef910c224f43acbb6fc',1,'core::Core']]],
   ['get_5fmemory_5fsize_5fdict_238',['get_memory_size_dict',['../classcore_1_1Core.html#a174dd55ab8ab26afe65913c6019ac73d',1,'core::Core']]],
   ['get_5fnode_5finput_5foutput_5fdimension_5fshapes_239',['get_node_input_output_dimension_shapes',['../namespaceutils.html#ae5f573a1f4ccf541c5964e2cfb40e95a',1,'utils']]],
-  ['get_5fnode_5fwith_5fid_240',['get_node_with_id',['../classonnx__workload_1_1ONNXWorkload.html#a8f9511dae3c3828addf600fa735a78d8',1,'onnx_workload.ONNXWorkload.get_node_with_id()'],['../classdnn__workload_1_1DNNWorkload.html#a8f9511dae3c3828addf600fa735a78d8',1,'dnn_workload.DNNWorkload.get_node_with_id()']]],
+  ['get_5fnode_5fwith_5fid_240',['get_node_with_id',['../classdnn__workload_1_1DNNWorkload.html#a8f9511dae3c3828addf600fa735a78d8',1,'dnn_workload.DNNWorkload.get_node_with_id()'],['../classonnx__workload_1_1ONNXWorkload.html#a8f9511dae3c3828addf600fa735a78d8',1,'onnx_workload.ONNXWorkload.get_node_with_id()']]],
   ['get_5fonnx_5fmodel_241',['get_onnx_model',['../classmodel_1_1ONNXModelParser.html#a769c2391bd777b1f155714ba645a5b1d',1,'model::ONNXModelParser']]],
   ['get_5fonnx_5ftensor_5ftype_242',['get_onnx_tensor_type',['../namespaceutils.html#afcad137159bbd46a91fa6985b6cc34dc',1,'utils']]],
   ['get_5foperand_5firrelevant_5fdimensions_243',['get_operand_irrelevant_dimensions',['../classlayer__node_1_1LayerNode.html#aca025f131c2e24f33c6dcb8fb377f583',1,'layer_node::LayerNode']]],
@@ -52,7 +52,7 @@ var searchData=
   ['get_5fspatial_5fmappings_253',['get_spatial_mappings',['../classparser_1_1Parser.html#a4f0677f5f5ee545b29dabd396b0744e7',1,'parser::Parser']]],
   ['get_5fstart_254',['get_start',['../classdummy__node_1_1DummyNode.html#afa8749a569f6a1c70b7c35337e2a7000',1,'dummy_node::DummyNode']]],
   ['get_5fsupported_5faccelerators_255',['get_supported_accelerators',['../classparser_1_1AcceleratorParser.html#ac2a4e15e21a945ef6408c49bcb90566e',1,'parser::AcceleratorParser']]],
-  ['get_5ftemporal_5floops_256',['get_temporal_loops',['../classengine_1_1SalsaEngine.html#a5e01b8ba76651496c5168721dee000cf',1,'engine.SalsaEngine.get_temporal_loops()'],['../classengine_1_1LomaEngine.html#a5e01b8ba76651496c5168721dee000cf',1,'engine.LomaEngine.get_temporal_loops()']]],
+  ['get_5ftemporal_5floops_256',['get_temporal_loops',['../classengine_1_1LomaEngine.html#a5e01b8ba76651496c5168721dee000cf',1,'engine.LomaEngine.get_temporal_loops()'],['../classengine_1_1SalsaEngine.html#a5e01b8ba76651496c5168721dee000cf',1,'engine.SalsaEngine.get_temporal_loops()']]],
   ['get_5fthreadpool_257',['get_threadpool',['../namespacezigzag_1_1classes_1_1stages_1_1RunOptStages.html#a364a58821ef707393282a0c954f60406',1,'zigzag::classes::stages::RunOptStages']]],
   ['get_5ftop_5fmemories_258',['get_top_memories',['../classmemory__hierarchy_1_1MemoryHierarchy.html#a544afc2738f7727e985fbfdc5aa5960c',1,'memory_hierarchy::MemoryHierarchy']]],
   ['get_5ftop_5fmemory_5finstance_259',['get_top_memory_instance',['../classcore_1_1Core.html#aa85ccd5b36572a408e369e58e610ccb7',1,'core::Core']]],
@@ -61,5 +61,6 @@ var searchData=
   ['get_5ftotal_5fwrite_5fins_5ffrom_5fabove_262',['get_total_write_ins_from_above',['../classcombined__mapping_1_1FourWayDataMoving.html#aac4faffab79215a54d30e2e97f604ffb',1,'combined_mapping::FourWayDataMoving']]],
   ['get_5ftotal_5fwrite_5fins_5ffrom_5fbelow_263',['get_total_write_ins_from_below',['../classcombined__mapping_1_1FourWayDataMoving.html#a10f7e3015d281ed7c7bc037c34d6e6d7',1,'combined_mapping::FourWayDataMoving']]],
   ['get_5funrolling_264',['get_unrolling',['../classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6',1,'spatial_mapping::SpatialMapping']]],
-  ['get_5fworkload_265',['get_workload',['../classmodel_1_1ONNXModelParser.html#ab5911bec98b0c5d0c449806d39b657ff',1,'model::ONNXModelParser']]]
+  ['get_5funrolling_5fall_265',['get_unrolling_all',['../classspatial__mapping_1_1SpatialMapping.html#ad85b5789cc3e9a1f439f4f2239facd4d',1,'spatial_mapping::SpatialMapping']]],
+  ['get_5fworkload_266',['get_workload',['../classmodel_1_1ONNXModelParser.html#ab5911bec98b0c5d0c449806d39b657ff',1,'model::ONNXModelParser']]]
 ];

@@ -111,6 +111,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa2c9d4c8282970bda3d167c1f0c329e6"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6">get_unrolling</a> (self, str op, int level)</td></tr>
 <tr class="memdesc:aa2c9d4c8282970bda3d167c1f0c329e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the unrolled loops for operand 'op' at level 'level'.  <a href="classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6">More...</a><br /></td></tr>
 <tr class="separator:aa2c9d4c8282970bda3d167c1f0c329e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad85b5789cc3e9a1f439f4f2239facd4d"><td class="memItemLeft" align="right" valign="top">list&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspatial__mapping_1_1SpatialMapping.html#ad85b5789cc3e9a1f439f4f2239facd4d">get_unrolling_all</a> (self, str op, int min_level)</td></tr>
+<tr class="separator:ad85b5789cc3e9a1f439f4f2239facd4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adceaf4eab27ea6d800d11194e37c2781"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classspatial__mapping_1_1SpatialMapping.html#adceaf4eab27ea6d800d11194e37c2781">calc_unroll_size</a> (self)</td></tr>
 <tr class="memdesc:adceaf4eab27ea6d800d11194e37c2781"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level.  <a href="classspatial__mapping_1_1SpatialMapping.html#adceaf4eab27ea6d800d11194e37c2781">More...</a><br /></td></tr>
 <tr class="separator:adceaf4eab27ea6d800d11194e37c2781"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -384,6 +386,66 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classspatial__mapping_1_1SpatialMapping_aa2c9d4c8282970bda3d167c1f0c329e6_icgraph.png" border="0" usemap="#aclassspatial__mapping_1_1SpatialMapping_aa2c9d4c8282970bda3d167c1f0c329e6_icgraph" alt=""/></div>
+<map name="aclassspatial__mapping_1_1SpatialMapping_aa2c9d4c8282970bda3d167c1f0c329e6_icgraph" id="aclassspatial__mapping_1_1SpatialMapping_aa2c9d4c8282970bda3d167c1f0c329e6_icgraph">
+<area shape="rect" title="Return the unrolled loops for operand &#39;op&#39; at level &#39;level&#39;." alt="" coords="184,5,291,32"/>
+<area shape="rect" href="classspatial__mapping_1_1SpatialMapping.html#ad85b5789cc3e9a1f439f4f2239facd4d" title=" " alt="" coords="5,5,136,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ad85b5789cc3e9a1f439f4f2239facd4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad85b5789cc3e9a1f439f4f2239facd4d">&#9670;&nbsp;</a></span>get_unrolling_all()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"> list get_unrolling_all </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str&#160;</td>
+          <td class="paramname"><em>op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>min_level</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<pre class="fragment">Return all the spatial loops at a given level and above for a given operand.
+
+Args:
+    op (str): The layer operand for which to return the spatial loops.
+    min_level (int): The lowest level.
+
+Returns:
+    list: A list of all spatial loops at given level and above.
+</pre> <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classspatial__mapping_1_1SpatialMapping_ad85b5789cc3e9a1f439f4f2239facd4d_cgraph.png" border="0" usemap="#aclassspatial__mapping_1_1SpatialMapping_ad85b5789cc3e9a1f439f4f2239facd4d_cgraph" alt=""/></div>
+<map name="aclassspatial__mapping_1_1SpatialMapping_ad85b5789cc3e9a1f439f4f2239facd4d_cgraph" id="aclassspatial__mapping_1_1SpatialMapping_ad85b5789cc3e9a1f439f4f2239facd4d_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,136,32"/>
+<area shape="rect" href="classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6" title="Return the unrolled loops for operand &#39;op&#39; at level &#39;level&#39;." alt="" coords="184,5,291,32"/>
+</map>
+</div>
 
 </div>
 </div>

@@ -9,6 +9,7 @@ var classspatial__mapping_1_1SpatialMapping =
     [ "calc_unit_count", "classspatial__mapping_1_1SpatialMapping.html#a7a8eadc13ab1a1f902862cbd046a8ef8", null ],
     [ "calc_unroll_size", "classspatial__mapping_1_1SpatialMapping.html#adceaf4eab27ea6d800d11194e37c2781", null ],
     [ "get_unrolling", "classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6", null ],
+    [ "get_unrolling_all", "classspatial__mapping_1_1SpatialMapping.html#ad85b5789cc3e9a1f439f4f2239facd4d", null ],
     [ "save_spatial_loop_dim_size", "classspatial__mapping_1_1SpatialMapping.html#a87e359be8063594da630da6cbd2dc9a8", null ],
     [ "arch_level", "classspatial__mapping_1_1SpatialMapping.html#a3761bcd8f0ad87adeee3d484a58dd567", null ],
     [ "data_serve_scope", "classspatial__mapping_1_1SpatialMapping.html#aebbe7326c30e28c8dad4453b6312bccc", null ],
