@@ -23,6 +23,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install ruff
           pip install -r requirements.txt
+          # install the current zigzag-dse
+          pip install .
       - name: Lint with ruff
         run: |
           # stop the build if there are Python syntax errors or undefined names
