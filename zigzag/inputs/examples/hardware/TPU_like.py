@@ -8,7 +8,7 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 
 
-def memory_hierarchy_dut(multiplier_array):
+def memory_hierarchy_dut(multiplier_array, visualize=False):
     """Memory hierarchy variables"""
     """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
 
@@ -130,12 +130,12 @@ def memory_hierarchy_dut(multiplier_array):
         ),
         served_dimensions="all",
     )
+    if visualize:
+        from zigzag.visualization.graph.memory_hierarchy import (
+            visualize_memory_hierarchy_graph,
+        )
 
-    from zigzag.visualization.graph.memory_hierarchy import (
-        visualize_memory_hierarchy_graph,
-    )
-
-    visualize_memory_hierarchy_graph(memory_hierarchy_graph)
+        visualize_memory_hierarchy_graph(memory_hierarchy_graph)
     return memory_hierarchy_graph
 
 
