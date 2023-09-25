@@ -1,12 +1,13 @@
-# Test the zigzag api call
 import pytest
 
 from zigzag.api import get_hardware_performance_zigzag
 
-
-@pytest.fixture
-def workload():
-    return "zigzag/inputs/examples/workload/mobilenetv2.onnx"
+workloads = (
+    "zigzag/inputs/examples/workload/alexnet.onnx",
+    "zigzag/inputs/examples/workload/mobilenetv2.onnx",
+    "zigzag/inputs/examples/workload/resnet18.onnx",
+    "zigzag.inputs.examples.workload.resnet18",
+)
 
 
 @pytest.fixture
@@ -19,6 +20,7 @@ def accelerator():
     return "zigzag.inputs.examples.hardware.TPU_like"
 
 
-def test_api(workload, mapping, accelerator):
+@pytest.mark.parametrize("workload", workloads)
+def test_api(workload, accelerator, mapping):
     answer = get_hardware_performance_zigzag(workload, accelerator, mapping)
     assert answer
