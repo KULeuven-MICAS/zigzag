@@ -38,5 +38,6 @@ The outputs of the function are
 * **energy**: A number that indicates the overall consumed energy for running the workload on the accelerator in the user-defined optimized way.
 * **latency**: A number that indicates the overall latency (cycle count) for running the workload on the accelerator in the user-defined optimized way.
 * **cme**: A collection of all the detailed cost model evaluation results. "cme" stands for "cost model evaluation".
+.. note::
 
-We demonstrate how to use this api function in multiple `demos <https://github.com/KULeuven-MICAS/zigzag-demo>`_.
+   We demonstrate how to use this api function in multiple `demos <https://github.com/KULeuven-MICAS/zigzag-demo>`_.
