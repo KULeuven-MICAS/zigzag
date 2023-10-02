@@ -33,8 +33,6 @@ def test_api(workload, accelerator, mapping):
     (energy, latency, cmes) = get_hardware_performance_zigzag(
         workload, accelerator, mapping
     )
-    print(f"{energy=}, {latency=}")
     (expected_energy, expected_latency) = ens_lats[workload]
-    print(f"{expected_energy=}, {expected_latency=}")
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)
