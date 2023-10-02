@@ -5,6 +5,7 @@ from dataclasses import dataclass
 from enum import auto
 from os import path
 from typing import List
+import pickle
 
 import onnx
 from onnx import AttributeProto
@@ -23,9 +24,18 @@ def parse_mapping_from_path(mapping_path):
             raise ValueError(
                 "No mapping path/dict provided, and default was not found."
             )
-    global module
-    module = importlib.import_module(mapping_path)
-    mapping = module.mapping
+    if "/" in mapping_path and mapping_path.split(".")[-1] in [
+        "pickle",
+        "pkl",
+        "mapping",
+    ]:
+        # Load in the pickle mapping file
+        with open(mapping_path, "rb") as fp:
+            mapping = pickle.load(fp)
+    else:
+        global module
+        module = importlib.import_module(mapping_path)
+        mapping = module.mapping
     if "default" in mapping:
         default_present = "\u2705"
     else:
@@ -112,20 +122,28 @@ class OnnxTensorType:
 def get_onnx_tensor_type(name, model):
     for input in model.graph.input:
         if input.name == name:
-            return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.Input)
+            return OnnxTensorType.from_tensor_type(
+                input.type.tensor_type, OnnxTensorCategory.Input
+            )
 
     for output in model.graph.output:
         if output.name == name:
-            return OnnxTensorType.from_tensor_type(output.type.tensor_type, OnnxTensorCategory.Output)
+            return OnnxTensorType.from_tensor_type(
+                output.type.tensor_type, OnnxTensorCategory.Output
+            )
 
     for value_info in model.graph.value_info:
         if value_info.name == name:
-            return OnnxTensorType.from_tensor_type(value_info.type.tensor_type, OnnxTensorCategory.Hidden)
+            return OnnxTensorType.from_tensor_type(
+                value_info.type.tensor_type, OnnxTensorCategory.Hidden
+            )
 
     for init in model.graph.initializer:
         if init.name == name:
             # initializers are represented a bit differently from other tensors
-            return OnnxTensorType(list(init.dims), init.data_type, OnnxTensorCategory.Constant)
+            return OnnxTensorType(
+                list(init.dims), init.data_type, OnnxTensorCategory.Constant
+            )
 
     raise KeyError(
         f""
