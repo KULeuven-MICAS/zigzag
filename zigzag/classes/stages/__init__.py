@@ -26,6 +26,8 @@ from .SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from .Stage import Stage, MainStage
 from .TemporalOrderingConversionStage import TemporalOrderingConversionStage
 from .WorkloadStage import WorkloadStage
+from .RemoveNoUseMemStage import RemoveNoUseMemStage
+from .SearchNoUseMemStage import SearchNoUseMemStage
 
 # Parameter providers: these parameters are provided to substages by the following classes:
 #  - accelerator: AcceleratorParserStage
