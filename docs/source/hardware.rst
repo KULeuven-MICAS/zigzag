@@ -53,7 +53,8 @@ The memory instance object has the following attributes:
 * **latency**: The latency of memory access in the number of cycles, i.e., after requiring read/write a memory address, how many cycles the memory takes to provide/receive this corresponding data. (For now, this attribute is not actively used. We assume that it is 1 to model the data prefetching behavior thanks to the deterministic dataflow.)
 
 (optional)
-* **min_r_granularity/min_w_granularity**: The minimal memory read/write granularity (in bit) the memory supports. This attribute is used to better model the memory that supports half-word access or a quarter-word access patterns. For example, if a memory's read bandwidth (wordlength) is 256 bit/cycle, its read energy (r_cost) is 100, and its min_r_granularity is 128 bits (i.e., assume this memory allow half-word read), read 128 bits from it will only take 50 energy. While if min_r_granularity is not defined or is defined as 256 bits, read 128 bits from it will take 100 energy.
+
+* **min_r_granularity/min_w_granularity**: The minimal memory read/write granularity (in bit) the memory supports. This attribute is used to better model the memory that supports half-word access or quarter-word access patterns. For example, if a memory's read bandwidth (wordlength) is 256 bit/cycle, its read energy (r_cost) is 100, and its min_r_granularity is 128 bits (i.e., assume this memory allow half-word read), read 128 bits from it (we approximatlly assume that) will only take 50 energy. While if min_r_granularity is not defined or is defined as 256 bits, read 128 bits from it will take 100 energy.
 
 Memory Hierarchy
 ----------------
