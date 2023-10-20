@@ -89,7 +89,9 @@ class RemoveUnusedMemoryStage(Stage):
             # special case when defining workload manually:
             # the constant operands list is empty for such as "Adder" layers
             # for input operand, we will represent all inputs as one input, since only their data size is used for required mem size calculation.
-            act_operand = self.layer.memory_operand_links[self.layer.input_operands[0]] # act representation in memory
+            act_operand = self.layer.memory_operand_links[
+                self.layer.input_operands[0]
+            ]  # act representation in memory
             const_operand = self.layer.memory_operand_links[
                 self.layer.input_operands[1]
             ]  # weight representation in memory
@@ -118,9 +120,7 @@ class RemoveUnusedMemoryStage(Stage):
         # Find target_act/const/output_mem_level
         for pos, ele in enumerate(self.mem_update_list[curr_id]):
             if list(ele.keys())[0] == act_operand:
-                target_act_mem_level = self.mem_update_list[curr_id][pos][
-                    act_operand
-                ]
+                target_act_mem_level = self.mem_update_list[curr_id][pos][act_operand]
             if list(ele.keys())[0] == output_operand:
                 target_output_mem_level = self.mem_update_list[curr_id][pos][
                     output_operand

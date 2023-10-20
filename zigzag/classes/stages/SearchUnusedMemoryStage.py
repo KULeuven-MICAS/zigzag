@@ -328,26 +328,37 @@ class SearchUnusedMemoryStage(Stage):
                         # so, the simulation will not reach to this "else" branch.
                         next_layer = list(self.workload.successors(layer))[0]
                         # next, we find out the layer representation for the act operand of the next layer
-                        const_layer_operand_of_next_layer = next_layer.constant_operands[0]
-                        act_layer_operand_of_next_layer = \
-                        [operand for operand in next_layer.input_operands if operand != const_layer_operand_of_next_layer][
-                            0]
+                        const_layer_operand_of_next_layer = (
+                            next_layer.constant_operands[0]
+                        )
+                        act_layer_operand_of_next_layer = [
+                            operand
+                            for operand in next_layer.input_operands
+                            if operand != const_layer_operand_of_next_layer
+                        ][0]
                         # then, we will fetch the mem representation for the act operand of the next layer
-                        act_mem_operand_of_next_layer = next_layer.memory_operand_links[act_layer_operand_of_next_layer]
+                        act_mem_operand_of_next_layer = next_layer.memory_operand_links[
+                            act_layer_operand_of_next_layer
+                        ]
                         # check if the current mem level serve the act operand in the next layer
                         mem_serve_act_in_next_layer = (
-                            True if (act_mem_operand_of_next_layer in served_operands) else False
+                            True
+                            if (act_mem_operand_of_next_layer in served_operands)
+                            else False
                         )
-                    except IndexError:  # there is no next layer, which means the current layer is the last layer
+                    except (
+                        IndexError
+                    ):  # there is no next layer, which means the current layer is the last layer
                         # As for the last layer, we will instead check
                         # if the mem serves act operand of the current layer.
                         mem_serve_act_in_next_layer = (
-                                    True if (act_operand in served_operands) else False
-                                )
+                            True if (act_operand in served_operands) else False
+                        )
 
                     mem_serve_io_both = (
                         True
-                        if mem_serve_act_in_next_layer and (output_operand in served_operands)
+                        if mem_serve_act_in_next_layer
+                        and (output_operand in served_operands)
                         else False
                     )  # ["I", "O"] both in mem.served_operands
                     mem_serve_weight = (
@@ -360,13 +371,12 @@ class SearchUnusedMemoryStage(Stage):
                     # but in each_layer_IO_data_size, data size of two inputs are put under one key,
                     # so we have to update served_operands to ensure the key used in each_layer_IO_data_size is in it.
                     if (
-                            len(layer.constant_operands) == 0 and mem_serve_io_both
+                        len(layer.constant_operands) == 0 and mem_serve_io_both
                     ):  # the layer type is an Adder layer, which has multiple input operands
                         served_operands = [
-                                        output_operand,
-                                        layer.memory_operand_links[layer.input_operands[0]],
-                                    ]
-
+                            output_operand,
+                            layer.memory_operand_links[layer.input_operands[0]],
+                        ]
 
                     if mem_serve_io_both or mem_serve_weight:
                         required_IO_data_size = sum(
@@ -403,8 +413,9 @@ class SearchUnusedMemoryStage(Stage):
         ## [NOTE] Until here, if there is still -1 value in mem_update_list, it means the size of top mem level for IO is not big enough.
         for layer_ele in self.mem_update_list.values():
             for operand_dict in layer_ele:
-                assert list(operand_dict.values())[0] >= 0, \
-                    "SearchUnusedMemoryStage fisnishes abnormally, there are still layers with top mem levels not figured out."
+                assert (
+                    list(operand_dict.values())[0] >= 0
+                ), "SearchUnusedMemoryStage fisnishes abnormally, there are still layers with top mem levels not figured out."
 
     def update_mem_level_for_loading_data(self):
         """
