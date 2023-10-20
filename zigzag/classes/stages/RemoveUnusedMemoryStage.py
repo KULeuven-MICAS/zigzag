@@ -51,8 +51,6 @@ class RemoveUnusedMemoryStage(Stage):
         self.mem_update_weight = mem_update_weight
 
     def run(self) -> Generator:
-        print(self.mem_update_list)
-        print(self.mem_update_weight)
         modified_accelerator = self.generate_accelerator_with_removing_unused_memory()
         sub_stage = self.list_of_callables[0](
             self.list_of_callables[1:],

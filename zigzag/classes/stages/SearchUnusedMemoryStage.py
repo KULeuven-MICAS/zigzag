@@ -46,6 +46,29 @@ logger = logging.getLogger(__name__)
 ##           if ("W" in mem.operand) and (current_mem_level < mem_update_weight):
 ##             mem_update_weight = current_mem_level
 #####################################################
+#  Special note for Adder layers:
+#   Currently the algorithm is tricky for Adder layers. As for a conv/pool layer, required I, O sizes are put in
+#   each_layer_IO_data_size and the weight data size will be accumulated in weight_size_entire_workload.
+#   But for Adder layers, (1) there is no weight operand (or constant operand); (2) there are two input operands.
+#   (3) the info regarding which of the two operands is represented as I1 or I2 is not saved in self.workload,
+#   though it is defined in the input file.
+#   So, the current solution is:
+#   (1) for weight, the data amount is 0, which means weight_size_entire_workload will not consider Adder layers.
+#   (2) for act, we add up the data size of the two (or multiple) inputs and treat the sum as the act data size
+#   for the current layer, which is stored in each_layer_IO_data_size.
+#   What does this mean?
+#   This means for Adder layers, the required act data size is over-estimated, because we also include the data amount
+#   of the other operand, which we may have defined separate mem for the other operand.
+#   In other words, for a mem level with enough size to hold both O, I1
+#   (assume I1 is the mem representation for one input),
+#   may be thought by the code that the size is not enough and therefore the output cannot be stored at this level.
+#   But keep in mind that!!!!!:
+#   this is only a problem when you use manually-defined workload and there are Adder layers.
+#   there is no problem if your workload is an .onnx file, because Adder layers will be skipped by default.
+#   Is there a solution?
+#   The reason why it cannot be fixed is we do not know which operand is from which layer.
+#   This problem can be fixed unless this info granularity is saved in the self.workload object,
+#   which is a networkx graph.
 
 
 class SearchUnusedMemoryStage(Stage):
@@ -240,6 +263,8 @@ class SearchUnusedMemoryStage(Stage):
                 self.update_IO_mem_level(
                     curr_id, act_operand, prev_layer_output_level
                 )  # update the input mem level of current layer
+            if id == 28:
+                pass
             if (
                 branch_starting_node or branch_final_node
             ):  ## branch starting node or branch final node or permited dummy nodes (e.g. Adder layer)
@@ -296,33 +321,53 @@ class SearchUnusedMemoryStage(Stage):
                     avail_mem_size = (
                         mem.memory_instance.size
                     )  # available hardware mem size
-                    if (
-                        len(layer.constant_operands) == 0
-                    ):  # Adder layer: multiple act operands
-                        mem_serve_act = False
-                        for layer_act_operand in layer.input_operands:
-                            if (
-                                layer.memory_operand_links[layer_act_operand]
-                                in served_operands
-                            ):
-                                mem_serve_act = True
-                                # modify to match the keys used in each_layer_IO_data_size
-                                served_operands = [
-                                    output_operand,
-                                    layer.memory_operand_links[layer.input_operands[0]],
-                                ]
-                    else:
-                        mem_serve_act = (
-                            True if (act_operand in served_operands) else False
+
+                    try:
+                        # we need to grab the next layer name, which is a non-Adder layer for sure
+                        # if next layer is an Adder layer, then branch_final_node=True for the current layer,
+                        # so, the simulation will not reach to this "else" branch.
+                        next_layer = list(self.workload.successors(layer))[0]
+                        # next, we find out the layer representation for the act operand of the next layer
+                        const_layer_operand_of_next_layer = next_layer.constant_operands[0]
+                        act_layer_operand_of_next_layer = \
+                        [operand for operand in next_layer.input_operands if operand != const_layer_operand_of_next_layer][
+                            0]
+                        # then, we will fetch the mem representation for the act operand of the next layer
+                        act_mem_operand_of_next_layer = next_layer.memory_operand_links[act_layer_operand_of_next_layer]
+                        # check if the current mem level serve the act operand in the next layer
+                        mem_serve_act_in_next_layer = (
+                            True if (act_mem_operand_of_next_layer in served_operands) else False
                         )
+                    except IndexError:  # there is no next layer, which means the current layer is the last layer
+                        # As for the last layer, we will instead check
+                        # if the mem serves act operand of the current layer.
+                        mem_serve_act_in_next_layer = (
+                                    True if (act_operand in served_operands) else False
+                                )
+
                     mem_serve_io_both = (
                         True
-                        if mem_serve_act and (output_operand in served_operands)
+                        if mem_serve_act_in_next_layer and (output_operand in served_operands)
                         else False
                     )  # ["I", "O"] both in mem.served_operands
                     mem_serve_weight = (
                         True if (const_operand in served_operands) else False
                     )  # mem.served_operands = ["W"]
+
+                    # we need to change served_operands if the current layer is an Adder layer,
+                    # for the ease of calculation of required input data size.
+                    # Since an Adder layer has two inputs,
+                    # but in each_layer_IO_data_size, data size of two inputs are put under one key,
+                    # so we have to update served_operands to ensure the key used in each_layer_IO_data_size is in it.
+                    if (
+                            len(layer.constant_operands) == 0 and mem_serve_io_both
+                    ):  # the layer type is an Adder layer, which has multiple input operands
+                        served_operands = [
+                                        output_operand,
+                                        layer.memory_operand_links[layer.input_operands[0]],
+                                    ]
+
+
                     if mem_serve_io_both or mem_serve_weight:
                         required_IO_data_size = sum(
                             [
@@ -358,7 +403,8 @@ class SearchUnusedMemoryStage(Stage):
         ## [NOTE] Until here, if there is still -1 value in mem_update_list, it means the size of top mem level for IO is not big enough.
         for layer_ele in self.mem_update_list.values():
             for operand_dict in layer_ele:
-                assert list(operand_dict.values())[0] >= 0
+                assert list(operand_dict.values())[0] >= 0, \
+                    "SearchUnusedMemoryStage fisnishes abnormally, there are still layers with top mem levels not figured out."
 
     def update_mem_level_for_loading_data(self):
         """
