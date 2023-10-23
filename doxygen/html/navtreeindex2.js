@@ -1,5 +1,9 @@
 var NAVTREEINDEX2 =
 {
+"classmemory__hierarchy_1_1MemoryHierarchy.html#aef00069480b036b23b084084db944430":[2,0,19,0,8],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#af329035d3add361f02f65c7add64435a":[2,0,19,0,13],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#afa317998d8d167b6c4449710490ac76e":[2,0,19,0,11],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#afe02a0af9609e5997af368b68f71a218":[2,0,19,0,9],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8":[2,0,19,0,16],
 "classmemory__instance_1_1MemoryInstance.html":[2,0,20,0],
 "classmemory__instance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d":[2,0,20,0,3],
@@ -245,9 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html":[2,0,34,0,0,6,0],
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a28729f443b5f1d432887ef8ec2895033":[2,0,34,0,0,6,0,0],
 "classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a6c7d55a1e67b644ef53a59bad9e42a61":[2,0,34,0,0,6,0,1],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a9c3cdc2b10b34debb53d9719fbddc638":[2,0,34,0,0,6,0,3],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#abad7d445eb555517f300b6de6986a765":[2,0,34,0,0,6,0,4],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,6,0,2],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af35ad66cf3eab7948fa0d47859715671":[2,0,34,0,0,6,0,5],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,6,0,6]
+"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a9c3cdc2b10b34debb53d9719fbddc638":[2,0,34,0,0,6,0,3]
 };

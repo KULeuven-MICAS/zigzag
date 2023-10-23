@@ -73,13 +73,14 @@ var searchData=
   ['core_2epy_116',['core.py',['../core_8py.html',1,'']]],
   ['core_5fallocation_117',['core_allocation',['../classdummy__node_1_1DummyNode.html#a0eefc4dfe20e299c997385acdaffb1f6',1,'dummy_node.DummyNode.core_allocation()'],['../classlayer__node_1_1LayerNode.html#a0eefc4dfe20e299c997385acdaffb1f6',1,'layer_node.LayerNode.core_allocation()']]],
   ['core_5fid_118',['core_id',['../classcost__model_1_1CostModelEvaluation.html#a1dcb76a1629c0153d7ab81183ecfd650',1,'cost_model::CostModelEvaluation']]],
-  ['cores_119',['cores',['../classaccelerator_1_1Accelerator.html#a544fab0363e5669bce84b499e2e92ad0',1,'accelerator::Accelerator']]],
-  ['cost_120',['cost',['../classadder__hierarchy_1_1Adder.html#a6ce3360f2586a441b79b1053cfd2769c',1,'adder_hierarchy.Adder.cost()'],['../classoperational__unit_1_1OperationalUnit.html#a6ce3360f2586a441b79b1053cfd2769c',1,'operational_unit.OperationalUnit.cost()']]],
-  ['cost_5fmodel_121',['cost_model',['../namespacecost__model.html',1,'']]],
-  ['cost_5fmodel_2epy_122',['cost_model.py',['../cost__model_8py.html',1,'']]],
-  ['costmodelevaluation_123',['CostModelEvaluation',['../classcost__model_1_1CostModelEvaluation.html',1,'cost_model']]],
-  ['costmodelstage_124',['CostModelStage',['../classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html',1,'zigzag::classes::stages::CostModelStage']]],
-  ['costmodelstage_2epy_125',['CostModelStage.py',['../CostModelStage_8py.html',1,'']]],
-  ['create_5fitem_126',['create_item',['../classcacti__parser_1_1CactiParser.html#a008f45afab52d9a76a2f9817954903d9',1,'cacti_parser::CactiParser']]],
-  ['cycle_5fcabl_5flevel_127',['cycle_cabl_level',['../classtemporal__mapping_1_1TemporalMapping.html#a2b40108a481cf87f258758e764cb8a4d',1,'temporal_mapping::TemporalMapping']]]
+  ['core_5fmem_5flevel_5flist_119',['core_mem_level_list',['../classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acd8295830954e1e4a836eb95e38f6083',1,'zigzag::classes::stages::SearchUnusedMemoryStage::SearchUnusedMemoryStage']]],
+  ['cores_120',['cores',['../classaccelerator_1_1Accelerator.html#a544fab0363e5669bce84b499e2e92ad0',1,'accelerator::Accelerator']]],
+  ['cost_121',['cost',['../classadder__hierarchy_1_1Adder.html#a6ce3360f2586a441b79b1053cfd2769c',1,'adder_hierarchy.Adder.cost()'],['../classoperational__unit_1_1OperationalUnit.html#a6ce3360f2586a441b79b1053cfd2769c',1,'operational_unit.OperationalUnit.cost()']]],
+  ['cost_5fmodel_122',['cost_model',['../namespacecost__model.html',1,'']]],
+  ['cost_5fmodel_2epy_123',['cost_model.py',['../cost__model_8py.html',1,'']]],
+  ['costmodelevaluation_124',['CostModelEvaluation',['../classcost__model_1_1CostModelEvaluation.html',1,'cost_model']]],
+  ['costmodelstage_125',['CostModelStage',['../classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html',1,'zigzag::classes::stages::CostModelStage']]],
+  ['costmodelstage_2epy_126',['CostModelStage.py',['../CostModelStage_8py.html',1,'']]],
+  ['create_5fitem_127',['create_item',['../classcacti__parser_1_1CactiParser.html#a008f45afab52d9a76a2f9817954903d9',1,'cacti_parser::CactiParser']]],
+  ['cycle_5fcabl_5flevel_128',['cycle_cabl_level',['../classtemporal__mapping_1_1TemporalMapping.html#a2b40108a481cf87f258758e764cb8a4d',1,'temporal_mapping::TemporalMapping']]]
 ];

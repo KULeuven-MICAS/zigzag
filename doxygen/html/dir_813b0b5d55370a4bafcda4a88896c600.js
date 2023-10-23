@@ -16,9 +16,11 @@ var dir_813b0b5d55370a4bafcda4a88896c600 =
       [ "PlotTemporalMappingsStage", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1classes_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
     ] ],
     [ "ReduceStages.py", "ReduceStages_8py.html", "ReduceStages_8py" ],
+    [ "RemoveUnusedMemoryStage.py", "RemoveUnusedMemoryStage_8py.html", "RemoveUnusedMemoryStage_8py" ],
     [ "RunOptStages.py", "RunOptStages_8py.html", "RunOptStages_8py" ],
     [ "SalsaStage.py", "SalsaStage_8py.html", "SalsaStage_8py" ],
     [ "SaveStage.py", "SaveStage_8py.html", "SaveStage_8py" ],
+    [ "SearchUnusedMemoryStage.py", "SearchUnusedMemoryStage_8py.html", "SearchUnusedMemoryStage_8py" ],
     [ "SpatialMappingConversionStage.py", "SpatialMappingConversionStage_8py.html", "SpatialMappingConversionStage_8py" ],
     [ "SpatialMappingGeneratorStage.py", "SpatialMappingGeneratorStage_8py.html", "SpatialMappingGeneratorStage_8py" ],
     [ "Stage.py", "Stage_8py.html", [

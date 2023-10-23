@@ -152,6 +152,9 @@ var annotated_dup =
             [ "SumStage", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1SumStage.html", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1SumStage" ],
             [ "ListifyStage", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage.html", "classzigzag_1_1classes_1_1stages_1_1ReduceStages_1_1ListifyStage" ]
           ] ],
+          [ "RemoveUnusedMemoryStage", "namespacezigzag_1_1classes_1_1stages_1_1RemoveUnusedMemoryStage.html", [
+            [ "RemoveUnusedMemoryStage", "classzigzag_1_1classes_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage.html", "classzigzag_1_1classes_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage" ]
+          ] ],
           [ "RunOptStages", "namespacezigzag_1_1classes_1_1stages_1_1RunOptStages.html", [
             [ "RemoveExtraInfoStage", "classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1RemoveExtraInfoStage.html", "classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1RemoveExtraInfoStage" ],
             [ "CacheBeforeYieldStage", "classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1CacheBeforeYieldStage.html", "classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1CacheBeforeYieldStage" ],
@@ -166,6 +169,9 @@ var annotated_dup =
             [ "CompleteSaveStage", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage.html", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage" ],
             [ "SimpleSaveStage", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage.html", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage" ],
             [ "PickleSaveStage", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1PickleSaveStage.html", "classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1PickleSaveStage" ]
+          ] ],
+          [ "SearchUnusedMemoryStage", "namespacezigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage.html", [
+            [ "SearchUnusedMemoryStage", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage" ]
           ] ],
           [ "SpatialMappingConversionStage", "namespacezigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage.html", [
             [ "SpatialMappingConversionStage", "classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html", "classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage" ]
