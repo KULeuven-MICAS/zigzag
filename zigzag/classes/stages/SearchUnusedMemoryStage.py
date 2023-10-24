@@ -263,8 +263,6 @@ class SearchUnusedMemoryStage(Stage):
                 self.update_IO_mem_level(
                     curr_id, act_operand, prev_layer_output_level
                 )  # update the input mem level of current layer
-            if id == 28:
-                pass
             if (
                 branch_starting_node or branch_final_node
             ):  ## branch starting node or branch final node or permited dummy nodes (e.g. Adder layer)
@@ -319,7 +317,7 @@ class SearchUnusedMemoryStage(Stage):
                     )  # Check the served operand of current mem
                     ## Update input, weight, output mem level
                     avail_mem_size = (
-                        mem.memory_instance.size
+                        mem.memory_instance.size * mem.unroll_count
                     )  # available hardware mem size
 
                     try:
@@ -364,7 +362,6 @@ class SearchUnusedMemoryStage(Stage):
                     mem_serve_weight = (
                         True if (const_operand in served_operands) else False
                     )  # mem.served_operands = ["W"]
-
                     # we need to change served_operands if the current layer is an Adder layer,
                     # for the ease of calculation of required input data size.
                     # Since an Adder layer has two inputs,
