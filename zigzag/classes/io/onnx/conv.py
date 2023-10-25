@@ -121,11 +121,18 @@ class ConvParser(Parser):
             d["constant_operands"] = ["W"]
 
             d["core_allocation"] = node_mapping["core_allocation"]
-            d["spatial_mapping"] = node_mapping["spatial_mapping"]
             d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] = node_mapping["memory_operand_links"]
+            try:
+                d["spatial_mapping"] = node_mapping["spatial_mapping"]
+            except KeyError: # not provided
+                d["spatial_mapping"] = None
+            try:
+                d["spatial_mapping_hint"] = node_mapping["spatial_mapping_hint"]
+            except KeyError: # not provided
+                d["spatial_mapping_hint"] = None
 
-            # Find the previous layer(s) that should be this node's parent(s)
+                # Find the previous layer(s) that should be this node's parent(s)
             node_inputs = self.node.input
             preds = []
             for node_input in node_inputs:

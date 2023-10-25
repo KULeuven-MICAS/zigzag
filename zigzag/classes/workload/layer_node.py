@@ -76,6 +76,9 @@ class LayerNode:
         user_spatial_mapping: Dict[str, tuple] = layer_attrs.get(
             "spatial_mapping", None
         )
+        user_spatial_mapping_hint: Dict[str, list] = layer_attrs.get(
+            "spatial_mapping_hint", None
+        )
         user_temporal_ordering = layer_attrs.get("temporal_ordering", None)
         core_allocation: int = layer_attrs.get("core_allocation", None)
         memory_operand_links: Dict[str, str] = layer_attrs.get(
@@ -103,6 +106,7 @@ class LayerNode:
         self.dimension_relations = dimension_relations
         self.loop_dim_list = list(loop_dim_size.keys())
         self.user_spatial_mapping = user_spatial_mapping
+        self.user_spatial_mapping_hint = user_spatial_mapping_hint
         self.user_temporal_ordering = user_temporal_ordering
         self.core_allocation = core_allocation
         self.memory_operand_links = memory_operand_links.copy()
