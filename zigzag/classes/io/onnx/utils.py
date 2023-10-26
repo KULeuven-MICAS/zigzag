@@ -12,6 +12,7 @@ from onnx import AttributeProto
 
 logger = logging.getLogger(__name__)
 
+
 ## Parse the input accelerator residing in accelerator_path.
 # @param mapping_path
 def parse_mapping_from_path(mapping_path):

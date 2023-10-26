@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 # user-provided spatial mapping across operational array dimensions
 # to the internal spatial mapping representation used in the cost model.
 class SpatialMappingConversionStage(Stage):
-
     ## The class constructor
     # Initialize the accelerator and layer attributes.
     def __init__(self, list_of_callables, *, accelerator, layer, **kwargs):
@@ -23,11 +22,11 @@ class SpatialMappingConversionStage(Stage):
 
     @staticmethod
     ## Check the layer attribute of the main_inputs:
-    # 
+    #
     # check that the layer includes:
     # - the core which it is allocated to
     # - the user-defined spatial mapping
-    # 
+    #
     # If not, a ValueError is raised.
     # @return: True
     def check_layer(layer):
@@ -52,14 +51,13 @@ class SpatialMappingConversionStage(Stage):
         return False
 
     def run(self):
-
         user_spatial_mapping = self.layer.user_spatial_mapping
         spatial_mapping = self.convert_user_spatial_mapping(user_spatial_mapping)
         # Since the spatial_mapping may be modified in the previous step,
         # we have to update this change to self.layer
         updated_user_spatial_mapping = {}
         for oa_dim, sm_loop in user_spatial_mapping.items():
-            if self.is_nested_tuple(sm_loop): # a mix sm loop
+            if self.is_nested_tuple(sm_loop):  # a mix sm loop
                 sm_comb = []
                 for sub_sm_loop in sm_loop:
                     sm_layer_dim = sub_sm_loop[0]
@@ -86,7 +84,8 @@ class SpatialMappingConversionStage(Stage):
 
     ## Convert the user-defined spatial mapping across operational array dimensions
     # to the internal SpatialMapping representation.
-    ''
+    ""
+
     # For this conversion we need to know:
     # - the user defined spatial mapping
     # - the core (i.e. operational array) on which the unrolling happens,
@@ -107,23 +106,40 @@ class SpatialMappingConversionStage(Stage):
         limited_user_spatial_mapping = {}  # init dict we will be filling
         for oa_dim_name, spatial_loop in user_spatial_mapping.items():
             if self.is_nested_tuple(spatial_loop):  # mix sm loop
-                limited_user_spatial_mapping[oa_dim_name] = []
+                limited_mix_user_spatial_mapping_on_dim = []
                 for spatial_loop_element in spatial_loop:
-                    limited_user_spatial_mapping_to_check = self.generate_limited_user_spatial_mapping(layer_dim_sizes,
-                                                                                                       oa_dims,
-                                                                                                       oa_dim_name,
-                                                                                                       spatial_loop_element)
+                    limited_user_spatial_mapping_to_check = (
+                        self.generate_limited_user_spatial_mapping(
+                            layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop_element
+                        )
+                    )
                     if limited_user_spatial_mapping_to_check == None:
                         continue  # Same to Check 0: Skip this spatial dimension if it doesn't exist in the layer
                     else:
-                        limited_user_spatial_mapping[oa_dim_name].append(limited_user_spatial_mapping_to_check)
-                limited_user_spatial_mapping[oa_dim_name] = tuple(limited_user_spatial_mapping[oa_dim_name])
-            else:  # single-dim sm loop
-                limited_user_spatial_mapping_to_check = self.generate_limited_user_spatial_mapping(layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop)
-                if limited_user_spatial_mapping_to_check == None:
-                    continue  # Same to Check 0: Skip this spatial dimension if it doesn't exist in the layer
+                        limited_mix_user_spatial_mapping_on_dim.append(
+                            limited_user_spatial_mapping_to_check
+                        )
+                if len(limited_mix_user_spatial_mapping_on_dim) == 0:
+                    continue  # Skip this spatial dimension if the defined dims in sm don't exist in the layer
                 else:
-                    limited_user_spatial_mapping[oa_dim_name] = limited_user_spatial_mapping_to_check
+                    limited_mix_user_spatial_mapping_on_dim = tuple(
+                        limited_mix_user_spatial_mapping_on_dim
+                    )
+                    limited_user_spatial_mapping[
+                        oa_dim_name
+                    ] = limited_mix_user_spatial_mapping_on_dim
+            else:  # single-dim sm loop
+                limited_user_spatial_mapping_to_check = (
+                    self.generate_limited_user_spatial_mapping(
+                        layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+                    )
+                )
+                if limited_user_spatial_mapping_to_check == None:
+                    continue  # Skip this spatial dimension if the defined dims in sm don't exist in the layer
+                else:
+                    limited_user_spatial_mapping[
+                        oa_dim_name
+                    ] = limited_user_spatial_mapping_to_check
             # Update the layer_dim_size to support multiple oa dims unrolling the same loop dim but not unrolling it more than the total layer dim
             # if (
             #     temporal_remainder == 1
@@ -160,6 +176,7 @@ class SpatialMappingConversionStage(Stage):
 
             for memory_level in memory_levels:
                 spatial_mapping_lvl = []
+                spatial_mapping_lvl_dict = {}
                 served_dimensions = memory_level.served_dimensions
                 for dimension in served_dimensions:
                     dim_name = dimension.name
@@ -170,12 +187,41 @@ class SpatialMappingConversionStage(Stage):
                         if self.is_nested_tuple(spatial_loop):  # mix sm loop
                             # Reformat the spatial_loop to the original format
                             for sub_spatial_loop in spatial_loop:
-                                spatial_mapping_lvl.append(sub_spatial_loop)
+                                (
+                                    spatial_mapping_dim,
+                                    spatial_mapping_size,
+                                ) = sub_spatial_loop
+                                if (
+                                    spatial_mapping_dim
+                                    in spatial_mapping_lvl_dict.keys()
+                                ):
+                                    spatial_mapping_lvl_dict[
+                                        spatial_mapping_dim
+                                    ] *= spatial_mapping_size
+                                else:
+                                    spatial_mapping_lvl_dict[
+                                        spatial_mapping_dim
+                                    ] = spatial_mapping_size
                         else:  # single-dim sm loop
-                            spatial_mapping_lvl.append(spatial_loop)
+                            (spatial_mapping_dim, spatial_mapping_size) = spatial_loop
+                            if spatial_mapping_dim in spatial_mapping_lvl_dict.keys():
+                                spatial_mapping_lvl_dict[
+                                    spatial_mapping_dim
+                                ] *= spatial_mapping_size
+                            else:
+                                spatial_mapping_lvl_dict[
+                                    spatial_mapping_dim
+                                ] = spatial_mapping_size
                         # Then remove this dim_name and spatial loop key value pair from the dict
                         # as the spatial mapping representation is a level-by-level one.
                         del user_sm_copy[dim_name]
+                for (
+                    spatial_mapping_lvl_dict_dim,
+                    spatial_mapping_lvl_dict_size,
+                ) in spatial_mapping_lvl_dict.items():
+                    spatial_mapping_lvl.append(
+                        (spatial_mapping_lvl_dict_dim, spatial_mapping_lvl_dict_size)
+                    )
                 spatial_mapping_dict[layer_op].append(spatial_mapping_lvl)
 
             # After we have gone through the memory levels, if there are still user-defined dimensions
@@ -190,7 +236,9 @@ class SpatialMappingConversionStage(Stage):
             spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
         )
 
-    def generate_limited_user_spatial_mapping(self, layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop):
+    def generate_limited_user_spatial_mapping(
+        self, layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+    ):
         ## Do check on spatial mapping, and convert the mapping to a tuple
         (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
         # Check 0: Skip this spatial dimension if it doesn't exist in the layer
@@ -207,4 +255,7 @@ class SpatialMappingConversionStage(Stage):
         # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
         temporal_remainder = int(np.ceil(layer_dim_size / loop_size_unrolled))
         loop_size_unrolled = layer_dim_size / temporal_remainder
-        return (loop_dim_unrolled, loop_size_unrolled,)
+        return (
+            loop_dim_unrolled,
+            loop_size_unrolled,
+        )

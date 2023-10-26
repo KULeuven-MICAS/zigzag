@@ -11,16 +11,48 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/examples/workload/alexnet.onnx": (5568602396.684999, 8134431),
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (751128562.4699999, 2427487),
-    "zigzag/inputs/examples/workload/resnet18.onnx": (1784539639.4349997, 3176546),
-    "zigzag.inputs.examples.workload.resnet18": (2115122870.395, 3884789),
+    "zigzag/inputs/examples/workload/alexnet.onnx": (5582430184.085, 8343378),
+    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (762066732.5049998, 3003074),
+    "zigzag/inputs/examples/workload/resnet18.onnx": (1743190534.155, 5305825),
+    "zigzag.inputs.examples.workload.resnet18": (2087322696.315, 6155355),
 }
 
 
 @pytest.fixture
 def mapping():
-    return "zigzag.inputs.examples.mapping.edge_tpu_like"
+    edge_tpu_like_mapping = {
+        "default": {
+            "core_allocation": 1,
+            "spatial_mapping": {
+                "D1": ("K", 8),
+                "D2": (("C", 2), ("FX", 2), ("FY", 2)),
+                "D3": (("OX", 2), ("OY", 2)),
+                "D4": (("OX", 2), ("OY", 2)),
+            },
+            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
+        },
+        "Add": {
+            "core_allocation": 1,
+            "spatial_mapping": {
+                "D1": ("G", 8),
+                "D2": ("C", 1),
+                "D3": ("OX", 1),
+                "D4": ("OY", 1),
+            },
+            "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
+        },
+        "Pooling": {
+            "core_allocation": 1,
+            "spatial_mapping": {
+                "D1": ("G", 8),
+                "D2": ("C", 1),
+                "D3": ("OX", 1),
+                "D4": ("OY", 1),
+            },
+            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
+        },
+    }
+    return edge_tpu_like_mapping
 
 
 @pytest.fixture

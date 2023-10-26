@@ -3,7 +3,8 @@ from math import ceil
 from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import (
     get_attribute_ints_with_name,
-    get_node_input_output_dimension_shapes, get_onnx_tensor_type,
+    get_node_input_output_dimension_shapes,
+    get_onnx_tensor_type,
 )
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
@@ -12,9 +13,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 ## Parser for ONNX Conv and QLinearConv nodes into LayerNode.
 class ConvParser(Parser):
-
     ## The class constructor
     # @param node_id
     # @param node
@@ -125,11 +126,11 @@ class ConvParser(Parser):
             d["memory_operand_links"] = node_mapping["memory_operand_links"]
             try:
                 d["spatial_mapping"] = node_mapping["spatial_mapping"]
-            except KeyError: # not provided
+            except KeyError:  # not provided
                 d["spatial_mapping"] = None
             try:
                 d["spatial_mapping_hint"] = node_mapping["spatial_mapping_hint"]
-            except KeyError: # not provided
+            except KeyError:  # not provided
                 d["spatial_mapping_hint"] = None
 
                 # Find the previous layer(s) that should be this node's parent(s)

@@ -1,9 +1,9 @@
 from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.workload.dummy_node import DummyNode
 
+
 ## This class parses an ONNX node into a DummyNode.
 class DefaultNodeParser(Parser):
-
     ## The class constructor
     # @param node_id
     # @param node

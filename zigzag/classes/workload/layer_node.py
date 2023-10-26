@@ -8,13 +8,12 @@ from collections import defaultdict
 
 ## Description missing
 class LayerNode:
-
     ## The class constructor
-    # 
+    #
     # To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
     # This parser collects information of operand, loop dimension, and loop relevance.
     # Equal-to-1 loop dimensions are eliminated.
-    # 
+    #
     # @param layer_id: The identifier (key) of the layer, as defined in the workload
     # @param layer_attrs: contains attributes specified below:
     # @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
@@ -382,7 +381,6 @@ class LayerNode:
     ## This function extract basic information for each layer node.
     # @return: total_MAC_count, operand_size_elem, operand_size_bit, operand_data_reuse.
     def extract_layer_info(self):
-
         # total MAC operation count
         total_MAC_count: int = 1
         for ky in self.loop_dim_size:
@@ -408,7 +406,7 @@ class LayerNode:
             operand_size_bit[operand] = size_in_elem * self.operand_precision[operand]
         self.operand_size_bit = operand_size_bit
 
-        # each operand's total data reuse factor, which is total MAC Op/total operand size (in element), 
+        # each operand's total data reuse factor, which is total MAC Op/total operand size (in element),
         # i.e. each data element can be used to support how many MAC operation.
         operand_data_reuse: Dict[str, float] = {}
         for operand, size_in_elem in operand_size_elem.items():
@@ -436,7 +434,6 @@ class LayerNode:
 
 
 if __name__ == "__main__":
-
     equation = "O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]"
     dimension_size = {
         "B": 1,

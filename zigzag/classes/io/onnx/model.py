@@ -15,9 +15,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 ## Parse the ONNX model into a workload.
 class ONNXModelParser:
-
     ## The class constructor
     # @param onxx_model
     # @param mapping_path
@@ -62,23 +62,22 @@ class ONNXModelParser:
         workload = self.parse_workload_from_onnx_model_and_mapping()
         self.workload = workload
 
-
     ## Converts an onnx model into a workload object.
     # We scan the model for all convolutional layers, and setup a Layer object for each of those using the mapping.
     # Then we combine the layers into a workload graph.
-    # 
+    #
     # If the model isn't in the format with external data, it will be slow to manipulate it, so better to work with raw models with external data
     # The line below accomplishes this.
     # onnx.save_model(model, 'model_external.onnx', save_as_external_data=True, all_tensors_to_one_file=True, location='model_external_raw_data', size_threshold=1024, convert_attribute=False)
-    # 
+    #
     # In the future, assume we will have a model saved with external data, then we have to execute the code below
     # if the model isn't inferred yet
-    # 
+    #
     # This approach is faster for large models because the raw model is used (w/o the external data)
     # if model is not inferred:
     # onnx.shape_inference.infer_shapes_path('path/to/the/model.onnx')  # This will save the inferred model to the same file
     # model = onnx.load('path/to/the/model.onnx')  # reload the inferred model
-    # 
+    #
     # Saves for each node_id the inputs and outputs tensor names
     def parse_workload_from_onnx_model_and_mapping(self):
         nodes_inputs = {}

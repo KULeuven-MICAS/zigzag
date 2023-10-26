@@ -298,8 +298,8 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
         # By default, if the parameter is not defined, it will be set as False internally.
         access_same_data_considered_as_no_access=True,
-        enable_mix_spatial_mapping=True,  # enable auto-generation of mix spatial mapping
-        maximize_hardware_utilization=True, # only evaluate spatial mapping with high hardware utilization (fast simulation speed)
+        enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
+        maximize_hardware_utilization=True, # only evaluate spatial mapping with highest hardware utilization (fast simulation speed)
     )
 
     # Launch the MainStage
