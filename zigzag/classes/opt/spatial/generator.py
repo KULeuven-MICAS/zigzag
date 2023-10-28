@@ -201,11 +201,23 @@ class UserSpatialMappingGenerator:
                     for sub_unrolling_in_combination in unrolling_in_combination:
                         unrolling_layer_dim = sub_unrolling_in_combination[0]
                         unrolling_layer_size = sub_unrolling_in_combination[1]
-                        combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                        if unrolling_layer_dim in combination_check.keys():
+                            combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                        else:
+                            # The unrolled layer dim does not exist in current layer.
+                            # This only happens when the spatial mapping is user-defined, which
+                            # contains non-existent layer dims in current layer.
+                            pass
                 else:
                     unrolling_layer_dim = unrolling_in_combination[0]
                     unrolling_layer_size = unrolling_in_combination[1]
-                    combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                    if unrolling_layer_dim in combination_check.keys():
+                        combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                    else:
+                        # The unrolled layer dim does not exist in current layer.
+                        # This only happens when the spatial mapping is user-defined, which
+                        # contains non-existent layer dims in current layer.
+                        pass
             for layer_dim, layer_size in combination_check.items():
                 if layer_size < 1:  # the layer size/the unrolling size < 1
                     # It means the unrolling size > the layer size, which is incorrect and impossible.

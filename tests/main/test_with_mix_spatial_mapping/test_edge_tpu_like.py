@@ -1,6 +1,8 @@
 import pytest
 
-from zigzag.api import get_hardware_performance_zigzag_without_unused_memory
+from zigzag.api import get_hardware_performance_zigzag_with_mix_spatial_mapping
+
+# Test case for when both spatial_mapping and spatial_mapping_hint are provided.
 
 workloads = (
     "zigzag/inputs/examples/workload/alexnet.onnx",
@@ -29,6 +31,8 @@ def mapping():
                 "D3": (("OX", 2), ("OY", 2)),
                 "D4": (("OX", 2), ("OY", 2)),
             },
+            # spatial_mapping_hint will not work if the mapping on every dimension is provided in spatial_mapping
+            "spatial_mapping_hint": {"D1": ["K"], "D2": ["C", "FX", "FY"], "D3": ["OX", "OY"], "D4": ["OX", "OY"]},
             "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
         },
         "Add": {
@@ -62,7 +66,7 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_without_unused_memory(
+    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(
         workload, accelerator, mapping
     )
     (expected_energy, expected_latency) = ens_lats[workload]

@@ -43,7 +43,6 @@ class SpatialMappingGeneratorStage(Stage):
             enable_mix_spatial_mapping_generation
         )
         self.maximize_hardware_utilization = maximize_hardware_utilization
-        self.check_user_spatial_mapping_hint(layer, accelerator)
 
     @staticmethod
     # Check that the layer includes:
@@ -61,23 +60,6 @@ class SpatialMappingGeneratorStage(Stage):
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError()
         return True
-
-    @staticmethod
-    def check_user_spatial_mapping_hint(layer, accelerator):
-        core_id = layer.core_allocation
-        core: Core = accelerator.get_core(core_id=core_id)
-        oa_dims = core.operational_array.dimensions
-        user_spatial_mapping_hint = layer.user_spatial_mapping_hint
-        if user_spatial_mapping_hint is None:
-            logger.debug("User-provided spatial mappings hint not found.")
-        else:
-            # Check if there is dim name that in user_provided_spatial_mapping_hint but not in oa_dims
-            oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
-            for oa_dim_key in user_spatial_mapping_hint.keys():
-                assert oa_dim_key in oa_dims_name, (
-                    f"A hardware dimension defined in spatial_mapping_hint: {oa_dim_key}, "
-                    f"does not exist in the hardware."
-                )
 
     ## Run this stage by generating user-formatted spatial mappings which are converted
     # to the memory-level based spatial mapping representation.
