@@ -32,7 +32,12 @@ def mapping():
                 "D4": (("OX", 2), ("OY", 2)),
             },
             # spatial_mapping_hint will not work if the mapping on every dimension is provided in spatial_mapping
-            "spatial_mapping_hint": {"D1": ["K"], "D2": ["C", "FX", "FY"], "D3": ["OX", "OY"], "D4": ["OX", "OY"]},
+            "spatial_mapping_hint": {
+                "D1": ["K"],
+                "D2": ["C", "FX", "FY"],
+                "D3": ["OX", "OY"],
+                "D4": ["OX", "OY"],
+            },
             "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
         },
         "Add": {
