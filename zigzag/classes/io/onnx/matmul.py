@@ -8,9 +8,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 ## Parses an ONNX MatMul operator into a LayerNode
 class MatMulParser(Parser):
-
     ## The class constructor
     # @param node_id
     # @param node
@@ -28,7 +28,6 @@ class MatMulParser(Parser):
     def generate_layer_node_for_matmul(self):
         ## Generate the necessary dictionary items required for the Node creation.
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
-
             # convert the data types to precisions based on the onnx definition
 
             # Equation
@@ -46,9 +45,16 @@ class MatMulParser(Parser):
             d["constant_operands"] = ["B"]
 
             d["core_allocation"] = node_mapping["core_allocation"]
-            d["spatial_mapping"] = node_mapping["spatial_mapping"]
             d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] = {"O": "O", "B": "I2", "A": "I1"}
+            try:
+                d["spatial_mapping"] = node_mapping["spatial_mapping"]
+            except KeyError:  # not provided
+                d["spatial_mapping"] = None
+            try:
+                d["spatial_mapping_hint"] = node_mapping["spatial_mapping_hint"]
+            except KeyError:  # not provided
+                d["spatial_mapping_hint"] = None
 
             # Find the previous layer(s) that should be this node's parent(s)
             node_inputs = self.node.input

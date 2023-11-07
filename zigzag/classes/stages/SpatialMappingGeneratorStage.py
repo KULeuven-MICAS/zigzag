@@ -10,35 +10,48 @@ import copy
 
 logger = logging.getLogger(__name__)
 
+
 ## Pipeline stage that finds spatial mappings given a:
 # - accelerator
 # - core allocation
 # - interconnection pattern on the allocated core
 # - layer
-# 
+#
 # The spatial mappings are found using the interconnection pattern present on the core.
-# 
+#
 # The inner-most memory level served dimensions is used,
 # as this is how the memories connect to the operational array.
 class SpatialMappingGeneratorStage(Stage):
-
     ## The class constructor
     # Note: list_of_callables does NOT need to include SpatialMappingConversionStage. Although this is used,
     # this usage is done automatically.
-    def __init__(self, list_of_callables, *, accelerator, layer, **kwargs):
+    def __init__(
+        self,
+        list_of_callables,
+        *,
+        accelerator,
+        layer,
+        enable_mix_spatial_mapping_generation=False,
+        maximize_hardware_utilization=True,
+        **kwargs,
+    ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.check_layer(layer)
         self.layer = layer
+        self.enable_mix_spatial_mapping_generation = (
+            enable_mix_spatial_mapping_generation
+        )
+        self.maximize_hardware_utilization = maximize_hardware_utilization
 
     @staticmethod
     # Check that the layer includes:
     # - the core which it is allocated to
-    # 
+    #
     # If not, a ValueError is raised.
-    # 
+    #
     # If the layer in main_inputs is not set, False is returned
-    # 
+    #
     # @return: True if layer is set correctly
     def check_layer(layer):
         if layer is None:
@@ -52,6 +65,7 @@ class SpatialMappingGeneratorStage(Stage):
     # to the memory-level based spatial mapping representation.
     def run(self):
         user_provided_spatial_mappings = self.layer.user_spatial_mapping
+        user_spatial_mapping_hint = self.layer.user_spatial_mapping_hint
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
         oa_dims = core.operational_array.dimensions
@@ -61,7 +75,11 @@ class SpatialMappingGeneratorStage(Stage):
         ):  # There is a single USM provided
             if len(user_provided_spatial_mappings) < len(oa_dims):
                 user_spatial_mapping_generator = UserSpatialMappingGenerator(
-                    self.layer, self.accelerator, user_provided_spatial_mappings
+                    layer=self.layer,
+                    accelerator=self.accelerator,
+                    defined_mapping=user_provided_spatial_mappings,
+                    enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
+                    maximize_hardware_utilization=self.maximize_hardware_utilization,
                 )
                 # Get all the USMs by running the generator
                 user_spatial_mappings = list(
@@ -74,9 +92,34 @@ class SpatialMappingGeneratorStage(Stage):
         ):  # There are multiple USMs provided
             user_spatial_mappings = user_provided_spatial_mappings
         else:  # There is no USM provided
+            # Initialize the user_provided_spatial_mapping_hint
+            if user_spatial_mapping_hint is None:
+                logger.info(
+                    "User-provided spatial mappings or hints not found. Auto-generating spatial_mapping_hint.."
+                )
+                user_spatial_mapping_hint = {}
+                for oa_dim in oa_dims:
+                    user_spatial_mapping_hint[oa_dim.name] = [
+                        layer_dim for layer_dim in self.layer.loop_dim_list
+                    ]
+                    self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
+            else:
+                oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
+                # Add definition for non-exist dimension in user_spatial_mapping_hint
+                for oa_dim_name in oa_dims_name:
+                    if oa_dim_name not in user_spatial_mapping_hint.keys():
+                        user_spatial_mapping_hint[oa_dim_name] = [
+                            layer_dim for layer_dim in self.layer.loop_dim_list
+                        ]
+                logger.debug(
+                    "No user-provided spatial mapping found, but a hint was found."
+                )
             # Initialize the UserSpatialMappingGenerator which will automatically generate SMs
             user_spatial_mapping_generator = UserSpatialMappingGenerator(
-                self.layer, self.accelerator
+                layer=self.layer,
+                accelerator=self.accelerator,
+                enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
+                maximize_hardware_utilization=self.maximize_hardware_utilization,
             )
             # Get all the USMs by running the generator
             user_spatial_mappings = list(

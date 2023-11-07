@@ -8,13 +8,12 @@ from collections import defaultdict
 
 ## Description missing
 class LayerNode:
-
     ## The class constructor
-    # 
+    #
     # To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
     # This parser collects information of operand, loop dimension, and loop relevance.
     # Equal-to-1 loop dimensions are eliminated.
-    # 
+    #
     # @param layer_id: The identifier (key) of the layer, as defined in the workload
     # @param layer_attrs: contains attributes specified below:
     # @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
@@ -76,6 +75,9 @@ class LayerNode:
         user_spatial_mapping: Dict[str, tuple] = layer_attrs.get(
             "spatial_mapping", None
         )
+        user_spatial_mapping_hint: Dict[str, list] = layer_attrs.get(
+            "spatial_mapping_hint", None
+        )
         user_temporal_ordering = layer_attrs.get("temporal_ordering", None)
         core_allocation: int = layer_attrs.get("core_allocation", None)
         memory_operand_links: Dict[str, str] = layer_attrs.get(
@@ -103,6 +105,7 @@ class LayerNode:
         self.dimension_relations = dimension_relations
         self.loop_dim_list = list(loop_dim_size.keys())
         self.user_spatial_mapping = user_spatial_mapping
+        self.user_spatial_mapping_hint = user_spatial_mapping_hint
         self.user_temporal_ordering = user_temporal_ordering
         self.core_allocation = core_allocation
         self.memory_operand_links = memory_operand_links.copy()
@@ -378,7 +381,6 @@ class LayerNode:
     ## This function extract basic information for each layer node.
     # @return: total_MAC_count, operand_size_elem, operand_size_bit, operand_data_reuse.
     def extract_layer_info(self):
-
         # total MAC operation count
         total_MAC_count: int = 1
         for ky in self.loop_dim_size:
@@ -404,7 +406,7 @@ class LayerNode:
             operand_size_bit[operand] = size_in_elem * self.operand_precision[operand]
         self.operand_size_bit = operand_size_bit
 
-        # each operand's total data reuse factor, which is total MAC Op/total operand size (in element), 
+        # each operand's total data reuse factor, which is total MAC Op/total operand size (in element),
         # i.e. each data element can be used to support how many MAC operation.
         operand_data_reuse: Dict[str, float] = {}
         for operand, size_in_elem in operand_size_elem.items():
@@ -432,7 +434,6 @@ class LayerNode:
 
 
 if __name__ == "__main__":
-
     equation = "O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]"
     dimension_size = {
         "B": 1,
