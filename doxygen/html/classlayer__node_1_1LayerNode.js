@@ -45,5 +45,6 @@ var classlayer__node_1_1LayerNode =
     [ "total_MAC_count", "classlayer__node_1_1LayerNode.html#a4a808bb94d1f0ad73ac5e8471c60aa7c", null ],
     [ "type", "classlayer__node_1_1LayerNode.html#a7aead736a07eaf25623ad7bfa1f0ee2d", null ],
     [ "user_spatial_mapping", "classlayer__node_1_1LayerNode.html#afc6b897cf2968aae5a895eb798ae1eb2", null ],
+    [ "user_spatial_mapping_hint", "classlayer__node_1_1LayerNode.html#ac08b23dece50e03fd9921fa5a105bfaa", null ],
     [ "user_temporal_ordering", "classlayer__node_1_1LayerNode.html#a11145ac9f56bb17c6aeeb2c85fd0f444", null ]
 ];

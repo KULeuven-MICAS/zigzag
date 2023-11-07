@@ -26,8 +26,9 @@ var searchData=
   ['allocated_35',['allocated',['../classmemory__allocator_1_1MemoryAllocator.html#af501f90be2a73c64b3b80cd90f54aa4c',1,'memory_allocator::MemoryAllocator']]],
   ['allowed_5fcycle_36',['allowed_cycle',['../classcost__model_1_1PortActivity.html#a5d44d08971d37ee4721801b29b705daa',1,'cost_model::PortActivity']]],
   ['allowed_5fmem_5fupdat_5fcycle_37',['allowed_mem_updat_cycle',['../classcost__model_1_1CostModelEvaluation.html#a0db3bb67cdf3d4a57ba2a804ebdadc16',1,'cost_model::CostModelEvaluation']]],
-  ['arch_5flevel_38',['arch_level',['../classspatial__mapping_1_1SpatialMapping.html#a3761bcd8f0ad87adeee3d484a58dd567',1,'spatial_mapping::SpatialMapping']]],
-  ['area_39',['area',['../classadder__hierarchy_1_1Adder.html#a4329d2992f02e00a6e706a5443269afc',1,'adder_hierarchy.Adder.area()'],['../classmemory__instance_1_1MemoryInstance.html#a4329d2992f02e00a6e706a5443269afc',1,'memory_instance.MemoryInstance.area()'],['../classoperational__unit_1_1OperationalUnit.html#a4329d2992f02e00a6e706a5443269afc',1,'operational_unit.OperationalUnit.area()']]],
-  ['assert_5fvalid_40',['assert_valid',['../classadder__hierarchy_1_1AdderHierarchy.html#a22155fda71d16711354d9effac48d239',1,'adder_hierarchy.AdderHierarchy.assert_valid()'],['../classmemory__level_1_1MemoryLevel.html#a6cd9c4b86713ce9fd99c1cfac74f7050',1,'memory_level.MemoryLevel.assert_valid()']]],
-  ['attr_41',['attr',['../classmemory__level_1_1MemoryPort.html#a710acfac10f0042826d2d6d9c213ae7b',1,'memory_level::MemoryPort']]]
+  ['append_5fmix_5fspatial_5funrollings_38',['append_mix_spatial_unrollings',['../classgenerator_1_1UserSpatialMappingGenerator.html#a26e2ead06314082e293d0a3965628e1c',1,'generator::UserSpatialMappingGenerator']]],
+  ['arch_5flevel_39',['arch_level',['../classspatial__mapping_1_1SpatialMapping.html#a3761bcd8f0ad87adeee3d484a58dd567',1,'spatial_mapping::SpatialMapping']]],
+  ['area_40',['area',['../classadder__hierarchy_1_1Adder.html#a4329d2992f02e00a6e706a5443269afc',1,'adder_hierarchy.Adder.area()'],['../classmemory__instance_1_1MemoryInstance.html#a4329d2992f02e00a6e706a5443269afc',1,'memory_instance.MemoryInstance.area()'],['../classoperational__unit_1_1OperationalUnit.html#a4329d2992f02e00a6e706a5443269afc',1,'operational_unit.OperationalUnit.area()']]],
+  ['assert_5fvalid_41',['assert_valid',['../classadder__hierarchy_1_1AdderHierarchy.html#a22155fda71d16711354d9effac48d239',1,'adder_hierarchy.AdderHierarchy.assert_valid()'],['../classmemory__level_1_1MemoryLevel.html#a6cd9c4b86713ce9fd99c1cfac74f7050',1,'memory_level.MemoryLevel.assert_valid()']]],
+  ['attr_42',['attr',['../classmemory__level_1_1MemoryPort.html#a710acfac10f0042826d2d6d9c213ae7b',1,'memory_level::MemoryPort']]]
 ];

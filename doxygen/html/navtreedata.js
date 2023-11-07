@@ -51,9 +51,9 @@ var NAVTREEINDEX =
 [
 "CostModelStage_8py.html",
 "classcost__model_1_1CostModelEvaluation.html#a6f269baa0f767adf24bf448bacb26111",
-"classmemory__hierarchy_1_1MemoryHierarchy.html#aef00069480b036b23b084084db944430",
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#abad7d445eb555517f300b6de6986a765",
-"loma_2engine_8py.html"
+"classmemory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151",
+"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a526aceb13044caff9d8b74fe75831e1b",
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

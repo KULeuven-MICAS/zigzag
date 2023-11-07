@@ -1,4 +1,7 @@
 <map id="run" name="run">
-<area shape="rect" id="node1" title="Runs the runnable." alt="" coords="5,13,48,39"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a9c517d63aca26f581f5c111c92408975" title="Convert the user&#45;defined spatial mapping across operational array dimensions to the internal SpatialM..." alt="" coords="96,5,253,47"/>
+<area shape="rect" id="node1" title="Runs the runnable." alt="" coords="5,78,48,105"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a9c517d63aca26f581f5c111c92408975" title="Convert the user&#45;defined spatial mapping across operational array dimensions to the internal SpatialM..." alt="" coords="96,71,253,112"/>
+<area shape="rect" id="node4" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="301,5,520,47"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="349,137,473,163"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a9b1d722a8f098d0b00443a92d83b837d" title=" " alt="" coords="327,71,495,112"/>
 </map>

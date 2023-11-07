@@ -1,5 +1,10 @@
 var NAVTREEINDEX2 =
 {
+"classmemory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,19,0,15],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#ac627168cec557079f83a54ab2c038ef9":[2,0,19,0,7],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#ace3c477fb06ec893e6c02ee3bf161ca6":[2,0,19,0,4],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#ae1c287576670543b11460042dabf59fa":[2,0,19,0,6],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#aec3b3042454ea17fdec1c37d20d2dd90":[2,0,19,0,3],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#aef00069480b036b23b084084db944430":[2,0,19,0,8],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#af329035d3add361f02f65c7add64435a":[2,0,19,0,13],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#afa317998d8d167b6c4449710490ac76e":[2,0,19,0,11],
@@ -244,10 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,4,1,3],
 "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html":[2,0,34,0,0,5,0],
 "classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a1e686737e25a49cf74fb7c5322abc762":[2,0,34,0,0,5,0,1],
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a4594e20a5ec8cf3449870da9265d5083":[2,0,34,0,0,5,0,2],
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a526aceb13044caff9d8b74fe75831e1b":[2,0,34,0,0,5,0,0],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html":[2,0,34,0,0,6,0],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a28729f443b5f1d432887ef8ec2895033":[2,0,34,0,0,6,0,0],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a6c7d55a1e67b644ef53a59bad9e42a61":[2,0,34,0,0,6,0,1],
-"classzigzag_1_1classes_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a9c3cdc2b10b34debb53d9719fbddc638":[2,0,34,0,0,6,0,3]
+"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a4594e20a5ec8cf3449870da9265d5083":[2,0,34,0,0,5,0,2]
 };
