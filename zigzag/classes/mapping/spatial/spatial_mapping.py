@@ -119,9 +119,6 @@ class SpatialMapping:
 
         """ ASSERT: The bottom level (MAC level) unit count must be the same for all operand """
         bottom_unit_count = [unit_count[op][0] for op in unit_count.keys()]
-        for x in bottom_unit_count:
-            if not x == bottom_unit_count[0]:
-                pass
         assert all(
             x == bottom_unit_count[0] for x in bottom_unit_count
         ), f"The MAC level unit count is not the same for all operand {bottom_unit_count}, please correct the spatial mapping."

@@ -246,9 +246,9 @@ class CostModelEvaluation:
 
         """ generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
         Later the fractional one is used for calculating energy, and the integer one is used for calculating latency"""
-        self.spatial_mapping_dict_int = spatial_mapping_fractional_to_int(
-            self.spatial_mapping.mapping_dict_origin
-        )
+        # self.spatial_mapping_dict_int = spatial_mapping_fractional_to_int(
+        #     self.spatial_mapping.mapping_dict_origin
+        # )
         self.spatial_mapping_dict_int = self.spatial_mapping.mapping_dict_origin
 
         # For constructing Mapping object,  the last parameter "self.access_same_data_considered_as_no_access" is optional
