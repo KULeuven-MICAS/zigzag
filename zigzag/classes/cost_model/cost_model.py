@@ -211,12 +211,14 @@ class CostModelEvaluation:
         accelerator,
         layer,
         spatial_mapping,
+        spatial_mapping_int,
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
     ):
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
+        self.spatial_mapping_int = spatial_mapping_int  # the original spatial mapping without decimal
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = (
             access_same_data_considered_as_no_access
@@ -249,7 +251,7 @@ class CostModelEvaluation:
         # self.spatial_mapping_dict_int = spatial_mapping_fractional_to_int(
         #     self.spatial_mapping.mapping_dict_origin
         # )
-        self.spatial_mapping_dict_int = self.spatial_mapping.mapping_dict_origin
+        self.spatial_mapping_dict_int = self.spatial_mapping_int
 
         # For constructing Mapping object,  the last parameter "self.access_same_data_considered_as_no_access" is optional
         self.mapping = Mapping(

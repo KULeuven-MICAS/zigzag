@@ -6,6 +6,8 @@ from zigzag.classes.hardware.architecture.dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 
+import math
+
 
 ## Class that generates valid user-format spatial mappings.
 class UserSpatialMappingGenerator:
@@ -19,6 +21,7 @@ class UserSpatialMappingGenerator:
         defined_mapping=None,
         enable_mix_spatial_mapping_generation=False,
         maximize_hardware_utilization=True,
+        enable_weight_diagonal_mapping=False,
     ) -> None:
         self.layer = layer
         self.accelerator = accelerator
@@ -27,11 +30,13 @@ class UserSpatialMappingGenerator:
             enable_mix_spatial_mapping_generation
         )
         self.maximize_hardware_utilization = maximize_hardware_utilization
+        self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
 
     def run(self):
         return self.generate_user_spatial_mappings(
             enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
             maximize_hardware_utilization=self.maximize_hardware_utilization,
+            enable_weight_diagonal_mapping=self.enable_weight_diagonal_mapping,
         )
 
     ## Generator that yields user-defined spatial mappings.
@@ -51,7 +56,10 @@ class UserSpatialMappingGenerator:
     #                   layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
     # \endcode
     def generate_user_spatial_mappings(
-        self, enable_mix_spatial_mapping_generation, maximize_hardware_utilization
+        self,
+        enable_mix_spatial_mapping_generation,
+        maximize_hardware_utilization,
+        enable_weight_diagonal_mapping,
     ):
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
@@ -179,53 +187,30 @@ class UserSpatialMappingGenerator:
                 # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
                 # Modify "2" to other numbers if you want to check on more spatial mappings.
                 break
+
+            legal_spatial_loop, left_layer_dim_size = self.check_spatial_loop_legality(
+                combination=combination, layer=self.layer
+            )
+            if not legal_spatial_loop:
+                continue
             # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
             oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
-            # Extra check on the total unrolling size of a layer dim, if it is mapped on >=2 dimensions.
-            combination_check = {
-                layer_dim: layer_size
-                for layer_dim, layer_size in self.layer.loop_dim_size.items()
-            }
-            check_passed = True  # initialization
-            for unrolling_in_combination in combination:
-                if unrolling_in_combination is None:
-                    continue
-                if self.is_nested_tuple(unrolling_in_combination):
-                    for sub_unrolling_in_combination in unrolling_in_combination:
-                        unrolling_layer_dim = sub_unrolling_in_combination[0]
-                        unrolling_layer_size = sub_unrolling_in_combination[1]
-                        if unrolling_layer_dim in combination_check.keys():
-                            combination_check[
-                                unrolling_layer_dim
-                            ] /= unrolling_layer_size
-                        else:
-                            # The unrolled layer dim does not exist in current layer.
-                            # This only happens when the spatial mapping is user-defined, which
-                            # contains non-existent layer dims in current layer.
-                            pass
-                else:
-                    unrolling_layer_dim = unrolling_in_combination[0]
-                    unrolling_layer_size = unrolling_in_combination[1]
-                    if unrolling_layer_dim in combination_check.keys():
-                        combination_check[unrolling_layer_dim] /= unrolling_layer_size
-                    else:
-                        # The unrolled layer dim does not exist in current layer.
-                        # This only happens when the spatial mapping is user-defined, which
-                        # contains non-existent layer dims in current layer.
-                        pass
-            for layer_dim, layer_size in combination_check.items():
-                if layer_size < 1:  # the layer size/the unrolling size < 1
-                    # It means the unrolling size > the layer size, which is incorrect and impossible.
-                    check_passed = False
-                    break
-            if not check_passed:
-                continue
 
             user_spatial_mapping = {
                 oa_dim_name: unrolling
                 for (oa_dim_name, unrolling) in zip(oa_dim_names, combination)
                 if unrolling is not None
             }
+            # Add act ir loop if it is weight stationary and the innermost memories serve for act.
+            if enable_weight_diagonal_mapping:
+                user_spatial_mapping = self.add_input_pr_spatial_loop_if_enabled(
+                    layer=self.layer,
+                    provided_user_spatial_mapping=user_spatial_mapping,
+                    user_spatial_mapping_hint=user_spatial_mapping_hint,
+                    innermost_levels=innermost_levels,
+                    left_layer_dim_size=left_layer_dim_size,
+                    enable_mix_spatial_mapping_generation=enable_mix_spatial_mapping_generation,
+                )
             yield user_spatial_mapping
             yield_count += 1
         # If yield_count==0, it means there is no legal spatial mapping found.
@@ -235,13 +220,49 @@ class UserSpatialMappingGenerator:
             yield_count > 0
         ), "There is no legal spatial mapping found. Please make sure the provided spatial mappings do not exceed the layer dimension size."
 
+    def check_spatial_loop_legality(self, combination, layer):
+        # Extra check on the total unrolling size of a layer dim, if it is mapped on >=2 dimensions.
+        combination_check = {
+            layer_dim: layer_size
+            for layer_dim, layer_size in layer.loop_dim_size.items()
+        }
+        legal_spatial_loop = True  # initialization
+        for unrolling_in_combination in combination:
+            if unrolling_in_combination is None:
+                continue
+            if self.is_nested_tuple(unrolling_in_combination):
+                for sub_unrolling_in_combination in unrolling_in_combination:
+                    unrolling_layer_dim = sub_unrolling_in_combination[0]
+                    unrolling_layer_size = sub_unrolling_in_combination[1]
+                    if unrolling_layer_dim in combination_check.keys():
+                        combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                    else:
+                        # The unrolled layer dim does not exist in current layer.
+                        # This only happens when the spatial mapping is user-defined, which
+                        # contains non-existent layer dims in current layer.
+                        pass
+            else:
+                unrolling_layer_dim = unrolling_in_combination[0]
+                unrolling_layer_size = unrolling_in_combination[1]
+                if unrolling_layer_dim in combination_check.keys():
+                    combination_check[unrolling_layer_dim] /= unrolling_layer_size
+                else:
+                    # The unrolled layer dim does not exist in current layer.
+                    # This only happens when the spatial mapping is user-defined, which
+                    # contains non-existent layer dims in current layer.
+                    pass
+        for layer_dim, layer_size in combination_check.items():
+            if layer_size < 1:  # the layer size/the unrolling size < 1
+                # It means the unrolling size > the layer size, which is incorrect and impossible.
+                legal_spatial_loop = False
+                break
+        return legal_spatial_loop, combination_check
+
     def append_mix_spatial_unrollings(
         self, provided_oa_dim_unrollings, provided_oa_dim_unrolling_hints, oa_dim
     ):
         # Create and append new mix spatial unrollings to original oa_dim_unrollings
         # An example of mix: (("K",2), ("OX", 2))
-        import math
-
         oa_dim_unrollings = provided_oa_dim_unrollings
         oa_dim_unrolling_hints = provided_oa_dim_unrolling_hints
         if (
@@ -387,8 +408,6 @@ class UserSpatialMappingGenerator:
         # @param descending:
         #                 True -- the higher the mapping utilization is, the closer to the front it is.
         #                 False -- the lower the mapping utilization is, the closer to the front it is.
-        import math
-
         oa_dim_unrollings = provided_oa_dim_unrollings
         if len(oa_dim_unrollings) > 1:
             # First we will record down the hardware utilization of each spatial unrolling in comb_value
@@ -425,6 +444,309 @@ class UserSpatialMappingGenerator:
             # We will return None as hardware_utilization.
             hardware_utilization = None
         return oa_dim_unrollings, hardware_utilization
+
+    def add_input_pr_spatial_loop_if_enabled(
+        self,
+        layer,
+        provided_user_spatial_mapping,
+        user_spatial_mapping_hint,
+        innermost_levels,
+        left_layer_dim_size,
+        enable_mix_spatial_mapping_generation,
+    ):
+        # This function is used to support diagonal spatial mapping
+        # when input/activation is served in the innermost memories and the weight is stationary.
+        user_spatial_mapping = provided_user_spatial_mapping
+        # get the link from layer op to mem op
+        layer_op_to_mem_op: dict = layer.memory_operand_links
+        # check if it is weight stationary.
+        # keep the spatial loop as it was if it is not weight stationary.
+        if len(layer.constant_operands) > 1:
+            return user_spatial_mapping
+        # get weight operand name
+        const_operand = layer.constant_operands[0]  # weight representation
+        # get activation operand name
+        act_operand = [
+            operand for operand in layer.input_operands if operand != const_operand
+        ][0]
+        # get output operand name
+        output_operand = layer.output_operand
+        # get name of OX, OY (weight ir layer dims)
+        weight_ir_layer_dims: list = layer.operand_loop_dim[const_operand]["ir"]
+        # get the oa_dim name served by input / output innermost memory level
+        for memory_level in innermost_levels:
+            mem_ops = memory_level.operands
+            if layer_op_to_mem_op[act_operand] in mem_ops:
+                act_served_oa_dim: set = memory_level.served_dimensions
+            if layer_op_to_mem_op[output_operand] in mem_ops:
+                output_served_oa_dim: set = memory_level.served_dimensions
+        # check if act is not served in the innermost memories, or it is uti-casting for act.
+        # keep the spatial loop as it was if act is not served.
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) == 0:
+            return user_spatial_mapping
+
+        act_served_oa_dim_name = list(act_served_oa_dim)[0].name
+        output_served_oa_dim_name = list(output_served_oa_dim)[0].name
+        act_served_oa_dim_size = list(act_served_oa_dim)[0].size
+        output_served_oa_dim_size = list(output_served_oa_dim)[0].size
+
+        # check if OX / OY in user_spatial_mapping_hint. Or else target_layer_dim will be empty.
+        target_layer_dim = []  # OX or OY or both
+        for layer_dim in weight_ir_layer_dims:
+            if layer_dim in user_spatial_mapping_hint[act_served_oa_dim_name]:
+                target_layer_dim.append(layer_dim)
+
+        # no further execution if OX / OY unrolling is not in user_spatial_mapping_hint
+        if len(target_layer_dim) == 0:
+            return user_spatial_mapping
+
+        ############################################
+        # Get existed mapping size on act_served_oa_dim, which will be added with OX, OY later.
+        if (
+            act_served_oa_dim_name in user_spatial_mapping.keys()
+        ):  # there already is sm loop
+            sm_loop = user_spatial_mapping[act_served_oa_dim_name]
+            if self.is_nested_tuple(sm_loop):  # a mix layer sm mapping
+                exist_act_loop_size = 1
+                for element in sm_loop:
+                    exist_act_loop_size *= element[1]
+            else:  # a single layer sm mapping
+                exist_act_loop_size = sm_loop[1]
+        else:  # there is no sm loop mapped on act served dim
+            exist_act_loop_size = 1
+
+        # Check if the existed mapping size is more than half of current oa dim size.
+        # If so, it means there is no space for extra mapping even with a size of 2.
+        # In that case, we will do nothing but return the orignal spatial mapping
+        if exist_act_loop_size * 2 > act_served_oa_dim_size:
+            return user_spatial_mapping
+
+        # fetch pr loop pairs for activation, e.g. {"IX": ["OX", "FX"]}
+        act_pr_layer_dims: dict = layer.operand_loop_dim[act_operand]["pr"]
+
+        # Next we get existed mapping size on output_served_oa_dim
+        # there are two classes of mapping:
+        # (1) ir mapping to weight, e.g. "C"
+        # (2) r mapping to weight, e.g. "FX", "FY" (kernel size)
+
+        # We firstly create a dict for later recording down existed r mapping to weight
+        # it will be like:
+        # weight_r_loop = {"OX": {"FX": 1}, "OY": {"FY": 1}}
+        weight_r_loop: dict = {}  # here we put a nested dict for recording
+        loops_name_for_kernel_size: list = []
+        pr_sm_link: dict = (
+            {}
+        )  # here we record down the link between pr loops, e.g. link["FX"]="OX"
+
+        for weight_ir_layer_dim in weight_ir_layer_dims:
+            for [layer_dim1, layer_dim2] in act_pr_layer_dims.values():
+                if weight_ir_layer_dim in [layer_dim1, layer_dim2]:
+                    break
+            # as we are unsure in act_pr_layer_dims, it is [OX, FX] or [FX, OX], we consider two possibilities.
+            if layer_dim1 == weight_ir_layer_dim:  # if the first one is OX / OY
+                weight_r_loop[layer_dim1] = {layer_dim2: 1}  # 1 by default
+                loops_name_for_kernel_size.append(layer_dim2)
+                pr_sm_link[layer_dim2] = layer_dim1
+            else:  # layer_dim2 == weight_ir_layer_dim, the second one is OX / OY
+                weight_r_loop[layer_dim2] = {layer_dim1: 1}  # 1 by default
+                loops_name_for_kernel_size.append(layer_dim1)
+                pr_sm_link[layer_dim1] = layer_dim2
+
+        # Next we will update the dict, and also find the mapping size (weight ir loop size) we do not care out.
+        weight_ir_loop_size = 1  # default value
+        sm_loop = user_spatial_mapping[output_served_oa_dim_name]
+        if self.is_nested_tuple(sm_loop):  # a mix sm mapping
+            for element in sm_loop:
+                # save operation as above
+                layer_dim = element[0]
+                mapping_size = element[1]
+                if layer_dim in loops_name_for_kernel_size:  # layer_dim in ["FX", "FY"]
+                    paired_pr_layer_dim = pr_sm_link[
+                        layer_dim
+                    ]  # "FX" -> "OX", "FY" -> "OY"
+                    weight_r_loop[paired_pr_layer_dim][layer_dim] *= mapping_size
+                else:  # not care
+                    weight_ir_loop_size *= mapping_size
+        else:  # a single layer sm mapping
+            layer_dim = sm_loop[0]
+            mapping_size = sm_loop[1]
+            if layer_dim in loops_name_for_kernel_size:  # layer_dim in ["FX", "FY"]
+                paired_pr_layer_dim = pr_sm_link[
+                    layer_dim
+                ]  # "FX" -> "OX", "FY" -> "OY"
+                weight_r_loop[paired_pr_layer_dim][layer_dim] *= mapping_size
+            else:  # not care
+                weight_ir_loop_size *= mapping_size
+
+        # At this point, we already know what sm mapping existed.
+        ############################################
+
+        # Next we will try to add possible OX / OY mapping
+        # find all possible OX / OY mapping breakdown and put them in the pool
+        # It looks like:
+        # sm_pools = {"OX": [("OX",2),("OX",5),("OX",5)], "OY": [("OY",2),("OY",5),("OY",5)]}
+        sm_pools_to_add: dict = {}
+        for layer_dim in target_layer_dim:
+            layer_size = self.layer.loop_dim_size[layer_dim]
+            layer_size_breakdown: list = self.prime_factors(layer_size)
+
+            # try to find the maximum OX / OY and add it to the list
+            # (1) check on act_served_oa_dim (ceil down to integer)
+            max_allowed_dim_size_on_act_served_dim = math.floor(
+                act_served_oa_dim_size / exist_act_loop_size
+            )
+            # (2) check on output_served_oa_dim
+            existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
+            for key in weight_r_loop.keys():
+                if key != layer_dim:
+                    ir_layer_dim_to_current_layer_dim = key
+            existed_pr_mapping_but_ir_to_current_layer_dim = list(
+                weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
+            )[0]
+            max_allowed_dim_size_on_output_served_dim = (
+                output_served_oa_dim_size
+                / weight_ir_loop_size
+                / existed_pr_mapping_but_ir_to_current_layer_dim
+            ) - (existed_pr_mapping - 1)
+            # ceil down to integer
+            max_allowed_dim_size_on_output_served_dim = math.floor(
+                max_allowed_dim_size_on_output_served_dim
+            )
+            max_allowed_target_dim_size = min(
+                max_allowed_dim_size_on_act_served_dim,
+                max_allowed_dim_size_on_output_served_dim,
+            )
+            # check whether the element in layer_size_breakdown is allowed to add
+            legal_layer_size_breakdown = []
+            for factor in layer_size_breakdown:
+                if (
+                    factor <= max_allowed_target_dim_size
+                    and factor <= left_layer_dim_size[layer_dim]
+                ):
+                    legal_layer_size_breakdown.append(factor)
+            if len(legal_layer_size_breakdown) > 0:
+                sm_pools_to_add[layer_dim] = [
+                    tuple([layer_dim, size]) for size in legal_layer_size_breakdown
+                ]
+
+        # check if there is anything in the pool
+        if len(sm_pools_to_add) == 0:
+            return user_spatial_mapping
+
+        # Generate possible combination
+        # In the for loop below, we will first try only with OX or OY. Then with their combination.
+        # In the end, we will only keep the best one, which has the maximal value of OX*OY.
+        # If there are multiple combs having the same OX*OY, we will keep the first one, as their cost are the same.
+        best_comb = []  # list initialization
+        best_comb_size = 0  # reference value to find the best comb
+        target_layer_dim = [
+            layer_dim
+            for layer_dim in target_layer_dim
+            if layer_dim in sm_pools_to_add.keys()
+        ]
+        if enable_mix_spatial_mapping_generation:
+            allowed_dim_comb_length = len(target_layer_dim)
+        else:
+            allowed_dim_comb_length = 1
+        for dim_comb_length in range(1, allowed_dim_comb_length + 1):
+            for dim_comb in itertools.combinations(target_layer_dim, dim_comb_length):
+                # we will create a temporal pools for each dim combination
+                sm_pools_mix = []
+                for layer_dim in dim_comb:
+                    sm_pools_mix += sm_pools_to_add[layer_dim]
+                max_comb_length = len(
+                    sm_pools_mix
+                )  # the max possible length of combination
+                for comb_length in range(1, max_comb_length + 1):
+                    for comb in itertools.combinations(sm_pools_mix, comb_length):
+                        # At this point, in comb, we have a possible OX / OY mapping
+                        # First we get current comb size
+                        # Example: comb_mapping = {"OX": 5, "OY", 10}
+                        comb_mapping: dict = {}
+                        for layer_dim in dim_comb:
+                            comb_mapping[layer_dim] = 1  # default value
+                        for element in comb:
+                            layer_dim = element[0]
+                            mapping_size = element[1]
+                            comb_mapping[layer_dim] *= mapping_size
+                        # Skip if current unrolling on a layer_dim is 1, which means it has been checked already.
+                        curr_comb_already_checked = False
+                        for unroll_size in comb_mapping.values():
+                            if unroll_size == 1:
+                                curr_comb_already_checked = True
+                                break
+                        if curr_comb_already_checked:
+                            continue
+                        # We will check if this comb is possible
+                        # (1) check on left_layer_dim_size
+                        curr_comb_illegal = False
+                        for unroll_dim, unroll_size in comb_mapping.items():
+                            if unroll_size > left_layer_dim_size[unroll_dim]:
+                                curr_comb_illegal = True
+                                break
+                        if curr_comb_illegal:
+                            continue
+                        # (2) check on act_served_oa_dim
+                        comb_size = math.prod([v for v in comb_mapping.values()])
+                        required_oa_dim_size = exist_act_loop_size * comb_size
+                        if required_oa_dim_size > act_served_oa_dim_size:
+                            continue  # the comb is not possible on act_served_oa_dim
+                        # (3) check on output_served_oa_dim
+                        required_oa_dim_size = weight_ir_loop_size
+                        for layer_dim in comb_mapping.keys():
+                            existed_pr_mapping = list(
+                                weight_r_loop[layer_dim].values()
+                            )[0]
+                            pr_mapping_to_add = comb_mapping[layer_dim]
+                            new_mapping_size = (
+                                existed_pr_mapping + pr_mapping_to_add - 1
+                            )
+                            required_oa_dim_size *= new_mapping_size
+                        if len(comb_mapping) == 1:  # only OX or OY
+                            # add the other existed pr loop to required_oa_dim_size,
+                            # because previously it is not counted in output_served_oa_dim_size.
+                            sole_dim = list(comb_mapping.keys())[0]
+                            the_other_pr_mapping_name = [
+                                key for key in weight_r_loop.keys() if key != sole_dim
+                            ][0]
+                            the_other_pr_mapping_size = list(
+                                weight_r_loop[the_other_pr_mapping_name].values()
+                            )[0]
+                            required_oa_dim_size *= the_other_pr_mapping_size
+                        if required_oa_dim_size > output_served_oa_dim_size:
+                            continue  # this comb is not possible on output_served_oa_dim
+                        # (4) compare with best_comb
+                        if comb_size > best_comb_size:
+                            # reformat the comb and merge repetitive elements
+                            # example: (("OX", 5), ("OY", 2))
+                            new_comb: list = [
+                                (layer_dim, mapping_size)
+                                for (layer_dim, mapping_size) in comb_mapping.items()
+                            ]
+                            best_comb = new_comb
+
+        # At this point, we get the best possible comb to add. Then we can add that to the current sm mapping
+        if len(best_comb) == 0:  # did not find any comb
+            return user_spatial_mapping
+        else:
+            if (
+                act_served_oa_dim_name in user_spatial_mapping.keys()
+            ):  # there already is sm loop previously
+                act_served_mapping_to_change = user_spatial_mapping[
+                    act_served_oa_dim_name
+                ]
+                if self.is_nested_tuple(
+                    act_served_mapping_to_change
+                ):  # originally it is a mix mapping
+                    reformed_sm = list(act_served_mapping_to_change) + best_comb
+                else:  # originally it is a single layer mapping
+                    reformed_sm = [act_served_mapping_to_change] + best_comb
+            else:  # there is no sm loop on act served oa dim previously
+                reformed_sm = best_comb
+            reformed_sm = tuple(reformed_sm)
+            user_spatial_mapping[act_served_oa_dim_name] = reformed_sm
+
+        return user_spatial_mapping
 
     @staticmethod
     def all_unique(items):
