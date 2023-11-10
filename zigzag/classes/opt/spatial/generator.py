@@ -186,7 +186,7 @@ class UserSpatialMappingGenerator:
                 layer_dim: layer_size
                 for layer_dim, layer_size in self.layer.loop_dim_size.items()
             }
-            check_passed = True # initialization
+            check_passed = True  # initialization
             for unrolling_in_combination in combination:
                 if unrolling_in_combination is None:
                     continue
@@ -231,7 +231,9 @@ class UserSpatialMappingGenerator:
         # If yield_count==0, it means there is no legal spatial mapping found.
         # The reason is that the spatial mapping provided by the user has exceeded the layer dim size,
         # therefore the loop cannot pass the check.
-        assert yield_count > 0, "There is no legal spatial mapping found. Please make sure the provided spatial mappings do not exceed the layer dimension size."
+        assert (
+            yield_count > 0
+        ), "There is no legal spatial mapping found. Please make sure the provided spatial mappings do not exceed the layer dimension size."
 
     def append_mix_spatial_unrollings(
         self, provided_oa_dim_unrollings, provided_oa_dim_unrolling_hints, oa_dim
