@@ -74,6 +74,10 @@ class SpatialMappingGeneratorStage(Stage):
             user_provided_spatial_mappings, dict
         ):  # There is a single USM provided
             if len(user_provided_spatial_mappings) < len(oa_dims):
+                self.layer.user_spatial_mapping_hint = self.complete_user_spatial_mapping_hint(
+                    user_spatial_mapping_hint=user_spatial_mapping_hint,
+                    oa_dims=oa_dims
+                )
                 user_spatial_mapping_generator = UserSpatialMappingGenerator(
                     layer=self.layer,
                     accelerator=self.accelerator,
@@ -92,28 +96,10 @@ class SpatialMappingGeneratorStage(Stage):
         ):  # There are multiple USMs provided
             user_spatial_mappings = user_provided_spatial_mappings
         else:  # There is no USM provided
-            # Initialize the user_provided_spatial_mapping_hint
-            if user_spatial_mapping_hint is None:
-                logger.info(
-                    "User-provided spatial mappings or hints not found. Auto-generating spatial_mapping_hint.."
-                )
-                user_spatial_mapping_hint = {}
-                for oa_dim in oa_dims:
-                    user_spatial_mapping_hint[oa_dim.name] = [
-                        layer_dim for layer_dim in self.layer.loop_dim_list
-                    ]
-                    self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
-            else:
-                oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
-                # Add definition for non-exist dimension in user_spatial_mapping_hint
-                for oa_dim_name in oa_dims_name:
-                    if oa_dim_name not in user_spatial_mapping_hint.keys():
-                        user_spatial_mapping_hint[oa_dim_name] = [
-                            layer_dim for layer_dim in self.layer.loop_dim_list
-                        ]
-                logger.debug(
-                    "No user-provided spatial mapping found, but a hint was found."
-                )
+            self.layer.user_spatial_mapping_hint = self.complete_user_spatial_mapping_hint(
+                user_spatial_mapping_hint=user_spatial_mapping_hint,
+                oa_dims=oa_dims
+            )
             # Initialize the UserSpatialMappingGenerator which will automatically generate SMs
             user_spatial_mapping_generator = UserSpatialMappingGenerator(
                 layer=self.layer,
@@ -144,3 +130,30 @@ class SpatialMappingGeneratorStage(Stage):
             )
             for cme, extra_info in spatial_mapping_conversion_stage.run():
                 yield cme, (user_spatial_mapping, extra_info)
+
+    def complete_user_spatial_mapping_hint(
+            self, user_spatial_mapping_hint, oa_dims
+    ):
+        # This function is to create user_spatial_mapping_hint when it is not provided
+        # or complete it if it is provided but on only part of oa dimensions.
+        complete_user_spatial_mapping_hint = user_spatial_mapping_hint
+        if complete_user_spatial_mapping_hint is None:
+            logger.info(
+                "User-provided spatial mappings hint not found. Auto-generating spatial_mapping_hint.."
+            )
+            complete_user_spatial_mapping_hint = {}
+            for oa_dim in oa_dims:
+                complete_user_spatial_mapping_hint[oa_dim.name] = [
+                    layer_dim for layer_dim in self.layer.loop_dim_list
+                ]
+            # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
+        else:
+            oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
+            # Add definition for non-exist dimension in user_spatial_mapping_hint
+            for oa_dim_name in oa_dims_name:
+                if oa_dim_name not in complete_user_spatial_mapping_hint.keys():
+                    complete_user_spatial_mapping_hint[oa_dim_name] = [
+                        layer_dim for layer_dim in self.layer.loop_dim_list
+                    ]
+            # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
+        return complete_user_spatial_mapping_hint

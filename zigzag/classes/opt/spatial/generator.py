@@ -177,7 +177,7 @@ class UserSpatialMappingGenerator:
         for combination in itertools.product(*unrollings):
             if maximize_hardware_utilization and yield_count >= 2:
                 # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
-                # Please modify "2" to other numbers if you want to check on more spatial mappings.
+                # Modify "2" to other numbers if you want to check on more spatial mappings.
                 break
             # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
             oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
@@ -228,6 +228,10 @@ class UserSpatialMappingGenerator:
             }
             yield user_spatial_mapping
             yield_count += 1
+        # If yield_count==0, it means there is no legal spatial mapping found.
+        # The reason is that the spatial mapping provided by the user has exceeded the layer dim size,
+        # therefore the loop cannot pass the check.
+        assert yield_count > 0, "There is no legal spatial mapping found. Please make sure the provided spatial mappings do not exceed the layer dimension size."
 
     def append_mix_spatial_unrollings(
         self, provided_oa_dim_unrollings, provided_oa_dim_unrolling_hints, oa_dim
