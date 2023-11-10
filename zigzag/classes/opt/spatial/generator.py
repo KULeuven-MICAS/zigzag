@@ -161,20 +161,6 @@ class UserSpatialMappingGenerator:
                     ) = self.sort_oa_dim_unrollings_in_the_order_of_utilization(
                         oa_dim_unrollings, descending=True
                     )
-                    if len(oa_dim_unrollings) > 0:  # oa_dim_unrollings is not []
-                        # Then only keep the combs in oa_dim_unrollings that have the highest oa_dim mapping utilization
-                        # The closer to the front, the higher the oa_dim utilization rate.
-                        updated_oa_dim_unrollings = [oa_dim_unrollings[0]]
-                        # Check if there are other sm loops that has the same utilization with the highest one.
-                        for i in range(1, len(hardware_utilization)):
-                            if hardware_utilization[i] == hardware_utilization[0]:
-                                updated_oa_dim_unrollings.append(oa_dim_unrollings[i])
-                        # [Optional] To reduce the simulation time, when there are still too many spatial unrollings,
-                        # We keep only the first two unrollings for each oa_dim.
-                        # You can comment out the next two lines if you want to check all spatial unrollings.
-                        if len(updated_oa_dim_unrollings) > 2:
-                            updated_oa_dim_unrollings = updated_oa_dim_unrollings[0:2]
-                        oa_dim_unrollings = updated_oa_dim_unrollings
 
                 # In case there are no unrollings (of size > 1) possible, add a single unrolling of size 1.
                 # The loop dimension we pick is randomly chosen as the first loop dimension in the layer.
@@ -186,7 +172,13 @@ class UserSpatialMappingGenerator:
 
         # Now we have for each operational array dimension the layer dimensions and size they can be unrolled without fractional remainder.
         # Now we have to combine them into user-defined spatial mappings.
+        # record down the number of yield
+        yield_count = 0
         for combination in itertools.product(*unrollings):
+            if maximize_hardware_utilization and yield_count >= 2:
+                # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
+                # Please modify "2" to other numbers if you want to check on more spatial mappings.
+                break
             # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
             oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
             # Extra check on the total unrolling size of a layer dim, if it is mapped on >=2 dimensions.
@@ -194,6 +186,7 @@ class UserSpatialMappingGenerator:
                 layer_dim: layer_size
                 for layer_dim, layer_size in self.layer.loop_dim_size.items()
             }
+            check_passed = True # initialization
             for unrolling_in_combination in combination:
                 if unrolling_in_combination is None:
                     continue
@@ -223,7 +216,10 @@ class UserSpatialMappingGenerator:
             for layer_dim, layer_size in combination_check.items():
                 if layer_size < 1:  # the layer size/the unrolling size < 1
                     # It means the unrolling size > the layer size, which is incorrect and impossible.
-                    continue
+                    check_passed = False
+                    break
+            if not check_passed:
+                continue
 
             user_spatial_mapping = {
                 oa_dim_name: unrolling
@@ -231,6 +227,7 @@ class UserSpatialMappingGenerator:
                 if unrolling is not None
             }
             yield user_spatial_mapping
+            yield_count += 1
 
     def append_mix_spatial_unrollings(
         self, provided_oa_dim_unrollings, provided_oa_dim_unrolling_hints, oa_dim

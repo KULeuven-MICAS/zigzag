@@ -110,7 +110,7 @@ class SpatialMappingConversionStage(Stage):
                 for spatial_loop_element in spatial_loop:
                     limited_user_spatial_mapping_to_check = (
                         self.generate_limited_user_spatial_mapping(
-                            layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop_element
+                            layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop_element, user_spatial_mapping
                         )
                     )
                     if limited_user_spatial_mapping_to_check == None:
@@ -131,7 +131,7 @@ class SpatialMappingConversionStage(Stage):
             else:  # single-dim sm loop
                 limited_user_spatial_mapping_to_check = (
                     self.generate_limited_user_spatial_mapping(
-                        layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+                        layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop, user_spatial_mapping
                     )
                 )
                 if limited_user_spatial_mapping_to_check == None:
@@ -237,7 +237,7 @@ class SpatialMappingConversionStage(Stage):
         )
 
     def generate_limited_user_spatial_mapping(
-        self, layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+        self, layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop, user_spatial_mapping
     ):
         ## Do check on spatial mapping, and convert the mapping to a tuple
         (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
@@ -253,9 +253,69 @@ class SpatialMappingConversionStage(Stage):
         layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
         loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
         # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
-        temporal_remainder = int(np.ceil(layer_dim_size / loop_size_unrolled))
-        loop_size_unrolled = layer_dim_size / temporal_remainder
+        # and if there is no more mapping for this layer dimension
+        no_more_mapping_for_current_layer_dim = self.check_if_there_is_further_oa_mapping_for_current_layer_dim(
+                oa_dim_name=oa_dim_name,
+                loop_dim_unrolled=loop_dim_unrolled,
+                user_spatial_mapping=user_spatial_mapping
+        )
+        if no_more_mapping_for_current_layer_dim:
+            loop_size_unrolled_on_early_oa_dims = self.calc_unrolled_loop_size_on_early_oa_dims(
+                oa_dim_name=oa_dim_name,
+                loop_dim_unrolled=loop_dim_unrolled,
+                user_spatial_mapping=user_spatial_mapping
+            )
+            temporal_remainder = int(np.ceil(layer_dim_size / (loop_size_unrolled*loop_size_unrolled_on_early_oa_dims)))
+            loop_size_unrolled = layer_dim_size / temporal_remainder / loop_size_unrolled_on_early_oa_dims
         return (
             loop_dim_unrolled,
             loop_size_unrolled,
         )
+
+    def check_if_there_is_further_oa_mapping_for_current_layer_dim(
+            self, oa_dim_name, loop_dim_unrolled, user_spatial_mapping
+    ):
+        # For the case when there is layer dimension that is mapped on multiple oa dimensions.
+        # We need to decide on which oa dimension to adjust the unrolling
+        # if the total unrolling size is not a multiple of the layer dimension size.
+        # In this case, we decide to only adjust the unrolling size on the last oa dimension,
+        # This function is to check if the current oa dimension is the last oa dimension for the current layer dim.
+        start_check_on_layer_dim_mapping = False
+        no_more_mapping_for_current_layer_dim = True
+        for oa_dim_name_private, spatial_loop_private in user_spatial_mapping.items():
+            if oa_dim_name == oa_dim_name_private:
+                start_check_on_layer_dim_mapping = True
+                continue
+            if start_check_on_layer_dim_mapping:
+                if self.is_nested_tuple(spatial_loop_private):  # mix sm loop
+                    for spatial_loop_element in spatial_loop_private:
+                        loop_dim_unrolled_private = spatial_loop_element[0]
+                        if loop_dim_unrolled == loop_dim_unrolled_private:
+                            no_more_mapping_for_current_layer_dim = False
+                            break
+                else:
+                    loop_dim_unrolled_private = spatial_loop_private[0]
+                    if loop_dim_unrolled == loop_dim_unrolled_private:
+                        no_more_mapping_for_current_layer_dim = False
+            if not no_more_mapping_for_current_layer_dim: # early exit if the flag is already False
+                break
+        return no_more_mapping_for_current_layer_dim
+
+    def calc_unrolled_loop_size_on_early_oa_dims(
+            self, oa_dim_name, loop_dim_unrolled, user_spatial_mapping
+    ):
+        # calculate the unrolled loop size for the specific layer dim on oa dims earlier than current oa dim
+        loop_unrolled_size_already = 1
+        for oa_dim_name_private, spatial_loop_private in user_spatial_mapping.items():
+            if oa_dim_name == oa_dim_name_private:
+                break
+            if self.is_nested_tuple(spatial_loop_private):  # mix sm loop
+                    for spatial_loop_element in spatial_loop_private:
+                        (loop_dim_unrolled_private, loop_size_unrolled_private) = spatial_loop_element
+                        if loop_dim_unrolled == loop_dim_unrolled_private:
+                            loop_unrolled_size_already *= loop_size_unrolled_private
+            else:
+                (loop_dim_unrolled_private, loop_size_unrolled_private) = spatial_loop_private
+                if loop_dim_unrolled == loop_dim_unrolled_private:
+                    loop_unrolled_size_already *= loop_size_unrolled_private
+        return loop_unrolled_size_already
