@@ -480,9 +480,11 @@ class UserSpatialMappingGenerator:
                 act_served_oa_dim: set = memory_level.served_dimensions
             if layer_op_to_mem_op[output_operand] in mem_ops:
                 output_served_oa_dim: set = memory_level.served_dimensions
-        # check if act is not served in the innermost memories, or it is uti-casting for act.
+        # check if act is not served in the innermost memories, or act/output is not multicasting on only one dimension.
         # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) == 0:
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) != 1:
+            return user_spatial_mapping
+        if "output_served_oa_dim" not in locals() or len(output_served_oa_dim) != 1:
             return user_spatial_mapping
 
         act_served_oa_dim_name = list(act_served_oa_dim)[0].name
