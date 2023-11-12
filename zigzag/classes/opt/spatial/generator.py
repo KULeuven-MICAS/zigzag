@@ -182,8 +182,9 @@ class UserSpatialMappingGenerator:
         # Now we have to combine them into user-defined spatial mappings.
         # record down the number of yield
         yield_count = 0
+        yield_count_limit = 2  # used to control the yield count when maximize_hardware_utilization == True
         for combination in itertools.product(*unrollings):
-            if maximize_hardware_utilization and yield_count >= 2:
+            if maximize_hardware_utilization and yield_count >= yield_count_limit:
                 # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
                 # Modify "2" to other numbers if you want to check on more spatial mappings.
                 break
@@ -214,11 +215,103 @@ class UserSpatialMappingGenerator:
             yield user_spatial_mapping
             yield_count += 1
         # If yield_count==0, it means there is no legal spatial mapping found.
-        # The reason is that the spatial mapping provided by the user has exceeded the layer dim size,
+        # One reason is that the spatial mapping provided by the user has exceeded the layer dim size,
         # therefore the loop cannot pass the check.
+        # The other reason could be: there is a layer dim mapped on multiple oa dims,
+        # so the product has exceeded the layer dim size.
+        # For a quick fix on the second cause, we will reform the sm loop only for single layer dim mapping.
+        if yield_count == 0:
+            for combination in itertools.product(*unrollings):
+                is_mix_comb = False
+                for loop in combination:
+                    if self.is_nested_tuple(loop):
+                        is_mix_comb = True
+                        continue
+                if is_mix_comb:
+                    # The fix is not applied for mix sm loop.
+                    continue
+                if maximize_hardware_utilization and yield_count >= yield_count_limit:
+                    # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
+                    # Modify "2" to other numbers if you want to check on more spatial mappings.
+                    break
+                new_combination, left_layer_dim_size = self.shrink_combination_when_a_layer_dim_is_mapped_on_multiple_oa_dims(
+                    combination=combination,
+                    layer=self.layer,
+                )
+                # Zip the combination (which is a (layer_dim, layer_size) for each oa_dim with the oa_dim names.
+                oa_dim_names = [oa_dim.name for oa_dim in oa_dims]
+
+                user_spatial_mapping = {
+                    oa_dim_name: unrolling
+                    for (oa_dim_name, unrolling) in zip(oa_dim_names, new_combination)
+                    if unrolling is not None
+                }
+                # Add act ir loop if it is weight stationary and the innermost memories serve for act.
+                if enable_weight_diagonal_mapping:
+                    user_spatial_mapping = self.add_input_pr_spatial_loop_if_enabled(
+                        layer=self.layer,
+                        provided_user_spatial_mapping=user_spatial_mapping,
+                        user_spatial_mapping_hint=user_spatial_mapping_hint,
+                        innermost_levels=innermost_levels,
+                        left_layer_dim_size=left_layer_dim_size,
+                        enable_mix_spatial_mapping_generation=enable_mix_spatial_mapping_generation,
+                    )
+                yield user_spatial_mapping
+                yield_count += 1
+
         assert (
             yield_count > 0
         ), "There is no legal spatial mapping found. Please make sure the provided spatial mappings do not exceed the layer dimension size."
+
+    def shrink_combination_when_a_layer_dim_is_mapped_on_multiple_oa_dims(
+        self, combination, layer
+    ):
+        new_combination = combination
+        legal_spatial_loop, left_layer_dim_size = self.check_spatial_loop_legality(
+            combination=new_combination, layer=layer
+        )
+        while not legal_spatial_loop:
+            new_combination_next = list(new_combination)
+            for layer_dim, layer_dim_size in left_layer_dim_size.items():
+                if layer_dim_size < 1:
+                    scaled_success = False
+                    for oa_index in range(len(new_combination_next)-1, -1, -1):  # reverse order on oa dims
+                        (mapped_layer_dim, mapped_layer_dim_size) = new_combination_next[oa_index]
+                        if mapped_layer_dim_size > 1:
+                            # shrink the mapped layer dim size
+                            mapped_layer_dim_size -= 1
+                            new_combination_next[oa_index] = (mapped_layer_dim, mapped_layer_dim_size)
+                            scaled_success = True
+                            break
+                        else:
+                            # because a layer can be mapped on multiple oa dims, we will move to the next oa dim.
+                            pass
+                    # assert: if not scaled_success,
+                    # it means the sm loop cannot pass the check, even though all mapped size on this layer dim is 1
+                    assert scaled_success, \
+                        f"The spatial loop cannot meet the current hardware dimension after scaling, " \
+                        f"Current spatial loop: {new_combination}"
+            new_combination_next = tuple(new_combination_next)
+            # Next we will judge if new_combination_next is a legal loop
+            # If it is, then we will keep the current combination, rather than new_combination_next,
+            # the reason is: new_combination can cover the entire layer dim, but new_combination_next is smaller than
+            # the layer dim, therefore the actual sm loop for the layer dim is a decimal number.
+            # In that case, we will ceil it up to mimic the real case on hardware.
+            legal_spatial_loop, left_layer_dim_size_next = self.check_spatial_loop_legality(
+                combination=new_combination_next, layer=layer
+            )
+            if not legal_spatial_loop:
+                new_combination = new_combination_next
+                left_layer_dim_size = left_layer_dim_size_next
+            else:
+                for layer_dim, layer_dim_size in left_layer_dim_size.items():
+                    # A special case when we will use new_combination_next when legal_spatial_loop == True
+                    # This case is when new_combination_next exactly match the layer dim size (left size == 1)
+                    if layer_dim_size < 1 and left_layer_dim_size_next[layer_dim] == 1:
+                        new_combination = new_combination_next
+                        left_layer_dim_size = left_layer_dim_size_next
+                        break
+        return new_combination, left_layer_dim_size
 
     def check_spatial_loop_legality(self, combination, layer):
         # Extra check on the total unrolling size of a layer dim, if it is mapped on >=2 dimensions.
