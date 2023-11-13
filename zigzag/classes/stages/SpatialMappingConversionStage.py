@@ -120,6 +120,7 @@ class SpatialMappingConversionStage(Stage):
                             oa_dim_name,
                             spatial_loop_element,
                             user_spatial_mapping,
+                            limited_user_spatial_mapping,
                         )
                     )
                     limited_user_spatial_mapping_int_to_check = (
@@ -129,6 +130,7 @@ class SpatialMappingConversionStage(Stage):
                             oa_dim_name,
                             spatial_loop_element,
                             user_spatial_mapping,
+                            limited_user_spatial_mapping,
                             False,
                         )
                     )
@@ -164,6 +166,7 @@ class SpatialMappingConversionStage(Stage):
                         oa_dim_name,
                         spatial_loop,
                         user_spatial_mapping,
+                        limited_user_spatial_mapping,
                     )
                 )
                 limited_user_spatial_mapping_int_to_check = (
@@ -173,6 +176,7 @@ class SpatialMappingConversionStage(Stage):
                         oa_dim_name,
                         spatial_loop,
                         user_spatial_mapping,
+                        limited_user_spatial_mapping,
                         False,
                     )
                 )
@@ -230,7 +234,8 @@ class SpatialMappingConversionStage(Stage):
         oa_dim_name,
         spatial_loop,
         user_spatial_mapping,
-        check_3=True,
+        limited_user_spatial_mapping,
+        allow_decimal_sm_loop_size=True,
     ):
         ## Do check on spatial mapping, and convert the mapping to a tuple
         (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
@@ -245,34 +250,42 @@ class SpatialMappingConversionStage(Stage):
         # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
         layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
         loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
-        if check_3:
-            # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
-            # and if there is no more mapping for this layer dimension
-            no_more_mapping_for_current_layer_dim = (
-                self.check_if_there_is_further_oa_mapping_for_current_layer_dim(
+        # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
+        # and if there is no more mapping for this layer dimension
+        no_more_mapping_for_current_layer_dim = (
+            self.check_if_there_is_further_oa_mapping_for_current_layer_dim(
+                oa_dim_name=oa_dim_name,
+                loop_dim_unrolled=loop_dim_unrolled,
+                user_spatial_mapping=user_spatial_mapping,
+            )
+        )
+        if no_more_mapping_for_current_layer_dim:
+            loop_size_unrolled_on_early_oa_dims = (
+                self.calc_unrolled_loop_size_on_early_oa_dims(
                     oa_dim_name=oa_dim_name,
                     loop_dim_unrolled=loop_dim_unrolled,
-                    user_spatial_mapping=user_spatial_mapping,
+                    user_spatial_mapping=limited_user_spatial_mapping,
                 )
             )
-            if no_more_mapping_for_current_layer_dim:
-                loop_size_unrolled_on_early_oa_dims = (
-                    self.calc_unrolled_loop_size_on_early_oa_dims(
-                        oa_dim_name=oa_dim_name,
-                        loop_dim_unrolled=loop_dim_unrolled,
-                        user_spatial_mapping=user_spatial_mapping,
-                    )
+            temporal_remainder = int(
+                np.ceil(
+                    layer_dim_size
+                    / (loop_size_unrolled * loop_size_unrolled_on_early_oa_dims)
                 )
-                temporal_remainder = int(
-                    np.ceil(
-                        layer_dim_size
-                        / (loop_size_unrolled * loop_size_unrolled_on_early_oa_dims)
-                    )
-                )
+            )
+            if allow_decimal_sm_loop_size:
                 loop_size_unrolled = (
                     layer_dim_size
                     / temporal_remainder
                     / loop_size_unrolled_on_early_oa_dims
+                )
+            else:
+                loop_size_unrolled = int(
+                    np.ceil(
+                        layer_dim_size
+                        / temporal_remainder
+                        / loop_size_unrolled_on_early_oa_dims
+                    )
                 )
         return (
             loop_dim_unrolled,
