@@ -220,21 +220,12 @@ class SpatialMappingConversionStage(Stage):
             layer=self.layer,
             accelerator=self.accelerator,
         )
-        try:
-            SpatialMapping(spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer), SpatialMapping(
-                spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
-            )
-        except:
-            pass
 
-        try:
-            return SpatialMapping(
-                spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
-            ), SpatialMapping(
-                spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
-            )
-        except:
-            pass
+        return SpatialMapping(
+            spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
+        ), SpatialMapping(
+            spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
+        )
 
     def generate_limited_user_spatial_mapping(
         self,
