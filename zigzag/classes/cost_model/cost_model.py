@@ -251,7 +251,7 @@ class CostModelEvaluation:
         # self.spatial_mapping_dict_int = spatial_mapping_fractional_to_int(
         #     self.spatial_mapping.mapping_dict_origin
         # )
-        self.spatial_mapping_dict_int = self.spatial_mapping_int
+        self.spatial_mapping_dict_int = self.spatial_mapping_int.mapping_dict_origin
 
         # For constructing Mapping object,  the last parameter "self.access_same_data_considered_as_no_access" is optional
         self.mapping = Mapping(

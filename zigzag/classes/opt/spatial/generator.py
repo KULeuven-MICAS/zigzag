@@ -234,7 +234,10 @@ class UserSpatialMappingGenerator:
                     # 2 means: only check the top 2 spatial mapping with the highest hardware utilization
                     # Modify "2" to other numbers if you want to check on more spatial mappings.
                     break
-                new_combination, left_layer_dim_size = self.shrink_combination_when_a_layer_dim_is_mapped_on_multiple_oa_dims(
+                (
+                    new_combination,
+                    left_layer_dim_size,
+                ) = self.shrink_combination_when_a_layer_dim_is_mapped_on_multiple_oa_dims(
                     combination=combination,
                     layer=self.layer,
                 )
@@ -275,12 +278,20 @@ class UserSpatialMappingGenerator:
             for layer_dim, layer_dim_size in left_layer_dim_size.items():
                 if layer_dim_size < 1:
                     scaled_success = False
-                    for oa_index in range(len(new_combination_next)-1, -1, -1):  # reverse order on oa dims
-                        (mapped_layer_dim, mapped_layer_dim_size) = new_combination_next[oa_index]
+                    for oa_index in range(
+                        len(new_combination_next) - 1, -1, -1
+                    ):  # reverse order on oa dims
+                        (
+                            mapped_layer_dim,
+                            mapped_layer_dim_size,
+                        ) = new_combination_next[oa_index]
                         if mapped_layer_dim_size > 1:
                             # shrink the mapped layer dim size
                             mapped_layer_dim_size -= 1
-                            new_combination_next[oa_index] = (mapped_layer_dim, mapped_layer_dim_size)
+                            new_combination_next[oa_index] = (
+                                mapped_layer_dim,
+                                mapped_layer_dim_size,
+                            )
                             scaled_success = True
                             break
                         else:
@@ -288,16 +299,20 @@ class UserSpatialMappingGenerator:
                             pass
                     # assert: if not scaled_success,
                     # it means the sm loop cannot pass the check, even though all mapped size on this layer dim is 1
-                    assert scaled_success, \
-                        f"The spatial loop cannot meet the current hardware dimension after scaling, " \
+                    assert scaled_success, (
+                        f"The spatial loop cannot meet the current hardware dimension after scaling, "
                         f"Current spatial loop: {new_combination}"
+                    )
             new_combination_next = tuple(new_combination_next)
             # Next we will judge if new_combination_next is a legal loop
             # If it is, then we will keep the current combination, rather than new_combination_next,
             # the reason is: new_combination can cover the entire layer dim, but new_combination_next is smaller than
             # the layer dim, therefore the actual sm loop for the layer dim is a decimal number.
             # In that case, we will ceil it up to mimic the real case on hardware.
-            legal_spatial_loop, left_layer_dim_size_next = self.check_spatial_loop_legality(
+            (
+                legal_spatial_loop,
+                left_layer_dim_size_next,
+            ) = self.check_spatial_loop_legality(
                 combination=new_combination_next, layer=layer
             )
             if not legal_spatial_loop:
