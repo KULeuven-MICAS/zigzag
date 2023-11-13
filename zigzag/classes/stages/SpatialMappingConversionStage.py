@@ -220,12 +220,21 @@ class SpatialMappingConversionStage(Stage):
             layer=self.layer,
             accelerator=self.accelerator,
         )
+        try:
+            SpatialMapping(spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer), SpatialMapping(
+                spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
+            )
+        except:
+            pass
 
-        return SpatialMapping(
-            spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
-        ), SpatialMapping(
-            spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
-        )
+        try:
+            return SpatialMapping(
+                spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
+            ), SpatialMapping(
+                spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
+            )
+        except:
+            pass
 
     def generate_limited_user_spatial_mapping(
         self,
@@ -363,8 +372,28 @@ class SpatialMappingConversionStage(Stage):
             # After we have gone through the memory levels, if there are still user-defined dimensions
             # present, add them as the top level. Otherwise add an empty list to make arch levels correct:
             # because first list we added was the operational array level.
+
+            # We will merge together if the top memory level is serving multiple oa dims
+            # and there are layer dims existing on multiple oa dims.
+            top_level_spatial_mapping_dict = {}
+            for (dim_name, spatial_loop) in user_sm_copy.items():
+                if self.is_nested_tuple(spatial_loop):  # mix sm loop
+                    for sub_spatial_loop in spatial_loop:
+                        spatial_loop_dim = sub_spatial_loop[0]
+                        spatial_loop_size = sub_spatial_loop[1]
+                        if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
+                            top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                        else:
+                            top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
+                else:
+                    spatial_loop_dim = spatial_loop[0]
+                    spatial_loop_size = spatial_loop[1]
+                    if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
+                        top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                    else:
+                        top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
             top_level_spatial_mapping = [
-                spatial_loop for (dim_name, spatial_loop) in user_sm_copy.items()
+                (layer_dim, layer_size) for (layer_dim, layer_size) in top_level_spatial_mapping_dict.items()
             ]
             spatial_mapping_dict[layer_op].append(top_level_spatial_mapping)
         return spatial_mapping_dict
