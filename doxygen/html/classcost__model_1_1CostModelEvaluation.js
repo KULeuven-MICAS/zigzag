@@ -1,6 +1,6 @@
 var classcost__model_1_1CostModelEvaluation =
 [
-    [ "__init__", "classcost__model_1_1CostModelEvaluation.html#a6f269baa0f767adf24bf448bacb26111", null ],
+    [ "__init__", "classcost__model_1_1CostModelEvaluation.html#a76d2dedcf7b16d77e70347bf41338c0c", null ],
     [ "__add__", "classcost__model_1_1CostModelEvaluation.html#a547cf97e438ebc6734fd6d1ea2b21b6d", null ],
     [ "__jsonrepr__", "classcost__model_1_1CostModelEvaluation.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__mul__", "classcost__model_1_1CostModelEvaluation.html#a64cee4d1b2939b36898932fba52a8207", null ],
@@ -71,6 +71,7 @@ var classcost__model_1_1CostModelEvaluation =
     [ "real_data_trans_cycle", "classcost__model_1_1CostModelEvaluation.html#af093ccb899c20f1b90e510d0db5d6d61", null ],
     [ "spatial_mapping", "classcost__model_1_1CostModelEvaluation.html#a1a81b4276ed57e54580bef8cb37bb2e5", null ],
     [ "spatial_mapping_dict_int", "classcost__model_1_1CostModelEvaluation.html#ac27748393385bdb22f28892a7ca49fea", null ],
+    [ "spatial_mapping_int", "classcost__model_1_1CostModelEvaluation.html#a778f2cf0f748119eb8ecc9f95b5897b6", null ],
     [ "SS_comb", "classcost__model_1_1CostModelEvaluation.html#ac1656d4b513cd50bcb57f83a2538862c", null ],
     [ "SS_comb_collect", "classcost__model_1_1CostModelEvaluation.html#a847d07c79a8fe220c4020f2f9dd280f2", null ],
     [ "temporal_mapping", "classcost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8", null ]

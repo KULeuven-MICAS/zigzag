@@ -50,10 +50,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "CostModelStage_8py.html",
-"classcost__model_1_1CostModelEvaluation.html#a6f269baa0f767adf24bf448bacb26111",
-"classmemory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151",
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a526aceb13044caff9d8b74fe75831e1b",
-"index.html"
+"classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59",
+"classmemory__hierarchy_1_1MemoryHierarchy.html#a668bc49f9e06cce6e422e6c9bd1ab6f9",
+"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0",
+"functions_vars_p.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

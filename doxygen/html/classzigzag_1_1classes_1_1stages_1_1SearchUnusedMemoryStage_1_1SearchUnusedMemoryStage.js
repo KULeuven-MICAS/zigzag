@@ -1,6 +1,7 @@
 var classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage =
 [
     [ "__init__", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a15c75b84fb8d98ca8127321c5d3637f8", null ],
+    [ "check_if_mem_serve_all_oa_dims", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a8690be42786add12e02a9754a404e2d9", null ],
     [ "remove_dummy_nodes_in_workload", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e", null ],
     [ "run", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a1e5cd5a636699da8312144cfed2d14e9", null ],
     [ "update_IO_mem_level", "classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a17f26d82450dd35d093a35f0c8828f77", null ],

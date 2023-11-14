@@ -216,7 +216,7 @@ var NAVTREEINDEX0 =
 "classcore_1_1Core.html#af8a083d94e17b62ad3a2e4cf9adae388":[2,0,5,0,10],
 "classcost__model_1_1CostModelEvaluation.html":[2,0,6,2],
 "classcost__model_1_1CostModelEvaluation.html#a0560bde5cdf85708f72681ce36d1c936":[2,0,6,2,48],
-"classcost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,6,2,73],
+"classcost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,6,2,74],
 "classcost__model_1_1CostModelEvaluation.html#a09c3d6ae12fe0469f495f0280f3c1730":[2,0,6,2,24],
 "classcost__model_1_1CostModelEvaluation.html#a0ab94b5e657e9550a1b27ace112c727d":[2,0,6,2,2],
 "classcost__model_1_1CostModelEvaluation.html#a0c53fbb91c880ae99bd7092d27148bfb":[2,0,6,2,61],

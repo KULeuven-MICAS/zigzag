@@ -1,5 +1,10 @@
 var NAVTREEINDEX2 =
 {
+"classmemory__hierarchy_1_1MemoryHierarchy.html#a668bc49f9e06cce6e422e6c9bd1ab6f9":[2,0,19,0,1],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#a7650211d58fa3d4d6d5d657a3cc5d484":[2,0,19,0,0],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#a812871c1309e3fa7d258ed681d461625":[2,0,19,0,5],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#a9e34421b449cae5af5b30531fbe153e3":[2,0,19,0,12],
+"classmemory__hierarchy_1_1MemoryHierarchy.html#aa551b39d3cb97666fedabc767a91f4a6":[2,0,19,0,18],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,19,0,15],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#ac627168cec557079f83a54ab2c038ef9":[2,0,19,0,7],
 "classmemory__hierarchy_1_1MemoryHierarchy.html#ace3c477fb06ec893e6c02ee3bf161ca6":[2,0,19,0,4],
@@ -220,7 +225,7 @@ var NAVTREEINDEX2 =
 "classutils_1_1OnnxTensorCategory.html#ad700e9d3fb55bebeddce0073c48f1dc2":[2,0,33,0,0],
 "classutils_1_1OnnxTensorType.html":[2,0,33,1],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html":[2,0,34,0,0,0,0],
-"classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#a7445f3853ca9d7829cf1234359f37f4b":[2,0,34,0,0,0,0,0],
+"classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#a6ed7ce065309d0cfcacebee9ace92fe8":[2,0,34,0,0,0,0,0],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ac6481ca6973711826d5f2ca92f7ac633":[2,0,34,0,0,0,0,1],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,0,0,2],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ae3c6a5283e6e1961f1c6b696f5ebc65c":[2,0,34,0,0,0,0,3],
@@ -244,10 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1AcceleratorParserStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,4,0,1],
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html":[2,0,34,0,0,4,1],
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a11b0ac7d8e498ccae82b0dd1d92ae163":[2,0,34,0,0,4,1,2],
-"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a526aceb13044caff9d8b74fe75831e1b":[2,0,34,0,0,4,1,0],
-"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,4,1,1],
-"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,34,0,0,4,1,3],
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html":[2,0,34,0,0,5,0],
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a1e686737e25a49cf74fb7c5322abc762":[2,0,34,0,0,5,0,1],
-"classzigzag_1_1classes_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#a4594e20a5ec8cf3449870da9265d5083":[2,0,34,0,0,5,0,2]
+"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a526aceb13044caff9d8b74fe75831e1b":[2,0,34,0,0,4,1,0]
 };

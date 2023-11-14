@@ -1,10 +1,14 @@
 <map id="run" name="run">
-<area shape="rect" id="node1" title=" " alt="" coords="5,141,48,168"/>
-<area shape="rect" id="node2" href="$classgenerator_1_1UserSpatialMappingGenerator.html#ad0390db042fa1709b603abcf658bc227" title="Generator that yields user&#45;defined spatial mappings." alt="" coords="96,134,263,175"/>
-<area shape="rect" id="node3" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a26e2ead06314082e293d0a3965628e1c" title=" " alt="" coords="335,46,489,87"/>
-<area shape="rect" id="node5" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="646,111,770,137"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="561,161,855,217"/>
-<area shape="rect" id="node8" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a570572d2854da61d13a11ddeb9a01a0e" title=" " alt="" coords="311,163,513,205"/>
-<area shape="rect" id="node4" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a6f18cab0d3471d80232f08af77736696" title=" " alt="" coords="663,56,753,83"/>
-<area shape="rect" id="node7" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a1f0b7cf313f46a4310f38324f056d61b" title=" " alt="" coords="652,5,764,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,204,48,231"/>
+<area shape="rect" id="node2" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a4e0755fb52038332fb3770170cb0c4c6" title="Generator that yields user&#45;defined spatial mappings." alt="" coords="96,197,263,238"/>
+<area shape="rect" id="node3" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a1445f1def31c9dbb8783e5414213eba8" title=" " alt="" coords="609,106,767,147"/>
+<area shape="rect" id="node4" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="922,113,1046,140"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="837,164,1131,220"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a07ed2ac3c42cb6d687841977023e9542" title=" " alt="" coords="841,244,1127,300"/>
+<area shape="rect" id="node8" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a26e2ead06314082e293d0a3965628e1c" title=" " alt="" coords="611,41,765,82"/>
+<area shape="rect" id="node10" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a07b6a476242dbdc729b256614f72487c" title=" " alt="" coords="615,289,761,330"/>
+<area shape="rect" id="node11" href="$classgenerator_1_1UserSpatialMappingGenerator.html#aaf341f8ad75c60f1ff4a704176f650a5" title=" " alt="" coords="311,280,539,336"/>
+<area shape="rect" id="node12" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a570572d2854da61d13a11ddeb9a01a0e" title=" " alt="" coords="587,171,789,213"/>
+<area shape="rect" id="node7" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a1f0b7cf313f46a4310f38324f056d61b" title=" " alt="" coords="928,63,1040,89"/>
+<area shape="rect" id="node9" href="$classgenerator_1_1UserSpatialMappingGenerator.html#a6f18cab0d3471d80232f08af77736696" title=" " alt="" coords="939,12,1029,39"/>
 </map>
