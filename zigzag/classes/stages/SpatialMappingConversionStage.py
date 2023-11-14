@@ -52,7 +52,9 @@ class SpatialMappingConversionStage(Stage):
 
     def run(self):
         user_spatial_mapping = self.layer.user_spatial_mapping
-        spatial_mapping = self.convert_user_spatial_mapping(user_spatial_mapping)
+        spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(
+            user_spatial_mapping
+        )
         # Since the spatial_mapping may be modified in the previous step,
         # we have to update this change to self.layer
         updated_user_spatial_mapping = {}
@@ -75,6 +77,7 @@ class SpatialMappingConversionStage(Stage):
 
         kwargs = self.kwargs.copy()
         kwargs["spatial_mapping"] = spatial_mapping
+        kwargs["spatial_mapping_int"] = spatial_mapping_int
         kwargs["accelerator"] = self.accelerator
         kwargs["layer"] = self.layer
 
@@ -104,13 +107,31 @@ class SpatialMappingConversionStage(Stage):
         oa_dims = core.operational_array.dimensions
         layer_dim_sizes = self.layer.loop_dim_size.copy()
         limited_user_spatial_mapping = {}  # init dict we will be filling
+        limited_user_spatial_mapping_int = {}  # init dict int we will be filling
         for oa_dim_name, spatial_loop in user_spatial_mapping.items():
             if self.is_nested_tuple(spatial_loop):  # mix sm loop
                 limited_mix_user_spatial_mapping_on_dim = []
+                limited_mix_user_spatial_mapping_int_on_dim = []
                 for spatial_loop_element in spatial_loop:
                     limited_user_spatial_mapping_to_check = (
                         self.generate_limited_user_spatial_mapping(
-                            layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop_element
+                            layer_dim_sizes,
+                            oa_dims,
+                            oa_dim_name,
+                            spatial_loop_element,
+                            user_spatial_mapping,
+                            limited_user_spatial_mapping,
+                        )
+                    )
+                    limited_user_spatial_mapping_int_to_check = (
+                        self.generate_limited_user_spatial_mapping(
+                            layer_dim_sizes,
+                            oa_dims,
+                            oa_dim_name,
+                            spatial_loop_element,
+                            user_spatial_mapping,
+                            limited_user_spatial_mapping,
+                            False,
                         )
                     )
                     if limited_user_spatial_mapping_to_check == None:
@@ -119,19 +140,44 @@ class SpatialMappingConversionStage(Stage):
                         limited_mix_user_spatial_mapping_on_dim.append(
                             limited_user_spatial_mapping_to_check
                         )
+                        limited_mix_user_spatial_mapping_int_on_dim.append(
+                            limited_user_spatial_mapping_int_to_check
+                        )
                 if len(limited_mix_user_spatial_mapping_on_dim) == 0:
                     continue  # Skip this spatial dimension if the defined dims in sm don't exist in the layer
                 else:
                     limited_mix_user_spatial_mapping_on_dim = tuple(
                         limited_mix_user_spatial_mapping_on_dim
                     )
+                    limited_mix_user_spatial_mapping_int_on_dim = tuple(
+                        limited_mix_user_spatial_mapping_int_on_dim
+                    )
                     limited_user_spatial_mapping[
                         oa_dim_name
                     ] = limited_mix_user_spatial_mapping_on_dim
+                    limited_user_spatial_mapping_int[
+                        oa_dim_name
+                    ] = limited_mix_user_spatial_mapping_int_on_dim
             else:  # single-dim sm loop
                 limited_user_spatial_mapping_to_check = (
                     self.generate_limited_user_spatial_mapping(
-                        layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+                        layer_dim_sizes,
+                        oa_dims,
+                        oa_dim_name,
+                        spatial_loop,
+                        user_spatial_mapping,
+                        limited_user_spatial_mapping,
+                    )
+                )
+                limited_user_spatial_mapping_int_to_check = (
+                    self.generate_limited_user_spatial_mapping(
+                        layer_dim_sizes,
+                        oa_dims,
+                        oa_dim_name,
+                        spatial_loop,
+                        user_spatial_mapping,
+                        limited_user_spatial_mapping,
+                        False,
                     )
                 )
                 if limited_user_spatial_mapping_to_check == None:
@@ -140,6 +186,9 @@ class SpatialMappingConversionStage(Stage):
                     limited_user_spatial_mapping[
                         oa_dim_name
                     ] = limited_user_spatial_mapping_to_check
+                    limited_user_spatial_mapping_int[
+                        oa_dim_name
+                    ] = limited_user_spatial_mapping_int_to_check
             # Update the layer_dim_size to support multiple oa dims unrolling the same loop dim but not unrolling it more than the total layer dim
             # if (
             #     temporal_remainder == 1
@@ -159,15 +208,102 @@ class SpatialMappingConversionStage(Stage):
             f"User-provided spatial mapping converted to: {user_spatial_mapping_for_log}"
         )
 
+        spatial_mapping_dict = self.generate_spatial_mapping_dict(
+            user_spatial_mapping=limited_user_spatial_mapping,
+            layer=self.layer,
+            accelerator=self.accelerator,
+        )
+        # The next spatial_mapping_dict is used in cost model to calculate the interval between different data transfer.
+        # Different with the one above, there are only integer numbers (corresponding to the real cases)
+        spatial_mapping_dict_int = self.generate_spatial_mapping_dict(
+            user_spatial_mapping=limited_user_spatial_mapping_int,
+            layer=self.layer,
+            accelerator=self.accelerator,
+        )
+
+        return SpatialMapping(
+            spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
+        ), SpatialMapping(
+            spatial_mapping_dict=spatial_mapping_dict_int, layer_node=self.layer
+        )
+
+    def generate_limited_user_spatial_mapping(
+        self,
+        layer_dim_sizes,
+        oa_dims,
+        oa_dim_name,
+        spatial_loop,
+        user_spatial_mapping,
+        limited_user_spatial_mapping,
+        allow_decimal_sm_loop_size=True,
+    ):
+        ## Do check on spatial mapping, and convert the mapping to a tuple
+        (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
+        # Check 0: Skip this spatial dimension if it doesn't exist in the layer
+        if loop_dim_unrolled not in layer_dim_sizes.keys():
+            return None
+        # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
+        oa_dim_size = next(
+            (oa_dim for oa_dim in oa_dims if oa_dim.name == oa_dim_name)
+        ).size
+        loop_size_unrolled = min(oa_dim_size, loop_size_unrolled)
+        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
+        layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
+        loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
+        # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
+        # and if there is no more mapping for this layer dimension
+        no_more_mapping_for_current_layer_dim = (
+            self.check_if_there_is_further_oa_mapping_for_current_layer_dim(
+                oa_dim_name=oa_dim_name,
+                loop_dim_unrolled=loop_dim_unrolled,
+                user_spatial_mapping=user_spatial_mapping,
+            )
+        )
+        if no_more_mapping_for_current_layer_dim:
+            loop_size_unrolled_on_early_oa_dims = (
+                self.calc_unrolled_loop_size_on_early_oa_dims(
+                    oa_dim_name=oa_dim_name,
+                    loop_dim_unrolled=loop_dim_unrolled,
+                    user_spatial_mapping=limited_user_spatial_mapping,
+                )
+            )
+            temporal_remainder = int(
+                np.ceil(
+                    layer_dim_size
+                    / (loop_size_unrolled * loop_size_unrolled_on_early_oa_dims)
+                )
+            )
+            if allow_decimal_sm_loop_size:
+                loop_size_unrolled = (
+                    layer_dim_size
+                    / temporal_remainder
+                    / loop_size_unrolled_on_early_oa_dims
+                )
+            else:
+                loop_size_unrolled = int(
+                    np.ceil(
+                        layer_dim_size
+                        / temporal_remainder
+                        / loop_size_unrolled_on_early_oa_dims
+                    )
+                )
+        return (
+            loop_dim_unrolled,
+            loop_size_unrolled,
+        )
+
+    def generate_spatial_mapping_dict(self, user_spatial_mapping, layer, accelerator):
+        # This function is to convert spatial mapping to spatial_mapping_dict,
+        # which attaches spatial mapping to different memory levels.
         spatial_mapping_dict = {}
-        layer_to_mem_op = self.layer.memory_operand_links
+        layer_to_mem_op = layer.memory_operand_links
         mem_to_layer_op = {
             mem_op: layer_op for (layer_op, mem_op) in layer_to_mem_op.items()
         }
-        core_id = self.layer.core_allocation
-        mem_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
+        core_id = layer.core_allocation
+        mem_hierarchy = accelerator.get_core(core_id).memory_hierarchy
         for mem_op, layer_op in mem_to_layer_op.items():
-            user_sm_copy = limited_user_spatial_mapping.copy()
+            user_sm_copy = user_spatial_mapping.copy()
             # layer_op = mem_to_layer_op[mem_op]
             spatial_mapping_dict[layer_op] = []
             memory_levels = mem_hierarchy.get_memory_levels(
@@ -227,35 +363,84 @@ class SpatialMappingConversionStage(Stage):
             # After we have gone through the memory levels, if there are still user-defined dimensions
             # present, add them as the top level. Otherwise add an empty list to make arch levels correct:
             # because first list we added was the operational array level.
+
+            # We will merge together if the top memory level is serving multiple oa dims
+            # and there are layer dims existing on multiple oa dims.
+            top_level_spatial_mapping_dict = {}
+            for (dim_name, spatial_loop) in user_sm_copy.items():
+                if self.is_nested_tuple(spatial_loop):  # mix sm loop
+                    for sub_spatial_loop in spatial_loop:
+                        spatial_loop_dim = sub_spatial_loop[0]
+                        spatial_loop_size = sub_spatial_loop[1]
+                        if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
+                            top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                        else:
+                            top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
+                else:
+                    spatial_loop_dim = spatial_loop[0]
+                    spatial_loop_size = spatial_loop[1]
+                    if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
+                        top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                    else:
+                        top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
             top_level_spatial_mapping = [
-                spatial_loop for (dim_name, spatial_loop) in user_sm_copy.items()
+                (layer_dim, layer_size) for (layer_dim, layer_size) in top_level_spatial_mapping_dict.items()
             ]
             spatial_mapping_dict[layer_op].append(top_level_spatial_mapping)
+        return spatial_mapping_dict
 
-        return SpatialMapping(
-            spatial_mapping_dict=spatial_mapping_dict, layer_node=self.layer
-        )
-
-    def generate_limited_user_spatial_mapping(
-        self, layer_dim_sizes, oa_dims, oa_dim_name, spatial_loop
+    def check_if_there_is_further_oa_mapping_for_current_layer_dim(
+        self, oa_dim_name, loop_dim_unrolled, user_spatial_mapping
     ):
-        ## Do check on spatial mapping, and convert the mapping to a tuple
-        (loop_dim_unrolled, loop_size_unrolled) = spatial_loop
-        # Check 0: Skip this spatial dimension if it doesn't exist in the layer
-        if loop_dim_unrolled not in layer_dim_sizes.keys():
-            return None
-        # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
-        oa_dim_size = next(
-            (oa_dim for oa_dim in oa_dims if oa_dim.name == oa_dim_name)
-        ).size
-        loop_size_unrolled = min(oa_dim_size, loop_size_unrolled)
-        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
-        layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
-        loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
-        # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
-        temporal_remainder = int(np.ceil(layer_dim_size / loop_size_unrolled))
-        loop_size_unrolled = layer_dim_size / temporal_remainder
-        return (
-            loop_dim_unrolled,
-            loop_size_unrolled,
-        )
+        # For the case when there is layer dimension that is mapped on multiple oa dimensions.
+        # We need to decide on which oa dimension to adjust the unrolling
+        # if the total unrolling size is not a multiple of the layer dimension size.
+        # In this case, we decide to only adjust the unrolling size on the last oa dimension,
+        # This function is to check if the current oa dimension is the last oa dimension for the current layer dim.
+        start_check_on_layer_dim_mapping = False
+        no_more_mapping_for_current_layer_dim = True
+        for oa_dim_name_private, spatial_loop_private in user_spatial_mapping.items():
+            if oa_dim_name == oa_dim_name_private:
+                start_check_on_layer_dim_mapping = True
+                continue
+            if start_check_on_layer_dim_mapping:
+                if self.is_nested_tuple(spatial_loop_private):  # mix sm loop
+                    for spatial_loop_element in spatial_loop_private:
+                        loop_dim_unrolled_private = spatial_loop_element[0]
+                        if loop_dim_unrolled == loop_dim_unrolled_private:
+                            no_more_mapping_for_current_layer_dim = False
+                            break
+                else:
+                    loop_dim_unrolled_private = spatial_loop_private[0]
+                    if loop_dim_unrolled == loop_dim_unrolled_private:
+                        no_more_mapping_for_current_layer_dim = False
+            if (
+                not no_more_mapping_for_current_layer_dim
+            ):  # early exit if the flag is already False
+                break
+        return no_more_mapping_for_current_layer_dim
+
+    def calc_unrolled_loop_size_on_early_oa_dims(
+        self, oa_dim_name, loop_dim_unrolled, user_spatial_mapping
+    ):
+        # calculate the unrolled loop size for the specific layer dim on oa dims earlier than current oa dim
+        loop_unrolled_size_already = 1
+        for oa_dim_name_private, spatial_loop_private in user_spatial_mapping.items():
+            if oa_dim_name == oa_dim_name_private:
+                break
+            if self.is_nested_tuple(spatial_loop_private):  # mix sm loop
+                for spatial_loop_element in spatial_loop_private:
+                    (
+                        loop_dim_unrolled_private,
+                        loop_size_unrolled_private,
+                    ) = spatial_loop_element
+                    if loop_dim_unrolled == loop_dim_unrolled_private:
+                        loop_unrolled_size_already *= loop_size_unrolled_private
+            else:
+                (
+                    loop_dim_unrolled_private,
+                    loop_size_unrolled_private,
+                ) = spatial_loop_private
+                if loop_dim_unrolled == loop_dim_unrolled_private:
+                    loop_unrolled_size_already *= loop_size_unrolled_private
+        return loop_unrolled_size_already

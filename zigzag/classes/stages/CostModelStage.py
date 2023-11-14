@@ -30,6 +30,7 @@ class CostModelStage(Stage):
         accelerator,
         layer,
         spatial_mapping,
+        spatial_mapping_int,
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
         **kwargs
@@ -39,12 +40,14 @@ class CostModelStage(Stage):
             self.accelerator,
             self.layer,
             self.spatial_mapping,
+            self.spatial_mapping_int,
             self.temporal_mapping,
             self.access_same_data_considered_as_no_access,
         ) = (
             accelerator,
             layer,
             spatial_mapping,
+            spatial_mapping_int,
             temporal_mapping,
             access_same_data_considered_as_no_access,
         )
@@ -55,6 +58,7 @@ class CostModelStage(Stage):
             accelerator=self.accelerator,
             layer=self.layer,
             spatial_mapping=self.spatial_mapping,
+            spatial_mapping_int=self.spatial_mapping_int,
             temporal_mapping=self.temporal_mapping,
             # the below parameter is optional
             access_same_data_considered_as_no_access=self.access_same_data_considered_as_no_access,
