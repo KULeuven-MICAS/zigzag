@@ -2,8 +2,6 @@ import logging
 from typing import Dict, List, Tuple
 from math import ceil
 import numpy as np
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.mapping.combined_mapping import Mapping
 from zigzag.classes.mapping.combined_mapping import FourWayDataMoving
 from zigzag.utils import pickle_deepcopy
@@ -100,7 +98,7 @@ class PortBeginOrEndActivity:
 # @param cme: CostModelEvaluation
 # @param memory_instance: MemoryInstance
 # @return total_inst_bw
-def get_total_inst_bandwidth(cme: CostModelEvaluation, memory_instance: MemoryInstance):
+def get_total_inst_bandwidth(cme, memory_instance):
     """
     Get the instantaneous offchip bandwidth required throughout this layer's execution.
     """
