@@ -107,6 +107,9 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
+<tr class="memitem:acd092bc79a82117ebe2e5ca9a02e8514"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecost__model.html#acd092bc79a82117ebe2e5ca9a02e8514">get_total_inst_bandwidth</a> (<a class="el" href="classcost__model_1_1CostModelEvaluation.html">CostModelEvaluation</a> cme, MemoryInstance memory_instance)</td></tr>
+<tr class="memdesc:acd092bc79a82117ebe2e5ca9a02e8514"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth required throughout this layer's execution.  <a href="namespacecost__model.html#acd092bc79a82117ebe2e5ca9a02e8514">More...</a><br /></td></tr>
+<tr class="separator:acd092bc79a82117ebe2e5ca9a02e8514"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addfd72f2b701c2142cc9c9463b24bf7b"><td class="memItemLeft" align="right" valign="top">List[Tuple]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b">get_shared_mem_list</a> (mem_op, mem_lv, memory_sharing_list)</td></tr>
 <tr class="memdesc:addfd72f2b701c2142cc9c9463b24bf7b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a certain operand's storage level (for example (A,1): operand A's 1st memory level), return a list of the rest operand's storage levels that share physical memory with the former one (A1)  <a href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b">More...</a><br /></td></tr>
 <tr class="separator:addfd72f2b701c2142cc9c9463b24bf7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -212,6 +215,45 @@ Here is the caller graph for this function:</div>
 </map>
 </div>
 
+</div>
+</div>
+<a id="acd092bc79a82117ebe2e5ca9a02e8514"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acd092bc79a82117ebe2e5ca9a02e8514">&#9670;&nbsp;</a></span>get_total_inst_bandwidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def cost_model.get_total_inst_bandwidth </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classcost__model_1_1CostModelEvaluation.html">CostModelEvaluation</a>&#160;</td>
+          <td class="paramname"><em>cme</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemoryInstance&#160;</td>
+          <td class="paramname"><em>memory_instance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth required throughout this layer's execution. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">cme</td><td>CostModelEvaluation </td></tr>
+    <tr><td class="paramname">memory_instance</td><td>MemoryInstance </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>total_inst_bw</dd></dl>
+<pre class="fragment">Get the instantaneous offchip bandwidth required throughout this layer's execution.
+</pre> 
 </div>
 </div>
 <a id="a76d26fd8e24df2faad53a9cd5174c0eb"></a>

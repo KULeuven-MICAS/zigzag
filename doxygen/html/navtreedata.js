@@ -53,7 +53,7 @@ var NAVTREEINDEX =
 "classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59",
 "classmemory__hierarchy_1_1MemoryHierarchy.html#a668bc49f9e06cce6e422e6c9bd1ab6f9",
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0",
-"functions_vars_p.html"
+"functions_vars_o.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
