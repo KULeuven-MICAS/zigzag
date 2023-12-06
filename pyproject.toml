@@ -11,7 +11,7 @@ namespaces = true  # true by default
 
 [project]
 name = "zigzag-dse"
-version = "2.5.0"
+version = "2.5.1"
 description = "ZigZag - Deep Learning Hardware Design Space Exploration"
 readme = "README.md"
 authors = [{ name = "Arne Symons", email = "arne.symons@kuleuven.be" }, { name = "Linyan Mei", email = "linyan.mei@kuleuven.be" }]
@@ -45,7 +45,7 @@ Homepage = "https://github.com/ZigZag-Project/zigzag"
 realpython = "zigzag.__main__:main"
 
 [tool.bumpver]
-current_version = "2.5.0"
+current_version = "2.5.1"
 version_pattern = "MAJOR.MINOR.PATCH"
 commit_message = "bump version {old_version} -> {new_version}"
 commit = true
