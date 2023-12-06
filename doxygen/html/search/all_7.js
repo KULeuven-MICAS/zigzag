@@ -59,7 +59,7 @@ var searchData=
   ['get_5fthreadpool_272',['get_threadpool',['../namespacezigzag_1_1classes_1_1stages_1_1RunOptStages.html#a364a58821ef707393282a0c954f60406',1,'zigzag::classes::stages::RunOptStages']]],
   ['get_5ftop_5fmemories_273',['get_top_memories',['../classmemory__hierarchy_1_1MemoryHierarchy.html#a544afc2738f7727e985fbfdc5aa5960c',1,'memory_hierarchy::MemoryHierarchy']]],
   ['get_5ftop_5fmemory_5finstance_274',['get_top_memory_instance',['../classcore_1_1Core.html#aa85ccd5b36572a408e369e58e610ccb7',1,'core::Core']]],
-  ['get_5ftotal_5finst_5fbandwidth_275',['get_total_inst_bandwidth',['../namespacecost__model.html#acd092bc79a82117ebe2e5ca9a02e8514',1,'cost_model']]],
+  ['get_5ftotal_5finst_5fbandwidth_275',['get_total_inst_bandwidth',['../namespacecost__model.html#a9deceb36090ec8ce399c86181b27c7d0',1,'cost_model']]],
   ['get_5ftotal_5fread_5fouts_5fto_5fabove_276',['get_total_read_outs_to_above',['../classcombined__mapping_1_1FourWayDataMoving.html#a357728c72fbcb92071e8a287b45c8d48',1,'combined_mapping::FourWayDataMoving']]],
   ['get_5ftotal_5fread_5fouts_5fto_5fbelow_277',['get_total_read_outs_to_below',['../classcombined__mapping_1_1FourWayDataMoving.html#a22a66f5c1c3066d71baf33f79520e30d',1,'combined_mapping::FourWayDataMoving']]],
   ['get_5ftotal_5fwrite_5fins_5ffrom_5fabove_278',['get_total_write_ins_from_above',['../classcombined__mapping_1_1FourWayDataMoving.html#aac4faffab79215a54d30e2e97f604ffb',1,'combined_mapping::FourWayDataMoving']]],
