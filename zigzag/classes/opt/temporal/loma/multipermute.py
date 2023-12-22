@@ -59,19 +59,21 @@ def init(multiset):
 
 
 ## Converts our bespoke linked list to a python list.
-def visit(h):
+def visit(h,original_multiset,unordered_loops):
     o = h
     l = []
     while o is not None:
         l.append(o.value)
         o = o.next
-    return l
+    # place unordered loops at the end
+    return [(name,size) for name,size in original_multiset if name in unordered_loops]+l
 
 
 ## Generator providing all multiset permutations of a multiset.
-def permutations(multiset):
-    h, i, j = init(multiset)
-    yield visit(h)
+def permutations(multiset,unordered_loops):
+    # init with only orderable loops
+    h, i, j = init([(name,size) for name,size in multiset if name not in unordered_loops])
+    yield visit(h,multiset,unordered_loops)
     while j.next is not None or j.value < h.value:
         if j.next is not None and i.value >= j.next.value:
             s = j
@@ -84,7 +86,7 @@ def permutations(multiset):
             i = t
         j = i.next
         h = t
-        yield visit(h)
+        yield visit(h,multiset,unordered_loops)
 
 
 if __name__ == "__main__":
