@@ -225,10 +225,11 @@ var NAVTREEINDEX2 =
 "classutils_1_1OnnxTensorCategory.html#ad700e9d3fb55bebeddce0073c48f1dc2":[2,0,33,0,0],
 "classutils_1_1OnnxTensorType.html":[2,0,33,1],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html":[2,0,34,0,0,0,0],
-"classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#a6ed7ce065309d0cfcacebee9ace92fe8":[2,0,34,0,0,0,0,0],
+"classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#a6d8c0e3c7fb1c74f55579bd6023c164c":[2,0,34,0,0,0,0,0],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ac6481ca6973711826d5f2ca92f7ac633":[2,0,34,0,0,0,0,1],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,0,0,2],
 "classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ae3c6a5283e6e1961f1c6b696f5ebc65c":[2,0,34,0,0,0,0,3],
+"classzigzag_1_1classes_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ae9537fbaed3d3248b036429faa587781":[2,0,34,0,0,0,0,4],
 "classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html":[2,0,34,0,0,1,0],
 "classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html#a07c39842bde845434203981e0cd9c229":[2,0,34,0,0,1,0,2],
 "classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html#ac8f4c022537d96b2e680698d5546aa99":[2,0,34,0,0,1,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1AcceleratorParserStage.html#aca1aff5f134bb8d4782729d704812c2b":[2,0,34,0,0,4,0,2],
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1AcceleratorParserStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,34,0,0,4,0,1],
 "classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html":[2,0,34,0,0,4,1],
-"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a11b0ac7d8e498ccae82b0dd1d92ae163":[2,0,34,0,0,4,1,2],
-"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a526aceb13044caff9d8b74fe75831e1b":[2,0,34,0,0,4,1,0]
+"classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html#a11b0ac7d8e498ccae82b0dd1d92ae163":[2,0,34,0,0,4,1,2]
 };
