@@ -31,7 +31,7 @@ var searchData=
   ['calc_5fpr_5fdimension_5fsize_76',['calc_pr_dimension_size',['../classlayer__node_1_1LayerNode.html#a7717cc8a738e75d123c4965afdaacc73',1,'layer_node::LayerNode']]],
   ['calc_5fpr_5fdimension_5fsize_5ftotal_77',['calc_pr_dimension_size_total',['../classlayer__node_1_1LayerNode.html#a73e6f7c6b50eab0dc50d86d53a745eb5',1,'layer_node::LayerNode']]],
   ['calc_5freq_5fmem_5fbw_5fand_5fdata_5ftransfer_5frate_78',['calc_req_mem_bw_and_data_transfer_rate',['../classcombined__mapping_1_1Mapping.html#a9ea07d0a8bb55a4b21a2cf801cda4886',1,'combined_mapping::Mapping']]],
-  ['calc_5fsize_5fslices_79',['calc_size_slices',['../classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa',1,'memory_allocator::MemoryAllocator']]],
+  ['calc_5fsize_5fslices_79',['calc_size_slices',['../classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d',1,'memory_allocator::MemoryAllocator']]],
   ['calc_5ftensor_5fdim_80',['calc_tensor_dim',['../classlayer__node_1_1LayerNode.html#a476f7f90dfcfda118c709dbec789af67',1,'layer_node::LayerNode']]],
   ['calc_5ftensor_5fdims_81',['calc_tensor_dims',['../classlayer__node_1_1LayerNode.html#a526339f776b30eb6d959ea5e41b3abc5',1,'layer_node::LayerNode']]],
   ['calc_5ftensor_5fsize_82',['calc_tensor_size',['../classlayer__node_1_1LayerNode.html#a3f47ff9a0ff1815fd7614e15d3e29203',1,'layer_node::LayerNode']]],

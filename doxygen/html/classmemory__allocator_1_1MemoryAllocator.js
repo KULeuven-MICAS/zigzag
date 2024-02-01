@@ -3,7 +3,7 @@ var classmemory__allocator_1_1MemoryAllocator =
     [ "__init__", "classmemory__allocator_1_1MemoryAllocator.html#a87439f126cafbca223aaa703eafc061e", null ],
     [ "allocate_node", "classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d", null ],
     [ "calc_loops_size", "classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161", null ],
-    [ "calc_size_slices", "classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa", null ],
+    [ "calc_size_slices", "classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d", null ],
     [ "find_best_loop_combination", "classmemory__allocator_1_1MemoryAllocator.html#a27fc942d253c16d5f5df55d84cab1c4d", null ],
     [ "run", "classmemory__allocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0", null ],
     [ "accelerator", "classmemory__allocator_1_1MemoryAllocator.html#abad7d445eb555517f300b6de6986a765", null ],

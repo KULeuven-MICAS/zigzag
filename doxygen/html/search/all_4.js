@@ -48,10 +48,11 @@ var searchData=
   ['dnn_5fworkload_2epy_182',['dnn_workload.py',['../dnn__workload_8py.html',1,'']]],
   ['dnnworkload_183',['DNNWorkload',['../classdnn__workload_1_1DNNWorkload.html',1,'dnn_workload']]],
   ['double_5fbuffer_5ftrue_184',['double_buffer_true',['../classcost__model_1_1CostModelEvaluation.html#ad1ce005906d5f0df2652db257385a442',1,'cost_model::CostModelEvaluation']]],
-  ['dummy_5fnode_185',['dummy_node',['../namespacedummy__node.html',1,'']]],
-  ['dummy_5fnode_2epy_186',['dummy_node.py',['../dummy__node_8py.html',1,'']]],
-  ['dummynode_187',['DummyNode',['../classdummy__node_1_1DummyNode.html',1,'dummy_node']]],
-  ['dump_5ffilename_5fpattern_188',['dump_filename_pattern',['../classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.DumpStage.DumpStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1SkipIfDumpExistsStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.RunOptStages.SkipIfDumpExistsStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.SaveStage.CompleteSaveStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.SaveStage.SimpleSaveStage.dump_filename_pattern()']]],
-  ['dumpstage_189',['DumpStage',['../classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html',1,'zigzag::classes::stages::DumpStage']]],
-  ['dumpstage_2epy_190',['DumpStage.py',['../DumpStage_8py.html',1,'']]]
+  ['double_5fbuffering_5fsupport_185',['double_buffering_support',['../classmemory__instance_1_1MemoryInstance.html#a6018e152103e9e6473041dba3a23f818',1,'memory_instance::MemoryInstance']]],
+  ['dummy_5fnode_186',['dummy_node',['../namespacedummy__node.html',1,'']]],
+  ['dummy_5fnode_2epy_187',['dummy_node.py',['../dummy__node_8py.html',1,'']]],
+  ['dummynode_188',['DummyNode',['../classdummy__node_1_1DummyNode.html',1,'dummy_node']]],
+  ['dump_5ffilename_5fpattern_189',['dump_filename_pattern',['../classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.DumpStage.DumpStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1RunOptStages_1_1SkipIfDumpExistsStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.RunOptStages.SkipIfDumpExistsStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.SaveStage.CompleteSaveStage.dump_filename_pattern()'],['../classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage.html#a07c39842bde845434203981e0cd9c229',1,'zigzag.classes.stages.SaveStage.SimpleSaveStage.dump_filename_pattern()']]],
+  ['dumpstage_190',['DumpStage',['../classzigzag_1_1classes_1_1stages_1_1DumpStage_1_1DumpStage.html',1,'zigzag::classes::stages::DumpStage']]],
+  ['dumpstage_2epy_191',['DumpStage.py',['../DumpStage_8py.html',1,'']]]
 ];

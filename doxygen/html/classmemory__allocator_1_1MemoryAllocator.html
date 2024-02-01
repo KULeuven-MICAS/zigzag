@@ -107,9 +107,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a62ba04231bc5184be66b9cd7c0312c2d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d">allocate_node</a> (self, MemoryLevel node, List[MemoryLevel] top_levels)</td></tr>
 <tr class="memdesc:a62ba04231bc5184be66b9cd7c0312c2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a single memory node with the best loops that remain in the unallocated loop ordering.  <a href="classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d">More...</a><br /></td></tr>
 <tr class="separator:a62ba04231bc5184be66b9cd7c0312c2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae341b710cf4dfad035ddbb106718b3aa"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa">calc_size_slices</a> (self, str mem_op, int mem_capacity)</td></tr>
-<tr class="memdesc:ae341b710cf4dfad035ddbb106718b3aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the required memory size to store different slices of the unallocated loops, with 'mem_capacity' as an upper bound.  <a href="classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa">More...</a><br /></td></tr>
-<tr class="separator:ae341b710cf4dfad035ddbb106718b3aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8e11aa3495c9878d091d3c6bf0acf7d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d">calc_size_slices</a> (self, str mem_op, int mem_capacity, bool db_support=False)</td></tr>
+<tr class="memdesc:aa8e11aa3495c9878d091d3c6bf0acf7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the required memory size to store different slices of the unallocated loops, with 'mem_capacity' as an upper bound.  <a href="classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d">More...</a><br /></td></tr>
+<tr class="separator:aa8e11aa3495c9878d091d3c6bf0acf7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ee18dda10d0934c8707685ed35fe161"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161">calc_loops_size</a> (self, List loops, str mem_op, List all_unallocated_loops)</td></tr>
 <tr class="memdesc:a2ee18dda10d0934c8707685ed35fe161"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the 'mem_op' tensor size required for all the loops in 'loops'.  <a href="classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161">More...</a><br /></td></tr>
 <tr class="separator:a2ee18dda10d0934c8707685ed35fe161"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -259,7 +259,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_a62ba04231bc5184be66b9cd7c0312c2d_cgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_a62ba04231bc5184be66b9cd7c0312c2d_cgraph" alt=""/></div>
 <map name="aclassmemory__allocator_1_1MemoryAllocator_a62ba04231bc5184be66b9cd7c0312c2d_cgraph" id="aclassmemory__allocator_1_1MemoryAllocator_a62ba04231bc5184be66b9cd7c0312c2d_cgraph">
 <area shape="rect" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="5,31,119,57"/>
-<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="206,5,331,32"/>
+<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="206,5,331,32"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a27fc942d253c16d5f5df55d84cab1c4d" title="Find the best combination of loops from different mem_ops." alt="" coords="167,56,371,83"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="419,5,541,32"/>
 </map>
@@ -329,7 +329,7 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_a2ee18dda10d0934c8707685ed35fe161_icgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_a2ee18dda10d0934c8707685ed35fe161_icgraph" alt=""/></div>
 <map name="aclassmemory__allocator_1_1MemoryAllocator_a2ee18dda10d0934c8707685ed35fe161_icgraph" id="aclassmemory__allocator_1_1MemoryAllocator_a2ee18dda10d0934c8707685ed35fe161_icgraph">
 <area shape="rect" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="687,13,809,39"/>
-<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="513,13,639,39"/>
+<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="513,13,639,39"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="352,13,465,39"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="261,13,304,39"/>
 <area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
@@ -338,8 +338,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ae341b710cf4dfad035ddbb106718b3aa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae341b710cf4dfad035ddbb106718b3aa">&#9670;&nbsp;</a></span>calc_size_slices()</h2>
+<a id="aa8e11aa3495c9878d091d3c6bf0acf7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8e11aa3495c9878d091d3c6bf0acf7d">&#9670;&nbsp;</a></span>calc_size_slices()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -360,7 +360,13 @@ Here is the caller graph for this function:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>mem_capacity</em>&#160;</td>
+          <td class="paramname"><em>mem_capacity</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>db_support</em> = <code>False</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -375,14 +381,15 @@ Here is the caller graph for this function:</div>
   <table class="params">
     <tr><td class="paramname">mem_op</td><td></td></tr>
     <tr><td class="paramname">mem_capacity</td><td>Capacity of the memory node in bits. </td></tr>
+    <tr><td class="paramname">db_support</td><td>Double buffering support of this node </td></tr>
   </table>
   </dd>
 </dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_cgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_cgraph" alt=""/></div>
-<map name="aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_cgraph" id="aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_cgraph">
+<div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_cgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_cgraph" alt=""/></div>
+<map name="aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_cgraph" id="aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_cgraph">
 <area shape="rect" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="5,5,131,32"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="179,5,301,32"/>
 </map>
@@ -390,8 +397,8 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_icgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_icgraph" alt=""/></div>
-<map name="aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_icgraph" id="aclassmemory__allocator_1_1MemoryAllocator_ae341b710cf4dfad035ddbb106718b3aa_icgraph">
+<div class="center"><img src="classmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_icgraph.png" border="0" usemap="#aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_icgraph" alt=""/></div>
+<map name="aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_icgraph" id="aclassmemory__allocator_1_1MemoryAllocator_aa8e11aa3495c9878d091d3c6bf0acf7d_icgraph">
 <area shape="rect" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="513,13,639,39"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="352,13,465,39"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="261,13,304,39"/>
@@ -494,7 +501,7 @@ Here is the call graph for this function:</div>
 <map name="aclassmemory__allocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph" id="aclassmemory__allocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph">
 <area shape="rect" title="Run the memory allocation process." alt="" coords="5,31,48,57"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a62ba04231bc5184be66b9cd7c0312c2d" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="96,31,209,57"/>
-<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#ae341b710cf4dfad035ddbb106718b3aa" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="297,5,422,32"/>
+<area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="297,5,422,32"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a27fc942d253c16d5f5df55d84cab1c4d" title="Find the best combination of loops from different mem_ops." alt="" coords="257,56,461,83"/>
 <area shape="rect" href="classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="509,5,632,32"/>
 </map>
