@@ -7,6 +7,7 @@ from zigzag.classes.io.onnx.conv import ConvParser
 from zigzag.classes.io.onnx.utils import (
     parse_mapping_from_path,
     parse_onnx_model_from_path,
+    parse_dynamic_onnx_model,
 )
 from zigzag.classes.workload.onnx_workload import ONNXWorkload
 
@@ -54,6 +55,8 @@ class ONNXModelParser:
         if not self.onnx_model:
             onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
             self.onnx_model = onnx_model
+        # Check for dynamicity in the model in the form of if statements
+        self.onnx_model = parse_dynamic_onnx_model(self.onnx_model)
 
         if not self.mapping:
             mapping = parse_mapping_from_path(self.mapping_path)

@@ -8,10 +8,11 @@ from typing import List
 import pickle
 
 import onnx
-from onnx import AttributeProto
+from onnx import AttributeProto, helper, compose
 
 logger = logging.getLogger(__name__)
 
+BRANCH_ATTRIBUTE = "branch"
 
 ## Parse the input accelerator residing in accelerator_path.
 # @param mapping_path
@@ -50,6 +51,66 @@ def parse_mapping_from_path(mapping_path):
 def parse_onnx_model_from_path(onnx_model_path):
     return onnx.load(onnx_model_path, load_external_data=False)
 
+def add_attribute(node, name, value):
+    attr = helper.make_attribute(name, value)
+    if hasattr(node, "attribute"):
+        node.attribute.append(attr)
+    else:
+        raise ValueError(f"{node} doesn't have an attribute field.")
+
+def add_branch_attribute(graph, branch=0):
+    for node in graph.node:
+        add_attribute(node, BRANCH_ATTRIBUTE, branch)
+        if node.op_type in ["If"]:
+            g0 = node.attribute[0].g  # then or else branch
+            g1 = node.attribute[1].g  # then or else branch
+            add_branch_attribute(g0, branch + 1)
+            add_branch_attribute(g1, branch + 1)
+
+def unroll_branches(graph):
+    seen_if = False
+    new_graph = graph
+    for node in graph.node:
+        if node.op_type in ["If"]:
+            if seen_if:
+                raise ValueError("Unrolling only implemented for single If operator in model.")
+            seen_if = True
+            g0 = node.attribute[0].g
+            g1 = node.attribute[1].g
+            if len(g1.node) > len(g0.node):
+                g0, g1 = g1, g0
+            # Recursively unroll any 'If' operator in the subgraph
+            g0 = unroll_branches(g0)
+            # Assume the first node in g0 is the only source node
+            g0_source = g0.node[0]
+            input_name = g0_source.input[0]
+            value_info = next(i for i in graph.value_info if i.name == input_name)
+            # Add value info to originalg graph output if it's not present
+            if input_name not in [vi.name for vi in graph.output]:
+                graph.output.extend([value_info])
+            # Add value info to subgraph input if it's not present
+            if input_name not in [vi.name for vi in g0.input]:
+                g0.input.extend([value_info])
+            # g0 is the graph we will combine with the original one
+            new_graph = compose.merge_graphs(graph, g0, io_map=[(input_name, input_name)])
+            break
+    return new_graph
+            
+def is_dynamic(model):
+    return "If" in [n.op_type for n in model.graph.node]
+
+## Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
+# All nodes are assigned a 'branch' attribute which specifies in which branch they live.
+# The branch attribute starts from 0 and increases for each seen If operator.
+# The nested graphs of the 'If' operators are then unrolled into a planar onnx model.
+def parse_dynamic_onnx_model(model):
+    new_model = model
+    if is_dynamic(model):
+        add_branch_attribute(model.graph)
+        pass
+        graph = unroll_branches(model.graph)
+        new_model = helper.make_model(graph)
+    return new_model
 
 ## Retrieves the attrs[name_idx].ints from attrs.
 # If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
