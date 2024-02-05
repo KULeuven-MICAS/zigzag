@@ -1,6 +1,6 @@
 from zigzag.classes.stages import *
 import re
-
+from onnx import ModelProto
 
 def get_hardware_performance_zigzag(
     workload,
@@ -33,7 +33,7 @@ def get_hardware_performance_zigzag(
 
     # Check workload format and based on it select the correct workload parser stage
     try:
-        if workload.split(".")[-1] == "onnx":
+        if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
             workload_parser_stage = ONNXModelParserStage
         else:
             workload_parser_stage = WorkloadParserStage
