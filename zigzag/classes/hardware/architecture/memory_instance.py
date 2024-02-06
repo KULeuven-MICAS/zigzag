@@ -18,6 +18,7 @@ class MemoryInstance:
     # @param min_w_granularity (int): The minimal number of bits that can be written in a clock cycle (can be less than w_bw)
     # @param mem_type (str): The type of memory. Used for CACTI cost extraction.
     # @param auto_cost_extraction (bool): Automatically extract the read cost, write cost and area using CACTI.
+    # @param double_buffering_support (bool): Support for double buffering on this memory instance.
     def __init__(
         self,
         name: str,
@@ -35,6 +36,7 @@ class MemoryInstance:
         min_w_granularity=None,
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
+        double_buffering_support: bool = False,
     ):
         if auto_cost_extraction:
             # Size must be a multiple of 8 when using CACTI
@@ -74,6 +76,7 @@ class MemoryInstance:
         self.w_port = w_port
         self.rw_port = rw_port
         self.latency = latency
+        self.double_buffering_support = double_buffering_support
         if not min_r_granularity:
             self.r_bw_min = r_bw
         else:

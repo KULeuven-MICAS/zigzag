@@ -15,7 +15,7 @@ class AcceleratorParser:
         if isinstance(accelerator, str):
             self.accelerator_path = accelerator
             self.accelerator = None
-        elif isinstance(accelerator, Accelerator):
+        elif type(accelerator).__name__ == "Accelerator":
             self.accelerator_path = None
             self.accelerator = accelerator
         else:

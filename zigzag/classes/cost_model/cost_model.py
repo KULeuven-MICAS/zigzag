@@ -2,7 +2,6 @@ import logging
 from typing import Dict, List, Tuple
 from math import ceil
 import numpy as np
-
 from zigzag.classes.mapping.combined_mapping import Mapping
 from zigzag.classes.mapping.combined_mapping import FourWayDataMoving
 from zigzag.utils import pickle_deepcopy
@@ -92,6 +91,34 @@ class PortBeginOrEndActivity:
 
     def __repr__(self):
         return str(self.served_op_lv_dir)
+
+
+## Given a cost model evaluation and a memory instance, compute the memory's
+# total instantaneous bandwidth required throughout this layer's execution.
+# @param cme: CostModelEvaluation
+# @param memory_instance: MemoryInstance
+# @return total_inst_bw
+def get_total_inst_bandwidth(cme, memory_instance):
+    """
+    Get the instantaneous offchip bandwidth required throughout this layer's execution.
+    """
+    # Check which operands require offchip memory throughout the computation
+    offchip_mem_operands = []
+    for op, memory_levels in cme.mem_hierarchy_dict.items():
+        last_mem_level = memory_levels[-1]
+        if last_mem_level.memory_instance == memory_instance:
+            offchip_mem_operands.append(op)
+    # Obtain the required instantaneous bandwidth to/from offchip for these operands
+    total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
+    for mem_op in offchip_mem_operands:
+        layer_op = next(
+            l_op
+            for l_op, m_op in cme.layer.memory_operand_links.items()
+            if m_op == mem_op
+        )
+        inst_bw_4way = cme.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
+        total_inst_bw += inst_bw_4way
+    return total_inst_bw
 
 
 ## Given a certain operand's storage level (for example (A,1): operand A's 1st memory level),
@@ -218,7 +245,9 @@ class CostModelEvaluation:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
-        self.spatial_mapping_int = spatial_mapping_int  # the original spatial mapping without decimal
+        self.spatial_mapping_int = (
+            spatial_mapping_int  # the original spatial mapping without decimal
+        )
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = (
             access_same_data_considered_as_no_access
