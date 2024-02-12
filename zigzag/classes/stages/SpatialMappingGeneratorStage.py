@@ -215,11 +215,12 @@ class SpatialMappingGeneratorStage(Stage):
             if layer_op_to_mem_op[act_operand] in mem_ops:
                 act_innermost_mem_level = memory_level
                 act_served_oa_dim: set = memory_level.served_dimensions
-                act_served_oa_dim_name = list(act_served_oa_dim)[0].name
         # check if act is not served in the innermost memories, or it is uti-casting for act.
         # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) == 0:
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) != 1:
             return input_mem_size_updated, self.accelerator
+        else:
+            act_served_oa_dim_name = list(act_served_oa_dim)[0].name
         # get the mem scaling factor if OX, OY exist
         mem_scaling_factor = 1
         if (

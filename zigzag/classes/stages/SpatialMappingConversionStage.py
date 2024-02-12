@@ -55,25 +55,6 @@ class SpatialMappingConversionStage(Stage):
         spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(
             user_spatial_mapping
         )
-        # Since the spatial_mapping may be modified in the previous step,
-        # we have to update this change to self.layer
-        updated_user_spatial_mapping = {}
-        for oa_dim, sm_loop in user_spatial_mapping.items():
-            if self.is_nested_tuple(sm_loop):  # a mix sm loop
-                sm_comb = []
-                for sub_sm_loop in sm_loop:
-                    sm_layer_dim = sub_sm_loop[0]
-                    for sm_element in spatial_mapping.spatial_loop_dim_size:
-                        if sm_element[0] == sm_layer_dim:
-                            sm_comb.append(sm_element)
-                sm_comb = tuple(sm_comb)
-                updated_user_spatial_mapping[oa_dim] = sm_comb
-            else:
-                sm_layer_dim = sm_loop[0]
-                for sm_element in spatial_mapping.spatial_loop_dim_size:
-                    if sm_element[0] == sm_layer_dim:
-                        updated_user_spatial_mapping[oa_dim] = sm_element
-        self.layer.user_spatial_mapping = updated_user_spatial_mapping
 
         kwargs = self.kwargs.copy()
         kwargs["spatial_mapping"] = spatial_mapping
