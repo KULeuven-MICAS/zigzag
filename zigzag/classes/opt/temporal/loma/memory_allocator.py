@@ -119,7 +119,8 @@ class MemoryAllocator:
         mem_ops = node.operands
         # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
-
+        # Does this node support double buffering
+        db_support=node.memory_instance.double_buffering_support
         # Get the capacity of this memory node (in bits)
         mem_capacity = node.memory_instance.size
 
@@ -178,7 +179,8 @@ class MemoryAllocator:
     # slices of the unallocated loops, with 'mem_capacity' as an upper bound.
     # @param mem_op
     # @param mem_capacity Capacity of the memory node in bits.
-    def calc_size_slices(self, mem_op: str, mem_capacity: int):
+    # @param db_support Double buffering support of this node
+    def calc_size_slices(self, mem_op: str, mem_capacity: int, db_support: bool=False):
 
         # Already allocated loops for this mem_op
         allocated_loops = self.allocated[mem_op]
@@ -186,6 +188,11 @@ class MemoryAllocator:
         # Unallocated loops for this mem_op
         unallocated_loops = self.unallocated[mem_op]
         sizes = []
+
+        # If this memory supports double buffering get the size it would take to allocate everything
+        if db_support:
+            all_loops=(allocated_loops+unallocated_loops[:len(unallocated_loops)+1])
+            all_loops_size=self.calc_loops_size(all_loops,mem_op,unallocated_loops)
 
         for i in range(
             len(unallocated_loops) + 1
@@ -197,6 +204,10 @@ class MemoryAllocator:
                 allocated_loops + unallocated_slice
             )  # Join them with already allocated loops
             size = self.calc_loops_size(loops, mem_op, unallocated_loops)
+            # double size allocated if the node uses double buffering
+            if db_support:
+                if len(unallocated_loops[i:])>0 and size<all_loops_size:
+                    size*=2
             if size <= mem_capacity:
                 sizes.append(size)
             else:
