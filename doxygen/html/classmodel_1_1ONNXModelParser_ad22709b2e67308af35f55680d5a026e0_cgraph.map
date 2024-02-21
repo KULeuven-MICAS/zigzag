@@ -1,6 +1,11 @@
 <map id="run" name="run">
-<area shape="rect" id="node1" title="Run the parser." alt="" coords="5,78,48,105"/>
-<area shape="rect" id="node2" href="$namespaceutils.html#af9fdc0a51acbe1b72752cc975cc15b8f" title="Parse the input accelerator residing in accelerator_path." alt="" coords="121,5,275,47"/>
-<area shape="rect" id="node3" href="$namespaceutils.html#a6edbae5d5968ca50b3452e632d7c4787" title=" " alt="" coords="109,71,287,112"/>
-<area shape="rect" id="node4" href="$classmodel_1_1ONNXModelParser.html#ade99e4499eaf6da42cc6e1cfab009081" title="Converts an onnx model into a workload object." alt="" coords="96,136,300,177"/>
+<area shape="rect" id="node1" title="Run the parser." alt="" coords="5,155,48,181"/>
+<area shape="rect" id="node2" href="$namespaceutils.html#a4998413979da9bdd0276055673bc7eb1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="121,49,275,90"/>
+<area shape="rect" id="node7" href="$namespaceutils.html#af9fdc0a51acbe1b72752cc975cc15b8f" title="Parse the input accelerator residing in accelerator_path." alt="" coords="121,114,275,155"/>
+<area shape="rect" id="node8" href="$namespaceutils.html#a6edbae5d5968ca50b3452e632d7c4787" title=" " alt="" coords="109,179,287,221"/>
+<area shape="rect" id="node9" href="$classmodel_1_1ONNXModelParser.html#ade99e4499eaf6da42cc6e1cfab009081" title="Converts an onnx model into a workload object." alt="" coords="96,245,300,286"/>
+<area shape="rect" id="node3" href="$namespaceutils.html#a9c6d5faf0e5a5361c9c681771432b498" title=" " alt="" coords="348,5,540,32"/>
+<area shape="rect" id="node5" href="$namespaceutils.html#a126f93938e1b985a3ff09eba0da3d3e0" title=" " alt="" coords="380,56,508,83"/>
+<area shape="rect" id="node6" href="$namespaceutils.html#a6a6d50ac0c550fcd9fbddc15602182a3" title=" " alt="" coords="365,107,523,133"/>
+<area shape="rect" id="node4" href="$namespaceutils.html#ada7a29b58004dd6ba5231b3910cd1160" title=" " alt="" coords="588,5,729,32"/>
 </map>

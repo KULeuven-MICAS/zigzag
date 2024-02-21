@@ -15,3 +15,4 @@ The following documents provide more information regarding the building blocks o
    mapping
    stages
    outputs
+   visualization

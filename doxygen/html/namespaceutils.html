@@ -109,6 +109,17 @@ Functions</h2></td></tr>
 <tr class="separator:af9fdc0a51acbe1b72752cc975cc15b8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6edbae5d5968ca50b3452e632d7c4787"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a6edbae5d5968ca50b3452e632d7c4787">parse_onnx_model_from_path</a> (onnx_model_path)</td></tr>
 <tr class="separator:a6edbae5d5968ca50b3452e632d7c4787"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ada7a29b58004dd6ba5231b3910cd1160"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#ada7a29b58004dd6ba5231b3910cd1160">add_attribute</a> (node, name, value)</td></tr>
+<tr class="separator:ada7a29b58004dd6ba5231b3910cd1160"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9c6d5faf0e5a5361c9c681771432b498"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a9c6d5faf0e5a5361c9c681771432b498">add_branch_attribute</a> (graph, branch=0)</td></tr>
+<tr class="separator:a9c6d5faf0e5a5361c9c681771432b498"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6a6d50ac0c550fcd9fbddc15602182a3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a6a6d50ac0c550fcd9fbddc15602182a3">unroll_branches</a> (graph)</td></tr>
+<tr class="separator:a6a6d50ac0c550fcd9fbddc15602182a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a126f93938e1b985a3ff09eba0da3d3e0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a126f93938e1b985a3ff09eba0da3d3e0">is_dynamic</a> (model)</td></tr>
+<tr class="separator:a126f93938e1b985a3ff09eba0da3d3e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4998413979da9bdd0276055673bc7eb1"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1">parse_dynamic_onnx_model</a> (model)</td></tr>
+<tr class="memdesc:a4998413979da9bdd0276055673bc7eb1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.  <a href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1">More...</a><br /></td></tr>
+<tr class="separator:a4998413979da9bdd0276055673bc7eb1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a17fecc160dd62fe06263a584e384165d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a17fecc160dd62fe06263a584e384165d">get_attribute_ints_with_name</a> (name, attrs, default=None)</td></tr>
 <tr class="memdesc:a17fecc160dd62fe06263a584e384165d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieves the attrs[name_idx].ints from attrs.  <a href="namespaceutils.html#a17fecc160dd62fe06263a584e384165d">More...</a><br /></td></tr>
 <tr class="separator:a17fecc160dd62fe06263a584e384165d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,8 +132,104 @@ Functions</h2></td></tr>
 Variables</h2></td></tr>
 <tr class="memitem:a0b14e488ae28d98d262453f3e9cd6e4d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a0b14e488ae28d98d262453f3e9cd6e4d">logger</a> = logging.getLogger(__name__)</td></tr>
 <tr class="separator:a0b14e488ae28d98d262453f3e9cd6e4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a76ce817b2d8bca19204762925e390e1c"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceutils.html#a76ce817b2d8bca19204762925e390e1c">BRANCH_ATTRIBUTE</a> = &quot;branch&quot;</td></tr>
+<tr class="separator:a76ce817b2d8bca19204762925e390e1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
+<a id="ada7a29b58004dd6ba5231b3910cd1160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ada7a29b58004dd6ba5231b3910cd1160">&#9670;&nbsp;</a></span>add_attribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def utils.add_attribute </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>name</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>value</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_ada7a29b58004dd6ba5231b3910cd1160_icgraph.png" border="0" usemap="#anamespaceutils_ada7a29b58004dd6ba5231b3910cd1160_icgraph" alt=""/></div>
+<map name="anamespaceutils_ada7a29b58004dd6ba5231b3910cd1160_icgraph" id="anamespaceutils_ada7a29b58004dd6ba5231b3910cd1160_icgraph">
+<area shape="rect" title=" " alt="" coords="936,13,1045,39"/>
+<area shape="rect" href="namespaceutils.html#a9c6d5faf0e5a5361c9c681771432b498" title=" " alt="" coords="728,13,888,39"/>
+<area shape="rect" href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="520,5,680,47"/>
+<area shape="rect" href="classmodel_1_1ONNXModelParser.html#ad22709b2e67308af35f55680d5a026e0" title="Run the parser." alt="" coords="261,13,472,39"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a9c6d5faf0e5a5361c9c681771432b498"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9c6d5faf0e5a5361c9c681771432b498">&#9670;&nbsp;</a></span>add_branch_attribute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def utils.add_branch_attribute </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>graph</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>branch</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a9c6d5faf0e5a5361c9c681771432b498_cgraph.png" border="0" usemap="#anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_cgraph" alt=""/></div>
+<map name="anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_cgraph" id="anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,165,32"/>
+<area shape="rect" href="namespaceutils.html#ada7a29b58004dd6ba5231b3910cd1160" title=" " alt="" coords="213,5,323,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a9c6d5faf0e5a5361c9c681771432b498_icgraph.png" border="0" usemap="#anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_icgraph" alt=""/></div>
+<map name="anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_icgraph" id="anamespaceutils_a9c6d5faf0e5a5361c9c681771432b498_icgraph">
+<area shape="rect" title=" " alt="" coords="728,13,888,39"/>
+<area shape="rect" href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="520,5,680,47"/>
+<area shape="rect" href="classmodel_1_1ONNXModelParser.html#ad22709b2e67308af35f55680d5a026e0" title="Run the parser." alt="" coords="261,13,472,39"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a17fecc160dd62fe06263a584e384165d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a17fecc160dd62fe06263a584e384165d">&#9670;&nbsp;</a></span>get_attribute_ints_with_name()</h2>
 
@@ -276,6 +383,78 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a126f93938e1b985a3ff09eba0da3d3e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a126f93938e1b985a3ff09eba0da3d3e0">&#9670;&nbsp;</a></span>is_dynamic()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def utils.is_dynamic </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>model</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a126f93938e1b985a3ff09eba0da3d3e0_icgraph.png" border="0" usemap="#anamespaceutils_a126f93938e1b985a3ff09eba0da3d3e0_icgraph" alt=""/></div>
+<map name="anamespaceutils_a126f93938e1b985a3ff09eba0da3d3e0_icgraph" id="anamespaceutils_a126f93938e1b985a3ff09eba0da3d3e0_icgraph">
+<area shape="rect" title=" " alt="" coords="728,13,824,39"/>
+<area shape="rect" href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="520,5,680,47"/>
+<area shape="rect" href="classmodel_1_1ONNXModelParser.html#ad22709b2e67308af35f55680d5a026e0" title="Run the parser." alt="" coords="261,13,472,39"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a4998413979da9bdd0276055673bc7eb1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4998413979da9bdd0276055673bc7eb1">&#9670;&nbsp;</a></span>parse_dynamic_onnx_model()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def utils.parse_dynamic_onnx_model </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>model</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator. </p>
+<p>All nodes are assigned a 'branch' attribute which specifies in which branch they live. The branch attribute starts from 0 and increases for each seen If operator. The nested graphs of the 'If' operators are then unrolled into a planar onnx model. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a4998413979da9bdd0276055673bc7eb1_cgraph.png" border="0" usemap="#anamespaceutils_a4998413979da9bdd0276055673bc7eb1_cgraph" alt=""/></div>
+<map name="anamespaceutils_a4998413979da9bdd0276055673bc7eb1_cgraph" id="anamespaceutils_a4998413979da9bdd0276055673bc7eb1_cgraph">
+<area shape="rect" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="5,49,165,90"/>
+<area shape="rect" href="namespaceutils.html#a9c6d5faf0e5a5361c9c681771432b498" title=" " alt="" coords="213,5,373,32"/>
+<area shape="rect" href="namespaceutils.html#a126f93938e1b985a3ff09eba0da3d3e0" title=" " alt="" coords="245,56,341,83"/>
+<area shape="rect" href="namespaceutils.html#a6a6d50ac0c550fcd9fbddc15602182a3" title=" " alt="" coords="231,107,356,133"/>
+<area shape="rect" href="namespaceutils.html#ada7a29b58004dd6ba5231b3910cd1160" title=" " alt="" coords="421,5,531,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a4998413979da9bdd0276055673bc7eb1_icgraph.png" border="0" usemap="#anamespaceutils_a4998413979da9bdd0276055673bc7eb1_icgraph" alt=""/></div>
+<map name="anamespaceutils_a4998413979da9bdd0276055673bc7eb1_icgraph" id="anamespaceutils_a4998413979da9bdd0276055673bc7eb1_icgraph">
+<area shape="rect" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="520,5,680,47"/>
+<area shape="rect" href="classmodel_1_1ONNXModelParser.html#ad22709b2e67308af35f55680d5a026e0" title="Run the parser." alt="" coords="261,13,472,39"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="af9fdc0a51acbe1b72752cc975cc15b8f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9fdc0a51acbe1b72752cc975cc15b8f">&#9670;&nbsp;</a></span>parse_mapping_from_path()</h2>
 
@@ -340,7 +519,50 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a6a6d50ac0c550fcd9fbddc15602182a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a6d50ac0c550fcd9fbddc15602182a3">&#9670;&nbsp;</a></span>unroll_branches()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def utils.unroll_branches </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>graph</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespaceutils_a6a6d50ac0c550fcd9fbddc15602182a3_icgraph.png" border="0" usemap="#anamespaceutils_a6a6d50ac0c550fcd9fbddc15602182a3_icgraph" alt=""/></div>
+<map name="anamespaceutils_a6a6d50ac0c550fcd9fbddc15602182a3_icgraph" id="anamespaceutils_a6a6d50ac0c550fcd9fbddc15602182a3_icgraph">
+<area shape="rect" title=" " alt="" coords="728,13,853,39"/>
+<area shape="rect" href="namespaceutils.html#a4998413979da9bdd0276055673bc7eb1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="520,5,680,47"/>
+<area shape="rect" href="classmodel_1_1ONNXModelParser.html#ad22709b2e67308af35f55680d5a026e0" title="Run the parser." alt="" coords="261,13,472,39"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <h2 class="groupheader">Variable Documentation</h2>
+<a id="a76ce817b2d8bca19204762925e390e1c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a76ce817b2d8bca19204762925e390e1c">&#9670;&nbsp;</a></span>BRANCH_ATTRIBUTE</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BRANCH_ATTRIBUTE = &quot;branch&quot;</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a0b14e488ae28d98d262453f3e9cd6e4d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0b14e488ae28d98d262453f3e9cd6e4d">&#9670;&nbsp;</a></span>logger</h2>
 
