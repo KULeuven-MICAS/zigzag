@@ -103,9 +103,7 @@ class CostModelEvaluationForIMC:
 
         self.active_mem_level = self.mapping.mem_level
 
-        # TODO: [jiacong] [ADD]
         self.MAC_energy_breakdown = None
-        # TODO: [jiacong] [FINISH]
 
         # Run the cost model evaluation
         self.run()
@@ -188,7 +186,6 @@ class CostModelEvaluationForIMC:
 
     ## Run the cost model evaluation.
     def run(self):
-        # - TODO: Latency calculation
         self.calc_memory_utilization()
         self.calc_memory_word_access()
         self.calc_energy()
@@ -468,10 +465,8 @@ class CostModelEvaluationForIMC:
     ## Calculate the dynamic MAC energy
     def calc_MAC_energy_cost(self):
         core = self.accelerator.get_core(self.core_id)
-        # TODO: [jiacong] [MODIFY]
         self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(self.layer, self.mapping)
         self.MAC_energy = sum([energy for energy in self.MAC_energy_breakdown.values()])
-        # TODO: [jiacong] [FINISH]
 
     ## Computes the memories reading/writing energy by converting the access patterns in self.mapping to
     # energy breakdown using the memory hierarchy of the core on which the layer is mapped.
@@ -562,9 +557,8 @@ class CostModelEvaluationForIMC:
         self.calc_double_buffer_flag()
         self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
 
-        # TODO: [jiacong] [MODIFY] update the latency model to fit IMC requirement
+        # Update the latency model to fit IMC requirement
         self.combine_data_transfer_rate_per_physical_port_imc()
-        # TODO: [jiacong] [FINISH]
 
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
@@ -772,7 +766,6 @@ class CostModelEvaluationForIMC:
             port_activity_collect.append(port_activity_single)
         self.port_activity_collect = port_activity_collect
 
-        # TODO: [jiacong] [MODIFY]
         # Step 2: calculate weight loading cycles
         layer_const_operand = self.layer.constant_operands[0] # e.g. "W"
         # get spatial mapping in a macro
@@ -822,7 +815,6 @@ class CostModelEvaluationForIMC:
         # Step 3: fetch tclk information
         self.tclk = operational_array.tclk
         self.tclk_breakdown = operational_array.tclk_breakdown
-        # TODO: [jiacong] [FINISH]
 
     ## Calculate the initial/final data loading/off-loading cycle by separating out
     # the first-time input operands' / the last-time output operand's data movement
@@ -1022,14 +1014,12 @@ class CostModelEvaluationForIMC:
         # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
         ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle
 
-        # TODO: [jiacong] [ADD]
         # scale ideal_temporal_cycle considering bit-serial input of imc
         operational_array = self.accelerator.get_core(self.core_id).operational_array
         hd_param = operational_array.unit.hd_param
         nb_of_cycles_per_mac = hd_param["input_precision"] / hd_param["input_bit_per_cycle"]
         ideal_cycle *= nb_of_cycles_per_mac
         ideal_temporal_cycle *= nb_of_cycles_per_mac
-        # TODO: [jiacong] [FINISH]
 
         MAC_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 

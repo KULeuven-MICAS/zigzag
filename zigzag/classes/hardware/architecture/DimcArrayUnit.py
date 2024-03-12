@@ -55,7 +55,7 @@ class DimcArrayUnit(ImcUnit):
             # at this point, we have the area of single cell array. Then multiply it with the number of banks.
             area_cells = single_cell_array_area * self.nb_of_banks # total cell array area in the core
         else:
-            # TODO: [jiacong] [TO BE SUPPORTED OR YOU CAN MODIFY YOURSELF]
+            # TODO: [TO BE SUPPORTED OR YOU CAN MODIFY YOURSELF]
             area_cells = None  # user-provided cell array area (from somewhere?)
             raise Exception(f"User-provided cell area is not supported yet.")
 

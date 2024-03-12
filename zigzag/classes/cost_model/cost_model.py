@@ -358,7 +358,6 @@ class CostModelEvaluation:
 
     ## Run the cost model evaluation.
     def run(self):
-        # - TODO: Latency calculation
         self.calc_memory_utilization()
         self.calc_memory_word_access()
         self.calc_energy()
