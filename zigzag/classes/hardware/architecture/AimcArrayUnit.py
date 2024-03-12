@@ -256,7 +256,12 @@ class AimcArrayUnit(ImcUnit):
         # currently in the energy model, the input and weight precision defined in the workload file should be the same with in the hd input file.
         # this check can be removed if variable precision is supported in the future.
 
-        layer_const_operand = layer.constant_operands[0]  # weight representation
+        # activation representation
+        layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+        # weight representation
+        layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
+
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
         layer_act_operand = [operand for operand in layer.input_operands if operand != layer_const_operand][0]  # activation representation
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
