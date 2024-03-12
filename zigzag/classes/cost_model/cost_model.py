@@ -343,8 +343,8 @@ class CostModelEvaluation:
             "inputs": {
                 "accelerator": self.accelerator,
                 "layer": self.layer,
-                "spatial_mapping": self.spatial_mapping
-                if hasattr(self, "spatial_mapping")
+                "spatial_mapping": self.spatial_mapping_int
+                if hasattr(self, "spatial_mapping_int")
                 else None,
                 "temporal_mapping": self.temporal_mapping
                 if hasattr(self, "temporal_mapping")

@@ -86,7 +86,7 @@ def get_hardware_performance_zigzag_imc(
     accelerator,
     mapping,
     opt="latency",
-    dump_filename_pattern="outputs/{datetime}.json",
+    dump_filename_pattern="outputs/layer_?.json",
     pickle_filename="outputs/list_of_cmes.pickle",
 ):
     # Initialize the logger

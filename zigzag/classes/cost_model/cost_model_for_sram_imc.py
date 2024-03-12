@@ -173,8 +173,8 @@ class CostModelEvaluationForIMC:
             "inputs": {
                 "accelerator": self.accelerator,
                 "layer": self.layer,
-                "spatial_mapping": self.spatial_mapping
-                if hasattr(self, "spatial_mapping")
+                "spatial_mapping": self.spatial_mapping_int
+                if hasattr(self, "spatial_mapping_int")
                 else None,
                 "temporal_mapping": self.temporal_mapping
                 if hasattr(self, "temporal_mapping")
@@ -184,7 +184,7 @@ class CostModelEvaluationForIMC:
 
     ## Simple JSON representation used for saving this object to a simple json file.
     def __simplejsonrepr__(self):
-        return {"energy": self.energy_total, "latency": self.latency_total2}
+        return {"energy": self.energy_total, "latency": self.latency_total2, "tclk": self.tclk, "area": self.area_total}
 
     ## Run the cost model evaluation.
     def run(self):
