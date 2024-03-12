@@ -158,7 +158,7 @@ def get_hardware_performance_zigzag_imc(
     # Get CME from answer
     cmes = answers
 
-    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
+    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes[0][0].tclk, cmes[0][0].area_total, cmes
 
 def get_hardware_performance_zigzag_pe_array_scaling(
     workload,
