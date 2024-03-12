@@ -4,6 +4,8 @@ from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 import os
 import pickle
 import json
+import yaml
+import re
 import numpy as np
 
 import logging
@@ -41,6 +43,8 @@ class CompleteSaveStage(Stage):
                     "?", f"{cme.layer}_complete"
                 )
             self.save_to_json(cme, filename=filename)
+            yamlname = re.split(r"\.", filename)[0] + ".yml"
+            self.save_to_yaml(jsonname=filename, yamlname=yamlname)
             logger.info(
                 f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
             )
@@ -50,6 +54,13 @@ class CompleteSaveStage(Stage):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w") as fp:
             json.dump(obj, fp, default=self.complexHandler, indent=4)
+
+    def save_to_yaml(self, jsonname, yamlname):
+        os.makedirs(os.path.dirname(yamlname), exist_ok=True)
+        with open(jsonname, "r") as fp:
+            res = json.load(fp)
+        with open(yamlname, "w") as fp:
+            yaml.dump(res, fp, Dumper=yaml.SafeDumper)
 
     @staticmethod
     def complexHandler(obj):
