@@ -313,8 +313,11 @@ class DimcArrayUnit(ImcUnit):
         get the mapped oa_dim in current mapping. The energy of unmapped oa_dim will be set to 0.
         """
 
-        layer_const_operand = layer.constant_operands[0]  # weight representation
-        layer_act_operand = [operand for operand in layer.input_operands if operand != layer_const_operand][0]  # activation representation
+        # activation representation
+        layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+        # weight representation
+        layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
 
         spatial_mapping = copy.deepcopy(layer.user_spatial_mapping)
 
@@ -391,7 +394,13 @@ class DimcArrayUnit(ImcUnit):
             # Pre-charge operation is required on local bitline if group_depth > 1
             # The final pre-charge energy = energy/PE * nb_of_precharge_times
             # nb_of_precharge_times is normalized to single PE.
-            layer_const_operand = layer.constant_operands[0]  # weight representation
+
+            # activation representation
+            layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                                 len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+            # weight representation
+            layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
+
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
             tm_loops_in_cell_group: list = mapping.temporal_mapping.mapping_dic_origin[layer_const_operand][0]
@@ -424,8 +433,12 @@ class DimcArrayUnit(ImcUnit):
         """
         calculate energy spent on multipliers for specific layer and mapping
         """
-        layer_const_operand = layer.constant_operands[0]  # weight representation
-        layer_act_operand = [operand for operand in layer.input_operands if operand != layer_const_operand][0]  # activation representation
+        # activation representation
+        layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+        # weight representation
+        layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
+
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
         nb_of_mapped_mults_in_macro = hd_param["weight_precision"] * hd_param["input_bit_per_cycle"] * \
                                       mapped_rows_total * wl_dim_size
@@ -438,7 +451,12 @@ class DimcArrayUnit(ImcUnit):
         """
         get the energy spent on RCA adder trees for specific layer and mapping
         """
-        layer_const_operand = layer.constant_operands[0]  # weight representation
+        # activation representation
+        layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+        # weight representation
+        layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
+
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
         nb_inputs_of_adder = bl_dim_size  # physical number of inputs in a single adder tree
         adder_depth = math.log2(nb_inputs_of_adder)
@@ -518,8 +536,12 @@ class DimcArrayUnit(ImcUnit):
         get the imc array energy for specific layer with specific mapping
         """
         """check if operand precision defined in the layer is the same with in hardware template"""
+        # activation representation
+        layer_act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["pr"]) > 0][0]
+        # weight representation
+        layer_const_operand = [operand for operand in layer.input_operands if operand != layer_act_operand][0]
 
-        layer_const_operand = layer.constant_operands[0] # weight representation
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
         layer_act_operand = [operand for operand in layer.input_operands if operand != layer_const_operand][0] # activation representation
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
