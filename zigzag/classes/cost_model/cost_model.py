@@ -219,7 +219,7 @@ def calc_MUW_union(port_duty_list):
 # * mapping: The combined spatial and temporal mapping object where access patterns are computed.
 #
 # The following cost model attributes are also initialized:
-# - energy_breakdown: The energy breakdown for all operands
+# - mem_energy_breakdown: The energy breakdown for all operands
 # - energy: The total energy
 #
 # After initialization, the cost model evaluation is run.
@@ -323,8 +323,8 @@ class CostModelEvaluation:
                     "energy_total": self.energy_total,
                     "operational_energy": self.MAC_energy,
                     "memory_energy": self.mem_energy,
-                    "energy_breakdown_per_level": self.energy_breakdown,
-                    "energy_breakdown_per_level_per_operand": self.energy_breakdown_further,
+                    "memory_energy_breakdown_per_level": self.mem_energy_breakdown,
+                    "memory_energy_breakdown_per_level_per_operand": self.mem_energy_breakdown_further,
                 },
                 "latency": {
                     "data_onloading": self.latency_total1 - self.latency_total0,
@@ -626,15 +626,15 @@ class CostModelEvaluation:
     ## Computes the memories reading/writing energy by converting the access patterns in self.mapping to
     # energy breakdown using the memory hierarchy of the core on which the layer is mapped.
     #
-    # The energy breakdown is saved in self.energy_breakdown.
+    # The energy breakdown is saved in self.mem_energy_breakdown.
     #
     # The energy total consumption is saved in self.energy_total.
     def calc_memory_energy_cost(self):
         core = self.accelerator.get_core(self.core_id)
         mem_hierarchy = core.memory_hierarchy
 
-        energy_breakdown = {}
-        energy_breakdown_further = {}
+        mem_energy_breakdown = {}
+        mem_energy_breakdown_further = {}
         energy_total = 0
         for (layer_op, mem_access_list_per_op) in self.memory_word_access.items():
             """Retrieve the memory levels in the hierarchy for this memory operand"""
@@ -685,10 +685,10 @@ class CostModelEvaluation:
                     )
                 )  # here it contains the full split
                 energy_total += total_energy_cost_memory
-            energy_breakdown[layer_op] = breakdown
-            energy_breakdown_further[layer_op] = breakdown_further
-        self.energy_breakdown = energy_breakdown
-        self.energy_breakdown_further = energy_breakdown_further
+            mem_energy_breakdown[layer_op] = breakdown
+            mem_energy_breakdown_further[layer_op] = breakdown_further
+        self.mem_energy_breakdown = mem_energy_breakdown
+        self.mem_energy_breakdown_further = mem_energy_breakdown_further
         self.mem_energy = energy_total
         self.energy_total = self.mem_energy + self.MAC_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
@@ -1138,15 +1138,16 @@ class CostModelEvaluation:
         self.data_offloading_cycle = data_offloading_cycle
 
     ## This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency
-    def calc_overall_latency(self):
+    def calc_overall_latency(self, cycles_per_mac=1):
+        # @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = ceil(
             self.layer.total_MAC_count
             / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
-        )
+        ) * cycles_per_mac
 
         # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
-        ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle
+        ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle * cycles_per_mac
         MAC_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 
         # Total latency without the initial data loading and the final data off-loading
@@ -1182,46 +1183,46 @@ class CostModelEvaluation:
         ## Energy
         sum.MAC_energy += other.MAC_energy
         sum.mem_energy += other.mem_energy
-        for op in sum.energy_breakdown.keys():
-            if op in other.energy_breakdown.keys():
+        for op in sum.mem_energy_breakdown.keys():
+            if op in other.mem_energy_breakdown.keys():
                 l = []
                 for i in range(
-                    min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))
+                    min(len(self.mem_energy_breakdown[op]), len(other.mem_energy_breakdown[op]))
                 ):
                     l.append(
-                        self.energy_breakdown[op][i] + other.energy_breakdown[op][i]
+                        self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i]
                     )
-                i = min(len(self.energy_breakdown[op]), len(other.energy_breakdown[op]))
-                l += self.energy_breakdown[op][i:]
-                l += other.energy_breakdown[op][i:]
-                sum.energy_breakdown[op] = l
+                i = min(len(self.mem_energy_breakdown[op]), len(other.mem_energy_breakdown[op]))
+                l += self.mem_energy_breakdown[op][i:]
+                l += other.mem_energy_breakdown[op][i:]
+                sum.mem_energy_breakdown[op] = l
 
-        for op in sum.energy_breakdown_further.keys():
-            if op in other.energy_breakdown_further.keys():
+        for op in sum.mem_energy_breakdown_further.keys():
+            if op in other.mem_energy_breakdown_further.keys():
                 l = []
                 for i in range(
                     min(
-                        len(self.energy_breakdown_further[op]),
-                        len(other.energy_breakdown_further[op]),
+                        len(self.mem_energy_breakdown_further[op]),
+                        len(other.mem_energy_breakdown_further[op]),
                     )
                 ):
                     l.append(
-                        self.energy_breakdown_further[op][i]
-                        + other.energy_breakdown_further[op][i]
+                        self.mem_energy_breakdown_further[op][i]
+                        + other.mem_energy_breakdown_further[op][i]
                     )
                 i = min(
-                    len(self.energy_breakdown_further[op]),
-                    len(other.energy_breakdown_further[op]),
+                    len(self.mem_energy_breakdown_further[op]),
+                    len(other.mem_energy_breakdown_further[op]),
                 )
-                l += self.energy_breakdown_further[op][i:]
-                l += other.energy_breakdown_further[op][i:]
-                sum.energy_breakdown_further[op] = l
+                l += self.mem_energy_breakdown_further[op][i:]
+                l += other.mem_energy_breakdown_further[op][i:]
+                sum.mem_energy_breakdown_further[op] = l
 
-        # Get all the operands from other that are not in self and add them to the energy breakdown aswell
-        op_diff = set(other.energy_breakdown.keys()) - set(self.energy_breakdown.keys())
+        # Get all the operands from other that are not in self and add them to the energy breakdown as well
+        op_diff = set(other.mem_energy_breakdown.keys()) - set(self.mem_energy_breakdown.keys())
         for op in op_diff:
-            sum.energy_breakdown[op] = other.energy_breakdown[op]
-            sum.energy_breakdown_further[op] = other.energy_breakdown_further[op]
+            sum.mem_energy_breakdown[op] = other.mem_energy_breakdown[op]
+            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[op]
 
         sum.energy_total += other.energy_total
 
@@ -1251,7 +1252,7 @@ class CostModelEvaluation:
         sum.data_loading_cycle += other.data_loading_cycle
         sum.data_offloading_cycle += other.data_offloading_cycle
         sum.ideal_cycle += other.ideal_cycle
-        sum.ideal_temporal_cycle += other.ideal_temporal_cycle
+        sum.ideal_temporal_cycle += other.ideal_temporal_cycle  # ideal computation cycles without stalling
         sum.latency_total0 += other.latency_total0
         sum.latency_total1 += other.latency_total1
         sum.latency_total2 += other.latency_total2
@@ -1294,8 +1295,8 @@ class CostModelEvaluation:
         add_attr = [
             "MAC_energy",
             "mem_energy",
-            "energy_breakdown",
-            "energy_breakdown_further",
+            "mem_energy_breakdown",
+            "mem_energy_breakdown_further",
             "energy_total",
             "memory_word_access",
             "data_loading_cycle",
@@ -1334,19 +1335,19 @@ class CostModelEvaluation:
         # Energy
         mul.MAC_energy *= number
         mul.mem_energy *= number
-        mul.energy_breakdown = {
+        mul.mem_energy_breakdown = {
             op: [
-                mul.energy_breakdown[op][i] * number
-                for i in range(len(mul.energy_breakdown[op]))
+                mul.mem_energy_breakdown[op][i] * number
+                for i in range(len(mul.mem_energy_breakdown[op]))
             ]
-            for op in mul.energy_breakdown.keys()
+            for op in mul.mem_energy_breakdown.keys()
         }
-        mul.energy_breakdown_further = {
+        mul.mem_energy_breakdown_further = {
             op: [
-                mul.energy_breakdown_further[op][i] * number
-                for i in range(len(mul.energy_breakdown_further[op]))
+                mul.mem_energy_breakdown_further[op][i] * number
+                for i in range(len(mul.mem_energy_breakdown_further[op]))
             ]
-            for op in mul.energy_breakdown_further.keys()
+            for op in mul.mem_energy_breakdown_further.keys()
         }
         mul.energy_total *= number
 
@@ -1392,8 +1393,8 @@ class CostModelEvaluation:
         mul_attr = [
             "MAC_energy",
             "mem_energy",
-            "energy_breakdown",
-            "energy_breakdown_further",
+            "mem_energy_breakdown",
+            "mem_energy_breakdown_further",
             "energy_total",
             "memory_word_access",
             "data_loading_cycle",
