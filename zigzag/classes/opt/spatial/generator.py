@@ -592,12 +592,13 @@ class UserSpatialMappingGenerator:
         # keep the spatial loop as it was if it is not weight stationary.
         if len(layer.constant_operands) > 1:
             return user_spatial_mapping
-        # get weight operand name
-        const_operand = layer.constant_operands[0]  # weight representation
-        # get activation operand name
-        act_operand = [
-            operand for operand in layer.input_operands if operand != const_operand
-        ][0]
+        # # get weight operand name
+        # const_operand = layer.constant_operands[0]  # weight representation
+        # # get activation operand name
+        # act_operand = [
+        #     operand for operand in layer.input_operands if operand != const_operand
+        # ][0]
+        act_operand, const_operand = self.identify_layer_operand_representation(layer)
         # get output operand name
         output_operand = layer.output_operand
         # get name of OX, OY (weight ir layer dims)
@@ -907,3 +908,20 @@ class UserSpatialMappingGenerator:
                     # If any item within the tuple is itself a tuple, it's a nested tuple
                     return True
         return False
+
+    @staticmethod
+    def identify_layer_operand_representation(layer):
+        # activation representation: list (conv layers)
+        act_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                       len(layer.operand_loop_dim[operand]["pr"]) > 0]
+        if len(act_operand) == 0:  # true for fully-connected (fc) layers
+            # weight representation (fc layers)
+            const_operand = [operand for operand in layer.operand_loop_dim.keys() if
+                             len(layer.operand_loop_dim[operand]["ir"]) == 0][0]
+            # activation representation (fc layers)
+            act_operand = [operand for operand in layer.input_operands if operand != const_operand][0]
+        else:
+            act_operand = act_operand[0]
+            # weight representation (conv layers)
+            const_operand = [operand for operand in layer.input_operands if operand != act_operand][0]
+        return act_operand, const_operand
