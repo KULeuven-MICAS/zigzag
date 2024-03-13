@@ -4,7 +4,6 @@ import math
 class UnitNor2:
     """
     Class for a single NOR2 gate.
-    Currently, the data is from foundry. It should be replaced by extracted data for open-source purpose.
     :param unit_area: The area cost (unit: mm2)
     :param unit_delay: The delay cost (unit: ns)
     :param unit_cap: The input capacitance including all input ports (unit: fF)
@@ -24,7 +23,6 @@ class UnitNor2:
 class UnitNand2:
     """
     Class for a single NAND2 gate.
-    Currently, the data is from foundry. It should be replaced by extracted data for open-source purpose.
     :param unit_area: The area cost (unit: mm2)
     :param unit_delay: The delay cost (unit: ns)
     :param unit_cap: The input capacitance including all input ports (unit: fF)
@@ -44,7 +42,6 @@ class UnitNand2:
 class UnitXor2:
     """
     Class for a single XOR2 gate.
-    Currently, the data is from foundry. It should be replaced by extracted data for open-source purpose.
     :param unit_area: The area cost (unit: mm2)
     :param unit_delay: The delay cost (unit: ns)
     :param unit_cap: The input capacitance including all input ports (unit: fF)
@@ -64,7 +61,6 @@ class UnitXor2:
 class UnitDff:
     """
     Class for a single 1-b DFF.
-    Currently, the data is from foundry. It should be replaced by extracted data for open-source purpose.
     :param unit_area: The area cost (unit: mm2)
     :param unit_delay: The delay cost (unit: ns)
     :param unit_cap: The input capacitance including all input ports (unit: fF)
