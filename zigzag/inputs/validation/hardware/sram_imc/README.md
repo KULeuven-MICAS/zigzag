@@ -29,7 +29,7 @@ The gray bar represents the reported performance value, while the colored bar re
 The percent above the bars is the ratio between model estimation and the chip measurement results.
 
 <p align="center">
-<img src="https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/validation/sram_model/model_validation.png" width="100%" alt="imc model validation plot">
+<img src="https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/validation/hardware/sram_imc/model_validation.png" width="100%" alt="imc model validation plot">
 </p>
 
 - AIMC1 incurs additional area costs due to repeaters/decaps.
