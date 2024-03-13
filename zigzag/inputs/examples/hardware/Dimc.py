@@ -8,6 +8,18 @@ from zigzag.classes.hardware.architecture.ImcArray import ImcArray
 from zigzag.classes.hardware.architecture.get_cacti_cost import get_w_cost_per_weight_from_cacti
 from zigzag.classes.hardware.architecture.get_cacti_cost import get_cacti_cost
 
+# Digital In-Memory Computing (DIMC) core definition
+# This example will define an DIMC core with a single macro, sized 32 rows x 32 columns.
+# Supported operand precision: 8 bit
+# Technology node: 28 nm
+# The architecture hierarchy looks like:
+#                    ------- dram (I, W, O) ----------
+#                    |                               |
+#                   sram (I, O)                 cell_group (W)
+#                    |-> reg_I1 (I) --> imc_array <--|
+#                    |                       |
+#                    | <---> reg_O1 (O) <--> |
+
 def memory_hierarchy_dut(imc_array, visualize=False):
     """ [OPTIONAL] Get w_cost of imc cell group from CACTI if required """
     cacti_path = "zigzag/classes/cacti/cacti_master"
