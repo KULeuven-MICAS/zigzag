@@ -1,4 +1,4 @@
-import pdb
+from dimc_validation_subfunc4 import dimc_cost_estimation4
 
 """
 ISSCC2023, 16.3 (50% input sparsity, 50% weight sparsity)
@@ -43,5 +43,4 @@ cacti_value_ISSCC2023_16_3 = { # rows: 256, bw: 64
 
 
 if __name__ == '__main__':
-    from dimc_validation_subfunc4 import *
     print(dimc_cost_estimation4(dimc_ISSCC2023_16_3, cacti_value_ISSCC2023_16_3))

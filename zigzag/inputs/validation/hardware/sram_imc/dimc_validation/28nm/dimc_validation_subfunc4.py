@@ -1,5 +1,4 @@
-import pdb
-from dimc_cost_model import *
+from dimc_cost_model import UnitNand2, UnitDff, MultiplierArray, Adder, AdderTree, MemoryInstance
 
 def dimc_cost_estimation4(dimc, cacti_value):
     unit_reg = UnitDff(dimc['unit_area'], dimc['unit_delay'], dimc['unit_cap'])
@@ -96,5 +95,4 @@ def dimc_cost_estimation4(dimc, cacti_value):
     return area_mismatch, delay_mismatch, energy_mismatch
     print(area_mults, area_adder_tree, area_accumulator+area_regs_accumulator, area_banks, area_regs_pipeline)
     print(energy_mults_mac, energy_adder_tree_mac, energy_accumulator_mac+energy_regs_accumulator_mac, energy_banks_mac, energy_regs_pipeline_mac)
-    pdb.set_trace()
     # return predicted_area, predicted_delay, predicted_energy/number_of_operations

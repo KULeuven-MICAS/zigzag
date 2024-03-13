@@ -1,7 +1,7 @@
-import pdb
-from dimc_validation import *
-from dimc_validation4 import *
-from dimc_validation_subfunc4 import *
+from dimc_validation import dimc_ISSCC2022_15_5, cacti_ISSCC2022_15_5, dimc_ISSCC2022_11_7, cacti_ISSCC2022_11_7, dimc_ISSCC2023_7_2, cacti_value_ISSCC2023_7_2
+from dimc_validation4 import dimc_ISSCC2023_16_3, cacti_value_ISSCC2023_16_3
+from dimc_validation_subfunc4 import dimc_cost_estimation4
+from dimc_validation_subfunc import dimc_cost_estimation
 
 def area_fitting():
     mismatch = 1

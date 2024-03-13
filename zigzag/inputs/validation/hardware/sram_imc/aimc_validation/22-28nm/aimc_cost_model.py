@@ -1,4 +1,3 @@
-import pdb
 import math
 
 class ADC:

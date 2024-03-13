@@ -1,7 +1,6 @@
-import pdb
-from aimc1_validation_subfunc import *
-from aimc2_validation_subfunc import *
-from aimc3_validation_subfunc import *
+from aimc1_validation_subfunc import aimc1_cost_estimation
+from aimc2_validation_subfunc import aimc2_cost_estimation
+from aimc3_validation_subfunc import aimc3_cost_estimation
 
 """
 CICC2021 (Assume 100% input toggle rate, 0% weight sparsity)

@@ -1,5 +1,4 @@
-import pdb
-from dimc_validation_subfunc import *
+from dimc_validation_subfunc import dimc_cost_estimation
 
 """
 ISSCC2022, 15.5 (50% input toggle rate, 50% weight sparsity)
