@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['workloadparserstage_789',['WorkloadParserStage',['../classzigzag_1_1classes_1_1stages_1_1MainInputParserStages_1_1WorkloadParserStage.html',1,'zigzag::classes::stages::MainInputParserStages']]],
-  ['workloadstage_790',['WorkloadStage',['../classzigzag_1_1classes_1_1stages_1_1WorkloadStage_1_1WorkloadStage.html',1,'zigzag::classes::stages::WorkloadStage']]]
+  ['userspatialmappinggenerator_886',['UserSpatialMappingGenerator',['../classgenerator_1_1UserSpatialMappingGenerator.html',1,'generator']]]
 ];

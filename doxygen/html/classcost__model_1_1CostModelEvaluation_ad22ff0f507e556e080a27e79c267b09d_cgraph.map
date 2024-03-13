@@ -1,5 +1,6 @@
 <map id="calc_energy" name="calc_energy">
-<area shape="rect" id="node1" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,31,105,57"/>
-<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="166,5,337,32"/>
-<area shape="rect" id="node3" href="$classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="153,56,349,83"/>
+<area shape="rect" id="node1" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,71,105,97"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="175,5,346,32"/>
+<area shape="rect" id="node3" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="153,56,368,112"/>
+<area shape="rect" id="node4" href="$classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="163,136,359,163"/>
 </map>

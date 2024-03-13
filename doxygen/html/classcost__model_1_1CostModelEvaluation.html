@@ -143,9 +143,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a726758366bc6877c7bbc708d74540d59"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59">calc_data_loading_offloading_latency</a> (self)</td></tr>
 <tr class="memdesc:a726758366bc6877c7bbc708d74540d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands' / the last-time output operand's data movement on corresponding ports.  <a href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59">More...</a><br /></td></tr>
 <tr class="separator:a726758366bc6877c7bbc708d74540d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a430d14f9239927cc54d3f4ff8e9a17f7"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a430d14f9239927cc54d3f4ff8e9a17f7">calc_overall_latency</a> (self)</td></tr>
-<tr class="memdesc:a430d14f9239927cc54d3f4ff8e9a17f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency.  <a href="classcost__model_1_1CostModelEvaluation.html#a430d14f9239927cc54d3f4ff8e9a17f7">More...</a><br /></td></tr>
-<tr class="separator:a430d14f9239927cc54d3f4ff8e9a17f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3824b783ca11b11e88a01313a99cebc5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a3824b783ca11b11e88a01313a99cebc5">calc_overall_latency</a> (self, cycles_per_mac=1)</td></tr>
+<tr class="memdesc:a3824b783ca11b11e88a01313a99cebc5"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency.  <a href="classcost__model_1_1CostModelEvaluation.html#a3824b783ca11b11e88a01313a99cebc5">More...</a><br /></td></tr>
+<tr class="separator:a3824b783ca11b11e88a01313a99cebc5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a547cf97e438ebc6734fd6d1ea2b21b6d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a547cf97e438ebc6734fd6d1ea2b21b6d">__add__</a> (self, other)</td></tr>
 <tr class="separator:a547cf97e438ebc6734fd6d1ea2b21b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64cee4d1b2939b36898932fba52a8207"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a64cee4d1b2939b36898932fba52a8207">__mul__</a> (self, number)</td></tr>
@@ -203,10 +203,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:af8e1a887c8db1f99c274bb236bb7dd15"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0560bde5cdf85708f72681ce36d1c936"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a0560bde5cdf85708f72681ce36d1c936">MAC_energy</a></td></tr>
 <tr class="separator:a0560bde5cdf85708f72681ce36d1c936"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a45b7754eda9dfa40200aa73c4b156cd3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a45b7754eda9dfa40200aa73c4b156cd3">energy_breakdown</a></td></tr>
-<tr class="separator:a45b7754eda9dfa40200aa73c4b156cd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61ffa8b6011dc0eda0abc1ae4edbaa3a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a61ffa8b6011dc0eda0abc1ae4edbaa3a">energy_breakdown_further</a></td></tr>
-<tr class="separator:a61ffa8b6011dc0eda0abc1ae4edbaa3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac09be0e397a4da6f137a8efafcd4d59e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#ac09be0e397a4da6f137a8efafcd4d59e">mem_energy_breakdown</a></td></tr>
+<tr class="separator:ac09be0e397a4da6f137a8efafcd4d59e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6177a49df9115c373128fd4f2be5e94e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#a6177a49df9115c373128fd4f2be5e94e">mem_energy_breakdown_further</a></td></tr>
+<tr class="separator:a6177a49df9115c373128fd4f2be5e94e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abab06e56ef976744382680dadb157baf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#abab06e56ef976744382680dadb157baf">mem_energy</a></td></tr>
 <tr class="separator:abab06e56ef976744382680dadb157baf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acc50f19f8d306559a62c9d62119b79a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classcost__model_1_1CostModelEvaluation.html#acc50f19f8d306559a62c9d62119b79a2">energy_total</a></td></tr>
@@ -279,7 +279,7 @@ Public Attributes</h2></td></tr>
 <li>mapping: The combined spatial and temporal mapping object where access patterns are computed.</li>
 </ul>
 <p>The following cost model attributes are also initialized:</p><ul>
-<li>energy_breakdown: The energy breakdown for all operands</li>
+<li>mem_energy_breakdown: The energy breakdown for all operands</li>
 <li>energy: The total energy</li>
 </ul>
 <p>After initialization, the cost model evaluation is run. </p>
@@ -507,10 +507,11 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a0de4f307221ee7f4fe653187bad7b237_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a0de4f307221ee7f4fe653187bad7b237_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a0de4f307221ee7f4fe653187bad7b237_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a0de4f307221ee7f4fe653187bad7b237_icgraph">
-<area shape="rect" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="503,5,672,61"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,20,455,47"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,20,304,47"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,13,213,54"/>
+<area shape="rect" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="675,24,844,80"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -538,10 +539,11 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph">
-<area shape="rect" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="503,5,713,47"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="675,31,885,73"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -578,10 +580,11 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a34f654d20dae08e1af87294fc1b7b3f6_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a34f654d20dae08e1af87294fc1b7b3f6_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a34f654d20dae08e1af87294fc1b7b3f6_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a34f654d20dae08e1af87294fc1b7b3f6_icgraph">
-<area shape="rect" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="503,13,677,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="675,39,849,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -609,9 +612,10 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_cgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_cgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_cgraph" id="aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_cgraph">
-<area shape="rect" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,31,105,57"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="166,5,337,32"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="153,56,349,83"/>
+<area shape="rect" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,71,105,97"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="175,5,346,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="153,56,368,112"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="163,136,359,163"/>
 </map>
 </div>
 <div class="dynheader">
@@ -619,9 +623,10 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_icgraph" id="aclasscost__model_1_1CostModelEvaluation_ad22ff0f507e556e080a27e79c267b09d_icgraph">
-<area shape="rect" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="352,13,452,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="524,39,624,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -653,13 +658,14 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_cgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_cgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_cgraph" id="aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_cgraph">
-<area shape="rect" title="Calculate latency in 4 steps." alt="" coords="5,152,108,179"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="177,5,346,61"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="156,86,367,127"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a34f654d20dae08e1af87294fc1b7b3f6" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="174,152,349,179"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a430d14f9239927cc54d3f4ff8e9a17f7" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="184,203,339,229"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="173,254,350,295"/>
-<area shape="rect" href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="415,145,588,186"/>
+<area shape="rect" title="Calculate latency in 4 steps." alt="" coords="5,177,108,204"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="179,5,348,61"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="158,86,369,127"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a34f654d20dae08e1af87294fc1b7b3f6" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="176,152,351,179"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a3824b783ca11b11e88a01313a99cebc5" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="186,203,341,229"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="175,254,352,295"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a1460fbd3870e5773893c6f372c4673e5" title="This function calculate the stalling cycles for IMC (In&#45;Memory&#45;Computing) hardware template Consider ..." alt="" coords="156,319,371,390"/>
+<area shape="rect" href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="419,145,592,186"/>
 </map>
 </div>
 <div class="dynheader">
@@ -667,9 +673,10 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a8427f972cb66d7cb6138322a233efe35_icgraph">
-<area shape="rect" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -697,10 +704,12 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_ab1b4f62c85a45ec1133298486549b22b_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_ab1b4f62c85a45ec1133298486549b22b_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_ab1b4f62c85a45ec1133298486549b22b_icgraph" id="aclasscost__model_1_1CostModelEvaluation_ab1b4f62c85a45ec1133298486549b22b_icgraph">
-<area shape="rect" title="Calculate the dynamic MAC energy." alt="" coords="500,13,671,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="352,13,452,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Calculate the dynamic MAC energy." alt="" coords="787,39,957,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="581,5,681,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="524,56,739,112"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -723,17 +732,18 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Computes the memories reading/writing energy by converting the access patterns in self.mapping to energy breakdown using the memory hierarchy of the core on which the layer is mapped. </p>
-<p>The energy breakdown is saved in self.energy_breakdown.</p>
+<p>The energy breakdown is saved in self.mem_energy_breakdown.</p>
 <p>The energy total consumption is saved in self.energy_total. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a2ad9aa62ea35824b599e4e3cdf033134_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a2ad9aa62ea35824b599e4e3cdf033134_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a2ad9aa62ea35824b599e4e3cdf033134_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a2ad9aa62ea35824b599e4e3cdf033134_icgraph">
-<area shape="rect" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="500,13,696,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="352,13,452,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="672,39,868,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="524,39,624,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -799,8 +809,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a430d14f9239927cc54d3f4ff8e9a17f7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a430d14f9239927cc54d3f4ff8e9a17f7">&#9670;&nbsp;</a></span>calc_overall_latency()</h2>
+<a id="a3824b783ca11b11e88a01313a99cebc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3824b783ca11b11e88a01313a99cebc5">&#9670;&nbsp;</a></span>calc_overall_latency()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -809,8 +819,18 @@ Here is the caller graph for this function:</div>
           <td class="memname">def calc_overall_latency </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>cycles_per_mac</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -819,12 +839,13 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classcost__model_1_1CostModelEvaluation_a430d14f9239927cc54d3f4ff8e9a17f7_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a430d14f9239927cc54d3f4ff8e9a17f7_icgraph" alt=""/></div>
-<map name="aclasscost__model_1_1CostModelEvaluation_a430d14f9239927cc54d3f4ff8e9a17f7_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a430d14f9239927cc54d3f4ff8e9a17f7_icgraph">
-<area shape="rect" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="503,13,657,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<div class="center"><img src="classcost__model_1_1CostModelEvaluation_a3824b783ca11b11e88a01313a99cebc5_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a3824b783ca11b11e88a01313a99cebc5_icgraph" alt=""/></div>
+<map name="aclasscost__model_1_1CostModelEvaluation_a3824b783ca11b11e88a01313a99cebc5_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a3824b783ca11b11e88a01313a99cebc5_icgraph">
+<area shape="rect" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="675,39,829,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -852,10 +873,12 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_a1460fbd3870e5773893c6f372c4673e5_icgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_a1460fbd3870e5773893c6f372c4673e5_icgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_a1460fbd3870e5773893c6f372c4673e5_icgraph" id="aclasscost__model_1_1CostModelEvaluation_a1460fbd3870e5773893c6f372c4673e5_icgraph">
-<area shape="rect" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="503,5,680,47"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="352,13,455,39"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,13,304,39"/>
-<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,213,47"/>
+<area shape="rect" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="787,31,964,73"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="580,5,683,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,56,739,112"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" href="classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
 </map>
 </div>
 
@@ -883,19 +906,23 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classcost__model_1_1CostModelEvaluation_ad22709b2e67308af35f55680d5a026e0_cgraph.png" border="0" usemap="#aclasscost__model_1_1CostModelEvaluation_ad22709b2e67308af35f55680d5a026e0_cgraph" alt=""/></div>
 <map name="aclasscost__model_1_1CostModelEvaluation_ad22709b2e67308af35f55680d5a026e0_cgraph" id="aclasscost__model_1_1CostModelEvaluation_ad22709b2e67308af35f55680d5a026e0_cgraph">
-<area shape="rect" title="Run the cost model evaluation." alt="" coords="5,249,48,276"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="146,56,246,83"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="145,224,247,251"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a57381e06034b594441ab37508b4e0e3e" title="Calculate occupancy for each physical memory based on the mapping." alt="" coords="105,275,287,301"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#aecfd11b3110a9af39bb8344415ace66d" title="Calculates the memory word access based on unit memory&#39;s data element move count and the physical mem..." alt="" coords="96,325,296,352"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="364,5,535,32"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="351,56,547,83"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="365,107,534,163"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="344,187,555,229"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a34f654d20dae08e1af87294fc1b7b3f6" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="362,253,537,280"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a430d14f9239927cc54d3f4ff8e9a17f7" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="372,304,527,331"/>
-<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="361,355,538,397"/>
-<area shape="rect" href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="603,246,776,287"/>
+<area shape="rect" title="Run the cost model evaluation." alt="" coords="5,371,48,397"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="153,136,253,163"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="96,56,311,112"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="152,337,255,364"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="96,388,311,444"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a57381e06034b594441ab37508b4e0e3e" title="Calculate occupancy for each physical memory based on the mapping." alt="" coords="112,468,295,495"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#aecfd11b3110a9af39bb8344415ace66d" title="Calculates the memory word access based on unit memory&#39;s data element move count and the physical mem..." alt="" coords="103,519,303,545"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="381,85,551,112"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="359,5,573,61"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="368,136,564,163"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="381,355,551,411"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="361,187,571,229"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a34f654d20dae08e1af87294fc1b7b3f6" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="379,253,553,280"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a3824b783ca11b11e88a01313a99cebc5" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="389,304,543,331"/>
+<area shape="rect" href="classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="377,530,555,571"/>
+<area shape="rect" href="classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a1460fbd3870e5773893c6f372c4673e5" title="This function calculate the stalling cycles for IMC (In&#45;Memory&#45;Computing) hardware template Consider ..." alt="" coords="359,435,573,506"/>
+<area shape="rect" href="namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="621,246,795,287"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1177,34 +1204,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a45b7754eda9dfa40200aa73c4b156cd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a45b7754eda9dfa40200aa73c4b156cd3">&#9670;&nbsp;</a></span>energy_breakdown</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">energy_breakdown</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a61ffa8b6011dc0eda0abc1ae4edbaa3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61ffa8b6011dc0eda0abc1ae4edbaa3a">&#9670;&nbsp;</a></span>energy_breakdown_further</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">energy_breakdown_further</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="acc50f19f8d306559a62c9d62119b79a2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#acc50f19f8d306559a62c9d62119b79a2">&#9670;&nbsp;</a></span>energy_total</h2>
 
@@ -1423,6 +1422,34 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">mem_energy</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac09be0e397a4da6f137a8efafcd4d59e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac09be0e397a4da6f137a8efafcd4d59e">&#9670;&nbsp;</a></span>mem_energy_breakdown</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mem_energy_breakdown</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6177a49df9115c373128fd4f2be5e94e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6177a49df9115c373128fd4f2be5e94e">&#9670;&nbsp;</a></span>mem_energy_breakdown_further</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mem_energy_breakdown_further</td>
         </tr>
       </table>
 </div><div class="memdoc">

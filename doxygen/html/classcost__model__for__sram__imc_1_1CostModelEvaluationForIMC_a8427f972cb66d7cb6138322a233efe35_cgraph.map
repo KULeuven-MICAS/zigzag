@@ -1,0 +1,5 @@
+<map id="calc_latency" name="calc_latency">
+<area shape="rect" id="node1" title="Calculate latency in 4 steps." alt="" coords="5,46,108,73"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="156,5,455,47"/>
+<area shape="rect" id="node3" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a1460fbd3870e5773893c6f372c4673e5" title="This function calculate the stalling cycles for IMC (In&#45;Memory&#45;Computing) hardware template Consider ..." alt="" coords="217,71,394,112"/>
+</map>

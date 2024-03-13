@@ -4,11 +4,21 @@ var dir_e1da819022a826103da5f2f9d10824dc =
       [ "Accelerator", "classaccelerator_1_1Accelerator.html", "classaccelerator_1_1Accelerator" ]
     ] ],
     [ "adder_hierarchy.py", "adder__hierarchy_8py.html", "adder__hierarchy_8py" ],
+    [ "AimcArray.py", "AimcArray_8py.html", "AimcArray_8py" ],
     [ "core.py", "core_8py.html", [
       [ "Core", "classcore_1_1Core.html", "classcore_1_1Core" ]
     ] ],
+    [ "DimcArray.py", "DimcArray_8py.html", "DimcArray_8py" ],
     [ "dimension.py", "dimension_8py.html", [
       [ "Dimension", "classdimension_1_1Dimension.html", "classdimension_1_1Dimension" ]
+    ] ],
+    [ "get_cacti_cost.py", "get__cacti__cost_8py.html", "get__cacti__cost_8py" ],
+    [ "imc_unit.py", "imc__unit_8py.html", [
+      [ "LogicUnit", "classimc__unit_1_1LogicUnit.html", "classimc__unit_1_1LogicUnit" ],
+      [ "ImcUnit", "classimc__unit_1_1ImcUnit.html", "classimc__unit_1_1ImcUnit" ]
+    ] ],
+    [ "ImcArray.py", "ImcArray_8py.html", [
+      [ "ImcArray", "classImcArray_1_1ImcArray.html", "classImcArray_1_1ImcArray" ]
     ] ],
     [ "memory_hierarchy.py", "memory__hierarchy_8py.html", [
       [ "MemoryHierarchy", "classmemory__hierarchy_1_1MemoryHierarchy.html", "classmemory__hierarchy_1_1MemoryHierarchy" ]

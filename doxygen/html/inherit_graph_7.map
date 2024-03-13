@@ -1,3 +1,7 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classcore_1_1Core.html" title="The Core class houses the array of multipliers and the attached memory hierarchy." alt="" coords="5,5,57,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,68,108"/>
+<area shape="rect" id="node2" href="$classconv_1_1ConvParser.html" title="Parser for ONNX Conv and QLinearConv nodes into LayerNode." alt="" coords="141,5,235,32"/>
+<area shape="rect" id="node3" href="$classdefault_1_1DefaultNodeParser.html" title="This class parses an ONNX node into a DummyNode." alt="" coords="116,56,260,83"/>
+<area shape="rect" id="node4" href="$classgemm_1_1GemmParser.html" title="Parses an ONNX Gemm operator into a LayerNode." alt="" coords="135,107,241,133"/>
+<area shape="rect" id="node5" href="$classmatmul_1_1MatMulParser.html" title="Parses an ONNX MatMul operator into a LayerNode." alt="" coords="133,157,243,184"/>
 </map>

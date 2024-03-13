@@ -1,11 +1,7 @@
 var searchData=
 [
-  ['salsastage_2epy_889',['SalsaStage.py',['../SalsaStage_8py.html',1,'']]],
-  ['savestage_2epy_890',['SaveStage.py',['../SaveStage_8py.html',1,'']]],
-  ['searchunusedmemorystage_2epy_891',['SearchUnusedMemoryStage.py',['../SearchUnusedMemoryStage_8py.html',1,'']]],
-  ['spatial_5fmapping_2epy_892',['spatial_mapping.py',['../spatial__mapping_8py.html',1,'']]],
-  ['spatialmappingconversionstage_2epy_893',['SpatialMappingConversionStage.py',['../SpatialMappingConversionStage_8py.html',1,'']]],
-  ['spatialmappinggeneratorstage_2epy_894',['SpatialMappingGeneratorStage.py',['../SpatialMappingGeneratorStage_8py.html',1,'']]],
-  ['stage_2epy_895',['Stage.py',['../Stage_8py.html',1,'']]],
-  ['state_2epy_896',['state.py',['../state_8py.html',1,'']]]
+  ['readme_2emd_995',['README.md',['../README_8md.html',1,'']]],
+  ['reducestages_2epy_996',['ReduceStages.py',['../ReduceStages_8py.html',1,'']]],
+  ['removeunusedmemorystage_2epy_997',['RemoveUnusedMemoryStage.py',['../RemoveUnusedMemoryStage_8py.html',1,'']]],
+  ['runoptstages_2epy_998',['RunOptStages.py',['../RunOptStages_8py.html',1,'']]]
 ];

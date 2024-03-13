@@ -8,6 +8,9 @@ var annotated_dup =
       [ "AdderLevel", "classadder__hierarchy_1_1AdderLevel.html", "classadder__hierarchy_1_1AdderLevel" ],
       [ "AdderHierarchy", "classadder__hierarchy_1_1AdderHierarchy.html", "classadder__hierarchy_1_1AdderHierarchy" ]
     ] ],
+    [ "AimcArray", "namespaceAimcArray.html", [
+      [ "AimcArray", "classAimcArray_1_1AimcArray.html", "classAimcArray_1_1AimcArray" ]
+    ] ],
     [ "cacti_parser", "namespacecacti__parser.html", [
       [ "CactiParser", "classcacti__parser_1_1CactiParser.html", "classcacti__parser_1_1CactiParser" ]
     ] ],
@@ -27,8 +30,14 @@ var annotated_dup =
       [ "PortBeginOrEndActivity", "classcost__model_1_1PortBeginOrEndActivity.html", "classcost__model_1_1PortBeginOrEndActivity" ],
       [ "CostModelEvaluation", "classcost__model_1_1CostModelEvaluation.html", "classcost__model_1_1CostModelEvaluation" ]
     ] ],
+    [ "cost_model_for_sram_imc", "namespacecost__model__for__sram__imc.html", [
+      [ "CostModelEvaluationForIMC", "classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html", "classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC" ]
+    ] ],
     [ "default", "namespacedefault.html", [
       [ "DefaultNodeParser", "classdefault_1_1DefaultNodeParser.html", "classdefault_1_1DefaultNodeParser" ]
+    ] ],
+    [ "DimcArray", "namespaceDimcArray.html", [
+      [ "DimcArray", "classDimcArray_1_1DimcArray.html", "classDimcArray_1_1DimcArray" ]
     ] ],
     [ "dimension", "namespacedimension.html", [
       [ "Dimension", "classdimension_1_1Dimension.html", "classdimension_1_1Dimension" ]
@@ -49,6 +58,16 @@ var annotated_dup =
     ] ],
     [ "generator", "namespacegenerator.html", [
       [ "UserSpatialMappingGenerator", "classgenerator_1_1UserSpatialMappingGenerator.html", "classgenerator_1_1UserSpatialMappingGenerator" ]
+    ] ],
+    [ "get_cacti_cost", "namespaceget__cacti__cost.html", [
+      [ "CactiConfig", "classget__cacti__cost_1_1CactiConfig.html", "classget__cacti__cost_1_1CactiConfig" ]
+    ] ],
+    [ "imc_unit", "namespaceimc__unit.html", [
+      [ "LogicUnit", "classimc__unit_1_1LogicUnit.html", "classimc__unit_1_1LogicUnit" ],
+      [ "ImcUnit", "classimc__unit_1_1ImcUnit.html", "classimc__unit_1_1ImcUnit" ]
+    ] ],
+    [ "ImcArray", "namespaceImcArray.html", [
+      [ "ImcArray", "classImcArray_1_1ImcArray.html", "classImcArray_1_1ImcArray" ]
     ] ],
     [ "layer_node", "namespacelayer__node.html", [
       [ "LayerNode", "classlayer__node_1_1LayerNode.html", "classlayer__node_1_1LayerNode" ]

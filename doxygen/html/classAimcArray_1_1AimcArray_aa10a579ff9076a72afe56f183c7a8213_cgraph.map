@@ -1,0 +1,6 @@
+<map id="get_area" name="get_area">
+<area shape="rect" id="node1" title="get area of AIMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="5,56,84,83"/>
+<area shape="rect" id="node2" href="$classAimcArray_1_1AimcArray.html#ab9b08098b91c90468bf35e05e1c983e1" title=" " alt="" coords="165,5,272,32"/>
+<area shape="rect" id="node3" href="$classAimcArray_1_1AimcArray.html#a1f5ce72ed2f3a6e36741f66f8f7dfb9d" title=" " alt="" coords="165,56,272,83"/>
+<area shape="rect" id="node4" href="$classimc__unit_1_1ImcUnit.html#aa273d543e964af7d14211f61d8ad36a0" title=" " alt="" coords="132,107,305,163"/>
+</map>

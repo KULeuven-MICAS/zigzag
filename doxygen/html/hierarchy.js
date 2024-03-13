@@ -5,6 +5,7 @@ var hierarchy =
     [ "Adder", "classadder__hierarchy_1_1Adder.html", null ],
     [ "AdderHierarchy", "classadder__hierarchy_1_1AdderHierarchy.html", null ],
     [ "AdderLevel", "classadder__hierarchy_1_1AdderLevel.html", null ],
+    [ "CactiConfig", "classget__cacti__cost_1_1CactiConfig.html", null ],
     [ "CactiParser", "classcacti__parser_1_1CactiParser.html", null ],
     [ "Core", "classcore_1_1Core.html", null ],
     [ "CostModelEvaluation", "classcost__model_1_1CostModelEvaluation.html", null ],
@@ -20,8 +21,13 @@ var hierarchy =
       [ "MemoryTooSmallException", "classmemory__allocator_1_1MemoryTooSmallException.html", null ]
     ] ],
     [ "FourWayDataMoving", "classcombined__mapping_1_1FourWayDataMoving.html", null ],
+    [ "ImcUnit", "classimc__unit_1_1ImcUnit.html", [
+      [ "AimcArray", "classAimcArray_1_1AimcArray.html", null ],
+      [ "DimcArray", "classDimcArray_1_1DimcArray.html", null ]
+    ] ],
     [ "LayerNode", "classlayer__node_1_1LayerNode.html", null ],
     [ "ListElement", "classmultipermute_1_1ListElement.html", null ],
+    [ "LogicUnit", "classimc__unit_1_1LogicUnit.html", null ],
     [ "LomaEngine", "classengine_1_1LomaEngine.html", null ],
     [ "Loop", "classmapping__assist__funcs_1_1Loop.html", null ],
     [ "MainStage", "classzigzag_1_1classes_1_1stages_1_1Stage_1_1MainStage.html", null ],
@@ -37,6 +43,7 @@ var hierarchy =
     [ "ONNXModelParser", "classmodel_1_1ONNXModelParser.html", null ],
     [ "OnnxTensorType", "classutils_1_1OnnxTensorType.html", null ],
     [ "OperationalArray", "classoperational__array_1_1OperationalArray.html", [
+      [ "ImcArray", "classImcArray_1_1ImcArray.html", null ],
       [ "MultiplierArray", "classoperational__array_1_1MultiplierArray.html", null ]
     ] ],
     [ "OperationalUnit", "classoperational__unit_1_1OperationalUnit.html", [
@@ -86,6 +93,9 @@ var hierarchy =
     [ "ABCMeta", null, [
       [ "Loop", "classloop_1_1Loop.html", null ],
       [ "Parser", "classparser_1_1Parser.html", null ]
+    ] ],
+    [ "CostModelEvaluation", null, [
+      [ "CostModelEvaluationForIMC", "classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html", null ]
     ] ],
     [ "DiGraph", null, [
       [ "DNNWorkload", "classdnn__workload_1_1DNNWorkload.html", null ],
