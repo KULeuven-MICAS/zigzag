@@ -3,7 +3,7 @@ import math
 import copy
 if __name__ == "__main__":
     from imc_unit import ImcUnit
-    from DimcArrayUnit import DimcArrayUnit
+    from DimcArray import DimcArray
     import logging as _logging
     _logging_level = _logging.INFO
     _logging_format = '%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
@@ -12,18 +12,25 @@ if __name__ == "__main__":
 else:
     import logging as _logging
     from zigzag.classes.hardware.architecture.imc_unit import ImcUnit
-    from zigzag.classes.hardware.architecture.DimcArrayUnit import DimcArrayUnit
+    from zigzag.classes.hardware.architecture.DimcArray import DimcArray
 
 ###############################################################################################################
 # README
-#   . class AimcArrayUnit (defines the energy/area/delay cost of an ADC, a DAC and an AIMC array)
+#   . class AimcArray (defines the energy/area/delay cost of an ADC, a DAC and an AIMC array)
 # How to use this file?
 #   . This file is internally called in ZigZag-IMC framework.
 #   . It can also be run independently, for mainly debugging. An example is given at the end of the file.
 ###############################################################################################################
 
-class AimcArrayUnit(ImcUnit):
+class AimcArray(ImcUnit):
+    # definition of an Analog In-SRAM-Computing (DIMC) core
+    # constraint:
+    #     -- activation precision must be in the power of 2.
+    #     -- input_bit_per_cycle must be in the power of 2.
     def __init__(self,tech_param:dict, hd_param:dict, dimensions:dict):
+        # @param tech_param: technology related parameters
+        # @param hd_param: IMC cores' parameters
+        # @param dimensions: IMC cores' dimensions
         super().__init__(tech_param, hd_param, dimensions)
 
     def __jsonrepr__(self):
@@ -257,7 +264,7 @@ class AimcArrayUnit(ImcUnit):
         # this check can be removed if variable precision is supported in the future.
 
         # activation/weight representation
-        layer_act_operand, layer_const_operand = DimcArrayUnit.identify_layer_operand_representation(layer)
+        layer_act_operand, layer_const_operand = DimcArray.identify_layer_operand_representation(layer)
 
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
@@ -272,13 +279,13 @@ class AimcArrayUnit(ImcUnit):
             f"Activation precision defined in the workload [{layer_act_operand_pres}] not equal to the one defined in the hardware hd_param [{act_pres_in_hd_param}]."
 
         """parameter extraction"""
-        mapped_rows_total, mapped_rows_for_adder, mapped_cols, macro_activation_times = DimcArrayUnit.get_mapped_oa_dim(
+        mapped_rows_total, mapped_rows_for_adder, mapped_cols, macro_activation_times = DimcArray.get_mapped_oa_dim(
             layer, self.wl_dim, self.bl_dim)
         self.mapped_rows_total = mapped_rows_total
 
         """energy calculation"""
         """energy of precharging"""
-        energy_precharging, mapped_group_depth = DimcArrayUnit.get_precharge_energy(self.hd_param, self.logic_unit.tech_param, layer, mapping)
+        energy_precharging, mapped_group_depth = DimcArray.get_precharge_energy(self.hd_param, self.logic_unit.tech_param, layer, mapping)
         self.mapped_group_depth = mapped_group_depth
 
         """energy of DACs"""
@@ -401,7 +408,7 @@ if __name__ == "__main__":
         "enable_cacti":         True,   # use CACTI to estimated cell array area cost (cell array exclude build-in logic part)
     }
     hd_param_aimc["adc_resolution"] = hd_param_aimc["input_bit_per_cycle"] + 0.5*math.log2(dimensions["D2"])
-    aimc = AimcArrayUnit(tech_param_28nm, hd_param_aimc, dimensions)
+    aimc = AimcArray(tech_param_28nm, hd_param_aimc, dimensions)
     aimc.get_area()
     aimc.get_delay()
     logger = _logging.getLogger(__name__)

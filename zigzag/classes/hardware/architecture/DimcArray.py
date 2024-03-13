@@ -1,7 +1,8 @@
 import numpy as np
 import math
 import copy
-if __name__ == "__main__":
+if __name__ == "__main__" or __name__ == "DimcArray":
+    # branch when the script is run locally or called by AimcArray.py
     from imc_unit import ImcUnit
     import logging as _logging
     _logging_level = _logging.INFO
@@ -14,22 +15,21 @@ else:
 
 ###############################################################################################################
 # README
-#   . class DimcArrayUnit (defines the energy/area/delay cost of a DIMC array)
+#   . class DimcArray (defines the energy/area/delay cost of a DIMC array)
 # How to use this file?
 #   . This file is internally called in ZigZag-IMC framework.
 #   . It can also be run independently, for mainly debugging. An example is given at the end of the file.
 ###############################################################################################################
 
-class DimcArrayUnit(ImcUnit):
-    """definition of a Digtal In-SRAM-Computing (DIMC) array"""
-    """
-    constraint:
-        -- activation precision must be in the power of 2.
-        -- input_bit_per_cycle must be in the power of 2.
-        -- 
-    assumption:
-    """
+class DimcArray(ImcUnit):
+    # definition of a Digtal In-SRAM-Computing (DIMC) core
+    # constraint:
+    #     -- activation precision must be in the power of 2.
+    #     -- input_bit_per_cycle must be in the power of 2.
     def __init__(self,tech_param:dict, hd_param:dict, dimensions:dict):
+        # @param tech_param: technology related parameters
+        # @param hd_param: IMC cores' parameters
+        # @param dimensions: IMC cores' dimensions
         super().__init__(tech_param, hd_param, dimensions)
 
     def __jsonrepr__(self):
@@ -314,7 +314,7 @@ class DimcArrayUnit(ImcUnit):
         """
 
         # activation/weight representation
-        layer_act_operand, layer_const_operand = DimcArrayUnit.identify_layer_operand_representation(layer)
+        layer_act_operand, layer_const_operand = DimcArray.identify_layer_operand_representation(layer)
 
         spatial_mapping = copy.deepcopy(layer.user_spatial_mapping)
 
@@ -366,7 +366,7 @@ class DimcArrayUnit(ImcUnit):
                 mapped_rows_total = math.ceil(mapped_rows_total)  # must be an integer, as it is used for adder trees.
                 mapped_rows_for_adder = mapped_rows_total
             else:
-                mapped_rows_total, mapped_rows_for_adder = DimcArrayUnit.calculate_mapped_rows_total_when_diagonal_mapping_found(
+                mapped_rows_total, mapped_rows_for_adder = DimcArray.calculate_mapped_rows_total_when_diagonal_mapping_found(
                     layer,
                     layer_const_operand,
                     layer_act_operand,
@@ -393,7 +393,7 @@ class DimcArrayUnit(ImcUnit):
             # nb_of_precharge_times is normalized to single PE.
 
             # activation/weight representation
-            layer_act_operand, layer_const_operand = DimcArrayUnit.identify_layer_operand_representation(layer)
+            layer_act_operand, layer_const_operand = DimcArray.identify_layer_operand_representation(layer)
 
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
@@ -540,12 +540,12 @@ class DimcArrayUnit(ImcUnit):
                 f"Activation precision defined in the workload [{layer_act_operand_pres}] not equal to the one defined in the hardware hd_param [{act_pres_in_hd_param}]."
 
         """parameter extraction"""
-        mapped_rows_total, mapped_rows_for_adder, mapped_cols, macro_activation_times = DimcArrayUnit.get_mapped_oa_dim(layer, self.wl_dim, self.bl_dim)
+        mapped_rows_total, mapped_rows_for_adder, mapped_cols, macro_activation_times = DimcArray.get_mapped_oa_dim(layer, self.wl_dim, self.bl_dim)
         self.mapped_rows_total = mapped_rows_total
 
         """energy calculation"""
         """energy of precharging"""
-        energy_precharging, mapped_group_depth = DimcArrayUnit.get_precharge_energy(self.hd_param, self.logic_unit.tech_param, layer, mapping)
+        energy_precharging, mapped_group_depth = DimcArray.get_precharge_energy(self.hd_param, self.logic_unit.tech_param, layer, mapping)
         self.mapped_group_depth = mapped_group_depth
 
         """energy of multiplier array"""
@@ -666,7 +666,7 @@ if __name__ == "__main__":
         # hardware dimension where accumulation happens (corresponds to the served dimension of output regs)
         "enable_cacti":         True,   # use CACTI to estimated cell array area cost (cell array exclude build-in logic part)
     }
-    dimc = DimcArrayUnit(tech_param_28nm, hd_param, dimensions)
+    dimc = DimcArray(tech_param_28nm, hd_param, dimensions)
     dimc.get_area()
     dimc.get_delay()
     logger = _logging.getLogger(__name__)

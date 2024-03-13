@@ -1,5 +1,6 @@
 import math
-if __name__ == "__main__":
+if __name__ == "__main__" or __name__ == "imc_unit":
+    # branch when the script is run locally or called by A/DimcArray.py
     from get_cacti_cost import get_cacti_cost
 else:
     from zigzag.classes.hardware.architecture.get_cacti_cost import get_cacti_cost

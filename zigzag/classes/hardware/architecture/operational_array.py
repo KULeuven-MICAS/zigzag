@@ -15,7 +15,10 @@ class OperationalArray:
     def __init__(self, operational_unit: OperationalUnit, dimensions: Dict[str, int]):
         self.unit = operational_unit
         self.total_unit_count = int(np.prod(list(dimensions.values())))
-        self.total_area = operational_unit.area * self.total_unit_count
+        try:
+            self.total_area = operational_unit.area * self.total_unit_count
+        except TypeError:  # branch for IMC
+            self.total_area = operational_unit.area
 
         base_dims = [
             Dimension(idx, name, size)
