@@ -17,7 +17,7 @@ Also, a Jupyter Notebook based demo is prepared for new users [here](https://git
 
 In this novel version, we have: 
 - Integrated ZigZag-IMC into the framework, enabling definition of both digital cores and In-Memory-Computing cores via the user interface.
-- Added yaml (.yml) files as an additional output format for complete result saving.
+- Added yaml (.yml) files as an additional output format when the result is completely saved.
 - Added optional functions to remove unused top memories in the HW architecture. 
 - Added an interface with ONNX to directly parse ONNX models
 - Overhauled our HW architecture definition to:
