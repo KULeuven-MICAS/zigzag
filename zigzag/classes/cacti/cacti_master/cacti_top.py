@@ -14,6 +14,7 @@ parser.add_argument('--ex_wr_port')
 parser.add_argument('--rd_wr_port')
 parser.add_argument('--bank_count')
 parser.add_argument('--mem_pool_path')
+parser.add_argument('--technology')
 args = parser.parse_args()
 
 
@@ -57,10 +58,10 @@ ex_wr_port = args.ex_wr_port
 rd_wr_port = args.rd_wr_port
 bank_count = args.bank_count
 
-technology = 0.090
+technology = args.technology
 
 
-C.cacti_auto(['single', [['mem_type', 'cache_size', 'IO_bus_width', 'ex_rd_port', 'ex_wr_port', 'rd_wr_port', 'technology'],[mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, technology]]], cacti_master_path, f'{self_gen_path}/cache.cfg')
+C.cacti_auto(['single', [['mem_type', 'cache_size', 'IO_bus_width', 'ex_rd_port', 'ex_wr_port', 'rd_wr_port', 'bank_count', 'technology'],[mem_type, cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, bank_count, technology]]], cacti_master_path, f'{self_gen_path}/cache.cfg')
 
 result = {}
 with open('%s/cache.cfg.out' % self_gen_path, 'r') as fp:
@@ -91,19 +92,20 @@ for i in range(len(result[' Capacity (bytes)'])):
     else:
         mem_type = 'dram'
 
-    mem_name = str(int(size_byte)) + '_Byte_' + str(int(mem_bw)) + '_BW_' + str(ex_rd_port) + '_' + str(ex_wr_port) + '_' + str(rd_wr_port)
+    mem_name = str(int(size_byte)) + '_Byte_' + str(int(mem_bw)) + '_BW_' + str(ex_rd_port) + '_' + str(ex_wr_port) + '_' + str(rd_wr_port) + '_BANK_COUNT_' + str(bank_count) + '_TECH_' + str(technology)
 
     new_result = {'%s' % mem_name: {
         'size_byte': int(size_byte),
         'size_bit': int(size_byte * 8),
-        'area': area*2,
+        'area': area,
         'cost': {'read_word': read_word, 'write_word': write_word},
         'IO_bus_width': int(mem_bw),
         'ex_rd_port': ex_rd_port,
         'ex_wr_port': ex_wr_port,
         'rd_wr_port': rd_wr_port,
-        'bank_count': 1, 
-        'memory_type': mem_type
+        'bank_count': bank_count, 
+        'memory_type': mem_type,
+        'technology': technology,
     }}
     with open(mem_pool_path, 'a+') as fp:
         yaml.dump(new_result, fp)

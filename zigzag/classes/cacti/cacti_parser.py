@@ -40,6 +40,7 @@ class CactiParser:
         w_port,
         rw_port,
         bank,
+        technology,
         mem_pool_path=MEM_POOL_PATH,
     ):
         with open(mem_pool_path, "r") as fp:
@@ -49,14 +50,12 @@ class CactiParser:
             for instance in memory_pool:
 
                 IO_bus_width = int(memory_pool[instance]["IO_bus_width"])
-                area = memory_pool[instance]["area"]
-                bank_count = int(memory_pool[instance]["bank_count"])
-                read_cost = memory_pool[instance]["cost"]["read_word"] * 1000
-                write_cost = memory_pool[instance]["cost"]["write_word"] * 1000
                 ex_rd_port = int(memory_pool[instance]["ex_rd_port"])
                 ex_wr_port = int(memory_pool[instance]["ex_wr_port"])
                 rd_wr_port = int(memory_pool[instance]["rd_wr_port"])
                 cache_size = int(memory_pool[instance]["size_bit"])
+                bank_count = int(memory_pool[instance].get("bank_count", -1))
+                tech = float(memory_pool[instance].get("technology", -1))
 
                 if (
                     (size == cache_size)
@@ -64,6 +63,8 @@ class CactiParser:
                     and (r_port == ex_rd_port)
                     and (w_port == ex_wr_port)
                     and (rw_port == rd_wr_port)
+                    and (bank_count == bank)
+                    and (tech == technology)
                 ):
                     return True
 
@@ -88,6 +89,7 @@ class CactiParser:
         w_port,
         rw_port,
         bank,
+        technology=0.022,
         mem_pool_path=MEM_POOL_PATH,
         cacti_top_path=CACTI_TOP_PATH,
     ):
@@ -114,6 +116,8 @@ class CactiParser:
                 str(bank),
                 "--mem_pool_path",
                 str(mem_pool_path),
+                "--technology",
+                str(technology),
             ]
         )
 
@@ -142,6 +146,7 @@ class CactiParser:
         w_port,
         rw_port,
         bank,
+        technology=0.022,
         mem_pool_path=MEM_POOL_PATH,
         cacti_top_path=CACTI_TOP_PATH,
     ):
@@ -164,7 +169,7 @@ class CactiParser:
             r_bw = new_r_bw
 
         if not self.item_exists(
-            mem_type, size, r_bw, r_port, w_port, rw_port, bank, mem_pool_path
+            mem_type, size, r_bw, r_port, w_port, rw_port, bank, technology, mem_pool_path, 
         ):
             self.create_item(
                 mem_type,
@@ -174,6 +179,7 @@ class CactiParser:
                 w_port,
                 rw_port,
                 bank,
+                technology,
                 mem_pool_path,
                 cacti_top_path,
             )
@@ -194,6 +200,7 @@ class CactiParser:
                 rd_wr_port = int(memory_pool[instance]["rd_wr_port"])
                 cache_size = int(memory_pool[instance]["size_bit"])
                 memory_type = memory_pool[instance]["memory_type"]
+                tech = float(memory_pool[instance].get("technology", -1))
 
                 if (
                     (mem_type == memory_type)
@@ -202,19 +209,14 @@ class CactiParser:
                     and (r_port == ex_rd_port)
                     and (w_port == ex_wr_port)
                     and (rw_port == rd_wr_port)
+                    and (tech == technology)
+                    and (bank_count == bank)
                 ):
                     # print("Memory instance found in Cacti memory pool!", cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, bank_count, read_cost, write_cost)
                     return (
-                        cache_size,
-                        IO_bus_width,
-                        IO_bus_width,
                         read_cost,
                         write_cost,
                         area,
-                        bank_count,
-                        ex_rd_port,
-                        ex_wr_port,
-                        rd_wr_port,
                     )
 
         # should be never reached
