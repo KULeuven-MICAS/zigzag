@@ -43,7 +43,7 @@ class CompleteSaveStage(Stage):
                     "?", f"{cme.layer}_complete"
                 )
             self.save_to_json(cme, filename=filename)
-            yamlname = re.split(r"\.", filename)[0] + ".yml"
+            yamlname = os.path.join(os.path.splitext(filename)[0], ".yml")
             self.save_to_yaml(jsonname=filename, yamlname=yamlname)
             logger.info(
                 f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
