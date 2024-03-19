@@ -114,15 +114,15 @@ def bar_plot_cost_model_evaluations_breakdown(
         la_break_down[d]["Data loading"] = cme.latency_total1 - cme.latency_total0
         la_break_down[d]["Data off-loading"] = cme.latency_total2 - cme.latency_total1
         la_tot[d] = cme.latency_total2
-        for operand in cme.energy_breakdown_further:
+        for operand in cme.mem_energy_breakdown_further:
             mem_op = cme.layer.memory_operand_links[operand]
             operand_memory_levels = mh.get_memory_levels(mem_op)
-            for j in range(len(cme.energy_breakdown_further[operand])):
+            for j in range(len(cme.mem_energy_breakdown_further[operand])):
                 mem = operand_memory_levels[j].name
                 memory_instances[mem] = operand_memory_levels[j]
                 memory_word_access_summed[d][operand][
                     mem
-                ] += cme.energy_breakdown_further[operand][j]
+                ] += cme.mem_energy_breakdown_further[operand][j]
 
     all_mems = set()
     for v in memory_word_access_summed.values():
