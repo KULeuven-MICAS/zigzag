@@ -254,6 +254,7 @@ def bar_plot_cost_model_evaluations_breakdown(
 
     fig.tight_layout()
     plt.savefig(save_path)
+    plt.close()
 
 
 if __name__ == "__main__":
