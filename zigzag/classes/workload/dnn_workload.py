@@ -4,7 +4,6 @@ from zigzag.classes.workload.layer_node import LayerNode
 from typing import Dict, Any
 from networkx import DiGraph
 
-
 ## Description missing
 class DNNWorkload(DiGraph):
 
