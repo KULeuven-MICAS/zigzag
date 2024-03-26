@@ -167,7 +167,7 @@ class LayerNode:
         return self.core_allocation
 
     def __str__(self):
-        return f"LayerNode_{self.id}"
+        return f"{self.name}"
 
     def __repr__(self):
         return str(self)
