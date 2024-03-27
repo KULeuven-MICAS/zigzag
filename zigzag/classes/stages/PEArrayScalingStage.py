@@ -2,7 +2,9 @@ from math import ceil
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
+from zigzag.classes.hardware.architecture.operational_unit import OperationalUnit
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage
 
@@ -10,16 +12,19 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-## This stage scales the PE array of the given accelerator.
-## Because the user-defined spatial mapping resides in the different workload layer nodes,
-## We also have to modify those to scale accordingly
+
 class PEArrayScalingStage(Stage):
+    """!  This stage scales the PE array of the given accelerator.
+    Because the user-defined spatial mapping resides in the different workload layer nodes,
+    We also have to modify those to scale accordingly
+    """
+
     def __init__(
         self, list_of_callables, *, workload, accelerator, pe_array_scaling, **kwargs
     ):
         super().__init__(list_of_callables, **kwargs)
 
-        ## SANITY CHECKS
+        # SANITY CHECKS
         # Only allow scaling factors that are a power of 2
         assert pe_array_scaling in [2**i for i in range(-3, 3)]
         # Make sure there's only one core so that the correct one is scaled
@@ -68,7 +73,7 @@ class PEArrayScalingStage(Stage):
         memory_hierarchy = core.memory_hierarchy
 
         # Create new operational array
-        new_operational_unit = pickle_deepcopy(operational_unit)
+        new_operational_unit: OperationalUnit = pickle_deepcopy(operational_unit)  # type: ignore
         new_dimension_sizes = [
             ceil(self.pe_array_scaling * dim_size) for dim_size in dimension_sizes
         ]
@@ -92,9 +97,9 @@ class PEArrayScalingStage(Stage):
             assert len(served_dimensions_vec) >= 1
             served_dimensions = served_dimensions_vec[0]
 
-            new_memory_instance = pickle_deepcopy(memory_instance)
-            new_operands = pickle_deepcopy(operands)
-            new_port_alloc = pickle_deepcopy(port_alloc)
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
+            new_operands: tuple[str] = pickle_deepcopy(operands)  # type: ignore
+            new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)  # type: ignore
             new_served_dimensions = pickle_deepcopy(served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,
@@ -112,7 +117,7 @@ class PEArrayScalingStage(Stage):
             )
 
         new_id = id
-        new_dataflows = pickle_deepcopy(dataflows)
+        new_dataflows: list = pickle_deepcopy(dataflows)  # type: ignore
         new_core = Core(
             id=new_id,
             operational_array=new_operational_array,

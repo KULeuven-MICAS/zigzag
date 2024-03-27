@@ -8,8 +8,8 @@ from zigzag.classes.hardware.architecture.core import Core
 
 
 def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
-    """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    """! Memory hierarchy variables
+    size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy)"""
     rf1 = MemoryInstance(
         name="rf_64B",
         size=512,

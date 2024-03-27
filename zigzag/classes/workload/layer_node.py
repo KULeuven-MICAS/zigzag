@@ -1,58 +1,54 @@
 from math import gcd, prod
 import re
 from collections import defaultdict
-from typing import Dict, List
+from typing import Any, Dict, List
 from copy import deepcopy
 from collections import defaultdict
 
 
-## Description missing
 class LayerNode:
-    ## The class constructor
-    #
-    # To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
-    # This parser collects information of operand, loop dimension, and loop relevance.
-    # Equal-to-1 loop dimensions are eliminated.
-    #
-    # @param layer_id: The identifier (key) of the layer, as defined in the workload
-    # @param layer_attrs: contains attributes specified below:
-    # @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
-    def __init__(self, layer_id, layer_attrs, node_name="", type=None):
-        # To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
-        # This parser collects information of operand, loop dimension, and loop relevance.
-        # Equal-to-1 loop dimensions are eliminated.
+    """! Description missing"""
 
-        # :param layer_id: The identifier (key) of the layer, as defined in the workload
-        # :param layer_attrs: contains attributes specified below:
-        # :param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
-        # *equation: core computation equation, e.g. 'O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]',
-        # 'Y[i][j] += A[i][k] * B[k][j]', 'Y[i][j] += A[i][k][l] * B[k][j] * C[l][j]', etc.
-        # *loop_dim_size: size of each computation loop, e.g. {'B': 1, 'K': 32, 'C': 64, 'OY': 28, 'OX': 28,
-        # 'FY': 1, 'FX': 1, 'G': 1}.
-        # *equation_relations: for the operand dimension that is not directly a loop dimension,
-        # a set of specific relation equations between them (operand dimension and loop dimension) is required,
-        # e.g. ['ix=ox+fx-1', 'iy=oy+fy-1'].
-        # *core_allocation: the accelerator core on which this layer is executed
-        # *memory_operand_links: the link between layer operands and where they are stored in the memory hierarchy.
+    def __init__(
+        self, layer_id: int, layer_attrs: dict[str, Any], node_name="", type=None
+    ):
+        """! The class constructor
+        To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
+        This parser collects information of operand, loop dimension, and loop relevance.
+        Equal-to-1 loop dimensions are eliminated.
+        @param layer_id: The identifier (key) of the layer, as defined in the workload
+        @param layer_attrs: contains attributes specified below:
+        @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
 
-        # :return (self)
-        # ------- directly get from inputs -------
-        # - loop_dim_size: collection of loop dimension size that >1.
-        # - operand_precision
-        # - loop_dim_list, e.g. ['B', 'K', 'C', ...], collection of loop dimension whose size >1.
-        # - operand_list, e.g. ['W', 'I', 'O']
+        *equation: core computation equation, e.g. 'O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]',
+        'Y[i][j] += A[i][k] * B[k][j]', 'Y[i][j] += A[i][k][l] * B[k][j] * C[l][j]', etc.
+        *loop_dim_size: size of each computation loop, e.g. {'B': 1, 'K': 32, 'C': 64, 'OY': 28, 'OX': 28,
+        'FY': 1, 'FX': 1, 'G': 1}.
+        *equation_relations: for the operand dimension that is not directly a loop dimension,
+        a set of specific relation equations between them (operand dimension and loop dimension) is required,
+        e.g. ['ix=ox+fx-1', 'iy=oy+fy-1'].
+        *core_allocation: the accelerator core on which this layer is executed
+        *memory_operand_links: the link between layer operands and where they are stored in the memory hierarchy.
 
-        # ------- operand and loop dimension relation -------
-        # - operand_loop_dim: operand and loop dimension relationship, e.g.
-        # operand_loop_dim = {'O': {'r': ['B', 'K', 'OY', 'OX'], 'ir': ['C', 'FX', 'FY'], 'pr': {}},
-        #                     'W': {'r': ['K', 'C', 'FY', 'FX'], 'ir': ['B', 'OX', 'OY'], 'pr': {}},
-        #                     'I': {'r': ['B', 'C'], 'ir': ['K'], 'pr': {'IY': ('OY', 'FY'), 'IX': ('OX', 'FX')}}}
+        @return (self)
+        ------- directly get from inputs -------
+        - loop_dim_size: collection of loop dimension size that >1.
+        - operand_precision
+        - loop_dim_list, e.g. ['B', 'K', 'C', ...], collection of loop dimension whose size >1.
+        - operand_list, e.g. ['W', 'I', 'O']
 
-        # ------- basic layer information extraction -------
-        # - total_MAC_count
-        # - operand_size_elem
-        # - operand_size_bit
-        # - operand_data_reuse
+        ------- operand and loop dimension relation -------
+        - operand_loop_dim: operand and loop dimension relationship, e.g.
+        operand_loop_dim = {'O': {'r': ['B', 'K', 'OY', 'OX'], 'ir': ['C', 'FX', 'FY'], 'pr': {}},
+                            'W': {'r': ['K', 'C', 'FY', 'FX'], 'ir': ['B', 'OX', 'OY'], 'pr': {}},
+                            'I': {'r': ['B', 'C'], 'ir': ['K'], 'pr': {'IY': ('OY', 'FY'), 'IX': ('OX', 'FX')}}}
+
+        ------- basic layer information extraction -------
+        - total_MAC_count
+        - operand_size_elem
+        - operand_size_bit
+        - operand_data_reuse
+        """
 
         self.id = layer_id
         self.layer_attrs = layer_attrs
@@ -67,10 +63,10 @@ class LayerNode:
             )
 
         # Get required attributes from layer_attrs
-        equation: str = layer_attrs.get("equation")
-        loop_dim_size: Dict[str, int] = layer_attrs.get("loop_dim_size")
+        equation: str = layer_attrs.get("equation")  # type: ignore
+        loop_dim_size: Dict[str, int] = layer_attrs.get("loop_dim_size")  # type: ignore
         pr_loop_dim_size: Dict[str, int] = layer_attrs.get("pr_loop_dim_size", None)
-        operand_precision: Dict[str, int] = layer_attrs.get("operand_precision")
+        operand_precision: Dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
         dimension_relations: List[str] = layer_attrs.get("dimension_relations", [])
         user_spatial_mapping: Dict[str, tuple] = layer_attrs.get(
             "spatial_mapping", None
@@ -84,7 +80,7 @@ class LayerNode:
             "memory_operand_links", None
         )
         source_storage_level: int = layer_attrs.get("source_storage_level", {})
-        operand_source_dimension_mapping: Dict[Dict[str, str]] = layer_attrs.get(
+        operand_source_dimension_mapping: Dict[Dict[str, str]] = layer_attrs.get(  # type: ignore
             "operand_source_dimension_mapping", {}
         )
         constant_operands: List[str] = layer_attrs.get("constant_operands", [])
@@ -172,8 +168,8 @@ class LayerNode:
     def __repr__(self):
         return str(self)
 
-    ## JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
+        """!  JSON representation used for saving this object to a json file."""
         return {
             "equation": self.equation,
             "equation_relations": self.dimension_relations,
@@ -185,10 +181,11 @@ class LayerNode:
             "source_storage_level": self.source_storage_level,
         }
 
-    ## Calculates the tensor size (nb of elements) for the given operand layer_op with the given loop dimension sizes loop_sizes.
-    # @param layer_op: str. A String representing the layer operand for which to compute the tensor size.
-    # @param loop_sizes: dict. A dict with string keys representing the dimension and integer values representing the size.
     def calc_tensor_size(self, layer_op, loop_sizes):
+        """!  Calculates the tensor size (nb of elements) for the given operand layer_op with the given loop dimension sizes loop_sizes.
+        @param layer_op: str. A String representing the layer operand for which to compute the tensor size.
+        @param loop_sizes: dict. A dict with string keys representing the dimension and integer values representing the size.
+        """
         return prod(self.calc_tensor_dims(layer_op, loop_sizes).values())
         # Initialize the tensor size as 1
 
@@ -229,10 +226,11 @@ class LayerNode:
             out[dim] = self.calc_tensor_dim(loop_sizes, dim)
         return out
 
-    ## Compute the total pr dimension size of this node, taking padding into account.
-    # @param dim (str): The partially relevant dimension, e.g. 'IX'.
-    # @return int: The total partially relevant dimension size
     def calc_pr_dimension_size_total(self, dim):
+        """!  Compute the total pr dimension size of this node, taking padding into account.
+        @param dim (str): The partially relevant dimension, e.g. 'IX'.
+        @return int: The total partially relevant dimension size
+        """
         related_dimension_sizes = [
             self.loop_dim_size[related_dim] for related_dim in self.pr_loop[dim]
         ]
@@ -254,10 +252,11 @@ class LayerNode:
         return total_pr_dim_size_without_padding
 
     @staticmethod
-    ## Calculates the number of unique indices c generated by iterating through the indices
-    # a in range(0,A,1) and b in range(0,B,1) according to the equation c = sa * a + sb * b.
-    # sa and sb thus represent the scaling of a, resp. b.
     def calc_pr_dimension_size(sa, A, sb, B):
+        """!  Calculates the number of unique indices c generated by iterating through the indices
+        a in range(0,A,1) and b in range(0,B,1) according to the equation c = sa * a + sb * b.
+        sa and sb thus represent the scaling of a, resp. b.
+        """
         return int(A * B - max(0, B - (sa / gcd(sa, sb))) * (A - (sb / gcd(sa, sb))))
 
     @staticmethod
@@ -305,7 +304,8 @@ class LayerNode:
         return pr_loop, pr_loop_list, pr_scaling_factors
 
     @staticmethod
-    def extract_r_ir_loop_info(equation, loop_dim_size, pr_loop, pr_loop_list):
+    def extract_r_ir_loop_info(equation: str, loop_dim_size, pr_loop, pr_loop_list):
+        """! Description missing"""
         operand_loop_dim: Dict[str, Dict] = {}
         operand_list = []
         equation = equation.replace("*", " * ")
@@ -378,9 +378,10 @@ class LayerNode:
             operand_dimensionality_order,
         )
 
-    ## This function extract basic information for each layer node.
-    # @return: total_MAC_count, operand_size_elem, operand_size_bit, operand_data_reuse.
     def extract_layer_info(self):
+        """!  This function extract basic information for each layer node.
+        @return: total_MAC_count, operand_size_elem, operand_size_bit, operand_data_reuse.
+        """
         # total MAC operation count
         total_MAC_count: int = 1
         for ky in self.loop_dim_size:
@@ -413,21 +414,23 @@ class LayerNode:
             operand_data_reuse[operand] = total_MAC_count / size_in_elem
         self.operand_data_reuse = operand_data_reuse
 
-    ## Return the irrelevant dimensions of layer operand 'layer_op'.
     def get_operand_irrelevant_dimensions(self, layer_op: str):
+        """!  Return the irrelevant dimensions of layer operand 'layer_op'."""
         return self.operand_loop_dim[layer_op]["ir"]
 
-    ## Return the layer operand associated with the given memory operand for this layer.
-    # If there is no such memory operand, an error is raised.
     def get_layer_operand(self, mem_op: str) -> str:
+        """!  Return the layer operand associated with the given memory operand for this layer.
+        If there is no such memory operand, an error is raised.
+        """
         for layer_operand, memory_operand in self.memory_operand_links.items():
             if memory_operand == mem_op:
                 return layer_operand
         raise ValueError(f"The memory operand {mem_op} is not present in layer {self}.")
 
-    ## Return the memory level at which an input operand is stored.
-    # If this layer node has no information for the given operand, it returns None.
     def get_operand_storage_level(self, layer_op: str):
+        """!  Return the memory level at which an input operand is stored.
+        If this layer node has no information for the given operand, it returns None.
+        """
         if layer_op not in self.source_storage_level:
             return None
         return self.source_storage_level[layer_op]

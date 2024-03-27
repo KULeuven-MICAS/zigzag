@@ -47,8 +47,8 @@ def bar_plot_cost_model_evaluations_total(
     ax2 = ax1.twinx()
 
     colormap = plt.get_cmap("Set1")
-    color_energy = colormap.colors[0]
-    color_latency = colormap.colors[1]
+    color_energy = colormap.colors[0]  # type: ignore
+    color_latency = colormap.colors[1]  # type: ignore
 
     h1 = rects1 = ax1.bar(
         x - width / 2, energies, width, label="Energy", color=color_energy

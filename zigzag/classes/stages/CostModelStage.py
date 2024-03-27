@@ -12,18 +12,10 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-##  Pipeline stage that calls a cost model to evaluate a mapping on a HW config.
-class CostModelStage(Stage):
 
-    ## The class constructor 
-    # Initializes the cost model stage given main inputs
-    # @param list_of_callables
-    # @param accelerator
-    # @param layer
-    # @param spatial_mapping
-    # @param temporal_mapping
-    # @param access_same_data_considered_as_no_access
-    # @param kwargs
+class CostModelStage(Stage):
+    """!   Pipeline stage that calls a cost model to evaluate a mapping on a HW config."""
+
     def __init__(
         self,
         list_of_callables: List[Callable],
@@ -34,8 +26,18 @@ class CostModelStage(Stage):
         spatial_mapping_int,
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
-        **kwargs
+        **kwargs,
     ):
+        """!  The class constructor
+        Initializes the cost model stage given main inputs
+        @param list_of_callables
+        @param accelerator
+        @param layer
+        @param spatial_mapping
+        @param temporal_mapping
+        @param access_same_data_considered_as_no_access
+        @param kwargs
+        """
         super().__init__(list_of_callables, **kwargs)
         (
             self.accelerator,
@@ -53,13 +55,17 @@ class CostModelStage(Stage):
             access_same_data_considered_as_no_access,
         )
 
-    ## Run the cost model stage by calling the internal zigzag cost model with the correct inputs.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
+        """!  Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""
         core_id = self.layer.core_allocation
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array
-        pe_type = getattr(operational_array, "pe_type", None) # return None if it does not exist
-        if pe_type is not None and pe_type in ["in_sram_computing"]: # if pe_type exists and in the list
+        pe_type = getattr(
+            operational_array, "pe_type", None
+        )  # return None if it does not exist
+        if pe_type is not None and pe_type in [
+            "in_sram_computing"
+        ]:  # if pe_type exists and in the list
             self.cme = CostModelEvaluationForIMC(
                 accelerator=self.accelerator,
                 layer=self.layer,

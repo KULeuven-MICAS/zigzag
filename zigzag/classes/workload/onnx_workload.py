@@ -5,25 +5,26 @@ from typing import Dict, Any
 from networkx import DiGraph
 
 
-## Description missing
 class ONNXWorkload(DiGraph):
+    """!  Description missing"""
 
-    ## Collect all the algorithmic workload information here.
     def __init__(self, **attr):
+        """!  Collect all the algorithmic workload information here."""
         super().__init__(**attr)
 
         self.node_id_to_obj = {}
         self.node_list = []
 
-    ## Add a node object to the ONNX workload graph.
-    # This can be a different object based on if it's an "accelerateable" node or not.
     def add(self, node_id, node_obj):
+        """!  Add a node object to the ONNX workload graph.
+        This can be a different object based on if it's an "accelerateable" node or not.
+        """
         self.node_list.append(node_obj)
         self.node_id_to_obj[node_id] = node_obj
 
         self.add_node(node_obj)
         edges = []
-        for (op, parents) in node_obj.input_operand_source.items():
+        for op, parents in node_obj.input_operand_source.items():
             for parent_id in parents:
                 parent_node_obj = self.node_id_to_obj[parent_id]
                 edges.append((parent_node_obj, node_obj))

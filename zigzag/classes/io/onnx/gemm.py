@@ -10,25 +10,27 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-## Parses an ONNX Gemm operator into a LayerNode
 class GemmParser(Parser):
-    ## The class construcutor
-    # @param node_id
-    # @param node
-    # @param nodes_outputs
-    # @param mapping
-    # @param onxx_odel
+    """!  Parses an ONNX Gemm operator into a LayerNode"""
+
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
+        """!  The class construcutor
+        @param node_id
+        @param node
+        @param nodes_outputs
+        @param mapping
+        @param onxx_odel
+        """
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
-    ## Run the parser
     def run(self):
+        """!  Run the parser"""
         layer_node = self.generate_layer_node_for_gemm()
         return layer_node
 
     def generate_layer_node_for_gemm(self):
-        ## Generate the necessary dictionary items required for the Node creation.
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
+            """!  Generate the necessary dictionary items required for the Node creation."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation
@@ -74,6 +76,7 @@ class GemmParser(Parser):
 
         # The Gemm node includes flags for transpose of both of its inputs.
         # If the first input is transposed, we need to transpose its shape here.
+        # TODO this doesn't actually perform the transpose?
         transA = get_attribute_ints_with_name("transA", self.node.attribute, default=0)
         if transA:
             assert len(ia_dimension_shape) == 2
@@ -81,6 +84,7 @@ class GemmParser(Parser):
 
         # If the input activations are empty (which can happen if there is a shape operator in the path)
         # we try to extract the weights from the model graph initializer to get the correct input activation size
+        # TODO having a shape operator in the ONNX graph should be dealt with at a higher level
         if not ia_dimension_shape:
             weight_name = self.node.input[1]
             initializer_names = [i.name for i in self.onnx_model.graph.initializer]

@@ -1,11 +1,12 @@
-## Description missing
 class Dimension:
+    """!  Description missing"""
 
-    ## The class constructor
-    ## @param index: The integer index of this Dimension.
-    ## @param name: The user-provided name of this Dimension.
-    ## @param size: The user-provided size of this Dimension.
     def __init__(self, index: int, name: str, size: int):
+        """!  The class constructor
+        @param index: The integer index of this Dimension.
+        @param name: The user-provided name of this Dimension.
+        @param size: The user-provided size of this Dimension.
+        """
         self.id = index
         self.name = name
         self.size = size
@@ -16,8 +17,8 @@ class Dimension:
     def __repr__(self):
         return str(self)
 
-    ## JSON representation of this class to save it to a json file.
     def __jsonrepr__(self):
+        """!  JSON representation of this class to save it to a json file."""
         return self.__dict__
 
     def __eq__(self, other):

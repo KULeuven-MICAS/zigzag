@@ -8,15 +8,18 @@ from zigzag.utils import pickle_deepcopy
 if TYPE_CHECKING:
     from zigzag.classes.workload.layer_node import LayerNode
 
-## Collect information of each single loop tuple in mapping.
-# Applied range: from the lowest architectural level to the current level.
-class Loop:
 
-    ## The class constructor
-    # @param loop
-    # @param MAC_op
-    # @param data_elem
+class Loop:
+    """!  Collect information of each single loop tuple in mapping.
+    Applied range: from the lowest architectural level to the current level.
+    """
+
     def __init__(self, loop: tuple, MAC_op: int, data_elem: int):
+        """!  The class constructor
+        @param loop
+        @param MAC_op
+        @param data_elem
+        """
         self.loop = loop
         self.MAC_op = MAC_op
         self.data_elem = data_elem
@@ -28,9 +31,11 @@ class Loop:
     def __repr__(self):
         return str(self.loop)
 
-## This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
-# It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
+
 def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
+    """!  This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
+    It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
+    """
 
     operand_loop_dim = {
         op: layer_node.operand_loop_dim[op] for op in mapping_dict.keys()
@@ -45,7 +50,7 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
         if relevance["pr"] != {}
     }
     pr_operand_list = list(pr_operand_loop_LUT.keys())
-    mapping_dict_reform = pickle_deepcopy(mapping_dict)
+    mapping_dict_reform: dict = pickle_deepcopy(mapping_dict)  # type: ignore
 
     # current and below level pr data size
     cabl_pr_data_size = {}
@@ -149,12 +154,7 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
     # return mapping_dict_reform, cabl_pr_data_size, cabl_pr_data_reuse, per_pr_data_size, per_pr_data_reuse
     return mapping_dict_reform
 
-## This function replaces all pr loops in a mapping of a single operand with r and ir loops.
-# @param single_operand_mapping
-# @param per_pr_data_size
-# @param per_pr_data_reuse
-# @param pr_operand_loop_LUT
-# @param r_ir_operand_loop_LUT
+
 def replace_pr_loop_in_mapping(
     single_operand_mapping: Dict,
     per_pr_data_size: Dict,
@@ -162,7 +162,14 @@ def replace_pr_loop_in_mapping(
     pr_operand_loop_LUT: Dict,
     r_ir_operand_loop_LUT: List,
 ):
-    mapping_new = pickle_deepcopy(single_operand_mapping)
+    """!  This function replaces all pr loops in a mapping of a single operand with r and ir loops.
+    @param single_operand_mapping
+    @param per_pr_data_size
+    @param per_pr_data_reuse
+    @param pr_operand_loop_LUT
+    @param r_ir_operand_loop_LUT
+    """
+    mapping_new: Dict = pickle_deepcopy(single_operand_mapping)  # type: ignore
 
     for level, loop_list in enumerate(single_operand_mapping):
         # Introduce the current level pr loop index to distinguish different pr loops at the same architectural level
@@ -184,7 +191,7 @@ def replace_pr_loop_in_mapping(
                         pr_data_dim + "_r",
                         per_pr_data_size[pr_data_dim][level][pr_idx_local],
                     )
-                    # insert ir loop after the r loop 
+                    # insert ir loop after the r loop
                     # NOTE: Here we insert the ir loop after/above the r loop, which indicates that we ignore the input FIFO effect
                     # during current level feeds data to below level. We could also insert the ir loop before/below the r loop,
                     # which leads to more energy-efficient mapping if the innermost ir loop merging down is enabled.
@@ -202,10 +209,10 @@ def replace_pr_loop_in_mapping(
     return mapping_new
 
 
-# This function generates detailed information for each single loop item for each operand.
 def calc_data_size_MAC_count_per_loop(
     mapping_dict_reform: Dict, operand_loop_dim_reform: Dict
 ):
+    """! This function generates detailed information for each single loop item for each operand."""
     detailed_mapping_dict = deepcopy(mapping_dict_reform)
     for operand, mapping_list in mapping_dict_reform.items():
         MAC_count = 1

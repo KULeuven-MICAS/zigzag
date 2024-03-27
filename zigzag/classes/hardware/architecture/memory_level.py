@@ -4,17 +4,12 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 from math import prod
 import numpy as np
 
-## Description missing
+
 class MemoryPort:
+    """!  Description missing"""
+
     port_id_counter = 0
 
-    ## The class constructor
-    # Collect all the physical memory port related information here.
-    # @param port_name: 
-    # @param port_bw: bit/cc
-    # @param port_bw_in: 
-    # @param port_attr: read_only (r), write_only (w), read_write (rw)
-    # @param port_id: port index per memory
     def __init__(
         self,
         port_name: str,
@@ -23,6 +18,14 @@ class MemoryPort:
         port_attr: str,
         port_id=None,
     ):
+        """!  The class constructor
+        Collect all the physical memory port related information here.
+        @param port_name:
+        @param port_bw: bit/cc
+        @param port_bw_in:
+        @param port_attr: read_only (r), write_only (w), read_write (rw)
+        @param port_id: port index per memory
+        """
         self.name = port_name
         self.bw = port_bw
         self.bw_min = port_bw_min
@@ -57,18 +60,10 @@ class MemoryPort:
     def __hash__(self):
         return self.port_id
 
-## Description missing
-class MemoryLevel:
 
-    ## The class constructor
-    # Initialize the memory level in the hierarchy with the physical memory instance
-    # @param memory_instance:
-    # @param operands:
-    # @param mem_level_of_operands: 
-    # @param port_alloc: memory port allocation (physical memory port -> functional memory port)
-    # @param served_dimensions:
-    # @param operational_array:
-    # @param id: an identifier used for reference check.
+class MemoryLevel:
+    """!  Description missing"""
+
     def __init__(
         self,
         memory_instance: MemoryInstance,
@@ -79,6 +74,16 @@ class MemoryLevel:
         operational_array: OperationalArray,
         id,
     ):
+        """!  The class constructor
+        Initialize the memory level in the hierarchy with the physical memory instance
+        @param memory_instance:
+        @param operands:
+        @param mem_level_of_operands:
+        @param port_alloc: memory port allocation (physical memory port -> functional memory port)
+        @param served_dimensions:
+        @param operational_array:
+        @param id: an identifier used for reference check.
+        """
         self.memory_instance = memory_instance
         self.name = self.memory_instance.name
         self.operands = list(operands)
@@ -134,10 +139,10 @@ class MemoryLevel:
     def __hash__(self) -> int:
         return hash(self.id)
 
-    ## Create port object
     def port_allocation(self):
-        # Step 1: according to the port count of the memory instance, initialize the physical port object 
-        # (so far, we don't know what the port will be used for. But we do know the port's id/bw/attribute) 
+        """!  Create port object"""
+        # Step 1: according to the port count of the memory instance, initialize the physical port object
+        # (so far, we don't know what the port will be used for. But we do know the port's id/bw/attribute)
         port_list = []
         r_port = self.memory_instance.r_port
         w_port = self.memory_instance.w_port
@@ -186,16 +191,17 @@ class MemoryLevel:
     def get_port_list(self):
         return self.port_list
 
-    ## JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
+        """!  JSON Representation of this class to save it to a json file."""
         return str(self)
         # return {"memory_instance": self.memory_instance,
         #         "served_dimensions_vec": self.served_dimensions_vec,
         #         "served_dimensions": self.served_dimensions}
 
-    ## Assert if the served_dimension of this MemoryLevel is valid.
-    # - in served_dimension tuple set, each dimension should only show up once, e.g. {(1,0), (1,1)} is not valid since the '1' in the first position showed up twice.
     def assert_valid(self):
+        """!  Assert if the served_dimension of this MemoryLevel is valid.
+        - in served_dimension tuple set, each dimension should only show up once, e.g. {(1,0), (1,1)} is not valid since the '1' in the first position showed up twice.
+        """
         sum_served_dims = []
         for op_served_dimensions in self.served_dimensions_vec:
             sum_op_served_dimensions = [sum(x) for x in zip(*op_served_dimensions)]
@@ -224,20 +230,22 @@ class MemoryLevel:
         ), f"Not all memory unrolling counts {unroll_count} are equal for MemoryLevel of Memory {str(self)}"
         self.unroll_count = unroll_count[0]
 
-    ## Calculates the total fanout of this MemoryLevel.
-    # This equals the total amount of multipliers all instances in this level combined serve.
-    # To calculate the number of lower-level instances a single instance of this level serves,
-    # this number should be divided by the total_fanouts of all lower levels.
     def calc_fanout(self):
+        """!  Calculates the total fanout of this MemoryLevel.
+        This equals the total amount of multipliers all instances in this level combined serve.
+        To calculate the number of lower-level instances a single instance of this level serves,
+        this number should be divided by the total_fanouts of all lower levels.
+        """
         total_fanout = 1
         for served_dimension in self.served_dimensions:
             total_fanout *= served_dimension.size
         self.total_fanout = total_fanout
 
-    ## Function that modifies the served_dimensions for this MemoryLevel if it is an empty set or 'all'.
-    # Empty set signals that the Memory Level has no dimensions served to the level below, thus a fanout of 1.
-    # 'all' signals that the MemoryLevel's served_dimensions are all dimensions, thus there is only one instance of the MemoryNode at this level.
     def check_served_dimensions(self):
+        """!  Function that modifies the served_dimensions for this MemoryLevel if it is an empty set or 'all'.
+        Empty set signals that the Memory Level has no dimensions served to the level below, thus a fanout of 1.
+        'all' signals that the MemoryLevel's served_dimensions are all dimensions, thus there is only one instance of the MemoryNode at this level.
+        """
         served_dimensions = self.served_dimensions_vec
         operands = self.operands
         # Modify served_dimensions to list to be able to change it if empty set or None.
@@ -273,9 +281,10 @@ class MemoryLevel:
                 ]
         self.served_dimensions = set(served_dimensions)
 
-    ## Find the dimension object with idx 'idx'.
-    # @param idx
     def find_dimension_with_idx(self, idx: int):
+        """!  Find the dimension object with idx 'idx'.
+        @param idx
+        """
         dimension = None
         for dim in self.dimensions:
             if dim.id == idx:

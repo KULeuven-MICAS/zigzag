@@ -1,5 +1,6 @@
 import logging
 
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
@@ -14,20 +15,16 @@ from zigzag.utils import pickle_deepcopy
 logger = logging.getLogger(__name__)
 
 
-## Pipeline stage that finds spatial mappings given a:
-# - accelerator
-# - core allocation
-# - interconnection pattern on the allocated core
-# - layer
-#
-# The spatial mappings are found using the interconnection pattern present on the core.
-#
-# The inner-most memory level served dimensions is used,
-# as this is how the memories connect to the operational array.
 class SpatialMappingGeneratorStage(Stage):
-    ## The class constructor
-    # Note: list_of_callables does NOT need to include SpatialMappingConversionStage. Although this is used,
-    # this usage is done automatically.
+    """! Pipeline stage that finds spatial mappings given a:
+    - accelerator
+    - core allocation
+    - interconnection pattern on the allocated core
+    - layer
+    The spatial mappings are found using the interconnection pattern present on the core.
+    The inner-most memory level served dimensions is used,
+    as this is how the memories connect to the operational array."""
+
     def __init__(
         self,
         list_of_callables,
@@ -39,6 +36,9 @@ class SpatialMappingGeneratorStage(Stage):
         enable_weight_diagonal_mapping=False,
         **kwargs,
     ):
+        """! The class constructor
+        Note: list_of_callables does NOT need to include SpatialMappingConversionStage. Although
+        this is used, this usage is done automatically."""
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.check_layer(layer)
@@ -62,13 +62,16 @@ class SpatialMappingGeneratorStage(Stage):
         if layer is None:
             raise ValueError()
         if layer.core_allocation is None:
-            logger.critical(f"Layer {layer} has no core allocation.")
+            logger.critical(  # pylint: disable=W1203
+                f"Layer {layer} has no core allocation."
+            )
             raise ValueError()
         return True
 
-    ## Run this stage by generating user-formatted spatial mappings which are converted
-    # to the memory-level based spatial mapping representation.
     def run(self):
+        """!  Run this stage by generating user-formatted spatial mappings which are converted
+        to the memory-level based spatial mapping representation.
+        """
         user_provided_spatial_mappings = self.layer.user_spatial_mapping
         user_spatial_mapping_hint = self.layer.user_spatial_mapping_hint
         core_id = self.layer.core_allocation
@@ -120,11 +123,11 @@ class SpatialMappingGeneratorStage(Stage):
             user_spatial_mappings = list(
                 (usm for usm in user_spatial_mapping_generator.run())
             )
-            logger.debug(f"No user-provided spatial mappings found. Auto-generating..")
+            logger.debug("No user-provided spatial mappings found. Auto-generating..")
         nb_user_spatial_mappings = len(user_spatial_mappings)
 
         for i, user_spatial_mapping in enumerate(user_spatial_mappings):
-            logger.info(
+            logger.info(  # pylint: disable=W1203
                 f"Launching spatial mapping {i+1}/{nb_user_spatial_mappings}: {user_spatial_mapping}."
             )
             # Set the user_spatial_mapping in the layer, as this is required by SpatialMappingConversionStage
@@ -265,9 +268,9 @@ class SpatialMappingGeneratorStage(Stage):
                 assert len(served_dimensions_vec) >= 1
                 served_dimensions = served_dimensions_vec[0]
 
-                new_memory_instance = pickle_deepcopy(memory_instance)
-                new_operands = pickle_deepcopy(operands)
-                new_port_alloc = pickle_deepcopy(port_alloc)
+                new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
+                new_operands: tuple[str] = pickle_deepcopy(operands)  # type: ignore
+                new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)  # type: ignore
                 new_served_dimensions = pickle_deepcopy(served_dimensions)
                 new_memory_hierarchy.add_memory(
                     memory_instance=new_memory_instance,
@@ -285,7 +288,7 @@ class SpatialMappingGeneratorStage(Stage):
                 id=new_id,
                 operational_array=operational_array,
                 memory_hierarchy=new_memory_hierarchy,
-                dataflows=new_dataflows,
+                dataflows=new_dataflows,  # type: ignore
             )
 
             # Create the new accelerator

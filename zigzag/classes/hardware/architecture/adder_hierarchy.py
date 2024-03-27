@@ -5,24 +5,26 @@ from zigzag.classes.hardware.architecture.operational_array import (
     MultiplierArray,
 )
 
-## This class represents one single adder.
-class Adder:
 
-    ## The class constructor
-    ## @param fan_in: the number of input data to be added together.
-    ## @param unit_cost: one addition energy.
-    ## @param unit_area: one adder area.
-    ## @param input_precision: input data precision. If it is 'int' format, it means the same precision is applied to all input data;
-    # if it is 'list' format, it allows to define for different input data the different precision.
-    ## @param output_precision: output data precision.
+class Adder:
+    """!  This class represents one single adder."""
+
     def __init__(
         self,
         fan_in: int,
         unit_cost: float,
         unit_area: float,
-        input_precision: List[int] or int,
+        input_precision: list[int] | int,
         output_precision: int,
     ):
+        """!  The class constructor
+        @param fan_in: the number of input data to be added together.
+        @param unit_cost: one addition energy.
+        @param unit_area: one adder area.
+        @param input_precision: input data precision. If it is 'int' format, it means the same precision is applied to all input data;
+        if it is 'list' format, it allows to define for different input data the different precision.
+        @param output_precision: output data precision.
+        """
         self.fan_in = fan_in
         self.cost = unit_cost
         self.area = unit_area
@@ -30,24 +32,26 @@ class Adder:
         self.output_precision = output_precision
 
 
-## Adder Level is the basic building block for Adder Hierarchy.
-# It can be an array of aggregators (AG, addition over space) or accumulators (AC, addition over time).
 class AdderLevel:
+    """!  Adder Level is the basic building block for Adder Hierarchy.
+    It can be an array of aggregators (AG, addition over space) or accumulators (AC, addition over time).
+    """
 
-    ## The class constructor
-    # @param index: Adder Level index.
-    # @param name: Adder Level name's default format: 'ALi' (i = 1,2,3,...).
-    # @param details: Adder Level's type, fan-in, and so on.
-    def __init__(self, index: int, name: str, details: Dict[str, str or int]):
+    def __init__(self, index: int, name: str, details: dict[str, str | int]):
+        """!  The class constructor
+        @param index: Adder Level index.
+        @param name: Adder Level name's default format: 'ALi' (i = 1,2,3,...).
+        @param details: Adder Level's type, fan-in, and so on.
+        """
         self.id = index
         self.name = name
         self.type = details["type"]
         self.unit = Adder(
-            details["fan_in"],
-            details["unit_cost"],
-            details["unit_area"],
-            details["input_precision"],
-            details["output_precision"],
+            details["fan_in"],  # type: ignore
+            details["unit_cost"],  # type: ignore
+            details["unit_area"],  # type: ignore
+            details["input_precision"],  # type: ignore
+            details["output_precision"],  # type: ignore
         )
         self.one_instance_unit_count = details["one_instance_unit_count"]
         self.total_unit_count = details["total_unit_count"]
@@ -58,20 +62,23 @@ class AdderLevel:
     def __repr__(self):
         return str(self)
 
-## Construct AdderHierarchy class based on user-defined adder hierarchy. It will check if users' definition is valid,
-# and extract all the related info, e.g. unit count for each adder level and total area.
-class AdderHierarchy:
 
-    ## The class constructor
-    # @param adder_hierarchy: user-defined adder hierarchy.For aggregation level (AG), 
-    # it should contain 'type', 'fan_in', 'unit_cost', 'unit_area';
-    # for accumulation level (AC), it should contain 'type', output_precision', 'unit_cost', 'unit_area'.
-    # @param multiplier_array: MultiplierArray object, check in "architecture/operational_array.py" for more info.
+class AdderHierarchy:
+    """!  Construct AdderHierarchy class based on user-defined adder hierarchy. It will check if users' definition is valid,
+    and extract all the related info, e.g. unit count for each adder level and total area.
+    """
+
     def __init__(
         self,
-        adder_hierarchy: Dict[str, Dict[str, str or int]],
+        adder_hierarchy: dict[str, dict[str, str | int]],
         multiplier_array: MultiplierArray,
     ):
+        """!  The class constructor
+        @param adder_hierarchy: user-defined adder hierarchy.For aggregation level (AG),
+        it should contain 'type', 'fan_in', 'unit_cost', 'unit_area';
+        for accumulation level (AC), it should contain 'type', output_precision', 'unit_cost', 'unit_area'.
+        @param multiplier_array: MultiplierArray object, check in "architecture/operational_array.py" for more info.
+        """
         self.calc_output_reduction_size(multiplier_array)
         self.assert_valid(adder_hierarchy)
         multiplier_output_precision = multiplier_array.unit.output_precision
@@ -83,10 +90,11 @@ class AdderHierarchy:
             ]
         )
 
-    ## From dimensions and operand_spatial_sharing defined by user, calculate total output-sharing dimension size.
-    # This function updates self.output_reduction_size and self.output_non_reduction_size.
-    # @param multiplier_array: MultiplierArray object, check in "architecture/operational_array.py" for more info.
     def calc_output_reduction_size(self, multiplier_array: MultiplierArray):
+        """!  From dimensions and operand_spatial_sharing defined by user, calculate total output-sharing dimension size.
+        This function updates self.output_reduction_size and self.output_non_reduction_size.
+        @param multiplier_array: MultiplierArray object, check in "architecture/operational_array.py" for more info.
+        """
         total_dimension_size = multiplier_array.total_unit_count
         output_reduction_size = 1
         for os in multiplier_array.operand_spatial_sharing:
@@ -95,9 +103,10 @@ class AdderHierarchy:
         self.output_reduction_size = output_reduction_size
         self.output_non_reduction_size = total_dimension_size // output_reduction_size
 
-    ## A valid adder hierarchy need to match operand_spatial_sharing (especially the output reduction dimension).
-    # @param adder_hierarchy: user-defined adder hierarchy
     def assert_valid(self, adder_hierarchy: Dict[str, Dict[str, str or int]]):
+        """!  A valid adder hierarchy need to match operand_spatial_sharing (especially the output reduction dimension).
+        @param adder_hierarchy: user-defined adder hierarchy
+        """
         assert all(
             [
                 adder_level["type"] in ["AG", "AC"]
@@ -132,14 +141,15 @@ class AdderHierarchy:
             f"reduction size ({self.output_reduction_size}) and no accumulator found."
         )
 
-    ## Construct adder level from the innermost level (close to multiplier) to the outermost. Calculate adder count and precision at each adder level. This function updates self.adder_levels.
-    # @param multiplier_output_precision: treated as the innermost-level adder's input precision.
-    # @param adder_hierarchy: user-defined adder hierarchy.
     def construct_adder_levels(
         self,
         multiplier_output_precision: int,
-        adder_hierarchy: Dict[str, Dict[str, str or int]],
+        adder_hierarchy: dict[str, dict[str, str | int]],
     ):
+        """!  Construct adder level from the innermost level (close to multiplier) to the outermost. Calculate adder count and precision at each adder level. This function updates self.adder_levels.
+        @param multiplier_output_precision: treated as the innermost-level adder's input precision.
+        @param adder_hierarchy: user-defined adder hierarchy.
+        """
         precision_counter = multiplier_output_precision
         unit_counter = self.output_reduction_size
 

@@ -9,8 +9,8 @@ from zigzag.classes.hardware.architecture.core import Core
 
 
 def memory_hierarchy_dut(multiplier_array, visualize=False):
-    """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    """! Memory hierarchy variables
+    size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy)"""
 
     reg_W_128B = MemoryInstance(
         name="rf_128B",

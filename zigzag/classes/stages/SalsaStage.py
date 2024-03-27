@@ -43,6 +43,7 @@ from zigzag.classes.stages.ReduceStages import MinimalLatencyStage
 
 logger = logging.getLogger(__name__)
 
+
 ## Class that return the best temporal mapping found by the Simulated Annealing
 # Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 class SalsaStage(Stage):

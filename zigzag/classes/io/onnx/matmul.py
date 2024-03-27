@@ -9,25 +9,29 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-## Parses an ONNX MatMul operator into a LayerNode
 class MatMulParser(Parser):
-    ## The class constructor
-    # @param node_id
-    # @param node
-    # @param nodes_outputs
-    # @param mapping
-    # @param onnx_model
+    """
+    Parses an ONNX MatMul operator into a LayerNode
+    """
+
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
+        """! The class constructor
+        @param node_id
+        @param node
+        @param nodes_outputs
+        @param mapping
+        @param onnx_model
+        """
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
-    ## Run the parser
-    def run(self):
+    def run(self) -> LayerNode:
+        """Run the parser"""
         layer_node = self.generate_layer_node_for_matmul()
         return layer_node
 
     def generate_layer_node_for_matmul(self):
-        ## Generate the necessary dictionary items required for the Node creation.
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
+            """!  Generate the necessary dictionary items required for the Node creation."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation
@@ -71,6 +75,7 @@ class MatMulParser(Parser):
             self.node, self.onnx_model
         )
 
+        # TODO it should be able to deal with tensors
         assert (
             len(ia_dimension_shape) == len(oa_dimension_shape) == 2
         )  # First element is batch size, second is input/output channel
@@ -107,6 +112,6 @@ class MatMulParser(Parser):
             type=self.node.op_type.lower(),
         )
 
-        logger.info(f"Parsed MatMul node {self.node.name}")
+        logger.info(f"Parsed MatMul node {self.node.name}")  # pylint disable=W1203
 
         return node_obj

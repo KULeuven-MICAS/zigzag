@@ -21,11 +21,13 @@ def pickle_deepcopy(to_copy):
 
     if not copied:
         return deepcopy(to_copy)
-    
+
+
 def pickle_save(to_save, path):
     with open(path, "wb") as fp:
         status = pickle.dump(to_save, fp)
     return status
+
 
 def pickle_load(path):
     with open(path, "rb") as fp:

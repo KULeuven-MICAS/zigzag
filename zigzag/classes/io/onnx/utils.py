@@ -8,15 +8,17 @@ from typing import List
 import pickle
 
 import onnx
-from onnx import AttributeProto, helper, compose
+from onnx import AttributeProto, helper, compose  # type: ignore
 
 logger = logging.getLogger(__name__)
 
 BRANCH_ATTRIBUTE = "branch"
 
-## Parse the input accelerator residing in accelerator_path.
-# @param mapping_path
+
 def parse_mapping_from_path(mapping_path):
+    """!  Parse the input accelerator residing in accelerator_path.
+    @param mapping_path
+    """
     # Sanity check on mapping_path
     if mapping_path is None:
         # Update the mapping_path to the default mapping file
@@ -51,12 +53,14 @@ def parse_mapping_from_path(mapping_path):
 def parse_onnx_model_from_path(onnx_model_path):
     return onnx.load(onnx_model_path, load_external_data=False)
 
+
 def add_attribute(node, name, value):
     attr = helper.make_attribute(name, value)
     if hasattr(node, "attribute"):
         node.attribute.append(attr)
     else:
         raise ValueError(f"{node} doesn't have an attribute field.")
+
 
 def add_branch_attribute(graph, branch=0):
     for node in graph.node:
@@ -67,13 +71,16 @@ def add_branch_attribute(graph, branch=0):
             add_branch_attribute(g0, branch + 1)
             add_branch_attribute(g1, branch + 1)
 
+
 def unroll_branches(graph):
     seen_if = False
     new_graph = graph
     for node in graph.node:
         if node.op_type in ["If"]:
             if seen_if:
-                raise ValueError("Unrolling only implemented for single If operator in model.")
+                raise ValueError(
+                    "Unrolling only implemented for single If operator in model."
+                )
             seen_if = True
             g0 = node.attribute[0].g
             g1 = node.attribute[1].g
@@ -92,18 +99,23 @@ def unroll_branches(graph):
             if input_name not in [vi.name for vi in g0.input]:
                 g0.input.extend([value_info])
             # g0 is the graph we will combine with the original one
-            new_graph = compose.merge_graphs(graph, g0, io_map=[(input_name, input_name)])
+            new_graph = compose.merge_graphs(
+                graph, g0, io_map=[(input_name, input_name)]
+            )
             break
     return new_graph
-            
+
+
 def is_dynamic(model):
     return "If" in [n.op_type for n in model.graph.node]
 
-## Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
-# All nodes are assigned a 'branch' attribute which specifies in which branch they live.
-# The branch attribute starts from 0 and increases for each seen If operator.
-# The nested graphs of the 'If' operators are then unrolled into a planar onnx model.
+
 def parse_dynamic_onnx_model(model):
+    """!  Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
+    All nodes are assigned a 'branch' attribute which specifies in which branch they live.
+    The branch attribute starts from 0 and increases for each seen If operator.
+    The nested graphs of the 'If' operators are then unrolled into a planar onnx model.
+    """
     new_model = model
     if is_dynamic(model):
         add_branch_attribute(model.graph)
@@ -112,15 +124,18 @@ def parse_dynamic_onnx_model(model):
         new_model = helper.make_model(graph)
     return new_model
 
-## Retrieves the attrs[name_idx].ints from attrs.
-# If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
-# If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
-# If name does not exist in attrs, the default provided by the caller is used.
-# If the caller doesn't supply a default, an error is thrown.
-# @param name
-# @param attrs
-# @param default
+
 def get_attribute_ints_with_name(name, attrs, default=None):
+    """! Retrieves the attrs[name_idx].ints from attrs.
+    If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
+    If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
+    If name does not exist in attrs, the default provided by the caller is used.
+    If the caller doesn't supply a default, an error is thrown.
+
+    @param name
+    @param attrs
+    @param default
+    """
     attrs_names = [attr.name for attr in attrs]
     try:
         name_idx = attrs_names.index(name)
@@ -142,8 +157,9 @@ def get_attribute_ints_with_name(name, attrs, default=None):
             )
 
 
-## Description missing
 class OnnxTensorCategory(enum.Enum):
+    """!  Description missing"""
+
     Input = auto()
     Output = auto()
     Hidden = auto()
@@ -167,8 +183,9 @@ class OnnxTensorCategory(enum.Enum):
 
 
 @dataclass
-## Description missing
 class OnnxTensorType:
+    """!  Description missing"""
+
     shape: List[int]
     elem_type: int
     category: OnnxTensorCategory

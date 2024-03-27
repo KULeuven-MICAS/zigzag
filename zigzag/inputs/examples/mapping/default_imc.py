@@ -9,5 +9,5 @@ mapping = {
         "core_allocation": 1,
         "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
         "spatial_mapping_hint": {"D1": ["G"], "D2": ["C"]},
-        },
+    },
 }

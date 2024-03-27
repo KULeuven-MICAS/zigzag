@@ -1,18 +1,20 @@
 from abc import ABCMeta, abstractmethod
 
 
-## Abstract base class that represents a parser of an onnx operator. Example: Conv, MatMul, etc.
 class Parser(metaclass=ABCMeta):
-    ## The class constructor
-    # @param node_id
-    # @param node
-    # @param nodes_outputs
-    # @param mapping
-    # @param onxx_model
-    # @param accelerator
+    """!  Abstract base class that represents a parser of an onnx operator. Example: Conv, MatMul, etc."""
+
     def __init__(
         self, node_id, node, nodes_outputs, mapping, onnx_model, accelerator=None
     ) -> None:
+        """!  The class constructor
+        @param node_id
+        @param node
+        @param nodes_outputs
+        @param mapping
+        @param onxx_model
+        @param accelerator
+        """
         self.node_id = node_id
         self.node = node
         self.nodes_outputs = nodes_outputs
@@ -21,8 +23,7 @@ class Parser(metaclass=ABCMeta):
         self.accelerator = accelerator
 
     @abstractmethod
-    def run(self):
-        ...
+    def run(self): ...
 
     @staticmethod
     def get_spatial_mappings(accelerator, core_allocation):

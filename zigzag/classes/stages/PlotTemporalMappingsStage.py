@@ -7,20 +7,22 @@ from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
 
-## Class that passes through all results yielded by substages, but keeps the TMs cme's and saves a plot.
-class PlotTemporalMappingsStage(Stage):
 
-    ## The class constructor
-    # @param list_of_callables: see Stage
-    # @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-    # in kwargs (thus supplied by higher level runnables)
-    # @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+class PlotTemporalMappingsStage(Stage):
+    """!  Class that passes through all results yielded by substages, but keeps the TMs cme's and saves a plot."""
+
     def __init__(self, list_of_callables, *, plot_filename_pattern, **kwargs):
+        """!  The class constructor
+        @param list_of_callables: see Stage
+        @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
+        in kwargs (thus supplied by higher level runnables)
+        @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+        """
         super().__init__(list_of_callables, **kwargs)
         self.plot_filename_pattern = plot_filename_pattern
 
-    ## Run the compare stage by comparing a new cost model output with the current best found result.
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
+        """!  Run the compare stage by comparing a new cost model output with the current best found result."""
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         cmes = []
         filename = self.plot_filename_pattern

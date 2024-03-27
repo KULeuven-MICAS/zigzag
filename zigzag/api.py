@@ -1,8 +1,10 @@
+from onnx import ModelProto  # type: ignore
+
 from zigzag.classes.stages import *
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from typing import Type
 import re
-from onnx import ModelProto
+
 
 def get_hardware_performance_zigzag(
     workload,
@@ -81,6 +83,7 @@ def get_hardware_performance_zigzag(
 
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
 
+
 def get_hardware_performance_zigzag_imc(
     workload,
     accelerator,
@@ -93,9 +96,9 @@ def get_hardware_performance_zigzag_imc(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = ( 
+    _logging_format = (
         "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )   
+    )
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -108,7 +111,7 @@ def get_hardware_performance_zigzag_imc(
     else:
         raise NotImplementedError(
             "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )   
+        )
 
     # Check workload format and based on it select the correct workload parser stage
     try:
@@ -144,7 +147,7 @@ def get_hardware_performance_zigzag_imc(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
-        maximize_hardware_utilization=True, # only evaluate spatial mapping with top2 utilization (fast simulation)
+        maximize_hardware_utilization=True,  # only evaluate spatial mapping with top2 utilization (fast simulation)
         enable_weight_diagonal_mapping=True,  # required by SpatialMappingGeneratorStage
         loma_show_progress_bar=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is smaller than the memory read bw,
@@ -158,7 +161,14 @@ def get_hardware_performance_zigzag_imc(
     # Get CME from answer
     cmes = answers
 
-    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes[0][0].tclk, cmes[0][0].area_total, cmes
+    return (
+        cmes[0][0].energy_total,
+        cmes[0][0].latency_total2,
+        cmes[0][0].tclk,
+        cmes[0][0].area_total,
+        cmes,
+    )
+
 
 def get_hardware_performance_zigzag_pe_array_scaling(
     workload,
@@ -314,6 +324,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
 
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
 
+
 def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     workload,
     accelerator,
@@ -382,7 +393,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
         # By default, if the parameter is not defined, it will be set as False internally.
         access_same_data_considered_as_no_access=True,
         enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
-        maximize_hardware_utilization=True, # only evaluate spatial mapping with highest hardware utilization (fast simulation speed)
+        maximize_hardware_utilization=True,  # only evaluate spatial mapping with highest hardware utilization (fast simulation speed)
     )
 
     # Launch the MainStage
@@ -391,6 +402,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     cmes = answers
 
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
+
 
 if __name__ == "__main__":
     workload = "zigzag/inputs/examples/workload/mobilenetv2.onnx"

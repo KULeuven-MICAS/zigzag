@@ -1,36 +1,30 @@
 import logging
 from zigzag.utils import pickle_deepcopy
-from zigzag.classes.cost_model.cost_model import (
-    CostModelEvaluation, PortActivity)
+from zigzag.classes.cost_model.cost_model import CostModelEvaluation, PortActivity
 
 logger = logging.getLogger(__name__)
 
-## Class that stores inputs and runs them through the zigzag cost model.
-#
-# Initialize the cost model evaluation with the following inputs:
-# - accelerator: the accelerator that includes the core on which to run the layer
-# - layer: the layer to run
-# - spatial_mapping: the spatial mapping
-# - temporal_mapping: the temporal mapping
-#
-# From these parameters, the following attributes are computed:
-# * core: The core on which the layer is ran. This should be specified in the LayerNode attributes.
-# * mapping: The combined spatial and temporal mapping object where access patterns are computed.
-#
-# The following cost model attributes are also initialized:
-# - mem_energy_breakdown: The energy breakdown for all operands
-# - energy: The total energy
-#
-# After initialization, the cost model evaluation is run.
-class CostModelEvaluationForIMC(CostModelEvaluation):
 
-    ## The class constructor
-    # After initialization, the cost model evaluation is run
-    # @param accelerator the accelerator that includes the core on which to run the
-    # @param layer the layer to run
-    # @param spatial_mapping the spatial mapping
-    # @param temporal_mapping the temporal mapping
-    # @param access_same_data_considered_as_no_access (optional)
+class CostModelEvaluationForIMC(CostModelEvaluation):
+    """!  Class that stores inputs and runs them through the zigzag cost model.
+
+    Initialize the cost model evaluation with the following inputs:
+    - accelerator: the accelerator that includes the core on which to run the layer
+    - layer: the layer to run
+    - spatial_mapping: the spatial mapping
+    - temporal_mapping: the temporal mapping
+
+    From these parameters, the following attributes are computed:
+    * core: The core on which the layer is ran. This should be specified in the LayerNode attributes.
+    * mapping: The combined spatial and temporal mapping object where access patterns are computed.
+
+    The following cost model attributes are also initialized:
+    - mem_energy_breakdown: The energy breakdown for all operands
+    - energy: The total energy
+
+    After initialization, the cost model evaluation is run.
+    """
+
     def __init__(
         self,
         *,
@@ -41,12 +35,22 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
     ):
-        super().__init__(accelerator=accelerator,
-                         layer=layer,
-                         spatial_mapping=spatial_mapping,
-                         spatial_mapping_int=spatial_mapping_int,
-                         temporal_mapping=temporal_mapping,
-                         access_same_data_considered_as_no_access=access_same_data_considered_as_no_access)
+        """!  The class constructor
+        After initialization, the cost model evaluation is run
+        @param accelerator the accelerator that includes the core on which to run the
+        @param layer the layer to run
+        @param spatial_mapping the spatial mapping
+        @param temporal_mapping the temporal mapping
+        @param access_same_data_considered_as_no_access (optional)
+        """
+        super().__init__(
+            accelerator=accelerator,
+            layer=layer,
+            spatial_mapping=spatial_mapping,
+            spatial_mapping_int=spatial_mapping_int,
+            temporal_mapping=temporal_mapping,
+            access_same_data_considered_as_no_access=access_same_data_considered_as_no_access,
+        )
 
     def __str__(self):
         return super().__str__()
@@ -65,9 +69,11 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         return {
             "outputs": {
                 "memory": {
-                    "utilization": self.mem_utili_shared
-                    if hasattr(self, "mem_utili_shared")
-                    else None,
+                    "utilization": (
+                        self.mem_utili_shared
+                        if hasattr(self, "mem_utili_shared")
+                        else None
+                    ),
                     "word_accesses": self.memory_word_access,
                 },
                 "energy": {
@@ -111,21 +117,28 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             "inputs": {
                 "accelerator": self.accelerator,
                 "layer": self.layer,
-                "spatial_mapping": self.spatial_mapping_int
-                if hasattr(self, "spatial_mapping_int")
-                else None,
-                "temporal_mapping": self.temporal_mapping
-                if hasattr(self, "temporal_mapping")
-                else None,
+                "spatial_mapping": (
+                    self.spatial_mapping_int
+                    if hasattr(self, "spatial_mapping_int")
+                    else None
+                ),
+                "temporal_mapping": (
+                    self.temporal_mapping if hasattr(self, "temporal_mapping") else None
+                ),
             },
         }
 
-    ## Simple JSON representation used for saving this object to a simple json file.
     def __simplejsonrepr__(self):
-        return {"energy": self.energy_total, "latency": self.latency_total2, "tclk": self.tclk, "area": self.area_total}
+        """!  Simple JSON representation used for saving this object to a simple json file."""
+        return {
+            "energy": self.energy_total,
+            "latency": self.latency_total2,
+            "tclk": self.tclk,
+            "area": self.area_total,
+        }
 
-    ## Run the cost model evaluation.
     def run(self):
+        """!  Run the cost model evaluation."""
         super().calc_memory_utilization()
         super().calc_memory_word_access()
         self.calc_energy()
@@ -148,34 +161,37 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # get total area
         self.area_total = self.imc_area + self.mem_area
 
-    ## Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy.
     def calc_energy(self):
+        """!  Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy."""
         # - TODO: Interconnection energy
         self.calc_MAC_energy_cost()
         super().calc_memory_energy_cost()
 
-    ## Calculate the dynamic MAC energy
     def calc_MAC_energy_cost(self):
+        """!  Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
-        self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(self.layer, self.mapping)
+        self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(
+            self.layer, self.mapping
+        )
         self.MAC_energy = sum([energy for energy in self.MAC_energy_breakdown.values()])
 
-    ##  Calculate latency in 4 steps
-    #
-    # 1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
-    # here we start with calculating the required (or allowed) memory updating window by comparing the effective
-    # data size with the physical memory size at each level. If the effective data size is smaller than 50%
-    # of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect);
-    # otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
-    #
-    # 2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,
-    # assuming we have enough memory ports.
-    #
-    # 3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
-    # data transfer attributes per physical memory port.
-    #
-    # 4) Finally, we combine the stall/slack of each memory port to get the final latency.
     def calc_latency(self):
+        """!   Calculate latency in 4 steps
+
+        1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
+        here we start with calculating the required (or allowed) memory updating window by comparing the effective
+        data size with the physical memory size at each level. If the effective data size is smaller than 50%
+        of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect);
+        otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
+
+        2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,
+        assuming we have enough memory ports.
+
+        3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
+        data transfer attributes per physical memory port.
+
+        4) Finally, we combine the stall/slack of each memory port to get the final latency.
+        """
         super().calc_double_buffer_flag()
         super().calc_allowed_and_real_data_transfer_cycle_per_DTL()
         # Update the latency model to fit IMC requirement
@@ -187,14 +203,15 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         cycles_per_mac = hd_param["input_precision"] / hd_param["input_bit_per_cycle"]
         super().calc_overall_latency(cycles_per_mac=cycles_per_mac)
 
-    ## This function calculate the stalling cycles for IMC (In-Memory-Computing) hardware template
-    # Consider memory sharing and port sharing, combine the data transfer activity
-    # Step 1: collect port activity per memory instance per physical memory port
-    # Step 2: calculate SS combine and MUW union parameters per physical memory port
-    # Note: this calculation is incorrect when following conditions are ALL true:
-    # (1) there are more than two mem levels for storing weights, e.g. dram -> cache -> IMC cells
-    # (2) extra stalling is introduced due to the intermediate mem levels (e.g. due to insifficuent bw of cache)
     def combine_data_transfer_rate_per_physical_port(self):
+        """!  This function calculate the stalling cycles for IMC (In-Memory-Computing) hardware template
+        Consider memory sharing and port sharing, combine the data transfer activity
+        Step 1: collect port activity per memory instance per physical memory port
+        Step 2: calculate SS combine and MUW union parameters per physical memory port
+        Note: this calculation is incorrect when following conditions are ALL true:
+        (1) there are more than two mem levels for storing weights, e.g. dram -> cache -> IMC cells
+        (2) extra stalling is introduced due to the intermediate mem levels (e.g. due to insifficuent bw of cache)
+        """
         # Step 1: collect port activity per memory instance per physical memory port
         port_activity_collect = []
         for mem_instance in self.mem_level_list:
@@ -242,7 +259,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         self.port_activity_collect = port_activity_collect
 
         # Step 2: calculate weight loading cycles
-        layer_const_operand = self.layer.constant_operands[0] # e.g. "W"
+        layer_const_operand = self.layer.constant_operands[0]  # e.g. "W"
         # get spatial mapping in a macro
         core = next(iter(self.accelerator.cores))
         operational_array = core.operational_array
@@ -261,13 +278,15 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # check if there is only one mem level for weight in accelerator. No weight loading required if that is the case.
         weight_mem_op = self.layer_op_to_mem_op[layer_const_operand]
         weight_mem_hierarchy: list = memory_hierarchy[weight_mem_op]
-        if len(weight_mem_hierarchy) == 1: # there is only one mem level for weight
+        if len(weight_mem_hierarchy) == 1:  # there is only one mem level for weight
             require_weight_loading = False
         else:
             require_weight_loading = True
         # check how many times of weight reloading is required
         # here assume imc cells is the lowest mem level for weight and rw_port
-        for imc_port, imc_ports in port_activity_collect[0].items(): # 0: the lowest mem node in the graph
+        for imc_port, imc_ports in port_activity_collect[
+            0
+        ].items():  # 0: the lowest mem node in the graph
             for port in imc_ports:
                 if port.served_op_lv_dir[2] == "wr_in_by_high":
                     nb_of_weight_reload_periods = port.period_count
@@ -281,7 +300,9 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
         # calculate the total number of weight loading cycles
         if require_weight_loading:
-            weight_loading_cycles = nb_of_weight_reload_periods * mapped_rows_total * mapped_group_depth
+            weight_loading_cycles = (
+                nb_of_weight_reload_periods * mapped_rows_total * mapped_group_depth
+            )
         else:
             weight_loading_cycles = 0
 
@@ -299,18 +320,27 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         sum.mem_energy += other.mem_energy
         for op in sum.MAC_energy_breakdown.keys():
             if op in other.MAC_energy_breakdown.keys():
-                sum.MAC_energy_breakdown[op] = self.MAC_energy_breakdown[op] + other.MAC_energy_breakdown[op]
+                sum.MAC_energy_breakdown[op] = (
+                    self.MAC_energy_breakdown[op] + other.MAC_energy_breakdown[op]
+                )
 
         for op in sum.mem_energy_breakdown.keys():
             if op in other.mem_energy_breakdown.keys():
                 l = []
                 for i in range(
-                    min(len(self.mem_energy_breakdown[op]), len(other.mem_energy_breakdown[op]))
+                    min(
+                        len(self.mem_energy_breakdown[op]),
+                        len(other.mem_energy_breakdown[op]),
+                    )
                 ):
                     l.append(
-                        self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i]
+                        self.mem_energy_breakdown[op][i]
+                        + other.mem_energy_breakdown[op][i]
                     )
-                i = min(len(self.mem_energy_breakdown[op]), len(other.mem_energy_breakdown[op]))
+                i = min(
+                    len(self.mem_energy_breakdown[op]),
+                    len(other.mem_energy_breakdown[op]),
+                )
                 l += self.mem_energy_breakdown[op][i:]
                 l += other.mem_energy_breakdown[op][i:]
                 sum.mem_energy_breakdown[op] = l
@@ -337,12 +367,18 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                 sum.mem_energy_breakdown_further[op] = l
 
         # Get all the operands from other that are not in self and add them to the energy breakdown as well
-        op_diff = set(other.mem_energy_breakdown.keys()) - set(self.mem_energy_breakdown.keys())
+        op_diff = set(other.mem_energy_breakdown.keys()) - set(
+            self.mem_energy_breakdown.keys()
+        )
         for op in op_diff:
             sum.mem_energy_breakdown[op] = other.mem_energy_breakdown[op]
-            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[op]
+            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[
+                op
+            ]
 
-        op_diff = set(other.MAC_energy_breakdown.keys()) - set(self.MAC_energy_breakdown.keys())
+        op_diff = set(other.MAC_energy_breakdown.keys()) - set(
+            self.MAC_energy_breakdown.keys()
+        )
         for op in op_diff:
             sum.MAC_energy_breakdown[op] = other.MAC_energy_breakdown[op]
 
@@ -375,7 +411,9 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         sum.data_offloading_cycle += other.data_offloading_cycle
         sum.ideal_cycle += other.ideal_cycle
         sum.SS_comb += other.SS_comb  # stalling cycles
-        sum.ideal_temporal_cycle += other.ideal_temporal_cycle  # ideal computation cycles without stalling
+        sum.ideal_temporal_cycle += (
+            other.ideal_temporal_cycle
+        )  # ideal computation cycles without stalling
         sum.latency_total0 += other.latency_total0
         sum.latency_total1 += other.latency_total1
         sum.latency_total2 += other.latency_total2
@@ -461,4 +499,3 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                 delattr(sum, attr)
 
         return sum
-

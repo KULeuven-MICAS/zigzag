@@ -7,7 +7,11 @@ mapping = {
     "Add": {
         "core_allocation": 1,
         "spatial_mapping": {"D1": ("G", 32), "D2": ("C", 1)},
-        "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
+        "memory_operand_links": {
+            "O": "O",
+            "X": "I2",
+            "Y": "I1",
+        },  # !NOTE These mappings force name usage within add layer
     },
     "Pooling": {
         "core_allocation": 1,

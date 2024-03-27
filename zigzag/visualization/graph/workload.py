@@ -33,11 +33,11 @@ def visualize_dnn_graph(G):
     plt.show()
 
 
-if __name__ == "__main__":
-    import zigzag.classes.stages.MainInputParserStages as MainInputParserStages
+# if __name__ == "__main__":
+#     import zigzag.classes.stages.MainInputParserStages as MainInputParserStages
 
-    workload = "zigzag.inputs.examples.workload.resnet18"
-    parsed_workload = MainInputParserStages.parse_workload_from_path_or_from_module(
-        workload
-    )
-    visualize_dnn_graph(parsed_workload)
+#     workload = "zigzag.inputs.examples.workload.resnet18"
+#     parsed_workload = MainInputParserStages.parse_workload_from_path_or_from_module(
+#         workload
+#     )
+#     visualize_dnn_graph(parsed_workload)

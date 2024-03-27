@@ -1,6 +1,7 @@
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage
 from typing import Generator
@@ -9,26 +10,26 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-#################### Description ####################
-## This stage must be processed behind WorkloadStage.
-## This stage removes unused memory level found by SearchUnusedMemoryStage.
-################### Pseudo-code ####################
-## Initialization:
-##  target_act_mem_level, target_output_mem_level: get from mem_update_list
-##  target_const_mem_level = mem_udpate_weight
-## 1. Modify mem structure:
-## for mem in mem_levels(sort_order: from bottom to top):
-##   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
-##     remove ['I'] in mem.served_operand, mem_port_alloc
-##   if ['O'] in mem.served_operand and mem.mem_level > target_output_mem_level:
-##     remove ['O'] in mem.served_operand, mem_port_alloc
-##   if ['W'] in mem.served_operand and mem.mem_level > target_const_mem_level:
-##     remove ['W'] in mem.served_operand, mem_port_alloc
-## 2. Remove unused memory
-## for mem in mem_levels(sort_order: from top to bottom):
-##   if mem.served_operand == empty:
-##     do not add the current mem into the modified architecture
-#####################################################
+# ################### Description ####################
+# # This stage must be processed behind WorkloadStage.
+# # This stage removes unused memory level found by SearchUnusedMemoryStage.
+# ################## Pseudo-code ####################
+# # Initialization:
+# #  target_act_mem_level, target_output_mem_level: get from mem_update_list
+# #  target_const_mem_level = mem_udpate_weight
+# # 1. Modify mem structure:
+# # for mem in mem_levels(sort_order: from bottom to top):
+# #   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
+# #     remove ['I'] in mem.served_operand, mem_port_alloc
+# #   if ['O'] in mem.served_operand and mem.mem_level > target_output_mem_level:
+# #     remove ['O'] in mem.served_operand, mem_port_alloc
+# #   if ['W'] in mem.served_operand and mem.mem_level > target_const_mem_level:
+# #     remove ['W'] in mem.served_operand, mem_port_alloc
+# # 2. Remove unused memory
+# # for mem in mem_levels(sort_order: from top to bottom):
+# #   if mem.served_operand == empty:
+# #     do not add the current mem into the modified architecture
+# ####################################################
 
 
 class RemoveUnusedMemoryStage(Stage):
@@ -105,11 +106,11 @@ class RemoveUnusedMemoryStage(Stage):
             ) in self.layer.operand_dimensionality_order.items():
                 if pr_loop_keys[0] in related_loop:
                     act_operand = operand
-            weight_operand: list = [
+            weight_operand_temp: list = [
                 x for x in self.layer.constant_operands if x != act_operand
             ]  # weight representation in layer
-            assert len(weight_operand) == 1
-            weight_operand: str = weight_operand[0]
+            assert len(weight_operand_temp) == 1
+            weight_operand: str = weight_operand_temp[0]
             act_operand = self.layer.memory_operand_links[
                 act_operand
             ]  # map from layer representation to hardware memory representation
@@ -151,7 +152,7 @@ class RemoveUnusedMemoryStage(Stage):
             assert len(served_dimensions_vec) >= 1
             served_dimensions = served_dimensions_vec[0]
 
-            new_memory_instance = pickle_deepcopy(memory_instance)
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
             new_operands = []
             new_port_alloc = []
             if (act_operand in operands) and curr_mem_level <= target_act_mem_level:
@@ -183,7 +184,7 @@ class RemoveUnusedMemoryStage(Stage):
         id = core.id
         dataflows = core.dataflows
         new_id = id
-        new_dataflows = pickle_deepcopy(dataflows)
+        new_dataflows: list = pickle_deepcopy(dataflows)  # type: ignore
         new_core = Core(
             id=new_id,
             operational_array=operational_array,

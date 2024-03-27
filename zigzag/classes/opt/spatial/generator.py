@@ -9,11 +9,10 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 import math
 
 
-## Class that generates valid user-format spatial mappings.
 class UserSpatialMappingGenerator:
-    ## The class constructor
-    # @param layer
-    # @param accelerator
+    """!  Class that generates valid user-format spatial mappings.
+"""
+
     def __init__(
         self,
         layer,
@@ -23,6 +22,10 @@ class UserSpatialMappingGenerator:
         maximize_hardware_utilization=True,
         enable_weight_diagonal_mapping=False,
     ) -> None:
+        """!  The class constructor
+ @param layer
+ @param accelerator
+"""
         self.layer = layer
         self.accelerator = accelerator
         self.defined_mapping = defined_mapping
@@ -39,28 +42,29 @@ class UserSpatialMappingGenerator:
             enable_weight_diagonal_mapping=self.enable_weight_diagonal_mapping,
         )
 
-    ## Generator that yields user-defined spatial mappings.
-    # User-defined means across operational array dimensions.
-    # For example, this might yield {'D1': (C, 16), 'D2': (K,16)}
-    # In essence it works as follows:
-    # \code{.py}
-    # for each operational array dimension oa_dim (D1, D2, ...):
-    #      for each layer operand layer_op (W, I, O, ...):
-    #       if oa_dim not in served_dimensions(layer_op):
-    #           continue
-    #       else:
-    #           for layer dimensions layer_dim (B, K, ...) in the layer:
-    #               if layer_dim is irrelevant for layer_op:
-    #                   layer_dim can be unrolled maximally
-    #                 if layer_dim is not irrelevant for layer_op:
-    #                   layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
-    # \endcode
     def generate_user_spatial_mappings(
         self,
         enable_mix_spatial_mapping_generation,
         maximize_hardware_utilization,
         enable_weight_diagonal_mapping,
     ):
+        """!  Generator that yields user-defined spatial mappings.
+ User-defined means across operational array dimensions.
+ For example, this might yield {'D1': (C, 16), 'D2': (K,16)}
+ In essence it works as follows:
+ \code{.py}
+ for each operational array dimension oa_dim (D1, D2, ...):
+      for each layer operand layer_op (W, I, O, ...):
+       if oa_dim not in served_dimensions(layer_op):
+           continue
+       else:
+           for layer dimensions layer_dim (B, K, ...) in the layer:
+               if layer_dim is irrelevant for layer_op:
+                   layer_dim can be unrolled maximally
+                 if layer_dim is not irrelevant for layer_op:
+                   layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
+ \endcode
+"""
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
         operational_array: OperationalArray = core.operational_array
@@ -454,7 +458,7 @@ class UserSpatialMappingGenerator:
                                             for key, value in merged_comb.items()
                                         ]
                                     )
-                                    #############
+                                    # ############
                                     # Since the merger will cause the comb is entirely superior to one existing comb,
                                     # the block will kick out that inferior comb.
                                     # e.g. ((K,2), (K,2), (C,2)) becomes ((K,4), (C,2)) after the merger
@@ -520,7 +524,7 @@ class UserSpatialMappingGenerator:
                                                 break
                                         else:
                                             pass
-                                    #############
+                                    # ############
                                     result_comb = merged_comb
                                 else:
                                     result_comb = comb
@@ -632,7 +636,7 @@ class UserSpatialMappingGenerator:
         if len(target_layer_dim) == 0:
             return user_spatial_mapping
 
-        ############################################
+        # ###########################################
         # Get existed mapping size on act_served_oa_dim, which will be added with OX, OY later.
         if (
             act_served_oa_dim_name in user_spatial_mapping.keys()
@@ -711,7 +715,7 @@ class UserSpatialMappingGenerator:
                 weight_ir_loop_size *= mapping_size
 
         # At this point, we already know what sm mapping existed.
-        ############################################
+        # ###########################################
 
         # Next we will try to add possible OX / OY mapping
         # find all possible OX / OY mapping breakdown and put them in the pool
@@ -912,16 +916,26 @@ class UserSpatialMappingGenerator:
     @staticmethod
     def identify_layer_operand_representation(layer):
         # activation representation: list (conv layers)
-        act_operand = [operand for operand in layer.operand_loop_dim.keys() if
-                       len(layer.operand_loop_dim[operand]["pr"]) > 0]
+        act_operand = [
+            operand
+            for operand in layer.operand_loop_dim.keys()
+            if len(layer.operand_loop_dim[operand]["pr"]) > 0
+        ]
         if len(act_operand) == 0:  # true for fully-connected (fc) layers
             # weight representation (fc layers)
-            const_operand = [operand for operand in layer.operand_loop_dim.keys() if
-                             len(layer.operand_loop_dim[operand]["ir"]) == 0][0]
+            const_operand = [
+                operand
+                for operand in layer.operand_loop_dim.keys()
+                if len(layer.operand_loop_dim[operand]["ir"]) == 0
+            ][0]
             # activation representation (fc layers)
-            act_operand = [operand for operand in layer.input_operands if operand != const_operand][0]
+            act_operand = [
+                operand for operand in layer.input_operands if operand != const_operand
+            ][0]
         else:
             act_operand = act_operand[0]
             # weight representation (conv layers)
-            const_operand = [operand for operand in layer.input_operands if operand != act_operand][0]
+            const_operand = [
+                operand for operand in layer.input_operands if operand != act_operand
+            ][0]
         return act_operand, const_operand

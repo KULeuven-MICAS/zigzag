@@ -7,32 +7,38 @@ from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.opt.temporal.loma.loop import Loop
 
-## Missing description
+
 class MemoryHierarchyTooSmallException(Exception):
+    """!  Missing description"""
+
     pass
 
-## Missing description
+
 class MemoryTooSmallException(Exception):
+    """!  Missing description"""
+
     pass
 
-## Class that handles allocation of a loop ordering to the memories in the hierarchy.
-class MemoryAllocator:
 
-    ## The class constructor
-    # 
-    # Initialize the class with:
-    # - the layer
-    # - the memory hierarchy parameters
-    # - the spatial mapping
-    # 
-    # through main_inputs and
-    # - ordering
-    # 
-    # @param accelerator
-    # @param layer
-    # @param spatial_mapping
-    # @param ordering
+class MemoryAllocator:
+    """!  Class that handles allocation of a loop ordering to the memories in the hierarchy."""
+
     def __init__(self, accelerator, layer, spatial_mapping, ordering: List):
+        """!  The class constructor
+
+        Initialize the class with:
+        - the layer
+        - the memory hierarchy parameters
+        - the spatial mapping
+
+        through main_inputs and
+        - ordering
+
+        @param accelerator
+        @param layer
+        @param spatial_mapping
+        @param ordering
+        """
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
@@ -68,7 +74,7 @@ class MemoryAllocator:
 
         # Initialize the allocated loops with the spatial mapping at the operand level for each operand
         self.allocated = {}
-        for (layer_op, mem_op) in self.layer_to_mem_op.items():
+        for layer_op, mem_op in self.layer_to_mem_op.items():
             self.allocated[mem_op] = [
                 Loop(dim, size, "spatial")
                 for (dim, size) in self.spatial_mapping.get_unrolling(
@@ -85,11 +91,12 @@ class MemoryAllocator:
         # The sublists represent the memory levels for that operand and contain the loops allocated to that level.
         self.temporal_mapping_dict = {layer_op: [] for layer_op in layer_ops}
 
-    ## Run the memory allocation process.
-    # Start by the lowest memory hierarchy level and allocate as much loops as possible
-    # for the different operands. The spatial unrolling has to be taken into account at
-    # each memory level in the hierarchy.
     def run(self):
+        """!  Run the memory allocation process.
+        Start by the lowest memory hierarchy level and allocate as much loops as possible
+        for the different operands. The spatial unrolling has to be taken into account at
+        each memory level in the hierarchy.
+        """
 
         # self.nodes contains the different memory nodes in bottom-up fashion
         core_id = self.layer.core_allocation
@@ -110,17 +117,18 @@ class MemoryAllocator:
 
         return temporal_mapping
 
-    ## Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
-    # @param node: The MemoryLevel to which we will allocate loops.
-    # @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
     def allocate_node(self, node: MemoryLevel, top_levels: List[MemoryLevel]):
+        """!  Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
+        @param node: The MemoryLevel to which we will allocate loops.
+        @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
+        """
 
         # Find out which mem operands this node stores
         mem_ops = node.operands
         # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
         # Does this node support double buffering
-        db_support=node.memory_instance.double_buffering_support
+        db_support = node.memory_instance.double_buffering_support
         # Get the capacity of this memory node (in bits)
         mem_capacity = node.memory_instance.size
 
@@ -136,7 +144,7 @@ class MemoryAllocator:
             mem_ops, all_sizes, node, top_levels
         )
 
-        for (best_loop_idx, mem_op) in zip(best_loop_idxs, mem_ops):
+        for best_loop_idx, mem_op in zip(best_loop_idxs, mem_ops):
             # Now that we have the combination of loop_idx for each mem_op, add them
             # to the allocated loops and remove them from the unallocated loops
             loops_to_allocate = self.unallocated[mem_op][:best_loop_idx].copy()
@@ -159,7 +167,7 @@ class MemoryAllocator:
             spatial_loops = self.spatial_mapping.get_unrolling(
                 op=layer_op, level=mem_level_op
             )
-            for (loop_dim, loop_size) in spatial_loops:
+            for loop_dim, loop_size in spatial_loops:
                 spatial_loop = Loop(dimension=loop_dim, size=loop_size, type="spatial")
                 self.allocated[mem_op].append(spatial_loop)
 
@@ -175,12 +183,15 @@ class MemoryAllocator:
             # Increment the mem_level we are currently at for this layer_op by 1
             self.mem_level[layer_op] += 1
 
-    ## Calculate the required memory size to store different
-    # slices of the unallocated loops, with 'mem_capacity' as an upper bound.
-    # @param mem_op
-    # @param mem_capacity Capacity of the memory node in bits.
-    # @param db_support Double buffering support of this node
-    def calc_size_slices(self, mem_op: str, mem_capacity: int, db_support: bool=False):
+    def calc_size_slices(
+        self, mem_op: str, mem_capacity: int, db_support: bool = False
+    ):
+        """!  Calculate the required memory size to store different
+        slices of the unallocated loops, with 'mem_capacity' as an upper bound.
+        @param mem_op
+        @param mem_capacity Capacity of the memory node in bits.
+        @param db_support Double buffering support of this node
+        """
 
         # Already allocated loops for this mem_op
         allocated_loops = self.allocated[mem_op]
@@ -191,8 +202,10 @@ class MemoryAllocator:
 
         # If this memory supports double buffering get the size it would take to allocate everything
         if db_support:
-            all_loops=(allocated_loops+unallocated_loops[:len(unallocated_loops)+1])
-            all_loops_size=self.calc_loops_size(all_loops,mem_op,unallocated_loops)
+            all_loops = (
+                allocated_loops + unallocated_loops[: len(unallocated_loops) + 1]
+            )
+            all_loops_size = self.calc_loops_size(all_loops, mem_op, unallocated_loops)
 
         for i in range(
             len(unallocated_loops) + 1
@@ -206,8 +219,8 @@ class MemoryAllocator:
             size = self.calc_loops_size(loops, mem_op, unallocated_loops)
             # double size allocated if the node uses double buffering
             if db_support:
-                if len(unallocated_loops[i:])>0 and size<all_loops_size:
-                    size*=2
+                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:
+                    size *= 2
             if size <= mem_capacity:
                 sizes.append(size)
             else:
@@ -218,11 +231,12 @@ class MemoryAllocator:
                 break  # Stop as soon as we have added a loop that overflows the memory
         return sizes
 
-    ## Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
-    # @param loops: The loops we want to calculate the size for.
-    # @para mmem_op: The memory operand we are calculating the size for.
-    # @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
     def calc_loops_size(self, loops: List, mem_op: str, all_unallocated_loops: List):
+        """!  Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
+        @param loops: The loops we want to calculate the size for.
+        @para mmem_op: The memory operand we are calculating the size for.
+        @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
+        """
 
         # First we compute the size of all loop dimensions present in this layer given the loops in 'loops'.
         all_dimensions = self.layer.loop_dim_list
@@ -243,7 +257,12 @@ class MemoryAllocator:
         if mem_op == "O":
             ir_dims = op_dimensions["ir"]  # Irrelevant dimensions
             layer_op = self.mem_to_layer_op[mem_op]
-            unallocated_spatial_dims = [dim for (dim, size) in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])]
+            unallocated_spatial_dims = [
+                dim
+                for (dim, size) in self.spatial_mapping.get_unrolling_all(
+                    layer_op, self.mem_level[layer_op]
+                )
+            ]
             unallocated_temporal_dims = [
                 unallocated_loop.dimension for unallocated_loop in all_unallocated_loops
             ]
@@ -260,15 +279,15 @@ class MemoryAllocator:
 
         return tensor_size_bits
 
-
-    ## Find the best combination of loops from different mem_ops.
-    # Best is defined as the combination that minimizes the number of accesses
-    # to the memory level above.
-    # @param mem_ops
-    # @param all_sizes
-    # @param node
-    # @param top_levels
     def find_best_loop_combination(self, mem_ops, all_sizes, node, top_levels):
+        """!  Find the best combination of loops from different mem_ops.
+        Best is defined as the combination that minimizes the number of accesses
+        to the memory level above.
+        @param mem_ops
+        @param all_sizes
+        @param node
+        @param top_levels
+        """
         # TODO: Take into account the operand precision which can change based on the loops picked
         mem_capacity = node.memory_instance.size
 

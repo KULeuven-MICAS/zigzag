@@ -8,8 +8,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-## Description missing
 class ONNXModelParserStage(Stage):
+    """!  Description missing"""
+
     def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
         super().__init__(list_of_callables, **kwargs)
         self.onnx_model_parser = ONNXModelParser(workload, mapping)
@@ -23,7 +24,7 @@ class ONNXModelParserStage(Stage):
             self.list_of_callables[1:],
             onnx_model=onnx_model,
             workload=workload,
-            **self.kwargs
+            **self.kwargs,
         )
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info

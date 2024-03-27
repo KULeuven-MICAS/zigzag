@@ -6,14 +6,16 @@ from zigzag.classes.stages.Stage import Stage
 
 logger = logging.getLogger(__name__)
 
-## Description missing
-class TemporalOrderingConversionStage(Stage):
 
-    ## The class constructor
-    # Initialize the accelerator and layer attributes.
+class TemporalOrderingConversionStage(Stage):
+    """!  Description missing"""
+
     def __init__(
         self, list_of_callables, *, accelerator, layer, spatial_mapping, **kwargs
     ):
+        """!  The class constructor
+        Initialize the accelerator and layer attributes.
+        """
         super().__init__(list_of_callables, **kwargs)
         self.check_layer(layer)
         self.layer = layer
@@ -21,16 +23,17 @@ class TemporalOrderingConversionStage(Stage):
         self.accelerator = accelerator
 
     @staticmethod
-    ## Check the layer attribute of the main_inputs:
-    # 
-    # check that the layer includes:
-    # - the core which it is allocated to
-    # - the user-defined spatial mapping
-    # 
-    # If not, a ValueError is raised.
-    # 
-    # @return: True
     def check_layer(layer):
+        """!  Check the layer attribute of the main_inputs:
+
+        check that the layer includes:
+        - the core which it is allocated to
+        - the user-defined spatial mapping
+
+        If not, a ValueError is raised.
+
+        @return: True
+        """
         if not layer.core_allocation:
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError()
@@ -42,9 +45,10 @@ class TemporalOrderingConversionStage(Stage):
 
         return True
 
-    ## Run this stage by converting the user-defined temporal loop ordering
-    # to the memory-level based temporal mapping representation.
     def run(self):
+        """!  Run this stage by converting the user-defined temporal loop ordering
+        to the memory-level based temporal mapping representation.
+        """
         temporal_mapping = self.convert_user_temporal_mapping(
             self.layer.user_temporal_ordering
         )

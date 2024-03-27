@@ -35,8 +35,9 @@ from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 
-## State of SALSA, storing an ordering, his temporal mapping and his energy value.
+
 class SalsaState:
+    """!  State of SALSA, storing an ordering, his temporal mapping and his energy value."""
 
     def __init__(
         self,
@@ -82,9 +83,10 @@ class SalsaState:
         else:
             self.opt_criterion = None
 
-    ## Swap between the element at positon i and j in the ordering
-    # and return the new resulting state.
     def swap(self, i, j):
+        """!  Swap between the element at positon i and j in the ordering
+        and return the new resulting state.
+        """
 
         swapped_ordering = deepcopy(self.ordering)
         temp = swapped_ordering[i]

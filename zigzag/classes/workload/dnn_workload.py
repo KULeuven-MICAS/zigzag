@@ -4,14 +4,16 @@ from zigzag.classes.workload.layer_node import LayerNode
 from typing import Dict, Any
 from networkx import DiGraph
 
-## Description missing
-class DNNWorkload(DiGraph):
 
-    ## The class constructor
-    # Collect all the algorithmic workload information here.
-    # @param workload: user-defined workload file (py).
-    # @return (self): Directed Graph with nodes the layers and edges the connections between layers.
+class DNNWorkload(DiGraph):
+    """!  Description missing"""
+
     def __init__(self, workload: Dict[Any, Dict], mapping: Dict[Any, Dict], **attr):
+        """!  The class constructor
+        Collect all the algorithmic workload information here.
+        @param workload: user-defined workload file (py).
+        @return (self): Directed Graph with nodes the layers and edges the connections between layers.
+        """
         super().__init__(**attr)
 
         layer_id_to_obj = {}  # Lookup dict for id to LayerNode object translation
@@ -22,6 +24,7 @@ class DNNWorkload(DiGraph):
             #  What is special about max pooling?
             # elif type(layer_id) == str and layer_id[0:6] == 'concat':
             #     continue
+            # TODO this overrides mapping info defined within the workload itself!
             if layer["operator_type"] in mapping.keys():
                 for attr_name, attr_va in mapping[layer["operator_type"]].items():
                     layer[attr_name] = attr_va
@@ -37,7 +40,7 @@ class DNNWorkload(DiGraph):
             self.layer_node_list.append(layer_node)
             # Find all of its operand sources and add edges accordingly
             edges = []
-            for (op, parent_list) in layer.get("operand_source", {}).items():
+            for op, parent_list in layer.get("operand_source", {}).items():
                 for parent_id in parent_list:
                     parent_layer = layer_id_to_obj[parent_id]
                     edges.append((parent_layer, layer_node))

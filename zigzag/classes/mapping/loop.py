@@ -1,13 +1,15 @@
 from abc import ABCMeta
 
-## Abstract base class that represents a loop. Could be spatial or temporal loop.
-class Loop(metaclass=ABCMeta):
 
-    ## The class constructor
-    # Initialize this Loop object.
-    # @param dimension (str): The dimension, e.g. "K"
-    # @param size (float): The loop size, e.g. 16.0
+class Loop(metaclass=ABCMeta):
+    """!  Abstract base class that represents a loop. Could be spatial or temporal loop."""
+
     def __init__(self, dimension, size) -> None:
+        """!  The class constructor
+        Initialize this Loop object.
+        @param dimension (str): The dimension, e.g. "K"
+        @param size (float): The loop size, e.g. 16.0
+        """
         self.type = None
         self.dimension = dimension
         self.size = size

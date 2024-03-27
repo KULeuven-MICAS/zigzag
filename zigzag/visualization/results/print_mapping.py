@@ -81,9 +81,7 @@ def print_mapping(cme):
     mem_op_to_layer_op = cme.mem_op_to_layer_op
     layer_op_to_mem_op = cme.layer_op_to_mem_op
     mem_name = {}
-    for (mem_op, mems_all_levels) in cme.accelerator.cores[
-        0
-    ].mem_hierarchy_dict.items():
+    for mem_op, mems_all_levels in cme.accelerator.cores[0].mem_hierarchy_dict.items():
         layer_op = mem_op_to_layer_op[mem_op]
         mem_name[layer_op] = []
         for mem_a_level in mems_all_levels:

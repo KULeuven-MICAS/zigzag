@@ -8,28 +8,32 @@ from zigzag.classes.stages.Stage import Stage
 logger = logging.getLogger(__name__)
 
 
-## Pipeline stage that converts the spatial mapping from a
-# user-provided spatial mapping across operational array dimensions
-# to the internal spatial mapping representation used in the cost model.
 class SpatialMappingConversionStage(Stage):
-    ## The class constructor
-    # Initialize the accelerator and layer attributes.
+    """!  Pipeline stage that converts the spatial mapping from a
+    user-provided spatial mapping across operational array dimensions
+    to the internal spatial mapping representation used in the cost model.
+    """
+
     def __init__(self, list_of_callables, *, accelerator, layer, **kwargs):
+        """!  The class constructor
+        Initialize the accelerator and layer attributes.
+        """
         super().__init__(list_of_callables, **kwargs)
         self.check_layer(layer)  # raise ValueError in case anything is wrong
         self.layer = layer
         self.accelerator = accelerator
 
     @staticmethod
-    ## Check the layer attribute of the main_inputs:
-    #
-    # check that the layer includes:
-    # - the core which it is allocated to
-    # - the user-defined spatial mapping
-    #
-    # If not, a ValueError is raised.
-    # @return: True
     def check_layer(layer):
+        """!  Check the layer attribute of the main_inputs:
+
+        check that the layer includes:
+        - the core which it is allocated to
+        - the user-defined spatial mapping
+
+        If not, a ValueError is raised.
+        @return: True
+        """
         if not isinstance(layer.core_allocation, int):
             logger.critical(f"Layer {layer} has no core allocation.")
             raise ValueError(f"Missing core allocation for {layer}.")
@@ -66,17 +70,16 @@ class SpatialMappingConversionStage(Stage):
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
-    ## Convert the user-defined spatial mapping across operational array dimensions
-    # to the internal SpatialMapping representation.
-    ""
+    ## Convert the user-defined spatial mapping across operational array dimensions to the internal SpatialMapping representation.
 
-    # For this conversion we need to know:
-    # - the user defined spatial mapping
-    # - the core (i.e. operational array) on which the unrolling happens,
-    #     and the memory hierarchy that is connected to that operational array.
-    # @param user_spatial_mapping: The user-defined spatial mapping to be converted.
-    # @returns: A SpatialMapping object with the converted spatial mapping.
     def convert_user_spatial_mapping(self, user_spatial_mapping):
+        """!  For this conversion we need to know:
+        - the user defined spatial mapping
+        - the core (i.e. operational array) on which the unrolling happens,
+            and the memory hierarchy that is connected to that operational array.
+        @param user_spatial_mapping: The user-defined spatial mapping to be converted.
+        @returns: A SpatialMapping object with the converted spatial mapping.
+        """
         # Adjust the user defined spatial mapping size based on the operational array dimension and the layer dimension:
         # E.g. user-provided unrolling is 16 but operational array dimension size iso only 12: change unrolling to 12
         # E.g. user-provided unrolling is 16 but layer dimension is only 12: change unrolling to 12
@@ -133,12 +136,12 @@ class SpatialMappingConversionStage(Stage):
                     limited_mix_user_spatial_mapping_int_on_dim = tuple(
                         limited_mix_user_spatial_mapping_int_on_dim
                     )
-                    limited_user_spatial_mapping[
-                        oa_dim_name
-                    ] = limited_mix_user_spatial_mapping_on_dim
-                    limited_user_spatial_mapping_int[
-                        oa_dim_name
-                    ] = limited_mix_user_spatial_mapping_int_on_dim
+                    limited_user_spatial_mapping[oa_dim_name] = (
+                        limited_mix_user_spatial_mapping_on_dim
+                    )
+                    limited_user_spatial_mapping_int[oa_dim_name] = (
+                        limited_mix_user_spatial_mapping_int_on_dim
+                    )
             else:  # single-dim sm loop
                 limited_user_spatial_mapping_to_check = (
                     self.generate_limited_user_spatial_mapping(
@@ -164,12 +167,12 @@ class SpatialMappingConversionStage(Stage):
                 if limited_user_spatial_mapping_to_check == None:
                     continue  # Skip this spatial dimension if the defined dims in sm don't exist in the layer
                 else:
-                    limited_user_spatial_mapping[
-                        oa_dim_name
-                    ] = limited_user_spatial_mapping_to_check
-                    limited_user_spatial_mapping_int[
-                        oa_dim_name
-                    ] = limited_user_spatial_mapping_int_to_check
+                    limited_user_spatial_mapping[oa_dim_name] = (
+                        limited_user_spatial_mapping_to_check
+                    )
+                    limited_user_spatial_mapping_int[oa_dim_name] = (
+                        limited_user_spatial_mapping_int_to_check
+                    )
             # Update the layer_dim_size to support multiple oa dims unrolling the same loop dim but not unrolling it more than the total layer dim
             # if (
             #     temporal_remainder == 1
@@ -316,9 +319,9 @@ class SpatialMappingConversionStage(Stage):
                                         spatial_mapping_dim
                                     ] *= spatial_mapping_size
                                 else:
-                                    spatial_mapping_lvl_dict[
-                                        spatial_mapping_dim
-                                    ] = spatial_mapping_size
+                                    spatial_mapping_lvl_dict[spatial_mapping_dim] = (
+                                        spatial_mapping_size
+                                    )
                         else:  # single-dim sm loop
                             (spatial_mapping_dim, spatial_mapping_size) = spatial_loop
                             if spatial_mapping_dim in spatial_mapping_lvl_dict.keys():
@@ -326,9 +329,9 @@ class SpatialMappingConversionStage(Stage):
                                     spatial_mapping_dim
                                 ] *= spatial_mapping_size
                             else:
-                                spatial_mapping_lvl_dict[
-                                    spatial_mapping_dim
-                                ] = spatial_mapping_size
+                                spatial_mapping_lvl_dict[spatial_mapping_dim] = (
+                                    spatial_mapping_size
+                                )
                         # Then remove this dim_name and spatial loop key value pair from the dict
                         # as the spatial mapping representation is a level-by-level one.
                         del user_sm_copy[dim_name]
@@ -348,24 +351,36 @@ class SpatialMappingConversionStage(Stage):
             # We will merge together if the top memory level is serving multiple oa dims
             # and there are layer dims existing on multiple oa dims.
             top_level_spatial_mapping_dict = {}
-            for (dim_name, spatial_loop) in user_sm_copy.items():
+            for dim_name, spatial_loop in user_sm_copy.items():
                 if self.is_nested_tuple(spatial_loop):  # mix sm loop
                     for sub_spatial_loop in spatial_loop:
                         spatial_loop_dim = sub_spatial_loop[0]
                         spatial_loop_size = sub_spatial_loop[1]
-                        if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
-                            top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                        if (
+                            spatial_loop_dim
+                            not in top_level_spatial_mapping_dict.keys()
+                        ):
+                            top_level_spatial_mapping_dict[spatial_loop_dim] = (
+                                spatial_loop_size
+                            )
                         else:
-                            top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
+                            top_level_spatial_mapping_dict[
+                                spatial_loop_dim
+                            ] *= spatial_loop_size
                 else:
                     spatial_loop_dim = spatial_loop[0]
                     spatial_loop_size = spatial_loop[1]
                     if spatial_loop_dim not in top_level_spatial_mapping_dict.keys():
-                        top_level_spatial_mapping_dict[spatial_loop_dim] = spatial_loop_size
+                        top_level_spatial_mapping_dict[spatial_loop_dim] = (
+                            spatial_loop_size
+                        )
                     else:
-                        top_level_spatial_mapping_dict[spatial_loop_dim] *= spatial_loop_size
+                        top_level_spatial_mapping_dict[
+                            spatial_loop_dim
+                        ] *= spatial_loop_size
             top_level_spatial_mapping = [
-                (layer_dim, layer_size) for (layer_dim, layer_size) in top_level_spatial_mapping_dict.items()
+                (layer_dim, layer_size)
+                for (layer_dim, layer_size) in top_level_spatial_mapping_dict.items()
             ]
             spatial_mapping_dict[layer_op].append(top_level_spatial_mapping)
         return spatial_mapping_dict

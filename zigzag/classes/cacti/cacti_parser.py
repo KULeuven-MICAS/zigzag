@@ -6,8 +6,9 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-##  Class that provides the interface between ZigZag and CACTI.
+
 class CactiParser:
+    """!   Class that provides the interface between ZigZag and CACTI."""
 
     ## Path of current directory
     cacti_path = os.path.dirname(os.path.realpath(__file__))
@@ -16,21 +17,10 @@ class CactiParser:
     ## Path to cacti python script to extract costs
     CACTI_TOP_PATH = f"{cacti_path}/cacti_master/cacti_top.py"
 
-    ## The class constructor
     def __init__(self):
+        """!  The class constructor"""
         pass
-    
-    ## This function checks if the provided memory configuration was already used in the past.
-    # @param mem_type
-    # @param size
-    # @param r_bw
-    # @param r_port
-    # @param w_port
-    # @param rw_port
-    # @param bank
-    # @param mem_pool_path  Path to cached cacti simulated memories
-    # @return True          The requested memory item has been simulated once.
-    # @return False         The requested memory item has not been simualted so far.
+
     def item_exists(
         self,
         mem_type,
@@ -43,7 +33,19 @@ class CactiParser:
         technology,
         mem_pool_path=MEM_POOL_PATH,
     ):
-        with open(mem_pool_path, "r") as fp:
+        """!  This function checks if the provided memory configuration was already used in the past.
+        @param mem_type
+        @param size
+        @param r_bw
+        @param r_port
+        @param w_port
+        @param rw_port
+        @param bank
+        @param mem_pool_path  Path to cached cacti simulated memories
+        @return True          The requested memory item has been simulated once.
+        @return False         The requested memory item has not been simualted so far.
+        """
+        with open(mem_pool_path, "r") as fp:  # pylint: disable=W1514
             memory_pool = yaml.full_load(fp)
 
         if memory_pool != None:
@@ -70,16 +72,6 @@ class CactiParser:
 
         return False
 
-    ## This function simulates a new item by calling CACTI7 based on the provided parameters
-    # @param mem_type
-    # @param size
-    # @param r_bw
-    # @param r_port
-    # @param w_port
-    # @param rw_port
-    # @param bank
-    # @param mem_pool_path  Path to cached cacti simulated memories
-    # @param cacti_top_path Path to cacti python script to extract costs
     def create_item(
         self,
         mem_type,
@@ -93,6 +85,17 @@ class CactiParser:
         mem_pool_path=MEM_POOL_PATH,
         cacti_top_path=CACTI_TOP_PATH,
     ):
+        """!  This function simulates a new item by calling CACTI7 based on the provided parameters
+        @param mem_type
+        @param size
+        @param r_bw
+        @param r_port
+        @param w_port
+        @param rw_port
+        @param bank
+        @param mem_pool_path  Path to cached cacti simulated memories
+        @param cacti_top_path Path to cacti python script to extract costs
+        """
         # print("No match in Cacti memory pool found!", size, r_bw, r_port, w_port, rw_port, bank)
         # os.chdir(f'{CACTI_PATH}/cacti-master/')
 
@@ -126,17 +129,6 @@ class CactiParser:
                 f"Cacti subprocess call failed with return value {p}."
             )
 
-    ## This functions checks first if the memory with the provided parameters was already simulated once.
-    # In case it hasn't been simulated, then it will create a new memory item based on the provided parameters.
-    # @param mem_type
-    # @param size
-    # @param r_bw
-    # @param r_port
-    # @param w_port
-    # @param rw_port
-    # @param bank
-    # @param mem_pool_path  Path to cached cacti simulated memories
-    # @param cacti_top_path Path to cacti python script to extract costs
     def get_item(
         self,
         mem_type,
@@ -150,6 +142,18 @@ class CactiParser:
         mem_pool_path=MEM_POOL_PATH,
         cacti_top_path=CACTI_TOP_PATH,
     ):
+        """!  This functions checks first if the memory with the provided parameters was already simulated once.
+        In case it hasn't been simulated, then it will create a new memory item based on the provided parameters.
+        @param mem_type
+        @param size
+        @param r_bw
+        @param r_port
+        @param w_port
+        @param rw_port
+        @param bank
+        @param mem_pool_path  Path to cached cacti simulated memories
+        @param cacti_top_path Path to cacti python script to extract costs
+        """
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
@@ -169,7 +173,15 @@ class CactiParser:
             r_bw = new_r_bw
 
         if not self.item_exists(
-            mem_type, size, r_bw, r_port, w_port, rw_port, bank, technology, mem_pool_path, 
+            mem_type,
+            size,
+            r_bw,
+            r_port,
+            w_port,
+            rw_port,
+            bank,
+            technology,
+            mem_pool_path,
         ):
             self.create_item(
                 mem_type,
@@ -187,7 +199,7 @@ class CactiParser:
         with open(mem_pool_path, "r") as fp:
             memory_pool = yaml.full_load(fp)
 
-        if memory_pool != None:
+        if memory_pool is not None:
             for instance in memory_pool:
 
                 IO_bus_width = int(memory_pool[instance]["IO_bus_width"])

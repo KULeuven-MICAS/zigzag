@@ -6,15 +6,17 @@ from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
-## The standard four-way data moving attribute of a memory interface.
 class FourWayDataMoving:
+    """!  The standard four-way data moving attribute of a memory interface.
+"""
 
-    ## The class constructor
-    # @param rd_out_to_low
-    # @param wr_in_by_low
-    # @param rd_out_to_high
-    # @param wr_in_by_high
     def __init__(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
+        """!  The class constructor
+ @param rd_out_to_low
+ @param wr_in_by_low
+ @param rd_out_to_high
+ @param wr_in_by_high
+"""
         self.rd_out_to_low = rd_out_to_low
         self.wr_in_by_low = wr_in_by_low
         self.rd_out_to_high = rd_out_to_high
@@ -32,24 +34,28 @@ class FourWayDataMoving:
             (self.rd_out_to_high, self.wr_in_by_high),
         ]
 
-    ## Return the total amount of times this memory interface is read from to the level above.
-    # If scaling is the energy cost per read, this returns the total read energy.
     def get_total_read_outs_to_above(self, scaling: float = 1):
+        """!  Return the total amount of times this memory interface is read from to the level above.
+ If scaling is the energy cost per read, this returns the total read energy.
+"""
         return scaling * self.rd_out_to_high
 
-    ## Return the total amount of times this memory interface is read from to the level below.
-    # If scaling is the energy cost per read, this returns the total read energy.
     def get_total_read_outs_to_below(self, scaling: float = 1):
+        """!  Return the total amount of times this memory interface is read from to the level below.
+ If scaling is the energy cost per read, this returns the total read energy.
+"""
         return scaling * self.rd_out_to_low
 
-    ## Return the total amount of times this memory interface is written to from the level above.
-    # If scaling is the energy cost per write, this returns the total read energy.
     def get_total_write_ins_from_above(self, scaling: float = 1):
+        """!  Return the total amount of times this memory interface is written to from the level above.
+ If scaling is the energy cost per write, this returns the total read energy.
+"""
         return scaling * self.wr_in_by_high
 
-    ## Return the total amount of times this memory interface is written to from the level below.
-    # If scaling is the energy cost per write, this returns the total read energy.
     def get_total_write_ins_from_below(self, scaling: float = 1):
+        """!  Return the total amount of times this memory interface is written to from the level below.
+ If scaling is the energy cost per write, this returns the total read energy.
+"""
         return scaling * self.wr_in_by_low
 
     def __add__(self, other):
@@ -85,13 +91,15 @@ class FourWayDataMoving:
             raise KeyError()
 
 
-## Collect the memory access pattern for each unit memory (memory that only hold one operand at one level).
 class DataMovePattern:
+    """!  Collect the memory access pattern for each unit memory (memory that only hold one operand at one level).
+"""
 
-    ## The class construcotr
-    # @param operand
-    # @param mem_level
     def __init__(self, operand, mem_level):
+        """!  The class construcotr
+ @param operand
+ @param mem_level
+"""
         self.name = operand + str(mem_level)
         self.data_elem_move_count = FourWayDataMoving(0, 0, 0, 0)
         self.data_precision = FourWayDataMoving(0, 0, 0, 0)
@@ -166,8 +174,9 @@ class DataMovePattern:
             rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
         )
 
-    ## update a single direction value for all data move attributes
     def update_single_dir_data(self, direction, new_value):
+        """!  update a single direction value for all data move attributes
+"""
         self.data_elem_move_count.update_single_dir_data(direction, new_value)
         self.data_precision.update_single_dir_data(direction, new_value)
         self.req_mem_bw_aver.update_single_dir_data(direction, new_value)
@@ -184,18 +193,13 @@ class DataMovePattern:
         return str(self)
 
 
-## Collect information of a complete mapping (spatial and temporal)
-# 
-# NOTE: Mapping is HW-unaware, i.e. Mapping doesn't take in HW information
-# like memory bw, access cost, size and so on.
 class Mapping:
+    """!  Collect information of a complete mapping (spatial and temporal)
 
-    ## The class construcotr
-    # @param accelerator
-    # @param spatial mapping
-    # @param temporal mapping
-    # @param layer_node
-    # @param access_same_data_considered_as_no_access
+ NOTE: Mapping is HW-unaware, i.e. Mapping doesn't take in HW information
+ like memory bw, access cost, size and so on.
+"""
+
     def __init__(
         self,
         accelerator: Accelerator,
@@ -204,6 +208,13 @@ class Mapping:
         layer_node: LayerNode,
         access_same_data_considered_as_no_access: bool = False,
     ):
+        """!  The class construcotr
+ @param accelerator
+ @param spatial mapping
+ @param temporal mapping
+ @param layer_node
+ @param access_same_data_considered_as_no_access
+"""
         # Mapping object can be initialized with separate spatial and temporal mappings
         self.accelerator = accelerator
         if type(spatial_mapping) is SpatialMapping:
@@ -267,14 +278,15 @@ class Mapping:
         # Ignore the data traffic between the top level memory and the external world
         self.disable_data_traffic_external()
 
-    ## Combine spatial and temporal mapping dictionary into combined_mapping_dict by
-    # inserting spatial loops above temporal loops at each level.
-    #
-    # - combined_mapping_dict_1s1t: corresponding level's smap and tmap are merged together.
-    # Each level's data size is the total data size.
-    # - combined_mapping_dict_1s2t: each level's smap is merged to level+1's tmap.
-    # Each level's data size is the unrolled data size.
     def combine_spatial_temporal_mapping_dict(self):
+        """!  Combine spatial and temporal mapping dictionary into combined_mapping_dict by
+ inserting spatial loops above temporal loops at each level.
+
+ - combined_mapping_dict_1s1t: corresponding level's smap and tmap are merged together.
+ Each level's data size is the total data size.
+ - combined_mapping_dict_1s2t: each level's smap is merged to level+1's tmap.
+ Each level's data size is the unrolled data size.
+"""
 
         # Initialization
         combined_mapping_dict_1s1t = {
@@ -307,12 +319,13 @@ class Mapping:
         self.combined_mapping_dict_1s1t = combined_mapping_dict_1s1t
         self.combined_mapping_dict_1s2t = combined_mapping_dict_1s2t
 
-    ## This function generates an list "psum_flag" that identify whether an output memory
-    # level holds partial or final output.
-    # E.g., psum_flag = [True, True, False] means that there are 3 memory levels for output and only the outermost
-    # memory level hold the final output, the 1st and 2nd memory levels need to store partial output for some time.
-    # For indexing convenience, we add an extra False to the end of the psum_flag list.
     def distinguish_output(self):
+        """!  This function generates an list "psum_flag" that identify whether an output memory
+ level holds partial or final output.
+ E.g., psum_flag = [True, True, False] means that there are 3 memory levels for output and only the outermost
+ memory level hold the final output, the 1st and 2nd memory levels need to store partial output for some time.
+ For indexing convenience, we add an extra False to the end of the psum_flag list.
+"""
         output_operand = self.layer_node.output_operand
         output_loop_dim_relevancy = self.layer_node.operand_loop_dim_reform[
             output_operand
@@ -339,8 +352,9 @@ class Mapping:
             False
         ]  # add an extra False on top for later indexing convenience
 
-    ## This function generates a dictionary that collect data precision for each operand at each arch level
     def gen_data_precision_dict(self):
+        """!  This function generates a dictionary that collect data precision for each operand at each arch level
+"""
         input_operands = self.layer_node.input_operands
         output_operand = self.layer_node.output_operand
         data_precision_dict = {
@@ -359,8 +373,9 @@ class Mapping:
                 )
         self.data_precision_dict = data_precision_dict
 
-    ## Given the combined mapping, generate r/ir loop size list at each level for each operand
     def gen_r_ir_loop_list(self):
+        """!  Given the combined mapping, generate r/ir loop size list at each level for each operand
+"""
         combined_mapping = self.combined_mapping_dict_1s1t_reform
         combined_mapping2 = self.combined_mapping_dict_1s2t_reform
         relevancy_table = self.layer_node.operand_loop_dim_reform
@@ -471,8 +486,9 @@ class Mapping:
         self.ir_loop_size_cabl2 = ir_loop_size_cabl2
         self.O_ir_loop_size_caal = O_ir_loop_size_caal
 
-    ## Based on the r loop size list, calculate the data size held by each architectural level.
     def calc_data_size(self):
+        """!  Based on the r loop size list, calculate the data size held by each architectural level.
+"""
         # data_elem_per_level_unrolled: data size held inside of each unrolled unit at each architectural level
         # data_elem_per_level: total data size at each architectural level (= data_elem_per_level_unrolled * unique unit count)
         data_elem_per_level_unrolled = {
@@ -517,9 +533,10 @@ class Mapping:
         self.data_elem_per_level = data_elem_per_level
         self.data_bit_per_level = data_bit_per_level
 
-    ## Calculate the effective data size for getting the allowed memory updating window in latency calculation.
-    # The effective data size is calculated by using data_elem_per_level_unrolled divided by the top r loops.
     def calc_effective_data_size(self):
+        """!  Calculate the effective data size for getting the allowed memory updating window in latency calculation.
+ The effective data size is calculated by using data_elem_per_level_unrolled divided by the top r loops.
+"""
         effective_data_elem = {
             op: [
                 data_elem_unrolled // self.temporal_mapping.top_r_loop_size[op][lv]
@@ -542,9 +559,10 @@ class Mapping:
         self.effective_data_elem = effective_data_elem
         self.effective_data_bit = effective_data_bit
 
-    ## Based on the ir loop size list and the total MAC Op count, calculate the data access
-    # at each memory level in a bottom-up way.
     def calc_data_access(self):
+        """!  Based on the ir loop size list and the total MAC Op count, calculate the data access
+ at each memory level in a bottom-up way.
+"""
         total_MAC_count = self.layer_node.total_MAC_count
 
         # data_access_raw doesn't distinguish read and write, doesn't distinguish input operands from output operand 
@@ -672,8 +690,9 @@ class Mapping:
                 mem_level
             ] = unit_mem_data_movement
 
-    ## This function calculates the average & instant required memory bw and the periodic data transfer pattern.
     def calc_req_mem_bw_and_data_transfer_rate(self):
+        """!  This function calculates the average & instant required memory bw and the periodic data transfer pattern.
+"""
 
         if self.access_same_data_considered_as_no_access:
             # For input operands, add operational array level's 'MAC_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level
@@ -901,9 +920,10 @@ class Mapping:
                     wr_in_by_high_wd,
                 )
 
-    ## This function set all the data traffic between the top level memory and the external world to 0
-    # in unit_mem_data_movement.
     def disable_data_traffic_external(self):
+        """!  This function set all the data traffic between the top level memory and the external world to 0
+ in unit_mem_data_movement.
+"""
         for operand in self.operand_list:
             mem_level = self.mem_level[operand] - 1
             self.unit_mem_data_movement[operand][mem_level].update_single_dir_data(
