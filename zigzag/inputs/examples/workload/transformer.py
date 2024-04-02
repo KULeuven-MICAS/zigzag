@@ -6,6 +6,7 @@ fc_dim = 512  # number of nodes in fully connected layer
 
 workload = {
     # B: batch_size
+    # MatMuls have sizes (PxQ)*(QxR)->(PxR)
     # D: hidden_dim
     # L: seq_len
     # H: num_heads
@@ -13,23 +14,23 @@ workload = {
     # K: seq_len (inner loop variable)
     0: {  # Embedding
         "operator_type": "add",
-        "equation": "O[b][d]=I[b][d]+W[d]",  # !NOTE No difference between += and =
+        "equation": "O[b][p]=I[b][p]+W[p]",  # !NOTE No difference between += and =
         "loop_dim_size": {
             "B": 1,
-            "D": hidden_dim,
+            "P": hidden_dim,
         },
         "operand_precision": {"O": 8, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"W": [], "I": []},
         "constant_operands": ["I", "W"],
     },
     1: {  # K projection
-        "operator_type": "matmul_project",
-        "equation": "O[b][l][d]+=I[b][l][c]*W[b][c][d]",
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "D": hidden_dim,
-            "C": hidden_dim,  # inner loop variable
+            "P": seq_len,
+            "R": hidden_dim,
+            "Q": hidden_dim,  # inner loop variable
         },
         "operand_precision": {"O": 16, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"W": [], "I": [0]},
@@ -37,13 +38,13 @@ workload = {
         # "operand_source_dimension_mapping": {"I": {"IX": "OX", "IY": "OY", "C": "G"}}, # TODO what does this do?
     },
     2: {  # Q projection
-        "operator_type": "matmul_project",
-        "equation": "O[b][l][d]+=I[b][l][c]*W[b][c][d]",
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "D": hidden_dim,
-            "C": hidden_dim,  # inner loop variable
+            "P": seq_len,
+            "R": hidden_dim,
+            "Q": hidden_dim,  # inner loop variable
         },
         "operand_precision": {"O": 16, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"W": [], "I": [0]},
@@ -51,13 +52,13 @@ workload = {
         # "operand_source_dimension_mapping": {"I": {"IX": "OX", "IY": "OY", "C": "G"}},
     },
     3: {  # V projection
-        "operator_type": "matmul_project",
-        "equation": "O[b][l][d]+=I[b][l][c]*W[b][c][d]",
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "D": hidden_dim,
-            "C": hidden_dim,  # inner loop variable
+            "P": seq_len,
+            "R": hidden_dim,
+            "Q": hidden_dim,  # inner loop variable
         },
         "operand_precision": {"O": 16, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"W": [], "I": [0]},
@@ -65,17 +66,18 @@ workload = {
         # "operand_source_dimension_mapping": {"I": {"IX": "OX", "IY": "OY", "C": "G"}},
     },
     4: {  # KQ MM (Q should also be transposed...)
-        "operator_type": "matmul_attn",
-        "equation": "O[b][l][k]+=I[b][l][d]*W[b][d][k]",  # I/W are K/Q matrices
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "D": hidden_dim,
-            "L": seq_len,
-            "K": seq_len,
+            "Q": hidden_dim,
+            "P": seq_len,
+            "R": seq_len,
         },
         "operand_precision": {"O": 16, "O_final": 8, "I": 8, "W": 8},
         "operand_source": {"I": [1], "W": [2]},
         "constant_operands": [],  # Note that none are constant
+        # "operand_source_dimension_mapping": {"I": {"P": "Q"}},
     },
     5: {  # softmax(KQ^T)
         "operator_type": "softmax",  # ! not yet supported
@@ -91,51 +93,51 @@ workload = {
         "constant_operands": [],  # Note that none are constant
     },
     6: {  # KQ^T * V matmul
-        "operator_type": "matmul_project",
-        "equation": "O[b][l][d]+=I[b][l][c]*W[c][d]",  # W is V matrix, I is LxL
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "D": hidden_dim,
-            "C": seq_len,  # inner loop varaible
+            "P": seq_len,
+            "R": hidden_dim,
+            "Q": seq_len,  # inner loop varaible
         },
         "operand_precision": {"O": 16, "O_final": 8, "I": 8, "W": 8},
         "operand_source": {"I": [3], "W": [5]},  # TODO doet source veranderen iets?
         "constant_operands": [],  # Note that none are constant
     },
     7: {  # fully connected
-        "operator_type": "matmul_fc1",
-        "equation": "O[b][l][dfc]+=I[b][l][d]*W[d][dfc]",
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "DFC": fc_dim,
-            "D": hidden_dim,
+            "P": seq_len,
+            "R": fc_dim,
+            "Q": hidden_dim,
         },
         "operand_precision": {"O": 16, "O_final": 8, "I": 8, "W": 8},
         "operand_source": {"I": [6], "W": []},
         "constant_operands": ["W"],
     },
     8: {  # fully connected - add bias
-        "operator_type": "add_fc",
-        "equation": "O[b][l][dfc]+=I[b][l][dfc]+W[l][dfc]",
+        "operator_type": "add",
+        "equation": "O[b][p][r]+=I[b][p][r]+W[p][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "DFC": fc_dim,
+            "P": seq_len,
+            "R": fc_dim,
         },
         "operand_precision": {"O": 16, "O_final": 8, "I": 8, "W": 8},
         "operand_source": {"I": [7], "W": []},
         "constant_operands": ["W"],
     },
     9: {  # fully connected
-        "operator_type": "matmul_fc2",
-        "equation": "O[b][l][d]+=I[b][l][dfc]*W[dfc][d]",
+        "operator_type": "matmul",
+        "equation": "O[b][p][r]+=I[b][p][q]*W[q][r]",
         "loop_dim_size": {
             "B": 1,
-            "L": seq_len,
-            "DFC": fc_dim,
-            "D": hidden_dim,
+            "P": seq_len,
+            "Q": fc_dim,
+            "R": hidden_dim,
         },
         "operand_precision": {"O": 16, "O_final": 8, "I": 8, "W": 8},
         "operand_source": {"I": [8], "W": []},
