@@ -11,7 +11,7 @@ mapping = {
             "O": "O",
             "X": "I2",
             "Y": "I1",
-        },  # !NOTE These mappings force name usage within add layer
+        },
     },
     "Pooling": {
         "core_allocation": 1,
