@@ -1,6 +1,9 @@
 import logging
 
+from numpy import deprecate
+
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.opt.spatial.SpatialMapping import SpatialMapping, SpatialMappingHint
 from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
@@ -10,6 +13,7 @@ from zigzag.classes.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
 import copy
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
@@ -29,8 +33,8 @@ class SpatialMappingGeneratorStage(Stage):
         self,
         list_of_callables,
         *,
-        accelerator,
-        layer,
+        accelerator: Accelerator,
+        layer: LayerNode,
         enable_mix_spatial_mapping_generation=False,
         maximize_hardware_utilization=True,
         enable_weight_diagonal_mapping=False,
@@ -43,9 +47,7 @@ class SpatialMappingGeneratorStage(Stage):
         self.accelerator = accelerator
         self.check_layer(layer)
         self.layer = layer
-        self.enable_mix_spatial_mapping_generation = (
-            enable_mix_spatial_mapping_generation
-        )
+        self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
         self.maximize_hardware_utilization = maximize_hardware_utilization
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
 
@@ -58,13 +60,11 @@ class SpatialMappingGeneratorStage(Stage):
     # If the layer in main_inputs is not set, False is returned
     #
     # @return: True if layer is set correctly
-    def check_layer(layer):
+    def check_layer(layer: LayerNode):
         if layer is None:
             raise ValueError()
         if layer.core_allocation is None:
-            logger.critical(  # pylint: disable=W1203
-                f"Layer {layer} has no core allocation."
-            )
+            logger.critical(f"Layer {layer} has no core allocation.")  # pylint: disable=W1203
             raise ValueError()
         return True
 
@@ -72,58 +72,41 @@ class SpatialMappingGeneratorStage(Stage):
         """!  Run this stage by generating user-formatted spatial mappings which are converted
         to the memory-level based spatial mapping representation.
         """
-        user_provided_spatial_mappings = self.layer.user_spatial_mapping
-        user_spatial_mapping_hint = self.layer.user_spatial_mapping_hint
+
+        # TODO move conversion
+        user_spatial_mapping_hint = SpatialMappingHint(self.layer.user_spatial_mapping_hint)
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
         oa_dims = core.operational_array.dimensions
 
-        if isinstance(
-            user_provided_spatial_mappings, dict
-        ):  # There is a single USM provided
-            if len(user_provided_spatial_mappings) < len(oa_dims):
-                self.layer.user_spatial_mapping_hint = (
-                    self.complete_user_spatial_mapping_hint(
-                        user_spatial_mapping_hint=user_spatial_mapping_hint,
-                        oa_dims=oa_dims,
-                    )
-                )
+        # There is a single USM provided
+        if isinstance(self.layer.user_spatial_mapping, dict):
+            # TODO move this conversion further up
+            user_provided_spatial_mappings = SpatialMapping.parse_spatial_mapping(
+                self.layer.user_spatial_mapping # type: ignore
+            )  
+            # Mapping fully defined by user, don't generate new ones
+            if all(map(lambda x: x in user_provided_spatial_mappings, oa_dims)):
+                user_spatial_mappings = [user_provided_spatial_mappings]
+            else:
+                # This is now part of `SpatialMappingHint`
+                # self.layer.user_spatial_mapping_hint = self.complete_user_spatial_mapping_hint(
+                #     user_spatial_mapping_hint=user_spatial_mapping_hint,
+                #     oa_dims=oa_dims,
+                # )
                 user_spatial_mapping_generator = UserSpatialMappingGenerator(
                     layer=self.layer,
                     accelerator=self.accelerator,
-                    defined_mapping=user_provided_spatial_mappings,
+                    provided_mapping=user_provided_spatial_mappings,
                     enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
-                    maximize_hardware_utilization=self.maximize_hardware_utilization,
                 )
                 # Get all the USMs by running the generator
-                user_spatial_mappings = list(
-                    (usm for usm in user_spatial_mapping_generator.run())
-                )
-            else:
-                user_spatial_mappings = [user_provided_spatial_mappings]
-        elif isinstance(
-            user_provided_spatial_mappings, list
-        ):  # There are multiple USMs provided
-            user_spatial_mappings = user_provided_spatial_mappings
-        else:  # There is no USM provided
-            self.layer.user_spatial_mapping_hint = (
-                self.complete_user_spatial_mapping_hint(
-                    user_spatial_mapping_hint=user_spatial_mapping_hint, oa_dims=oa_dims
-                )
-            )
-            # Initialize the UserSpatialMappingGenerator which will automatically generate SMs
-            user_spatial_mapping_generator = UserSpatialMappingGenerator(
-                layer=self.layer,
-                accelerator=self.accelerator,
-                enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
-                maximize_hardware_utilization=self.maximize_hardware_utilization,
-                enable_weight_diagonal_mapping=self.enable_weight_diagonal_mapping,
-            )
-            # Get all the USMs by running the generator
-            user_spatial_mappings = list(
-                (usm for usm in user_spatial_mapping_generator.run())
-            )
-            logger.debug("No user-provided spatial mappings found. Auto-generating..")
+                logger.debug("User-provided spatial mappings incomplete. Auto-generating..")
+                user_spatial_mappings = [x for x in user_spatial_mapping_generator.run()]
+        else:
+            raise NotImplementedError("No support for multiple provided spatial mappings by user")
+            # user_spatial_mappings = user_provided_spatial_mappings
+
         nb_user_spatial_mappings = len(user_spatial_mappings)
 
         for i, user_spatial_mapping in enumerate(user_spatial_mappings):
@@ -162,6 +145,7 @@ class SpatialMappingGeneratorStage(Stage):
                     cme.accelerator = original_accelerator
                 yield cme, (user_spatial_mapping, extra_info)
 
+    @deprecate
     def complete_user_spatial_mapping_hint(self, user_spatial_mapping_hint, oa_dims):
         # This function is to create user_spatial_mapping_hint when it is not provided
         # or complete it if it is provided but on only part of oa dimensions.
@@ -190,9 +174,7 @@ class SpatialMappingGeneratorStage(Stage):
     def modify_innermost_input_mem_size(self, core_id, user_spatial_mapping):
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
         # to avoid the MemoryTooSmallException in loma stage.
-        input_mem_size_updated = (
-            False  # flag to indicate if the accelerator is modified.
-        )
+        input_mem_size_updated = False  # flag to indicate if the accelerator is modified.
         core = self.accelerator.get_core(core_id=core_id)
         operational_array = core.operational_array
         oa_dims = operational_array.dimensions
@@ -226,9 +208,7 @@ class SpatialMappingGeneratorStage(Stage):
             act_served_oa_dim_name = list(act_served_oa_dim)[0].name
         # get the mem scaling factor if OX, OY exist
         mem_scaling_factor = 1
-        if (
-            act_served_oa_dim_name not in user_spatial_mapping.keys()
-        ):  # there is no sm loop
+        if act_served_oa_dim_name not in user_spatial_mapping.keys():  # there is no sm loop
             pass
         else:  # there is sm loop on act served oa dim
             act_served_oa_mapping = user_spatial_mapping[act_served_oa_dim_name]
@@ -256,12 +236,12 @@ class SpatialMappingGeneratorStage(Stage):
             new_mh_name = mh_name + "-supporting-diagonal-map"
             new_memory_hierarchy = MemoryHierarchy(operational_array, new_mh_name)
             # Add memories to the new memory hierarchy with the correct attributes
-            for curr_mem_level, memory_level in enumerate(
-                memory_hierarchy.mem_level_list
-            ):
+            for curr_mem_level, memory_level in enumerate(memory_hierarchy.mem_level_list):
                 memory_instance = memory_level.memory_instance
                 if memory_level == act_innermost_mem_level:
-                    memory_instance.size *= mem_scaling_factor  # scale here. For others, keep them unchanged.
+                    memory_instance.size *= (
+                        mem_scaling_factor  # scale here. For others, keep them unchanged.
+                    )
                 operands = tuple(memory_level.operands)
                 port_alloc = memory_level.port_alloc_raw
                 served_dimensions_vec = memory_level.served_dimensions_vec
@@ -301,11 +281,11 @@ class SpatialMappingGeneratorStage(Stage):
             )
             return input_mem_size_updated, new_accelerator
 
-    @staticmethod
-    def is_nested_tuple(obj):
-        if isinstance(obj, tuple):
-            for item in obj:
-                if isinstance(item, tuple):
-                    # If any item within the tuple is itself a tuple, it's a nested tuple
-                    return True
-        return False
+    # @staticmethod
+    # def is_nested_tuple(obj):
+    #     if isinstance(obj, tuple):
+    #         for item in obj:
+    #             if isinstance(item, tuple):
+    #                 # If any item within the tuple is itself a tuple, it's a nested tuple
+    #                 return True
+    #     return False

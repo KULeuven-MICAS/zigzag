@@ -1,7 +1,7 @@
 class Dimension:
     """!  Description missing"""
 
-    def __init__(self, index: int, name: str, size: int):
+    def __init__(self, index: int = 0, name: str = "", size: int = 1):
         """!  The class constructor
         @param index: The integer index of this Dimension.
         @param name: The user-provided name of this Dimension.
@@ -21,10 +21,12 @@ class Dimension:
         """!  JSON representation of this class to save it to a json file."""
         return self.__dict__
 
-    def __eq__(self, other):
-        return (
-            other.id == self.id and self.name == other.name and self.size == other.size
-        )
+    def __eq__(self, other: "Dimension"):
+        # id should be enough to identify dimension
+        return self.id == other.id
+        # return other.id == self.id and self.name == other.name and self.size == other.size
 
     def __hash__(self):
-        return hash(self.id) ^ hash(self.name)
+        # id should be enough to identify dimension
+        return hash(self.id)
+        # return hash(self.id) ^ hash(self.name)

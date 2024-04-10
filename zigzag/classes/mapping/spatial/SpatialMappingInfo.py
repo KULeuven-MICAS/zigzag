@@ -6,15 +6,15 @@ if TYPE_CHECKING:
     from zigzag.classes.workload.layer_node import LayerNode
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
-class SpatialMapping:
-    """!  Class that collect all the info related to spatial mapping.
-"""
+
+class SpatialMappingInfo:
+    """!  Class that collect all the info related to spatial mapping."""
 
     def __init__(self, spatial_mapping_dict: Dict, layer_node: "LayerNode"):
         """!  The class constructor
- @param spatial_mapping_dict
- @param layer_node
-"""
+        @param spatial_mapping_dict
+        @param layer_node
+        """
         self.mapping_dict_origin = spatial_mapping_dict
         self.mapping_dict_reform = mapping_assist_funcs.decouple_pr_loop(
             spatial_mapping_dict, layer_node
@@ -49,16 +49,15 @@ class SpatialMapping:
         return str(self)
 
     def __jsonrepr__(self):
-        """!  JSON representation of this object to save it to a file.
-"""
+        """!  JSON representation of this object to save it to a file."""
         return {"spatial_mapping": self.mapping_dict_origin}
 
     def get_unrolling(self, op: str, level: int):
         """!  Return the unrolled loops for operand 'op' at level 'level'.
- 'level' = 0 would signify the operational level.
- @param op
- @param level
-"""
+        'level' = 0 would signify the operational level.
+        @param op
+        @param level
+        """
         return self.mapping_dict_origin[op][level]
 
     def get_unrolling_all(self, op: str, min_level: int) -> list:
@@ -77,28 +76,18 @@ class SpatialMapping:
         return spatial_loops
 
     def calc_unroll_size(self):
-        """!  Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level
-"""
+        """!  Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level"""
 
         # Initialization
         unroll_size_r = {op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()}
-        unroll_size_ir = {
-            op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()
-        }
-        unroll_size_total = {
-            op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()
-        }
+        unroll_size_ir = {op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()}
+        unroll_size_total = {op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()}
 
         # Go through the reformed spatial mapping and extract the unroll size
         for operand in self.operand_list:
-            for level, current_level_loops in enumerate(
-                self.mapping_dict_reform[operand]
-            ):
+            for level, current_level_loops in enumerate(self.mapping_dict_reform[operand]):
                 for loop_type, loop_dim in current_level_loops:
-                    if (
-                        loop_type
-                        in self.layer_node.operand_loop_dim_reform[operand]["r"]
-                    ):
+                    if loop_type in self.layer_node.operand_loop_dim_reform[operand]["r"]:
                         unroll_size_r[operand][level] *= loop_dim
                     else:
                         unroll_size_ir[operand][level] *= loop_dim
@@ -109,15 +98,12 @@ class SpatialMapping:
         self.unroll_size_total = unroll_size_total
 
     def calc_unit_count(self):
-        """!  Calculate total/unique/duplicate unit count per operand per architecture level
-"""
+        """!  Calculate total/unique/duplicate unit count per operand per architecture level"""
         # Number of unit at each level (for each operand)
         # Added round call as number doesn't remain integer due to self.mapping_dict_reform number instability
         unit_count = {
             op: [
-                round(
-                    round(prod(self.unroll_size_total[op][lv : self.arch_level[op]]), 3)
-                )
+                round(round(prod(self.unroll_size_total[op][lv : self.arch_level[op]]), 3))
                 for lv in range(self.arch_level[op])
             ]
             for op in self.operand_list
@@ -153,13 +139,13 @@ class SpatialMapping:
 
     def calc_data_serve_scope(self):
         """!  Calculate data serve scope, i.e., for input operands, it means that each data element
- is broadcast to how many unit at below level; for output operand, it means that how
- many unit add/collect their output values to one result, and push it to above level
+        is broadcast to how many unit at below level; for output operand, it means that how
+        many unit add/collect their output values to one result, and push it to above level
 
- NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.
+        NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.
 
- data_serve_scope is calculated by dividing unit_duplicate at current level by unit_count at one level above.
-"""
+        data_serve_scope is calculated by dividing unit_duplicate at current level by unit_count at one level above.
+        """
         data_serve_scope = {
             op: [
                 self.unit_duplicate[op][lv] / self.unit_duplicate[op][lv + 1]
@@ -173,10 +159,10 @@ class SpatialMapping:
     def calc_mem_bw_boost_factor(self):
         """!  Calculate memory bandwidth incremental factor between architectural levels.
 
- NOTE: mem_bw_boost doesn't include MAC level, thus is one level less than other spatial mapping attributes.
+        NOTE: mem_bw_boost doesn't include MAC level, thus is one level less than other spatial mapping attributes.
 
- mem_bw_boost can calculated by either dividing unit_unique at current level by unit_count at one level above.
-"""
+        mem_bw_boost can calculated by either dividing unit_unique at current level by unit_count at one level above.
+        """
         mem_bw_boost = {
             op: [
                 round(self.unit_unique[op][lv] / self.unit_unique[op][lv + 1])
@@ -193,7 +179,5 @@ class SpatialMapping:
         # Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels.
         op = self.layer_node.input_operands[0]
         self.spatial_loop_dim_size = [
-            loop
-            for spatial_loops in self.mapping_dict_origin[op]
-            for loop in spatial_loops
+            loop for spatial_loops in self.mapping_dict_origin[op] for loop in spatial_loops
         ]

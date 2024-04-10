@@ -1,17 +1,17 @@
 from math import gcd, prod
 import re
 from collections import defaultdict
-from typing import Any, Dict, List
 from copy import deepcopy
 from collections import defaultdict
+from typing import Any
+
+from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
 
 
 class LayerNode:
     """! Description missing"""
 
-    def __init__(
-        self, layer_id: int, layer_attrs: dict[str, Any], node_name="", type=None
-    ):
+    def __init__(self, layer_id: int, layer_attrs: dict[str, Any], node_name="", type=None):
         """! The class constructor
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -64,38 +64,29 @@ class LayerNode:
 
         # Get required attributes from layer_attrs
         equation: str = layer_attrs.get("equation")  # type: ignore
-        loop_dim_size: Dict[str, int] = layer_attrs.get("loop_dim_size")  # type: ignore
-        pr_loop_dim_size: Dict[str, int] = layer_attrs.get("pr_loop_dim_size", None)
-        operand_precision: Dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
-        dimension_relations: List[str] = layer_attrs.get("dimension_relations", [])
-        user_spatial_mapping: Dict[str, tuple] = layer_attrs.get(
-            "spatial_mapping", None
-        )
-        user_spatial_mapping_hint: Dict[str, list] = layer_attrs.get(
-            "spatial_mapping_hint", None
-        )
+        loop_dim_size: dict[str, int] = layer_attrs.get("loop_dim_size")  # type: ignore
+        pr_loop_dim_size: dict[str, int] = layer_attrs.get("pr_loop_dim_size", None)
+        operand_precision: dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
+        dimension_relations: list[str] = layer_attrs.get("dimension_relations", [])
+        # user_spatial_mapping: dict[str, tuple] = layer_attrs.get("spatial_mapping", None)
+        user_spatial_mapping = SpatialMapping.parse_spatial_mapping(layer_attrs.get("spatial_mapping", None))
+        user_spatial_mapping_hint: dict[str, list] = layer_attrs.get("spatial_mapping_hint", None)
         user_temporal_ordering = layer_attrs.get("temporal_ordering", None)
         core_allocation: int = layer_attrs.get("core_allocation", None)
-        memory_operand_links: Dict[str, str] = layer_attrs.get(
-            "memory_operand_links", None
-        )
+        memory_operand_links: dict[str, str] = layer_attrs.get("memory_operand_links", None)
         source_storage_level: int = layer_attrs.get("source_storage_level", {})
-        operand_source_dimension_mapping: Dict[Dict[str, str]] = layer_attrs.get(  # type: ignore
+        operand_source_dimension_mapping: dict[dict[str, str]] = layer_attrs.get(  # type: ignore
             "operand_source_dimension_mapping", {}
         )
-        constant_operands: List[str] = layer_attrs.get("constant_operands", [])
-        input_operand_source: Dict[str, list] = layer_attrs.get(
-            "operand_source", dict()
-        )
+        constant_operands: list[str] = layer_attrs.get("constant_operands", [])
+        input_operand_source: dict[str, list] = layer_attrs.get("operand_source", dict())
         # Save the padding for different tensor dimensions
-        padding: Dict[str, tuple] = layer_attrs.get(
+        padding: dict[str, tuple] = layer_attrs.get(
             "padding", {}
         )  # Empty dict signals no padding in any dimension
 
         self.equation = equation
-        self.loop_dim_size = dict(
-            item for item in tuple(loop_dim_size.items())
-        )  # if item[1] != 1)
+        self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
         self.pr_loop_dim_size = pr_loop_dim_size
         self.operand_precision = operand_precision
         self.dimension_relations = dimension_relations
@@ -115,9 +106,7 @@ class LayerNode:
         self.pr_loop = pr_loop
         self.pr_scaling_factors = pr_scaling_factors
         if not self.pr_loop_dim_size:
-            self.pr_loop_dim_size = {
-                dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop
-            }
+            self.pr_loop_dim_size = {dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop}
 
         # Step2: extract relevant and irrelevant loop dimensions.
         (
@@ -139,7 +128,7 @@ class LayerNode:
             op for op in self.input_operands if op not in self.constant_operands
         ]
         # Save the way an operand's tensor should be reshaped for interaction with other nodes.
-        self.operand_tensor_reshape: Dict[str, list] = layer_attrs.get(
+        self.operand_tensor_reshape: dict[str, list] = layer_attrs.get(
             "operand_tensor_reshape", {op: [] for op in self.operand_list}
         )
 
@@ -193,18 +182,12 @@ class LayerNode:
         if dim in loop_sizes:
             return loop_sizes[dim]
         elif dim in self.pr_loop:
-            related_dimension_sizes = [
-                loop_sizes[dimension] for dimension in self.pr_loop[dim]
-            ]
+            related_dimension_sizes = [loop_sizes[dimension] for dimension in self.pr_loop[dim]]
             scaling_factors = list(self.pr_scaling_factors[dim].values())
             assert (
                 len(related_dimension_sizes) == len(scaling_factors) == 2
             ), "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
-            args = (
-                val
-                for pair in zip(scaling_factors, related_dimension_sizes)
-                for val in pair
-            )
+            args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
             pr_dim_size = self.calc_pr_dimension_size(*args)
             # Clip this to the largest possible size for this partially relevant dimension (computed at initialization based on padding)
             pr_dim_size = min(self.pr_loop_dim_size[dim], pr_dim_size)
@@ -240,11 +223,7 @@ class LayerNode:
         assert (
             len(related_dimension_sizes) == len(scaling_factors) == 2
         ), "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
-        args = (
-            val
-            for pair in zip(scaling_factors, related_dimension_sizes)
-            for val in pair
-        )
+        args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
         total_pr_dim_size = self.calc_pr_dimension_size(*args)
         # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and subtract
         padding = self.padding.get(dim, (0, 0))  # default = (0, 0)
@@ -264,10 +243,10 @@ class LayerNode:
         return eval("lambda n: " + equal_sign_right)
 
     def extract_pr_loop_info(self, equation_relations):
-        pr_loop: Dict[str, list] = {}
-        pr_loop_list: List[str] = []
-        pr_scaling_factors: Dict[str, list] = {}
-        padding: Dict[str, int] = {}
+        pr_loop: dict[str, list] = {}
+        pr_loop_list: list[str] = []
+        pr_scaling_factors: dict[str, list] = {}
+        padding: dict[str, int] = {}
         for relation in equation_relations:
             relation_disassembly = re.findall("[a-zA-Z]+", relation)
 
@@ -306,7 +285,7 @@ class LayerNode:
     @staticmethod
     def extract_r_ir_loop_info(equation: str, loop_dim_size, pr_loop, pr_loop_list):
         """! Description missing"""
-        operand_loop_dim: Dict[str, Dict] = {}
+        operand_loop_dim: dict[str, dict] = {}
         operand_list = []
         equation = equation.replace("*", " * ")
         equation = equation.replace("=", " = ")
@@ -329,14 +308,11 @@ class LayerNode:
             operand_list.append(operand)
             operand_loop_dim[operand] = {}
             r_loop_list = [
-                loop_dim.upper()
-                for loop_dim in equation_disassembly[begin_idx + 1 : split_loc]
+                loop_dim.upper() for loop_dim in equation_disassembly[begin_idx + 1 : split_loc]
             ]
             ir_loop_list = list(set(dimension_list).difference(r_loop_list))
 
-            pr_loop_remove_flag = any(
-                loop in list(pr_loop.keys()) for loop in r_loop_list
-            )
+            pr_loop_remove_flag = any(loop in list(pr_loop.keys()) for loop in r_loop_list)
             if pr_loop_remove_flag:
                 operand_loop_dim[operand]["r"] = [
                     loop for loop in r_loop_list if loop not in pr_loop_list
@@ -389,27 +365,25 @@ class LayerNode:
         self.total_MAC_count = total_MAC_count
 
         # each operand's size (Unit: # of data element)
-        operand_size_elem: Dict[str, int] = {}
+        operand_size_elem: dict[str, int] = {}
         for operand, relevancy in self.operand_loop_dim.items():
             operand_size_elem[operand] = 1
             for r_loop in relevancy["r"]:
                 operand_size_elem[operand] *= self.loop_dim_size[r_loop]
             for pr_loop, pr_loop_collect in relevancy["pr"].items():
-                multiply_factor = self.calc_tensor_dims(operand, self.loop_dim_size)[
-                    pr_loop
-                ]
+                multiply_factor = self.calc_tensor_dims(operand, self.loop_dim_size)[pr_loop]
                 operand_size_elem[operand] *= multiply_factor
         self.operand_size_elem = operand_size_elem
 
         # each operand's size (Unit: bit)
-        operand_size_bit: Dict[str, int] = {}
+        operand_size_bit: dict[str, int] = {}
         for operand, size_in_elem in operand_size_elem.items():
             operand_size_bit[operand] = size_in_elem * self.operand_precision[operand]
         self.operand_size_bit = operand_size_bit
 
         # each operand's total data reuse factor, which is total MAC Op/total operand size (in element),
         # i.e. each data element can be used to support how many MAC operation.
-        operand_data_reuse: Dict[str, float] = {}
+        operand_data_reuse: dict[str, float] = {}
         for operand, size_in_elem in operand_size_elem.items():
             operand_data_reuse[operand] = total_MAC_count / size_in_elem
         self.operand_data_reuse = operand_data_reuse
@@ -434,22 +408,3 @@ class LayerNode:
         if layer_op not in self.source_storage_level:
             return None
         return self.source_storage_level[layer_op]
-
-
-if __name__ == "__main__":
-    equation = "O[g][b][k][oy][ox]+=W[g][k][c][fy][fx]*I[g][b][c][ix][iy]"
-    dimension_size = {
-        "B": 1,
-        "K": 32,
-        "C": 64,
-        "OY": 28,
-        "OX": 28,
-        "FY": 3,
-        "FX": 3,
-        "G": 2,
-    }
-    operand_precision = {"O": 24, "O_final": 24, "W": 8, "I": 8}
-    equation_relations = ["ix=ox+fx-1", "iy=oy+fy-1"]
-
-    aa = LayerNode(equation, dimension_size, operand_precision, equation_relations)
-    a = 1
