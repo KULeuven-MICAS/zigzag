@@ -1,3 +1,8 @@
+import re
+
+from sympy import false
+
+
 class Dimension:
     """!  Description missing"""
 
@@ -12,7 +17,8 @@ class Dimension:
         self.size = size
 
     def __str__(self):
-        return f"Dimension(id={self.id},name={self.name},size={self.size})"
+        return self.name
+        # return f"Dimension(id={self.id},name={self.name},size={self.size})"
 
     def __repr__(self):
         return str(self)
@@ -21,8 +27,10 @@ class Dimension:
         """!  JSON representation of this class to save it to a json file."""
         return self.__dict__
 
-    def __eq__(self, other: "Dimension"):
+    def __eq__(self, other):
         # id should be enough to identify dimension
+        if not isinstance(other, Dimension):
+            return False
         return self.id == other.id
         # return other.id == self.id and self.name == other.name and self.size == other.size
 
@@ -30,3 +38,9 @@ class Dimension:
         # id should be enough to identify dimension
         return hash(self.id)
         # return hash(self.id) ^ hash(self.name)
+
+    @staticmethod
+    def parse_user_input(x: str):
+        assert bool(re.match(r"D\d", x)), f"User specified dimension {x} not recognized"
+        idx: int = re.findall(r"\d", x).pop()
+        return Dimension(idx, x)

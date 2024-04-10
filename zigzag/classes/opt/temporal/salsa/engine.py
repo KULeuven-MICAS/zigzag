@@ -34,13 +34,14 @@ import random
 
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.workload.layer_node import LayerNode
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.opt.temporal.loma.multipermute import permutations
 from zigzag.classes.opt.temporal.loma.memory_allocator import MemoryAllocator
 from zigzag.classes.opt.temporal.salsa.state import SalsaState
 
 logger = logging.getLogger(__name__)
+
 
 ## Class that handles optimization of temporal mapping given a:
 # - layer
@@ -63,7 +64,7 @@ class SalsaEngine:
         *,
         accelerator: Accelerator,
         layer: LayerNode,
-        spatial_mapping: SpatialMapping,
+        spatial_mapping: SpatialMappingInternal,
         **kwargs,
     ):
 
@@ -99,9 +100,7 @@ class SalsaEngine:
     ## Run a simulated annealing optimiation on the loop ordering using a loma memory allocation strategy.
     def run_simulated_annealing_opt(self, cme_queue):
         temperature = self.start_temperature
-        start_ordering = (
-            self.temporal_mapping_lpf
-        )  # tmo stands for temporal mapping ordering
+        start_ordering = self.temporal_mapping_lpf  # tmo stands for temporal mapping ordering
 
         # Initialize the algorithm with a random starting point
         random.shuffle(start_ordering)
@@ -142,8 +141,7 @@ class SalsaEngine:
 
             x = np.random.rand()  # x belongs to [0, 1]
             p = np.exp(
-                ((current_state.opt_criterion / next_state.opt_criterion) - 1)
-                / temperature
+                ((current_state.opt_criterion / next_state.opt_criterion) - 1) / temperature
             )  # probability of accepting the next state
 
             if x < p:
@@ -157,16 +155,12 @@ class SalsaEngine:
 
     ## Get all loops that have to be temporally scheduled given layer and spatial mapping.
     def get_temporal_loops(self):
-        temporal_loop_dim_size = (
-            self.layer.loop_dim_size.copy()
-        )  # init with all loop sizes
+        temporal_loop_dim_size = self.layer.loop_dim_size.copy()  # init with all loop sizes
         for spatial_loop in self.spatial_mapping.spatial_loop_dim_size:
             (spatial_loop_dim, spatial_loop_size) = spatial_loop
             # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,
             # we take the ceil of the division, so there can be one extra temporal iteration.
-            q = int(
-                np.ceil(temporal_loop_dim_size[spatial_loop_dim] / spatial_loop_size)
-            )
+            q = int(np.ceil(temporal_loop_dim_size[spatial_loop_dim] / spatial_loop_size))
             # q, rem = divmod(temporal_loop_dim_size[spatial_loop_dim], spatial_loop_size)
             # assert rem == 0, "Division of dimension size by spatial unrolling size is not an integer"
             if q == 1:
@@ -175,9 +169,7 @@ class SalsaEngine:
                 temporal_loop_dim_size[spatial_loop_dim] = q
 
         # Remove all dimensions with a temporal loop size of 1
-        temporal_loop_dim_size_no_1s = {
-            key: val for (key, val) in temporal_loop_dim_size.items() if val > 1
-        }
+        temporal_loop_dim_size_no_1s = {key: val for (key, val) in temporal_loop_dim_size.items() if val > 1}
 
         self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)

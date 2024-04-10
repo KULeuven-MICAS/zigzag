@@ -1,20 +1,24 @@
+from typing import TypeAlias
 from copy import deepcopy
 from dataclasses import dataclass
 import itertools
 import logging
 import math
-from matplotlib.hatch import SmallCircles
 from pydantic import BaseModel
 
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.dimension import Dimension
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.operational_array import OperationalArray
-from zigzag.classes.workload.layer_node import LayerNode
 
 
 logger = logging.getLogger(__name__)
+
+
+"""
+Type aliases for legacy data structures
+"""
+UnrollFactor: TypeAlias = int | float
+LayerDimStr: TypeAlias = str
+LimitedUSM: TypeAlias = dict[Dimension, list[tuple[LayerDimStr, UnrollFactor]]]
+UserSpatialMappingLegacy: TypeAlias = dict[Dimension, dict[LayerDimStr, UnrollFactor]]
 
 
 @dataclass
@@ -26,12 +30,14 @@ class LayerDim:
     def __hash__(self):
         return hash(self.name)
 
+    def __str__(self):
+        return self.name
+
 
 class MappingSingleOADim:
     """! Spatial unrolling for a single Operational Array Dimension"""
 
-    # TODO right now, mappings are defined as {"OA dim: (("layerdim1", i), ("layerdim2", j))
-    def __init__(self, data: dict[LayerDim, int]):
+    def __init__(self, data: dict[LayerDim, UnrollFactor]):
         self.data = data
 
     def get_nb_unrolled_dims(self):
@@ -48,6 +54,7 @@ class MappingSingleOADim:
         return math.prod([factor for factor in self.data.values()])
 
     def __getitem__(self, key: LayerDim):
+        assert isinstance(key, LayerDim)
         return self.data[key]
 
     def __contains__(self, key: LayerDim):
@@ -56,14 +63,21 @@ class MappingSingleOADim:
     def items(self):
         return self.data.items()
 
-    def __setitem__(self, key: LayerDim, value: int):
+    def __setitem__(self, key: LayerDim, value: UnrollFactor):
         self.data[key] = value
+
+    def __str__(self):
+        return str(self.data)
+
+    def __jsonrepr__(self):
+        return {layer_dim.name: str(unroll_factor) for layer_dim, unroll_factor in self.items()}
 
 
 class SpatialMapping:
     """! Spatial unrollings defined for every operational array dimension"""
 
     def __init__(self, data: dict[Dimension, MappingSingleOADim]):
+        assert isinstance(data, dict)
         self.data = data
 
     def is_valid(self, max_unrollings: "SpatialMapping", oa_dims: list[Dimension]):
@@ -72,6 +86,9 @@ class SpatialMapping:
         - the instance does not contain LayerDims that are not bounded by `max_unrollings`
         - each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
         - the instance does not contain OA Dimensions that are not part of the given list
+        @param max_unrollings a SpatialMapping instance that contains the maximally allowed
+        unrolling for each Layer Dimension in each OA Dimension individually
+        @param oa_dims list of Operational Array Dimensions that should be included in this instance
         """
         for oa_dim in oa_dims:
             if oa_dim not in self:
@@ -86,6 +103,7 @@ class SpatialMapping:
                 return False
 
         for oa_dim in self.data.keys():
+            assert isinstance(oa_dim, Dimension)
             if oa_dim not in oa_dims:
                 return False
 
@@ -129,7 +147,8 @@ class SpatialMapping:
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
         return math.prod([x.get_utilization() for x in self.data.values()])
 
-    def __getitem__(self, key: Dimension):
+    def __getitem__(self, key: Dimension) -> MappingSingleOADim:
+        assert isinstance(key, Dimension)
         return self.data[key]
 
     def items(self):
@@ -147,46 +166,53 @@ class SpatialMapping:
     def copy(self):
         return SpatialMapping(deepcopy(self.data))
 
+    def __str__(self):
+        return str(self.__jsonrepr__())
+
+    def __jsonrepr__(self):
+        return {oa_dim.name: mapping.__jsonrepr__() for oa_dim, mapping in self.items()}
+
+    def convert_to_legacy(self) -> UserSpatialMappingLegacy:
+        """! Convert this instance to the format used throughout older parts of the code base"""
+        return {
+            oa_dim: {layer_dim.name: unrolling for layer_dim, unrolling in mapping_single_oa_dim.items()}
+            for oa_dim, mapping_single_oa_dim in self.items()
+        }
+
     @staticmethod
-    def parse_spatial_mapping(x: dict[Dimension, tuple[str, int] | tuple[tuple]]):
+    def parse_user_input(x: dict[Dimension, tuple[str, UnrollFactor] | tuple[tuple]]):
         """! Parse legacy notation
-        Example:
-        x = {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
-        return SpatialMapping({"D1": {"OX": 25}, "D2": {"FX":3, "FY": 3}})
+        Example input: {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
         """
-        spatial_mapping_dict = {}  # operational array dimension : MappingSingleOADim
+        if x is None:
+            return SpatialMapping({})
+
+        if isinstance(x, list):
+            raise NotImplementedError("No support for multiple provided spatial mappings by user")
+
+        data: dict[Dimension, MappingSingleOADim] = {}
         for k, v in x.items():
-            mapping_single_dim_dict: dict[LayerDim, int] = {}
+            mapping_single_dim_dict: dict[LayerDim, UnrollFactor] = {}
 
             if isinstance(v[0], tuple):
-                # v: tuple[tuple[str, int]]
+                # v: tuple[tuple[str, UnrollFactor]]
                 # Nested layer dimensions
                 for layer_dim, factor in v:  # type: ignore
                     mapping_single_dim_dict[LayerDim(layer_dim)] = factor  # type: ignore
             else:
-                # v : tuple[str, int]
+                # v : tuple[str, UnrollFactor]
                 layer_dim, factor = v  # type: ignore
                 mapping_single_dim_dict[LayerDim(layer_dim)] = factor  # type: ignore
 
-            spatial_mapping_dict[k] = MappingSingleOADim(mapping_single_dim_dict)
-        return SpatialMapping(spatial_mapping_dict)
+            data[k] = MappingSingleOADim(mapping_single_dim_dict)
+        return SpatialMapping(data)
 
 
-@dataclass
 class SpatialMappingHint:
     """! Suggested LayerDims to be unrolled for every Operational Array Dimension"""
 
-    def __init__(self, data: dict):
-        self.data: dict[Dimension, set[LayerDim]]
-
-        if isinstance(next(iter(data.keys())), Dimension):
-            self.data = data
-        # Legacy notation: dict[str, list[str]]
-        elif isinstance(next(iter(data.keys())), str):
-            self.data = {
-                Dimension(name=oa_dim_name): {LayerDim(layer_dim_name) for layer_dim_name in hints}
-                for oa_dim_name, hints in data.items()
-            }
+    def __init__(self, data: dict[Dimension, set[LayerDim]]):
+        self.data = data
 
     def complete_with_defaults(self, oa_dims: list[Dimension], layer_dims: set[LayerDim]):
         for oa_dim in filter(lambda x: x not in self, oa_dims):
@@ -203,3 +229,11 @@ class SpatialMappingHint:
 
     def __contains__(self, key: Dimension):
         return self.data.__contains__(key)
+
+    @staticmethod
+    def parse_user_input(x: dict[str, list]):
+        if x is None:
+            return SpatialMappingHint({})
+        return SpatialMappingHint(
+            {Dimension.parse_user_input(k): {LayerDim(layer_dim) for layer_dim in v} for k, v in x.items()}
+        )

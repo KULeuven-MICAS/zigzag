@@ -5,13 +5,16 @@ import numpy as np
 from sympy.ntheory import factorint
 import logging
 
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.loma.multipermute import permutations
 from zigzag.classes.opt.temporal.loma.memory_allocator import (
     MemoryHierarchyTooSmallException,
     MemoryTooSmallException,
     MemoryAllocator,
 )
+from zigzag.classes.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +39,13 @@ class LomaEngine:
     """
 
     def __init__(
-        self, *, accelerator, layer, spatial_mapping, loma_lpf_limit=np.inf, **kwargs
+        self,
+        *,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        spatial_mapping: SpatialMappingInternal,
+        loma_lpf_limit=np.inf,
+        **kwargs,
     ):
         """!  The class constructor
         Initialize the engine with the given:
@@ -63,9 +72,7 @@ class LomaEngine:
         # TODO: thus adapt the memory hierarchy.
         # TODO: The fact that there is a global buffer above the cores requires attention.
         core_id = layer.core_allocation
-        self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(
-            core_id
-        ).memory_hierarchy
+        self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(core_id).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
 
@@ -79,31 +86,24 @@ class LomaEngine:
         self.get_temporal_loops()  # get all the temporal loops
         self.get_prime_factors()  # convert these to LPFs (loop prime factors)
 
-        if self.show_progress_bar:
-            pbar = tqdm(total=self.nb_permutations)
-        else:
-            pbar = None
+        pbar = tqdm(total=self.nb_permutations) if self.show_progress_bar else None
 
         yielded = False
         for ordering in self.og():  # ordering generator
-            allocator = MemoryAllocator(
-                self.accelerator, self.layer, self.spatial_mapping, ordering
-            )
+            allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
             # using try catch here because in the depth-first mode the highest level might not be big enough
             try:
-                temporal_mapping = (
-                    allocator.run()
-                )  # allocate this ordering to the memories
+                temporal_mapping = allocator.run()  # allocate this ordering to the memories
                 yielded = True
                 yield temporal_mapping
             except MemoryHierarchyTooSmallException:
                 pass
             except MemoryTooSmallException:
                 pass  # Skip the ordering that crashed due to ordering (+su) not fitting in memory
-            if self.show_progress_bar:
+            if pbar is not None:
                 pbar.update(1)
 
-        if self.show_progress_bar:
+        if pbar is not None:
             pbar.close()
 
         if not yielded:
@@ -111,18 +111,14 @@ class LomaEngine:
                 f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is compatible with the architecture."
             )
 
-    def get_temporal_loops(self):
+    def get_temporal_loops(self) -> None:
         """!  Get all loops that have to be temporally scheduled given layer and spatial mapping."""
-        temporal_loop_dim_size = (
-            self.layer.loop_dim_size.copy()
-        )  # init with all loop sizes
+        temporal_loop_dim_size = self.layer.loop_dim_size.copy()  # init with all loop sizes
         for spatial_loop in self.spatial_mapping.spatial_loop_dim_size:
             (spatial_loop_dim, spatial_loop_size) = spatial_loop
             # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,
             # we take the ceil of the division, so there can be one extra temporal iteration.
-            q = int(
-                np.ceil(temporal_loop_dim_size[spatial_loop_dim] / spatial_loop_size)
-            )
+            q = int(np.ceil(temporal_loop_dim_size[spatial_loop_dim] / spatial_loop_size))
             # q, rem = divmod(temporal_loop_dim_size[spatial_loop_dim], spatial_loop_size)
             # assert rem == 0, "Division of dimension size by spatial unrolling size is not an integer"
             if q == 1:
@@ -131,9 +127,7 @@ class LomaEngine:
                 temporal_loop_dim_size[spatial_loop_dim] = q
 
         # Remove all dimensions with a temporal loop size of 1
-        temporal_loop_dim_size_no_1s = {
-            key: val for (key, val) in temporal_loop_dim_size.items() if val > 1
-        }
+        temporal_loop_dim_size_no_1s = {key: val for (key, val) in temporal_loop_dim_size.items() if val > 1}
 
         self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
@@ -200,9 +194,7 @@ class LomaEngine:
             for nb_duplicated_pf in nb_duplicated_pfs:
                 nb_permutations = int(nb_permutations / factorial(nb_duplicated_pf))
         self.nb_permutations = nb_permutations
-        logger.debug(
-            f"Launching {self.nb_permutations:,} temporal loop order permutations."
-        )
+        logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
 
     def limit_lpfs(self):
         """!  Function to limit the total number of loop prime factors present in this instance.
@@ -216,9 +208,7 @@ class LomaEngine:
             return
         while n_pf > self.lpf_limit:
             # Find the loop dimension with the most lpfs
-            max_ld = max(
-                self.temporal_loop_pf_count_sums.items(), key=operator.itemgetter(1)
-            )[0]
+            max_ld = max(self.temporal_loop_pf_count_sums.items(), key=operator.itemgetter(1))[0]
             # Get the prime factors of this loop dimension
             max_pfs = list(self.temporal_loop_pfs[max_ld])
             # Get the multiplicity of these prime factors
@@ -238,9 +228,7 @@ class LomaEngine:
             else:  # the new factor is not yet present in the factors, insert so list remains sorted
                 new_factor_idx = len([pf for pf in max_pfs if pf < new_factor])
                 max_pfs.insert(new_factor_idx, new_factor)
-                max_counts.insert(
-                    new_factor_idx, 1
-                )  # first time this factor occured, count = 1
+                max_counts.insert(new_factor_idx, 1)  # first time this factor occured, count = 1
 
             # Sanitize max_pfs and max_counts to remove all elements with multiplicity 0
             non_zero_idxs = [idx for idx, count in enumerate(max_counts) if count != 0]
@@ -258,9 +246,7 @@ class LomaEngine:
         # Update self.lpfs for these new factors
         lpfs = []
         for dim in self.temporal_loop_pfs.keys():
-            for pf, count in zip(
-                self.temporal_loop_pfs[dim], self.temporal_loop_pf_counts[dim]
-            ):
+            for pf, count in zip(self.temporal_loop_pfs[dim], self.temporal_loop_pf_counts[dim]):
                 lpfs += list(((dim, pf),) * count)
         self.lpfs = lpfs
 

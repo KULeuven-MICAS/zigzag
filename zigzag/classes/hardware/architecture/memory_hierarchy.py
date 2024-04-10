@@ -30,9 +30,7 @@ class MemoryHierarchy(DiGraph):
         self.name = name
         self.operational_array = operational_array
         self.operands = set()  # Initialize the set that will store all memory operands
-        self.nb_levels = (
-            {}
-        )  # Initialize the dict that will store how many memory levels an operand has
+        self.nb_levels = {}  # Initialize the dict that will store how many memory levels an operand has
         self.mem_level_list = []
         self.memory_level_id = 0
 
@@ -70,11 +68,7 @@ class MemoryHierarchy(DiGraph):
 
         if port_alloc is None:
             # Define the standard port allocation scheme (this assumes one read port and one write port)
-            if not (
-                memory_instance.r_port == 1
-                and memory_instance.w_port == 1
-                and memory_instance.rw_port == 0
-            ):
+            if not (memory_instance.r_port == 1 and memory_instance.w_port == 1 and memory_instance.rw_port == 0):
                 raise ValueError(
                     f"No port allocation was provided for memory level of instance {memory_instance} and doesn't match with standard port allocation generation of 1 read and 1 write port."
                 )
@@ -90,16 +84,12 @@ class MemoryHierarchy(DiGraph):
                         }
                     )
                 else:
-                    port_alloc.append(
-                        {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None}
-                    )
+                    port_alloc.append({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None})
             port_alloc = tuple(port_alloc)
 
         # Assert that if served_dimensions is a string, it is "all"
         if type(served_dimensions) == str:
-            assert (
-                served_dimensions == "all"
-            ), "Served dimensions is a string, but is not all."
+            assert served_dimensions == "all", "Served dimensions is a string, but is not all."
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
         for mem_op in operands:
@@ -112,16 +102,12 @@ class MemoryHierarchy(DiGraph):
 
         # Parse the served_dimensions by replicating it into a tuple for each memory operand
         # as the MemoryLevel constructor expects this.
-        served_dimensions_repl = tuple(
-            [served_dimensions for _ in range(len(operands))]
-        )
+        served_dimensions_repl = tuple([served_dimensions for _ in range(len(operands))])
 
         # Compute which memory level this is for all the operands
         mem_level_of_operands = {}
         for operand in operands:
-            nb_levels_so_far = len(
-                [node for node in self.nodes() if operand in node.operands]
-            )
+            nb_levels_so_far = len([node for node in self.nodes() if operand in node.operands])
             mem_level_of_operands[operand] = nb_levels_so_far
 
         memory_level = MemoryLevel(
@@ -155,9 +141,7 @@ class MemoryHierarchy(DiGraph):
         The first entry in the returned list is the innermost memory level.
         """
         # Sort the nodes topologically and filter out all memories that don't store mem_op
-        memories = [
-            node for node in nx.topological_sort(self) if mem_op in node.operands
-        ]
+        memories = [node for node in nx.topological_sort(self) if mem_op in node.operands]
         return memories
 
     def get_operands(self):
@@ -198,11 +182,7 @@ class MemoryHierarchy(DiGraph):
 
         for k in self.nb_levels:
             self.nb_levels[k] = len(
-                set(
-                    node.mem_level_of_operands.get(k)
-                    for node in self.nodes()
-                    if k in node.mem_level_of_operands
-                )
+                set(node.mem_level_of_operands.get(k) for node in self.nodes() if k in node.mem_level_of_operands)
             )
         return to_remove, max(self.nb_levels.keys())
 
@@ -257,11 +237,7 @@ class MemoryHierarchy(DiGraph):
 
         for k in self.nb_levels:
             self.nb_levels[k] = len(
-                set(
-                    node.mem_level_of_operands.get(k)
-                    for node in self.nodes()
-                    if k in node.mem_level_of_operands
-                )
+                set(node.mem_level_of_operands.get(k) for node in self.nodes() if k in node.mem_level_of_operands)
             )
 
         return to_remove, self.nb_levels[operand]

@@ -5,7 +5,8 @@ from copy import deepcopy
 from collections import defaultdict
 from typing import Any
 
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
+from zigzag.classes.opt.spatial.SpatialMapping import SpatialMapping, SpatialMappingHint
 
 
 class LayerNode:
@@ -58,9 +59,7 @@ class LayerNode:
         # equation_relations has been replaced by dimension_relations.
         # Check if layer has equation_relations and notify user.
         if "equation_relations" in layer_attrs:
-            raise ValueError(
-                f"Please replace equation_relations by dimension_relations for layer {self}."
-            )
+            raise ValueError(f"Please replace equation_relations by dimension_relations for layer {self}.")
 
         # Get required attributes from layer_attrs
         equation: str = layer_attrs.get("equation")  # type: ignore
@@ -69,8 +68,9 @@ class LayerNode:
         operand_precision: dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
         dimension_relations: list[str] = layer_attrs.get("dimension_relations", [])
         # user_spatial_mapping: dict[str, tuple] = layer_attrs.get("spatial_mapping", None)
-        user_spatial_mapping = SpatialMapping.parse_spatial_mapping(layer_attrs.get("spatial_mapping", None))
-        user_spatial_mapping_hint: dict[str, list] = layer_attrs.get("spatial_mapping_hint", None)
+        user_spatial_mapping = SpatialMapping.parse_user_input(layer_attrs.get("spatial_mapping", None))
+        # user_spatial_mapping_hint: dict[str, list] = layer_attrs.get("spatial_mapping_hint", None)
+        user_spatial_mapping_hint = SpatialMappingHint.parse_user_input(layer_attrs.get("spatial_mapping_hint", None))
         user_temporal_ordering = layer_attrs.get("temporal_ordering", None)
         core_allocation: int = layer_attrs.get("core_allocation", None)
         memory_operand_links: dict[str, str] = layer_attrs.get("memory_operand_links", None)
@@ -81,9 +81,7 @@ class LayerNode:
         constant_operands: list[str] = layer_attrs.get("constant_operands", [])
         input_operand_source: dict[str, list] = layer_attrs.get("operand_source", dict())
         # Save the padding for different tensor dimensions
-        padding: dict[str, tuple] = layer_attrs.get(
-            "padding", {}
-        )  # Empty dict signals no padding in any dimension
+        padding: dict[str, tuple] = layer_attrs.get("padding", {})  # Empty dict signals no padding in any dimension
 
         self.equation = equation
         self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
@@ -124,9 +122,7 @@ class LayerNode:
         self.operand_dimensionality_order = operand_dimensionality_order
 
         # Save the variable (non-constant) input operands
-        self.variable_input_operands: list = [
-            op for op in self.input_operands if op not in self.constant_operands
-        ]
+        self.variable_input_operands: list = [op for op in self.input_operands if op not in self.constant_operands]
         # Save the way an operand's tensor should be reshaped for interaction with other nodes.
         self.operand_tensor_reshape: dict[str, list] = layer_attrs.get(
             "operand_tensor_reshape", {op: [] for op in self.operand_list}
@@ -135,14 +131,12 @@ class LayerNode:
         # Step3: extract layer info, e.g. total operand size, total operand data reuse, total MAC operation, etc.
         self.extract_layer_info()
 
-    def build_pr_funcs(self):
+    def build_pr_funcs(self) -> tuple[dict[str, list[str]], list[str], dict[str, dict[str, int]]]:
         # 1 long dimensions are removed in self.loop_dim_size but required in extract_pr_loop_info
-        loop_dim_size = defaultdict(lambda: 1)
+        loop_dim_size: dict[str, int] = defaultdict(lambda: 1)
         loop_dim_size.update(self.loop_dim_size)
         if self.dimension_relations:
-            pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(
-                self.dimension_relations
-            )
+            pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
@@ -198,9 +192,7 @@ class LayerNode:
             ), "This line should only be reached when the dim has a size of 1 in the layer."
             return 1
         else:
-            raise ValueError(
-                "Something went wrong in the initialization of the layer, or in the caller function."
-            )
+            raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")
 
     def calc_tensor_dims(self, layer_op, loop_sizes):
         out = {}
@@ -214,12 +206,8 @@ class LayerNode:
         @param dim (str): The partially relevant dimension, e.g. 'IX'.
         @return int: The total partially relevant dimension size
         """
-        related_dimension_sizes = [
-            self.loop_dim_size[related_dim] for related_dim in self.pr_loop[dim]
-        ]
-        scaling_factors = list(
-            self.pr_scaling_factors[dim].values()
-        )  # assumes this dict is ordered
+        related_dimension_sizes = [self.loop_dim_size[related_dim] for related_dim in self.pr_loop[dim]]
+        scaling_factors: list[dict] = list(self.pr_scaling_factors[dim].values())  # assumes this dict is ordered
         assert (
             len(related_dimension_sizes) == len(scaling_factors) == 2
         ), "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
@@ -242,13 +230,15 @@ class LayerNode:
     def return_lambda(equal_sign_right):
         return eval("lambda n: " + equal_sign_right)
 
-    def extract_pr_loop_info(self, equation_relations):
-        pr_loop: dict[str, list] = {}
+    def extract_pr_loop_info(
+        self, equation_relations: list[str]
+    ) -> tuple[dict[str, list[str]], list[str], dict[str, dict[str, int]]]:
+        pr_loop: dict[str, list[str]] = {}
         pr_loop_list: list[str] = []
-        pr_scaling_factors: dict[str, list] = {}
+        pr_scaling_factors: dict[str, dict[str, int]] = {}
         padding: dict[str, int] = {}
         for relation in equation_relations:
-            relation_disassembly = re.findall("[a-zA-Z]+", relation)
+            relation_disassembly: list[str] = re.findall("[a-zA-Z]+", relation)
 
             assert (
                 len(relation_disassembly) == 3
@@ -261,7 +251,7 @@ class LayerNode:
 
             # To extract the scaling factors for the different loop dimension iterators, we need to make sure
             # there is a scaling factor present in the equation. If it is not present, raise an exception.
-            scaling_factors = {}
+            scaling_factors: dict[str, int] = {}
             for val_lower in relation_disassembly[1:]:
                 if relation[relation.index(val_lower) - 1] == "*":
                     if not relation[relation.index(val_lower) - 2].isdigit():
@@ -269,37 +259,35 @@ class LayerNode:
                             f"Please use a scaling factor for every dimension iterator on the RHS of equation {relation}"
                         )
                     else:
-                        scaling_factors[val_lower] = int(
-                            re.findall("(\\d+)(?=\\*" + val_lower + ")", relation)[0]
-                        )
+                        scaling_factors[val_lower] = int(re.findall("(\\d+)(?=\\*" + val_lower + ")", relation)[0])
                 else:
                     scaling_factors[val_lower] = 1
             # scaling_factors = re.findall('[0-9]+', relation)
-            assert (
-                len(scaling_factors) == 2
-            ), f"Please remove any constants in the equation relation {relation}."
+            assert len(scaling_factors) == 2, f"Please remove any constants in the equation relation {relation}."
             pr_scaling_factors[key] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
     @staticmethod
-    def extract_r_ir_loop_info(equation: str, loop_dim_size, pr_loop, pr_loop_list):
+    def extract_r_ir_loop_info(
+        equation: str, loop_dim_size: dict[str, int], pr_loop: dict[str, list[str]], pr_loop_list: list[str]
+    ) -> tuple[dict[str, dict[str, list[str]]], dict[str, dict[str, list[str]]], list[str], dict[str, list[str]]]:
         """! Description missing"""
-        operand_loop_dim: dict[str, dict] = {}
-        operand_list = []
+        operand_loop_dim: dict[str, dict[str, list[str]]] = {}
+        operand_list: list[str] = []
         equation = equation.replace("*", " * ")
         equation = equation.replace("=", " = ")
         equation = equation.replace("+", " + ")
-        equation_disassembly = re.findall("[a-zA-Z,0-9,=,*,+]+", equation)
+        equation_disassembly: list[str] = re.findall("[a-zA-Z,0-9,=,*,+]+", equation)
         # filter out + that directly precedes an = (+=) or another + (++) to make this work for concat and add
         prev_char = None
         for i, char in enumerate(equation_disassembly):
             if (char == "=" or char == "+") and prev_char == "+":
                 equation_disassembly.pop(i - 1)
             prev_char = char
-        split_location = [
-            i for (i, x) in enumerate(equation_disassembly) if x in ["=", "*", "+"]
-        ] + [len(equation_disassembly)]
+        split_location = [i for (i, x) in enumerate(equation_disassembly) if x in ["=", "*", "+"]] + [
+            len(equation_disassembly)
+        ]
         dimension_list = list(loop_dim_size.keys())
         begin_idx = 0
         operand_dimensionality_order = {}
@@ -307,29 +295,20 @@ class LayerNode:
             operand = equation_disassembly[begin_idx]
             operand_list.append(operand)
             operand_loop_dim[operand] = {}
-            r_loop_list = [
-                loop_dim.upper() for loop_dim in equation_disassembly[begin_idx + 1 : split_loc]
-            ]
+            r_loop_list = [loop_dim.upper() for loop_dim in equation_disassembly[begin_idx + 1 : split_loc]]
             ir_loop_list = list(set(dimension_list).difference(r_loop_list))
 
-            pr_loop_remove_flag = any(loop in list(pr_loop.keys()) for loop in r_loop_list)
+            pr_loop_remove_flag = any(loop in pr_loop for loop in r_loop_list)
             if pr_loop_remove_flag:
-                operand_loop_dim[operand]["r"] = [
-                    loop for loop in r_loop_list if loop not in pr_loop_list
-                ]  #  and loop_dim_size[loop] != 1]
+                #  and loop_dim_size[loop] != 1]
+                operand_loop_dim[operand]["r"] = [loop for loop in r_loop_list if loop not in pr_loop_list]
                 operand_loop_dim[operand]["ir"] = [
-                    loop
-                    for loop in ir_loop_list
-                    if loop not in pr_loop_list and loop_dim_size[loop] != 1
+                    loop for loop in ir_loop_list if loop not in pr_loop_list and loop_dim_size[loop] != 1
                 ]
                 operand_loop_dim[operand]["pr"] = pr_loop
             else:
-                operand_loop_dim[operand]["r"] = [
-                    loop for loop in r_loop_list if loop_dim_size[loop] != 1
-                ]
-                operand_loop_dim[operand]["ir"] = [
-                    loop for loop in ir_loop_list if loop_dim_size[loop] != 1
-                ]
+                operand_loop_dim[operand]["r"] = [loop for loop in r_loop_list if loop_dim_size[loop] != 1]
+                operand_loop_dim[operand]["ir"] = [loop for loop in ir_loop_list if loop_dim_size[loop] != 1]
                 operand_loop_dim[operand]["pr"] = {}
             begin_idx = split_loc + 1
 

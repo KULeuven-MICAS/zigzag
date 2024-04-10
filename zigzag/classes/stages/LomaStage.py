@@ -1,5 +1,5 @@
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.loma.engine import LomaEngine
 from zigzag.classes.workload.layer_node import LayerNode
 from typing import Generator, Callable, List, Tuple, Any
@@ -16,9 +16,9 @@ class LomaStage(Stage):
         self,
         list_of_callables: List[Callable],
         *,
-        accelerator,
-        layer,
-        spatial_mapping,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        spatial_mapping: SpatialMappingInternal,
         **kwargs,
     ):
         """!  The class constructor
@@ -26,7 +26,7 @@ class LomaStage(Stage):
         @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
         @param accelerator (Accelerator): The accelerator object.
         @param layer (Layer): The layer object.
-        @param spatial_mapping (SpatialMapping): The spatial mapping object.
+        @param spatial_mapping (SpatialMappingInternal): The spatial mapping object.
         """
         super().__init__(list_of_callables, **kwargs)
         self.accelerator, self.layer, self.spatial_mapping = (

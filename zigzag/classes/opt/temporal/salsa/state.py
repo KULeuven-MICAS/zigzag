@@ -32,7 +32,7 @@ from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.workload.layer_node import LayerNode
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 
 
@@ -43,7 +43,7 @@ class SalsaState:
         self,
         accelerator: Accelerator,
         layer: LayerNode,
-        spatial_mapping: SpatialMapping,
+        spatial_mapping: SpatialMappingInternal,
         ordering,
         opt_criterion_name,
     ):
@@ -51,22 +51,16 @@ class SalsaState:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
-        self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(
-            layer.core_allocation
-        ).memory_hierarchy
+        self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(layer.core_allocation).memory_hierarchy
         self.opt_criterion_name = opt_criterion_name
 
-        allocator = MemoryAllocator(
-            self.accelerator, self.layer, self.spatial_mapping, ordering
-        )
+        allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
 
         # allocator = MemoryAllocator(layer=self.layer,
         #                                 ordering=ordering,
         #                                 spatial_mapping=self.spatial_mapping)
 
-        self.temporal_mapping = (
-            allocator.run()
-        )  # allocate this ordering to the memories
+        self.temporal_mapping = allocator.run()  # allocate this ordering to the memories
 
         self.cme = CostModelEvaluation(
             accelerator=self.accelerator,

@@ -20,9 +20,7 @@ def get_hardware_performance_zigzag(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -33,9 +31,7 @@ def get_hardware_performance_zigzag(
     elif opt == "EDP":
         opt_stage = MinimalEDPStage
     else:
-        raise NotImplementedError(
-            "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
     try:
@@ -69,6 +65,8 @@ def get_hardware_performance_zigzag(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=lpf_limit,  # required by LomaStage
         loma_show_progress_bar=True,
+        # TODO Enabling this option seems to cause errors
+        enable_weight_diagonal_mapping=False,
         # If we need access the same input data multiple times from the innermost memory level and the data size is smaller than the memory read bw,
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
         # By default, if the parameter is not defined, it will be set as False internally.
@@ -96,9 +94,7 @@ def get_hardware_performance_zigzag_imc(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -109,9 +105,7 @@ def get_hardware_performance_zigzag_imc(
     elif opt == "EDP":
         opt_stage = MinimalEDPStage
     else:
-        raise NotImplementedError(
-            "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
     try:
@@ -183,9 +177,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -196,9 +188,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     elif opt == "EDP":
         opt_stage = MinimalEDPStage
     else:
-        raise NotImplementedError(
-            "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
     try:
@@ -260,9 +250,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -273,9 +261,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
     elif opt == "EDP":
         opt_stage = MinimalEDPStage
     else:
-        raise NotImplementedError(
-            "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
     try:
@@ -337,9 +323,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # Sanity check on the optimization criterion
@@ -350,9 +334,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     elif opt == "EDP":
         opt_stage = MinimalEDPStage
     else:
-        raise NotImplementedError(
-            "Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'."
-        )
+        raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
     try:

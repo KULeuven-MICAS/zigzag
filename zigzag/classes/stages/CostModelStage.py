@@ -4,7 +4,7 @@ from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from zigzag.classes.cost_model.cost_model_for_sram_imc import CostModelEvaluationForIMC
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.workload.layer_node import LayerNode
 
@@ -20,9 +20,9 @@ class CostModelStage(Stage):
         self,
         list_of_callables: List[Callable],
         *,
-        accelerator,
-        layer,
-        spatial_mapping,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        spatial_mapping: SpatialMappingInternal,
         spatial_mapping_int,
         temporal_mapping,
         access_same_data_considered_as_no_access=True,
@@ -60,12 +60,8 @@ class CostModelStage(Stage):
         core_id = self.layer.core_allocation
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array
-        pe_type = getattr(
-            operational_array, "pe_type", None
-        )  # return None if it does not exist
-        if pe_type is not None and pe_type in [
-            "in_sram_computing"
-        ]:  # if pe_type exists and in the list
+        pe_type = getattr(operational_array, "pe_type", None)  # return None if it does not exist
+        if pe_type is not None and pe_type in ["in_sram_computing"]:  # if pe_type exists and in the list
             self.cme = CostModelEvaluationForIMC(
                 accelerator=self.accelerator,
                 layer=self.layer,

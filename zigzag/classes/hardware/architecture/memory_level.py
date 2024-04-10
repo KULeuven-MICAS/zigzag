@@ -1,4 +1,5 @@
 from typing import Dict, Tuple, List
+from zigzag.classes.hardware.architecture.dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from math import prod
@@ -30,7 +31,7 @@ class MemoryPort:
         self.bw = port_bw
         self.bw_min = port_bw_min
         self.attr = port_attr
-        self.served_op_lv_dir = []
+        self.served_op_lv_dir: list = []
 
         """ to give each port a unique id number """
         if port_id is None:
@@ -67,10 +68,10 @@ class MemoryLevel:
     def __init__(
         self,
         memory_instance: MemoryInstance,
-        operands: List[str],
-        mem_level_of_operands: Dict,
+        operands: list[str],
+        mem_level_of_operands: dict,
         port_alloc: Tuple[dict, ...],
-        served_dimensions: set or str,
+        served_dimensions: set | str,
         operational_array: OperationalArray,
         id,
     ):
@@ -93,6 +94,7 @@ class MemoryLevel:
         self.nb_dimensions = operational_array.nb_dimensions
         self.dimension_sizes = operational_array.dimension_sizes
         self.id = id
+        self.served_dimensions: set[Dimension] = set()
         self.check_served_dimensions()
         self.assert_valid()
 
@@ -163,9 +165,7 @@ class MemoryLevel:
             port_list.append(new_port)
         for i in range(1, rw_port + 1):
             port_name = "rw_port_" + str(i)
-            port_bw = (
-                self.memory_instance.r_bw
-            )  # we assume the read-write port has the same bw for read and write
+            port_bw = self.memory_instance.r_bw  # we assume the read-write port has the same bw for read and write
             port_bw_min = self.memory_instance.r_bw_min
             port_attr = "rw"
             new_port = MemoryPort(port_name, port_bw, port_bw_min, port_attr)
@@ -214,16 +214,8 @@ class MemoryLevel:
     def calc_unroll_count(self):
         unroll_count = []
         for sum_op_served_dimensions in self.sum_served_dims:
-            sum_served_dims_invert = [
-                not sum_dim for sum_dim in sum_op_served_dimensions
-            ]
-            op_unroll_count = prod(
-                [
-                    prod(x)
-                    for x in zip(self.dimension_sizes, sum_served_dims_invert)
-                    if prod(x) != 0
-                ]
-            )
+            sum_served_dims_invert = [not sum_dim for sum_dim in sum_op_served_dimensions]
+            op_unroll_count = prod([prod(x) for x in zip(self.dimension_sizes, sum_served_dims_invert) if prod(x) != 0])
             unroll_count.append(op_unroll_count)
         assert all(
             op_unroll_count == unroll_count[0] for op_unroll_count in unroll_count
@@ -241,23 +233,19 @@ class MemoryLevel:
             total_fanout *= served_dimension.size
         self.total_fanout = total_fanout
 
-    def check_served_dimensions(self):
+    def check_served_dimensions(self) -> None:
         """!  Function that modifies the served_dimensions for this MemoryLevel if it is an empty set or 'all'.
         Empty set signals that the Memory Level has no dimensions served to the level below, thus a fanout of 1.
         'all' signals that the MemoryLevel's served_dimensions are all dimensions, thus there is only one instance of the MemoryNode at this level.
         """
-        served_dimensions = self.served_dimensions_vec
         operands = self.operands
         # Modify served_dimensions to list to be able to change it if empty set or None.
-        served_dimensions = list(served_dimensions)
-        for op_idx, (op, op_served_dimensions) in enumerate(
-            zip(operands, served_dimensions)
-        ):
+        served_dimensions: list[tuple] = list(self.served_dimensions_vec)
+        for op_idx, (op, op_served_dimensions) in enumerate(zip(operands, served_dimensions)):
             # If served_dimensions is an empty set, it means this memory level is fully unrolled wrt operational_array
             # We then convert it to be consistent with used notation
             if op_served_dimensions == set():
-                op_served_dimensions = {(0,) * self.nb_dimensions}
-                served_dimensions[op_idx] = tuple(op_served_dimensions)
+                served_dimensions[op_idx] = (0,) * self.nb_dimensions
             # If served_dimensions is 'all', it means this memory level is not unrolled
             # We then convert it to a set containing all base dimensions of the operational_array (corresponds to a flat identity matrix)
             if op_served_dimensions == "all":
@@ -265,31 +253,23 @@ class MemoryLevel:
                 flat_identity_tuple = tuple([tuple(row) for row in identity_array])
                 op_served_dimensions = set(flat_identity_tuple)
                 served_dimensions[op_idx] = tuple(op_served_dimensions)
-        served_dimensions = tuple(served_dimensions)
-        self.served_dimensions_vec = served_dimensions
+        self.served_dimensions_vec = tuple(served_dimensions)
 
         # Based on the vector representation of the served dimensions,
         # we also save all the dimension objects this memory level serves.
-        served_dimensions = []
+
         for op_served_dimensions_vec in self.served_dimensions_vec:
             for served_dimension_vec in op_served_dimensions_vec:
-                non_zero_idxs = [
-                    idx for idx, elem in enumerate(served_dimension_vec) if elem != 0
-                ]  # vector indices that are non-zero
-                served_dimensions += [
-                    self.find_dimension_with_idx(idx) for idx in non_zero_idxs
-                ]
-        self.served_dimensions = set(served_dimensions)
+                # vector indices that are non-zero
+                non_zero_idxs = [idx for idx, elem in enumerate(served_dimension_vec) if elem != 0]
+                self.served_dimensions.update({self.find_dimension_with_idx(idx) for idx in non_zero_idxs})
 
-    def find_dimension_with_idx(self, idx: int):
+    def find_dimension_with_idx(self, idx: int) -> Dimension:
         """!  Find the dimension object with idx 'idx'.
         @param idx
         """
-        dimension = None
         for dim in self.dimensions:
             if dim.id == idx:
-                dimension = dim
-                break
-        if dimension is None:
-            raise ValueError("idx passed to function is not a valid dimension id.")
-        return dimension
+                return dim
+
+        raise ValueError("idx passed to function is not a valid dimension id.")

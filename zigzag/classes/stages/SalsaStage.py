@@ -31,7 +31,7 @@ from copy import deepcopy
 import logging
 
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.mapping.spatial.spatial_mapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.salsa.engine import SalsaEngine
 from zigzag.classes.workload.layer_node import LayerNode
 from typing import Generator, Callable, List, Tuple, Any
@@ -53,7 +53,7 @@ class SalsaStage(Stage):
     # @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
     # @param accelerator (Accelerator): The accelerator object.
     # @param layer (Layer): The layer object.
-    # @param spatial_mapping (SpatialMapping): The spatial mapping object.
+    # @param spatial_mapping (SpatialMappingInternal): The spatial mapping object.
     def __init__(
         self,
         list_of_callables: List[Callable],
@@ -84,16 +84,12 @@ class SalsaStage(Stage):
         elif self.opt_criterion_name == "latency":
             self.compare_stage = self.compare_cme_latency
         else:
-            raise Exception(
-                "Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'."
-            )
+            raise Exception("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
 
     ## Set up and start salsa engine, then collect and return the best cost model evaluation
     def run(self):
 
-        logger.info(
-            f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s)."
-        )
+        logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
 
         self.engine = SalsaEngine(
             accelerator=self.accelerator,
@@ -145,10 +141,7 @@ class SalsaStage(Stage):
 
         if self.best_cme is None:
             self.best_cme = cme
-        elif (
-            cme.latency_total2 == self.best_cme.latency_total2
-            and cme.energy_total < self.best_cme.energy_total
-        ):
+        elif cme.latency_total2 == self.best_cme.latency_total2 and cme.energy_total < self.best_cme.energy_total:
             self.best_cme = cme
         elif cme.latency_total2 < self.best_cme.latency_total2:
             self.best_cme = cme
@@ -158,10 +151,7 @@ class SalsaStage(Stage):
     def compare_cme_energy(self, cme):
         if self.best_cme is None:
             self.best_cme = cme
-        elif (
-            cme.energy_total == self.best_cme.energy_total
-            and cme.latency_total2 < self.best_cme.latency_total2
-        ):
+        elif cme.energy_total == self.best_cme.energy_total and cme.latency_total2 < self.best_cme.latency_total2:
             self.best_cme = cme
         elif cme.energy_total < self.best_cme.energy_total:
             self.best_cme = cme

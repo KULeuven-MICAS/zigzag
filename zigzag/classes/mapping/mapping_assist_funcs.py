@@ -1,12 +1,16 @@
+from typing import TypeAlias
 from typing import Dict, List
 from typing import TYPE_CHECKING
 from math import prod
 from copy import deepcopy
 
+from zigzag.classes.opt.spatial.SpatialMapping import LayerDimStr, UnrollFactor
 from zigzag.utils import pickle_deepcopy
 
 if TYPE_CHECKING:
     from zigzag.classes.workload.layer_node import LayerNode
+
+SpatialMappingPerMEMLvl: TypeAlias = dict[str, list[list[tuple[LayerDimStr, UnrollFactor]]]]
 
 
 class Loop:
@@ -32,63 +36,48 @@ class Loop:
         return str(self.loop)
 
 
-def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
+def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNode") -> SpatialMappingPerMEMLvl:
     """!  This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
     It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
     """
 
-    operand_loop_dim = {
-        op: layer_node.operand_loop_dim[op] for op in mapping_dict.keys()
-    }
-    r_ir_operand_loop_LUT = {
-        op: relevance["r"] + relevance["ir"]
-        for (op, relevance) in operand_loop_dim.items()
-    }
-    pr_operand_loop_LUT = {
-        op: relevance["pr"]
-        for (op, relevance) in operand_loop_dim.items()
-        if relevance["pr"] != {}
-    }
+    operand_loop_dim = {op: layer_node.operand_loop_dim[op] for op in mapping_dict.keys()}
+    r_ir_operand_loop_LUT = {op: relevance["r"] + relevance["ir"] for (op, relevance) in operand_loop_dim.items()}
+    pr_operand_loop_LUT = {op: relevance["pr"] for (op, relevance) in operand_loop_dim.items() if relevance["pr"] != {}}
     pr_operand_list = list(pr_operand_loop_LUT.keys())
-    mapping_dict_reform: dict = pickle_deepcopy(mapping_dict)  # type: ignore
+    mapping_dict_reform: SpatialMappingPerMEMLvl = pickle_deepcopy(mapping_dict)  # type: ignore
 
     # current and below level pr data size
-    cabl_pr_data_size = {}
+    cabl_pr_data_size: dict = {}
     # current and below level pr data reuse
-    cabl_pr_data_reuse = {}
+    cabl_pr_data_reuse: dict = {}
 
     # each single pr loop data size
-    per_pr_data_size = {}
+    per_pr_data_size: dict = {}
     # each single pr loop data reuse
-    per_pr_data_reuse = {}
+    per_pr_data_reuse: dict = {}
 
     for operand in pr_operand_list:
 
         # initialize current and below level pr loop size
         cabl_pr_lp_size = {
-            pr_data_dim: {
-                pr_loop_dim: 1
-                for pr_loop_dim in pr_operand_loop_LUT[operand][pr_data_dim]
-            }
-            for pr_data_dim in pr_operand_loop_LUT[operand].keys()
+            pr_data_dim: {pr_loop_dim: 1 for pr_loop_dim in pr_operand_loop_LUT[operand][pr_data_dim]}
+            for pr_data_dim in pr_operand_loop_LUT[operand]
         }
 
         # initialize current and below level pr data size
         cabl_pr_data_size[operand] = {
-            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))]
-            for pr_data_dim in pr_operand_loop_LUT[operand].keys()
+            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))] for pr_data_dim in pr_operand_loop_LUT[operand]
         }
 
         # initialize current and below level pr data reuse
         cabl_pr_data_reuse[operand] = {
-            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))]
-            for pr_data_dim in pr_operand_loop_LUT[operand].keys()
+            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))] for pr_data_dim in pr_operand_loop_LUT[operand]
         }
 
         # initialize per pr loop data size
         per_pr_data_size[operand] = {
-            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))]
-            for pr_data_dim in pr_operand_loop_LUT[operand].keys()
+            pr_data_dim: [[] for _ in range(len(mapping_dict[operand]))] for pr_data_dim in pr_operand_loop_LUT[operand]
         }
 
         # initialize per pr loop data reuse
@@ -103,27 +92,15 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
                 if loop_type in r_ir_operand_loop_LUT[operand]:
                     continue
                 for pr_data_dim in pr_operand_loop_LUT[operand].keys():
-                    if any(
-                        lp_type == loop_type
-                        for lp_type in pr_operand_loop_LUT[operand][pr_data_dim]
-                    ):
+                    if any(lp_type == loop_type for lp_type in pr_operand_loop_LUT[operand][pr_data_dim]):
                         cabl_pr_lp_size[pr_data_dim][loop_type] *= loop_size
 
                         # compute pr related data dimension size and data dimension reuse at current and below joint levels
                         # based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled into r and ir loops.
-                        pr_loop_combined_to_r = layer_node.calc_tensor_dim(
-                            cabl_pr_lp_size[pr_data_dim], pr_data_dim
-                        )
-                        pr_loop_combined_to_ir = (
-                            prod(cabl_pr_lp_size[pr_data_dim].values())
-                            / pr_loop_combined_to_r
-                        )
-                        cabl_pr_data_size[operand][pr_data_dim][level].append(
-                            pr_loop_combined_to_r
-                        )
-                        cabl_pr_data_reuse[operand][pr_data_dim][level].append(
-                            pr_loop_combined_to_ir
-                        )
+                        pr_loop_combined_to_r = layer_node.calc_tensor_dim(cabl_pr_lp_size[pr_data_dim], pr_data_dim)
+                        pr_loop_combined_to_ir = prod(cabl_pr_lp_size[pr_data_dim].values()) / pr_loop_combined_to_r
+                        cabl_pr_data_size[operand][pr_data_dim][level].append(pr_loop_combined_to_r)
+                        cabl_pr_data_reuse[operand][pr_data_dim][level].append(pr_loop_combined_to_ir)
 
         # compute pr related data dimension size and data dimension reuse at each level for each pr loop
         # based on cabl_pr_data_size/cabl_pr_data_reuse """
@@ -156,11 +133,11 @@ def decouple_pr_loop(mapping_dict: Dict, layer_node: "LayerNode"):
 
 
 def replace_pr_loop_in_mapping(
-    single_operand_mapping: Dict,
-    per_pr_data_size: Dict,
-    per_pr_data_reuse: Dict,
-    pr_operand_loop_LUT: Dict,
-    r_ir_operand_loop_LUT: List,
+    single_operand_mapping: dict,
+    per_pr_data_size: dict,
+    per_pr_data_reuse: dict,
+    pr_operand_loop_LUT: dict,
+    r_ir_operand_loop_LUT: list,
 ):
     """!  This function replaces all pr loops in a mapping of a single operand with r and ir loops.
     @param single_operand_mapping
@@ -173,17 +150,13 @@ def replace_pr_loop_in_mapping(
 
     for level, loop_list in enumerate(single_operand_mapping):
         # Introduce the current level pr loop index to distinguish different pr loops at the same architectural level
-        cl_pr_lp_idx_local = {
-            pr_data_dim: 0 for pr_data_dim in pr_operand_loop_LUT.keys()
-        }
+        cl_pr_lp_idx_local = {pr_data_dim: 0 for pr_data_dim in pr_operand_loop_LUT.keys()}
         cl_pr_lp_idx_global = 0
         for idx, (loop_type, loop_size) in enumerate(loop_list):
             if loop_type in r_ir_operand_loop_LUT:
                 continue
             for pr_data_dim in pr_operand_loop_LUT.keys():
-                if any(
-                    lp_type == loop_type for lp_type in pr_operand_loop_LUT[pr_data_dim]
-                ):
+                if any(lp_type == loop_type for lp_type in pr_operand_loop_LUT[pr_data_dim]):
                     # replace the pr loop in the mapping by r loop
                     pr_idx_local = cl_pr_lp_idx_local[pr_data_dim]
                     pr_idx_global = cl_pr_lp_idx_global
@@ -209,9 +182,7 @@ def replace_pr_loop_in_mapping(
     return mapping_new
 
 
-def calc_data_size_MAC_count_per_loop(
-    mapping_dict_reform: Dict, operand_loop_dim_reform: Dict
-):
+def calc_data_size_MAC_count_per_loop(mapping_dict_reform: Dict, operand_loop_dim_reform: Dict):
     """! This function generates detailed information for each single loop item for each operand."""
     detailed_mapping_dict = deepcopy(mapping_dict_reform)
     for operand, mapping_list in mapping_dict_reform.items():
