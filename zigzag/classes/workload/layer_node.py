@@ -6,7 +6,7 @@ from collections import defaultdict
 from typing import Any
 
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.classes.opt.spatial.SpatialMapping import SpatialMapping, SpatialMappingHint
+from zigzag.classes.opt.spatial.SpatialMapping import LayerDim, LayerDimStr, SpatialMapping, SpatialMappingHint
 
 
 class LayerNode:
@@ -63,8 +63,8 @@ class LayerNode:
 
         # Get required attributes from layer_attrs
         equation: str = layer_attrs.get("equation")  # type: ignore
-        loop_dim_size: dict[str, int] = layer_attrs.get("loop_dim_size")  # type: ignore
-        pr_loop_dim_size: dict[str, int] = layer_attrs.get("pr_loop_dim_size", None)
+        loop_dim_size: dict[LayerDimStr, int] = layer_attrs.get("loop_dim_size")  # type: ignore
+        pr_loop_dim_size: dict[LayerDimStr, int] = layer_attrs.get("pr_loop_dim_size", None)
         operand_precision: dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
         dimension_relations: list[str] = layer_attrs.get("dimension_relations", [])
         # user_spatial_mapping: dict[str, tuple] = layer_attrs.get("spatial_mapping", None)
@@ -84,7 +84,12 @@ class LayerNode:
         padding: dict[str, tuple] = layer_attrs.get("padding", {})  # Empty dict signals no padding in any dimension
 
         self.equation = equation
-        self.loop_dim_size = dict(item for item in tuple(loop_dim_size.items()))  # if item[1] != 1)
+        # Legacy code: still uses LayerDimStr instead of LayerDim
+        self.loop_dim_size: dict[LayerDimStr, int] = loop_dim_size
+        self.layer_dim_sizes: dict[LayerDim, int] = {
+            LayerDim(layer_dim): size for layer_dim, size in loop_dim_size.items()
+        }
+
         self.pr_loop_dim_size = pr_loop_dim_size
         self.operand_precision = operand_precision
         self.dimension_relations = dimension_relations

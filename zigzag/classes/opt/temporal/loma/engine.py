@@ -81,7 +81,7 @@ class LomaEngine:
         @return Generator that yields all temporal mappings
         """
         # TODO: add the criterion(s) as inputs to this function.
-        logger.info("Running temporal mapping search engine...")
+        loggerlogger = logging.getLogger(__name__)
 
         self.get_temporal_loops()  # get all the temporal loops
         self.get_prime_factors()  # convert these to LPFs (loop prime factors)
@@ -137,7 +137,7 @@ class LomaEngine:
             )
             self.lpf_limit = min_nb_temporal_loops
 
-    def get_prime_factors(self):
+    def get_prime_factors(self) -> None:
         """!  Get the prime factors for all temporal loops.
         This is saved in three separate class attributes (temporal_loop_pfs, temporal_loop_pf_counts, temporal_loop_pf_count_sums)
         """
@@ -145,9 +145,9 @@ class LomaEngine:
         # temporal_loop_pf_counts: a dict that for each temporal loop dimension contains the prime factor multiplicities
         # temporal_loop_pf_count_sums: a dict that for each temporal loop dimension contains the total amount of prime factors
 
-        temporal_loop_pfs = {}
-        temporal_loop_pf_counts = {}
-        temporal_loop_pf_count_sums = {}
+        temporal_loop_pfs: dict[str, tuple[int, ...]] = {}
+        temporal_loop_pf_counts: dict[str, tuple[int, ...]] = {}
+        temporal_loop_pf_count_sums: dict[str, int] = {}
         lpfs = []
         for (
             tl_dim,
@@ -176,7 +176,7 @@ class LomaEngine:
 
         logger.debug(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
 
-        self.temporal_loop_pfs = temporal_loop_pfs
+        self.temporal_loop_pfs: dict[str, tuple[int, ...]] = temporal_loop_pfs
         self.temporal_loop_pf_counts = temporal_loop_pf_counts
         self.temporal_loop_pf_count_sums = temporal_loop_pf_count_sums
         self.lpfs = lpfs
@@ -196,7 +196,7 @@ class LomaEngine:
         self.nb_permutations = nb_permutations
         logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
 
-    def limit_lpfs(self):
+    def limit_lpfs(self) -> None:
         """!  Function to limit the total number of loop prime factors present in this instance.
         This function scans the lpfs and while the number of lpfs is greater than self.lpf_limit it:
         - picks the loop dimension that has the most lpfs
@@ -210,9 +210,9 @@ class LomaEngine:
             # Find the loop dimension with the most lpfs
             max_ld = max(self.temporal_loop_pf_count_sums.items(), key=operator.itemgetter(1))[0]
             # Get the prime factors of this loop dimension
-            max_pfs = list(self.temporal_loop_pfs[max_ld])
+            max_pfs: list[int] = list(self.temporal_loop_pfs[max_ld])
             # Get the multiplicity of these prime factors
-            max_counts = list(self.temporal_loop_pf_counts[max_ld])
+            max_counts: list[int] = list(self.temporal_loop_pf_counts[max_ld])
 
             if max_counts[0] == 1:  # multiplicity of smallest pf is 1
                 new_factor = max_pfs[0] * max_pfs[1]

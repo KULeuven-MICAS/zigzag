@@ -15,7 +15,7 @@ def get_hardware_performance_zigzag(
     pickle_filename="outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
     cost_model_class: Type = CostModelEvaluation,
-):
+) -> tuple[float, float, list[CostModelEvaluation]]:
     # Initialize the logger
     import logging as _logging
 

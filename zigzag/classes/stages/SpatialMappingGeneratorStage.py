@@ -1,6 +1,5 @@
 import logging
 
-from numpy import deprecate
 
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.opt.spatial.SpatialMapping import SpatialMapping
@@ -52,15 +51,13 @@ class SpatialMappingGeneratorStage(Stage):
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
 
     @staticmethod
-    # Check that the layer includes:
-    # - the core which it is allocated to
-    #
-    # If not, a ValueError is raised.
-    #
-    # If the layer in main_inputs is not set, False is returned
-    #
-    # @return: True if layer is set correctly
     def check_layer(layer: LayerNode):
+        """!Check that the layer includes:
+        - the core which it is allocated to
+        If not, a ValueError is raised.
+        If the layer in main_inputs is not set, False is returned
+        @return: True if layer is set correctly
+        """
         if layer is None:
             raise ValueError()
         if layer.core_allocation is None:
@@ -73,7 +70,6 @@ class SpatialMappingGeneratorStage(Stage):
         to the memory-level based spatial mapping representation.
         """
 
-        user_spatial_mapping_hint = self.layer.user_spatial_mapping_hint
         user_provided_spatial_mappings = self.layer.user_spatial_mapping
         core_id = self.layer.core_allocation
         core: Core = self.accelerator.get_core(core_id=core_id)
@@ -131,27 +127,27 @@ class SpatialMappingGeneratorStage(Stage):
                     cme.accelerator = original_accelerator
                 yield cme, (user_spatial_mapping, extra_info)
 
-    @deprecate
-    def complete_user_spatial_mapping_hint(self, user_spatial_mapping_hint, oa_dims):
-        # This function is to create user_spatial_mapping_hint when it is not provided
-        # or complete it if it is provided but on only part of oa dimensions.
-        complete_user_spatial_mapping_hint = user_spatial_mapping_hint
-        if complete_user_spatial_mapping_hint is None:
-            logger.info("User-provided spatial mappings hint not found. Auto-generating spatial_mapping_hint..")
-            complete_user_spatial_mapping_hint = {}
-            for oa_dim in oa_dims:
-                complete_user_spatial_mapping_hint[oa_dim.name] = [layer_dim for layer_dim in self.layer.loop_dim_list]
-            # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
-        else:
-            oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
-            # Add definition for non-exist dimension in user_spatial_mapping_hint
-            for oa_dim_name in oa_dims_name:
-                if oa_dim_name not in complete_user_spatial_mapping_hint.keys():
-                    complete_user_spatial_mapping_hint[oa_dim_name] = [
-                        layer_dim for layer_dim in self.layer.loop_dim_list
-                    ]
-            # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
-        return complete_user_spatial_mapping_hint
+    # @deprecate
+    # def complete_user_spatial_mapping_hint(self, user_spatial_mapping_hint, oa_dims):
+    #     # This function is to create user_spatial_mapping_hint when it is not provided
+    #     # or complete it if it is provided but on only part of oa dimensions.
+    #     complete_user_spatial_mapping_hint = user_spatial_mapping_hint
+    #     if complete_user_spatial_mapping_hint is None:
+    #         logger.info("User-provided spatial mappings hint not found. Auto-generating spatial_mapping_hint..")
+    #         complete_user_spatial_mapping_hint = {}
+    #         for oa_dim in oa_dims:
+    #             complete_user_spatial_mapping_hint[oa_dim.name] = [layer_dim for layer_dim in self.layer.loop_dim_list]
+    #         # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
+    #     else:
+    #         oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
+    #         # Add definition for non-exist dimension in user_spatial_mapping_hint
+    #         for oa_dim_name in oa_dims_name:
+    #             if oa_dim_name not in complete_user_spatial_mapping_hint.keys():
+    #                 complete_user_spatial_mapping_hint[oa_dim_name] = [
+    #                     layer_dim for layer_dim in self.layer.loop_dim_list
+    #                 ]
+    #         # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
+    #     return complete_user_spatial_mapping_hint
 
     def modify_innermost_input_mem_size(self, core_id: int, user_spatial_mapping: SpatialMapping):
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
@@ -249,12 +245,3 @@ class SpatialMappingGeneratorStage(Stage):
                 core_set=new_cores,
             )
             return input_mem_size_updated, new_accelerator
-
-    # @staticmethod
-    # def is_nested_tuple(obj):
-    #     if isinstance(obj, tuple):
-    #         for item in obj:
-    #             if isinstance(item, tuple):
-    #                 # If any item within the tuple is itself a tuple, it's a nested tuple
-    #                 return True
-    #     return False

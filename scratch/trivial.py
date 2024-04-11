@@ -31,9 +31,9 @@ workload = {
         "operator_type": "matmul",
         "equation": "O[p][r]+=I[p][q]*W[q][r]",
         "loop_dim_size": {
-            "P": 10,
-            "Q": 10,
-            "R": 10,
+            "P": 1000,
+            "Q": 1000,
+            "R": 1000,
         },
         "operand_precision": {"O": 8, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"I": [], "W": []},
@@ -71,20 +71,21 @@ reg_O1 = MemoryInstance(
     rw_port=0,
     latency=1,
 )
+x = 8
 sram_32KB_512_1r_1w = MemoryInstance(
     name="sram_32KB",
     size=1000 * 8,
-    r_bw=8,
-    w_bw=8,
-    r_cost=1,
-    w_cost=1,
+    r_bw=8 * x,
+    w_bw=8 * x,
+    r_cost=1 * x,
+    w_cost=1 * x,
     area=0,
     r_port=1,
     w_port=1,
     rw_port=0,
     latency=1,
 )
-x = 1
+x = 8
 sram_2M_with_16_128K_bank_128_1r_1w = MemoryInstance(
     name="sram_2MB",
     size=131072 * 16 * 8,
@@ -117,13 +118,13 @@ memory_hierarchy_graph.add_memory(
     memory_instance=reg_IW1,
     operands=("I2",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    served_dimensions={(0, 1)},
+    served_dimensions={(0, 0, 0, 0)},
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=reg_O1,
     operands=("O",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
-    served_dimensions={(0, 0)},
+    served_dimensions={(0, 0, 0, 0)},
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=sram_32KB_512_1r_1w,
@@ -194,9 +195,7 @@ with open(pickle_filename, "rb") as fp:
     cme_for_all_layers: list[CostModelEvaluation] = pickle.load(fp)
 
 
-bar_plot_cost_model_evaluations_breakdown(
-    cme_for_all_layers, save_path="outputs/plot_breakdown.png"
-)
+bar_plot_cost_model_evaluations_breakdown(cme_for_all_layers, save_path="outputs/plot_breakdown.png")
 
 visualize_memory_hierarchy_graph(
     cme_for_all_layers[0].accelerator.cores[0].memory_hierarchy,

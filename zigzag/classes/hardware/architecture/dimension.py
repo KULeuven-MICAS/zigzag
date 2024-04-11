@@ -1,10 +1,8 @@
 import re
 
-from sympy import false
-
 
 class Dimension:
-    """!  Description missing"""
+    """! Operational Array Dimension"""
 
     def __init__(self, index: int = 0, name: str = "", size: int = 1):
         """!  The class constructor

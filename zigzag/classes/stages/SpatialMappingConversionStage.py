@@ -81,7 +81,7 @@ class SpatialMappingConversionStage(Stage):
         self, user_spatial_mapping: SpatialMapping
     ) -> tuple[SpatialMappingInternal, SpatialMappingInternal]:
         """!  Convert the SpatialMapping instance in `user-defined` format (spatial mapping across operational array
-        dimensions) to the internal SpatialMappingInternal representation. For this conversion we need to know:
+        dimensions) to the  SpatialMappingInternal representation. For this conversion we need to know:
         - the user defined spatial mapping
         - the core (i.e. operational array) on which the unrolling happens,and the memory hierarchy that is connected
           to that operational array.
@@ -97,15 +97,18 @@ class SpatialMappingConversionStage(Stage):
         core_id = self.layer.core_allocation
         core = self.accelerator.get_core(core_id)
         oa_dims = core.operational_array.dimensions
-        layer_dim_sizes = {LayerDim(layer_dim): size for layer_dim, size in self.layer.loop_dim_size.items()}
+        layer_dim_sizes = self.layer.layer_dim_sizes
         limited_usm: SpatialMapping = SpatialMapping({})
         limited_usm_int: SpatialMapping = SpatialMapping({})
 
-        for oa_dim, mapping_single_oa_dim in user_spatial_mapping.items():
+        # TODO this changes the unrollings to factors of the layer dimension size
+        # TODO move this functionality to SpatialMapping.is_valid()
+
+        for oa_dim, mapping_this_oa_dim in user_spatial_mapping.items():
             limited_mix_usm_this_dim: list[tuple[LayerDim, UnrollFactor]] = []
             limited_mix_usm_this_dim_int: list[tuple[LayerDim, UnrollFactor]] = []
 
-            for spatial_loop_element in mapping_single_oa_dim.items():
+            for spatial_loop_element in mapping_this_oa_dim.items():
                 limited_user_spatial_mapping_to_check = self.generate_limited_user_spatial_mapping(
                     layer_dim_sizes,
                     oa_dims,
@@ -141,8 +144,7 @@ class SpatialMappingConversionStage(Stage):
                 for layer_dim, unroll_factor in limited_mix_usm_this_dim_int:
                     limited_usm_int[oa_dim][layer_dim] = unroll_factor
 
-        user_spatial_mapping_for_log = {array_dim: loop_comb for array_dim, loop_comb, in limited_usm.items()}
-        logger.debug(f"User-provided spatial mapping converted to: {user_spatial_mapping_for_log}")
+        logger.debug("User-provided spatial mapping converted to: %s", limited_usm)
 
         spatial_mapping_dict = self.generate_mapping_per_mem_lvl(user_spatial_mapping=limited_usm)
         # The next spatial_mapping_dict is used in cost model to calculate the interval between different data transfer.
@@ -164,39 +166,40 @@ class SpatialMappingConversionStage(Stage):
         allow_decimal_sm_loop_size=True,
     ) -> None | tuple[LayerDim, float | int]:
         ## Do check on spatial mapping, and convert the mapping to a tuple
-        loop_dim_unrolled, loop_size_unrolled = spatial_loop
+        layer_dim, unroll_factor = spatial_loop
         # Check 0: Skip this spatial dimension if it doesn't exist in the layer
-        if loop_dim_unrolled not in layer_dim_sizes:
+        if layer_dim not in layer_dim_sizes:
             return None
-        # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
-        oa_dim_size = oa_dim.size
-        loop_size_unrolled = min(oa_dim_size, loop_size_unrolled)
-        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist
-        layer_dim_size = layer_dim_sizes.get(loop_dim_unrolled, 1)
-        loop_size_unrolled = min(layer_dim_size, loop_size_unrolled)
-        # Check 3: Adjust unrolling if it is not a multiple of the layer dimension size
+        # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling (should be the case after SpatialMappingGenerator)
+        assert unroll_factor <= oa_dim.size
+        # unroll_factor = min(oa_dim.size, unroll_factor)
+        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist (should be the case)
+        assert layer_dim in layer_dim_sizes
+        layer_dim_size = layer_dim_sizes[layer_dim]
+        assert unroll_factor <= layer_dim_size
+
+        # Check 3: Adjust unrolling if it is not a divisor of the layer dimension size
         # and if there is no more mapping for this layer dimension
         no_more_mapping_for_current_layer_dim = self.check_if_there_is_further_oa_mapping_for_current_layer_dim(
             oa_dim=oa_dim,
-            loop_dim_unrolled=loop_dim_unrolled,
+            loop_dim_unrolled=layer_dim,
             user_spatial_mapping=user_spatial_mapping,
         )
         if no_more_mapping_for_current_layer_dim:
             loop_size_unrolled_on_early_oa_dims = self.calc_unrolled_loop_size_on_early_oa_dims(
                 oa_dim=oa_dim,
-                loop_dim_unrolled=loop_dim_unrolled,
+                loop_dim_unrolled=layer_dim,
                 user_spatial_mapping=limited_user_spatial_mapping,
             )
-            temporal_remainder = int(
-                np.ceil(layer_dim_size / (loop_size_unrolled * loop_size_unrolled_on_early_oa_dims))
+            temporal_remainder = int(np.ceil(layer_dim_size / (unroll_factor * loop_size_unrolled_on_early_oa_dims)))
+            unroll_factor_remainder = layer_dim_size / temporal_remainder / loop_size_unrolled_on_early_oa_dims
+            unroll_factor_new: UnrollFactor = (
+                unroll_factor_remainder if allow_decimal_sm_loop_size else int(unroll_factor_remainder)
             )
-            if allow_decimal_sm_loop_size:
-                loop_size_unrolled = layer_dim_size / temporal_remainder / loop_size_unrolled_on_early_oa_dims
-            else:
-                loop_size_unrolled = int(
-                    np.ceil(layer_dim_size / temporal_remainder / loop_size_unrolled_on_early_oa_dims)
-                )
-        return loop_dim_unrolled, loop_size_unrolled
+
+            return layer_dim, unroll_factor_new
+        else:
+            return layer_dim, unroll_factor
 
     def generate_mapping_per_mem_lvl(self, user_spatial_mapping: SpatialMapping) -> SpatialMappingPerMEMLvl:
         """! This function is to convert spatial mapping to mapping_per_mem_lvl,
