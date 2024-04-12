@@ -1,6 +1,5 @@
 import os
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.hardware.architecture.operational_unit import Multiplier
 from zigzag.classes.hardware.architecture.operational_array import MultiplierArray
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
@@ -170,15 +169,13 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=reg_W1,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions={(0, 0, 1, 0), (0, 0, 0, 1)},
+        served_dimensions=("D3", "D4"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O1,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},
-        ),
-        served_dimensions={(0, 1, 0, 0)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
+        served_dimensions=("D2",),
     )
 
     ##################################### on-chip highest memory hierarchy initialization #####################################
@@ -187,23 +184,21 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_64KB_with_8_8K_256_1r_1w_W,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
 
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_64KB_with_8_8K_64_1r_1w_I,
         operands=("I1",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
 
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_256KB_with_8_32KB_256_1r_1w_O,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
-        ),
-        served_dimensions="all",
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},),
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
 
     # memory_hierarchy_graph.add_memory(memory_instance=sram_256KB_with_8_32KB_256_1r_1w_O_staging, operands=('O',),
@@ -214,7 +209,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_W,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_A,
@@ -223,7 +218,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
             {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
 
     ####################################################################################################################
@@ -241,7 +236,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3", "D4"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -264,9 +259,7 @@ def multiplier_array_dut():
         "D4": 2,
     }  # {'D1': ('K', 16), 'D2': ('C', 16), 'D3': ('OX', 2), 'D4': ('OY', 2),}
 
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array

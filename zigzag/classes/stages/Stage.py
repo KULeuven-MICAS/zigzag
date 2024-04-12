@@ -52,8 +52,6 @@ class MainStage:
 
     def run(self):
         answers = []
-        for cme, extra_info in self.list_of_callables[0](
-            self.list_of_callables[1:], **self.kwargs
-        ).run():
+        for cme, extra_info in self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs).run():
             answers.append((cme, extra_info))
         return answers

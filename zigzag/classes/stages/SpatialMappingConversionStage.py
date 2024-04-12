@@ -1,12 +1,13 @@
-from typing import TypeAlias
+from typing import Any, Generator, TypeAlias
 import logging
 
 import numpy as np
 
+from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.dimension import Dimension
+from zigzag.classes.hardware.architecture.Dimension import Dimension
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal, SpatialMappingPerMEMLvl
-from zigzag.classes.opt.spatial.SpatialMapping import (
+from zigzag.classes.mapping.spatial.SpatialMapping import (
     LayerDim,
     LayerDimStr,
     MappingSingleOADim,
@@ -63,7 +64,7 @@ class SpatialMappingConversionStage(Stage):
                     return True
         return False
 
-    def run(self):
+    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
         user_spatial_mapping = self.layer.user_spatial_mapping
         spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(user_spatial_mapping)
 
@@ -73,7 +74,7 @@ class SpatialMappingConversionStage(Stage):
         kwargs["accelerator"] = self.accelerator
         kwargs["layer"] = self.layer
 
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
+        sub_stage: Stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
@@ -96,7 +97,6 @@ class SpatialMappingConversionStage(Stage):
 
         core_id = self.layer.core_allocation
         core = self.accelerator.get_core(core_id)
-        oa_dims = core.operational_array.dimensions
         layer_dim_sizes = self.layer.layer_dim_sizes
         limited_usm: SpatialMapping = SpatialMapping({})
         limited_usm_int: SpatialMapping = SpatialMapping({})
@@ -111,7 +111,6 @@ class SpatialMappingConversionStage(Stage):
             for spatial_loop_element in mapping_this_oa_dim.items():
                 limited_user_spatial_mapping_to_check = self.generate_limited_user_spatial_mapping(
                     layer_dim_sizes,
-                    oa_dims,
                     oa_dim,
                     spatial_loop_element,
                     user_spatial_mapping,
@@ -119,7 +118,6 @@ class SpatialMappingConversionStage(Stage):
                 )
                 limited_user_spatial_mapping_int_to_check = self.generate_limited_user_spatial_mapping(
                     layer_dim_sizes,
-                    oa_dims,
                     oa_dim,
                     spatial_loop_element,
                     user_spatial_mapping,
@@ -158,7 +156,6 @@ class SpatialMappingConversionStage(Stage):
     def generate_limited_user_spatial_mapping(
         self,
         layer_dim_sizes: dict[LayerDim, int],
-        oa_dims: list[Dimension],
         oa_dim: Dimension,
         spatial_loop: tuple[LayerDim, UnrollFactor],
         user_spatial_mapping: SpatialMapping,

@@ -38,20 +38,15 @@ class GeneralParameterIteratorStage(Stage):
                 else:
                     runparams[key] = v
                     iterable = False
-                for cme, extra_info in self.recursive_run(
-                    reduced_param_iters_reduced, runparams
-                ):
+                for cme, extra_info in self.recursive_run(reduced_param_iters_reduced, runparams):
                     yield cme, (
-                        (tuple((kk, vv) for kk, vv in zip(key, v)) + extra_info[0],)
-                        + extra_info[1:]
+                        (tuple((kk, vv) for kk, vv in zip(key, v)) + extra_info[0],) + extra_info[1:]
                         if iterable
                         else (((key, v),) + extra_info[0],) + extra_info[1:]
                     )
         else:
             # trivial case, no more extra parameters to iterate over
-            sub_stage = self.list_of_callables[0](
-                self.list_of_callables[1:], **runparams
-            )
+            sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **runparams)
             for cme, extra_info in sub_stage.run():
                 yield cme, (tuple(), extra_info)
 

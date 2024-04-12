@@ -30,11 +30,7 @@ class OperationalUnit:
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, OperationalUnit):
             return False
-        return (
-            self.precision == __o.precision
-            and self.cost == __o.cost
-            and self.area == __o.area
-        )
+        return self.precision == __o.precision and self.cost == __o.cost and self.area == __o.area
 
 
 class Multiplier(OperationalUnit):

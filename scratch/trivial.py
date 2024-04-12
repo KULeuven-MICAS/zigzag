@@ -24,16 +24,15 @@ from zigzag.visualization.results.plot_cme import (
 )
 from zigzag.visualization.results.print_mapping import print_mapping
 from zigzag.visualization.graph.memory_hierarchy import visualize_memory_hierarchy_graph
-from zigzag.inputs.examples.hardware.Edge_TPU_like import memory_hierarchy_dut
 
 workload = {
     0: {  # fully connected
         "operator_type": "matmul",
         "equation": "O[p][r]+=I[p][q]*W[q][r]",
         "loop_dim_size": {
-            "P": 1000,
-            "Q": 1000,
-            "R": 1000,
+            "P": 1024,
+            "Q": 1024,
+            "R": 1024,
         },
         "operand_precision": {"O": 8, "O_final": 8, "W": 8, "I": 8},
         "operand_source": {"I": [], "W": []},
@@ -118,19 +117,22 @@ memory_hierarchy_graph.add_memory(
     memory_instance=reg_IW1,
     operands=("I2",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    served_dimensions={(0, 0, 0, 0)},
+    # served_dimensions={(0, 0, 0, 0)},
+    served_dimensions=("D1",),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=reg_O1,
     operands=("O",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
-    served_dimensions={(0, 0, 0, 0)},
+    # served_dimensions={(0, 0, 0, 0)},
+    served_dimensions=(),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=sram_32KB_512_1r_1w,
     operands=("I2",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    served_dimensions="all",
+    # served_dimensions="all",
+    served_dimensions=("D1", "D2", "D3", "D4"),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=sram_2M_with_16_128K_bank_128_1r_1w,
@@ -139,7 +141,7 @@ memory_hierarchy_graph.add_memory(
         {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
         {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
     ),
-    served_dimensions="all",
+    served_dimensions=("D1", "D2", "D3", "D4"),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=dram,
@@ -154,7 +156,7 @@ memory_hierarchy_graph.add_memory(
             "th": "rw_port_1",
         },
     ),
-    served_dimensions="all",
+    served_dimensions=("D1", "D2", "D3", "D4"),
 )
 
 
@@ -178,7 +180,7 @@ model = "trivial"
 dump_filename_pattern = f"outputs/TPU-{model}-layer_?.json"
 pickle_filename = f"outputs/TPU-{model}-saved_list_of_cmes.pickle"
 
-energy, latency, cme = api.get_hardware_performance_zigzag(
+energy, latency, _ = api.get_hardware_performance_zigzag(
     workload=workload,
     accelerator=accelerator,
     mapping=mapping,

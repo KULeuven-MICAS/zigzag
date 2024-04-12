@@ -1,7 +1,10 @@
 import logging
 
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
+from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.loma.memory_allocator import MemoryAllocator
 from zigzag.classes.stages.Stage import Stage
+from zigzag.classes.workload.layer_node import LayerNode
 
 
 logger = logging.getLogger(__name__)
@@ -11,7 +14,13 @@ class TemporalOrderingConversionStage(Stage):
     """!  Description missing"""
 
     def __init__(
-        self, list_of_callables, *, accelerator, layer, spatial_mapping, **kwargs
+        self,
+        list_of_callables,
+        *,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        spatial_mapping: SpatialMappingInternal,
+        **kwargs,
     ):
         """!  The class constructor
         Initialize the accelerator and layer attributes.
@@ -49,9 +58,7 @@ class TemporalOrderingConversionStage(Stage):
         """!  Run this stage by converting the user-defined temporal loop ordering
         to the memory-level based temporal mapping representation.
         """
-        temporal_mapping = self.convert_user_temporal_mapping(
-            self.layer.user_temporal_ordering
-        )
+        temporal_mapping = self.convert_user_temporal_mapping(self.layer.user_temporal_ordering)
         kwargs = self.kwargs.copy()
         kwargs["temporal_mapping"] = temporal_mapping
         kwargs["spatial_mapping"] = self.spatial_mapping
@@ -84,16 +91,12 @@ class TemporalOrderingConversionStage(Stage):
             if size == "all":
                 size = layer_dim_sizes[dim]
                 size_already = 1
-                for dim_already, size_already_sub in (
-                    converted_mapping + spatial_mapping.spatial_loop_dim_size
-                ):
+                for dim_already, size_already_sub in converted_mapping + spatial_mapping.spatial_loop_dim_size:
                     if dim_already == dim:
                         size_already *= size_already_sub
                 size //= size_already
             converted_mapping.append((dim, size))
-        allocator = MemoryAllocator(
-            self.accelerator, layer, spatial_mapping, converted_mapping
-        )
+        allocator = MemoryAllocator(self.accelerator, layer, spatial_mapping, converted_mapping)
 
         temporal_mapping = allocator.run()  # allocate this ordering to the memories
         return temporal_mapping

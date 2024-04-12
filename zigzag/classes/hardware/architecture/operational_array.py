@@ -1,6 +1,6 @@
 from typing import Dict
 import numpy as np
-from zigzag.classes.hardware.architecture.dimension import Dimension
+from zigzag.classes.hardware.architecture.Dimension import Dimension
 from zigzag.classes.hardware.architecture.operational_unit import (
     OperationalUnit,
     Multiplier,
@@ -23,10 +23,7 @@ class OperationalArray:
         except TypeError:  # branch for IMC
             self.total_area = operational_unit.area
 
-        base_dims = [
-            Dimension(idx, name, size)
-            for idx, (name, size) in enumerate(dimensions.items())
-        ]
+        base_dims = [Dimension(idx, name, size) for idx, (name, size) in enumerate(dimensions.items())]
         self.dimensions = base_dims
         self.dimension_sizes = [dim.size for dim in base_dims]
         self.nb_dimensions = len(base_dims)
@@ -35,16 +32,24 @@ class OperationalArray:
     def __jsonrepr__(self):
         return {"operational_unit": self.unit, "dimensions": self.dimensions}
 
-    def __eq__(self, __o: object) -> bool:
-        if not isinstance(__o, OperationalArray):
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, OperationalArray):
             return False
-        return self.unit == __o.unit and self.dimensions == __o.dimensions
+        return self.unit == other.unit and self.dimensions == other.dimensions
 
 
 class MultiplierArray(OperationalArray):
     """!  Description missing"""
 
-    pass
+    def __init__(
+        self,
+        multiplier: Multiplier,
+        dimensions: dict[str, int],
+        operand_spatial_sharing: dict[str, set[tuple[int, ...]]] = {},
+    ):
+        self.multiplier = multiplier
+        self.dimensions = dimensions
+        self.operand_spatial_sharing = operand_spatial_sharing
 
 
 def multiplier_array_example1():
@@ -58,9 +63,7 @@ def multiplier_array_example1():
         "O": {(0, 1, 0)},
         "I2": {(0, 0, 1), (1, 1, 0)},
     }
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions, operand_spatial_sharing)
 
     return multiplier_array
@@ -73,17 +76,7 @@ def multiplier_array_example2():
     multiplier_area = 0.1
     dimensions = {"D1": 14, "D2": 12}
     operand_spatial_sharing = {"I1": {(1, 0)}, "O": {(0, 1)}, "I2": {(1, 1)}}
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions, operand_spatial_sharing)
 
     return multiplier_array
-
-
-if __name__ == "__main__":
-    multiplier_array = multiplier_array_example1()
-    for os in multiplier_array.operand_spatial_sharing:
-        print(
-            f"{os}\tdirection: {os.direction} operand: {os.operand} instances: {os.instances}"
-        )

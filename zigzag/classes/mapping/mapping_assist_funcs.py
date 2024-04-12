@@ -4,7 +4,8 @@ from typing import TYPE_CHECKING
 from math import prod
 from copy import deepcopy
 
-from zigzag.classes.opt.spatial.SpatialMapping import LayerDimStr, UnrollFactor
+from zigzag.classes.mapping.spatial.SpatialMapping import LayerDimStr, UnrollFactor
+from zigzag.classes.workload.layer_node import Relevancy
 from zigzag.utils import pickle_deepcopy
 
 if TYPE_CHECKING:
@@ -42,8 +43,12 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNo
     """
 
     operand_loop_dim = {op: layer_node.operand_loop_dim[op] for op in mapping_dict.keys()}
-    r_ir_operand_loop_LUT = {op: relevance["r"] + relevance["ir"] for (op, relevance) in operand_loop_dim.items()}
-    pr_operand_loop_LUT = {op: relevance["pr"] for (op, relevance) in operand_loop_dim.items() if relevance["pr"] != {}}
+    r_ir_operand_loop_LUT = {
+        op: relevance[Relevancy.R] + relevance[Relevancy.IR] for (op, relevance) in operand_loop_dim.items()
+    }
+    pr_operand_loop_LUT = {
+        op: relevance[Relevancy.PR] for (op, relevance) in operand_loop_dim.items() if relevance[Relevancy.PR] != {}
+    }
     pr_operand_list = list(pr_operand_loop_LUT.keys())
     mapping_dict_reform: SpatialMappingPerMEMLvl = pickle_deepcopy(mapping_dict)  # type: ignore
 
@@ -191,7 +196,7 @@ def calc_data_size_MAC_count_per_loop(mapping_dict_reform: Dict, operand_loop_di
         for level, loop_list in enumerate(mapping_dict_reform[operand]):
             for idx, (loop_type, loop_size) in enumerate(loop_list):
                 MAC_count *= loop_size
-                if loop_type in operand_loop_dim_reform[operand]["r"]:
+                if loop_type in operand_loop_dim_reform[operand][Relevancy.R]:
                     data_elem *= loop_size
                 detailed_mapping_dict[operand][level][idx] = Loop(
                     (loop_type, loop_size), round(MAC_count), round(data_elem)

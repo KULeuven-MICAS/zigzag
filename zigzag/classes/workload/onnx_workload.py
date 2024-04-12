@@ -1,11 +1,11 @@
 import networkx as nx
 
+from zigzag.classes.workload.Workload import Workload
 from zigzag.classes.workload.layer_node import LayerNode
-from typing import Dict, Any
 from networkx import DiGraph
 
 
-class ONNXWorkload(DiGraph):
+class ONNXWorkload(Workload):
     """!  Description missing"""
 
     def __init__(self, **attr):
@@ -38,6 +38,4 @@ class ONNXWorkload(DiGraph):
         for node in self.nodes:
             if node.id == id:
                 return node
-        raise ValueError(
-            "DNNWorkload instance does not have a node with the requested id"
-        )
+        raise ValueError("DNNWorkload instance does not have a node with the requested id")

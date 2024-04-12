@@ -209,9 +209,7 @@ class Adder:
         """
         area: The area cost (unit: mm2)
         """
-        area = (
-            3 * self.nand2.calculate_area() + 2 * self.xor2.calculate_area()
-        ) * self.number_of_1b_adder
+        area = (3 * self.nand2.calculate_area() + 2 * self.xor2.calculate_area()) * self.number_of_1b_adder
         return area
 
     def calculate_delay_lsb(self):
@@ -225,9 +223,9 @@ class Adder:
         """
         delay: The delay cost for MSB (unit: ns) (worst-case delay)
         """
-        delay_carry = (
-            self.xor2.calculate_delay() + 2 * self.nand2.calculate_delay()
-        ) + (2 * self.nand2.calculate_delay()) * (
+        delay_carry = (self.xor2.calculate_delay() + 2 * self.nand2.calculate_delay()) + (
+            2 * self.nand2.calculate_delay()
+        ) * (
             self.input_precision - 1
         )  # A-to-Cout -> Cin-to-Count * (precision-1)
         return delay_carry
@@ -237,9 +235,7 @@ class Adder:
         energy: The energy cost (each time it is triggered) (unit: fJ)
         """
         energy = (
-            (2 * self.xor2.calculate_cap() + 3 * self.nand2.calculate_cap())
-            * self.vdd**2
-            * self.number_of_1b_adder
+            (2 * self.xor2.calculate_cap() + 3 * self.nand2.calculate_cap()) * self.vdd**2 * self.number_of_1b_adder
         )
         return energy
 
@@ -264,17 +260,14 @@ class AdderTree:
         """
         if math.log(number_of_input, 2) % 1 != 0:
             raise ValueError(
-                "The number of input for the adder tree is not in the power of 2. Currently it is: %s"
-                % number_of_input
+                "The number of input for the adder tree is not in the power of 2. Currently it is: %s" % number_of_input
             )
         self.vdd = vdd
         self.input_precision = input_precision
         self.number_of_input = number_of_input
         self.depth = int(math.log(number_of_input, 2))
         self.output_precision = input_precision + self.depth
-        self.number_of_1b_adder = number_of_input * (input_precision + 1) - (
-            input_precision + self.depth + 1
-        )
+        self.number_of_1b_adder = number_of_input * (input_precision + 1) - (input_precision + self.depth + 1)
         self.unit_area = unit_area
         self.unit_delay = unit_delay
         self.unit_cap = unit_cap
@@ -312,10 +305,7 @@ class AdderTree:
             unit_delay=self.unit_delay,
             unit_cap=self.unit_cap,
         )
-        delay = (
-            last_adder.calculate_delay_lsb() * (self.depth - 1)
-            + last_adder.calculate_delay_msb()
-        )
+        delay = last_adder.calculate_delay_lsb() * (self.depth - 1) + last_adder.calculate_delay_msb()
         return delay
 
     def calculate_energy(self):

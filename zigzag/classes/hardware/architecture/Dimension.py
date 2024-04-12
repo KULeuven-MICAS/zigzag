@@ -40,5 +40,6 @@ class Dimension:
     @staticmethod
     def parse_user_input(x: str):
         assert bool(re.match(r"D\d", x)), f"User specified dimension {x} not recognized"
-        idx: int = re.findall(r"\d", x).pop()
+        # Dimension id starts at 0, user format starts at D1
+        idx: int = int(re.findall(r"\d", x).pop()) - 1
         return Dimension(idx, x)

@@ -39,21 +39,14 @@ class CostModelStage(Stage):
         @param kwargs
         """
         super().__init__(list_of_callables, **kwargs)
-        (
-            self.accelerator,
-            self.layer,
-            self.spatial_mapping,
-            self.spatial_mapping_int,
-            self.temporal_mapping,
-            self.access_same_data_considered_as_no_access,
-        ) = (
-            accelerator,
-            layer,
-            spatial_mapping,
-            spatial_mapping_int,
-            temporal_mapping,
-            access_same_data_considered_as_no_access,
-        )
+
+        self.accelerator = accelerator
+        self.layer = layer
+        self.spatial_mapping = spatial_mapping
+        self.spatial_mapping_int = spatial_mapping_int
+        self.temporal_mapping = temporal_mapping
+        self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
+        self.cme: CostModelEvaluation | CostModelEvaluationForIMC
 
     def run(self) -> Generator[Tuple[CostModelEvaluation, Any], None, None]:
         """!  Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""

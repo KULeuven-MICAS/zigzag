@@ -2,7 +2,8 @@ from typing import TypeAlias
 from math import prod
 from typing import TYPE_CHECKING
 
-from zigzag.classes.opt.spatial.SpatialMapping import LayerDimStr, UnrollFactor
+from zigzag.classes.mapping.spatial.SpatialMapping import LayerDimStr, UnrollFactor
+from zigzag.classes.workload.layer_node import Relevancy
 
 
 if TYPE_CHECKING:
@@ -94,7 +95,7 @@ class SpatialMappingInternal:
         for operand in self.operand_list:
             for level, current_level_loops in enumerate(self.mapping_dict_reform[operand]):
                 for loop_type, loop_dim in current_level_loops:
-                    if loop_type in self.layer_node.operand_loop_dim_reform[operand]["r"]:
+                    if loop_type in self.layer_node.operand_loop_dim_reform[operand][Relevancy.R]:
                         unroll_size_r[operand][level] *= loop_dim
                     else:
                         unroll_size_ir[operand][level] *= loop_dim
@@ -116,19 +117,19 @@ class SpatialMappingInternal:
             for op in self.operand_list
         }
 
-        """ ASSERT: The bottom level (MAC level) unit count must be the same for all operand """
+        #  ASSERT: The bottom level (MAC level) unit count must be the same for all operand
         bottom_unit_count = [unit_count[op][0] for op in unit_count.keys()]
         assert all(
             x == bottom_unit_count[0] for x in bottom_unit_count
         ), f"The MAC level unit count is not the same for all operand {bottom_unit_count}, please correct the spatial mapping."
 
-        """ Number of unit at each level that hold unique data (for each operand) """
+        #  Number of unit at each level that hold unique data (for each operand)
         unit_unique = {
             op: [prod(self.unroll_size_r[op][lv : self.arch_level[op]]) for lv in range(self.arch_level[op])]
             for op in self.operand_list
         }
 
-        """ Number of unit at each level that hold the same data (for each operand) """
+        #  Number of unit at each level that hold the same data (for each operand)
         unit_duplicate = {
             op: [prod(self.unroll_size_ir[op][lv : self.arch_level[op]]) for lv in range(self.arch_level[op])]
             for op in self.operand_list

@@ -2,15 +2,15 @@ import numpy as np
 import math
 import copy
 
+from zigzag.classes.workload.layer_node import LayerNode, Relevancy
+
 if __name__ == "__main__" or __name__ == "DimcArray":
     # branch when the script is run locally or called by AimcArray.py
     from imc_unit import ImcUnit
     import logging as _logging
 
     _logging_level = _logging.INFO
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 else:
     import logging as _logging
@@ -55,9 +55,7 @@ class DimcArray(ImcUnit):
                 tech_node, self.wl_dim_size, self.bl_dim_size, group_depth, w_pres
             )[1]
             # at this point, we have the area of single cell array. Then multiply it with the number of banks.
-            area_cells = (
-                single_cell_array_area * self.nb_of_banks
-            )  # total cell array area in the core
+            area_cells = single_cell_array_area * self.nb_of_banks  # total cell array area in the core
         else:
             # TODO: [TO BE SUPPORTED OR YOU CAN MODIFY YOURSELF]
             area_cells = None  # user-provided cell array area (from somewhere?)
@@ -81,22 +79,12 @@ class DimcArray(ImcUnit):
             adder_depth % 1 == 0
         ), f"[DimcArray] The number of inputs [{nb_inputs_of_adder}] for the adder tree is not in the power of 2."
         adder_depth = int(adder_depth)  # float -> int for simplicity
-        adder_output_pres = (
-            adder_input_pres + adder_depth
-        )  # output precision of the adder tree
-        nb_of_1b_adder_in_single_adder_tree = nb_inputs_of_adder * (
-            adder_input_pres + 1
-        ) - (
+        adder_output_pres = adder_input_pres + adder_depth  # output precision of the adder tree
+        nb_of_1b_adder_in_single_adder_tree = nb_inputs_of_adder * (adder_input_pres + 1) - (
             adder_input_pres + adder_depth + 1
         )  # nb of 1b adders in a single adder tree
-        nb_of_adder_trees = (
-            self.hd_param["input_bit_per_cycle"] * self.wl_dim_size * self.nb_of_banks
-        )
-        area_adders = (
-            self.logic_unit.get_1b_adder_area()
-            * nb_of_1b_adder_in_single_adder_tree
-            * nb_of_adder_trees
-        )
+        nb_of_adder_trees = self.hd_param["input_bit_per_cycle"] * self.wl_dim_size * self.nb_of_banks
+        area_adders = self.logic_unit.get_1b_adder_area() * nb_of_1b_adder_in_single_adder_tree * nb_of_adder_trees
 
         """area of extra adders with place values (pv) when input_bit_per_cycle>1 (type: RCA)"""
         nb_inputs_of_adder_pv = self.hd_param["input_bit_per_cycle"]
@@ -110,33 +98,23 @@ class DimcArray(ImcUnit):
                 adder_depth_pv % 1 == 0
             ), f"[DimcArray] The value [{nb_inputs_of_adder_pv}] of [input_bit_per_cycle] is not in the power of 2."
             adder_depth_pv = int(adder_depth_pv)  # float -> int for simplicity
-            nb_of_1b_adder_pv = input_precision_pv * (
-                nb_inputs_of_adder_pv - 1
-            ) + nb_inputs_of_adder_pv * (
+            nb_of_1b_adder_pv = input_precision_pv * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
                 adder_depth_pv - 0.5
             )  # nb of 1b adders in a single place-value adder tree
             nb_of_adder_trees_pv = self.wl_dim_size * self.nb_of_banks
-        area_adders_pv = (
-            self.logic_unit.get_1b_adder_area()
-            * nb_of_1b_adder_pv
-            * nb_of_adder_trees_pv
-        )
+        area_adders_pv = self.logic_unit.get_1b_adder_area() * nb_of_1b_adder_pv * nb_of_adder_trees_pv
 
         """area of accumulators (adder type: RCA)"""
         if self.hd_param["input_bit_per_cycle"] == self.hd_param["input_precision"]:
             area_accumulators = 0
         else:
             accumulator_output_pres = (
-                self.hd_param["input_precision"]
-                + self.hd_param["weight_precision"]
-                + math.log2(self.bl_dim_size)
+                self.hd_param["input_precision"] + self.hd_param["weight_precision"] + math.log2(self.bl_dim_size)
             )
             nb_of_1b_adder_accumulator = (
                 accumulator_output_pres * self.wl_dim_size * self.nb_of_banks
             )  # number of 1b adder in all accumulators
-            nb_of_1b_reg_accumulator = (
-                nb_of_1b_adder_accumulator  # number of regs in all accumulators
-            )
+            nb_of_1b_reg_accumulator = nb_of_1b_adder_accumulator  # number of regs in all accumulators
             area_accumulators = (
                 self.logic_unit.get_1b_adder_area() * nb_of_1b_adder_accumulator
                 + self.logic_unit.get_1b_reg_area() * nb_of_1b_reg_accumulator
@@ -197,20 +175,15 @@ class DimcArray(ImcUnit):
 
         """delay of accumulators (adder type: RCA)"""
         accumulator_output_pres = (
-            self.hd_param["input_precision"]
-            + self.hd_param["weight_precision"]
-            + math.log2(self.bl_dim_size)
+            self.hd_param["input_precision"] + self.hd_param["weight_precision"] + math.log2(self.bl_dim_size)
         )
-        accumulator_output_pres = int(
-            accumulator_output_pres
-        )  # float -> int for simplicity
+        accumulator_output_pres = int(accumulator_output_pres)  # float -> int for simplicity
         if accumulator_output_pres == accumulator_input_pres:  # no accumulator
             dly_accumulators = 0
         else:
             dly_accumulators = (
                 self.logic_unit.get_1b_adder_dly_in2cout()
-                + (accumulator_output_pres - accumulator_input_pres)
-                * self.logic_unit.get_1b_adder_dly_cin2cout()
+                + (accumulator_output_pres - accumulator_input_pres) * self.logic_unit.get_1b_adder_dly_cin2cout()
             )
 
         """total delay of imc"""
@@ -234,11 +207,7 @@ class DimcArray(ImcUnit):
 
         """energy of multiplier array"""
         nb_of_mults = (
-            self.hd_param["input_bit_per_cycle"]
-            * w_pres
-            * self.wl_dim_size
-            * self.bl_dim_size
-            * self.nb_of_banks
+            self.hd_param["input_bit_per_cycle"] * w_pres * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
         )
         energy_mults = self.logic_unit.get_1b_multiplier_energy() * nb_of_mults
 
@@ -250,22 +219,12 @@ class DimcArray(ImcUnit):
             adder_depth % 1 == 0
         ), f"[DimcArray] The number of inputs [{nb_inputs_of_adder}] for the adder tree is not in the power of 2."
         adder_depth = int(adder_depth)  # float -> int for simplicity
-        adder_output_pres = (
-            adder_input_pres + adder_depth
-        )  # output precision of the adder tree
-        nb_of_1b_adder_in_single_adder_tree = nb_inputs_of_adder * (
-            adder_input_pres + 1
-        ) - (
+        adder_output_pres = adder_input_pres + adder_depth  # output precision of the adder tree
+        nb_of_1b_adder_in_single_adder_tree = nb_inputs_of_adder * (adder_input_pres + 1) - (
             adder_input_pres + adder_depth + 1
         )  # nb of 1b adders in a single adder tree
-        nb_of_adder_trees = (
-            self.hd_param["input_bit_per_cycle"] * self.wl_dim_size * self.nb_of_banks
-        )
-        energy_adders = (
-            self.logic_unit.get_1b_adder_energy()
-            * nb_of_1b_adder_in_single_adder_tree
-            * nb_of_adder_trees
-        )
+        nb_of_adder_trees = self.hd_param["input_bit_per_cycle"] * self.wl_dim_size * self.nb_of_banks
+        energy_adders = self.logic_unit.get_1b_adder_energy() * nb_of_1b_adder_in_single_adder_tree * nb_of_adder_trees
 
         """energy of adders_pv (type: RCA)"""
         nb_inputs_of_adder_pv = self.hd_param["input_bit_per_cycle"]
@@ -273,31 +232,23 @@ class DimcArray(ImcUnit):
             energy_adders_pv = 0
         else:
             adder_pv_input_precision = adder_output_pres
-            nb_of_1b_adder_pv = adder_pv_input_precision * (
-                nb_inputs_of_adder_pv - 1
-            ) + nb_inputs_of_adder_pv * (math.log2(nb_inputs_of_adder_pv) - 0.5)
-            nb_of_adder_trees_pv = self.wl_dim_size * self.nb_of_banks
-            energy_adders_pv = (
-                self.logic_unit.get_1b_adder_energy()
-                * nb_of_1b_adder_pv
-                * nb_of_adder_trees_pv
+            nb_of_1b_adder_pv = adder_pv_input_precision * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
+                math.log2(nb_inputs_of_adder_pv) - 0.5
             )
+            nb_of_adder_trees_pv = self.wl_dim_size * self.nb_of_banks
+            energy_adders_pv = self.logic_unit.get_1b_adder_energy() * nb_of_1b_adder_pv * nb_of_adder_trees_pv
 
         """energy of accumulators (adder type: RCA)"""
         if self.hd_param["input_bit_per_cycle"] == self.hd_param["input_precision"]:
             energy_accumulators = 0
         else:
             accumulator_output_pres = (
-                self.hd_param["input_precision"]
-                + self.hd_param["weight_precision"]
-                + math.log2(self.bl_dim_size)
+                self.hd_param["input_precision"] + self.hd_param["weight_precision"] + math.log2(self.bl_dim_size)
             )
             nb_of_1b_adder_accumulator = (
                 accumulator_output_pres * self.wl_dim_size * self.nb_of_banks
             )  # number of 1b adder in all accumulators
-            nb_of_1b_reg_accumulator = (
-                nb_of_1b_adder_accumulator  # number of regs in all accumulators
-            )
+            nb_of_1b_reg_accumulator = nb_of_1b_adder_accumulator  # number of regs in all accumulators
             energy_accumulators = (
                 self.logic_unit.get_1b_adder_energy() * nb_of_1b_adder_accumulator
                 + self.logic_unit.get_1b_reg_energy() * nb_of_1b_reg_accumulator
@@ -328,9 +279,7 @@ class DimcArray(ImcUnit):
         self.get_delay()
 
         clock_cycle_period = self.delay  # unit: ns
-        peak_energy_per_cycle = sum(
-            [v for v in self.get_peak_energy_single_cycle().values()]
-        )  # unit: pJ
+        peak_energy_per_cycle = sum([v for v in self.get_peak_energy_single_cycle().values()])  # unit: pJ
         imc_area = self.area  # unit: mm^2
 
         tops_peak = nb_of_macs_per_cycle * 2 / clock_cycle_period / 1000
@@ -339,38 +288,32 @@ class DimcArray(ImcUnit):
 
         logger = _logging.getLogger(__name__)
         logger.info(f"Current macro-level peak performance:")
-        logger.info(
-            f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}"
-        )
+        logger.info(f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}")
 
         return tops_peak, topsw_peak, topsmm2_peak
 
     @staticmethod
     def calculate_mapped_rows_total_when_diagonal_mapping_found(
-        layer, layer_const_operand, layer_act_operand, sm_on_wl_dim, sm_on_bl_dim
+        layer: LayerNode, layer_const_operand, layer_act_operand, sm_on_wl_dim, sm_on_bl_dim
     ):
         # This function is used for calcualting the total mapped number of rows when OX, OY unroll is found,
         # which requires a diagonal data mapping.
         # If OX, OY unroll does not exist, you can also use this function to calculate the total mapped number of rows.
         # The only drawback is the simulation time is longer.
         # First, fetch the dimension name of OX / OY (they are weight ir loops)
-        weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand]["ir"]
+        weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand][Relevancy.IR]
         # Second, we will find out what pr loops they pair with. Create a dict to record them down for later use.
         # For neural network, OX pairs with FX, OY with FY. So, it is assumed the pair size is in 2.
-        act_pr_layer_dims: dict = layer.operand_loop_dim[layer_act_operand]["pr"]
+        act_pr_layer_dims: dict = layer.operand_loop_dim[layer_act_operand][Relevancy.PR]
         pr_sm: dict = {}
         pr_sm_link: dict = {}
         for [layer_dim1, layer_dim2] in act_pr_layer_dims.values():
             # for weight_ir_layer_dim in weight_ir_layer_dims:
             if layer_dim1 in weight_ir_layer_dims:
-                pr_sm[layer_dim2] = {
-                    layer_dim1: 1
-                }  # 1 by default, which means no mapping found
+                pr_sm[layer_dim2] = {layer_dim1: 1}  # 1 by default, which means no mapping found
                 pr_sm_link[layer_dim1] = layer_dim2
             else:  # layer_dim2 in weight_ir_layer_dims
-                pr_sm[layer_dim1] = {
-                    layer_dim2: 1
-                }  # 1 by default, which means no mapping found
+                pr_sm[layer_dim1] = {layer_dim2: 1}  # 1 by default, which means no mapping found
                 pr_sm_link[layer_dim2] = layer_dim1
         # Third, check if they are mapped on wl_dim and record down the mapped value if exist
         for weight_ir_layer_dim in weight_ir_layer_dims:
@@ -423,9 +366,7 @@ class DimcArray(ImcUnit):
         """
 
         # activation/weight representation
-        layer_act_operand, layer_const_operand = (
-            DimcArray.identify_layer_operand_representation(layer)
-        )
+        layer_act_operand, layer_const_operand = DimcArray.identify_layer_operand_representation(layer)
 
         spatial_mapping = copy.deepcopy(layer.user_spatial_mapping)
 
@@ -449,22 +390,16 @@ class DimcArray(ImcUnit):
         else:
             sm_on_wl_dim = spatial_mapping[wl_dim]  # spatial mapping on wl_dimension
             if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
-                mapped_cols = sm_on_wl_dim[
-                    1
-                ]  # floating number is also supported for calculation
+                mapped_cols = sm_on_wl_dim[1]  # floating number is also supported for calculation
             else:  # mix layer_dim mapping (e.g. (("K",2), ("OX",2)) )
                 mapped_cols = math.prod([v[1] for v in sm_on_wl_dim])
             # We then calculate the number of mapped rows in each macro.
             # As there might be OX / OY unrolling, which results in a diagonal mapping, we will have a special check on that
             # Firstly check if there is OX / OY unrolling
-            weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand][
-                "ir"
-            ]
+            weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand]["ir"]
             weight_ir_loop_on_wl_dim = False  # set default value
             if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
-                weight_ir_loop_on_wl_dim = (
-                    True if sm_on_wl_dim[0] in weight_ir_layer_dims else False
-                )
+                weight_ir_loop_on_wl_dim = True if sm_on_wl_dim[0] in weight_ir_layer_dims else False
             else:  # mix layer_dim mapping (e.g. (("K",2), ("OX",2)) )
                 for element in sm_on_wl_dim:
                     layer_dim = element[0]
@@ -478,17 +413,11 @@ class DimcArray(ImcUnit):
             if (
                 not weight_ir_loop_on_wl_dim
             ):  # if False: mean there is no OX / OY unrolling on wl_dim, so no diagonal unrolling required
-                if isinstance(
-                    sm_on_bl_dim[0], str
-                ):  # single layer mapping (e.g. ("FX", 2))
-                    mapped_rows_total = sm_on_bl_dim[
-                        1
-                    ]  # floating number is also supported for calculation
+                if isinstance(sm_on_bl_dim[0], str):  # single layer mapping (e.g. ("FX", 2))
+                    mapped_rows_total = sm_on_bl_dim[1]  # floating number is also supported for calculation
                 else:  # mix layer_dim mapping (e.g. (("C",2), ("FX",2)) )
                     mapped_rows_total = math.prod([v[1] for v in sm_on_bl_dim])
-                mapped_rows_total = math.ceil(
-                    mapped_rows_total
-                )  # must be an integer, as it is used for adder trees.
+                mapped_rows_total = math.ceil(mapped_rows_total)  # must be an integer, as it is used for adder trees.
                 mapped_rows_for_adder = mapped_rows_total
             else:
                 mapped_rows_total, mapped_rows_for_adder = (
@@ -507,9 +436,7 @@ class DimcArray(ImcUnit):
         # Get the number of time of activating macro
         # Note: it is normalized to a hardware that has only one macro (see equation below)
         # Equation = total MAC number of a layer/spatial mapping on a single macro
-        macro_activation_times = layer.total_MAC_count / np.prod(
-            [x[1] for x in spatial_mapping_in_macro]
-        )
+        macro_activation_times = layer.total_MAC_count / np.prod([x[1] for x in spatial_mapping_in_macro])
         return (
             mapped_rows_total,
             mapped_rows_for_adder,
@@ -528,21 +455,15 @@ class DimcArray(ImcUnit):
             # nb_of_precharge_times is normalized to single PE.
 
             # activation/weight representation
-            layer_act_operand, layer_const_operand = (
-                DimcArray.identify_layer_operand_representation(layer)
-            )
+            layer_act_operand, layer_const_operand = DimcArray.identify_layer_operand_representation(layer)
 
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
-            tm_loops_in_cell_group: list = mapping.temporal_mapping.mapping_dic_origin[
-                layer_const_operand
-            ][0]
+            tm_loops_in_cell_group: list = mapping.temporal_mapping.mapping_dic_origin[layer_const_operand][0]
             # As loops close to the beginning will be executed firstly, we will count how many weight ir loops there are
             # until we reach a weight r loop
-            weight_r_layer_dims: list = layer.operand_loop_dim[layer_const_operand]["r"]
-            weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand][
-                "ir"
-            ]
+            weight_r_layer_dims: list = layer.operand_loop_dim[layer_const_operand][Relevancy.R]
+            weight_ir_layer_dims: list = layer.operand_loop_dim[layer_const_operand]["ir"]
             for loop_name, loop_size in tm_loops_in_cell_group:
                 if loop_name in weight_ir_layer_dims:
                     precharge_interval *= loop_size
@@ -550,9 +471,7 @@ class DimcArray(ImcUnit):
                     break  # break when we meet the first ir loop of weight
             # Equation: nb_of_precharge_times = rd_out_to_low_count_of_lowest_weight_mem / precharge_intervals
             nb_of_precharge_times = (
-                mapping.unit_mem_data_movement[layer_const_operand][
-                    0
-                ].data_elem_move_count.rd_out_to_low
+                mapping.unit_mem_data_movement[layer_const_operand][0].data_elem_move_count.rd_out_to_low
                 / precharge_interval
             )
             single_pe_precharge_energy = (
@@ -583,25 +502,14 @@ class DimcArray(ImcUnit):
         calculate energy spent on multipliers for specific layer and mapping
         """
         # activation/weight representation
-        layer_act_operand, layer_const_operand = (
-            self.identify_layer_operand_representation(layer)
-        )
+        layer_act_operand, layer_const_operand = self.identify_layer_operand_representation(layer)
 
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
         nb_of_mapped_mults_in_macro = (
-            hd_param["weight_precision"]
-            * hd_param["input_bit_per_cycle"]
-            * mapped_rows_total
-            * wl_dim_size
+            hd_param["weight_precision"] * hd_param["input_bit_per_cycle"] * mapped_rows_total * wl_dim_size
         )
-        nb_of_activation_times = macro_activation_times * (
-            layer_act_operand_pres / hd_param["input_bit_per_cycle"]
-        )
-        energy_mults = (
-            logic_unit.get_1b_multiplier_energy()
-            * nb_of_mapped_mults_in_macro
-            * nb_of_activation_times
-        )
+        nb_of_activation_times = macro_activation_times * (layer_act_operand_pres / hd_param["input_bit_per_cycle"])
+        energy_mults = logic_unit.get_1b_multiplier_energy() * nb_of_mapped_mults_in_macro * nb_of_activation_times
         return energy_mults
 
     def get_adder_trees_energy(
@@ -618,23 +526,17 @@ class DimcArray(ImcUnit):
         get the energy spent on RCA adder trees for specific layer and mapping
         """
         # activation/weight representation
-        layer_act_operand, layer_const_operand = (
-            self.identify_layer_operand_representation(layer)
-        )
+        layer_act_operand, layer_const_operand = self.identify_layer_operand_representation(layer)
 
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
-        nb_inputs_of_adder = (
-            bl_dim_size  # physical number of inputs in a single adder tree
-        )
+        nb_inputs_of_adder = bl_dim_size  # physical number of inputs in a single adder tree
         adder_depth = math.log2(nb_inputs_of_adder)
         assert (
             nb_inputs_of_adder % 1 == 0
         ), f"The number of inputs for an adder tree [{nb_inputs_of_adder}] is not in the power of 2."
         adder_depth = int(adder_depth)  # float -> int for simplicity
         mapped_inputs = mapped_rows_for_adder  # number of used inputs for an adder tree
-        adder_input_pres = (
-            layer_const_operand_pres  # input precision for a single adder tree
-        )
+        adder_input_pres = layer_const_operand_pres  # input precision for a single adder tree
         adder_output_pres = adder_input_pres + adder_depth
         nb_of_1b_adder = nb_inputs_of_adder * (adder_input_pres + 1) - (
             adder_input_pres + adder_depth + 1
@@ -680,26 +582,19 @@ class DimcArray(ImcUnit):
                         half_activated_number_of_1b_adder += 0
                         left_input = left_input - baseline
                     elif left_input < baseline:
-                        half_activated_number_of_1b_adder += (
-                            adder_input_pres + activated_depth
-                        )
+                        half_activated_number_of_1b_adder += adder_input_pres + activated_depth
                     else:  # left_input == baseline
-                        fully_activated_number_of_1b_adder += baseline * (
-                            adder_input_pres + 1
-                        ) - (adder_input_pres + activated_depth + 1)
-                        half_activated_number_of_1b_adder += (
-                            adder_input_pres + activated_depth
+                        fully_activated_number_of_1b_adder += baseline * (adder_input_pres + 1) - (
+                            adder_input_pres + activated_depth + 1
                         )
+                        half_activated_number_of_1b_adder += adder_input_pres + activated_depth
                         left_input = left_input - baseline
 
             single_adder_tree_energy = (
                 fully_activated_number_of_1b_adder * logic_unit.get_1b_adder_energy()
-                + half_activated_number_of_1b_adder
-                * logic_unit.get_1b_adder_energy_half_activated()
+                + half_activated_number_of_1b_adder * logic_unit.get_1b_adder_energy_half_activated()
             )
-            nb_of_activation_times = (
-                mapped_cols * layer_act_operand_pres * macro_activation_times
-            )
+            nb_of_activation_times = mapped_cols * layer_act_operand_pres * macro_activation_times
             energy_adders = single_adder_tree_energy * nb_of_activation_times
         else:
             energy_adders = 0
@@ -722,20 +617,11 @@ class DimcArray(ImcUnit):
             energy_adders_pv = 0
         else:
             adder_pv_input_precision = input_precision
-            nb_of_1b_adder_pv = adder_pv_input_precision * (
-                nb_inputs_of_adder_pv - 1
-            ) + nb_inputs_of_adder_pv * (math.log2(nb_inputs_of_adder_pv) - 0.5)
-            nb_of_activation_times = (
-                mapped_cols
-                * layer_act_operand_pres
-                / input_bit_per_cycle
-                * macro_activation_times
+            nb_of_1b_adder_pv = adder_pv_input_precision * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
+                math.log2(nb_inputs_of_adder_pv) - 0.5
             )
-            energy_adders_pv = (
-                logic_unit.get_1b_adder_energy()
-                * nb_of_1b_adder_pv
-                * nb_of_activation_times
-            )
+            nb_of_activation_times = mapped_cols * layer_act_operand_pres / input_bit_per_cycle * macro_activation_times
+            energy_adders_pv = logic_unit.get_1b_adder_energy() * nb_of_1b_adder_pv * nb_of_activation_times
         return energy_adders_pv
 
     def get_energy_for_a_layer(self, layer, mapping):
@@ -744,9 +630,7 @@ class DimcArray(ImcUnit):
         """
         """check if operand precision defined in the layer is the same with in hardware template"""
         # activation/weight representation
-        layer_act_operand, layer_const_operand = (
-            self.identify_layer_operand_representation(layer)
-        )
+        layer_act_operand, layer_const_operand = self.identify_layer_operand_representation(layer)
 
         layer_const_operand_pres = layer.operand_precision[layer_const_operand]
         layer_act_operand_pres = layer.operand_precision[layer_act_operand]
@@ -817,21 +701,11 @@ class DimcArray(ImcUnit):
             energy_accumulators = 0
         else:
             accumulator_output_pres = (
-                self.hd_param["input_precision"]
-                + self.hd_param["weight_precision"]
-                + math.log2(self.bl_dim_size)
+                self.hd_param["input_precision"] + self.hd_param["weight_precision"] + math.log2(self.bl_dim_size)
             )
-            nb_of_activation_times = (
-                mapped_cols
-                * layer_act_operand_pres
-                / input_bit_per_cycle
-                * macro_activation_times
-            )
+            nb_of_activation_times = mapped_cols * layer_act_operand_pres / input_bit_per_cycle * macro_activation_times
             energy_accumulators = (
-                (
-                    self.logic_unit.get_1b_adder_energy()
-                    + self.logic_unit.get_1b_reg_energy()
-                )
+                (self.logic_unit.get_1b_adder_energy() + self.logic_unit.get_1b_reg_energy())
                 * accumulator_output_pres
                 * nb_of_activation_times
             )
@@ -852,25 +726,21 @@ class DimcArray(ImcUnit):
         act_operand = [
             operand
             for operand in layer.operand_loop_dim.keys()
-            if len(layer.operand_loop_dim[operand]["pr"]) > 0
+            if len(layer.operand_loop_dim[operand][Relevancy.PR]) > 0
         ]
         if len(act_operand) == 0:  # true for fully-connected (fc) layers
             # weight representation (fc layers)
             const_operand = [
                 operand
                 for operand in layer.operand_loop_dim.keys()
-                if len(layer.operand_loop_dim[operand]["ir"]) == 0
+                if len(layer.operand_loop_dim[operand][Relevancy.IR]) == 0
             ][0]
             # activation representation (fc layers)
-            act_operand = [
-                operand for operand in layer.input_operands if operand != const_operand
-            ][0]
+            act_operand = [operand for operand in layer.input_operands if operand != const_operand][0]
         else:
             act_operand = act_operand[0]
             # weight representation (conv layers)
-            const_operand = [
-                operand for operand in layer.input_operands if operand != act_operand
-            ][0]
+            const_operand = [operand for operand in layer.input_operands if operand != act_operand][0]
         return act_operand, const_operand
 
 

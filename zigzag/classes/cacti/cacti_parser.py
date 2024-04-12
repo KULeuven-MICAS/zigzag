@@ -33,7 +33,7 @@ class CactiParser:
         technology,
         mem_pool_path=MEM_POOL_PATH,
     ):
-        """!  This function checks if the provided memory configuration was already used in the past.
+        """!  This function checks whether the provided memory configuration was already used in the past.
         @param mem_type
         @param size
         @param r_bw
@@ -125,9 +125,7 @@ class CactiParser:
         )
 
         if p != 0:
-            raise ChildProcessError(
-                f"Cacti subprocess call failed with return value {p}."
-            )
+            raise ChildProcessError(f"Cacti subprocess call failed with return value {p}.")
 
     def get_item(
         self,
@@ -157,17 +155,13 @@ class CactiParser:
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
-        logger.info(
-            f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}."
-        )
+        logger.info(f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}.")
 
         if mem_type == "rf":
             new_mem_type = "sram"
             new_size = int(size * 128)
             new_r_bw = int(r_bw)
-            logger.warning(
-                f"Type {mem_type} -> {new_mem_type}. Size {size} -> {new_size}. BW {r_bw} -> {new_r_bw}."
-            )
+            logger.warning(f"Type {mem_type} -> {new_mem_type}. Size {size} -> {new_size}. BW {r_bw} -> {new_r_bw}.")
             mem_type = new_mem_type
             size = new_size
             r_bw = new_r_bw

@@ -1,6 +1,6 @@
 from typing import Dict
 from math import prod
-from zigzag.classes.workload.layer_node import LayerNode
+from zigzag.classes.workload.layer_node import LayerNode, Relevancy
 from zigzag.utils import pickle_deepcopy
 
 
@@ -54,41 +54,24 @@ class TemporalMapping:
         done = False
 
         while not done:
-            mapping_st = {
-                op: [[] for _ in range(self.mem_level[op])] for op in self.operand_list
-            }
+            mapping_st = {op: [[] for _ in range(self.mem_level[op])] for op in self.operand_list}
             MAC_level_st = {op: 1 for op in self.operand_list}
             for operand in self.mem_level.keys():
                 for level, current_level_loops in enumerate(mapping_previous[operand]):
                     if not current_level_loops:
-                        mapping_st[operand][level] = pickle_deepcopy(  # type: ignore
-                            current_level_loops
-                        )
+                        mapping_st[operand][level] = pickle_deepcopy(current_level_loops)  # type: ignore
                     else:
                         for loop_type, loop_dim in current_level_loops:
-                            if (
-                                loop_type
-                                in self.layer_node.operand_loop_dim[operand]["ir"]
-                            ):
+                            if loop_type in self.layer_node.operand_loop_dim[operand][Relevancy.IR]:
                                 if level == 0:
                                     MAC_level_st[operand] *= loop_dim
-                                    mapping_st[operand][level].append(
-                                        (loop_type, loop_dim)
-                                    )
-                                    mapping_current[operand][level].remove(
-                                        (loop_type, loop_dim)
-                                    )
+                                    mapping_st[operand][level].append((loop_type, loop_dim))
+                                    mapping_current[operand][level].remove((loop_type, loop_dim))
                                 else:
-                                    mapping_st[operand][level - 1].append(
-                                        (loop_type, loop_dim)
-                                    )
-                                    mapping_current[operand][level].remove(
-                                        (loop_type, loop_dim)
-                                    )
+                                    mapping_st[operand][level - 1].append((loop_type, loop_dim))
+                                    mapping_current[operand][level].remove((loop_type, loop_dim))
                             else:
-                                mapping_st[operand][level].extend(
-                                    mapping_current[operand][level]
-                                )
+                                mapping_st[operand][level].extend(mapping_current[operand][level])
                                 break
             if mapping_st != mapping_previous:
                 mapping_previous: dict = pickle_deepcopy(mapping_st)  # type: ignore
@@ -105,19 +88,14 @@ class TemporalMapping:
         # iteration_each_level only counts for the current level for-loops
         iteration_each_level = {
             op: [
-                prod(
-                    [loop_dim for (_, loop_dim) in self.mapping_dic_stationary[op][lv]]
-                )
+                prod([loop_dim for (_, loop_dim) in self.mapping_dic_stationary[op][lv]])
                 for lv in range(self.mem_level[op])
             ]
             for op in self.operand_list
         }
         # cycle_per_level count for current and below levels' for-loops
         cycle_cabl_level = {
-            op: [
-                prod(iteration_each_level[op][0 : lv + 1])
-                for lv in range(self.mem_level[op])
-            ]
+            op: [prod(iteration_each_level[op][0 : lv + 1]) for lv in range(self.mem_level[op])]
             for op in self.operand_list
         }
 
@@ -136,29 +114,23 @@ class TemporalMapping:
 
         # Initialization
         # self.mem_level[op] + 1 to add the placeholder for operational array level
-        top_r_loop_size = {
-            op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list
-        }
+        top_r_loop_size = {op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list}
 
-        top_ir_loop_size = {
-            op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list
-        }
+        top_ir_loop_size = {op: [1 for _ in range(self.mem_level[op] + 1)] for op in self.operand_list}
 
         # Check and extract the top ir loops
         for operand in self.operand_list:
-            for level, current_level_loops in enumerate(
-                self.mapping_dic_stationary[operand]
-            ):
+            for level, current_level_loops in enumerate(self.mapping_dic_stationary[operand]):
                 if not current_level_loops:
                     continue
                 else:
                     for loop_type, loop_dim in reversed(current_level_loops):
-                        if loop_type in self.layer_node.operand_loop_dim[operand]["r"]:
+                        if loop_type in self.layer_node.operand_loop_dim[operand][Relevancy.R]:
                             top_r_loop_size[operand][level + 1] *= loop_dim
                         else:
                             break
                     for loop_type, loop_dim in reversed(current_level_loops):
-                        if loop_type in self.layer_node.operand_loop_dim[operand]["ir"]:
+                        if loop_type in self.layer_node.operand_loop_dim[operand][Relevancy.IR]:
                             top_ir_loop_size[operand][level + 1] *= loop_dim
                         else:
                             break

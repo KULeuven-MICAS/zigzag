@@ -33,16 +33,12 @@ def memory_hierarchy_dut(imc_array, visualize=False):
     output_precision = hd_param["input_precision"] + hd_param["weight_precision"]
     if hd_param["enable_cacti"]:
         # unit: pJ/weight writing
-        w_cost_per_weight_writing = get_w_cost_per_weight_from_cacti(
-            cacti_path, tech_param, hd_param, dimensions
-        )
+        w_cost_per_weight_writing = get_w_cost_per_weight_from_cacti(cacti_path, tech_param, hd_param, dimensions)
     else:
-        w_cost_per_weight_writing = hd_param[
-            "w_cost_per_weight_writing"
-        ]  # user-provided value (unit: pJ/weight)
+        w_cost_per_weight_writing = hd_param["w_cost_per_weight_writing"]  # user-provided value (unit: pJ/weight)
 
-    """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    # Memory hierarchy variables
+    #   size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy)
     cell_group = MemoryInstance(
         name="cell_group",
         size=hd_param["weight_precision"] * hd_param["group_depth"],
@@ -62,9 +58,7 @@ def memory_hierarchy_dut(imc_array, visualize=False):
         r_bw=hd_param["input_precision"],
         w_bw=hd_param["input_precision"],
         r_cost=0,
-        w_cost=tech_param["dff_cap"]
-        * (tech_param["vdd"] ** 2)
-        * hd_param["input_precision"],  # pJ/access
+        w_cost=tech_param["dff_cap"] * (tech_param["vdd"] ** 2) * hd_param["input_precision"],  # pJ/access
         area=tech_param["dff_area"] * hd_param["input_precision"],  # mm^2
         r_port=1,
         w_port=1,
@@ -78,9 +72,7 @@ def memory_hierarchy_dut(imc_array, visualize=False):
         r_bw=output_precision,
         w_bw=output_precision,
         r_cost=0,
-        w_cost=tech_param["dff_cap"]
-        * (tech_param["vdd"] ** 2)
-        * output_precision,  # pJ/access
+        w_cost=tech_param["dff_cap"] * (tech_param["vdd"] ** 2) * output_precision,  # pJ/access
         area=tech_param["dff_area"] * output_precision,  # mm^2
         r_port=2,
         w_port=2,
@@ -92,9 +84,7 @@ def memory_hierarchy_dut(imc_array, visualize=False):
 
     sram_size = 256 * 1024  # unit: byte
     sram_bw = max(
-        imc_array.unit.bl_dim_size
-        * hd_param["input_precision"]
-        * imc_array.unit.nb_of_banks,
+        imc_array.unit.bl_dim_size * hd_param["input_precision"] * imc_array.unit.nb_of_banks,
         imc_array.unit.wl_dim_size * output_precision * imc_array.unit.nb_of_banks,
     )
     ac_time, sram_area, sram_r_cost, sram_w_cost = get_cacti_cost(
@@ -125,11 +115,7 @@ def memory_hierarchy_dut(imc_array, visualize=False):
 
     dram_size = 1 * 1024 * 1024 * 1024  # unit: byte
     dram_ac_cost_per_bit = 3.7  # unit: pJ/bit
-    dram_bw = (
-        imc_array.unit.wl_dim_size
-        * hd_param["weight_precision"]
-        * imc_array.unit.nb_of_banks
-    )
+    dram_bw = imc_array.unit.wl_dim_size * hd_param["weight_precision"] * imc_array.unit.nb_of_banks
     dram_100MB_32_3r_3w = MemoryInstance(
         name="dram_1GB",
         size=dram_size * 8,  # byte -> bit
@@ -148,46 +134,38 @@ def memory_hierarchy_dut(imc_array, visualize=False):
 
     memory_hierarchy_graph = MemoryHierarchy(operational_array=imc_array)
 
-    """
-    fh: from high = wr_in_by_high 
-    fl: from low = wr_in_by_low 
-    th: to high = rd_out_to_high
-    tl: to low = rd_out_to_low
-    """
+    # fh: from high = wr_in_by_high
+    # fl: from low = wr_in_by_low
+    # th: to high = rd_out_to_high
+    # tl: to low = rd_out_to_low
     memory_hierarchy_graph.add_memory(
         memory_instance=cell_group,
         operands=("I2",),
         port_alloc=({"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},),
-        served_dimensions=set(),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_I1,
         operands=("I1",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions={(1, 0, 0)},
+        served_dimensions=("D1",),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O1,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},
-        ),
-        served_dimensions={(0, 1, 0)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
+        served_dimensions=("D2",),
     )
 
     ##################################### on-chip highest memory hierarchy initialization #####################################
 
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_256KB_256_3r_3w,
-        operands=(
-            "I1",
-            "O",
-        ),
+        operands=("I1", "O"),
         port_alloc=(
             {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
             {"fh": "w_port_2", "tl": "r_port_2", "fl": "w_port_3", "th": "r_port_3"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
 
     ####################################################################################################################
@@ -200,7 +178,7 @@ def memory_hierarchy_dut(imc_array, visualize=False):
             {"fh": "w_port_2", "tl": "r_port_2", "fl": None, "th": None},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_3", "th": "r_port_3"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
 
     if visualize:
@@ -247,9 +225,7 @@ def imc_array_dut():
         "D2": 32,  # bitline dimension
         "D3": 1,  # nb_macros (nb_arrays)
     }  # {"D1": ("K", 4), "D2": ("C", 32),}
-    hd_param["adc_resolution"] = hd_param["input_bit_per_cycle"] + 0.5 * int(
-        math.log2(dimensions["D2"])
-    )
+    hd_param["adc_resolution"] = hd_param["input_bit_per_cycle"] + 0.5 * int(math.log2(dimensions["D2"]))
 
     aimc_array = ImcArray(tech_param, hd_param, dimensions)
 

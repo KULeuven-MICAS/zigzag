@@ -7,12 +7,14 @@ from typing import Iterator
 
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
-from zigzag.classes.hardware.architecture.dimension import Dimension
-from zigzag.classes.workload.layer_node import LayerNode
-from zigzag.classes.opt.spatial.SpatialMapping import (
+from zigzag.classes.hardware.architecture.Dimension import Dimension
+from zigzag.classes.hardware.architecture.memory_level import ServedMemDimensions
+from zigzag.classes.workload.layer_node import LayerNode, MemOperandStr, OperandStr, Relevancy
+from zigzag.classes.mapping.spatial.SpatialMapping import (
     LayerDim,
     SpatialMapping,
     MappingSingleOADim,
+    SpatialMappingHint,
     UnrollFactor,
 )
 
@@ -46,7 +48,7 @@ class UserSpatialMappingGenerator:
         self.layer_dim_sizes = self.layer.layer_dim_sizes
         # Lowest memory levels
         self.innermost_levels = core.memory_hierarchy.get_inner_memories()
-        self.spatial_mapping_hint = self.layer.user_spatial_mapping_hint
+        self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
         self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, {LayerDim(x) for x in self.layer.loop_dim_list})
         # Limit the number of SpatialMappings generated
         self.MAX_NB_MAPPINGS = 3  # pylint: disable=C0103
@@ -183,6 +185,7 @@ class UserSpatialMappingGenerator:
         # Sort according to hardware utilization
         candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_utilization(), reverse=True)
 
+        # TODO we need a new `utility` function that also incorporates the diversity of layer dims
         utilizations = [x.get_utilization() for x in candidate_mappings]
         # Count how many times the best utilization occurs
         nb_top_utilizations = utilizations.count(utilizations[0])
@@ -244,7 +247,7 @@ class UserSpatialMappingGenerator:
                 layer_dim_size_remainder[layer_dim] //= unroll_factor
 
         # get the link from layer op to mem op
-        layer_op_to_mem_op: dict = self.layer.memory_operand_links
+        memory_operand_links: dict[OperandStr, MemOperandStr] = self.layer.memory_operand_links
         # check if it is weight stationary.
         # keep the spatial loop as it was if it is not weight stationary.
         if len(self.layer.constant_operands) > 1:
@@ -258,24 +261,28 @@ class UserSpatialMappingGenerator:
         # get output operand name
         output_operand = self.layer.output_operand
         # get name of OX, OY (weight ir layer dims)
-        weight_ir_layer_dims: list[LayerDim] = [LayerDim(x) for x in self.layer.operand_loop_dim[const_operand]["ir"]]
+        weight_ir_layer_dims: list[LayerDim] = [
+            LayerDim(x) for x in self.layer.operand_loop_dim[const_operand][Relevancy.IR]
+        ]
+
+        # TODO this code doesn't currently work
         # get the oa_dim name served by input / output innermost memory level
         for mem_level in self.innermost_levels:
-            mem_ops = mem_level.operands
-            if layer_op_to_mem_op[act_operand] in mem_ops:
-                act_served_oa_dims: set[Dimension] = mem_level.served_dimensions
-            if layer_op_to_mem_op[output_operand] in mem_ops:
-                output_served_oa_dims: set[Dimension] = mem_level.served_dimensions  # type: ignore
+            if memory_operand_links[act_operand] in mem_level.operands:
+                act_served_oa_dims: ServedMemDimensions = mem_level.served_dimensions
+            if memory_operand_links[output_operand] in mem_level.operands:
+                output_served_oa_dims: ServedMemDimensions = mem_level.served_dimensions
         # check if act is not served in the innermost memories, or act/output is not multicasting on only one dimension.
+
         # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:  # type: ignore
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:
             return spatial_mapping
-        if "output_served_oa_dim" not in locals() or len(output_served_oa_dims) != 1:  # type: ignore
+        if "output_served_oa_dim" not in locals() or len(output_served_oa_dims) != 1:
             return spatial_mapping
 
         # TODO why only first element?
-        act_served_oa_dim: Dimension = list(act_served_oa_dims)[0]  # type: ignore
-        output_served_oa_dim: Dimension = list(output_served_oa_dims)[0]  # type: ignore
+        act_served_oa_dim: Dimension = list(act_served_oa_dims)[0]
+        output_served_oa_dim: Dimension = list(output_served_oa_dims)[0]
         act_served_oa_dim_size = act_served_oa_dim.size
         output_served_oa_dim_size = output_served_oa_dim.size
 
@@ -304,7 +311,7 @@ class UserSpatialMappingGenerator:
             return spatial_mapping
 
         # fetch pr loop pairs for activation, e.g. {"IX": ["OX", "FX"]}
-        act_pr_layer_dims = [LayerDim(x) for x in self.layer.operand_loop_dim[act_operand]["pr"]]
+        act_pr_layer_dims = [LayerDim(x) for x in self.layer.operand_loop_dim[act_operand][Relevancy.PR]]
 
         # Next we get existed mapping size on output_served_oa_dim
         # there are two classes of mapping:
@@ -491,25 +498,18 @@ class UserSpatialMappingGenerator:
             factors.append(n)
         return factors
 
-    # @staticmethod
-    # def is_nested_tuple(obj):
-    #     if isinstance(obj, tuple):
-    #         for item in obj:
-    #             if isinstance(item, tuple):
-    #                 # If any item within the tuple is itself a tuple, it's a nested tuple
-    #                 return True
-    #     return False
-
     @staticmethod
     def identify_layer_operand_representation(layer: LayerNode) -> tuple[str | None, str | None]:
         # activation representation: list (conv layers)
         act_operands_pool: list[str] = [
-            op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op]["pr"]) > 0
+            op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op][Relevancy.PR]) > 0
         ]
         # true for fully-connected (fc) layers
         if len(act_operands_pool) == 0:
             # weight representation (fc layers)
-            const_operands_pool = [op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op]["ir"]) == 0]
+            const_operands_pool = [
+                op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op][Relevancy.IR]) == 0
+            ]
             const_operand = None if len(const_operands_pool) == 0 else const_operands_pool[0]
             # activation representation (fc layers)
             act_operands_pool = [operand for operand in layer.input_operands if operand != const_operand]

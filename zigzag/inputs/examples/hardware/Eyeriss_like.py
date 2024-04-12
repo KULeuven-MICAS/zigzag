@@ -102,21 +102,16 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
         memory_instance=rf1,
         operands=("I1",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions=set(),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=rf1,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions=set(),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=rf2,
         operands=("O",),
-        port_alloc=(
-            {"fh": "rw_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "rw_port_1"},
-        ),
-        served_dimensions=set(),
+        port_alloc=({"fh": "rw_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "rw_port_1"},),
     )
 
     memory_hierarchy_graph.add_memory(
@@ -130,13 +125,13 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=lb2_64KB,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=gb,
@@ -150,7 +145,7 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=dram,
@@ -165,7 +160,7 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -182,9 +177,7 @@ def multiplier_array_latency_test1():
     multiplier_energy = 0.5
     multiplier_area = 0.1
     dimensions = {"D1": 14, "D2": 12}
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array

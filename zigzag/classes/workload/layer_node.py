@@ -1,12 +1,33 @@
+from enum import Enum
+from typing import TypeAlias
 from math import gcd, prod
 import re
-from collections import defaultdict
 from copy import deepcopy
-from collections import defaultdict
 from typing import Any
 
-from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.classes.opt.spatial.SpatialMapping import LayerDim, LayerDimStr, SpatialMapping, SpatialMappingHint
+from zigzag.classes.mapping.spatial.SpatialMapping import LayerDim, LayerDimStr, SpatialMapping, SpatialMappingHint
+
+
+class Relevancy(Enum):
+    R = "r"
+    PR = "pr"
+    IR = "ir"
+
+
+# e.g. "I", "W"
+OperandStr: TypeAlias = str
+# e.g. "I1", "I2"
+MemOperandStr: TypeAlias = str
+LayerDimSizes: TypeAlias = dict[LayerDimStr, int]
+MemOperandLinks: TypeAlias = dict[OperandStr, MemOperandStr]
+OperandSrcDimMapping: TypeAlias = dict[OperandStr, dict[LayerDimStr, LayerDimStr]]
+PrLoop: TypeAlias = dict[LayerDimStr, list[LayerDimStr]]
+# Flattened version of PrLoop
+LoopList: TypeAlias = list[LayerDimStr]
+PrScalingFactors: TypeAlias = dict[LayerDimStr, dict[LayerDimStr, int]]
+
+OperandLoopDims: TypeAlias = dict[OperandStr, dict[Relevancy, LoopList | PrLoop]]
+OperandDimOrder: TypeAlias = dict[OperandStr, LoopList]
 
 
 class LayerNode:
@@ -63,29 +84,26 @@ class LayerNode:
 
         # Get required attributes from layer_attrs
         equation: str = layer_attrs.get("equation")  # type: ignore
-        loop_dim_size: dict[LayerDimStr, int] = layer_attrs.get("loop_dim_size")  # type: ignore
-        pr_loop_dim_size: dict[LayerDimStr, int] = layer_attrs.get("pr_loop_dim_size", None)
-        operand_precision: dict[str, int] = layer_attrs.get("operand_precision")  # type: ignore
+        loop_dim_size: LayerDimSizes = layer_attrs.get("loop_dim_size")  # type: ignore
+        pr_loop_dim_size: LayerDimSizes = layer_attrs.get("pr_loop_dim_size", None)
+        operand_precision: dict[OperandStr, int] = layer_attrs.get("operand_precision")  # type: ignore
         dimension_relations: list[str] = layer_attrs.get("dimension_relations", [])
-        # user_spatial_mapping: dict[str, tuple] = layer_attrs.get("spatial_mapping", None)
         user_spatial_mapping = SpatialMapping.parse_user_input(layer_attrs.get("spatial_mapping", None))
-        # user_spatial_mapping_hint: dict[str, list] = layer_attrs.get("spatial_mapping_hint", None)
         user_spatial_mapping_hint = SpatialMappingHint.parse_user_input(layer_attrs.get("spatial_mapping_hint", None))
         user_temporal_ordering = layer_attrs.get("temporal_ordering", None)
         core_allocation: int = layer_attrs.get("core_allocation", None)
-        memory_operand_links: dict[str, str] = layer_attrs.get("memory_operand_links", None)
-        source_storage_level: int = layer_attrs.get("source_storage_level", {})
-        operand_source_dimension_mapping: dict[dict[str, str]] = layer_attrs.get(  # type: ignore
-            "operand_source_dimension_mapping", {}
-        )
-        constant_operands: list[str] = layer_attrs.get("constant_operands", [])
-        input_operand_source: dict[str, list] = layer_attrs.get("operand_source", dict())
-        # Save the padding for different tensor dimensions
-        padding: dict[str, tuple] = layer_attrs.get("padding", {})  # Empty dict signals no padding in any dimension
+        memory_operand_links: MemOperandLinks = layer_attrs.get("memory_operand_links", None)
+        source_storage_level = layer_attrs.get("source_storage_level", {})
+        operand_source_dimension_mapping: OperandSrcDimMapping = layer_attrs.get("operand_source_dimension_mapping", {})  # type: ignore
+        constant_operands: list[OperandStr] = layer_attrs.get("constant_operands", [])
+        input_operand_source: dict[OperandStr, LayerNode] = layer_attrs.get("operand_source", dict())
+        # Save the padding for different tensor dimensions. Empty dict signals no padding in any dimension
+        padding: dict[OperandStr, tuple] = layer_attrs.get("padding", {})
 
         self.equation = equation
         # Legacy code: still uses LayerDimStr instead of LayerDim
         self.loop_dim_size: dict[LayerDimStr, int] = loop_dim_size
+        # Same attribute
         self.layer_dim_sizes: dict[LayerDim, int] = {
             LayerDim(layer_dim): size for layer_dim, size in loop_dim_size.items()
         }
@@ -108,7 +126,7 @@ class LayerNode:
         pr_loop, pr_loop_list, pr_scaling_factors = self.build_pr_funcs()
         self.pr_loop = pr_loop
         self.pr_scaling_factors = pr_scaling_factors
-        if not self.pr_loop_dim_size:
+        if self.pr_loop_dim_size is None or len(self.pr_loop_dim_size) == 0:
             self.pr_loop_dim_size = {dim: self.calc_pr_dimension_size_total(dim) for dim in pr_loop}
 
         # Step2: extract relevant and irrelevant loop dimensions.
@@ -136,18 +154,15 @@ class LayerNode:
         # Step3: extract layer info, e.g. total operand size, total operand data reuse, total MAC operation, etc.
         self.extract_layer_info()
 
-    def build_pr_funcs(self) -> tuple[dict[str, list[str]], list[str], dict[str, dict[str, int]]]:
-        # 1 long dimensions are removed in self.loop_dim_size but required in extract_pr_loop_info
-        loop_dim_size: dict[str, int] = defaultdict(lambda: 1)
-        loop_dim_size.update(self.loop_dim_size)
-        if self.dimension_relations:
+    def build_pr_funcs(self) -> tuple[PrLoop, LoopList, PrScalingFactors]:
+        if len(self.dimension_relations) > 0:
             pr_loop, pr_loop_list, pr_scaling_factors = self.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
-    def get_core_allocation(self):
+    def get_core_allocation(self) -> int:
         return self.core_allocation
 
     def __str__(self):
@@ -199,14 +214,14 @@ class LayerNode:
         else:
             raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")
 
-    def calc_tensor_dims(self, layer_op, loop_sizes):
+    def calc_tensor_dims(self, layer_op: OperandStr, loop_sizes):
         out = {}
         op_dimensions = self.operand_loop_dim[layer_op]
-        for dim in op_dimensions["r"] + list(op_dimensions["pr"].keys()):
+        for dim in op_dimensions[Relevancy.R] + list(op_dimensions[Relevancy.PR].keys()):
             out[dim] = self.calc_tensor_dim(loop_sizes, dim)
         return out
 
-    def calc_pr_dimension_size_total(self, dim):
+    def calc_pr_dimension_size_total(self, dim: LayerDimStr) -> int:
         """!  Compute the total pr dimension size of this node, taking padding into account.
         @param dim (str): The partially relevant dimension, e.g. 'IX'.
         @return int: The total partially relevant dimension size
@@ -224,7 +239,7 @@ class LayerNode:
         return total_pr_dim_size_without_padding
 
     @staticmethod
-    def calc_pr_dimension_size(sa, A, sb, B):
+    def calc_pr_dimension_size(sa: int, A: int, sb: int, B: int):
         """!  Calculates the number of unique indices c generated by iterating through the indices
         a in range(0,A,1) and b in range(0,B,1) according to the equation c = sa * a + sb * b.
         sa and sb thus represent the scaling of a, resp. b.
@@ -235,13 +250,10 @@ class LayerNode:
     def return_lambda(equal_sign_right):
         return eval("lambda n: " + equal_sign_right)
 
-    def extract_pr_loop_info(
-        self, equation_relations: list[str]
-    ) -> tuple[dict[str, list[str]], list[str], dict[str, dict[str, int]]]:
-        pr_loop: dict[str, list[str]] = {}
-        pr_loop_list: list[str] = []
-        pr_scaling_factors: dict[str, dict[str, int]] = {}
-        padding: dict[str, int] = {}
+    def extract_pr_loop_info(self, equation_relations: list[str]) -> tuple[PrLoop, LoopList, PrScalingFactors]:
+        pr_loop: PrLoop = {}
+        pr_loop_list: LoopList = []
+        pr_scaling_factors: PrScalingFactors = {}
         for relation in equation_relations:
             relation_disassembly: list[str] = re.findall("[a-zA-Z]+", relation)
 
@@ -249,14 +261,14 @@ class LayerNode:
                 len(relation_disassembly) == 3
             ), f"equation_relation {relation} does not involve a linear relationship between two dimension iterators."
 
-            key = relation_disassembly[0].upper()
+            key: LayerDimStr = relation_disassembly[0].upper()
             val = [loop_dim.upper() for loop_dim in relation_disassembly[1:]]
             pr_loop[key] = val
             pr_loop_list.extend([key] + val)
 
             # To extract the scaling factors for the different loop dimension iterators, we need to make sure
             # there is a scaling factor present in the equation. If it is not present, raise an exception.
-            scaling_factors: dict[str, int] = {}
+            scaling_factors: dict[LayerDimStr, int] = {}
             for val_lower in relation_disassembly[1:]:
                 if relation[relation.index(val_lower) - 1] == "*":
                     if not relation[relation.index(val_lower) - 2].isdigit():
@@ -267,7 +279,6 @@ class LayerNode:
                         scaling_factors[val_lower] = int(re.findall("(\\d+)(?=\\*" + val_lower + ")", relation)[0])
                 else:
                     scaling_factors[val_lower] = 1
-            # scaling_factors = re.findall('[0-9]+', relation)
             assert len(scaling_factors) == 2, f"Please remove any constants in the equation relation {relation}."
             pr_scaling_factors[key] = scaling_factors
 
@@ -275,11 +286,11 @@ class LayerNode:
 
     @staticmethod
     def extract_r_ir_loop_info(
-        equation: str, loop_dim_size: dict[str, int], pr_loop: dict[str, list[str]], pr_loop_list: list[str]
-    ) -> tuple[dict[str, dict[str, list[str]]], dict[str, dict[str, list[str]]], list[str], dict[str, list[str]]]:
+        equation: str, loop_dim_size: LayerDimSizes, pr_loop: PrLoop, pr_loop_list: LoopList
+    ) -> tuple[OperandLoopDims, OperandLoopDims, list[OperandStr], OperandDimOrder]:
         """! Description missing"""
-        operand_loop_dim: dict[str, dict[str, list[str]]] = {}
-        operand_list: list[str] = []
+        operand_loop_dim: OperandLoopDims = {}
+        operand_list: list[OperandStr] = []
         equation = equation.replace("*", " * ")
         equation = equation.replace("=", " = ")
         equation = equation.replace("+", " + ")
@@ -306,15 +317,15 @@ class LayerNode:
             pr_loop_remove_flag = any(loop in pr_loop for loop in r_loop_list)
             if pr_loop_remove_flag:
                 #  and loop_dim_size[loop] != 1]
-                operand_loop_dim[operand]["r"] = [loop for loop in r_loop_list if loop not in pr_loop_list]
-                operand_loop_dim[operand]["ir"] = [
+                operand_loop_dim[operand][Relevancy.R] = [loop for loop in r_loop_list if loop not in pr_loop_list]
+                operand_loop_dim[operand][Relevancy.IR] = [
                     loop for loop in ir_loop_list if loop not in pr_loop_list and loop_dim_size[loop] != 1
                 ]
-                operand_loop_dim[operand]["pr"] = pr_loop
+                operand_loop_dim[operand][Relevancy.PR] = pr_loop
             else:
-                operand_loop_dim[operand]["r"] = [loop for loop in r_loop_list if loop_dim_size[loop] != 1]
-                operand_loop_dim[operand]["ir"] = [loop for loop in ir_loop_list if loop_dim_size[loop] != 1]
-                operand_loop_dim[operand]["pr"] = {}
+                operand_loop_dim[operand][Relevancy.R] = [loop for loop in r_loop_list if loop_dim_size[loop] != 1]
+                operand_loop_dim[operand][Relevancy.IR] = [loop for loop in ir_loop_list if loop_dim_size[loop] != 1]
+                operand_loop_dim[operand][Relevancy.PR] = {}
             begin_idx = split_loc + 1
 
             # Add the dimensionality order of all relevant (including partially relevant) dimensions of this operand
@@ -324,19 +335,14 @@ class LayerNode:
         # to r and ir dict with "_r" and "_ir" suffix. It brings benefits to loop info extraction after pr loop decoupling step.
         operand_loop_dim_reform = deepcopy(operand_loop_dim)
         for operand, dic in operand_loop_dim.items():
-            del operand_loop_dim_reform[operand]["pr"]
-            if dic["pr"] != {}:
+            del operand_loop_dim_reform[operand][Relevancy.PR]
+            if dic[Relevancy.PR] != {}:
                 r_extend_list = [pr_data_dim + "_r" for pr_data_dim in pr_loop.keys()]
                 ir_extend_list = [pr_data_dim + "_ir" for pr_data_dim in pr_loop.keys()]
-                operand_loop_dim_reform[operand]["r"] += r_extend_list
-                operand_loop_dim_reform[operand]["ir"] += ir_extend_list
+                operand_loop_dim_reform[operand][Relevancy.R] += r_extend_list
+                operand_loop_dim_reform[operand][Relevancy.IR] += ir_extend_list
 
-        return (
-            operand_loop_dim,
-            operand_loop_dim_reform,
-            operand_list,
-            operand_dimensionality_order,
-        )
+        return operand_loop_dim, operand_loop_dim_reform, operand_list, operand_dimensionality_order
 
     def extract_layer_info(self):
         """!  This function extract basic information for each layer node.
@@ -352,9 +358,9 @@ class LayerNode:
         operand_size_elem: dict[str, int] = {}
         for operand, relevancy in self.operand_loop_dim.items():
             operand_size_elem[operand] = 1
-            for r_loop in relevancy["r"]:
+            for r_loop in relevancy[Relevancy.R]:
                 operand_size_elem[operand] *= self.loop_dim_size[r_loop]
-            for pr_loop, pr_loop_collect in relevancy["pr"].items():
+            for pr_loop, pr_loop_collect in relevancy[Relevancy.PR].items():
                 multiply_factor = self.calc_tensor_dims(operand, self.loop_dim_size)[pr_loop]
                 operand_size_elem[operand] *= multiply_factor
         self.operand_size_elem = operand_size_elem
@@ -374,7 +380,7 @@ class LayerNode:
 
     def get_operand_irrelevant_dimensions(self, layer_op: str):
         """!  Return the irrelevant dimensions of layer operand 'layer_op'."""
-        return self.operand_loop_dim[layer_op]["ir"]
+        return self.operand_loop_dim[layer_op][Relevancy.IR]
 
     def get_layer_operand(self, mem_op: str) -> str:
         """!  Return the layer operand associated with the given memory operand for this layer.
@@ -385,7 +391,7 @@ class LayerNode:
                 return layer_operand
         raise ValueError(f"The memory operand {mem_op} is not present in layer {self}.")
 
-    def get_operand_storage_level(self, layer_op: str):
+    def get_operand_storage_level(self, layer_op: OperandStr):
         """!  Return the memory level at which an input operand is stored.
         If this layer node has no information for the given operand, it returns None.
         """

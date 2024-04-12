@@ -1,14 +1,15 @@
 import networkx as nx
 
+from zigzag.classes.workload.Workload import Workload
 from zigzag.classes.workload.layer_node import LayerNode
-from typing import Dict, Any
+from typing import Any
 from networkx import DiGraph
 
 
-class DNNWorkload(DiGraph):
+class DNNWorkload(Workload):
     """!  Description missing"""
 
-    def __init__(self, workload: Dict[Any, Dict], mapping: Dict[Any, Dict], **attr):
+    def __init__(self, workload: dict[int, dict], mapping: dict[Any, dict], **attr):
         """!  The class constructor
         Collect all the algorithmic workload information here.
         @param workload: user-defined workload file (py).
@@ -16,7 +17,7 @@ class DNNWorkload(DiGraph):
         """
         super().__init__(**attr)
 
-        layer_id_to_obj = {}  # Lookup dict for id to LayerNode object translation
+        layer_id_to_obj: dict[int, LayerNode] = {}  # Lookup dict for id to LayerNode object translation
         self.layer_node_list = []
 
         for layer_id, layer in workload.items():
@@ -54,6 +55,4 @@ class DNNWorkload(DiGraph):
         for node in self.nodes:
             if node.id == id:
                 return node
-        raise ValueError(
-            "DNNWorkload instance does not have a node with the requested id"
-        )
+        raise ValueError("DNNWorkload instance does not have a node with the requested id")

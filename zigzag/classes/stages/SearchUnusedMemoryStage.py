@@ -1,10 +1,14 @@
+from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.stages.Stage import Stage
 
 import networkx as nx
 from typing import Generator
+from zigzag.classes.workload.Workload import Workload
 from zigzag.classes.workload.dummy_node import DummyNode
 
 import logging
+
+from zigzag.classes.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -81,7 +85,7 @@ logger = logging.getLogger(__name__)
 
 
 class SearchUnusedMemoryStage(Stage):
-    def __init__(self, list_of_callables, *, accelerator, workload, **kwargs):
+    def __init__(self, list_of_callables, *, accelerator: Accelerator, workload: Workload, **kwargs):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.workload = workload
@@ -89,19 +93,15 @@ class SearchUnusedMemoryStage(Stage):
         self.mem_update_list = {}
         self.each_layer_IO_data_size = {}  # unit: bit
         core_id = accelerator.cores[0].id  # correct only for single-core hardware
-        self.core_mem_level_list = accelerator.get_core(
-            core_id=core_id
-        ).memory_hierarchy.mem_level_list
-        self.mem_update_weight = (
-            len(self.core_mem_level_list) - 1
-        )  # index of the top memory
+        self.core_mem_level_list = accelerator.get_core(core_id=core_id).memory_hierarchy.mem_level_list
+        self.mem_update_weight = len(self.core_mem_level_list) - 1  # index of the top memory
         self.weight_size_entire_workload = 0  # unit: bit
         self.layer_list = {}  # layer name and its corresponding id
         core = accelerator.get_core(core_id=core_id)
+        layer: LayerNode
         for id, layer in enumerate(nx.topological_sort(workload)):
-            if (
-                type(layer) != DummyNode
-            ):  # create record on memory level, data size of each operand for un-dummy nodes
+            # create record on memory level, data size of each operand for un-dummy nodes
+            if not isinstance(layer, DummyNode):
                 # identify the weight operand
                 if len(layer.constant_operands) == 1:
                     weight_operand = layer.constant_operands[0]
@@ -126,12 +126,8 @@ class SearchUnusedMemoryStage(Stage):
                         ]
                         self.each_layer_IO_data_size[f"{id}"] = [
                             {
-                                layer.memory_operand_links[
-                                    output_operand
-                                ]: layer.operand_size_bit[output_operand],
-                                layer.memory_operand_links[
-                                    input_operand
-                                ]: input_data_size,
+                                layer.memory_operand_links[output_operand]: layer.operand_size_bit[output_operand],
+                                layer.memory_operand_links[input_operand]: input_data_size,
                             }
                         ]
                         self.layer_list[layer] = id
@@ -146,9 +142,7 @@ class SearchUnusedMemoryStage(Stage):
                         ) in layer.operand_dimensionality_order.items():
                             if pr_loop_keys[0] in related_loop:
                                 act_operand = operand
-                        weight_operand_temp: list = [
-                            x for x in layer.constant_operands if x != act_operand
-                        ]
+                        weight_operand_temp: list = [x for x in layer.constant_operands if x != act_operand]
                         assert len(weight_operand_temp) == 1
                         weight_operand: str = weight_operand_temp[0]
                 self.mem_update_list[f"{id}"] = [
@@ -158,16 +152,12 @@ class SearchUnusedMemoryStage(Stage):
                 ]
                 self.each_layer_IO_data_size[f"{id}"] = [
                     {
-                        layer.memory_operand_links[operand]: layer.operand_size_bit[
-                            operand
-                        ]
+                        layer.memory_operand_links[operand]: layer.operand_size_bit[operand]
                         for operand in layer.memory_operand_links.keys()
                         if operand != weight_operand
                     }
                 ]
-                self.weight_size_entire_workload += layer.operand_size_bit[
-                    weight_operand
-                ]
+                self.weight_size_entire_workload += layer.operand_size_bit[weight_operand]
                 self.layer_list[layer] = id
 
     def run(self, workload_data_always_from_top_mem=False) -> Generator:
@@ -197,34 +187,24 @@ class SearchUnusedMemoryStage(Stage):
         self.remove_dummy_nodes_in_workload()  # remove dummy nodes for the ease of telling the branch starting or final nodes
 
         ## Update mem_update_list and mem_update_weight
+        layer: LayerNode
         for id, layer in enumerate(nx.topological_sort(self.workload)):
-            branch_starting_node = (
-                True if self.workload.out_degree(layer) > 1 else False
-            )  # starting node of branches
+            branch_starting_node = True if self.workload.out_degree(layer) > 1 else False  # starting node of branches
             branch_final_node = (
                 True
                 if self.workload.out_degree(layer) == 1
-                and self.workload.in_degree(list(self.workload.successors(layer))[0])
-                > 1
+                and self.workload.in_degree(list(self.workload.successors(layer))[0]) > 1
                 else False
             )
-            output_operand = layer.memory_operand_links[
-                layer.output_operand
-            ]  # output representation in memory
-            curr_id = self.layer_list[
-                layer
-            ]  # current layer id (key) in mem_udpate_list
+            output_operand = layer.memory_operand_links[layer.output_operand]  # output representation in memory
+            curr_id = self.layer_list[layer]  # current layer id (key) in mem_udpate_list
+            # weight representation in memory
             if len(layer.constant_operands) == 1:
-                const_operand = layer.memory_operand_links[
-                    layer.constant_operands[0]
-                ]  # weight representation in memory
+                const_operand = layer.memory_operand_links[layer.constant_operands[0]]
+                # act representation in memory
                 act_operand = layer.memory_operand_links[
-                    [
-                        operand
-                        for operand in layer.input_operands
-                        if operand not in layer.constant_operands
-                    ][0]
-                ]  # act representation in memory
+                    [operand for operand in layer.input_operands if operand not in layer.constant_operands][0]
+                ]
             else:
                 if len(layer.constant_operands) == 0:
                     # special case when defining workload manually:
@@ -235,106 +215,68 @@ class SearchUnusedMemoryStage(Stage):
                     # special case when defining workload manually:
                     # both I and W are considered as constant operands for the first layer
                     pr_loop_keys = tuple(layer.pr_loop.keys())
-                    for (
-                        operand,
-                        related_loop,
-                    ) in layer.operand_dimensionality_order.items():
+                    for operand, related_loop in layer.operand_dimensionality_order.items():
                         if pr_loop_keys[0] in related_loop:
                             act_operand = operand
-                    weight_operand_temp: list = [
-                        x for x in layer.constant_operands if x != act_operand
-                    ]
+                    weight_operand_temp: list = [x for x in layer.constant_operands if x != act_operand]
                     weight_operand: str = weight_operand_temp[0]
                     act_operand = layer.memory_operand_links[
                         act_operand
                     ]  # map from layer representation to hardware memory representation
-                    const_operand = layer.memory_operand_links[
-                        weight_operand
-                    ]  # weight representation in memory
+                    const_operand = layer.memory_operand_links[weight_operand]  # weight representation in memory
             if id != 0:  ## not the first layer
                 ## Assign mem_udpate_list[layer]["I"] = mem_udpate_list[previous_layer]["O"]
-                prev_layer = list(self.workload.predecessors(layer))[
-                    0
-                ]  # previous layer node (object)
+                prev_layer = list(self.workload.predecessors(layer))[0]  # previous layer node (object)
                 prev_layer_id = self.layer_list[prev_layer]  # previous layer id
-                prev_layer_output_operand = (
-                    prev_layer.output_operand
-                )  # output representation in memory of previous layer
-                for ele in self.mem_update_list[
-                    f"{prev_layer_id}"
-                ]:  # find the output mem level of previous layer
+                # output representation in memory of previous layer
+                prev_layer_output_operand = prev_layer.output_operand
+                for ele in self.mem_update_list[f"{prev_layer_id}"]:  # find the output mem level of previous layer
                     try:
                         prev_layer_output_level = ele[f"{prev_layer_output_operand}"]
-                    except (
-                        KeyError
-                    ):  # skip if the key is incorrect, as there will only be one that match.
+                    except KeyError:  # skip if the key is incorrect, as there will only be one that match.
                         pass
                 self.update_IO_mem_level(
                     curr_id, act_operand, prev_layer_output_level
                 )  # update the input mem level of current layer
-            if (
-                branch_starting_node or branch_final_node
-            ):  # # branch starting node or branch final node or permited dummy nodes (e.g. Adder layer)
-                # # Update input, weight, output mem level for branch starting node and branch final node
-                # # Find the top mem level for input if it is the first layer, update mem_udpate_list of current layer
+            # # branch starting node or branch final node or permited dummy nodes (e.g. Adder layer)
+            # # Update input, weight, output mem level for branch starting node and branch final node
+            # # Find the top mem level for input if it is the first layer, update mem_udpate_list of current layer
+            if branch_starting_node or branch_final_node:
                 if id == 0:  ## the first layer
-                    for curr_mem_level, mem in reversed(
-                        list(enumerate(self.core_mem_level_list))
-                    ):
+                    for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
                         served_operands = list(
                             mem.mem_level_of_operands.keys()
                         )  # Check the served operand of current mem
                         if act_operand in served_operands:
-                            self.update_IO_mem_level(
-                                curr_id, act_operand, curr_mem_level
-                            )  # update the input mem level of current layer if it is the first layer
+                            # update the input mem level of current layer if it is the first layer
+                            self.update_IO_mem_level(curr_id, act_operand, curr_mem_level)
                             break
                 ## Find the top mem level for output, update mem_update_list of current layer
-                for curr_mem_level, mem in reversed(
-                    list(enumerate(self.core_mem_level_list))
-                ):
-                    served_operands = list(
-                        mem.mem_level_of_operands.keys()
-                    )  # Check the served operand of current mem
+                for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
+                    served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     if output_operand in served_operands:
-                        self.update_IO_mem_level(
-                            curr_id, output_operand, curr_mem_level
-                        )  # update the output mem level of current layer
+                        # update the output mem level of current layer
+                        self.update_IO_mem_level(curr_id, output_operand, curr_mem_level)
                         break
                 ## Find the top mem level for weight, update mem_update_weight of current layer to the top weight mem level if mem_update_weight is bigger
-                for curr_mem_level, mem in reversed(
-                    list(enumerate(self.core_mem_level_list))
-                ):
-                    served_operands = list(
-                        mem.mem_level_of_operands.keys()
-                    )  # Check the served operand of current mem
-                    if (
-                        const_operand in served_operands
-                    ):  # identify the top weight mem level
+                for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
+                    served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
+                    if const_operand in served_operands:  # identify the top weight mem level
                         # We need to check if the current mem serve all oa dims, otherwise we will not decrease
                         # the mem_update_weight.
                         # The reason is if the current mem not serve all oa dims, the mapping will impact the memory
                         # utilization, so solely comparing with total memory size will be incorrect.
-                        mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(
-                            mem, self.accelerator
-                        )
-                        if (
-                            curr_mem_level < self.mem_update_weight
-                        ) and mem_serve_all_oa_dims:  # mem_update_weight is bigger than the top weight mem level
+                        mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(mem, self.accelerator)
+                        # mem_update_weight is bigger than the top weight mem level
+                        if (curr_mem_level < self.mem_update_weight) and mem_serve_all_oa_dims:
                             self.mem_update_weight = curr_mem_level
                         break
             else:  # # node (layer) that is not a branch starting node or a branch final node
                 # # Iterate the memory level and update input, weight, output mem level
-                for curr_mem_level, mem in reversed(
-                    list(enumerate(self.core_mem_level_list))
-                ):
-                    served_operands = list(
-                        mem.mem_level_of_operands.keys()
-                    )  # Check the served operand of current mem
+                for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
+                    served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     ## Update input, weight, output mem level
-                    avail_mem_size = (
-                        mem.memory_instance.size * mem.unroll_count
-                    )  # available hardware mem size
+                    avail_mem_size = mem.memory_instance.size * mem.unroll_count  # available hardware mem size
 
                     try:
                         # we need to grab the next layer name, which is a non-Adder layer for sure
@@ -342,50 +284,37 @@ class SearchUnusedMemoryStage(Stage):
                         # so, the simulation will not reach to this "else" branch.
                         next_layer = list(self.workload.successors(layer))[0]
                         # next, we find out the layer representation for the act operand of the next layer
-                        const_layer_operand_of_next_layer = (
-                            next_layer.constant_operands[0]
-                        )
+                        const_layer_operand_of_next_layer = next_layer.constant_operands[0]
                         act_layer_operand_of_next_layer = [
                             operand
                             for operand in next_layer.input_operands
                             if operand != const_layer_operand_of_next_layer
                         ][0]
                         # then, we will fetch the mem representation for the act operand of the next layer
-                        act_mem_operand_of_next_layer = next_layer.memory_operand_links[
-                            act_layer_operand_of_next_layer
-                        ]
+                        act_mem_operand_of_next_layer = next_layer.memory_operand_links[act_layer_operand_of_next_layer]
                         # check if the current mem level serve the act operand in the next layer
                         mem_serve_act_in_next_layer = (
-                            True
-                            if (act_mem_operand_of_next_layer in served_operands)
-                            else False
+                            True if (act_mem_operand_of_next_layer in served_operands) else False
                         )
-                    except (
-                        IndexError
-                    ):  # there is no next layer, which means the current layer is the last layer
+                    except IndexError:  # there is no next layer, which means the current layer is the last layer
                         # As for the last layer, we will instead check
                         # if the mem serves act operand of the current layer.
-                        mem_serve_act_in_next_layer = (
-                            True if (act_operand in served_operands) else False
-                        )
+                        mem_serve_act_in_next_layer = True if (act_operand in served_operands) else False
 
+                    # ["I", "O"] both in mem.served_operands
                     mem_serve_io_both = (
-                        True
-                        if mem_serve_act_in_next_layer
-                        and (output_operand in served_operands)
-                        else False
-                    )  # ["I", "O"] both in mem.served_operands
-                    mem_serve_weight = (
-                        True if (const_operand in served_operands) else False
-                    )  # mem.served_operands = ["W"]
+                        True if mem_serve_act_in_next_layer and (output_operand in served_operands) else False
+                    )
+                    # mem.served_operands = ["W"]
+                    mem_serve_weight = True if (const_operand in served_operands) else False
                     # we need to change served_operands if the current layer is an Adder layer,
                     # for the ease of calculation of required input data size.
                     # Since an Adder layer has two inputs,
                     # but in each_layer_IO_data_size, data size of two inputs are put under one key,
                     # so we have to update served_operands to ensure the key used in each_layer_IO_data_size is in it.
-                    if (
-                        len(layer.constant_operands) == 0 and mem_serve_io_both
-                    ):  # the layer type is an Adder layer, which has multiple input operands
+
+                    # the layer type is an Adder layer, which has multiple input operands
+                    if len(layer.constant_operands) == 0 and mem_serve_io_both:
                         served_operands = [
                             output_operand,
                             layer.memory_operand_links[layer.input_operands[0]],
@@ -399,37 +328,27 @@ class SearchUnusedMemoryStage(Stage):
                                 if operand != const_operand
                             ]
                         )
+                        # required size to put data in current mem level
                         required_weight_size = (
-                            self.weight_size_entire_workload
-                            if const_operand in served_operands
-                            else 0
+                            self.weight_size_entire_workload if const_operand in served_operands else 0
                         )
-                        required_total_size = (
-                            required_IO_data_size + required_weight_size
-                        )  # required size to put data in current mem level
-                        if (
-                            required_total_size <= avail_mem_size
-                        ):  # sum(layer[operand_size] for operand in mem.operands) <= mem.size
+                        required_total_size = required_IO_data_size + required_weight_size
+
+                        # sum(layer[operand_size] for operand in mem.operands) <= mem.size
+                        if required_total_size <= avail_mem_size:
                             if mem_serve_io_both:
                                 if id == 0:
-                                    self.update_IO_mem_level(
-                                        curr_id, act_operand, curr_mem_level
-                                    )  # update input mem level
-                                self.update_IO_mem_level(
-                                    curr_id, output_operand, curr_mem_level
-                                )  # update output mem level
+                                    # update input mem level
+                                    self.update_IO_mem_level(curr_id, act_operand, curr_mem_level)
+                                # update output mem level
+                                self.update_IO_mem_level(curr_id, output_operand, curr_mem_level)
                             # For weight, we need to check if the current mem serve all oa dims, otherwise we will not
                             # decrease the mem_update_weight.
                             # The reason is if the current mem not serve all oa dims, the mapping will impact the memory
                             # utilization, so solely comparing with total memory size will be incorrect.
-                            mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(
-                                mem, self.accelerator
-                            )
-                            if (
-                                (curr_mem_level < self.mem_update_weight)
-                                and mem_serve_all_oa_dims
-                                and mem_serve_weight
-                            ):  # update weight mem level
+                            mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(mem, self.accelerator)
+                            # update weight mem level
+                            if (curr_mem_level < self.mem_update_weight) and mem_serve_all_oa_dims and mem_serve_weight:
                                 self.mem_update_weight = curr_mem_level
         # # [OPTIONAL CHECK] assert check if there is -1 value in mem_update_list
         # # [NOTE] Until here, if there is still -1 value in mem_update_list, it means the size of top mem level for IO is not big enough.
@@ -463,44 +382,25 @@ class SearchUnusedMemoryStage(Stage):
 
         ## Update mem_update_list and mem_update_weight
         for id, layer in enumerate(nx.topological_sort(self.workload)):
+            # act representation
             act_operand = layer.memory_operand_links[
-                [
-                    operand
-                    for operand in layer.input_operands
-                    if operand not in layer.constant_operands
-                ][0]
-            ]  # act representation
+                [operand for operand in layer.input_operands if operand not in layer.constant_operands][0]
+            ]
             output_operand = layer.output_operand  # output representation
-            curr_id = self.layer_list[
-                layer
-            ]  # current layer id (key) in mem_udpate_list
-            if (
-                id == 0
-            ):  # the first layer: update activation mem level to the top possible mem level
-                for curr_mem_level, mem in reversed(
-                    list(enumerate(self.core_mem_level_list))
-                ):
-                    served_operands = list(
-                        mem.mem_level_of_operands.keys()
-                    )  # Check the served operand of current mem
+            curr_id = self.layer_list[layer]  # current layer id (key) in mem_udpate_list
+            if id == 0:  # the first layer: update activation mem level to the top possible mem level
+                for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
+                    served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     if act_operand in served_operands:
-                        self.update_IO_mem_level(
-                            curr_id, act_operand, curr_mem_level
-                        )  # update the input mem level of current layer if it is the first layer
+                        # update the input mem level of current layer if it is the first layer
+                        self.update_IO_mem_level(curr_id, act_operand, curr_mem_level)
                         break
-            if (
-                id == len(self.layer_list) - 1
-            ):  # the last layer: update output mem level to the top possible mem level
-                for curr_mem_level, mem in reversed(
-                    list(enumerate(self.core_mem_level_list))
-                ):
-                    served_operands = list(
-                        mem.mem_level_of_operands.keys()
-                    )  # Check the served operand of current mem
+            if id == len(self.layer_list) - 1:  # the last layer: update output mem level to the top possible mem level
+                for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
+                    served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     if output_operand in served_operands:
-                        self.update_IO_mem_level(
-                            curr_id, output_operand, curr_mem_level
-                        )  # update the output mem level of current layer if it is the last layer
+                        # update the output mem level of current layer if it is the last layer
+                        self.update_IO_mem_level(curr_id, output_operand, curr_mem_level)
                         break
 
     def remove_dummy_nodes_in_workload(self):
@@ -516,9 +416,7 @@ class SearchUnusedMemoryStage(Stage):
         nx.draw(self.workload, pos, with_labels=True, node_color="lightblue", font_weight="bold")
         plt.show()
         """
-        dummy_nodes = [
-            node for node in self.workload.nodes() if type(node) == DummyNode
-        ]
+        dummy_nodes = [node for node in self.workload.nodes() if type(node) == DummyNode]
         for dummy_node in dummy_nodes:
             for successor_node in list(self.workload.successors(dummy_node)):
                 for predecessor_node in list(self.workload.predecessors(dummy_node)):
@@ -526,8 +424,7 @@ class SearchUnusedMemoryStage(Stage):
         self.workload.remove_nodes_from(dummy_nodes)
 
     def update_IO_mem_level(self, layer_id, operand, target_level):
-        """
-        Update self.mem_update_list as:
+        """! Update self.mem_update_list as:
         self.mem_update_list[layer_id][operand_index][operand] = target_level
         """
         for pos, ele in enumerate(self.mem_update_list[f"{layer_id}"]):

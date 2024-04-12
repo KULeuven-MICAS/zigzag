@@ -16,11 +16,7 @@ class ADC:
     def calculate_area(self):
         if self.resolution < 12:
             # self.area = 10 ** (-0.25 * self.resolution-3.3) * 2**self.resolution # unit: mm2
-            self.area = (
-                (10**-6)
-                * 10 ** (-0.0369 * self.resolution + 1.206)
-                * 2**self.resolution
-            )  # unit: mm2
+            self.area = (10**-6) * 10 ** (-0.0369 * self.resolution + 1.206) * 2**self.resolution  # unit: mm2
         else:
             self.area = 5 * 10**-7 * 2**self.resolution  # unit: mm2
         return self.area

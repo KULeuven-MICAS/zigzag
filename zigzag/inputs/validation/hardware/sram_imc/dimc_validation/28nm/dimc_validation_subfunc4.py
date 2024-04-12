@@ -91,9 +91,7 @@ def dimc_cost_estimation4(dimc, cacti_value):
         w_bw=dimc["reg_accumulator_precision"],
         delay=unit_reg.calculate_delay(),
         r_energy=0,
-        w_energy=unit_reg.calculate_cap()
-        * dimc["vdd"] ** 2
-        * dimc["reg_accumulator_precision"],
+        w_energy=unit_reg.calculate_cap() * dimc["vdd"] ** 2 * dimc["reg_accumulator_precision"],
         area=unit_reg.calculate_area() * dimc["reg_accumulator_precision"],
         r_port=1,
         w_port=1,
@@ -107,9 +105,7 @@ def dimc_cost_estimation4(dimc, cacti_value):
         w_bw=dimc["reg_pipeline_precision"],
         delay=unit_reg.calculate_delay(),
         r_energy=0,
-        w_energy=unit_reg.calculate_cap()
-        * dimc["vdd"] ** 2
-        * dimc["reg_pipeline_precision"],
+        w_energy=unit_reg.calculate_cap() * dimc["vdd"] ** 2 * dimc["reg_pipeline_precision"],
         area=unit_reg.calculate_area() * dimc["reg_pipeline_precision"],
         r_port=1,
         w_port=1,
@@ -134,74 +130,41 @@ def dimc_cost_estimation4(dimc, cacti_value):
     area_adder_tree = (
         dimc["banks"]
         * dimc["output_channel"]
-        * (
-            8 * 8 * adder_tree1.calculate_area()
-            + 8 * adder_tree2.calculate_area()
-            + adder_tree3.calculate_area()
-        )
+        * (8 * 8 * adder_tree1.calculate_area() + 8 * adder_tree2.calculate_area() + adder_tree3.calculate_area())
     )
     area_regs_pipeline = dimc["banks"] * dimc["output_channel"] * 8 * regs_pipeline.area
-    area_accumulator = (
-        dimc["banks"] * dimc["output_channel"] * accumulator.calculate_area()
-    )
+    area_accumulator = dimc["banks"] * dimc["output_channel"] * accumulator.calculate_area()
     area_banks = dimc["banks"] * unitbank.area
-    area_regs_accumulator = (
-        dimc["banks"] * dimc["output_channel"] * regs_accumulator.area
-    )
+    area_regs_accumulator = dimc["banks"] * dimc["output_channel"] * regs_accumulator.area
 
     predicted_area = (
-        area_mults
-        + area_adder_tree
-        + area_regs_pipeline
-        + area_accumulator
-        + area_banks
-        + area_regs_accumulator
+        area_mults + area_adder_tree + area_regs_pipeline + area_accumulator + area_banks + area_regs_accumulator
     )  # cost of input/output regs is not taken out
 
     ## Minimum clock time
-    adder_1b_carry_delay = (
-        2 * UnitNand2(unit_area, unit_delay, unit_cap).calculate_delay()
-    )
+    adder_1b_carry_delay = 2 * UnitNand2(unit_area, unit_delay, unit_cap).calculate_delay()
     accumulator_delay = accumulator.calculate_delay_lsb() + adder_1b_carry_delay * (
         dimc["reg_accumulator_precision"] - dimc["accumulator_input_precision"]
     )
     # predicted_delay = max(unitbank.delay + mults.calculate_delay() + adder_tree1.calculate_delay() + adder_tree2.calculate_delay(), adder_tree3.calculate_delay() + accumulator.calculate_delay_msb())
     predicted_delay = max(
-        unitbank.delay
-        + mults.calculate_delay()
-        + adder_tree1.calculate_delay()
-        + adder_tree2.calculate_delay(),
+        unitbank.delay + mults.calculate_delay() + adder_tree1.calculate_delay() + adder_tree2.calculate_delay(),
         adder_tree3.calculate_delay() + accumulator_delay,
     )
 
     ## Energy cost breakdown per cycle
-    energy_mults = (
-        dimc["input_toggle_rate"]
-        * dimc["banks"]
-        * dimc["output_channel"]
-        * mults.calculate_energy()
-    )  # fJ
+    energy_mults = dimc["input_toggle_rate"] * dimc["banks"] * dimc["output_channel"] * mults.calculate_energy()  # fJ
     energy_adder_tree = (
         dimc["input_toggle_rate"]
         * dimc["weight_sparsity"]
         * dimc["banks"]
         * dimc["output_channel"]
-        * (
-            8 * 8 * adder_tree1.calculate_energy()
-            + 8 * adder_tree2.calculate_energy()
-            + adder_tree3.calculate_energy()
-        )
+        * (8 * 8 * adder_tree1.calculate_energy() + 8 * adder_tree2.calculate_energy() + adder_tree3.calculate_energy())
     )  # fJ
-    energy_accumulator = (
-        dimc["banks"] * dimc["output_channel"] * accumulator.calculate_energy()
-    )
+    energy_accumulator = dimc["banks"] * dimc["output_channel"] * accumulator.calculate_energy()
     energy_banks = 0  # make it to zero because: (1) from validation, this cost is very small in percentage to entire macro energy; (2) papaers don't report how many cycles they will read out the data once.
-    energy_regs_accumulator = (
-        dimc["banks"] * dimc["output_channel"] * regs_accumulator.w_energy
-    )
-    energy_regs_pipeline = (
-        dimc["banks"] * dimc["output_channel"] * 8 * regs_pipeline.w_energy
-    )
+    energy_regs_accumulator = dimc["banks"] * dimc["output_channel"] * regs_accumulator.w_energy
+    energy_regs_pipeline = dimc["banks"] * dimc["output_channel"] * 8 * regs_pipeline.w_energy
 
     predicted_energy_per_cycle = (
         energy_mults
@@ -216,12 +179,8 @@ def dimc_cost_estimation4(dimc, cacti_value):
 
     predicted_energy = predicted_energy_per_cycle * number_of_cycle
 
-    number_of_operations = (
-        2 * dimc["banks"] * dimc["output_channel"] * dimc["input_channel"]
-    )  # 1MAC = 2 Operations
-    predicted_tops = (
-        number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
-    )
+    number_of_operations = 2 * dimc["banks"] * dimc["output_channel"] * dimc["input_channel"]  # 1MAC = 2 Operations
+    predicted_tops = number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
     predicted_topsw = number_of_operations / predicted_energy * 10**3
 
     ## Energy breakdown per MAC
@@ -230,9 +189,7 @@ def dimc_cost_estimation4(dimc, cacti_value):
     energy_adder_tree_mac = energy_adder_tree * number_of_cycle / number_of_mac
     energy_accumulator_mac = energy_accumulator * number_of_cycle / number_of_mac
     energy_banks_mac = energy_banks * number_of_cycle / number_of_mac
-    energy_regs_accumulator_mac = (
-        energy_regs_accumulator * number_of_cycle / number_of_mac
-    )
+    energy_regs_accumulator_mac = energy_regs_accumulator * number_of_cycle / number_of_mac
     energy_regs_pipeline_mac = energy_regs_pipeline * number_of_cycle / number_of_mac
     energy_estimation_per_mac = predicted_energy / number_of_mac
     energy_reported_per_mac = 2000 / dimc["TOP/s/W"]

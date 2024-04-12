@@ -1,6 +1,6 @@
 from typing import Dict, List
 from math import log2, ceil, prod
-from zigzag.classes.hardware.architecture.operational_array import (
+from zigzag.classes.hardware.architecture.OperationalArray import (
     Multiplier,
     MultiplierArray,
 )
@@ -84,10 +84,7 @@ class AdderHierarchy:
         multiplier_output_precision = multiplier_array.unit.output_precision
         self.construct_adder_levels(multiplier_output_precision, adder_hierarchy)
         self.total_area = prod(
-            [
-                adder_level.unit.area * adder_level.total_unit_count
-                for adder_level in self.adder_levels
-            ]
+            [adder_level.unit.area * adder_level.total_unit_count for adder_level in self.adder_levels]
         )
 
     def calc_output_reduction_size(self, multiplier_array: MultiplierArray):
@@ -108,10 +105,7 @@ class AdderHierarchy:
         @param adder_hierarchy: user-defined adder hierarchy
         """
         assert all(
-            [
-                adder_level["type"] in ["AG", "AC"]
-                for adder_level in adder_hierarchy.values()
-            ]
+            [adder_level["type"] in ["AG", "AC"] for adder_level in adder_hierarchy.values()]
         ), "Some adder type not recognized. Adder type can only be 'AG' or 'AC'."
 
         total_fan_in = 1
@@ -156,15 +150,10 @@ class AdderHierarchy:
         for name, adder_details in adder_hierarchy.items():
             if adder_details["type"] == "AG":
                 adder_details["input_precision"] = precision_counter
-                adder_details["output_precision"] = precision_counter + ceil(
-                    log2(adder_details["fan_in"])
-                )
-                adder_details["one_instance_unit_count"] = (
-                    unit_counter // adder_details["fan_in"]
-                )
+                adder_details["output_precision"] = precision_counter + ceil(log2(adder_details["fan_in"]))
+                adder_details["one_instance_unit_count"] = unit_counter // adder_details["fan_in"]
                 adder_details["total_unit_count"] = (
-                    adder_details["one_instance_unit_count"]
-                    * self.output_non_reduction_size
+                    adder_details["one_instance_unit_count"] * self.output_non_reduction_size
                 )
 
                 """ update precision and unit count when encounter aggregation (AG) adder level """
@@ -178,16 +167,14 @@ class AdderHierarchy:
                 ]
                 adder_details["one_instance_unit_count"] = unit_counter
                 adder_details["total_unit_count"] = (
-                    adder_details["one_instance_unit_count"]
-                    * self.output_non_reduction_size
+                    adder_details["one_instance_unit_count"] * self.output_non_reduction_size
                 )
 
                 """ only update precision when encounter accumulation (AC) adder level """
                 precision_counter = adder_details["output_precision"]
 
         adder_levels_obj = [
-            AdderLevel(idx, name, details)
-            for idx, (name, details) in enumerate(adder_hierarchy.items())
+            AdderLevel(idx, name, details) for idx, (name, details) in enumerate(adder_hierarchy.items())
         ]
         self.adder_levels = adder_levels_obj
 
@@ -205,9 +192,7 @@ if __name__ == "__main__":
         "OS4": ((1, 1, 0), "I2"),
     }
 
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions, operand_spatial_sharing)
 
     user_defined_adder_hierarchy = {

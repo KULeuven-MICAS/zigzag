@@ -1,5 +1,5 @@
 class Loop:
-    """!  Class that stores a single for loop's information."""
+    """!  Class that stores a single for-loop's information."""
 
     def __init__(self, dimension: str, size: int, type: str = "temporal"):
         """!  The class constructor

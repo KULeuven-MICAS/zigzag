@@ -1,6 +1,5 @@
 from typing import Set
 from zigzag.classes.hardware.architecture.core import Core
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 
 
 class Accelerator:
@@ -28,7 +27,5 @@ class Accelerator:
         """
         core = next((core for core in self.cores if core.id == core_id), None)
         if not core:
-            raise ValueError(
-                f"Requested core with id {core_id} is not present in accelerator."
-            )
+            raise ValueError(f"Requested core with id {core_id} is not present in accelerator.")
         return core

@@ -88,9 +88,7 @@ def aimc1_cost_estimation(aimc, cacti_value):
     area_mults = aimc["banks"] * aimc["output_channel"] * mults.calculate_area()
     area_adder_tree = 0
     area_accumulator = 0
-    area_banks = (
-        aimc["banks"] * 2 * unitbank.area
-    )  # 2 for pulse generators (repeators in papers) (it's an assumption)
+    area_banks = aimc["banks"] * 2 * unitbank.area  # 2 for pulse generators (repeators in papers) (it's an assumption)
     area_regs_accumulator = 0
     area_regs_pipeline = 0
     area_adc = aimc["banks"] * aimc["output_channel"] * adc.calculate_area()
@@ -121,33 +119,18 @@ def aimc1_cost_estimation(aimc, cacti_value):
     predicted_delay = unitbank.delay + mults.calculate_delay() + adc.calculate_delay()
 
     ## Energy cost breakdown per cycle
-    energy_mults = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * mults.calculate_energy()
-    )
+    energy_mults = (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * mults.calculate_energy()
     energy_adder_tree = 0
     energy_accumulator = 0
     energy_banks = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * (energy_wl + energy_bl + energy_en)
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * (energy_wl + energy_bl + energy_en)
     )
     energy_regs_accumulator = 0
     energy_regs_pipeline = 0
     energy_adc = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * adc.calculate_energy(vdd=aimc["vdd"])
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * adc.calculate_energy(vdd=aimc["vdd"])
     )
-    energy_dac = (
-        aimc["banks"]
-        * aimc["input_channel"]
-        * dac.calculate_energy(vdd=aimc["vdd"], k0=aimc["dac_energy_k0"])
-    )
+    energy_dac = aimc["banks"] * aimc["input_channel"] * dac.calculate_energy(vdd=aimc["vdd"], k0=aimc["dac_energy_k0"])
 
     # (for beyong ADC/DAC part, scale from 28nm -> 22nm, exclude ADC/DAC, which is assumed indepedent from tech.) (assume linear)
     energy_mults = energy_mults / 28 * 22
@@ -172,13 +155,9 @@ def aimc1_cost_estimation(aimc, cacti_value):
 
     predicted_energy = predicted_energy_per_cycle * number_of_cycle
 
-    number_of_operations = (
-        2 * aimc["banks"] * aimc["output_channel"] * aimc["input_channel"]
-    )  # 1MAC = 2 Operations
+    number_of_operations = 2 * aimc["banks"] * aimc["output_channel"] * aimc["input_channel"]  # 1MAC = 2 Operations
 
-    predicted_tops = (
-        number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
-    )
+    predicted_tops = number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
     predicted_topsw = number_of_operations / predicted_energy * 10**3
 
     ## Energy breakdown per MAC

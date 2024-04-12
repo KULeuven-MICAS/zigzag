@@ -5,17 +5,16 @@ from dataclasses import dataclass
 import itertools
 import logging
 import math
+from numpy import isin
 from pydantic import BaseModel
 
-from zigzag.classes.hardware.architecture.dimension import Dimension
+from zigzag.classes.hardware.architecture.Dimension import Dimension
 
 
 logger = logging.getLogger(__name__)
 
 
-"""
-Type aliases for legacy data structures
-"""
+# Type aliases for legacy data structures
 UnrollFactor: TypeAlias = int | float
 LayerDimStr: TypeAlias = str
 LimitedUSM: TypeAlias = dict[Dimension, list[tuple[LayerDimStr, UnrollFactor]]]
@@ -253,39 +252,46 @@ class SpatialMapping:
     def __jsonrepr__(self):
         return {oa_dim.name: mapping.__jsonrepr__() for oa_dim, mapping in self.items()}
 
-    # def convert_to_legacy(self) -> UserSpatialMappingLegacy:
-    #     """! Convert this instance to the format used throughout older parts of the code base"""
-    #     return {
-    #         oa_dim: {layer_dim.name: unrolling for layer_dim, unrolling in mapping_single_oa_dim.items()}
-    #         for oa_dim, mapping_single_oa_dim in self.items()
-    #     }
+    @staticmethod
+    def empty():
+        return SpatialMapping({})
 
     @staticmethod
-    def parse_user_input(x: dict[Dimension, tuple[str, UnrollFactor] | tuple[tuple]]):
+    def parse_user_input(x: dict[str, tuple[str, str | int] | tuple[tuple]]):
         """! Parse legacy notation
         Example input: {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
         """
         if x is None:
-            return SpatialMapping({})
+            return SpatialMapping.empty()
 
         if isinstance(x, list):
             raise NotImplementedError("No support for multiple provided spatial mappings by user")
 
+        assert isinstance(x, dict)
+
         data: dict[Dimension, MappingSingleOADim] = {}
         for k, v in x.items():
+            assert isinstance(k, str)
+            assert isinstance(v, tuple)
+            oa_dim = Dimension.parse_user_input(k)
             mapping_single_dim_dict: dict[LayerDim, UnrollFactor] = {}
 
-            if isinstance(v[0], tuple):
-                # v: tuple[tuple[str, UnrollFactor]]
-                # Nested layer dimensions
-                for layer_dim, factor in v:  # type: ignore
-                    mapping_single_dim_dict[LayerDim(layer_dim)] = factor  # type: ignore
+            ## Nested layer dimensions e.g. (("FX", 3), ("FY", 3))
+            if all([isinstance(x, tuple) and len(x) == 2 for x in v]):
+                assert all([isinstance(x, tuple)])
+                v_nested: tuple[tuple] = v  # type: ignore
+                for layer_dim, factor in v_nested:
+                    assert isinstance(layer_dim, str)
+                    assert isinstance(factor, str | int)
+                    mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
+            # e.g. ("OX", 3)
             else:
-                # v : tuple[str, UnrollFactor]
-                layer_dim, factor = v  # type: ignore
-                mapping_single_dim_dict[LayerDim(layer_dim)] = factor  # type: ignore
+                assert len(v) == 2
+                v_single: tuple[str, str | int] = v
+                layer_dim, factor = v_single
+                mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
 
-            data[k] = MappingSingleOADim(mapping_single_dim_dict)
+            data[oa_dim] = MappingSingleOADim(mapping_single_dim_dict)
         return SpatialMapping(data)
 
 
@@ -302,19 +308,17 @@ class SpatialMappingHint:
     def __getitem__(self, key: Dimension):
         return self.data[key]
 
-    # def items(self):
-    #     return self.data.items()
-
-    # def __setitem__(self, key: Dimension, value: set[LayerDim]):
-    #     self.data[key] = value
-
     def __contains__(self, key: Dimension):
         return self.data.__contains__(key)
 
     @staticmethod
-    def parse_user_input(x: dict[str, list]):
+    def empty():
+        return SpatialMappingHint({})
+
+    @staticmethod
+    def parse_user_input(x: dict[str, list]) -> "SpatialMappingHint":
         if x is None:
-            return SpatialMappingHint({})
+            return SpatialMappingHint.empty()
         return SpatialMappingHint(
             {Dimension.parse_user_input(k): {LayerDim(layer_dim) for layer_dim in v} for k, v in x.items()}
         )

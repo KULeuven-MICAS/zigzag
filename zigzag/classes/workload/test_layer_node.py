@@ -37,9 +37,9 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
         pr_loop_size = {"OX": 28, "FX": 3, "OY": 28, "FY": 4}
         result_pr1 = test_layer_node.pr_funcs["IX"](pr_loop_size)
@@ -84,9 +84,9 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
         pr_loop_size = {"OX": 14, "FX": 3, "OY": 15, "FY": 4}
         result_pr1 = test_layer_node.pr_funcs["IX"](pr_loop_size)
@@ -131,9 +131,9 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
         pr_loop_size = {"OX": 14, "FX": 3, "OY": 15, "FY": 4}
         result_pr1 = test_layer_node.pr_funcs["IX"](pr_loop_size)
@@ -174,12 +174,12 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
             self.assertEqual(
-                set(expect[operand]["ir"]),
-                set(result[operand]["ir"]),
+                set(expect[operand][Relevancy.IR]),
+                set(result[operand][Relevancy.IR]),
             )
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
         pr_loop_size = {"OY": 28, "FY": 3}
         result_pr2 = test_layer_node.pr_funcs["IY"](pr_loop_size)
@@ -216,9 +216,9 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
         pr_loop_size = {"OX": 14, "FX": 3, "OY": 15, "FY": 4}
         result_pr1 = test_layer_node.pr_funcs["IX"](pr_loop_size)
@@ -259,9 +259,9 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
     def test_FC(self):
 
@@ -293,18 +293,16 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
     def test_MVM(self):
 
         test_equation = "Y[i]+=A[i][j]*B[j]"
         test_loop_dim_size = {"I": 56, "J": 112}
         test_operand_precision = {"Y": 24, "Y_final": 24, "A": 8, "B": 8}
-        test_layer_node = LayerNode(
-            test_equation, test_loop_dim_size, test_operand_precision
-        )
+        test_layer_node = LayerNode(test_equation, test_loop_dim_size, test_operand_precision)
 
         result = test_layer_node.operand_loop_dim
         expect = {
@@ -314,18 +312,16 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
     def test_GEMM(self):
 
         test_equation = "Y[i][k]+=A[i][j]*B[j][k]"
         test_loop_dim_size = {"I": 56, "J": 112, "K": 28}
         test_operand_precision = {"Y": 24, "Y_final": 24, "A": 8, "B": 8}
-        test_layer_node = LayerNode(
-            test_equation, test_loop_dim_size, test_operand_precision
-        )
+        test_layer_node = LayerNode(test_equation, test_loop_dim_size, test_operand_precision)
 
         result = test_layer_node.operand_loop_dim
         expect = {
@@ -335,18 +331,16 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
     def test_MMc(self):
 
         test_equation = "Y[i][j]+=A[i][k]*B[k][l]*C[l][j]"
         test_loop_dim_size = {"I": 56, "J": 112, "K": 28, "L": 14}
         test_operand_precision = {"Y": 24, "Y_final": 24, "A": 8, "B": 8, "C": 8}
-        test_layer_node = LayerNode(
-            test_equation, test_loop_dim_size, test_operand_precision
-        )
+        test_layer_node = LayerNode(test_equation, test_loop_dim_size, test_operand_precision)
 
         result = test_layer_node.operand_loop_dim
         expect = {
@@ -357,18 +351,16 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])
 
     def test_MTTKRP(self):
 
         test_equation = "Y[i][j]+=A[i][k][l]*B[k][j]*C[l][j]"
         test_loop_dim_size = {"I": 56, "J": 112, "K": 28, "L": 14}
         test_operand_precision = {"Y": 24, "Y_final": 24, "A": 8, "B": 8, "C": 8}
-        test_layer_node = LayerNode(
-            test_equation, test_loop_dim_size, test_operand_precision
-        )
+        test_layer_node = LayerNode(test_equation, test_loop_dim_size, test_operand_precision)
 
         result = test_layer_node.operand_loop_dim
         expect = {
@@ -379,6 +371,6 @@ class TestLayerNode(unittest.TestCase):
         }
 
         for operand in expect:
-            self.assertEqual(set(expect[operand]["r"]), set(result[operand]["r"]))
-            self.assertEqual(set(expect[operand]["ir"]), set(result[operand]["ir"]))
-            self.assertEqual(expect[operand]["pr"], result[operand]["pr"])
+            self.assertEqual(set(expect[operand][Relevancy.R]), set(result[operand][Relevancy.R]))
+            self.assertEqual(set(expect[operand][Relevancy.IR]), set(result[operand][Relevancy.IR]))
+            self.assertEqual(expect[operand][Relevancy.PR], result[operand][Relevancy.PR])

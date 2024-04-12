@@ -1,6 +1,6 @@
 from typing import Dict
 from math import prod
-from zigzag.classes.workload.layer_node import LayerNode
+from zigzag.classes.workload.layer_node import LayerNode, Relevancy
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
@@ -291,7 +291,7 @@ class Mapping:
         output_ir_flag = [False] * output_arch_level
         for level, current_level_loops in enumerate(self.combined_mapping_dict_1s1t_reform[output_operand]):
             for loop_type, loop_dim in current_level_loops:
-                if loop_type in output_loop_dim_relevancy["ir"] and loop_dim > 1:
+                if loop_type in output_loop_dim_relevancy[Relevancy.IR] and loop_dim > 1:
                     output_ir_flag[level] = True
                     break
         # reversely check from current level to the top level whether there is ir loop shows up in the middle,
@@ -322,28 +322,52 @@ class Mapping:
         relevancy_table = self.layer_node.operand_loop_dim_reform
         r_loop_size_per_level = {
             op: [
-                prod([lp_dim for lp_type, lp_dim in combined_mapping[op][lv] if lp_type in relevancy_table[op]["r"]])
+                prod(
+                    [
+                        lp_dim
+                        for lp_type, lp_dim in combined_mapping[op][lv]
+                        if lp_type in relevancy_table[op][Relevancy.R]
+                    ]
+                )
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
         r_loop_size_per_level2 = {
             op: [
-                prod([lp_dim for lp_type, lp_dim in combined_mapping2[op][lv] if lp_type in relevancy_table[op]["r"]])
+                prod(
+                    [
+                        lp_dim
+                        for lp_type, lp_dim in combined_mapping2[op][lv]
+                        if lp_type in relevancy_table[op][Relevancy.R]
+                    ]
+                )
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
         ir_loop_size_per_level = {
             op: [
-                prod([lp_dim for lp_type, lp_dim in combined_mapping[op][lv] if lp_type in relevancy_table[op]["ir"]])
+                prod(
+                    [
+                        lp_dim
+                        for lp_type, lp_dim in combined_mapping[op][lv]
+                        if lp_type in relevancy_table[op][Relevancy.IR]
+                    ]
+                )
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
         ir_loop_size_per_level2 = {
             op: [
-                prod([lp_dim for lp_type, lp_dim in combined_mapping2[op][lv] if lp_type in relevancy_table[op]["ir"]])
+                prod(
+                    [
+                        lp_dim
+                        for lp_type, lp_dim in combined_mapping2[op][lv]
+                        if lp_type in relevancy_table[op][Relevancy.IR]
+                    ]
+                )
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list

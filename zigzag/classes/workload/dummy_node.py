@@ -15,9 +15,7 @@ class DummyNode:
         self.input_operand_source = {"I": preds}
         self.name = node_name
         self.type = type
-        self.core_allocation = (
-            -1
-        )  # We assume these nodes are mapped on a core with id -1
+        self.core_allocation = -1  # We assume these nodes are mapped on a core with id -1
         self.runtime = 0
         self.start = None
         self.end = None

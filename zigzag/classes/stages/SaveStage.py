@@ -39,9 +39,7 @@ class CompleteSaveStage(Stage):
             if type(cme.layer) == list:
                 filename = self.dump_filename_pattern.replace("?", "overall_complete")
             else:
-                filename = self.dump_filename_pattern.replace(
-                    "?", f"{cme.layer}_complete"
-                )
+                filename = self.dump_filename_pattern.replace("?", f"{cme.layer}_complete")
             self.save_to_json(cme, filename=filename)
             yamlname = os.path.join(os.path.splitext(filename)[0], ".yml")
             self.save_to_yaml(jsonname=filename, yamlname=yamlname)
@@ -72,9 +70,7 @@ class CompleteSaveStage(Stage):
         if hasattr(obj, "__jsonrepr__"):
             return obj.__jsonrepr__()
         else:
-            raise TypeError(
-                f"Object of type {type(obj)} is not serializable. Create a __jsonrepr__ method."
-            )
+            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __jsonrepr__ method.")
 
 
 class SimpleSaveStage(Stage):
@@ -104,9 +100,7 @@ class SimpleSaveStage(Stage):
             if type(cme.layer) == list:
                 filename = self.dump_filename_pattern.replace("?", "overall_simple")
             else:
-                filename = self.dump_filename_pattern.replace(
-                    "?", f"{cme.layer}_simple"
-                )
+                filename = self.dump_filename_pattern.replace("?", f"{cme.layer}_simple")
             self.save_to_json(cme, filename=filename)
             logger.info(
                 f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
@@ -128,9 +122,7 @@ class SimpleSaveStage(Stage):
         if hasattr(obj, "__simplejsonrepr__"):
             return obj.__simplejsonrepr__()
         else:
-            raise TypeError(
-                f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method."
-            )
+            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method.")
 
 
 class PickleSaveStage(Stage):
@@ -159,6 +151,4 @@ class PickleSaveStage(Stage):
             os.makedirs(dirname)
         with open(self.pickle_filename, "wb") as handle:
             pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        logger.info(
-            f"Saved pickled list of {len(all_cmes)} CMEs to {self.pickle_filename}."
-        )
+        logger.info(f"Saved pickled list of {len(all_cmes)} CMEs to {self.pickle_filename}.")

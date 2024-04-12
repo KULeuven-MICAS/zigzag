@@ -141,9 +141,7 @@ class MultiProcessingSpawnStage(Stage):
         return list(self.sub_stage.run())
 
     def run(self):
-        self.sub_stage = self.list_of_callables[0](
-            self.list_of_callables[1:], **self.kwargs
-        )
+        self.sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         get_threadpool(self.nb_multiprocessing_threads).apply_async(
             self._to_run, callback=self.callback, error_callback=raise_exception
         )
@@ -180,7 +178,5 @@ class MultiProcessingGatherStage(Stage):
                 yield ans
             count += 1
             if count % (count_to_get // 10) == 0:
-                logger.info(
-                    f"Multiprocessing results received: {count} of {count_to_get}"
-                )
+                logger.info(f"Multiprocessing results received: {count} of {count_to_get}")
         close_threadpool()

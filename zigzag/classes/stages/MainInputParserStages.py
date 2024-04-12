@@ -20,9 +20,7 @@ class AcceleratorParserStage(Stage):
     def run(self):
         self.accelerator_parser.run()
         accelerator = self.accelerator_parser.get_accelerator()
-        sub_stage = self.list_of_callables[0](
-            self.list_of_callables[1:], accelerator=accelerator, **self.kwargs
-        )
+        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
@@ -63,8 +61,6 @@ class WorkloadParserStage(Stage):
 
     def run(self):
         workload = parse_workload_from_path_or_from_module(self.workload, self.mapping)
-        sub_stage = self.list_of_callables[0](
-            self.list_of_callables[1:], workload=workload, **self.kwargs
-        )
+        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], workload=workload, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info

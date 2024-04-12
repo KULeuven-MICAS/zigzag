@@ -3,7 +3,7 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.operational_array import OperationalArray
+from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
 from zigzag.classes.hardware.architecture.operational_unit import OperationalUnit
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage
@@ -19,9 +19,7 @@ class PEArrayScalingStage(Stage):
     We also have to modify those to scale accordingly
     """
 
-    def __init__(
-        self, list_of_callables, *, workload, accelerator, pe_array_scaling, **kwargs
-    ):
+    def __init__(self, list_of_callables, *, workload, accelerator, pe_array_scaling, **kwargs):
         super().__init__(list_of_callables, **kwargs)
 
         # SANITY CHECKS
@@ -74,13 +72,8 @@ class PEArrayScalingStage(Stage):
 
         # Create new operational array
         new_operational_unit: OperationalUnit = pickle_deepcopy(operational_unit)  # type: ignore
-        new_dimension_sizes = [
-            ceil(self.pe_array_scaling * dim_size) for dim_size in dimension_sizes
-        ]
-        new_dimensions = {
-            f"D{i}": new_dim_size
-            for i, new_dim_size in enumerate(new_dimension_sizes, start=1)
-        }
+        new_dimension_sizes = [ceil(self.pe_array_scaling * dim_size) for dim_size in dimension_sizes]
+        new_dimensions = {f"D{i}": new_dim_size for i, new_dim_size in enumerate(new_dimension_sizes, start=1)}
         new_operational_array = OperationalArray(new_operational_unit, new_dimensions)
 
         # Initialize the new memory hierarchy
@@ -112,9 +105,7 @@ class PEArrayScalingStage(Stage):
         id = core.id
         dataflows = core.dataflows
         if dataflows is not None:
-            raise NotImplementedError(
-                "Scale your core-defined dataflows accordingly here."
-            )
+            raise NotImplementedError("Scale your core-defined dataflows accordingly here.")
 
         new_id = id
         new_dataflows: list = pickle_deepcopy(dataflows)  # type: ignore

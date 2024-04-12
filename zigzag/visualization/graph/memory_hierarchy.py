@@ -3,6 +3,7 @@ import networkx as nx
 import matplotlib.pyplot as plt
 
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 
 
 def visualize_memory_hierarchy_graph(G: MemoryHierarchy, save_path: str = ""):
@@ -16,6 +17,7 @@ def visualize_memory_hierarchy_graph(G: MemoryHierarchy, save_path: str = ""):
     node_list = []
     node_size_list = []
     node_label_dict = {}
+    node: MemoryLevel
     for gen_idx, generation in enumerate(generations):
         y = gen_idx
         node_size = (gen_idx + 1) * 2000
@@ -27,9 +29,7 @@ def visualize_memory_hierarchy_graph(G: MemoryHierarchy, save_path: str = ""):
             pos[node] = (x, y)
             node_list.append(node)
             node_size_list.append(node_size)
-            node_label_dict[node] = (
-                f"{node.name}\n{node.operands}\nx{node.unroll_count}"
-            )
+            node_label_dict[node] = f"{node.name}\n{node.operands}\nx{node.calc_unroll_count()}"
 
     nx.draw(
         G,

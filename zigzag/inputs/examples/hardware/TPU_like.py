@@ -90,15 +90,12 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=reg_W_128B,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions={(0, 0)},
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O_2B,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},
-        ),
-        served_dimensions={(0, 1)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
+        served_dimensions=("D2",),
     )
 
     ##################################### on-chip highest memory hierarchy initialization #####################################
@@ -110,7 +107,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
             {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
 
     ####################################################################################################################
@@ -128,7 +125,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -146,9 +143,7 @@ def multiplier_array_dut():
     multiplier_area = 1
     dimensions = {"D1": 32, "D2": 32}  # {'D1': ('K', 32), 'D2': ('C', 32)}
 
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array

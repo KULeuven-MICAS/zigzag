@@ -42,9 +42,7 @@ class MemoryInstance:
         """
         if auto_cost_extraction:
             # Size must be a multiple of 8 when using CACTI
-            assert (
-                size % 8 == 0
-            ), "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
+            assert size % 8 == 0, "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
             cacti_parser = CactiParser()
             (
                 _,

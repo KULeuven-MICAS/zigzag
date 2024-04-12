@@ -1,5 +1,7 @@
 from copy import deepcopy
 
+from zigzag.classes.cost_model.cost_model import CostModelEvaluation
+
 
 def create_printing_block(row, col):
     return [[" "] * col for _ in range(row)]
@@ -38,9 +40,7 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
     tm_block = modify_printing_block(tm_block, 1, 0, dash + title + dash)
     i = 2
     for op in mem_op_to_layer_op.keys():
-        tm_block = modify_printing_block(
-            tm_block, i, 1, f"{op} ({mem_op_to_layer_op[op]}): " + str(tm[op])
-        )
+        tm_block = modify_printing_block(tm_block, i, 1, f"{op} ({mem_op_to_layer_op[op]}): " + str(tm[op]))
         i += 1
     tm_block = modify_printing_block(tm_block, 6, 0, "-" * tot_col)
     tm_block = modify_printing_block(tm_block, 7, 1, "Temporal Loops")
@@ -53,9 +53,7 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
             len(tm_list) - i,
             "for " + str(li[0]) + " in " + "[0:" + str(li[1]) + ")",
         )
-        tm_block = modify_printing_block(
-            tm_block, 2 * (i + 1) + 1 + 7, 0, "-" * tot_col
-        )
+        tm_block = modify_printing_block(tm_block, 2 * (i + 1) + 1 + 7, 0, "-" * tot_col)
 
     # print mem name to each level
     for idx, operand in enumerate(op_list):
@@ -76,7 +74,7 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
     print_printing_block(tm_block)
 
 
-def print_mapping(cme):
+def print_mapping(cme: CostModelEvaluation):
     tm = cme.temporal_mapping.mapping_dic_stationary
     mem_op_to_layer_op = cme.mem_op_to_layer_op
     layer_op_to_mem_op = cme.layer_op_to_mem_op

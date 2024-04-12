@@ -119,9 +119,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
         w_bw=aimc["reg_accumulator_precision"],
         delay=unit_reg.calculate_delay(),
         r_energy=0,
-        w_energy=unit_reg.calculate_cap()
-        * aimc["vdd"] ** 2
-        * aimc["reg_accumulator_precision"],
+        w_energy=unit_reg.calculate_cap() * aimc["vdd"] ** 2 * aimc["reg_accumulator_precision"],
         area=unit_reg.calculate_area() * aimc["reg_accumulator_precision"],
         r_port=1,
         w_port=1,
@@ -144,12 +142,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
     )
 
     energy_wl = (
-        aimc["input_channel"]
-        * aimc["unit_cap"]
-        / 2
-        * 2
-        * aimc["vdd"] ** 2
-        * aimc["weight_precision"]
+        aimc["input_channel"] * aimc["unit_cap"] / 2 * 2 * aimc["vdd"] ** 2 * aimc["weight_precision"]
     )  # per output channel
     # energy_bl = aimc['rows'] * aimc['unit_cap']/2*2 * aimc['vdd']**2 * aimc['weight_precision'] # per output channel (aimc['unit_cap']/2 for bitline cap/cell, *2 for 2 bitline port of 2 cells connecting together)
     energy_en = (
@@ -182,13 +175,9 @@ def aimc2_cost_estimation(aimc, cacti_value):
             + 1 * adder4.calculate_area()
         )
     )
-    area_accumulator = (
-        aimc["banks"] * aimc["output_channel"] * accumulator.calculate_area()
-    )
+    area_accumulator = aimc["banks"] * aimc["output_channel"] * accumulator.calculate_area()
     area_banks = aimc["banks"] * unitbank.area
-    area_regs_accumulator = (
-        aimc["banks"] * aimc["output_channel"] * regs_accumulator.area
-    )
+    area_regs_accumulator = aimc["banks"] * aimc["output_channel"] * regs_accumulator.area
     area_regs_pipeline = aimc["banks"] * aimc["output_channel"] * regs_pipeline.area
     area_adc = aimc["banks"] * aimc["output_channel"] * 16 * adc.calculate_area()
     area_dac = aimc["banks"] * 2 * aimc["input_channel"] * dac.calculate_area()
@@ -205,9 +194,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
     )  # cost of input/output regs has been taken out
 
     ## delay cost (2* for input transfer two times)
-    adder_1b_carry_delay = (
-        2 * UnitNand2(unit_area, unit_delay, unit_cap).calculate_delay()
-    )
+    adder_1b_carry_delay = 2 * UnitNand2(unit_area, unit_delay, unit_cap).calculate_delay()
     accumulator_delay = accumulator.calculate_delay_lsb() + adder_1b_carry_delay * (
         aimc["reg_accumulator_precision"] - aimc["accumulator_input_precision"]
     )
@@ -217,12 +204,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
     )
 
     ## Energy cost breakdown per input transfer
-    energy_mults = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * mults.calculate_energy()
-    )
+    energy_mults = (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * mults.calculate_energy()
     # energy_adder_tree = (1-aimc['weight_sparsity']) * aimc['banks'] * aimc['output_channel'] * adder_tree.calculate_energy()
     energy_adder_tree = (
         (1 - aimc["weight_sparsity"])
@@ -235,21 +217,12 @@ def aimc2_cost_estimation(aimc, cacti_value):
             + 1 * adder4.calculate_energy()
         )
     )
-    energy_accumulator = (
-        aimc["banks"] * aimc["output_channel"] * accumulator.calculate_energy()
-    )
+    energy_accumulator = aimc["banks"] * aimc["output_channel"] * accumulator.calculate_energy()
     energy_banks = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * (energy_wl + energy_bl + energy_en)
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * (energy_wl + energy_bl + energy_en)
     )
-    energy_regs_accumulator = (
-        aimc["banks"] * aimc["output_channel"] * regs_accumulator.w_energy
-    )
-    energy_regs_pipeline = (
-        aimc["banks"] * aimc["output_channel"] * regs_pipeline.w_energy
-    )
+    energy_regs_accumulator = aimc["banks"] * aimc["output_channel"] * regs_accumulator.w_energy
+    energy_regs_pipeline = aimc["banks"] * aimc["output_channel"] * regs_pipeline.w_energy
     energy_adc = (
         (1 - aimc["weight_sparsity"])
         * aimc["banks"]
@@ -258,10 +231,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
         * adc.calculate_energy(vdd=aimc["vdd"])
     )
     energy_dac = (
-        aimc["banks"]
-        * 2
-        * aimc["input_channel"]
-        * dac.calculate_energy(vdd=aimc["vdd"], k0=aimc["dac_energy_k0"])
+        aimc["banks"] * 2 * aimc["input_channel"] * dac.calculate_energy(vdd=aimc["vdd"], k0=aimc["dac_energy_k0"])
     )
 
     ## 2* for input transfer two times
@@ -289,13 +259,9 @@ def aimc2_cost_estimation(aimc, cacti_value):
 
     predicted_energy = predicted_energy_per_cycle * number_of_cycle
 
-    number_of_operations = (
-        2 * aimc["banks"] * aimc["output_channel"] * aimc["input_channel"]
-    )  # 1MAC = 2 Operations
+    number_of_operations = 2 * aimc["banks"] * aimc["output_channel"] * aimc["input_channel"]  # 1MAC = 2 Operations
 
-    predicted_tops = (
-        number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
-    )
+    predicted_tops = number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
     predicted_topsw = number_of_operations / predicted_energy * 10**3
 
     ## Energy breakdown per MAC
@@ -304,9 +270,7 @@ def aimc2_cost_estimation(aimc, cacti_value):
     energy_adder_tree_mac = energy_adder_tree * number_of_cycle / number_of_mac
     energy_accumulator_mac = energy_accumulator * number_of_cycle / number_of_mac
     energy_banks_mac = energy_banks * number_of_cycle / number_of_mac
-    energy_regs_accumulator_mac = (
-        energy_regs_accumulator * number_of_cycle / number_of_mac
-    )
+    energy_regs_accumulator_mac = energy_regs_accumulator * number_of_cycle / number_of_mac
     energy_regs_pipeline_mac = energy_regs_pipeline * number_of_cycle / number_of_mac
     energy_adc_mac = energy_adc * number_of_cycle / number_of_mac
     energy_dac_mac = energy_dac * number_of_cycle / number_of_mac

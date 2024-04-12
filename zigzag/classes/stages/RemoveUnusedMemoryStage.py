@@ -2,6 +2,7 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage
 from typing import Generator
@@ -37,8 +38,8 @@ class RemoveUnusedMemoryStage(Stage):
         self,
         list_of_callables,
         *,
-        accelerator,
-        layer,
+        accelerator: Accelerator,
+        layer: LayerNode,
         mem_update_list,
         mem_update_weight,
         layer_list,
@@ -64,25 +65,18 @@ class RemoveUnusedMemoryStage(Stage):
 
     def generate_accelerator_with_removing_unused_memory(self):
         ## Remove nouse memory level according to update_mem_list and mem_update_weight
-        curr_id = self.layer_list[
-            self.layer
-        ]  # current layer id (key) in mem_udpate_list
+        curr_id = self.layer_list[self.layer]  # current layer id (key) in mem_udpate_list
         curr_id = str(curr_id)
-        output_operand = self.layer.memory_operand_links[
-            self.layer.output_operand
-        ]  # output representation in memory
+        output_operand = self.layer.memory_operand_links[self.layer.output_operand]  # output representation in memory
         core = next(iter(self.accelerator.cores))
         operational_array = core.operational_array
         memory_hierarchy = core.memory_hierarchy
 
         if len(self.layer.constant_operands) == 1:
+            # act representation in memory
             act_operand = self.layer.memory_operand_links[
-                [
-                    operand
-                    for operand in self.layer.input_operands
-                    if operand not in self.layer.constant_operands
-                ][0]
-            ]  # act representation in memory
+                [operand for operand in self.layer.input_operands if operand not in self.layer.constant_operands][0]
+            ]
             const_operand = self.layer.memory_operand_links[
                 self.layer.constant_operands[0]
             ]  # weight representation in memory
@@ -90,9 +84,7 @@ class RemoveUnusedMemoryStage(Stage):
             # special case when defining workload manually:
             # the constant operands list is empty for such as "Adder" layers
             # for input operand, we will represent all inputs as one input, since only their data size is used for required mem size calculation.
-            act_operand = self.layer.memory_operand_links[
-                self.layer.input_operands[0]
-            ]  # act representation in memory
+            act_operand = self.layer.memory_operand_links[self.layer.input_operands[0]]  # act representation in memory
             const_operand = self.layer.memory_operand_links[
                 self.layer.input_operands[1]
             ]  # weight representation in memory
@@ -100,41 +92,31 @@ class RemoveUnusedMemoryStage(Stage):
             # special case when defining workload manually:
             # both I and W are considered as constant operands for the first layer
             pr_loop_keys = tuple(self.layer.pr_loop.keys())
-            for (
-                operand,
-                related_loop,
-            ) in self.layer.operand_dimensionality_order.items():
+            for operand, related_loop in self.layer.operand_dimensionality_order.items():
                 if pr_loop_keys[0] in related_loop:
                     act_operand = operand
-            weight_operand_temp: list = [
-                x for x in self.layer.constant_operands if x != act_operand
-            ]  # weight representation in layer
+            # weight representation in layer
+            weight_operand_temp: list = [x for x in self.layer.constant_operands if x != act_operand]
             assert len(weight_operand_temp) == 1
             weight_operand: str = weight_operand_temp[0]
-            act_operand = self.layer.memory_operand_links[
-                act_operand
-            ]  # map from layer representation to hardware memory representation
-            const_operand = self.layer.memory_operand_links[
-                weight_operand
-            ]  # weight representation in memory
+            # map from layer representation to hardware memory representation
+            act_operand = self.layer.memory_operand_links[act_operand]
+            # weight representation in memory
+            const_operand = self.layer.memory_operand_links[weight_operand]
 
         # Find target_act/const/output_mem_level
         for pos, ele in enumerate(self.mem_update_list[curr_id]):
             if list(ele.keys())[0] == act_operand:
                 target_act_mem_level = self.mem_update_list[curr_id][pos][act_operand]
             if list(ele.keys())[0] == output_operand:
-                target_output_mem_level = self.mem_update_list[curr_id][pos][
-                    output_operand
-                ]
+                target_output_mem_level = self.mem_update_list[curr_id][pos][output_operand]
         if len(self.layer.constant_operands) == 0:
             # special case when defining workload manually:
             # the constant operands list is empty for such as "Adder" layers
             # Here we make a trick: treating the other input as const_operand
             for pos, ele in enumerate(self.mem_update_list[curr_id]):
                 if list(ele.keys())[0] == act_operand:
-                    target_const_mem_level = self.mem_update_list[curr_id][pos][
-                        act_operand
-                    ]
+                    target_const_mem_level = self.mem_update_list[curr_id][pos][act_operand]
         else:
             target_const_mem_level = self.mem_update_weight
 
@@ -163,9 +145,7 @@ class RemoveUnusedMemoryStage(Stage):
                 new_operands.append(const_operand)
                 index_in_operands = operands.index(const_operand)
                 new_port_alloc.append(port_alloc[index_in_operands])
-            if (
-                output_operand in operands
-            ) and curr_mem_level <= target_output_mem_level:
+            if (output_operand in operands) and curr_mem_level <= target_output_mem_level:
                 new_operands.append(output_operand)
                 index_in_operands = operands.index(output_operand)
                 new_port_alloc.append(port_alloc[index_in_operands])

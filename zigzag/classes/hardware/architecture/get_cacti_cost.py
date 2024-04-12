@@ -408,11 +408,7 @@ class CactiConfig:
         """ use default value for each parameter """
         if user_input[0] == "default":
             for itm in self.config_options.keys():
-                user_config.append(
-                    self.config_options[itm]["string"]
-                    + str(self.config_options[itm]["default"])
-                    + "\n"
-                )
+                user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
             self.write_config(user_config, path)
             self.call_cacti(path)
 
@@ -421,16 +417,10 @@ class CactiConfig:
             for itm in self.config_options.keys():
                 if itm in user_input[1][0]:
                     ii = user_input[1][0].index(itm)
-                    user_config.append(
-                        self.config_options[itm]["string"]
-                        + str(user_input[1][1][ii])
-                        + "\n"
-                    )
+                    user_config.append(self.config_options[itm]["string"] + str(user_input[1][1][ii]) + "\n")
                 else:
                     user_config.append(
-                        self.config_options[itm]["string"]
-                        + str(self.config_options[itm]["default"])
-                        + "\n"
+                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
                     )
             self.write_config(user_config, path)
             self.call_cacti(path)
@@ -441,16 +431,12 @@ class CactiConfig:
             for itm in self.config_options.keys():
                 if itm not in user_input[1]:
                     common_part.append(
-                        self.config_options[itm]["string"]
-                        + str(self.config_options[itm]["default"])
-                        + "\n"
+                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
                     )
 
             for itm in user_input[1]:
                 for va in self.config_options[itm]["option"]:
-                    user_config.append(
-                        [self.config_options[itm]["string"] + str(va) + "\n"]
-                    )
+                    user_config.append([self.config_options[itm]["string"] + str(va) + "\n"])
 
             for ii in range(len(user_config)):
                 user_config[ii] += common_part
@@ -474,9 +460,7 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
     import logging as _logging
 
     _logging_level = _logging.CRITICAL
-    _logging_format = (
-        "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    )
+    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 
     # get current system (linux or windows)
@@ -547,9 +531,7 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
     except:
         msg = f"CACTI failed. [current setting] rows: {rows}, bw: {bw}, mem size (byte): {mem_size_in_byte}"
         _logging.critical(msg)
-        msg = (
-            f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
-        )
+        msg = f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
         _logging.critical(msg)
         exit()
     result = {}
@@ -568,33 +550,15 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
                     pass
     # get required cost
     try:
-        access_time = scaling_factor * float(
-            result[" Access time (ns)"][-1]
-        )  # unit: ns
+        access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns
         if bw > 32:
-            area = (
-                scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32
-            )  # unit: mm2
-            r_cost = (
-                scaling_factor
-                * float(result[" Dynamic read energy (nJ)"][-1])
-                * bw
-                / 32
-            )  # unit: nJ
-            w_cost = (
-                scaling_factor
-                * float(result[" Dynamic write energy (nJ)"][-1])
-                * bw
-                / 32
-            )  # unit: nJ
+            area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32  # unit: mm2
+            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1]) * bw / 32  # unit: nJ
+            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1]) * bw / 32  # unit: nJ
         else:
             area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2  # unit: mm2
-            r_cost = scaling_factor * float(
-                result[" Dynamic read energy (nJ)"][-1]
-            )  # unit: nJ
-            w_cost = scaling_factor * float(
-                result[" Dynamic write energy (nJ)"][-1]
-            )  # unit: nJ
+            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
+            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
     except KeyError:
         _logging.critical(f"**KeyError** in result, current result: {result}")
         breakpoint()
@@ -632,9 +596,7 @@ def get_w_cost_per_weight_from_cacti(cacti_path, tech_param, hd_param, dimension
     bl_dim_size = dimensions[bl_dim]
     group_depth = hd_param["group_depth"]
     w_pres = hd_param["weight_precision"]
-    cell_array_size = (
-        wl_dim_size * bl_dim_size * group_depth * w_pres / 8
-    )  # array size. unit: byte
+    cell_array_size = wl_dim_size * bl_dim_size * group_depth * w_pres / 8  # array size. unit: byte
     array_bw = wl_dim_size * w_pres  # imc array bandwidth. unit: bit
 
     # we will call cacti to get the area (mm^2), access_time (ns), r_cost (nJ/access), w_cost (nJ/access)
@@ -646,9 +608,7 @@ def get_w_cost_per_weight_from_cacti(cacti_path, tech_param, hd_param, dimension
         bw=array_bw,
     )
     w_cost_per_weight_writing = w_cost * w_pres / array_bw  # pJ/weight
-    w_cost_per_weight_writing = round(
-        w_cost_per_weight_writing, 3
-    )  # keep 3 valid digits
+    w_cost_per_weight_writing = round(w_cost_per_weight_writing, 3)  # keep 3 valid digits
     return w_cost_per_weight_writing  # unit: pJ/weight
 
 

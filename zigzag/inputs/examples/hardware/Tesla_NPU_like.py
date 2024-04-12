@@ -138,15 +138,12 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=reg_W1,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions={(0, 1, 0), (0, 0, 1)},
+        served_dimensions=("D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O4,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},
-        ),
-        served_dimensions={(0, 0, 0)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
     )
 
     ##################################### on-chip highest memory hierarchy initialization #####################################
@@ -155,13 +152,13 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_1KB_256_1r_1w_I,
         operands=("I1",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1KB_256_1r_1w_W,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
     # memory_hierarchy_graph.add_memory(memory_instance=sram_2KB_with_2_1KB_256_1r_1w, operands=('O',),
     #                                   port_alloc=({'fh': 'w_port_1', 'tl': 'r_port_1', 'fl': 'w_port_1', 'th': 'r_port_1'},),
@@ -171,7 +168,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_W,
         operands=("I2",),
         port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_A,
@@ -180,7 +177,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
             {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
 
     ####################################################################################################################
@@ -198,7 +195,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2", "D3"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -220,9 +217,7 @@ def multiplier_array_dut():
         "D3": 4,
     }  # {'D1': ('K', 32), 'D2': ('OX', 8), 'D3': ('OY', 4),}
 
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array

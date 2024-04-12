@@ -83,11 +83,7 @@ def aimc3_cost_estimation(aimc, cacti_value):
     energy_wl = 0  # per output channel
     # for energy_bl, there are 64 rows in total, but only 8 are used.
     energy_bl = (
-        aimc["input_channel"]
-        * aimc["unit_cap"]
-        / 2
-        * aimc["vdd"] ** 2
-        * aimc["weight_precision"]
+        aimc["input_channel"] * aimc["unit_cap"] / 2 * aimc["vdd"] ** 2 * aimc["weight_precision"]
     )  # per output channel (aimc['unit_cap']/2 for bitline cap/cell, *2 for 2 bitline port of 2 cells connecting together)
     energy_en = 0  # per output channel (no enable signal) (for cap couplling-based AIMC, no enable signal is required, as long as the input sequence timing is gated when not under computation.)
 
@@ -105,9 +101,7 @@ def aimc3_cost_estimation(aimc, cacti_value):
 
     ## Area cost breakdown
     area_mults = aimc["banks"] * aimc["output_channel"] * mults.calculate_area()
-    area_adder_tree = (
-        aimc["banks"] * aimc["output_channel"] * adder_tree.calculate_area()
-    )
+    area_adder_tree = aimc["banks"] * aimc["output_channel"] * adder_tree.calculate_area()
     area_accumulator = 0
     if aimc["compact_rule"] == False:
         area_banks = aimc["banks"] * 3 * unitbank.area  # 2 for non-compact rule scaling
@@ -141,10 +135,7 @@ def aimc3_cost_estimation(aimc, cacti_value):
 
     ## delay cost
     predicted_delay = (
-        unitbank.delay
-        + mults.calculate_delay()
-        + adder_tree.calculate_delay_msb()
-        + adc.calculate_delay()
+        unitbank.delay + mults.calculate_delay() + adder_tree.calculate_delay_msb() + adc.calculate_delay()
     )
 
     ## Energy cost breakdown per input transfer
@@ -156,25 +147,16 @@ def aimc3_cost_estimation(aimc, cacti_value):
         * mults_energy.calculate_energy()
     )
     energy_adder_tree = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * adder_tree.calculate_energy()
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * adder_tree.calculate_energy()
     )
     energy_accumulator = 0
     energy_banks = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * (energy_wl + energy_bl + energy_en)
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * (energy_wl + energy_bl + energy_en)
     )
     energy_regs_accumulator = 0
     energy_regs_pipeline = 0
     energy_adc = (
-        (1 - aimc["weight_sparsity"])
-        * aimc["banks"]
-        * aimc["output_channel"]
-        * adc.calculate_energy(vdd=aimc["vdd"])
+        (1 - aimc["weight_sparsity"]) * aimc["banks"] * aimc["output_channel"] * adc.calculate_energy(vdd=aimc["vdd"])
     )
     energy_dac = 0
 
@@ -201,13 +183,9 @@ def aimc3_cost_estimation(aimc, cacti_value):
 
     predicted_energy = predicted_energy_per_cycle * number_of_cycle
 
-    number_of_operations = (
-        2 * aimc["banks"] * aimc["output_channel"] * aimc["rows"] / 8
-    )  # 1MAC = 2 Operations
+    number_of_operations = 2 * aimc["banks"] * aimc["output_channel"] * aimc["rows"] / 8  # 1MAC = 2 Operations
 
-    predicted_tops = (
-        number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
-    )
+    predicted_tops = number_of_operations / (predicted_delay * number_of_cycle) / (10**3)
     predicted_topsw = number_of_operations / predicted_energy * 10**3
 
     ## Energy breakdown per MAC
@@ -216,9 +194,7 @@ def aimc3_cost_estimation(aimc, cacti_value):
     energy_adder_tree_mac = energy_adder_tree * number_of_cycle / number_of_mac
     energy_accumulator_mac = energy_accumulator * number_of_cycle / number_of_mac
     energy_banks_mac = energy_banks * number_of_cycle / number_of_mac
-    energy_regs_accumulator_mac = (
-        energy_regs_accumulator * number_of_cycle / number_of_mac
-    )
+    energy_regs_accumulator_mac = energy_regs_accumulator * number_of_cycle / number_of_mac
     energy_regs_pipeline_mac = 0
     energy_adc_mac = energy_adc * number_of_cycle / number_of_mac
     energy_dac_mac = energy_dac * number_of_cycle / number_of_mac

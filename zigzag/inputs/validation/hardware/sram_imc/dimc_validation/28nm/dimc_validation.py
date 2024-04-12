@@ -116,14 +116,12 @@ dimc_ISSCC2023_7_2 = {  # https://ieeexplore.ieee.org/document/10067260/
     "unit_delay": 0,  # ns
     "unit_cap": 0,  # fF
 }
-cacti_value_ISSCC2023_7_2 = (
-    {  # here I temporarily use: 1024 B, bw: 64 (no 128 in raw data)
-        "delay": 0.0914947,  # ns
-        "r_energy": 0.401656 * 1000 / 64 * 81,  # fJ
-        "w_energy": 0.855128 * 1000 / 64 * 81,  # fJ
-        "area": 0.00193147,  # mm2
-    }
-)
+cacti_value_ISSCC2023_7_2 = {  # here I temporarily use: 1024 B, bw: 64 (no 128 in raw data)
+    "delay": 0.0914947,  # ns
+    "r_energy": 0.401656 * 1000 / 64 * 81,  # fJ
+    "w_energy": 0.855128 * 1000 / 64 * 81,  # fJ
+    "area": 0.00193147,  # mm2
+}
 
 
 if __name__ == "__main__":

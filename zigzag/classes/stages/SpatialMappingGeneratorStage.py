@@ -1,8 +1,9 @@
 import logging
+from typing import Generator
 
 
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.opt.spatial.SpatialMapping import SpatialMapping
+from zigzag.classes.mapping.spatial.SpatialMapping import SpatialMapping
 from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
@@ -12,7 +13,7 @@ from zigzag.classes.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
 import copy
-from zigzag.classes.workload.layer_node import LayerNode
+from zigzag.classes.workload.layer_node import LayerNode, Relevancy
 from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
@@ -65,7 +66,7 @@ class SpatialMappingGeneratorStage(Stage):
             raise ValueError()
         return True
 
-    def run(self):
+    def run(self) -> Generator:
         """!  Run this stage by generating user-formatted spatial mappings which are converted
         to the memory-level based spatial mapping representation.
         """
@@ -127,28 +128,6 @@ class SpatialMappingGeneratorStage(Stage):
                     cme.accelerator = original_accelerator
                 yield cme, (user_spatial_mapping, extra_info)
 
-    # @deprecate
-    # def complete_user_spatial_mapping_hint(self, user_spatial_mapping_hint, oa_dims):
-    #     # This function is to create user_spatial_mapping_hint when it is not provided
-    #     # or complete it if it is provided but on only part of oa dimensions.
-    #     complete_user_spatial_mapping_hint = user_spatial_mapping_hint
-    #     if complete_user_spatial_mapping_hint is None:
-    #         logger.info("User-provided spatial mappings hint not found. Auto-generating spatial_mapping_hint..")
-    #         complete_user_spatial_mapping_hint = {}
-    #         for oa_dim in oa_dims:
-    #             complete_user_spatial_mapping_hint[oa_dim.name] = [layer_dim for layer_dim in self.layer.loop_dim_list]
-    #         # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
-    #     else:
-    #         oa_dims_name = [oa_dim.name for oa_dim in oa_dims]
-    #         # Add definition for non-exist dimension in user_spatial_mapping_hint
-    #         for oa_dim_name in oa_dims_name:
-    #             if oa_dim_name not in complete_user_spatial_mapping_hint.keys():
-    #                 complete_user_spatial_mapping_hint[oa_dim_name] = [
-    #                     layer_dim for layer_dim in self.layer.loop_dim_list
-    #                 ]
-    #         # self.layer.user_spatial_mapping_hint = user_spatial_mapping_hint
-    #     return complete_user_spatial_mapping_hint
-
     def modify_innermost_input_mem_size(self, core_id: int, user_spatial_mapping: SpatialMapping):
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
         # to avoid the MemoryTooSmallException in loma stage.
@@ -169,7 +148,7 @@ class SpatialMappingGeneratorStage(Stage):
         # get activation operand name
         act_operand = [operand for operand in self.layer.input_operands if operand != const_operand][0]
         # get name of OX, OY (weight ir layer dims)
-        weight_ir_layer_dims: list = self.layer.operand_loop_dim[const_operand]["ir"]
+        weight_ir_layer_dims: list = self.layer.operand_loop_dim[const_operand][Relevancy.IR]
         # get the oa_dim name served by input innermost memory level
         for memory_level in innermost_levels:
             mem_ops = memory_level.operands
