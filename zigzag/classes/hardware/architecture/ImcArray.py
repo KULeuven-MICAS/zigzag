@@ -5,12 +5,12 @@ if __name__ == "__main__":
     from zigzag.classes.hardware.architecture.Dimension import Dimension
     from DimcArray import DimcArray
     from AimcArray import AimcArray
-    from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
+    from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 else:
     from zigzag.classes.hardware.architecture.Dimension import Dimension
     from zigzag.classes.hardware.architecture.DimcArray import DimcArray
     from zigzag.classes.hardware.architecture.AimcArray import AimcArray
-    from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
+    from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 
 
 class ImcArray(OperationalArray):

@@ -1,4 +1,4 @@
-from onnx import ModelProto  # type: ignore
+from onnx import ModelProto
 
 from zigzag.classes.stages import *
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation

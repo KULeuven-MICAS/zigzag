@@ -3,7 +3,7 @@ from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
+from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.hardware.architecture.operational_unit import OperationalUnit
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage

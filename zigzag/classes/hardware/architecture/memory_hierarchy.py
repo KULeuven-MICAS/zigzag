@@ -4,7 +4,7 @@ from networkx import DiGraph
 
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions, ServedMemDimsUserFormat
-from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
+from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.workload.layer_node import MemOperandStr
 
 

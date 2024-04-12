@@ -1,5 +1,5 @@
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.OperationalArray import OperationalArray
+from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 import networkx as nx
 
