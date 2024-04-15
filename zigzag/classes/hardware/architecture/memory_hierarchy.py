@@ -1,6 +1,7 @@
 from collections import defaultdict
 import networkx as nx
 from networkx import DiGraph
+from typeguard import typechecked
 
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions, ServedMemDimsUserFormat
@@ -8,6 +9,7 @@ from zigzag.classes.hardware.architecture.operational_array import OperationalAr
 from zigzag.classes.workload.layer_node import MemOperandStr
 
 
+@typechecked
 class MemoryHierarchy(DiGraph):
     """!  Class that represents a memory hierarchy as a directed networkx graph.
     The memory hierarchy graph is directed, with the root nodes representing the lowest level
@@ -88,10 +90,6 @@ class MemoryHierarchy(DiGraph):
                 else:
                     port_alloc += (({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None}),)
 
-        # # Assert that if served_dimensions is a string, it is "all"
-        # if isinstance(served_dimensions, str):
-        #     assert served_dimensions == "all", "Served dimensions is a string, but is not all."
-
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
         for mem_op in operands:
             if mem_op not in self.operands:
@@ -100,11 +98,6 @@ class MemoryHierarchy(DiGraph):
             else:
                 self.nb_levels[mem_op] += 1
             self.operands.add(mem_op)
-
-        # # Parse the served_dimensions by replicating it into a tuple for each memory operand
-        # # as the MemoryLevel constructor expects this.
-        # # TODO what is this ?
-        # served_dimensions_repl = tuple([served_dimensions for _ in range(len(operands))])
 
         # Compute which memory level this is for all the operands
         mem_level_of_operands = {}

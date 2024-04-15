@@ -1,6 +1,8 @@
+from typeguard import typechecked
 from zigzag.classes.cacti.cacti_parser import CactiParser
 
 
+@typechecked
 class MemoryInstance:
     """!  Description missing"""
 

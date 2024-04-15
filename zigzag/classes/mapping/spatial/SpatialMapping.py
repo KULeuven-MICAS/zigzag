@@ -1,12 +1,13 @@
 from functools import reduce
 from typing import TypeAlias
-from copy import deepcopy
+import copy
 from dataclasses import dataclass
 import itertools
 import logging
 import math
-from numpy import isin
+import numpy
 from pydantic import BaseModel
+from typeguard import typechecked
 
 from zigzag.classes.hardware.architecture.Dimension import Dimension
 
@@ -21,11 +22,14 @@ LimitedUSM: TypeAlias = dict[Dimension, list[tuple[LayerDimStr, UnrollFactor]]]
 UserSpatialMappingLegacy: TypeAlias = dict[Dimension, dict[LayerDimStr, UnrollFactor]]
 
 
-@dataclass
+@typechecked
 class LayerDim:
-    """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)"""
+    """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)
+    # TODO make layer_dim_size a property of LayerDim
+    """
 
-    name: str
+    def __init__(self, name: str):
+        self.name = name
 
     def __hash__(self):
         return hash(self.name)
@@ -33,7 +37,11 @@ class LayerDim:
     def __str__(self):
         return self.name
 
+    def __eq__(self, other) -> bool:
+        return isinstance(other, LayerDim) and self.name == other.name
 
+
+@typechecked
 class MappingSingleOADim:
     """! Spatial unrolling for a single Operational Array Dimension"""
 
@@ -60,7 +68,6 @@ class MappingSingleOADim:
         return self.data.keys()
 
     def __getitem__(self, key: LayerDim):
-        assert isinstance(key, LayerDim)
         return self.data[key]
 
     def __delitem__(self, key: LayerDim):
@@ -81,7 +88,20 @@ class MappingSingleOADim:
     def __jsonrepr__(self):
         return {layer_dim.name: str(unroll_factor) for layer_dim, unroll_factor in self.items()}
 
+    def __eq__(self, other) -> bool:
+        """! Return true if the contained LayerDims are the same and all unrollings are the same"""
+        return (
+            isinstance(other, MappingSingleOADim)
+            and all([layer_dim in other for layer_dim in self.layer_dims()])
+            and all([layer_dim in self for layer_dim in other.layer_dims()])
+            and all([self[layer_dim] == other[layer_dim] for layer_dim in self.layer_dims()])
+        )
 
+    def __hash__(self):
+        return hash(frozenset(self.data))
+
+
+@typechecked
 class SpatialMapping:
     """! Spatial unrollings defined for every operational array dimension"""
 
@@ -89,7 +109,6 @@ class SpatialMapping:
         assert isinstance(data, dict)
         self.data = data
 
-    # TODO make layer_dim_size a property of LayerDim
     def is_valid(
         self, max_unrollings: "SpatialMapping", oa_dims: list[Dimension], layer_dim_sizes: dict[LayerDim, int]
     ):
@@ -192,7 +211,7 @@ class SpatialMapping:
                     del self[some_oa_dim][layer_dim]
 
     # TODO make the return type clearer
-    def get_utilization(self) -> UnrollFactor:
+    def get_hw_utilization(self) -> UnrollFactor:
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
         return math.prod([x.get_utilization() for x in self.values()])
 
@@ -202,7 +221,30 @@ class SpatialMapping:
 
     def get_total_unrolling_of_layer_dim(self, layer_dim: LayerDim) -> UnrollFactor:
         """! Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions"""
+        if self.get_hw_utilization() > 64:
+            pass
         return math.prod([v for k, v in self.flatten_unrollings() if k == layer_dim])
+
+    def get_performance_indicator(self) -> float:
+        """! Return a value that indicates how well this SpatialMapping is expected to perform when used in ZigZag,
+        compared to other SpatialMappings. The mapping with the highest value is expected to give the best results.
+        Note: it is expected that the SpatialMapping is valid for the considered architecture and workload.
+        The performance indicator consists of a term to represent the hardware representation and a term
+        to indicate the diversity in LayerDims. Mappings with a higher hardware utilization should always have a higher
+        performance indicator regardless of the diversity.
+        Diversity is of importance because a mapping that unrolls the same LayerDim over all OA Dims will perform poorly
+        due to the limited bandwidth of the memory that associated with that LayerDim.
+        # TODO this is a rather naive metric and doesn't consider that multiple LayerDims may use the same memory
+        The rational behind this function is that it costs less computation time to estimate the performance than
+        actually computing the CMEs for each SpatialMapping
+        """
+        hw_utilization = float(self.get_hw_utilization())
+        unrolling_per_layer_dim = [
+            self.get_total_unrolling_of_layer_dim(dim) for dim in self.get_all_contained_layer_dims()
+        ]
+        diversity_indicator = hw_utilization / max(unrolling_per_layer_dim) - 1
+        assert diversity_indicator < hw_utilization, "error in the performance indicator formula"
+        return hw_utilization + diversity_indicator
 
     def flatten_unrollings(self) -> list[tuple[LayerDim, UnrollFactor]]:
         """! Convert all unrollings (pair of LayerDim and UnrollFactor) at all Operational Array Dimension to a single
@@ -215,8 +257,11 @@ class SpatialMapping:
     def oa_dims(self) -> set[Dimension]:
         return set(self.keys())
 
-    def mappings(self) -> set[MappingSingleOADim]:
-        return set(self.values())
+    def mappings(self) -> list[MappingSingleOADim]:
+        """! Return a list with all of the MappingSingleOADims contained in this instance.
+        Note: converting this to a set may cause problems since MappingSingleOADim objects with identical unrollings
+        will be mapped on the same set element."""
+        return list(self.values())
 
     def keys(self):
         return self.data.keys()
@@ -244,13 +289,25 @@ class SpatialMapping:
         return len(self.data)
 
     def copy(self):
-        return SpatialMapping(deepcopy(self.data))
+        return SpatialMapping(copy.deepcopy(self.data))
 
     def __str__(self):
         return str(self.__jsonrepr__())
 
     def __jsonrepr__(self):
         return {oa_dim.name: mapping.__jsonrepr__() for oa_dim, mapping in self.items()}
+
+    def __eq__(self, other) -> bool:
+        """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""
+        return (
+            isinstance(other, SpatialMapping)
+            and all([oa_dim in other for oa_dim in self.oa_dims()])
+            and all([oa_dim in self for oa_dim in other.oa_dims()])
+            and all([self[oa_dim] == other[oa_dim] for oa_dim in self.oa_dims()])
+        )
+
+    def __hash__(self):
+        return hash(frozenset(map(lambda x: (x[0], hash(x[1])), self.items())))
 
     @staticmethod
     def empty():

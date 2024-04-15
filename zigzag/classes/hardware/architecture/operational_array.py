@@ -1,5 +1,5 @@
-from typing import Dict
 import numpy as np
+from typeguard import typechecked
 from zigzag.classes.hardware.architecture.Dimension import Dimension
 from zigzag.classes.hardware.architecture.operational_unit import (
     OperationalUnit,
@@ -7,10 +7,11 @@ from zigzag.classes.hardware.architecture.operational_unit import (
 )
 
 
+@typechecked
 class OperationalArray:
     """!  This class captures multi-dimensional operational array size."""
 
-    def __init__(self, operational_unit: OperationalUnit, dimensions: Dict[str, int]):
+    def __init__(self, operational_unit: OperationalUnit, dimensions: dict[str, int]):
         """!  The class constructor
         @param operational_unit: an OperationalUnit object including precision and single operation energy, later we
         can add idle energy also (e.g. for situations that one or two of the input operands is zero).
@@ -23,10 +24,11 @@ class OperationalArray:
         except TypeError:  # branch for IMC
             self.total_area = operational_unit.area
 
-        base_dims = [Dimension(idx, name, size) for idx, (name, size) in enumerate(dimensions.items())]
-        self.dimensions = base_dims
-        self.dimension_sizes = [dim.size for dim in base_dims]
-        self.nb_dimensions = len(base_dims)
+        self.dimensions: list[Dimension] = [
+            Dimension(idx, name, size) for idx, (name, size) in enumerate(dimensions.items())
+        ]
+        # self.dimension_sizes = [dim.size for dim in base_dims]
+        # self.nb_dimensions = len(base_dims)
 
     # JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
@@ -47,8 +49,8 @@ class MultiplierArray(OperationalArray):
         dimensions: dict[str, int],
         operand_spatial_sharing: dict[str, set[tuple[int, ...]]] = {},
     ):
-        self.multiplier = multiplier
-        self.dimensions = dimensions
+        super(MultiplierArray, self).__init__(multiplier, dimensions)
+        self.multiplier = self.unit
         self.operand_spatial_sharing = operand_spatial_sharing
 
 

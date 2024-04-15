@@ -1,4 +1,5 @@
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
+from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.stages.Stage import Stage
 
 import networkx as nx
@@ -271,12 +272,13 @@ class SearchUnusedMemoryStage(Stage):
                         if (curr_mem_level < self.mem_update_weight) and mem_serve_all_oa_dims:
                             self.mem_update_weight = curr_mem_level
                         break
-            else:  # # node (layer) that is not a branch starting node or a branch final node
+            # # node (layer) that is not a branch starting node or a branch final node
+            else:
                 # # Iterate the memory level and update input, weight, output mem level
                 for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
                     served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     ## Update input, weight, output mem level
-                    avail_mem_size = mem.memory_instance.size * mem.unroll_count  # available hardware mem size
+                    avail_mem_size = mem.memory_instance.size * mem.calc_unroll_count()  # available hardware mem size
 
                     try:
                         # we need to grab the next layer name, which is a non-Adder layer for sure
@@ -358,12 +360,12 @@ class SearchUnusedMemoryStage(Stage):
                     list(operand_dict.values())[0] >= 0
                 ), "SearchUnusedMemoryStage fisnishes abnormally, there are still layers with top mem levels not figured out."
 
-    def check_if_mem_serve_all_oa_dims(self, mem, accelerator):
+    def check_if_mem_serve_all_oa_dims(self, mem: MemoryLevel, accelerator: Accelerator):
         # check if mem serve all hardare dimensions
         core = accelerator.cores[0]
         operational_array = core.operational_array
         oa_dim_nb = len(operational_array.dimensions)
-        mem_served_oa_dim_nb = len(mem.served_dimensions)
+        mem_served_oa_dim_nb = mem.served_dimensions.nb_dims()
         if mem_served_oa_dim_nb == oa_dim_nb:
             return True
         else:

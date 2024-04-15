@@ -1,6 +1,9 @@
 import re
 
+from typeguard import typechecked
 
+
+@typechecked
 class Dimension:
     """! Operational Array Dimension"""
 

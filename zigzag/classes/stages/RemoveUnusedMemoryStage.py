@@ -1,13 +1,14 @@
+from typing import Generator, overload
+import logging
+
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.hardware.architecture.memory_level import ServedMemDimensions, ServedMemDimsUserFormat
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 from zigzag.classes.stages.Stage import Stage
-from typing import Generator
-
-import logging
 
 logger = logging.getLogger(__name__)
 
@@ -130,9 +131,7 @@ class RemoveUnusedMemoryStage(Stage):
             memory_instance = memory_level.memory_instance
             operands = tuple(memory_level.operands)
             port_alloc = memory_level.port_alloc_raw
-            served_dimensions_vec = memory_level.served_dimensions_vec
-            assert len(served_dimensions_vec) >= 1
-            served_dimensions = served_dimensions_vec[0]
+            served_dimensions = memory_level.served_dimensions
 
             new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
             new_operands = []
@@ -151,13 +150,13 @@ class RemoveUnusedMemoryStage(Stage):
                 new_port_alloc.append(port_alloc[index_in_operands])
             new_operands = tuple(new_operands)
             new_port_alloc = tuple(new_port_alloc)
-            new_served_dimensions = pickle_deepcopy(served_dimensions)
+            new_served_dimensions: ServedMemDimensions = pickle_deepcopy(served_dimensions)
             if len(new_operands) > 0:
                 new_memory_hierarchy.add_memory(
                     memory_instance=new_memory_instance,
                     operands=new_operands,
                     port_alloc=new_port_alloc,
-                    served_dimensions=new_served_dimensions,
+                    served_dimensions=new_served_dimensions.to_user_format(),
                 )
 
         # Create the new core

@@ -1,5 +1,7 @@
 import re
-from typing import Dict, Tuple, List, TypeAlias
+from typing import TypeAlias
+from typeguard import typechecked
+
 from zigzag.classes.hardware.architecture.Dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
@@ -9,7 +11,10 @@ import numpy as np
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 
 
+@typechecked
 class ServedMemDimensions:
+    """! Represents a collection of Operational Array Dimensions (served by some Memory Instance)"""
+
     def __init__(self, data: set[Dimension]):
         assert isinstance(data, set)
         assert all([isinstance(x, Dimension) for x in data])
@@ -30,6 +35,9 @@ class ServedMemDimensions:
 
         return tuple(vec_single_operand for _ in range(nb_operands))
 
+    def nb_dims(self):
+        return len(self.data)
+
     def assert_valid(self, oa_dims: list[Dimension]) -> None:
         """! Return True iff:
         - all served dimensions are contained within the given Operational Array Dimensions
@@ -39,6 +47,9 @@ class ServedMemDimensions:
         assert all(
             [served_dim in oa_dims for served_dim in self]
         ), f"User-specified served dimensions {self.data} contains element not part of the Operational Array Dimensions {oa_dims}"
+
+    def to_user_format(self) -> ServedMemDimsUserFormat:
+        return tuple(oa_dim.name for oa_dim in self)
 
     def __eq__(self, other):
         return isinstance(other, ServedMemDimensions) and self.data == other.data
@@ -118,6 +129,7 @@ class MemoryPort:
         return self.port_id
 
 
+@typechecked
 class MemoryLevel:
     """!  Description missing"""
 
@@ -145,8 +157,8 @@ class MemoryLevel:
         self.name = self.memory_instance.name
         self.operands = list(operands)
         self.mem_level_of_operands = mem_level_of_operands
-        self.oa_dims = operational_array.dimensions
-        self.id = id
+        self.oa_dims: list[Dimension] = operational_array.dimensions
+        self.id: int = id
         self.served_dimensions: ServedMemDimensions = served_dimensions
         self.served_dimensions.assert_valid(self.oa_dims)
 

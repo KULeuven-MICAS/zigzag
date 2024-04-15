@@ -1,7 +1,10 @@
 from typing import Set
+
+from typeguard import typechecked
 from zigzag.classes.hardware.architecture.core import Core
 
 
+@typechecked
 class Accelerator:
     """!   The Accelerator class houses a set of Cores with an additional Global Buffer.
     This Global Buffer sits above the cores, and can optionally be disabled.

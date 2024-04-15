@@ -1,10 +1,10 @@
 import logging
 from typing import Generator
-
+from typeguard import typechecked
 
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.mapping.spatial.SpatialMapping import SpatialMapping
-from zigzag.classes.opt.spatial.generator import UserSpatialMappingGenerator
+from zigzag.classes.opt.spatial.UserSpatialMappingGenerator import UserSpatialMappingGenerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
@@ -19,6 +19,7 @@ from zigzag.utils import pickle_deepcopy
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class SpatialMappingGeneratorStage(Stage):
     """! Pipeline stage that finds spatial mappings given a:
     - accelerator
@@ -36,8 +37,8 @@ class SpatialMappingGeneratorStage(Stage):
         accelerator: Accelerator,
         layer: LayerNode,
         enable_mix_spatial_mapping_generation=False,
-        maximize_hardware_utilization=True,
         enable_weight_diagonal_mapping=False,
+        nb_mappings_generated=3,
         **kwargs,
     ):
         """! The class constructor
@@ -48,8 +49,8 @@ class SpatialMappingGeneratorStage(Stage):
         self.check_layer(layer)
         self.layer = layer
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
-        self.maximize_hardware_utilization = maximize_hardware_utilization
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
+        self.nb_mappings_generated = nb_mappings_generated
 
     @staticmethod
     def check_layer(layer: LayerNode):
@@ -85,6 +86,7 @@ class SpatialMappingGeneratorStage(Stage):
                 accelerator=self.accelerator,
                 provided_mapping=user_provided_spatial_mappings,
                 enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
+                nb_mappings_generated=self.nb_mappings_generated,
             )
             # Get all the USMs by running the generator
             logger.debug("User-provided spatial mappings incomplete. Auto-generating..")

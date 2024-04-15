@@ -8,7 +8,8 @@ import pickle
 import sys
 
 sys.path.append("../zigzag")
-
+from extended_int import int_inf
+from zigzag.classes.stages import *
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
@@ -117,21 +118,18 @@ memory_hierarchy_graph.add_memory(
     memory_instance=reg_IW1,
     operands=("I2",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    # served_dimensions={(0, 0, 0, 0)},
     served_dimensions=("D1",),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=reg_O1,
     operands=("O",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
-    # served_dimensions={(0, 0, 0, 0)},
     served_dimensions=(),
 )
 memory_hierarchy_graph.add_memory(
     memory_instance=sram_32KB_512_1r_1w,
     operands=("I2",),
     port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-    # served_dimensions="all",
     served_dimensions=("D1", "D2", "D3", "D4"),
 )
 memory_hierarchy_graph.add_memory(
@@ -180,14 +178,67 @@ model = "trivial"
 dump_filename_pattern = f"outputs/TPU-{model}-layer_?.json"
 pickle_filename = f"outputs/TPU-{model}-saved_list_of_cmes.pickle"
 
-energy, latency, _ = api.get_hardware_performance_zigzag(
-    workload=workload,
-    accelerator=accelerator,
-    mapping=mapping,
-    opt="latency",
-    dump_filename_pattern=dump_filename_pattern,
-    pickle_filename=pickle_filename,
+
+###### Run stages ######
+
+# Initialize the logger
+import logging as _logging
+
+_logging_level = _logging.INFO
+_logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+_logging.basicConfig(level=_logging_level, format=_logging_format)
+
+opt_stage = MinimalEDPStage
+workload_parser_stage = WorkloadParserStage
+
+mainstage = MainStage(
+    [  # Initialize the MainStage as entry point
+        workload_parser_stage,  # Parse the ONNX Model into the workload
+        AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
+        SimpleSaveStage,  # Save the summed CME energy and latency to a json
+        PickleSaveStage,  # Save all received CMEs in a list to a pickle file
+        SumStage,  # Sum up the received best CME across all layers of the workload
+        SearchUnusedMemoryStage,  # Search for unused memory instance
+        WorkloadStage,  # Iterate through the different layers in the workload
+        RemoveUnusedMemoryStage,  # Remove unused memory instance
+        CompleteSaveStage,  # Save each processed layer to a json
+        opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
+        SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
+        opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
+        LomaStage,  # Generate multiple temporal mappings (TM)
+        # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal mapping (TM)
+        CostModelStage,  # Evaluate generated SM and TM through cost model
+    ],
+    accelerator=accelerator,  # required by AcceleratorParserStage
+    workload=workload,  # required by workload_parser_stage
+    mapping=mapping,  # required by workload_parser_stage
+    dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+    pickle_filename=pickle_filename,  # filename for pickled list of cmes
+    loma_lpf_limit=6,  # required by LomaStage
+    loma_show_progress_bar=True,
+    # If we need access the same input data multiple times from the innermost memory level and the data size is smaller than the memory read bw,
+    # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
+    # By default, if the parameter is not defined, it will be set as False internally.
+    access_same_data_considered_as_no_access=True,
+    enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
+    enable_weight_diagonal_mapping=False,
+    nb_mappings_generated=int_inf,
 )
+
+# Launch the MainStage
+cmes = mainstage.run()
+
+energy, latency = cmes[0][0].energy_total, cmes[0][0].latency_total2
+
+
+# energy, latency, _ = api.get_hardware_performance_zigzag(
+#     workload=workload,
+#     accelerator=accelerator,
+#     mapping=mapping,
+#     opt="latency",
+#     dump_filename_pattern=dump_filename_pattern,
+#     pickle_filename=pickle_filename,
+# )
 
 print(f"Total network energy = {energy:.2e} pJ")
 print(f"Total network latency = {latency:.2e} cycles")

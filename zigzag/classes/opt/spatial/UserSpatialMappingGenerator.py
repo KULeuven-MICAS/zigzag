@@ -1,9 +1,9 @@
-from copy import deepcopy
-from dataclasses import dataclass
 import itertools
 import logging
 import math
 from typing import Iterator
+from typeguard import typechecked
+from sympy import divisors, primefactors
 
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
@@ -21,6 +21,7 @@ from zigzag.classes.mapping.spatial.SpatialMapping import (
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class UserSpatialMappingGenerator:
     """! Class that generates valid user-format spatial mappings."""
 
@@ -28,13 +29,16 @@ class UserSpatialMappingGenerator:
         self,
         layer: LayerNode,
         accelerator: Accelerator,
-        provided_mapping: SpatialMapping = SpatialMapping({}),
-        enable_mix_spatial_mapping_generation=True,
-        enable_weight_diagonal_mapping=True,
+        provided_mapping: SpatialMapping = SpatialMapping.empty(),
+        enable_mix_spatial_mapping_generation=False,
+        enable_weight_diagonal_mapping=False,
+        nb_mappings_generated=3,
     ) -> None:
         """!  The class constructor
-        @param layer
-        @param accelerator
+        @param enable_mix_spatial_mapping_generation Indicate wether to generate `mixed` spatial mappings i.e. unroll
+          multiple LayerDims over same OA Dim
+        @param enable_weight_diagonal_mapping #TODO
+        @param nb_mappings_generated Maximal number of mappings generated, to limit simulation time
         """
         self.layer = layer
         self.accelerator = accelerator
@@ -42,19 +46,92 @@ class UserSpatialMappingGenerator:
         # Functional parameters
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
+        self.nb_mappings_generated = nb_mappings_generated
 
         core: Core = self.accelerator.get_core(core_id=layer.core_allocation)
         self.oa_dims = core.operational_array.dimensions
         self.layer_dim_sizes = self.layer.layer_dim_sizes
-        # Lowest memory levels
         self.innermost_levels = core.memory_hierarchy.get_inner_memories()
         self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
         self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, {LayerDim(x) for x in self.layer.loop_dim_list})
-        # Limit the number of SpatialMappings generated
-        self.MAX_NB_MAPPINGS = 3  # pylint: disable=C0103
 
     def run(self):
         return self.generate_user_spatial_mappings()
+
+    def generate_user_spatial_mappings(self) -> Iterator[SpatialMapping]:
+        """!  Generator that yields SpatialMappings
+        # TODO this function first does all the work before it yield the first element
+        """
+        max_unrollings = self.get_max_unrolling()
+
+        # Start from given mapping if provided, create empty one instead
+        mapping_template = self.provided_mapping if self.provided_mapping is not None else SpatialMapping.empty()
+        mapping_template.check_and_reduce(max_unrollings, self.oa_dims, self.layer_dim_sizes)
+
+        oa_dims_to_fill = [x for x in self.oa_dims if x not in mapping_template]
+        # For each OA Dimension to fill, generate a list of MappingSingleOADim candidates
+        mappings_per_oa_dim: list[list[MappingSingleOADim]] = [
+            list(
+                self.generate_user_spatial_mapping_single_dim(
+                    self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], oa_dim.size
+                )
+            )
+            for oa_dim in oa_dims_to_fill
+        ]
+
+        candidate_mappings: list[SpatialMapping] = []
+        for combination in itertools.product(*mappings_per_oa_dim):
+            # Start from the user-defined mapping
+            candidate = mapping_template.copy()
+            for idx, oa_dim in enumerate(oa_dims_to_fill):
+                candidate[oa_dim] = combination[idx]
+            # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
+            if candidate.is_valid(max_unrollings, self.oa_dims, self.layer_dim_sizes):
+                candidate_mappings.append(candidate)
+
+        assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
+        assert len(candidate_mappings) == len(set(candidate_mappings)), "Generated mappings are not unique"
+
+        # Sort according to expected performance
+        candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
+
+        indicators = [x.get_performance_indicator() for x in candidate_mappings]
+        nb_top_mappings = len([x for x in indicators if x == indicators[0]])
+
+        # Limit the number of mappings generated
+        for i in range(min(nb_top_mappings, self.nb_mappings_generated)):
+            candidate = candidate_mappings[i]
+            if self.enable_weight_diagonal_mapping:
+                candidate = self.add_input_pr_spatial_loop(candidate)
+            yield candidate
+
+    def limit_unrolling_to_mem_bandwidth(self, mapping: SpatialMapping) -> SpatialMapping:
+        """! Scale the given SpatialMapping in case any of the unrollings is limited by the memory structure"""
+        for mem_level in self.innermost_levels:
+            for mem_op in mem_level.operands:
+                layer_op = self.layer.get_layer_operand(mem_op)
+                # Either write BW (to write outputs away) or read BW (to read inputs)
+                mem_bandwidth = mem_level.write_bw if (layer_op == "O") else mem_level.read_bw
+                # Bit precision of layer operand
+                precision = self.layer.operand_precision[layer_op]
+                irrelevant_dimensions = self.layer.get_operand_irrelevant_dimensions(layer_op)
+
+                for oa_dim in mem_level.served_dimensions:
+                    # Iterate over all possible LayerDims and rescale max unroll factor
+                    for layer_dim, unrolling_size in mapping[oa_dim].items():
+                        # If not irrelevant, it is (partially) relevant. Limit based on BW and operand precision.
+                        if layer_dim not in irrelevant_dimensions:
+                            max_multicast_elements = mem_bandwidth // precision if precision > 0 else unrolling_size
+                            if max_multicast_elements < unrolling_size:
+                                mapping[oa_dim][layer_dim] = max_multicast_elements
+                                logger.warning(
+                                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                                    layer_dim,
+                                    oa_dim,
+                                    max_multicast_elements,
+                                    mem_level.name,
+                                )
+        return mapping
 
     def get_max_unrolling(self) -> SpatialMapping:
         """! Generate a SpatialMapping that contains the maximal unroll factor for every Operational
@@ -74,165 +151,56 @@ class UserSpatialMappingGenerator:
             }
         )
 
-        # Scale max unrollings if it is limited by memory structure
-        for mem_level in self.innermost_levels:
-            for mem_op in mem_level.operands:
-                layer_op = self.layer.get_layer_operand(mem_op)
-                # Either write BW (to write outputs away) or read BW (to read inputs)
-                mem_bandwidth = mem_level.write_bw if (layer_op == "O") else mem_level.read_bw
-                # Bit precision of layer operand
-                precision = self.layer.operand_precision[layer_op]
-                irrelevant_dimensions = self.layer.get_operand_irrelevant_dimensions(layer_op)
-
-                for oa_dim in mem_level.served_dimensions:
-                    # Iterate over all possible LayerDims and rescale max unroll factor
-                    for layer_dim, unrolling_size in max_unrolling[oa_dim].items():
-                        # If not irrelevant, it is (partially) relevant. Limit based on BW and operand precision.
-                        if layer_dim not in irrelevant_dimensions:
-                            max_multicast_elements = mem_bandwidth // precision if precision > 0 else unrolling_size
-                            # try:
-                            #     max_multicast_elements = mem_bandwidth // precision
-                            # except ZeroDivisionError:
-                            #     max_multicast_elements = unrolling_size
-                            # max_unrolling[oa_dim][layer_dim] = min(max_multicast_elements, unrolling_size)
-                            if max_multicast_elements < unrolling_size:
-                                max_unrolling[oa_dim][layer_dim] = max_multicast_elements
-                                logger.info(
-                                    "Maximal spatial unrolling at %s limited to %i due to bandwidth of %s",
-                                    oa_dim,
-                                    max_multicast_elements,
-                                    mem_level,
-                                )
-
-        return max_unrolling
+        return self.limit_unrolling_to_mem_bandwidth(max_unrolling)
 
     def generate_user_spatial_mapping_single_dim(
         self,
         unroll_hints: set[LayerDim],
         max_unrollings: MappingSingleOADim,
         oa_dim_size: int,
-    ) -> list[MappingSingleOADim]:
+    ) -> Iterator[MappingSingleOADim]:
         """! Generate a list of possible mappings for the given Operational Array Dimension. Possible mappings include
-        unrolling all LayerDims in `unroll_hints` for all prime factors upto the maximal value defined in `max_unrolling`
+        unrolling all LayerDims in `unroll_hints` for all unique divisors upto the maximal value defined in
+        `max_unrolling`.
         """
-        # All suggested mappings
-        possible_mappings: list[MappingSingleOADim] = []
-
-        # Simple case: maximally unroll over one LayerDim only
+        # Unroll a single LayerDim over this OA Dim
         for layer_dim in unroll_hints:
             max_factor: UnrollFactor = max_unrollings[layer_dim]
-            # Filter out unrollings equal to 1
-            if max_factor >= 1:
-                possible_mappings.append(MappingSingleOADim({layer_dim: max_factor}))
-                possible_mappings.extend(
-                    [MappingSingleOADim({layer_dim: unroll_factor}) for unroll_factor in self.prime_factors(max_factor)]  # type: ignore # TODO fix UnrollFactor type
-                )
+            # NOTE the unroll factor may equal one
+            for factor in divisors(max_factor):  # type: ignore # TODO fix UnrollFactor type
+                yield MappingSingleOADim({layer_dim: factor})
 
         if self.enable_mix_spatial_mapping_generation:
-            # TODO fix this part, incorporating the fact that possible mappings contain all factorizations
-            # Add mappings that are combinations of multiple LayerDim
-            combination_mappings = self.generate_layer_dim_combinations(max_unrollings, unroll_hints)
-            # Make sure new combinations do not exceed OA Dimension size
-            possible_mappings += list(filter(lambda x: x.get_utilization() <= oa_dim_size, combination_mappings))
+            mixed_mappings = self.generate_mapping_single_dim_mixed(max_unrollings, unroll_hints)
+            yield from filter(lambda x: x.get_utilization() <= oa_dim_size, mixed_mappings)
 
-        return possible_mappings
-
-    def generate_user_spatial_mappings(self) -> Iterator[SpatialMapping]:
-        """!  Generator that yields user-defined spatial mappings.
-        User-defined means across operational array dimensions.
-        For example, this might yield {'D1': (C, 16), 'D2': (K,16)}
-        In essence it works as follows:
-        \code{.py}
-        for each operational array dimension oa_dim (D1, D2, ...):
-             for each layer operand layer_op (W, I, O, ...):
-              if oa_dim not in served_dimensions(layer_op):
-                  continue
-              else:
-                  for layer dimensions layer_dim (B, K, ...) in the layer:
-                      if layer_dim is irrelevant for layer_op:
-                          layer_dim can be unrolled maximally
-                        if layer_dim is not irrelevant for layer_op:
-                          layer_dim can be unrolled if the BW allows it (assumes flexible "bus" reads)
-        \endcode
-        """
-
-        max_unrollings = self.get_max_unrolling()
-
-        # Start from given mapping if provided, create empty one instead
-        mapping_template = self.provided_mapping if self.provided_mapping is not None else SpatialMapping({})
-
-        mapping_template.check_and_reduce(max_unrollings, self.oa_dims, self.layer_dim_sizes)
-
-        oa_dims_to_fill = [x for x in self.oa_dims if x not in mapping_template]
-        # For each OA Dimension to fill, generate a list of MappingSingleOADim candidates
-        mappings_per_oa_dim: list[list[MappingSingleOADim]] = [
-            self.generate_user_spatial_mapping_single_dim(
-                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], oa_dim.size
-            )
-            for oa_dim in oa_dims_to_fill
-        ]
-
-        candidate_mappings: list[SpatialMapping] = []
-        for combination in itertools.product(*mappings_per_oa_dim):
-            candidate = mapping_template.copy()
-            for idx, oa_dim in enumerate(oa_dims_to_fill):
-                candidate[oa_dim] = combination[idx]
-            # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
-            if candidate.is_valid(max_unrollings, self.oa_dims, self.layer_dim_sizes):
-                candidate_mappings.append(candidate)
-        assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
-
-        # Sort according to hardware utilization
-        candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_utilization(), reverse=True)
-
-        # TODO we need a new `utility` function that also incorporates the diversity of layer dims
-        utilizations = [x.get_utilization() for x in candidate_mappings]
-        # Count how many times the best utilization occurs
-        nb_top_utilizations = utilizations.count(utilizations[0])
-
-        # Consider all candidates with the same (best) utilization
-        for i in range(max(nb_top_utilizations, self.MAX_NB_MAPPINGS)):
-            candidate = candidate_mappings[i]
-            if self.enable_weight_diagonal_mapping:
-                candidate = self.add_input_pr_spatial_loop(candidate)
-            yield candidate
-
-    def generate_layer_dim_combinations(
+    def generate_mapping_single_dim_mixed(
         self,
         max_unrolling: MappingSingleOADim,
         unrolling_hints: set[LayerDim],
-    ) -> list[MappingSingleOADim]:
-        """! Given a list of MappingSingleOADim where each item only contains a single Layer Dimension,
+    ) -> Iterator[MappingSingleOADim]:
+        """! Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimension,
         generate new MappingSingleOADim instances that each contain multiple Layer Dimensions (`mixed`),
         constrained to the maximal Operational Array dimension that corresponds to the MappingSingleOADim
         instance.
         """
-        # Not possible to create new combinations if less than 1 LayerDim is available to unroll
-        if len(unrolling_hints) <= 1 or max_unrolling.get_nb_unrolled_dims() <= 1:
-            return []
 
-        prime_pool: dict[LayerDim, list[int]] = {
-            layer_dim: self.prime_factors(max_unroll)  # type: ignore
+        unique_factor_pool: dict[LayerDim, list[int]] = {
+            layer_dim: self.non_trivial_divisors(max_unroll)  # type: ignore
             for layer_dim, max_unroll in max_unrolling.items()
-            if max_unroll > 1
         }
 
-        # Create new combinations
-        new_mappings: list[MappingSingleOADim] = []
         # Number of Layer Dimensions combined in new Mapping
         for combination_len in range(2, len(unrolling_hints) + 1):
             # e.g. ("C", "K") or ("C", "K", "G")
-            for layer_dim_comb in itertools.combinations(unrolling_hints, combination_len):
-                to_combine: list[list[int]] = [prime_pool[layer_dim] for layer_dim in layer_dim_comb]
+            for layer_dim_mix in itertools.combinations(unrolling_hints, combination_len):
+                # e.g. ([3,2], [5,4]) which corresponds to ("C", "K")
+                to_combine: list[list[int]] = [unique_factor_pool[layer_dim] for layer_dim in layer_dim_mix]
                 # e.g. (2, 4) which corresponds to ("C", "K")
                 for combination in itertools.product(*to_combine):
                     # e.g. (("C", 2), ("K", 4))
-                    mapping_zip = zip(layer_dim_comb, combination)
-                    new_mappings.append(
-                        MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
-                    )
-
-        return new_mappings
+                    mapping_zip = zip(layer_dim_mix, combination)
+                    yield MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
 
     def add_input_pr_spatial_loop(self, spatial_mapping: SpatialMapping) -> SpatialMapping:
         """! This function is used to support diagonal spatial mapping
@@ -360,7 +328,7 @@ class UserSpatialMappingGenerator:
         sm_pools_to_add: dict[LayerDim, list[tuple[LayerDim, int]]] = {}
         for layer_dim in target_layer_dim:
             layer_size = self.layer.loop_dim_size[layer_dim.name]
-            layer_size_breakdown: list[int] = self.prime_factors(layer_size)
+            layer_size_breakdown: list[int] = primefactors(layer_size)
 
             # try to find the maximum OX / OY and add it to the list
             # (1) check on act_served_oa_dim (ceil down to integer)
@@ -483,20 +451,9 @@ class UserSpatialMappingGenerator:
         return spatial_mapping
 
     @staticmethod
-    def prime_factors(n: int) -> list[int]:
-        # non-prime number decomposition
-        assert n > 0, "Number for prime decomposition must be a positive integer"
-        i = 2
-        factors = []
-        while i * i <= n:
-            if n % i:
-                i += 1
-            else:
-                n //= i
-                factors.append(i)
-        if n > 1:
-            factors.append(n)
-        return factors
+    def non_trivial_divisors(n: int) -> list[int]:
+        """! Return a list of divisors of `n`, excluding 1 and `n` itself"""
+        return list(filter(lambda x: 1 < x < n, divisors(n)))
 
     @staticmethod
     def identify_layer_operand_representation(layer: LayerNode) -> tuple[str | None, str | None]:

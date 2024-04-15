@@ -5,6 +5,8 @@ import re
 from copy import deepcopy
 from typing import Any
 
+from typeguard import typechecked
+
 from zigzag.classes.mapping.spatial.SpatialMapping import LayerDim, LayerDimStr, SpatialMapping, SpatialMappingHint
 
 
@@ -30,6 +32,7 @@ OperandLoopDims: TypeAlias = dict[OperandStr, dict[Relevancy, LoopList | PrLoop]
 OperandDimOrder: TypeAlias = dict[OperandStr, LoopList]
 
 
+@typechecked
 class LayerNode:
     """! Description missing"""
 
@@ -82,11 +85,12 @@ class LayerNode:
         if "equation_relations" in layer_attrs:
             raise ValueError(f"Please replace equation_relations by dimension_relations for layer {self}.")
 
+        # TODO: for each of these: make class with `parse_user_input` method that accepts  `None`
         # Get required attributes from layer_attrs
-        equation: str = layer_attrs.get("equation")  # type: ignore
-        loop_dim_size: LayerDimSizes = layer_attrs.get("loop_dim_size")  # type: ignore
-        pr_loop_dim_size: LayerDimSizes = layer_attrs.get("pr_loop_dim_size", None)
-        operand_precision: dict[OperandStr, int] = layer_attrs.get("operand_precision")  # type: ignore
+        equation: str = layer_attrs.get("equation", "")
+        loop_dim_size: LayerDimSizes = layer_attrs.get("loop_dim_size", {})
+        pr_loop_dim_size: LayerDimSizes = layer_attrs.get("pr_loop_dim_size", {})
+        operand_precision: dict[OperandStr, int] = layer_attrs.get("operand_precision", {})
         dimension_relations: list[str] = layer_attrs.get("dimension_relations", [])
         user_spatial_mapping = SpatialMapping.parse_user_input(layer_attrs.get("spatial_mapping", None))
         user_spatial_mapping_hint = SpatialMappingHint.parse_user_input(layer_attrs.get("spatial_mapping_hint", None))
@@ -94,9 +98,9 @@ class LayerNode:
         core_allocation: int = layer_attrs.get("core_allocation", None)
         memory_operand_links: MemOperandLinks = layer_attrs.get("memory_operand_links", None)
         source_storage_level = layer_attrs.get("source_storage_level", {})
-        operand_source_dimension_mapping: OperandSrcDimMapping = layer_attrs.get("operand_source_dimension_mapping", {})  # type: ignore
+        operand_source_dimension_mapping: OperandSrcDimMapping = layer_attrs.get("operand_source_dimension_mapping", {})
         constant_operands: list[OperandStr] = layer_attrs.get("constant_operands", [])
-        input_operand_source: dict[OperandStr, LayerNode] = layer_attrs.get("operand_source", dict())
+        input_operand_source: dict[OperandStr, list[int]] = layer_attrs.get("operand_source", {})
         # Save the padding for different tensor dimensions. Empty dict signals no padding in any dimension
         padding: dict[OperandStr, tuple] = layer_attrs.get("padding", {})
 
