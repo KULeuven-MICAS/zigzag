@@ -269,37 +269,22 @@ class LayerNode:
         pr_loop_list: List[str] = []
         pr_scaling_factors: Dict[str, list] = {}
         padding: Dict[str, int] = {}
+        # Regex pattern to find dimensions and coefficients of form dim1 = coef_2*dim2 + coef_3*dim3
+        pattern = r"(\w+)\s*=\s*(?:(\w+)\s*\*\s*)?(\w+)\s*\+\s*(?:(\w+)\s*\*\s*)?(\w+)"
         for relation in equation_relations:
-            relation_disassembly = re.findall("[a-zA-Z]+", relation)
+            match = re.search(pattern, relation)
+            if match:
+                dim1, coef_2, dim2, coef_3, dim3 = match.groups()
+                coef_2 = int(coef_2) if coef_2 is not None else 1
+                coef_3 = int(coef_3) if coef_3 is not None else 1
+            else:
+                raise ValueError(f"Please make sure {relation} is of the form 'dim1 = a*dim2 + b*dim3'")
 
-            assert (
-                len(relation_disassembly) == 3
-            ), f"equation_relation {relation} does not involve a linear relationship between two dimension iterators."
-
-            key = relation_disassembly[0].upper()
-            val = [loop_dim.upper() for loop_dim in relation_disassembly[1:]]
+            key = dim1.upper()
+            val = (dim2.upper(), dim3.upper())
             pr_loop[key] = val
-            pr_loop_list.extend([key] + val)
-
-            # To extract the scaling factors for the different loop dimension iterators, we need to make sure
-            # there is a scaling factor present in the equation. If it is not present, raise an exception.
-            scaling_factors = {}
-            for val_lower in relation_disassembly[1:]:
-                if relation[relation.index(val_lower) - 1] == "*":
-                    if not relation[relation.index(val_lower) - 2].isdigit():
-                        raise NotImplementedError(
-                            f"Please use a scaling factor for every dimension iterator on the RHS of equation {relation}"
-                        )
-                    else:
-                        scaling_factors[val_lower] = int(
-                            re.findall("(\\d+)(?=\\*" + val_lower + ")", relation)[0]
-                        )
-                else:
-                    scaling_factors[val_lower] = 1
-            # scaling_factors = re.findall('[0-9]+', relation)
-            assert (
-                len(scaling_factors) == 2
-            ), f"Please remove any constants in the equation relation {relation}."
+            pr_loop_list.extend((key,) + val)
+            scaling_factors = {dim2: coef_2, dim3: coef_3}
             pr_scaling_factors[key] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors
