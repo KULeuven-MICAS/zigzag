@@ -64,7 +64,8 @@ class LomaEngine:
         ).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
-
+        # set list of loops not affected by loop factorization and ordering and placed at the end
+        self.unordered_loops=[] if "unordered_loops" not in layer.layer_attrs else layer.layer_attrs["unordered_loops"]
     ## Runs the LomaEngine
     # @return Generator that yields all temporal mappings
     def run(self):
@@ -153,7 +154,11 @@ class LomaEngine:
             tl_dim,
             tl_size,
         ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
-            factors = factorint(tl_size)
+            # factorize only loops that we want to be ordered
+            if tl_dim in self.unordered_loops:
+                factors={tl_size:1}
+            else:
+                factors = factorint(tl_size)
             pfs = []
             counts = []
             for pf, multiplicity in factors.items():
@@ -263,4 +268,4 @@ class LomaEngine:
     ## Generator that yields all orderings of the temporal loops.
     def og(self):
         # The lpfs are stored in self.lpfs
-        return permutations(self.lpfs)
+        return permutations(self.lpfs,self.unordered_loops)
