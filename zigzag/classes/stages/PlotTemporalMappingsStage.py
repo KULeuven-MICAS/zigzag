@@ -1,6 +1,8 @@
 import os
 
 from typing import Generator, Any, Tuple
+
+from typeguard import typechecked
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from zigzag.visualization.results.plot_cme import (
@@ -8,6 +10,7 @@ from zigzag.visualization.results.plot_cme import (
 )
 
 
+@typechecked
 class PlotTemporalMappingsStage(Stage):
     """!  Class that passes through all results yielded by substages, but keeps the TMs cme's and saves a plot."""
 

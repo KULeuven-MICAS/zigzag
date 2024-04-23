@@ -1,4 +1,4 @@
-from typing import List
+from zigzag.utils import json_repr_handler
 
 
 class OperationalUnit:
@@ -6,7 +6,7 @@ class OperationalUnit:
 
     def __init__(
         self,
-        input_precision: List[int],
+        input_precision: list[int],
         output_precision: int,
         unit_cost: float,
         unit_area: float,
@@ -25,7 +25,7 @@ class OperationalUnit:
 
     def __jsonrepr__(self):
         """!  JSON Representation of this class to save it to a json file."""
-        return self.__dict__
+        return json_repr_handler(self.__dict__)
 
     def __eq__(self, __o: object) -> bool:
         if not isinstance(__o, OperationalUnit):
@@ -34,9 +34,8 @@ class OperationalUnit:
 
 
 class Multiplier(OperationalUnit):
-    """!  Description missing"""
 
-    def __init__(self, input_precision: List[int], energy_cost: float, area: float):
+    def __init__(self, input_precision: list[int], energy_cost: float, area: float):
         """!  The class constructor
         @param input_precision: The bit precision of the multiplication inputs.
         @param energy_cost: The energy cost of performing a single multiplication.

@@ -1,31 +1,26 @@
-from typing import TypeAlias
 from math import prod
-from typing import TYPE_CHECKING
 
-from zigzag.classes.mapping.spatial.SpatialMapping import LayerDimStr, UnrollFactor
-from zigzag.classes.workload.layer_node import Relevancy
+from typeguard import typechecked
 
-
-if TYPE_CHECKING:
-    from zigzag.classes.workload.layer_node import LayerNode
+from zigzag.classes.datatypes import LayerDim, LayerOperand, UnrollFactor
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.mapping_assist_funcs import SpatialMappingPerMEMLvl, decouple_pr_loop
+from zigzag.utils import json_repr_handler
 
 
+@typechecked
 class SpatialMappingInternal:
     """!  Class that collect all the info related to spatial mapping."""
 
     def __init__(self, spatial_mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNode"):
-        """!  The class constructor
-        @param spatial_mapping_dict
-        @param layer_node
-        """
+
         self.mapping_dict_origin = spatial_mapping_dict
         self.mapping_dict_reform: SpatialMappingPerMEMLvl = decouple_pr_loop(spatial_mapping_dict, layer_node)
         self.layer_node = layer_node
-        self.operand_list: list[str] = layer_node.operand_list
+        self.layer_operands: list[LayerOperand] = layer_node.layer_operands
 
         # Extract architecture level count for each operand from spatial mapping definition, starting from MAC level
-        self.arch_level = {op: len(smap) for (op, smap) in spatial_mapping_dict.items()}
+        self.arch_level = {op: len(smap) for op, smap in spatial_mapping_dict.items()}
 
         # Calculate unrolled loop size for different loop types (r/ir/total)
         self.calc_unroll_size()
@@ -52,17 +47,15 @@ class SpatialMappingInternal:
 
     def __jsonrepr__(self):
         """!  JSON representation of this object to save it to a file."""
-        return {"spatial_mapping": self.mapping_dict_origin}
+        return json_repr_handler({"spatial_mapping": self.mapping_dict_origin})
 
-    def get_unrolling(self, op: str, level: int):
+    def get_unrolling(self, op: LayerOperand, level: int):
         """!  Return the unrolled loops for operand 'op' at level 'level'.
         'level' = 0 would signify the operational level.
-        @param op
-        @param level
         """
         return self.mapping_dict_origin[op][level]
 
-    def get_unrolling_all(self, op: str, min_level: int) -> list:
+    def get_unrolling_all(self, op: LayerOperand, min_level: int) -> list:
         """Return all the spatial loops at a given level and above for a given operand.
 
         Args:
@@ -81,25 +74,26 @@ class SpatialMappingInternal:
         """!  Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level"""
 
         # Initialization
-        unroll_size_r: dict[LayerDimStr, list[UnrollFactor]] = {
-            op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()
+        unroll_size_r: dict[LayerOperand, list[UnrollFactor]] = {
+            op: [1] * arch_lv for op, arch_lv in self.arch_level.items()
         }
-        unroll_size_ir: dict[LayerDimStr, list[UnrollFactor]] = {
-            op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()
+        unroll_size_ir: dict[LayerOperand, list[UnrollFactor]] = {
+            op: [1] * arch_lv for op, arch_lv in self.arch_level.items()
         }
-        unroll_size_total: dict[LayerDimStr, list[UnrollFactor]] = {
-            op: [1] * arch_lv for (op, arch_lv) in self.arch_level.items()
+        unroll_size_total: dict[LayerOperand, list[UnrollFactor]] = {
+            op: [1] * arch_lv for op, arch_lv in self.arch_level.items()
         }
 
         # Go through the reformed spatial mapping and extract the unroll size
-        for operand in self.operand_list:
-            for level, current_level_loops in enumerate(self.mapping_dict_reform[operand]):
-                for loop_type, loop_dim in current_level_loops:
-                    if loop_type in self.layer_node.operand_loop_dim_reform[operand][Relevancy.R]:
-                        unroll_size_r[operand][level] *= loop_dim
+        for layer_op in self.layer_operands:
+            for level, current_level_loops in enumerate(self.mapping_dict_reform[layer_op]):
+                for layer_dim, loop_dim in current_level_loops:
+                    # TODO use pr_decoupled_relevancy_info
+                    if layer_dim in self.layer_node.pr_decoupled_relevancy_info.get_r_layer_dims(layer_op):
+                        unroll_size_r[layer_op][level] *= loop_dim
                     else:
-                        unroll_size_ir[operand][level] *= loop_dim
-                    unroll_size_total[operand][level] *= loop_dim
+                        unroll_size_ir[layer_op][level] *= loop_dim
+                    unroll_size_total[layer_op][level] *= loop_dim
 
         self.unroll_size_r = unroll_size_r
         self.unroll_size_ir = unroll_size_ir
@@ -114,7 +108,7 @@ class SpatialMappingInternal:
                 round(round(prod(self.unroll_size_total[op][lv : self.arch_level[op]]), 3))
                 for lv in range(self.arch_level[op])
             ]
-            for op in self.operand_list
+            for op in self.layer_operands
         }
 
         #  ASSERT: The bottom level (MAC level) unit count must be the same for all operand
@@ -126,13 +120,13 @@ class SpatialMappingInternal:
         #  Number of unit at each level that hold unique data (for each operand)
         unit_unique = {
             op: [prod(self.unroll_size_r[op][lv : self.arch_level[op]]) for lv in range(self.arch_level[op])]
-            for op in self.operand_list
+            for op in self.layer_operands
         }
 
         #  Number of unit at each level that hold the same data (for each operand)
         unit_duplicate = {
             op: [prod(self.unroll_size_ir[op][lv : self.arch_level[op]]) for lv in range(self.arch_level[op])]
-            for op in self.operand_list
+            for op in self.layer_operands
         }
 
         self.unit_count = unit_count
@@ -150,7 +144,7 @@ class SpatialMappingInternal:
         """
         data_serve_scope = {
             op: [self.unit_duplicate[op][lv] / self.unit_duplicate[op][lv + 1] for lv in range(self.arch_level[op] - 1)]
-            for op in self.operand_list
+            for op in self.layer_operands
         }
 
         self.data_serve_scope = data_serve_scope
@@ -166,16 +160,17 @@ class SpatialMappingInternal:
             op: [
                 round(self.unit_unique[op][lv] / self.unit_unique[op][lv + 1]) for lv in range(self.arch_level[op] - 1)
             ]
-            for op in self.operand_list
+            for op in self.layer_operands
         }
 
         self.mem_bw_boost = mem_bw_boost
 
-    # Save the loops that were unrolled spatially in a list without any arch level information for easy access in loma.
     def save_spatial_loop_dim_size(self) -> None:
-        # We take one of the input operands and go through the spatial mapping dict for that operand.
-        # Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels.
+        """! Save the loops that were unrolled spatially in a list without any arch level information for easy access in loma.
+        We take one of the input operands and go through the spatial mapping dict for that operand.
+        Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels."""
+
         op = self.layer_node.input_operands[0]
-        self.spatial_loop_dim_size: list[tuple[str, UnrollFactor]] = [
+        self.spatial_loop_dim_size: list[tuple[LayerDim, UnrollFactor]] = [
             loop for spatial_loops in self.mapping_dict_origin[op] for loop in spatial_loops
         ]

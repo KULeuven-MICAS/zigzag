@@ -1,10 +1,10 @@
 from typeguard import typechecked
 from zigzag.classes.cacti.cacti_parser import CactiParser
+from zigzag.utils import json_repr_handler
 
 
 @typechecked
 class MemoryInstance:
-    """!  Description missing"""
 
     def __init__(
         self,
@@ -30,7 +30,7 @@ class MemoryInstance:
         @param name: memory module name, e.g. 'SRAM_512KB_BW_16b', 'I_RF'.
         @param size: total memory capacity (unit: bit).
         @param r_bw/w_bw: memory bandwidth (or wordlength) (unit: bit/cycle).
-        @param r_cost/w_cost: memory unit data access energy.
+        @param r_cost/w_cost: memory unit data access energy (unit: pJ/access).
         @param area: memory area (unit can be whatever user-defined unit).
         @param r_port: number of memory read port.
         @param w_port: number of memory write port (rd_port and wr_port can work in parallel).
@@ -46,18 +46,7 @@ class MemoryInstance:
             # Size must be a multiple of 8 when using CACTI
             assert size % 8 == 0, "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
             cacti_parser = CactiParser()
-            (
-                _,
-                r_bw,
-                w_bw,
-                r_cost,
-                w_cost,
-                area,
-                bank,
-                r_port,
-                w_port,
-                rw_port,
-            ) = cacti_parser.get_item(
+            r_cost, w_cost, area = cacti_parser.get_item(
                 mem_type=mem_type,
                 size=size,
                 r_bw=r_bw,
@@ -88,9 +77,13 @@ class MemoryInstance:
         else:
             self.w_bw_min = min_w_granularity
 
+    def update_size(self, new_size: int) -> None:
+        """! Update the memory size of this instance."""
+        self.size = new_size
+
     def __jsonrepr__(self):
         """!  JSON Representation of this class to save it to a json file."""
-        return self.__dict__
+        return json_repr_handler(self.__dict__)
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__

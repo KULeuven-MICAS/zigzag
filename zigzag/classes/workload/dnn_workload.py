@@ -1,18 +1,18 @@
 import networkx as nx
+from typeguard import typechecked
 
 from zigzag.classes.workload.Workload import Workload
+from zigzag.classes.workload.workload_attributes import LayerAttributes
 from zigzag.classes.workload.layer_node import LayerNode
 from typing import Any
-from networkx import DiGraph
 
 
+@typechecked
 class DNNWorkload(Workload):
-    """!  Description missing"""
 
-    def __init__(self, workload: dict[int, dict], mapping: dict[Any, dict], **attr):
+    def __init__(self, workload: dict[int, dict], mapping: dict[str, dict[str, Any]], **attr):
         """!  The class constructor
         Collect all the algorithmic workload information here.
-        @param workload: user-defined workload file (py).
         @return (self): Directed Graph with nodes the layers and edges the connections between layers.
         """
         super().__init__(**attr)
@@ -33,7 +33,8 @@ class DNNWorkload(Workload):
                 for attr_name, attr_va in mapping["default"].items():
                     layer[attr_name] = attr_va
             # For each item in the dict generate the LayerNode and add it to the dnn graph G
-            layer_node = LayerNode(layer_id, layer)
+            layer_attributes = LayerAttributes.parse_user_input(layer)
+            layer_node = LayerNode(layer_id, layer_attributes)
             # Save this layer_id and LayerNode pair in the layer_id_to_obj dict
             layer_id_to_obj[layer_id] = layer_node
             # self.add_node(layer_id, info=layer_node)
@@ -43,9 +44,10 @@ class DNNWorkload(Workload):
             edges = []
             for op, parent_list in layer.get("operand_source", {}).items():
                 for parent_id in parent_list:
+                    assert parent_id in layer_id_to_obj, f"Illegal reference to non-existent layer with id {parent_id}"
                     parent_layer = layer_id_to_obj[parent_id]
                     edges.append((parent_layer, layer_node))
-                    layer_node.input_operand_source[op] = parent_layer
+                    # layer_node.input_operand_source[op] = parent_layer # ! This feature is not used?
             self.add_edges_from(edges)
 
     def topological_sort(self):

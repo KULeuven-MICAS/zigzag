@@ -1,5 +1,7 @@
 import math
 
+from zigzag.utils import json_repr_handler
+
 
 class UnitNor2:
     """
@@ -385,7 +387,7 @@ class MemoryInstance:
         """
         JSON Representation of this class to save it to a json file.
         """
-        return self.__dict__
+        return json_repr_handler(self.__dict__)
 
     def __eq__(self, other: object) -> bool:
         return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__

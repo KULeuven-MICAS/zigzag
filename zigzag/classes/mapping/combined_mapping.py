@@ -1,166 +1,16 @@
-from typing import Dict
-from math import prod
-from zigzag.classes.workload.layer_node import LayerNode, Relevancy
+import math
+from typeguard import typechecked
+from zigzag.classes.datatypes import Constants, LayerOperand
+from zigzag.classes.mapping.data_movement import DataMovePattern
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping
+from zigzag.classes.mapping.temporal.temporal_mapping import TemporalMapping, TemporalMappingDict
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
+from zigzag.classes.mapping.mapping_assist_funcs import SpatialMappingPerMEMLvl
 import zigzag.classes.mapping.mapping_assist_funcs as mapping_assist_funcs
 
 
-class FourWayDataMoving:
-    """!  The standard four-way data moving attribute of a memory interface."""
-
-    def __init__(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        """!  The class constructor
-        @param rd_out_to_low
-        @param wr_in_by_low
-        @param rd_out_to_high
-        @param wr_in_by_high
-        """
-        self.rd_out_to_low = rd_out_to_low
-        self.wr_in_by_low = wr_in_by_low
-        self.rd_out_to_high = rd_out_to_high
-        self.wr_in_by_high = wr_in_by_high
-        """ format used in the original ZigZag version """
-        self.info_list = [
-            (self.rd_out_to_low, self.wr_in_by_low),
-            (self.rd_out_to_high, self.wr_in_by_high),
-        ]
-
-    def update_single_dir_data(self, dir: str, new_value):
-        setattr(self, dir, new_value)
-        self.info_list = [
-            (self.rd_out_to_low, self.wr_in_by_low),
-            (self.rd_out_to_high, self.wr_in_by_high),
-        ]
-
-    def get_total_read_outs_to_above(self, scaling: float = 1):
-        """!  Return the total amount of times this memory interface is read from to the level above.
-        If scaling is the energy cost per read, this returns the total read energy.
-        """
-        return scaling * self.rd_out_to_high
-
-    def get_total_read_outs_to_below(self, scaling: float = 1):
-        """!  Return the total amount of times this memory interface is read from to the level below.
-        If scaling is the energy cost per read, this returns the total read energy.
-        """
-        return scaling * self.rd_out_to_low
-
-    def get_total_write_ins_from_above(self, scaling: float = 1):
-        """!  Return the total amount of times this memory interface is written to from the level above.
-        If scaling is the energy cost per write, this returns the total read energy.
-        """
-        return scaling * self.wr_in_by_high
-
-    def get_total_write_ins_from_below(self, scaling: float = 1):
-        """!  Return the total amount of times this memory interface is written to from the level below.
-        If scaling is the energy cost per write, this returns the total read energy.
-        """
-        return scaling * self.wr_in_by_low
-
-    def __add__(self, other):
-        return FourWayDataMoving(
-            self.rd_out_to_low + other.rd_out_to_low,
-            self.wr_in_by_low + other.wr_in_by_low,
-            self.rd_out_to_high + other.rd_out_to_high,
-            self.wr_in_by_high + other.wr_in_by_high,
-        )
-
-    def __mul__(self, other):
-        return FourWayDataMoving(
-            self.rd_out_to_low * other,
-            self.wr_in_by_low * other,
-            self.rd_out_to_high * other,
-            self.wr_in_by_high * other,
-        )
-
-    def __iter__(self):
-        for e in ["rd_out_to_low", "wr_in_by_low", "rd_out_to_high", "wr_in_by_high"]:
-            yield e
-
-    def __repr__(self):
-        return f"4waydatamoving (rd /\\: {self.rd_out_to_high}, wr V: {self.wr_in_by_high}, rd V: {self.rd_out_to_low}, wr /\\: {self.wr_in_by_low})"
-
-    def __jsonrepr__(self):
-        return repr(self)
-
-    def __getitem__(self, item):
-        if hasattr(self, item):
-            return getattr(self, item)
-        else:
-            raise KeyError()
-
-
-class DataMovePattern:
-    """!  Collect the memory access pattern for each unit memory (memory that only hold one operand at one level)."""
-
-    def __init__(self, operand, mem_level):
-        """!  The class construcotr
-        @param operand
-        @param mem_level
-        """
-        self.name = operand + str(mem_level)
-        self.data_elem_move_count = FourWayDataMoving(0, 0, 0, 0)
-        self.data_precision = FourWayDataMoving(0, 0, 0, 0)
-        self.req_mem_bw_aver = FourWayDataMoving(0, 0, 0, 0)
-        self.req_mem_bw_inst = FourWayDataMoving(0, 0, 0, 0)
-        self.data_trans_period = FourWayDataMoving(0, 0, 0, 0)
-        self.data_trans_period_count = FourWayDataMoving(0, 0, 0, 0)
-        self.data_trans_amount_per_period = FourWayDataMoving(0, 0, 0, 0)
-        self.inst_data_trans_window = FourWayDataMoving(0, 0, 0, 0)
-
-    # For every memory, there are 4 data transfer link in the hierarchy:
-    # rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
-
-    def set_data_elem_move_count(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        self.data_elem_move_count = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_data_precision(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        self.data_precision = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_req_mem_bw_aver(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        self.req_mem_bw_aver = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_req_mem_bw_inst(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        self.req_mem_bw_inst = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_data_trans_period(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        # data_trans_period: every how many cycle, the memory link need to be activated for a certain duration
-        self.data_trans_period = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_data_trans_period_count(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        # data_trans_period_count: to finish all the for-loop computation, how many such ideal_period is required
-        self.data_trans_period_count = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def set_data_trans_amount_per_period(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        # data_trans_amount_per_period: data amount that being transferred for each single period
-        self.data_trans_amount_per_period = FourWayDataMoving(
-            rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
-        )
-
-    def set_inst_data_trans_window(self, rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high):
-        # inst_data_trans_window: the allowed memory updating window, assuming the served memory level
-        # is non-double buffered (thus need to avoid the data overwriting issue
-        self.inst_data_trans_window = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-
-    def update_single_dir_data(self, direction, new_value):
-        """!  update a single direction value for all data move attributes"""
-        self.data_elem_move_count.update_single_dir_data(direction, new_value)
-        self.data_precision.update_single_dir_data(direction, new_value)
-        self.req_mem_bw_aver.update_single_dir_data(direction, new_value)
-        self.req_mem_bw_inst.update_single_dir_data(direction, new_value)
-        self.data_trans_period.update_single_dir_data(direction, new_value)
-        self.data_trans_period_count.update_single_dir_data(direction, new_value)
-        self.data_trans_amount_per_period.update_single_dir_data(direction, new_value)
-        self.inst_data_trans_window.update_single_dir_data(direction, new_value)
-
-    def __str__(self):
-        return self.name
-
-    def __repr__(self):
-        return str(self)
-
-
+@typechecked
 class Mapping:
     """!  Collect information of a complete mapping (spatial and temporal)
 
@@ -171,18 +21,11 @@ class Mapping:
     def __init__(
         self,
         accelerator: Accelerator,
-        spatial_mapping: dict | SpatialMappingInternal,
-        temporal_mapping: dict | TemporalMapping,
+        spatial_mapping: SpatialMappingPerMEMLvl | SpatialMappingInternal,
+        temporal_mapping: TemporalMappingDict | TemporalMapping,
         layer_node: LayerNode,
         access_same_data_considered_as_no_access: bool = False,
     ):
-        """!  The class construcotr
-        @param accelerator
-        @param spatial mapping
-        @param temporal mapping
-        @param layer_node
-        @param access_same_data_considered_as_no_access
-        """
         # Mapping object can be initialized with separate spatial and temporal mappings
         self.accelerator = accelerator
         if isinstance(spatial_mapping, SpatialMappingInternal):
@@ -200,7 +43,9 @@ class Mapping:
         # Initialize unit_mem_data_movement, which collects all the important data movement info
         # related to each unit memory, such as data access count, data precision, required memory BW to
         # prevent stall, data transfer rate, etc.
-        self.unit_mem_data_movement = {op: [[] for _ in range(self.mem_level[op])] for op in self.operand_list}
+        self.unit_mem_data_movement: dict[LayerOperand, list[DataMovePattern]] = {  # type: ignore
+            op: [None for _ in range(self.mem_level[op])] for op in self.operand_list
+        }
 
         # Combine spatial and temporal mapping dictionary into "joint_mapping_dict" in order to
         # enable decoupling pr loops into r and ir loops in one go
@@ -215,7 +60,7 @@ class Mapping:
         )
 
         # Distinguish final output from partial output: "psum_flag"
-        self.distinguish_output()
+        self.psum_flag = self.get_psum_flags()
 
         # Generate a dictionary that collect data precision for each operand at each arch level
         self.gen_data_precision_dict()
@@ -276,35 +121,36 @@ class Mapping:
         self.combined_mapping_dict_1s1t = combined_mapping_dict_1s1t
         self.combined_mapping_dict_1s2t = combined_mapping_dict_1s2t
 
-    def distinguish_output(self):
+    def get_psum_flags(self) -> list[bool]:
         """!  This function generates an list "psum_flag" that identify whether an output memory
         level holds partial or final output.
         E.g., psum_flag = [True, True, False] means that there are 3 memory levels for output and only the outermost
         memory level hold the final output, the 1st and 2nd memory levels need to store partial output for some time.
         For indexing convenience, we add an extra False to the end of the psum_flag list.
+        # TODO cleanup
         """
         output_operand = self.layer_node.output_operand
-        output_loop_dim_relevancy = self.layer_node.operand_loop_dim_reform[output_operand]
+        loop_dim_relevancy = self.layer_node.pr_decoupled_relevancy_info
         # output_ir_flag indicate whether at an architectural level, there is output's ir loop in it.
         # True for yes, there is.
         output_arch_level = self.spatial_mapping.arch_level[output_operand]
         output_ir_flag = [False] * output_arch_level
         for level, current_level_loops in enumerate(self.combined_mapping_dict_1s1t_reform[output_operand]):
             for loop_type, loop_dim in current_level_loops:
-                if loop_type in output_loop_dim_relevancy[Relevancy.IR] and loop_dim > 1:
+                if loop_type in loop_dim_relevancy.get_ir_layer_dims(output_operand) and loop_dim > 1:
                     output_ir_flag[level] = True
                     break
         # reversely check from current level to the top level whether there is ir loop shows up in the middle,
         # False means final output is present at current level
         psum_flag_H2L = [any(output_ir_flag[lv:output_arch_level]) for lv in reversed(range(output_arch_level))]
         psum_flag_L2H = list(reversed(psum_flag_H2L))
-        self.psum_flag = psum_flag_L2H[1:] + [False]  # add an extra False on top for later indexing convenience
+        return psum_flag_L2H[1:] + [False]  # add an extra False on top for later indexing convenience
 
     def gen_data_precision_dict(self):
         """!  This function generates a dictionary that collect data precision for each operand at each arch level"""
         input_operands = self.layer_node.input_operands
         output_operand = self.layer_node.output_operand
-        data_precision_dict = {
+        data_precision_dict: dict[LayerOperand, list[int]] = {
             op: [self.layer_node.operand_precision[op]] * (self.mem_level[op] + 1) for op in input_operands
         }
         data_precision_dict[output_operand] = []
@@ -312,21 +158,25 @@ class Mapping:
             if self.psum_flag[i]:
                 data_precision_dict[output_operand].append(self.layer_node.operand_precision[output_operand])
             else:
-                data_precision_dict[output_operand].append(self.layer_node.operand_precision[output_operand + "_final"])
+                data_precision_dict[output_operand].append(
+                    self.layer_node.operand_precision[Constants.FINAL_OUTPUT_LAYER_OP]
+                )
         self.data_precision_dict = data_precision_dict
 
     def gen_r_ir_loop_list(self):
-        """!  Given the combined mapping, generate r/ir loop size list at each level for each operand"""
+        """!  Given the combined mapping, generate r/ir loop size list at each level for each operand
+        # TODO cleanup
+        """
         combined_mapping = self.combined_mapping_dict_1s1t_reform
         combined_mapping2 = self.combined_mapping_dict_1s2t_reform
-        relevancy_table = self.layer_node.operand_loop_dim_reform
+        relevancy_table = self.layer_node.pr_decoupled_relevancy_info
         r_loop_size_per_level = {
             op: [
-                prod(
+                math.prod(
                     [
                         lp_dim
                         for lp_type, lp_dim in combined_mapping[op][lv]
-                        if lp_type in relevancy_table[op][Relevancy.R]
+                        if lp_type in relevancy_table.get_r_layer_dims(op)
                     ]
                 )
                 for lv in range(self.spatial_mapping.arch_level[op])
@@ -335,11 +185,11 @@ class Mapping:
         }
         r_loop_size_per_level2 = {
             op: [
-                prod(
+                math.prod(
                     [
                         lp_dim
                         for lp_type, lp_dim in combined_mapping2[op][lv]
-                        if lp_type in relevancy_table[op][Relevancy.R]
+                        if lp_type in relevancy_table.get_r_layer_dims(op)
                     ]
                 )
                 for lv in range(self.spatial_mapping.arch_level[op])
@@ -348,11 +198,11 @@ class Mapping:
         }
         ir_loop_size_per_level = {
             op: [
-                prod(
+                math.prod(
                     [
                         lp_dim
                         for lp_type, lp_dim in combined_mapping[op][lv]
-                        if lp_type in relevancy_table[op][Relevancy.IR]
+                        if lp_type in relevancy_table.get_ir_layer_dims(op)
                     ]
                 )
                 for lv in range(self.spatial_mapping.arch_level[op])
@@ -361,11 +211,11 @@ class Mapping:
         }
         ir_loop_size_per_level2 = {
             op: [
-                prod(
+                math.prod(
                     [
                         lp_dim
                         for lp_type, lp_dim in combined_mapping2[op][lv]
-                        if lp_type in relevancy_table[op][Relevancy.IR]
+                        if lp_type in relevancy_table.get_ir_layer_dims(op)
                     ]
                 )
                 for lv in range(self.spatial_mapping.arch_level[op])
@@ -376,33 +226,37 @@ class Mapping:
         # current and below levels (cabl) r loop size
         r_loop_size_cabl = {
             op: [
-                round(prod(r_loop_size_per_level[op][0 : lv + 1])) for lv in range(self.spatial_mapping.arch_level[op])
+                round(math.prod(r_loop_size_per_level[op][0 : lv + 1]))
+                for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
         r_loop_size_cabl2 = {
             op: [
-                round(prod(r_loop_size_per_level2[op][0 : lv + 1])) for lv in range(self.spatial_mapping.arch_level[op])
+                round(math.prod(r_loop_size_per_level2[op][0 : lv + 1]))
+                for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
         # current and below levels (cabl) ir loop size
         ir_loop_size_cabl = {
-            op: [prod(ir_loop_size_per_level[op][0 : lv + 1]) for lv in range(self.spatial_mapping.arch_level[op])]
+            op: [math.prod(ir_loop_size_per_level[op][0 : lv + 1]) for lv in range(self.spatial_mapping.arch_level[op])]
             for op in self.operand_list
         }
         # current and below levels (cabl) ir loop size
         ir_loop_size_cabl2 = {
-            op: [prod(ir_loop_size_per_level2[op][0 : lv + 1]) for lv in range(self.spatial_mapping.arch_level[op])]
+            op: [
+                math.prod(ir_loop_size_per_level2[op][0 : lv + 1]) for lv in range(self.spatial_mapping.arch_level[op])
+            ]
             for op in self.operand_list
         }
         # current and above levels (caal) ir loop size, only for output operand for calculating psum backflow access count
         output_operand = self.layer_node.output_operand
         O_ir_loop_size_caal = [
-            prod(ir_loop_size_per_level[output_operand][lv : self.spatial_mapping.arch_level[output_operand]])
+            math.prod(ir_loop_size_per_level[output_operand][lv : self.spatial_mapping.arch_level[output_operand]])
             for lv in range(self.spatial_mapping.arch_level[output_operand])
         ]
-        # append two extra 1 to the list to facilitate the psum bcakflow access calculation later
+        # append two extra 1 to the list to facilitate the psum backflow access calculation later
         # We can see it as adding two output memory levels on top with no data reuse.
         O_ir_loop_size_caal.extend([1, 1])
 
@@ -511,7 +365,7 @@ class Mapping:
                 if (
                     self.access_same_data_considered_as_no_access
                     and mem_level == 0
-                    and self.accelerator.get_core(self.layer_node.get_core_allocation()).mem_r_bw_dict[
+                    and self.accelerator.get_core(self.layer_node.core_allocation).mem_r_bw_dict[
                         self.layer_node.memory_operand_links[operand]
                     ][mem_level]
                     >= self.data_bit_per_level[operand][mem_level]
@@ -574,7 +428,7 @@ class Mapping:
                 rd_out_to_low_pre = self.layer_node.operand_precision[output_operand]
             else:
                 # final output data precision
-                wr_in_by_low_pre = self.layer_node.operand_precision[output_operand + "_final"]
+                wr_in_by_low_pre = self.layer_node.operand_precision[Constants.FINAL_OUTPUT_LAYER_OP]
                 rd_out_to_low_pre = 0
             if wr_in_by_high != 0:
                 # partial output data precision
@@ -583,7 +437,7 @@ class Mapping:
             else:
                 # final output data precision
                 wr_in_by_high_pre = 0
-                rd_out_to_high_pre = self.layer_node.operand_precision[output_operand + "_final"]
+                rd_out_to_high_pre = self.layer_node.operand_precision[Constants.FINAL_OUTPUT_LAYER_OP]
 
             unit_mem_data_movement.set_data_precision(
                 rd_out_to_low_pre,

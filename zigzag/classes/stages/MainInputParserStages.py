@@ -1,5 +1,7 @@
 import importlib
 
+from typeguard import typechecked
+
 from zigzag.classes.io.accelerator.parser import AcceleratorParser
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.workload.dnn_workload import DNNWorkload
@@ -10,8 +12,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class AcceleratorParserStage(Stage):
-    """!  Description missing"""
 
     def __init__(self, list_of_callables, *, accelerator, **kwargs):
         super().__init__(list_of_callables, **kwargs)
@@ -30,8 +32,6 @@ def parse_workload_from_path_or_from_module(workload, mapping):
     @ingroup Stages
     Parse the input workload residing in workload_path.
     The "workload" dict is converted to a NetworkX graph.
-    @param workload
-    @param mapping
     """
     if isinstance(workload, str):  # load from path
         module = importlib.import_module(workload)
@@ -42,7 +42,7 @@ def parse_workload_from_path_or_from_module(workload, mapping):
         mapping = module.mapping
 
     # make a copy here to prevent later it is being changed in the following stages
-    workload_copy: dict = pickle_deepcopy(workload)  # type: ignore
+    workload_copy: dict = pickle_deepcopy(workload)
     workload = DNNWorkload(workload_copy, mapping)
     logger.info(
         f"Created workload graph with {workload.number_of_nodes()} nodes and {workload.number_of_edges()} edges."
@@ -51,8 +51,8 @@ def parse_workload_from_path_or_from_module(workload, mapping):
     return workload
 
 
+@typechecked
 class WorkloadParserStage(Stage):
-    """!  Description missing"""
 
     def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
         super().__init__(list_of_callables, **kwargs)

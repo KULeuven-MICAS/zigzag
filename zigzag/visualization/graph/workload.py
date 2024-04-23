@@ -31,13 +31,3 @@ def visualize_dnn_graph(G):
     nx.draw_networkx_labels(G, pos=pos_lb, font_color="black")
     plt.box(False)
     plt.show()
-
-
-# if __name__ == "__main__":
-#     import zigzag.classes.stages.MainInputParserStages as MainInputParserStages
-
-#     workload = "zigzag.inputs.examples.workload.resnet18"
-#     parsed_workload = MainInputParserStages.parse_workload_from_path_or_from_module(
-#         workload
-#     )
-#     visualize_dnn_graph(parsed_workload)

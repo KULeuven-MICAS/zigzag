@@ -1,12 +1,11 @@
-import re
 from typing import TypeAlias
 from typeguard import typechecked
+import math
 
-from zigzag.classes.hardware.architecture.Dimension import Dimension
+from zigzag.classes.datatypes import Dimension, MemOperandStr, MemoryOperand
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
-from math import prod
-import numpy as np
+
 
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 
@@ -52,7 +51,11 @@ class ServedMemDimensions:
         return tuple(oa_dim.name for oa_dim in self)
 
     def __eq__(self, other):
-        return isinstance(other, ServedMemDimensions) and self.data == other.data
+        return (
+            isinstance(other, ServedMemDimensions)
+            and len(self.data) == len(other.data)
+            and all([x in other.data for x in self.data])
+        )
 
     def __str__(self):
         return str(self.data)
@@ -62,6 +65,9 @@ class ServedMemDimensions:
 
     def __iter__(self):
         return iter(self.data)
+
+    def __len__(self):
+        return len(self.data)
 
     @staticmethod
     def parse_user_format(x: ServedMemDimsUserFormat) -> "ServedMemDimensions":
@@ -73,8 +79,8 @@ class ServedMemDimensions:
         return ServedMemDimensions(data)
 
 
+@typechecked
 class MemoryPort:
-    """!  Description missing"""
 
     port_id_counter = 0
 
@@ -108,7 +114,7 @@ class MemoryPort:
             self.port_id = port_id
             MemoryPort.port_id_counter = port_id + 1
 
-    def add_port_function(self, operand_level_direction: tuple[str, int, str]):
+    def add_port_function(self, operand_level_direction: tuple[MemoryOperand, int, str]):
         self.served_op_lv_dir.append(operand_level_direction)
 
     def __str__(self):
@@ -131,31 +137,24 @@ class MemoryPort:
 
 @typechecked
 class MemoryLevel:
-    """!  Description missing"""
 
     def __init__(
         self,
         memory_instance: MemoryInstance,
-        operands: tuple[str, ...],
-        mem_level_of_operands: dict,
+        operands: tuple[MemOperandStr, ...],
+        mem_level_of_operands: dict[MemoryOperand, int],
         port_alloc: tuple[dict, ...],
         served_dimensions: ServedMemDimensions,
         operational_array: OperationalArray,
         id: int,
     ):
-        """!  The class constructor
-        Initialize the memory level in the hierarchy with the physical memory instance
-        @param memory_instance:
-        @param operands:
-        @param mem_level_of_operands:
+        """! Initialize the memory level in the hierarchy with the physical memory instance
         @param port_alloc: memory port allocation (physical memory port -> functional memory port)
-        @param served_dimensions:
-        @param operational_array:
         @param id: an identifier used for reference check.
         """
         self.memory_instance = memory_instance
         self.name = self.memory_instance.name
-        self.operands = list(operands)
+        self.operands = [MemoryOperand(x) for x in operands]
         self.mem_level_of_operands = mem_level_of_operands
         self.oa_dims: list[Dimension] = operational_array.dimensions
         self.id: int = id
@@ -176,13 +175,10 @@ class MemoryLevel:
         self.read_bw = memory_instance.r_bw
         self.write_bw = memory_instance.w_bw
 
-        #  calculate memory unrolling count
-        # Todo: for memory level using diagonal dimension, only allow it to have an unrolling count of '1'.
-        self.calc_unroll_count()
-
-        #  calculate in ideal case memory's total fanout and per-data fanout
-        # Todo: not consider systolic array for now.
-        self.calc_fanout()
+        # ! not used?
+        # #  calculate in ideal case memory's total fanout and per-data fanout
+        # # Todo: not consider systolic array for now.
+        # self.total_fanout = self.calc_fanout()
 
     def __update_formatted_string(self):
         self.formatted_string = f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands},served_dimensions={self.served_dimensions})"
@@ -211,7 +207,7 @@ class MemoryLevel:
         """!  Create port object"""
         # Step 1: according to the port count of the memory instance, initialize the physical port object
         # (so far, we don't know what the port will be used for. But we do know the port's id/bw/attribute)
-        port_list = []
+        port_list: list[MemoryPort] = []
         r_port = self.memory_instance.r_port
         w_port = self.memory_instance.w_port
         rw_port = self.memory_instance.rw_port
@@ -260,9 +256,6 @@ class MemoryLevel:
     def __jsonrepr__(self):
         """!  JSON Representation of this class to save it to a json file."""
         return str(self)
-        # return {"memory_instance": self.memory_instance,
-        #         "served_dimensions": self.served_dimensions,
-        #         "served_dimensions": self.served_dimensions}
 
     # def assert_valid(self):
     #     """!  Assert if the served_dimension of this MemoryLevel is valid.
@@ -279,15 +272,16 @@ class MemoryLevel:
 
     def calc_unroll_count(self) -> int:
         """! Calculate how many times this memory instance is unrolled (duplicated) on the Operational Array"""
-        return prod(oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions)
+        return math.prod(oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions)
 
-    def calc_fanout(self) -> int:
-        """!  Calculates the total fanout of this MemoryLevel.
-        This equals the total amount of multipliers all instances in this level combined serve.
-        To calculate the number of lower-level instances a single instance of this level serves,
-        this number should be divided by the total_fanouts of all lower levels.
-        """
-        return int(np.prod([oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions]))
+    # ! not used?
+    # def calc_fanout(self) -> int:
+    #     """!  Calculates the total fanout of this MemoryLevel.
+    #     This equals the total amount of multipliers all instances in this level combined serve.
+    #     To calculate the number of lower-level instances a single instance of this level serves,
+    #     this number should be divided by the total_fanouts of all lower levels.
+    #     """
+    #     return int(math.prod([oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions]))
 
     # def check_served_dimensions(self) -> None:
     #     """!  Function that modifies the served_dimensions for this MemoryLevel if it is an empty set or 'all'.

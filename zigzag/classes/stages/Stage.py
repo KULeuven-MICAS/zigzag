@@ -1,9 +1,11 @@
+from abc import ABCMeta, abstractmethod
 from typing import Generator, Callable, List
 
 
-class Stage:
+class Stage(metaclass=ABCMeta):
     """!  Abstract superclass for Runnables"""
 
+    @abstractmethod
     def __init__(self, list_of_callables: List[Callable], **kwargs):
         """!  The class constructor
         @param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
@@ -22,6 +24,7 @@ class Stage:
                               Final callable in list_of_callables must return Stage instances that have is_leaf() == True"
             )
 
+    @abstractmethod
     def run(self) -> Generator:
         """!  Runs the runnable.
         This requires no arguments and returns a generator yielding any amount of tuple, that each have

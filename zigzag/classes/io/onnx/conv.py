@@ -1,4 +1,7 @@
 from math import ceil
+from typing import Any
+
+from typeguard import typechecked
 
 from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import (
@@ -6,6 +9,7 @@ from zigzag.classes.io.onnx.utils import (
     get_node_input_output_dimension_shapes,
     get_onnx_tensor_type,
 )
+from zigzag.classes.workload.workload_attributes import LayerAttributes
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 
@@ -14,20 +18,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class ConvParser(Parser):
     """!  Parser for ONNX Conv and QLinearConv nodes into LayerNode."""
 
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
-        """!  The class constructor
-        @param node_id
-        @param node
-        @param nodes_outputs
-        @param mapping
-        @param onxx_model
-        """
+
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
-    def run(self):
+    def run(self) -> LayerNode:
         """!  Run the parser and return the created LayerNode object"""
         layer_node = self.generate_layer_node_for_conv()
         return layer_node
@@ -43,9 +42,7 @@ class ConvParser(Parser):
             elif op_type == "QLinearConv":
                 return node.input[3]
             else:
-                raise NotImplementedError(
-                    f"Retrieving weight name for onnx node of type {op_type} is not supported."
-                )
+                raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
 
         def get_input_output_weight_data_type(node, model):
             """!  Return the data type of the input, output and weight tensors of this node.
@@ -71,18 +68,9 @@ class ConvParser(Parser):
             ia_shape,
             oa_shape,
             node_mapping,
-        ):
-            """!  Generate the necessary dictionary items required for the LayerNode creation.
-            @param kernel_shape
-            @param strides
-            @param dilations
-            @param groups
-            @param padding
-            @param padding
-            @param ia_shape
-            @param oa_shape
-            @param node_mapping
-            """
+        ) -> dict[str, Any]:
+            """!  Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a
+            given Layer Attribute, the Layer Attribute is not included in the returned dict."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation
@@ -92,9 +80,7 @@ class ConvParser(Parser):
             d["equation"] = "O[b][g][k][oy][ox]+=W[g][k][c][fy][fx]*I[b][g][c][iy][ix]"
 
             # Get dimension sizes from input parameters
-            assert (
-                ia_shape[0] == oa_shape[0]
-            ), "Batch size is different for input and output activations."
+            assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
             B = oa_shape[0]
             if B == 0:
                 B = 1
@@ -125,18 +111,15 @@ class ConvParser(Parser):
             d["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
             # d["operand_source"] =  {'W': [], 'I': []}
             d["constant_operands"] = ["W"]
-
             d["core_allocation"] = node_mapping["core_allocation"]
-            d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] = node_mapping["memory_operand_links"]
-            try:
+
+            if "temporal_ordering" in node_mapping:
+                d["temporal_ordering"] = node_mapping["temporal_ordering"]
+            if "spatial_mapping" in node_mapping:
                 d["spatial_mapping"] = node_mapping["spatial_mapping"]
-            except KeyError:  # not provided
-                d["spatial_mapping"] = None
-            try:
+            if "spatial_mapping_hint" in node_mapping:
                 d["spatial_mapping_hint"] = node_mapping["spatial_mapping_hint"]
-            except KeyError:  # not provided
-                d["spatial_mapping_hint"] = None
 
                 # Find the previous layer(s) that should be this node's parent(s)
             node_inputs = self.node.input
@@ -169,14 +152,10 @@ class ConvParser(Parser):
         padding = get_attribute_ints_with_name("pads", attrs, default=[0, 0, 0, 0])
 
         # Get the input and output activation shapes
-        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(
-            self.node, self.onnx_model
-        )
+        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
         # Get the input and output activation and weight data type (precision)
-        ia_data_type, oa_data_type, w_data_type = get_input_output_weight_data_type(
-            self.node, self.onnx_model
-        )
+        ia_data_type, oa_data_type, w_data_type = get_input_output_weight_data_type(self.node, self.onnx_model)
 
         # Get the hw mapping of this node.
         if self.node.name in self.mapping:
@@ -185,9 +164,7 @@ class ConvParser(Parser):
             try:
                 node_mapping = self.mapping["default"]
             except:
-                raise ValueError(
-                    f"There is no mapping provided for node {self.node.name}, nor a default one."
-                )
+                raise ValueError(f"There is no mapping provided for node {self.node.name}, nor a default one.")
 
         # Take a deepcopy of the mapping, otherwise it will be changed for other layers if using default
         node_mapping = pickle_deepcopy(node_mapping)
@@ -205,9 +182,10 @@ class ConvParser(Parser):
 
         node_obj = LayerNode(
             self.node_id,
-            node_attrs,
+            # NOTE we first generate the layer attributes in user input format and then parse to `LayerAttributes`. This is redundant
+            LayerAttributes.parse_user_input(node_attrs),
             node_name=self.node.name,
-            type=self.node.op_type.lower(),
+            layer_type=self.node.op_type.lower(),
         )
 
         logger.info(f"Parsed Conv node {self.node.name}")

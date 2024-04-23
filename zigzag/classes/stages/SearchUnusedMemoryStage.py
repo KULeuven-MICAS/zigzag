@@ -1,3 +1,5 @@
+from typeguard import typechecked
+from zigzag.classes.datatypes import LayerOperand
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.stages.Stage import Stage
@@ -14,6 +16,7 @@ from zigzag.classes.workload.layer_node import LayerNode
 logger = logging.getLogger(__name__)
 
 # ################### Description ####################
+# TODO clean up
 # # This stage must be processed before WorkloadStage.
 # # This stage figures out the unused memory levels for "I", "W", "O" when the size of lower memory
 # # level is enough to hold all data, considering the output data of previous layer can be directly
@@ -85,8 +88,12 @@ logger = logging.getLogger(__name__)
 #   which is a networkx graph.
 
 
+@typechecked
 class SearchUnusedMemoryStage(Stage):
     def __init__(self, list_of_callables, *, accelerator: Accelerator, workload: Workload, **kwargs):
+        """
+        # TODO needs cleanup
+        """
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.workload = workload
@@ -99,13 +106,14 @@ class SearchUnusedMemoryStage(Stage):
         self.weight_size_entire_workload = 0  # unit: bit
         self.layer_list = {}  # layer name and its corresponding id
         core = accelerator.get_core(core_id=core_id)
-        layer: LayerNode
         for id, layer in enumerate(nx.topological_sort(workload)):
+            layer: LayerNode
+
             # create record on memory level, data size of each operand for un-dummy nodes
             if not isinstance(layer, DummyNode):
                 # identify the weight operand
                 if len(layer.constant_operands) == 1:
-                    weight_operand = layer.constant_operands[0]
+                    weight_operand: LayerOperand = layer.constant_operands[0]
                 else:
                     if len(layer.constant_operands) == 0:
                         # special case when defining workload manually:
@@ -137,15 +145,13 @@ class SearchUnusedMemoryStage(Stage):
                         # special case when defining workload manually:
                         # both I and W are considered as constant operands for the first layer
                         pr_loop_keys = tuple(layer.pr_loop.keys())
-                        for (
-                            operand,
-                            related_loop,
-                        ) in layer.operand_dimensionality_order.items():
+                        act_operand = None
+                        for operand, related_loop in layer.operand_dimensionality_order.items():
                             if pr_loop_keys[0] in related_loop:
                                 act_operand = operand
                         weight_operand_temp: list = [x for x in layer.constant_operands if x != act_operand]
                         assert len(weight_operand_temp) == 1
-                        weight_operand: str = weight_operand_temp[0]
+                        weight_operand: LayerOperand = weight_operand_temp[0]
                 self.mem_update_list[f"{id}"] = [
                     {operand: -1}
                     for operand in core.mem_hierarchy_dict.keys()
@@ -154,7 +160,7 @@ class SearchUnusedMemoryStage(Stage):
                 self.each_layer_IO_data_size[f"{id}"] = [
                     {
                         layer.memory_operand_links[operand]: layer.operand_size_bit[operand]
-                        for operand in layer.memory_operand_links.keys()
+                        for operand in layer.memory_operand_links
                         if operand != weight_operand
                     }
                 ]

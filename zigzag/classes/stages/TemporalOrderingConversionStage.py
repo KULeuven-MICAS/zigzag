@@ -1,5 +1,7 @@
 import logging
 
+from typeguard import typechecked
+
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.loma.memory_allocator import MemoryAllocator
@@ -10,8 +12,8 @@ from zigzag.classes.workload.layer_node import LayerNode
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class TemporalOrderingConversionStage(Stage):
-    """!  Description missing"""
 
     def __init__(
         self,
@@ -22,9 +24,6 @@ class TemporalOrderingConversionStage(Stage):
         spatial_mapping: SpatialMappingInternal,
         **kwargs,
     ):
-        """!  The class constructor
-        Initialize the accelerator and layer attributes.
-        """
         super().__init__(list_of_callables, **kwargs)
         self.check_layer(layer)
         self.layer = layer
@@ -71,20 +70,13 @@ class TemporalOrderingConversionStage(Stage):
     def convert_user_temporal_mapping(self, user_temporal_mapping):
         spatial_mapping = self.spatial_mapping
         layer = self.layer
-        layer_dim_sizes = layer.loop_dim_size
+        layer_dim_sizes = layer.layer_dim_sizes
         for i, utm in list(enumerate(user_temporal_mapping))[::-1]:
             if utm[0] not in layer_dim_sizes:
                 logger.warning(
                     f"Supplied temporal ordering {utm} for layer {layer} thrown out because loop not present in the layer"
                 )
                 del user_temporal_mapping[i]
-
-        # I don't think this is actually necessary to check:
-        # If a dimension is fully unrolled spatially it doesn't have to be present in temporal ordering.
-        # for d in layer_dim_sizes:
-        #     if d not in [utm[0] for utm in user_temporal_mapping]:
-        #         logger.error(f"Supplied temporal ordering for layer {layer} is missing dimension {d}")
-        #         raise ValueError(f"Supplied temporal ordering for layer {layer} is missing dimension {d}")
 
         converted_mapping = []
         for dim, size in user_temporal_mapping:

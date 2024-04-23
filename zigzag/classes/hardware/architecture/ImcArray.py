@@ -1,16 +1,7 @@
-import numpy as np
-from typing import Dict
-
-if __name__ == "__main__":
-    from zigzag.classes.hardware.architecture.Dimension import Dimension
-    from DimcArray import DimcArray
-    from AimcArray import AimcArray
-    from zigzag.classes.hardware.architecture.operational_array import OperationalArray
-else:
-    from zigzag.classes.hardware.architecture.Dimension import Dimension
-    from zigzag.classes.hardware.architecture.DimcArray import DimcArray
-    from zigzag.classes.hardware.architecture.AimcArray import AimcArray
-    from zigzag.classes.hardware.architecture.operational_array import OperationalArray
+from zigzag.classes.hardware.architecture.DimcArray import DimcArray
+from zigzag.classes.hardware.architecture.AimcArray import AimcArray
+from zigzag.classes.hardware.architecture.operational_array import OperationalArray
+from zigzag.utils import json_repr_handler
 
 
 class ImcArray(OperationalArray):
@@ -42,4 +33,4 @@ class ImcArray(OperationalArray):
 
     def __jsonrepr__(self):
         # JSON Representation of this class to save it to a json file.
-        return {"operational_unit": self.unit, "dimensions": self.dimensions}
+        return json_repr_handler({"operational_unit": self.unit, "dimensions": self.dimensions})

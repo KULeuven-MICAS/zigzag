@@ -2,7 +2,9 @@ import logging
 from typing import Generator
 from typeguard import typechecked
 
+from zigzag.classes.datatypes import Dimension, LayerDim
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.classes.mapping.spatial.SpatialMapping import SpatialMapping
 from zigzag.classes.opt.spatial.UserSpatialMappingGenerator import UserSpatialMappingGenerator
 from zigzag.classes.hardware.architecture.core import Core
@@ -13,7 +15,7 @@ from zigzag.classes.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
 import copy
-from zigzag.classes.workload.layer_node import LayerNode, Relevancy
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 
 logger = logging.getLogger(__name__)
@@ -46,52 +48,25 @@ class SpatialMappingGeneratorStage(Stage):
         this is used, this usage is done automatically."""
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
-        self.check_layer(layer)
         self.layer = layer
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
         self.nb_mappings_generated = nb_mappings_generated
 
-    @staticmethod
-    def check_layer(layer: LayerNode):
-        """!Check that the layer includes:
-        - the core which it is allocated to
-        If not, a ValueError is raised.
-        If the layer in main_inputs is not set, False is returned
-        @return: True if layer is set correctly
-        """
-        if layer is None:
-            raise ValueError()
-        if layer.core_allocation is None:
-            logger.critical(f"Layer {layer} has no core allocation.")  # pylint: disable=W1203
-            raise ValueError()
-        return True
-
     def run(self) -> Generator:
         """!  Run this stage by generating user-formatted spatial mappings which are converted
         to the memory-level based spatial mapping representation.
         """
-
-        user_provided_spatial_mappings = self.layer.user_spatial_mapping
         core_id = self.layer.core_allocation
-        core: Core = self.accelerator.get_core(core_id=core_id)
-        oa_dims = core.operational_array.dimensions
 
-        # Mapping fully defined by user, don't generate new ones
-        if all(map(lambda x: x in user_provided_spatial_mappings, oa_dims)):
-            user_spatial_mappings = [user_provided_spatial_mappings]
-        else:
-            user_spatial_mapping_generator = UserSpatialMappingGenerator(
-                layer=self.layer,
-                accelerator=self.accelerator,
-                provided_mapping=user_provided_spatial_mappings,
-                enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
-                nb_mappings_generated=self.nb_mappings_generated,
-            )
-            # Get all the USMs by running the generator
-            logger.debug("User-provided spatial mappings incomplete. Auto-generating..")
-            user_spatial_mappings = [x for x in user_spatial_mapping_generator.run()]
+        user_spatial_mapping_generator = UserSpatialMappingGenerator(
+            layer=self.layer,
+            accelerator=self.accelerator,
+            enable_mix_spatial_mapping_generation=self.enable_mix_spatial_mapping_generation,
+            nb_mappings_generated=self.nb_mappings_generated,
+        )
 
+        user_spatial_mappings = [x for x in user_spatial_mapping_generator.run()]
         nb_user_spatial_mappings = len(user_spatial_mappings)
 
         for i, user_spatial_mapping in enumerate(user_spatial_mappings):
@@ -105,10 +80,9 @@ class SpatialMappingGeneratorStage(Stage):
 
             # Modify the size of lower input mem to support weight diagonal spatial unrolling (for OX/OY)
             if self.enable_weight_diagonal_mapping:
-                (
-                    input_mem_size_updated,
-                    new_accelerator,
-                ) = self.modify_innermost_input_mem_size(core_id, user_spatial_mapping)
+                input_mem_size_updated, new_accelerator = self.modify_innermost_input_mem_size(
+                    core_id, user_spatial_mapping
+                )
             if self.enable_weight_diagonal_mapping and input_mem_size_updated:
                 original_accelerator = self.accelerator
                 spatial_mapping_conversion_stage = SpatialMappingConversionStage(
@@ -131,47 +105,49 @@ class SpatialMappingGeneratorStage(Stage):
                 yield cme, (user_spatial_mapping, extra_info)
 
     def modify_innermost_input_mem_size(self, core_id: int, user_spatial_mapping: SpatialMapping):
+        """!
+        # TODO needs cleanup
+        """
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
         # to avoid the MemoryTooSmallException in loma stage.
         input_mem_size_updated = False  # flag to indicate if the accelerator is modified.
         core = self.accelerator.get_core(core_id=core_id)
         operational_array = core.operational_array
-        oa_dims = operational_array.dimensions
         memory_hierarchy = copy.deepcopy(core.memory_hierarchy)
         innermost_levels = memory_hierarchy.get_inner_memories()
         # get the link from layer op to mem op
-        layer_op_to_mem_op: dict = self.layer.memory_operand_links
+        layer_op_to_mem_op = self.layer.memory_operand_links
         # check if it is weight stationary.
         # keep the spatial loop as it was if it is not weight stationary.
-        if len(self.layer.constant_operands) > 1:
+        if self.layer.constant_operands is None or len(self.layer.constant_operands) != 1:
             return input_mem_size_updated, self.accelerator
         # get weight operand name
         const_operand = self.layer.constant_operands[0]  # weight representation
         # get activation operand name
         act_operand = [operand for operand in self.layer.input_operands if operand != const_operand][0]
         # get name of OX, OY (weight ir layer dims)
-        weight_ir_layer_dims: list = self.layer.operand_loop_dim[const_operand][Relevancy.IR]
+        weight_ir_layer_dims: list[LayerDim] = self.layer.loop_relevancy_info.get_ir_layer_dims(const_operand)
         # get the oa_dim name served by input innermost memory level
         for memory_level in innermost_levels:
             mem_ops = memory_level.operands
             if layer_op_to_mem_op[act_operand] in mem_ops:
                 act_innermost_mem_level = memory_level
-                act_served_oa_dim: set = memory_level.served_dimensions
+                act_served_oa_dims: ServedMemDimensions = memory_level.served_dimensions
         # check if act is not served in the innermost memories, or it is uti-casting for act.
         # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dim) != 1:
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:
             return input_mem_size_updated, self.accelerator
-        else:
-            act_served_oa_dim_name = list(act_served_oa_dim)[0].name
-        # get the mem scaling factor if OX, OY exist
-        mem_scaling_factor = 1
-        if act_served_oa_dim_name not in user_spatial_mapping:  # there is no sm loop
+
+        act_served_oa_dim: Dimension = next(iter((act_served_oa_dims)))
+        # get the mem scaling f#actor if OX, OY exist
+        mem_scaling_factor: int = 1
+        if act_served_oa_dim not in user_spatial_mapping:  # there is no sm loop
             pass
         else:  # there is sm loop on act served oa dim
-            act_served_oa_mapping = user_spatial_mapping[act_served_oa_dim_name]
+            act_served_oa_mapping = user_spatial_mapping[act_served_oa_dim]
             for layer_dim, layer_size in act_served_oa_mapping.items():
                 if layer_dim in weight_ir_layer_dims:
-                    mem_scaling_factor *= layer_size
+                    mem_scaling_factor *= int(layer_size)
 
         # scale the mem size
         if mem_scaling_factor == 1:
@@ -184,10 +160,14 @@ class SpatialMappingGeneratorStage(Stage):
             new_mh_name = mh_name + "-supporting-diagonal-map"
             new_memory_hierarchy = MemoryHierarchy(operational_array, new_mh_name)
             # Add memories to the new memory hierarchy with the correct attributes
-            for curr_mem_level, memory_level in enumerate(memory_hierarchy.mem_level_list):
+            for memory_level in memory_hierarchy.mem_level_list:
                 memory_instance = memory_level.memory_instance
                 if memory_level == act_innermost_mem_level:
-                    memory_instance.size *= mem_scaling_factor  # scale here. For others, keep them unchanged.
+                    # scale here. For others, keep them unchanged.
+                    prev_size = memory_instance.size
+                    new_size = memory_instance.size * mem_scaling_factor
+                    memory_instance.update_size(new_size)
+                    logger.info("Updated %s size from %i to %i", memory_instance, prev_size, new_size)
                 operands = tuple(memory_level.operands)
                 port_alloc = memory_level.port_alloc_raw
                 served_dimensions_vec = memory_level.served_dimensions_vec
@@ -214,7 +194,7 @@ class SpatialMappingGeneratorStage(Stage):
                 id=new_id,
                 operational_array=operational_array,
                 memory_hierarchy=new_memory_hierarchy,
-                dataflows=new_dataflows,  # type: ignore
+                dataflows=new_dataflows,
             )
 
             # Create the new accelerator

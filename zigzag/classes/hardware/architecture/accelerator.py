@@ -2,6 +2,7 @@ from typing import Set
 
 from typeguard import typechecked
 from zigzag.classes.hardware.architecture.core import Core
+from zigzag.utils import json_repr_handler
 
 
 @typechecked
@@ -10,7 +11,7 @@ class Accelerator:
     This Global Buffer sits above the cores, and can optionally be disabled.
     """
 
-    def __init__(self, name, core_set: Set[Core]):
+    def __init__(self, name, core_set: set[Core]):
         self.name = name
         self.cores = sorted([core for core in core_set], key=lambda core: core.id)
 
@@ -22,7 +23,7 @@ class Accelerator:
 
     def __jsonrepr__(self):
         """!  JSON representation used for saving this object to a json file."""
-        return {"name": self.name, "cores": self.cores}
+        return json_repr_handler({"name": self.name, "cores": self.cores})
 
     def get_core(self, core_id: int | str) -> Core:
         """!  Return the core with id 'core_id'.

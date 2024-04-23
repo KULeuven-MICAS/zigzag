@@ -1,6 +1,7 @@
 from copy import deepcopy
 
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
+from zigzag.classes.datatypes import LayerOperand, MemoryOperand
 
 
 def create_printing_block(row, col):
@@ -19,7 +20,15 @@ def print_printing_block(printing_block):
         print("".join(printing_block[i]))
 
 
-def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
+def print_good_tm_format(
+    tm: dict[LayerOperand, list],
+    mem_name: dict[LayerOperand, list[str]],
+    cme_name: str,
+    mem_op_to_layer_op: dict[MemoryOperand, LayerOperand],
+):
+    """!
+    # TODO requires cleanup, documentation
+    """
     op_list = list(tm.keys())
     tm_list = [tp for li in tm[op_list[0]] for tp in li]
 
@@ -39,8 +48,8 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
     dash = "*" * int((tot_col - len(title)) / 2)
     tm_block = modify_printing_block(tm_block, 1, 0, dash + title + dash)
     i = 2
-    for op in mem_op_to_layer_op.keys():
-        tm_block = modify_printing_block(tm_block, i, 1, f"{op} ({mem_op_to_layer_op[op]}): " + str(tm[op]))
+    for mem_op, layer_op in mem_op_to_layer_op.items():
+        tm_block = modify_printing_block(tm_block, i, 1, f"{mem_op} ({layer_op.name}): " + str(tm[layer_op]))
         i += 1
     tm_block = modify_printing_block(tm_block, 6, 0, "-" * tot_col)
     tm_block = modify_printing_block(tm_block, 7, 1, "Temporal Loops")
@@ -58,7 +67,7 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
     # print mem name to each level
     for idx, operand in enumerate(op_list):
         column_position = tot_col_cut + idx * interval
-        tm_block = modify_printing_block(tm_block, 7, column_position, operand)
+        tm_block = modify_printing_block(tm_block, 7, column_position, operand.name)
         i = 0
         for level, lv_li in enumerate(tm[operand]):
             for _ in lv_li:
@@ -75,10 +84,10 @@ def print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op):
 
 
 def print_mapping(cme: CostModelEvaluation):
-    tm = cme.temporal_mapping.mapping_dic_stationary
-    mem_op_to_layer_op = cme.mem_op_to_layer_op
-    layer_op_to_mem_op = cme.layer_op_to_mem_op
-    mem_name = {}
+    tm: dict[LayerOperand, list] = cme.temporal_mapping.mapping_dic_stationary
+    layer_op_to_mem_op = cme.memory_operand_links
+    mem_op_to_layer_op = {mem_op: layer_op for layer_op, mem_op in cme.memory_operand_links.items()}
+    mem_name: dict[LayerOperand, list[str]] = {}
     for mem_op, mems_all_levels in cme.accelerator.cores[0].mem_hierarchy_dict.items():
         layer_op = mem_op_to_layer_op[mem_op]
         mem_name[layer_op] = []
@@ -88,7 +97,7 @@ def print_mapping(cme: CostModelEvaluation):
             mem_name[layer_op]
         ), f"Temporal mapping level {len(tm[layer_op])} and memory hierarchy level {len(mem_name[layer_op])} of operand {layer_op} do not match."
     cme_name = str(cme)
-    print_good_tm_format(tm, mem_name, cme_name, layer_op_to_mem_op)
+    print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op)
 
 
 if __name__ == "__main__":

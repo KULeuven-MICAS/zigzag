@@ -45,8 +45,9 @@ class SalsaState:
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
         ordering,
-        opt_criterion_name,
+        opt_criterion_name: str,
     ):
+        assert opt_criterion_name in ("energy", "latency")  # TODO make this an enum
         self.ordering = ordering
         self.accelerator = accelerator
         self.layer = layer
@@ -56,16 +57,13 @@ class SalsaState:
 
         allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
 
-        # allocator = MemoryAllocator(layer=self.layer,
-        #                                 ordering=ordering,
-        #                                 spatial_mapping=self.spatial_mapping)
-
         self.temporal_mapping = allocator.run()  # allocate this ordering to the memories
 
         self.cme = CostModelEvaluation(
             accelerator=self.accelerator,
             layer=self.layer,
             spatial_mapping=self.spatial_mapping,
+            spatial_mapping_int=self.spatial_mapping,  # TODO the int version is missing?
             temporal_mapping=self.temporal_mapping,
         )
 
@@ -74,8 +72,6 @@ class SalsaState:
             self.opt_criterion = self.cme.energy_total
         elif self.opt_criterion_name == "latency":
             self.opt_criterion = self.cme.latency_total0
-        else:
-            self.opt_criterion = None
 
     def swap(self, i, j):
         """!  Swap between the element at positon i and j in the ordering

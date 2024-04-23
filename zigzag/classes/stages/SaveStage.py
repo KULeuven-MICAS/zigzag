@@ -1,6 +1,8 @@
 from typing import Generator, Any, Tuple
-from zigzag.classes.stages.Stage import Stage
+
+from typeguard import typechecked
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
+from zigzag.classes.stages.Stage import Stage
 import os
 import pickle
 import json
@@ -10,19 +12,22 @@ import numpy as np
 
 import logging
 
+from zigzag.utils import json_repr_handler
+
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class CompleteSaveStage(Stage):
     """!  Class that passes through all results yielded by substages, but saves the results as a json list to a file
     at the end of the iteration.
     """
 
-    def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
+    def __init__(self, list_of_callables, *, dump_filename_pattern: str, **kwargs):
         """!  The class constructor
         @param list_of_callables: see Stage
         @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables)
+        in kwargs (thus supplied by higher level runnables). Must contain `?`
         @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
         """
         super().__init__(list_of_callables, **kwargs)
@@ -36,7 +41,7 @@ class CompleteSaveStage(Stage):
         for id, (cme, extra_info) in enumerate(substage.run()):
             cme: CostModelEvaluation
             # filename = self.dump_filename_pattern.format(datetime=datetime.now().isoformat().replace(":", "-"))
-            if type(cme.layer) == list:
+            if isinstance(cme.layer, list):
                 filename = self.dump_filename_pattern.replace("?", "overall_complete")
             else:
                 filename = self.dump_filename_pattern.replace("?", f"{cme.layer}_complete")
@@ -51,7 +56,7 @@ class CompleteSaveStage(Stage):
     def save_to_json(self, obj, filename):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w") as fp:
-            json.dump(obj, fp, default=self.complexHandler, indent=4)
+            json.dump(obj, fp, default=json_repr_handler, indent=4)
 
     def save_to_yaml(self, jsonname, yamlname):
         os.makedirs(os.path.dirname(yamlname), exist_ok=True)
@@ -60,19 +65,8 @@ class CompleteSaveStage(Stage):
         with open(yamlname, "w") as fp:
             yaml.dump(res, fp, Dumper=yaml.SafeDumper)
 
-    @staticmethod
-    def complexHandler(obj):
-        # print(type(obj))
-        if isinstance(obj, set):
-            return list(obj)
-        if isinstance(obj, np.int32):
-            return int(obj)
-        if hasattr(obj, "__jsonrepr__"):
-            return obj.__jsonrepr__()
-        else:
-            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __jsonrepr__ method.")
 
-
+@typechecked
 class SimpleSaveStage(Stage):
     """!  Class that passes through results yielded by substages, but saves the results as a json list to a file
     at the end of the iteration.
@@ -110,19 +104,11 @@ class SimpleSaveStage(Stage):
     def save_to_json(self, obj, filename):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w") as fp:
-            json.dump(obj, fp, default=self.complexHandler, indent=4)
 
-    @staticmethod
-    def complexHandler(obj):
-        # print(type(obj))
-        if isinstance(obj, set):
-            return list(obj)
-        if isinstance(obj, np.int32):
-            return int(obj)
-        if hasattr(obj, "__simplejsonrepr__"):
-            return obj.__simplejsonrepr__()
-        else:
-            raise TypeError(f"Object of type {type(obj)} is not serializable. Create a __simplejsonrepr__ method.")
+            def handler(obj):
+                return json_repr_handler(obj, simple=True)
+
+            json.dump(obj, fp, default=handler, indent=4)
 
 
 class PickleSaveStage(Stage):

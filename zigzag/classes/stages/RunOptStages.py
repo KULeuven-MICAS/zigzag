@@ -1,4 +1,6 @@
 from typing import Generator, Tuple, Any
+
+from typeguard import typechecked
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
@@ -8,6 +10,7 @@ import os
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class RemoveExtraInfoStage(Stage):
     """!  Strips extra info for subcallables to save memory"""
 
@@ -26,6 +29,7 @@ class RemoveExtraInfoStage(Stage):
             yield cme, None
 
 
+@typechecked
 class CacheBeforeYieldStage(Stage):
     """!  Caches results in a list and then yields them.
     This breaks the yield flow from top to bottom.
@@ -49,6 +53,7 @@ class CacheBeforeYieldStage(Stage):
             yield ty
 
 
+@typechecked
 class SkipIfDumpExistsStage(Stage):
     """!  Check if the output file is already generated, skip the run if so."""
 
@@ -88,13 +93,15 @@ def get_threadpool(nb_threads_if_non_existent):
 
 def close_threadpool():
     global threadpool
-    threadpool.close()
+    if threadpool is not None:
+        threadpool.close()
     threadpool = None
 
 
 def terminate_threadpool():
     global threadpool
-    threadpool.terminate()
+    if threadpool is not None:
+        threadpool.terminate()
     threadpool = None
 
 
@@ -103,6 +110,7 @@ def raise_exception(e):
     raise e
 
 
+@typechecked
 class MultiProcessingSpawnStage(Stage):
     """!  Multiprocessing support stage.
 
@@ -148,6 +156,7 @@ class MultiProcessingSpawnStage(Stage):
         yield None, None
 
 
+@typechecked
 class MultiProcessingGatherStage(Stage):
     """!  Multiprocessing support stage.
 

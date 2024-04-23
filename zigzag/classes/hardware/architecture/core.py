@@ -1,7 +1,11 @@
+from zigzag.classes.datatypes import MemoryOperand
 from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
 from zigzag.classes.hardware.architecture.operational_array import OperationalArray
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
 import networkx as nx
+
+from zigzag.utils import json_repr_handler
 
 
 class Core:
@@ -38,7 +42,7 @@ class Core:
 
     # JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
-        return self.__dict__
+        return json_repr_handler(self.__dict__)
 
     def __hash__(self) -> int:
         return hash(self.id)
@@ -69,12 +73,12 @@ class Core:
 
     def generate_memory_hierarchy_dict(self):
         mem_operands = self.memory_hierarchy.nb_levels.keys()
-        mem_hierarchy_dict = {}
-        mem_size_dict = {}
-        mem_r_bw_dict = {}
-        mem_w_bw_dict = {}
-        mem_r_bw_min_dict = {}
-        mem_w_bw_min_dict = {}
+        mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
+        mem_size_dict: dict[MemoryOperand, list[int]] = {}
+        mem_r_bw_dict: dict[MemoryOperand, list[int]] = {}
+        mem_w_bw_dict: dict[MemoryOperand, list[int]] = {}
+        mem_r_bw_min_dict: dict[MemoryOperand, list[int]] = {}
+        mem_w_bw_min_dict: dict[MemoryOperand, list[int]] = {}
         for mem_op in mem_operands:
             mem_hierarchy_dict[mem_op] = [
                 node for node in nx.topological_sort(self.memory_hierarchy) if mem_op in node.operands
@@ -113,7 +117,7 @@ class Core:
 
     def generate_memory_sharing_list(self):
         """!  Generates a list of dictionary that indicates which operand's which memory levels are sharing the same physical memory"""
-        memory_sharing_list = []
+        memory_sharing_list: list[dict[MemoryOperand, int]] = []
         for mem_lv in self.mem_hierarchy_dict.values():
             for mem in mem_lv:
                 operand_mem_share = mem.mem_level_of_operands
@@ -137,7 +141,7 @@ class Core:
     def get_memory_bw_min_dict(self):
         return self.mem_r_bw_min_dict, self.mem_w_bw_min_dict
 
-    def get_memory_sharing_list(self):
+    def get_memory_sharing_list(self) -> list[dict[MemoryOperand, int]]:
         return self.mem_sharing_list
 
     def get_memory_level(self, mem_op: str, mem_lv: int):

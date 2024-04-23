@@ -1,12 +1,13 @@
 import logging
 
-from typing import Generator, Callable, List, Tuple, Any
+from typeguard import typechecked
+
 from zigzag.classes.stages.Stage import Stage
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class GeneralParameterIteratorStage(Stage):
     """!  General iterator over any parameter whose values can be set from a predetermined list"""
 
@@ -52,26 +53,3 @@ class GeneralParameterIteratorStage(Stage):
 
     def run(self):
         return self.recursive_run(self.param_iters, self.kwargs)
-
-
-# if __name__ == "__main__":
-
-#     class Dummy(Stage):
-#         def is_leaf(self):
-#             return True
-
-#         def run(self):
-#             yield None, self.kwargs
-
-#     from zigzag.classes.stages.Stage import MainStage
-
-#     DUT = MainStage(
-#         [GeneralParameterIteratorStage, Dummy],
-#         general_parameter_iterations={
-#             ("arg1.1", "arg1.2"): ((111, 121), (112, 122), (113, 123)),
-#             "arg2": (21, 22, 23, 24, 25),
-#             "arg3": (31, 32),
-#         },
-#     )
-#     for l in DUT.run():
-#         print(l)

@@ -1,3 +1,9 @@
+"""
+This file includes:
+  . class LogicUnit (defines the energy/area/delay cost of multipliers, adders, regs)
+  . class ImcArray (provides initialization function, used for class DimcArray and AimcArray)
+"""
+
 import math
 
 if __name__ == "__main__" or __name__ == "imc_unit":
@@ -5,12 +11,6 @@ if __name__ == "__main__" or __name__ == "imc_unit":
     from get_cacti_cost import get_cacti_cost
 else:
     from zigzag.classes.hardware.architecture.get_cacti_cost import get_cacti_cost
-
-# ##############################################################################################################
-# This file includes:
-#   . class LogicUnit (defines the energy/area/delay cost of multipliers, adders, regs)
-#   . class ImcArray (provides initialization function, used for class DimcArray and AimcArray)
-# ##############################################################################################################
 
 
 class LogicUnit:
@@ -32,9 +32,9 @@ class LogicUnit:
             "dff_dly":  0.0478*3.4,     # unit: ns
         }
         """
-        """check input firstly"""
+        # check input firstly
         self.check_tech_param(tech_param)
-        """initialization"""
+        # initialization
         self.tech_param = tech_param
         self.tech_param["wl_cap"] = (
             tech_param["nd2_cap"] / 2
@@ -63,8 +63,8 @@ class LogicUnit:
                 raise Exception(f"[LogicUnit] Incorrect input, value [{tech_param[a]}] of param [{a}] is not positive.")
 
     def get_1b_adder_energy(self):
-        """energy of 1b full adder"""
-        """Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate"""
+        """energy of 1b full adder
+        Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate"""
         adder_cap = 3 * self.tech_param["nd2_cap"] + 2 * self.tech_param["xor2_cap"]
         return adder_cap * (self.tech_param["vdd"] ** 2)  # unit: pJ
 
@@ -74,9 +74,9 @@ class LogicUnit:
         return adder_cap * (self.tech_param["vdd"] ** 2)  # unit: pJ
 
     def get_1b_multiplier_energy(self):
-        """energy of 1b multiplier"""
-        """1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate"""
-        """why 0.5: considering weight stays constant during multiplication"""
+        """energy of 1b multiplier
+        1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate
+        why 0.5: considering weight stays constant during multiplication"""
         return 0.5 * self.tech_param["nd2_cap"] * (self.tech_param["vdd"] ** 2)  # unit: pJ
 
     def get_1b_reg_energy(self):
@@ -84,14 +84,14 @@ class LogicUnit:
         return self.tech_param["dff_cap"] * (self.tech_param["vdd"] ** 2)  # unit: pJ
 
     def get_1b_adder_area(self):
-        """area of 1b full adder"""
-        """Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate"""
+        """area of 1b full adder
+        Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate"""
         adder_area = 3 * self.tech_param["nd2_area"] + 2 * self.tech_param["xor2_area"]
         return adder_area
 
     def get_1b_multiplier_area(self):
-        """area of 1b multiplier"""
-        """1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate"""
+        """area of 1b multiplier
+        1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate"""
         return self.tech_param["nd2_area"]
 
     def get_1b_reg_area(self):
@@ -114,13 +114,13 @@ class LogicUnit:
         return adder_dly
 
     def get_1b_multiplier_dly(self):
-        """delay of 1b multiplier"""
-        """1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate"""
+        """delay of 1b multiplier
+        1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate"""
         return self.tech_param["nd2_dly"]
 
     def get_1b_reg_dly(self):
-        """delay of 1b DFF"""
-        """why 0? Compared to others, it's negligible"""
+        """delay of 1b DFF
+        why 0? Compared to others, it's negligible"""
         return 0
 
 
@@ -130,7 +130,7 @@ class ImcUnit:
     def __init__(self, tech_param: dict, hd_param: dict, dimensions: dict):
         """check input firstly"""
         self.check_input(hd_param, dimensions)
-        """initialization"""
+        # initialization
         self.hd_param = hd_param
         self.dimensions = dimensions
         self.wl_dim = hd_param[
@@ -213,9 +213,8 @@ class ImcUnit:
                 )
 
     def get_single_cell_array_cost_from_cacti(self, tech_node, wl_dim_size, bl_dim_size, group_depth, w_pres):
-        """get the area, energy cost of a single macro (cell array) using CACTI"""
-        """this function is called when cacti is required for cost estimation"""
-        """
+        """get the area, energy cost of a single macro (cell array) using CACTI
+        this function is called when cacti is required for cost estimation
         @param tech_node:   the technology node (e.g. 0.028, 0.032, 0.022 ... unit: um)
         @param wl_dim_size: the size of dimension where wordline is.
         @param bl_dim_size: the size of dimension where bitline (adder tree) is.

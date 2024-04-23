@@ -1,12 +1,13 @@
+from typeguard import typechecked
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.classes.opt.temporal.loma.engine import LomaEngine
 from zigzag.classes.workload.layer_node import LayerNode
-from typing import Generator, Callable, List, Tuple, Any
+from typing import Callable
 from zigzag.classes.stages.Stage import Stage
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
 
+@typechecked
 class LomaStage(Stage):
     """!  Class that iterates through the different temporal mappings generated through
     the loop order based memory allocation (loma) engine
@@ -14,7 +15,7 @@ class LomaStage(Stage):
 
     def __init__(
         self,
-        list_of_callables: List[Callable],
+        list_of_callables: list[Callable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,

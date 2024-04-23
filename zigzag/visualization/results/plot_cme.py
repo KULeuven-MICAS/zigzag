@@ -1,11 +1,9 @@
-from typing import Dict, List, Tuple
-from typing import TYPE_CHECKING
 from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import numpy as np
-from zigzag.classes.mapping.combined_mapping import FourWayDataMoving
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
+from zigzag.classes.mapping.data_movement import FourWayDataMoving
 
 # MPL FONT SIZES
 SMALLEST_SIZE = 10
@@ -24,7 +22,7 @@ plt.rc("figure", titlesize=MEDIUM_SIZE)  # fontsize of the figure title
 
 
 def bar_plot_cost_model_evaluations_total(
-    cmes: List[CostModelEvaluation],
+    cmes: list[CostModelEvaluation],
     labels,
     save_path: str = "plot.png",
 ):
@@ -34,9 +32,7 @@ def bar_plot_cost_model_evaluations_total(
         cmes (List[CostModelEvaluation]): List of CostModelEvaluations to compare.
         save_path (str): Path to save the plot to.
     """
-    assert len(cmes) == len(
-        labels
-    ), "Please match a label for each cost model evaluation."
+    assert len(cmes) == len(labels), "Please match a label for each cost model evaluation."
     energies = [cme.energy_total for cme in cmes]
     latencies = [cme.latency_total2 for cme in cmes]
 
@@ -50,12 +46,8 @@ def bar_plot_cost_model_evaluations_total(
     color_energy = colormap.colors[0]  # type: ignore
     color_latency = colormap.colors[1]  # type: ignore
 
-    h1 = rects1 = ax1.bar(
-        x - width / 2, energies, width, label="Energy", color=color_energy
-    )
-    h2 = rects2 = ax2.bar(
-        x + width / 2, latencies, width, label="Latency", color=color_latency
-    )
+    h1 = rects1 = ax1.bar(x - width / 2, energies, width, label="Energy", color=color_energy)
+    h2 = rects2 = ax2.bar(x + width / 2, latencies, width, label="Latency", color=color_latency)
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax1.set_ylabel("Energy [pJ]", fontsize=15)
@@ -82,85 +74,76 @@ def bar_plot_cost_model_evaluations_total(
     plt.savefig(save_path)
 
 
-def bar_plot_cost_model_evaluations_breakdown(
-    cmes: List[CostModelEvaluation], save_path: str, xtick_rotation=90
-):
+def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluation], save_path: str, xtick_rotation=90):
     memory_word_access_summed = {
-        d: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0)))
-        for d in range(len(cmes))
+        idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
     }
-    mac_costs = defaultdict(lambda: 0)
+    mac_costs = defaultdict(lambda: 0.0)
     memory_instances = {}
-    la_break_down = {
-        d: {
+    la_break_down: dict[int, dict[str, float]] = {
+        idx: {
             "Ideal computation": 0,
             "Spatial stall": 0,
             "Temporal stall": 0,
             "Data loading": 0,
             "Data off-loading": 0,
         }
-        for d in range(len(cmes))
+        for idx in range(len(cmes))
     }
-    la_tot = {d: 0 for d in range(len(cmes))}
+    la_tot: dict[int, float] = {idx: 0 for idx in range(len(cmes))}
 
-    for d, cme in enumerate(cmes):
-        mh = cme.accelerator.get_core(cme.layer.core_allocation).memory_hierarchy
-        mac_costs[d] = cme.MAC_energy
-        la_break_down[d]["Ideal computation"] = cme.ideal_cycle
-        la_break_down[d]["Spatial stall"] = cme.ideal_temporal_cycle - cme.ideal_cycle
-        la_break_down[d]["Temporal stall"] = (
-            cme.latency_total0 - cme.ideal_temporal_cycle
-        )
-        la_break_down[d]["Data loading"] = cme.latency_total1 - cme.latency_total0
-        la_break_down[d]["Data off-loading"] = cme.latency_total2 - cme.latency_total1
-        la_tot[d] = cme.latency_total2
+    for idx, cme in enumerate(cmes):
+        mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation).memory_hierarchy
+        mac_costs[idx] = cme.MAC_energy
+        la_break_down[idx]["Ideal computation"] = cme.ideal_cycle
+        la_break_down[idx]["Spatial stall"] = cme.ideal_temporal_cycle - cme.ideal_cycle
+        la_break_down[idx]["Temporal stall"] = cme.latency_total0 - cme.ideal_temporal_cycle
+        la_break_down[idx]["Data loading"] = cme.latency_total1 - cme.latency_total0
+        la_break_down[idx]["Data off-loading"] = cme.latency_total2 - cme.latency_total1
+        la_tot[idx] = cme.latency_total2
         for operand in cme.mem_energy_breakdown_further:
             mem_op = cme.layer.memory_operand_links[operand]
-            operand_memory_levels = mh.get_memory_levels(mem_op)
+            operand_memory_levels = mem_hierarchy.get_memory_levels(mem_op)
             for j in range(len(cme.mem_energy_breakdown_further[operand])):
                 mem = operand_memory_levels[j].name
                 memory_instances[mem] = operand_memory_levels[j]
-                memory_word_access_summed[d][operand][
-                    mem
-                ] += cme.mem_energy_breakdown_further[operand][j]
+                memory_word_access_summed[idx][operand][mem] += cme.mem_energy_breakdown_further[operand][j]
 
     all_mems = set()
     for v in memory_word_access_summed.values():
         for vv in v.values():
             for vvv in vv.keys():
                 all_mems.add(vvv)
-    all_mems = sorted(
-        list(all_mems), key=lambda m: memory_instances[m].memory_instance.size
-    )
+    all_mems = sorted(list(all_mems), key=lambda m: memory_instances[m].memory_instance.size)
     all_ops = set()
     for v in memory_word_access_summed.values():
         for vv in v.keys():
             all_ops.add(vv)
     all_ops = sorted(list(all_ops))
 
-    """ plotting start """
-    """ Energy part """
+    # plotting start
+    # Energy part
 
     fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(10, 8))
     hues = np.linspace(0, 1, len(all_ops) + 1)[:-1]
     hatches = ["////", "\\\\\\\\", "xxxx", "++++"]
     x = 0
     xticks = {}
-    for d, cme in enumerate(cmes):
+    for idx, cme in enumerate(cmes):
         total_energy = 0
         startx_of_layer = x
         # mac
-        ax1.bar([x], [mac_costs[d]], width=1, bottom=0, facecolor="k")
-        total_energy += mac_costs[d]
-        highest_bar = mac_costs[d]
+        ax1.bar([x], [mac_costs[idx]], width=1, bottom=0, facecolor="k")
+        total_energy += mac_costs[idx]
+        highest_bar = mac_costs[idx]
         xticks[x] = "MAC"
         x += 1
         # mems
         for mem in all_mems:
             bottom = 0
             for op_i, operand in enumerate(all_ops):
-                for dir_i, dir in enumerate(memory_word_access_summed[d][operand][mem]):
-                    height = memory_word_access_summed[d][operand][mem][dir]
+                for dir_i, dir in enumerate(memory_word_access_summed[idx][operand][mem]):
+                    height = memory_word_access_summed[idx][operand][mem][dir]
                     ax1.bar(
                         [x],
                         [height],
@@ -175,7 +158,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             total_energy += bottom
             x += 1
             highest_bar = max(bottom, highest_bar)
-        x
+
         ax1.text(
             x * 0.5 + startx_of_layer * 0.5,
             1.05 * highest_bar,
@@ -189,7 +172,7 @@ def bar_plot_cost_model_evaluations_breakdown(
     for op, h in zip(all_ops, hues):
         ax1.bar(0, 0, width=1, facecolor=hsv_to_rgb((h, 1, 1)), label=op)
 
-    for dir_i, dir in enumerate(memory_word_access_summed[d][operand][mem]):
+    for dir_i, dir in enumerate(memory_word_access_summed[idx][operand][mem]):
         ax1.bar(
             [0],
             [0],
@@ -206,7 +189,7 @@ def bar_plot_cost_model_evaluations_breakdown(
 
     ax1.set_ylabel("Energy (pJ)", fontsize=15)
 
-    """ Latency part """
+    # Latency part
     x2 = list(range(len(la_break_down)))
 
     y2 = {ky: [] for ky in la_break_down[0].keys()}

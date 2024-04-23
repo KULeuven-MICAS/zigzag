@@ -34,13 +34,6 @@ class CactiParser:
         mem_pool_path=MEM_POOL_PATH,
     ):
         """!  This function checks whether the provided memory configuration was already used in the past.
-        @param mem_type
-        @param size
-        @param r_bw
-        @param r_port
-        @param w_port
-        @param rw_port
-        @param bank
         @param mem_pool_path  Path to cached cacti simulated memories
         @return True          The requested memory item has been simulated once.
         @return False         The requested memory item has not been simualted so far.
@@ -86,18 +79,9 @@ class CactiParser:
         cacti_top_path=CACTI_TOP_PATH,
     ):
         """!  This function simulates a new item by calling CACTI7 based on the provided parameters
-        @param mem_type
-        @param size
-        @param r_bw
-        @param r_port
-        @param w_port
-        @param rw_port
-        @param bank
         @param mem_pool_path  Path to cached cacti simulated memories
         @param cacti_top_path Path to cacti python script to extract costs
         """
-        # print("No match in Cacti memory pool found!", size, r_bw, r_port, w_port, rw_port, bank)
-        # os.chdir(f'{CACTI_PATH}/cacti-master/')
 
         p = subprocess.call(
             [
@@ -142,13 +126,6 @@ class CactiParser:
     ):
         """!  This functions checks first if the memory with the provided parameters was already simulated once.
         In case it hasn't been simulated, then it will create a new memory item based on the provided parameters.
-        @param mem_type
-        @param size
-        @param r_bw
-        @param r_port
-        @param w_port
-        @param rw_port
-        @param bank
         @param mem_pool_path  Path to cached cacti simulated memories
         @param cacti_top_path Path to cacti python script to extract costs
         """

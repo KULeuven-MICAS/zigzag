@@ -32,6 +32,8 @@ import numpy as np
 import logging
 import random
 
+from typeguard import typechecked
+
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
@@ -43,22 +45,19 @@ from zigzag.classes.opt.temporal.salsa.state import SalsaState
 logger = logging.getLogger(__name__)
 
 
-## Class that handles optimization of temporal mapping given a:
-# - layer
-# - spatial mapping
-# - memory hierarchy
-# - number of iterations
-# - start temperature
-# This optimization is carried out through simulated annealing loop order based.
-# Each loop is broken down to the smallest possible part (prime factors), then a runtime
-# estimation is performed to choose the fastest engine to use (LOMA or SALSA).
+@typechecked
 class SalsaEngine:
+    """!  Class that handles optimization of temporal mapping given a:
+    - layer
+    - spatial mapping
+    - memory hierarchy
+    - number of iterations
+    - start temperature
+    This optimization is carried out through simulated annealing loop order based.
+    Each loop is broken down to the smallest possible part (prime factors), then a runtime estimation is performed to choose the fastest engine to use (LOMA or SALSA).
+    # TODO cleanup
+    """
 
-    ## The class constructor
-    # @param acceleartor
-    # @param layer
-    # @param spatial mapping
-    # @param kwargs
     def __init__(
         self,
         *,
@@ -67,16 +66,14 @@ class SalsaEngine:
         spatial_mapping: SpatialMappingInternal,
         **kwargs,
     ):
-
-        # iteration_number, start_temperature, opt_criterion_name
-
-        # Initialize the engine with the given:
-        # - LayerNode
-        # - SpatialMapping
-        # - Accelerator
-        # - Number of iterations
-        # - Start temperature
-        # The memory hierarchy from the correct core is extracted from the accelerator.
+        """! Initialize the engine with the given:
+        - LayerNode
+        - SpatialMapping
+        - Accelerator
+        - Number of iterations
+        - Start temperature
+        The memory hierarchy from the correct core is extracted from the accelerator.
+        """
 
         # Hardware and mapping related inputs
         self.accelerator = accelerator
@@ -90,15 +87,15 @@ class SalsaEngine:
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.lpf_limit = kwargs.get("loma_lpf_limit", 4)
 
-    ## Call the necessary methods, start the processes and collect the best temporal mapping found during the run.
     def run(self, cme_queue):
+        """! Call the necessary methods, start the processes and collect the best temporal mapping found during the run."""
         self.cme_queue = cme_queue
         self.get_temporal_loops()
         self.get_prime_factors()
         self.run_simulated_annealing_opt(self.cme_queue)
 
-    ## Run a simulated annealing optimiation on the loop ordering using a loma memory allocation strategy.
     def run_simulated_annealing_opt(self, cme_queue):
+        """! Run a simulated annealing optimization on the loop ordering using a loma memory allocation strategy."""
         temperature = self.start_temperature
         start_ordering = self.temporal_mapping_lpf  # tmo stands for temporal mapping ordering
 
@@ -140,9 +137,8 @@ class SalsaEngine:
             next_state = current_state.swap(i, j)
 
             x = np.random.rand()  # x belongs to [0, 1]
-            p = np.exp(
-                ((current_state.opt_criterion / next_state.opt_criterion) - 1) / temperature
-            )  # probability of accepting the next state
+            # probability of accepting the next state
+            p = np.exp(((current_state.opt_criterion / next_state.opt_criterion) - 1) / temperature)
 
             if x < p:
                 # Replace the current state by the next state and compare the energy with the best state
@@ -153,9 +149,9 @@ class SalsaEngine:
 
         cme_queue.put(best_state.cme)
 
-    ## Get all loops that have to be temporally scheduled given layer and spatial mapping.
     def get_temporal_loops(self):
-        temporal_loop_dim_size = self.layer.loop_dim_size.copy()  # init with all loop sizes
+        """! Get all loops that have to be temporally scheduled given layer and spatial mapping."""
+        temporal_loop_dim_size = self.layer.layer_dim_sizes.copy()  # init with all loop sizes
         for spatial_loop in self.spatial_mapping.spatial_loop_dim_size:
             (spatial_loop_dim, spatial_loop_size) = spatial_loop
             # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,

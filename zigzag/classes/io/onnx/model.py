@@ -1,4 +1,5 @@
-from onnx import ModelProto  # type: ignore
+from onnx import ModelProto
+from typeguard import typechecked  # type: ignore
 
 from zigzag.classes.io.onnx.default import DefaultNodeParser
 from zigzag.classes.io.onnx.gemm import GemmParser
@@ -17,14 +18,12 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class ONNXModelParser:
     """!  Parse the ONNX model into a workload."""
 
     def __init__(self, onnx_model, mapping_path) -> None:
-        """!  The class constructor
-        @param onxx_model
-        @param mapping_path
-        """
+
         # Sanity checks on given onnx_model
         if isinstance(onnx_model, str):
             self.onnx_model_path = onnx_model
@@ -98,17 +97,11 @@ class ONNXModelParser:
             nodes_outputs[node_id] = node.output
 
             if node.op_type in ["QLinearConv", "Conv"]:
-                parser = ConvParser(
-                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
-                )
+                parser = ConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             elif node.op_type in ["MatMul"]:
-                parser = MatMulParser(
-                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
-                )
+                parser = MatMulParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             elif node.op_type in ["Gemm"]:
-                parser = GemmParser(
-                    node_id, node, nodes_outputs, self.mapping, self.onnx_model
-                )
+                parser = GemmParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
             else:  # it is not a convolutional node, so create a DummyNode
                 parser = DefaultNodeParser(node_id, node, nodes_outputs)
             node_obj = parser.run()

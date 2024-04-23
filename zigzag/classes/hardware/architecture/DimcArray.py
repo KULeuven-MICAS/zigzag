@@ -2,7 +2,7 @@ import numpy as np
 import math
 import copy
 
-from zigzag.classes.workload.layer_node import LayerNode, Relevancy
+from zigzag.classes.workload.layer_node import LayerNode
 
 if __name__ == "__main__" or __name__ == "DimcArray":
     # branch when the script is run locally or called by AimcArray.py

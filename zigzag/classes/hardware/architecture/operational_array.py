@@ -1,10 +1,11 @@
 import numpy as np
 from typeguard import typechecked
-from zigzag.classes.hardware.architecture.Dimension import Dimension
+from zigzag.classes.datatypes import Dimension
 from zigzag.classes.hardware.architecture.operational_unit import (
     OperationalUnit,
     Multiplier,
 )
+from zigzag.utils import json_repr_handler
 
 
 @typechecked
@@ -27,12 +28,10 @@ class OperationalArray:
         self.dimensions: list[Dimension] = [
             Dimension(idx, name, size) for idx, (name, size) in enumerate(dimensions.items())
         ]
-        # self.dimension_sizes = [dim.size for dim in base_dims]
-        # self.nb_dimensions = len(base_dims)
 
     # JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
-        return {"operational_unit": self.unit, "dimensions": self.dimensions}
+        return json_repr_handler({"operational_unit": self.unit, "dimensions": self.dimensions})
 
     def __eq__(self, other) -> bool:
         if not isinstance(other, OperationalArray):
@@ -41,7 +40,6 @@ class OperationalArray:
 
 
 class MultiplierArray(OperationalArray):
-    """!  Description missing"""
 
     def __init__(
         self,

@@ -1,5 +1,7 @@
 from typing import Generator
 
+from typeguard import typechecked
+
 from zigzag.classes.io.onnx.model import ONNXModelParser
 from zigzag.classes.stages.Stage import Stage
 
@@ -8,8 +10,8 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class ONNXModelParserStage(Stage):
-    """!  Description missing"""
 
     def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
         super().__init__(list_of_callables, **kwargs)
@@ -28,7 +30,3 @@ class ONNXModelParserStage(Stage):
         )
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
-
-    # # For testing purposes
-    # def is_leaf(self) -> bool:
-    #     return True

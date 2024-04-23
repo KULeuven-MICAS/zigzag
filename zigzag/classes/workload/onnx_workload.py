@@ -1,12 +1,13 @@
 import networkx as nx
+from typeguard import typechecked
 
 from zigzag.classes.workload.Workload import Workload
+from zigzag.classes.workload.dummy_node import DummyNode
 from zigzag.classes.workload.layer_node import LayerNode
-from networkx import DiGraph
 
 
+@typechecked
 class ONNXWorkload(Workload):
-    """!  Description missing"""
 
     def __init__(self, **attr):
         """!  Collect all the algorithmic workload information here."""
@@ -15,7 +16,7 @@ class ONNXWorkload(Workload):
         self.node_id_to_obj = {}
         self.node_list = []
 
-    def add(self, node_id, node_obj):
+    def add(self, node_id, node_obj: LayerNode | DummyNode):
         """!  Add a node object to the ONNX workload graph.
         This can be a different object based on if it's an "accelerateable" node or not.
         """

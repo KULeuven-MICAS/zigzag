@@ -25,9 +25,7 @@ def parse_mapping_from_path(mapping_path):
         if path.exists("inputs/examples/mapping/default.py"):
             mapping_path = "zigzag.inputs.examples.mapping.default"
         else:
-            raise ValueError(
-                "No mapping path/dict provided, and default was not found."
-            )
+            raise ValueError("No mapping path/dict provided, and default was not found.")
     if "/" in mapping_path and mapping_path.split(".")[-1] in [
         "pickle",
         "pkl",
@@ -44,9 +42,7 @@ def parse_mapping_from_path(mapping_path):
         default_present = "\u2705"
     else:
         default_present = "\u274C"
-    logger.debug(
-        f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}."
-    )
+    logger.debug(f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}.")
     return mapping
 
 
@@ -78,9 +74,7 @@ def unroll_branches(graph):
     for node in graph.node:
         if node.op_type in ["If"]:
             if seen_if:
-                raise ValueError(
-                    "Unrolling only implemented for single If operator in model."
-                )
+                raise ValueError("Unrolling only implemented for single If operator in model.")
             seen_if = True
             g0 = node.attribute[0].g
             g1 = node.attribute[1].g
@@ -99,9 +93,7 @@ def unroll_branches(graph):
             if input_name not in [vi.name for vi in g0.input]:
                 g0.input.extend([value_info])
             # g0 is the graph we will combine with the original one
-            new_graph = compose.merge_graphs(
-                graph, g0, io_map=[(input_name, input_name)]
-            )
+            new_graph = compose.merge_graphs(graph, g0, io_map=[(input_name, input_name)])
             break
     return new_graph
 
@@ -145,20 +137,15 @@ def get_attribute_ints_with_name(name, attrs, default=None):
         elif attr_type == AttributeProto.AttributeType.INTS:
             return attrs[name_idx].ints
         else:
-            raise NotImplementedError(
-                f"Attribute extraction of type {attr_type} not supported."
-            )
+            raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
     except ValueError:
         if default is not None:
             return default
         else:
-            raise ValueError(
-                f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}."
-            )
+            raise ValueError(f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}.")
 
 
 class OnnxTensorCategory(enum.Enum):
-    """!  Description missing"""
 
     Input = auto()
     Output = auto()
@@ -184,7 +171,6 @@ class OnnxTensorCategory(enum.Enum):
 
 @dataclass
 class OnnxTensorType:
-    """!  Description missing"""
 
     shape: List[int]
     elem_type: int
@@ -201,28 +187,20 @@ class OnnxTensorType:
 def get_onnx_tensor_type(name, model):
     for input in model.graph.input:
         if input.name == name:
-            return OnnxTensorType.from_tensor_type(
-                input.type.tensor_type, OnnxTensorCategory.Input
-            )
+            return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.Input)
 
     for output in model.graph.output:
         if output.name == name:
-            return OnnxTensorType.from_tensor_type(
-                output.type.tensor_type, OnnxTensorCategory.Output
-            )
+            return OnnxTensorType.from_tensor_type(output.type.tensor_type, OnnxTensorCategory.Output)
 
     for value_info in model.graph.value_info:
         if value_info.name == name:
-            return OnnxTensorType.from_tensor_type(
-                value_info.type.tensor_type, OnnxTensorCategory.Hidden
-            )
+            return OnnxTensorType.from_tensor_type(value_info.type.tensor_type, OnnxTensorCategory.Hidden)
 
     for init in model.graph.initializer:
         if init.name == name:
             # initializers are represented a bit differently from other tensors
-            return OnnxTensorType(
-                list(init.dims), init.data_type, OnnxTensorCategory.Constant
-            )
+            return OnnxTensorType(list(init.dims), init.data_type, OnnxTensorCategory.Constant)
 
     raise KeyError(
         f""

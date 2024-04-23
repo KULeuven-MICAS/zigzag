@@ -1,44 +1,15 @@
 from functools import reduce
-from typing import TypeAlias
 import copy
-from dataclasses import dataclass
-import itertools
 import logging
 import math
-import numpy
-from pydantic import BaseModel
 from typeguard import typechecked
 
-from zigzag.classes.hardware.architecture.Dimension import Dimension
+from zigzag.classes.datatypes import Dimension, LayerDim, UnrollFactor, UnrollFactorInt
+from zigzag.classes.workload.LayerAttribute import LayerAttribute
+from zigzag.utils import json_repr_handler
 
 
 logger = logging.getLogger(__name__)
-
-
-# Type aliases for legacy data structures
-UnrollFactor: TypeAlias = int | float
-LayerDimStr: TypeAlias = str
-LimitedUSM: TypeAlias = dict[Dimension, list[tuple[LayerDimStr, UnrollFactor]]]
-UserSpatialMappingLegacy: TypeAlias = dict[Dimension, dict[LayerDimStr, UnrollFactor]]
-
-
-@typechecked
-class LayerDim:
-    """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)
-    # TODO make layer_dim_size a property of LayerDim
-    """
-
-    def __init__(self, name: str):
-        self.name = name
-
-    def __hash__(self):
-        return hash(self.name)
-
-    def __str__(self):
-        return self.name
-
-    def __eq__(self, other) -> bool:
-        return isinstance(other, LayerDim) and self.name == other.name
 
 
 @typechecked
@@ -46,7 +17,8 @@ class MappingSingleOADim:
     """! Spatial unrolling for a single Operational Array Dimension"""
 
     def __init__(self, data: dict[LayerDim, UnrollFactor]):
-        self.data: dict[LayerDim, UnrollFactor] = data
+        # float type is used in `SpatialMappingConversionStage`
+        self.data: dict[LayerDim, UnrollFactor] | dict[LayerDim, float] = data
 
     def get_nb_unrolled_dims(self):
         """! Return the number of different layer dimensions unrolled (unroll factor > 1) over this
@@ -79,14 +51,17 @@ class MappingSingleOADim:
     def items(self):
         return self.data.items()
 
-    def __setitem__(self, key: LayerDim, value: UnrollFactor):
-        self.data[key] = value
+    def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
+        self.data[key] = value  # type: ignore
 
     def __str__(self):
-        return str(self.data)
+        return str({str(k): str(v) for k, v in self.items()})
+
+    def __repr__(self):
+        return str(self)
 
     def __jsonrepr__(self):
-        return {layer_dim.name: str(unroll_factor) for layer_dim, unroll_factor in self.items()}
+        return json_repr_handler(self.data)
 
     def __eq__(self, other) -> bool:
         """! Return true if the contained LayerDims are the same and all unrollings are the same"""
@@ -102,47 +77,77 @@ class MappingSingleOADim:
 
 
 @typechecked
-class SpatialMapping:
+class SpatialMapping(LayerAttribute):
     """! Spatial unrollings defined for every operational array dimension"""
 
     def __init__(self, data: dict[Dimension, MappingSingleOADim]):
-        assert isinstance(data, dict)
         self.data = data
+        self.__oa_dims_are_initialized = False
+
+    def initialize_oa_dims(self, oa_dims: list[Dimension]) -> None:
+        """! Update the sizes from the OA Dims contained in this SpatialMapping from 1 to the size of the corresponding
+        OA Dimension from the given list.
+        When the SpatialMapping is parsed from the workload definition, the OA Dimension sizes are unknown and given in
+        the hardware architecture definition instead. To come to a valid SpatialMapping, the OA Dimension sizes must be
+        updated.
+        @param oa_dims List with OA Dimensions from the hardware architecture definition.
+        """
+        assert not self.__oa_dims_are_initialized, "OA Dimensions were already initialized"
+
+        for this_oa_dim in self.oa_dims():
+            given_oa_dim = oa_dims[oa_dims.index(this_oa_dim)]
+            this_oa_dim.size = given_oa_dim.size
+
+        self.__oa_dims_are_initialized = True
+
+    def oa_dims_are_initialized(self) -> bool:
+        return self.__oa_dims_are_initialized
 
     def is_valid(
-        self, max_unrollings: "SpatialMapping", oa_dims: list[Dimension], layer_dim_sizes: dict[LayerDim, int]
+        self,
+        max_unrollings: "SpatialMapping",
+        layer_dim_sizes: dict[LayerDim, UnrollFactorInt],
+        oa_dims: list[Dimension],
     ):
         """! Return True iff
-        1) the utilization at each OA Dimension does not exceed the size of the Dimension
-        2) the instance does not contain LayerDims that are not bounded by `max_unrollings`
-        3) each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
-        4) the instance does not contain OA Dimensions that are not part of the given list
-        5) the total unrolling of each contained LayerDim does not exceed the LayerDim size
-        6) the instance does not contain LayerDims that are not bounded by the given layer_dim_sizes
-        @param max_unrollings a SpatialMapping instance that contains the maximally allowed
-        unrolling for each Layer Dimension in each OA Dimension individually
-        @param oa_dims list of Operational Array Dimensions that should be included in this instance
-        @param layer_dim_sizes dict that contains the size of each LayerDim
+        1) the instance's OA Dimensions have been initialized to the size from the hardware architecture definition
+        2) the instance does not contain OA Dimensions that are not defined in the given list (no rogue OA Dim)
+        3) all OA Dimensions defined in the given list are contained within this instance
+        4) the instance does not contain LayerDims that are not bounded by `max_unrollings` (no rogue LayerDim)
+        5) each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
+        6) the utilization at each OA Dimension does not exceed the size of the Dimension
+        7) the instance does not contain LayerDims that are not bounded by the given layer_dim_sizes
+        8) the total unrolling of each contained LayerDim does not exceed the LayerDim size
+        @param max_unrollings a SpatialMapping instance that contains the maximally allowed unrolling for each
+        Layer Dimension in each OA Dimension individually
+        @param dict of `LayerDimSizes`. `LayerDimSizes` instance cannot be used due to circular import.
+        @param oa_dims List of OA Dimensions from hardware architecture definition to compare to
         """
-        if not all(oa_dim in self for oa_dim in oa_dims):
-            return False
+        # 1)
+        assert self.oa_dims_are_initialized(), "Initialize OA Dimensions first"
+        # 2)
+        assert all(self_oa_dim in oa_dims for self_oa_dim in self.oa_dims()), "Illegal OA Dimension found"
+        # 3)
+        assert all(given_oa_dim in self for given_oa_dim in oa_dims), "SpatialMapping misses OA Dimension"
 
-        for oa_dim in oa_dims:
+        for oa_dim in self.oa_dims():
+
             for layer_dim, unrolling in self[oa_dim].items():
+                # 4)
                 if layer_dim not in max_unrollings[oa_dim]:
                     return False
+                # 5)
                 if unrolling > max_unrollings[oa_dim][layer_dim]:
                     return False
-
+            # 6)
             if self[oa_dim].get_utilization() > oa_dim.size:
                 return False
 
-        if not all(oa_dim in oa_dims for oa_dim in self.data):
-            return False
-
+        # 7)
         if not all([layer_dim in layer_dim_sizes for layer_dim in self.get_all_contained_layer_dims()]):
             return False
 
+        # 8)
         if not all(
             [self.get_total_unrolling_of_layer_dim(layer_dim) <= size for layer_dim, size in layer_dim_sizes.items()]
         ):
@@ -151,31 +156,41 @@ class SpatialMapping:
         return True
 
     def check_and_reduce(
-        self, max_unrollings: "SpatialMapping", oa_dims: list[Dimension], layer_dim_sizes: dict[LayerDim, int]
+        self,
+        max_unrollings: "SpatialMapping",
+        layer_dim_sizes: dict[LayerDim, UnrollFactorInt],
     ):
         """! Verify
         - that the utilization at each OA Dimension does not exceed the size of the Dimension
         - that each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
         Reduce the unrollings otherwise.
-        # TODO maybe it is better to throw an error when the user-provided spatial mapping is invalid?
+        @param dict of `LayerDimSizes`. `LayerDimSizes` instance cannot be used due to circular import.
+        # TODO should be moved to something similar to `parse_user_input`
         """
-        assert all([oa_dim in oa_dims for oa_dim in self.oa_dims()]), "Unexpected OA Dim found"
-        assert all(
-            [layer_dim in layer_dim_sizes for layer_dim in self.get_all_contained_layer_dims()]
-        ), "Unexpected LayerDim found"
+        assert self.oa_dims_are_initialized(), "Initialize OA Dimensions first"
+
+        # Remove LayerDim if not listed in `layer_dim_sizes`
+        for layer_dim in self.get_all_contained_layer_dims():
+            if layer_dim not in layer_dim_sizes:
+                logger.warning(
+                    "User provided spatial unrolling %s is not defined in Loop Dimension Sizes %s. Removing %s.",
+                    layer_dim,
+                    layer_dim_sizes,
+                    layer_dim,
+                )
+                self.delete_layer_dim(layer_dim)
 
         # Check every OA Dim separately
         for oa_dim, mapping_this_oa_dim in self.items():
-            # First check individual LayerDim unrollings
+            # Limit unrolling to maximally allowed per LayerDim
             for layer_dim, unrolling in mapping_this_oa_dim.items():
                 max_unrolling = max_unrollings[oa_dim][layer_dim]
                 if unrolling > max_unrolling:
-                    logger.info(
-                        "User provided spatial unrolling of %i for %s in Dimension %s exceeded maximally allowed \
-                            unrolling of %i. Reducing unrolling to this value.",
+                    logger.warning(
+                        "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling of %i. Reducing unrolling to this value.",
+                        layer_dim,
                         unrolling,
-                        str(layer_dim),
-                        str(oa_dim),
+                        oa_dim,
                         max_unrolling,
                     )
                     self[oa_dim][layer_dim] = max_unrolling
@@ -183,9 +198,8 @@ class SpatialMapping:
             # Check full OA Dimension
             if mapping_this_oa_dim.get_utilization() > oa_dim.size:
                 logger.info(
-                    "User provided spatial unrolling of for Dimension %s exceeded maximally allowed unrolling of %i. \
-                        Removing arbitrary Layer unrollings to meet this constraint",
-                    str(oa_dim),
+                    "User provided spatial unrolling of for Dimension %s exceeded maximally allowed unrolling of %i. Removing arbitrary Layer unrollings to meet this constraint",
+                    oa_dim,
                     oa_dim.size,
                 )
                 while mapping_this_oa_dim.get_utilization() > oa_dim.size:
@@ -197,9 +211,8 @@ class SpatialMapping:
         for layer_dim in self.get_all_contained_layer_dims():
             layer_size = layer_dim_sizes[layer_dim]
             if self.get_total_unrolling_of_layer_dim(layer_dim) > layer_size:
-                logger.info(
-                    "User provided spatial unrolling of for Layer Dimension %s exceeded layer size of %i. Removing \
-                        unrollings for %s in arbitrary Dimensions to meet this constraint",
+                logger.warning(
+                    "User provided spatial unrolling of for Layer Dimension %s exceeded layer size of %i. Removing unrollings for %s in arbitrary Dimensions to meet this constraint",
                     layer_dim.name,
                     layer_size,
                     layer_dim.name,
@@ -213,7 +226,7 @@ class SpatialMapping:
     # TODO make the return type clearer
     def get_hw_utilization(self) -> UnrollFactor:
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
-        return math.prod([x.get_utilization() for x in self.values()])
+        return int(math.prod([x.get_utilization() for x in self.values()]))
 
     def get_all_contained_layer_dims(self) -> set[LayerDim]:
         """! Return a set containing all the LayerDims contained in the mapping at any OA Dim"""
@@ -254,6 +267,12 @@ class SpatialMapping:
             lambda a, b: a + b, [list(mapping_single_dim.items()) for mapping_single_dim in self.mappings()], []
         )
 
+    def delete_layer_dim(self, layer_dim: LayerDim) -> None:
+        assert layer_dim in self.get_all_contained_layer_dims()
+        for oa_dim in self.oa_dims():
+            if layer_dim in self[oa_dim]:
+                del self[oa_dim][layer_dim]
+
     def oa_dims(self) -> set[Dimension]:
         return set(self.keys())
 
@@ -282,20 +301,11 @@ class SpatialMapping:
     def __delitem__(self, b):
         pass
 
-    def __contains__(self, key: Dimension):
-        return self.data.__contains__(key)
-
-    def __len__(self):
-        return len(self.data)
-
-    def copy(self):
-        return SpatialMapping(copy.deepcopy(self.data))
+    def copy(self) -> "SpatialMapping":
+        return copy.deepcopy(self)
 
     def __str__(self):
-        return str(self.__jsonrepr__())
-
-    def __jsonrepr__(self):
-        return {oa_dim.name: mapping.__jsonrepr__() for oa_dim, mapping in self.items()}
+        return str({str(k): str(v) for k, v in self.items()})
 
     def __eq__(self, other) -> bool:
         """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""
@@ -310,13 +320,14 @@ class SpatialMapping:
         return hash(frozenset(map(lambda x: (x[0], hash(x[1])), self.items())))
 
     @staticmethod
-    def empty():
+    def empty() -> "SpatialMapping":
         return SpatialMapping({})
 
     @staticmethod
-    def parse_user_input(x: dict[str, tuple[str, str | int] | tuple[tuple]]):
+    def parse_user_input(x: dict[str, tuple[str, str | int] | tuple[tuple]]) -> "SpatialMapping":
         """! Parse legacy notation
         Example input: {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
+        NOTE: this does not (yet) check wether the input sizes are valid
         """
         if x is None:
             return SpatialMapping.empty()
@@ -352,7 +363,8 @@ class SpatialMapping:
         return SpatialMapping(data)
 
 
-class SpatialMappingHint:
+@typechecked
+class SpatialMappingHint(LayerAttribute):
     """! Suggested LayerDims to be unrolled for every Operational Array Dimension"""
 
     def __init__(self, data: dict[Dimension, set[LayerDim]]):
@@ -365,11 +377,8 @@ class SpatialMappingHint:
     def __getitem__(self, key: Dimension):
         return self.data[key]
 
-    def __contains__(self, key: Dimension):
-        return self.data.__contains__(key)
-
     @staticmethod
-    def empty():
+    def empty() -> "SpatialMappingHint":
         return SpatialMappingHint({})
 
     @staticmethod

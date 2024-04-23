@@ -4,7 +4,6 @@ import argparse
 
 from zigzag.classes.cacti.cacti_master.cacti_config_creator import CactiConfig
 
-
 parser = argparse.ArgumentParser()
 parser.add_argument("--mem_type")
 parser.add_argument("--cache_size")
@@ -30,19 +29,19 @@ if not os.path.isdir(self_gen_path):
 os.system(f"rm -rf {self_gen_path}/*")
 C = CactiConfig()
 
-"""Function 1: set default value"""
+# Function 1: set default value
 # C.change_default_value(['technology'], [0.090])
 
-"""Function 2: use default values to run CACTI"""
+# Function 2: use default values to run CACTI
 # C.cacti_auto(['default'], file_path + '/cache.cfg')
 
-"""Function 3: use user-defined + default values to run CACTI"""
+# Function 3: use user-defined + default values to run CACTI
 # C.cacti_auto(['single', [['technology', 'cache_size'],[0.022, 524288]]], file_path+'/cache.cfg')
 
-"""Function 4: sweep any one variable using the default list & other default value"""
+# Function 4: sweep any one variable using the default list & other default value
 # C.cacti_auto(['sweep', ['IO_bus_width']], file_path+'/cache.cfg')
 
-""" Combining Function 1 & 4 to do multi-variable sweep """
+#  Combining Function 1 & 4 to do multi-variable sweep
 
 mem_type = args.mem_type
 

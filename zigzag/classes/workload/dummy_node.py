@@ -1,10 +1,14 @@
+from zigzag.classes.datatypes import LayerOperand
+from zigzag.classes.workload.workload_attributes import InputOperandSource
+
+
 class DummyNode:
     """!  A class to represent an ONNX node that is not "accelerateable".
     This node is created to preserve the original ONNX model graph structure,
     but will be skipped by the underlying engines, treating it as a 0 HW cost node.
     """
 
-    def __init__(self, id, preds, node_name="", type=None) -> None:
+    def __init__(self, id, preds: list[int], node_name="", type=None) -> None:
         """!  The class constructor
         Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
         @param id (int): id for this node
@@ -12,7 +16,7 @@ class DummyNode:
         @param node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
         """
         self.id = id
-        self.input_operand_source = {"I": preds}
+        self.input_operand_source: InputOperandSource = {LayerOperand("I"): preds}
         self.name = node_name
         self.type = type
         self.core_allocation = -1  # We assume these nodes are mapped on a core with id -1

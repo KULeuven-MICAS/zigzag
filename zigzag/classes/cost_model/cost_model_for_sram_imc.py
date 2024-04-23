@@ -69,11 +69,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         return {
             "outputs": {
                 "memory": {
-                    "utilization": (
-                        self.mem_utili_shared
-                        if hasattr(self, "mem_utili_shared")
-                        else None
-                    ),
+                    "utilization": (self.mem_utili_shared if hasattr(self, "mem_utili_shared") else None),
                     "word_accesses": self.memory_word_access,
                 },
                 "energy": {
@@ -117,14 +113,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             "inputs": {
                 "accelerator": self.accelerator,
                 "layer": self.layer,
-                "spatial_mapping": (
-                    self.spatial_mapping_int
-                    if hasattr(self, "spatial_mapping_int")
-                    else None
-                ),
-                "temporal_mapping": (
-                    self.temporal_mapping if hasattr(self, "temporal_mapping") else None
-                ),
+                "spatial_mapping": (self.spatial_mapping_int if hasattr(self, "spatial_mapping_int") else None),
+                "temporal_mapping": (self.temporal_mapping if hasattr(self, "temporal_mapping") else None),
             },
         }
 
@@ -170,9 +160,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
     def calc_MAC_energy_cost(self):
         """!  Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
-        self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(
-            self.layer, self.mapping
-        )
+        self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(self.layer, self.mapping)
         self.MAC_energy = sum([energy for energy in self.MAC_energy_breakdown.values()])
 
     def calc_latency(self):
@@ -225,26 +213,18 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                     except:  # mem op to layer might not have this mem op (e.g. pooling layer)
                         continue
                     period_count = getattr(
-                        self.mapping_int.unit_mem_data_movement[layer_op][
-                            mem_lv
-                        ].data_trans_period_count,
+                        self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_period_count,
                         mov_dir,
                     )
                     if period_count == 0:
                         # skip the inactive data movement activities because they won't impact SS
                         continue
                     period = getattr(
-                        self.mapping_int.unit_mem_data_movement[layer_op][
-                            mem_lv
-                        ].data_trans_period,
+                        self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_period,
                         mov_dir,
                     )
-                    real_cycle = getattr(
-                        self.real_data_trans_cycle[layer_op][mem_lv], mov_dir
-                    )
-                    allowed_cycle = getattr(
-                        self.allowed_mem_updat_cycle[layer_op][mem_lv], mov_dir
-                    )
+                    real_cycle = getattr(self.real_data_trans_cycle[layer_op][mem_lv], mov_dir)
+                    allowed_cycle = getattr(self.allowed_mem_updat_cycle[layer_op][mem_lv], mov_dir)
                     port_activity = PortActivity(
                         real_cycle,
                         allowed_cycle,
@@ -284,9 +264,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             require_weight_loading = True
         # check how many times of weight reloading is required
         # here assume imc cells is the lowest mem level for weight and rw_port
-        for imc_port, imc_ports in port_activity_collect[
-            0
-        ].items():  # 0: the lowest mem node in the graph
+        for imc_port, imc_ports in port_activity_collect[0].items():  # 0: the lowest mem node in the graph
             for port in imc_ports:
                 if port.served_op_lv_dir[2] == "wr_in_by_high":
                     nb_of_weight_reload_periods = port.period_count
@@ -300,9 +278,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
         # calculate the total number of weight loading cycles
         if require_weight_loading:
-            weight_loading_cycles = (
-                nb_of_weight_reload_periods * mapped_rows_total * mapped_group_depth
-            )
+            weight_loading_cycles = nb_of_weight_reload_periods * mapped_rows_total * mapped_group_depth
         else:
             weight_loading_cycles = 0
 
@@ -320,9 +296,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         sum.mem_energy += other.mem_energy
         for op in sum.MAC_energy_breakdown.keys():
             if op in other.MAC_energy_breakdown.keys():
-                sum.MAC_energy_breakdown[op] = (
-                    self.MAC_energy_breakdown[op] + other.MAC_energy_breakdown[op]
-                )
+                sum.MAC_energy_breakdown[op] = self.MAC_energy_breakdown[op] + other.MAC_energy_breakdown[op]
 
         for op in sum.mem_energy_breakdown.keys():
             if op in other.mem_energy_breakdown.keys():
@@ -333,10 +307,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                         len(other.mem_energy_breakdown[op]),
                     )
                 ):
-                    l.append(
-                        self.mem_energy_breakdown[op][i]
-                        + other.mem_energy_breakdown[op][i]
-                    )
+                    l.append(self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i])
                 i = min(
                     len(self.mem_energy_breakdown[op]),
                     len(other.mem_energy_breakdown[op]),
@@ -354,10 +325,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                         len(other.mem_energy_breakdown_further[op]),
                     )
                 ):
-                    l.append(
-                        self.mem_energy_breakdown_further[op][i]
-                        + other.mem_energy_breakdown_further[op][i]
-                    )
+                    l.append(self.mem_energy_breakdown_further[op][i] + other.mem_energy_breakdown_further[op][i])
                 i = min(
                     len(self.mem_energy_breakdown_further[op]),
                     len(other.mem_energy_breakdown_further[op]),
@@ -367,18 +335,12 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                 sum.mem_energy_breakdown_further[op] = l
 
         # Get all the operands from other that are not in self and add them to the energy breakdown as well
-        op_diff = set(other.mem_energy_breakdown.keys()) - set(
-            self.mem_energy_breakdown.keys()
-        )
+        op_diff = set(other.mem_energy_breakdown.keys()) - set(self.mem_energy_breakdown.keys())
         for op in op_diff:
             sum.mem_energy_breakdown[op] = other.mem_energy_breakdown[op]
-            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[
-                op
-            ]
+            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[op]
 
-        op_diff = set(other.MAC_energy_breakdown.keys()) - set(
-            self.MAC_energy_breakdown.keys()
-        )
+        op_diff = set(other.MAC_energy_breakdown.keys()) - set(self.MAC_energy_breakdown.keys())
         for op in op_diff:
             sum.MAC_energy_breakdown[op] = other.MAC_energy_breakdown[op]
 
@@ -394,12 +356,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                         len(other.memory_word_access[op]),
                     )
                 ):
-                    l.append(
-                        self.memory_word_access[op][i] + other.memory_word_access[op][i]
-                    )
-                i = min(
-                    len(self.memory_word_access[op]), len(other.memory_word_access[op])
-                )
+                    l.append(self.memory_word_access[op][i] + other.memory_word_access[op][i])
+                i = min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))
                 l += self.memory_word_access[op][i:]
                 l += other.memory_word_access[op][i:]
                 sum.memory_word_access[op] = l
@@ -411,9 +369,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         sum.data_offloading_cycle += other.data_offloading_cycle
         sum.ideal_cycle += other.ideal_cycle
         sum.SS_comb += other.SS_comb  # stalling cycles
-        sum.ideal_temporal_cycle += (
-            other.ideal_temporal_cycle
-        )  # ideal computation cycles without stalling
+        sum.ideal_temporal_cycle += other.ideal_temporal_cycle  # ideal computation cycles without stalling
         sum.latency_total0 += other.latency_total0
         sum.latency_total1 += other.latency_total1
         sum.latency_total2 += other.latency_total2

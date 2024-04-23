@@ -30,16 +30,12 @@ from sympy.ntheory import factorint
 from copy import deepcopy
 import logging
 
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.mapping.spatial.SpatialMappingInternal import SpatialMappingInternal
+
+from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from zigzag.classes.opt.temporal.salsa.engine import SalsaEngine
-from zigzag.classes.workload.layer_node import LayerNode
 from typing import Generator, Callable, List, Tuple, Any
 from zigzag.classes.stages.Stage import Stage
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 
-from zigzag.classes.stages.ReduceStages import MinimalEnergyStage
-from zigzag.classes.stages.ReduceStages import MinimalLatencyStage
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +66,7 @@ class SalsaStage(Stage):
             spatial_mapping,
         )
         self.engine = None
-        self.best_cme = None
+        self.best_cme: CostModelEvaluation | None = None
 
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.number_of_core_allocated = kwargs.get("salsa_number_of_core", 1)

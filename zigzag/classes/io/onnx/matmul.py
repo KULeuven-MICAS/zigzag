@@ -2,6 +2,7 @@ import onnx
 
 from zigzag.classes.io.onnx.parser import Parser
 from zigzag.classes.io.onnx.utils import get_node_input_output_dimension_shapes
+from zigzag.classes.workload.workload_attributes import LayerAttributes
 from zigzag.classes.workload.layer_node import LayerNode
 
 import logging
@@ -49,16 +50,14 @@ class MatMulParser(Parser):
             d["constant_operands"] = ["B"]
 
             d["core_allocation"] = node_mapping["core_allocation"]
-            d["temporal_ordering"] = node_mapping.get("temporal_ordering", None)
             d["memory_operand_links"] = {"O": "O", "B": "I2", "A": "I1"}
-            try:
+
+            if "temporal_ordering" in node_mapping:
+                d["temporal_ordering"] = node_mapping["temporal_ordering"]
+            if "spatial_mapping" in node_mapping:
                 d["spatial_mapping"] = node_mapping["spatial_mapping"]
-            except KeyError:  # not provided
-                d["spatial_mapping"] = None
-            try:
+            if "spatial_mapping_hint" in node_mapping:
                 d["spatial_mapping_hint"] = node_mapping["spatial_mapping_hint"]
-            except KeyError:  # not provided
-                d["spatial_mapping_hint"] = None
 
             # Find the previous layer(s) that should be this node's parent(s)
             node_inputs = self.node.input
@@ -71,17 +70,13 @@ class MatMulParser(Parser):
 
             return d
 
-        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(
-            self.node, self.onnx_model
-        )
+        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
         # TODO it should be able to deal with tensors
         assert (
             len(ia_dimension_shape) == len(oa_dimension_shape) == 2
         )  # First element is batch size, second is input/output channel
-        assert (
-            ia_dimension_shape[0] == oa_dimension_shape[0]
-        )  # Batch size should be the same for input and output
+        assert ia_dimension_shape[0] == oa_dimension_shape[0]  # Batch size should be the same for input and output
         # If the batch size is 0, we discard it by setting it to 1 internally inside ZigZag
         batch_size = ia_dimension_shape[0]
         if batch_size == 0:
@@ -98,18 +93,15 @@ class MatMulParser(Parser):
             try:
                 node_mapping = self.mapping["default"]
             except:
-                raise ValueError(
-                    f"There is no mapping provided for node {self.node.name}, nor a default one."
-                )
+                raise ValueError(f"There is no mapping provided for node {self.node.name}, nor a default one.")
 
-        node_attrs = get_layer_node_input_format(
-            B, C, K, node_mapping, self.nodes_outputs
-        )
+        node_attrs = get_layer_node_input_format(B, C, K, node_mapping, self.nodes_outputs)
         node_obj = LayerNode(
             self.node_id,
-            node_attrs,
+            # NOTE we first generate the layer attributes in user input format and then parse to `LayerAttributes`. This is redundant
+            LayerAttributes.parse_user_input(node_attrs),
             node_name=self.node.name,
-            type=self.node.op_type.lower(),
+            layer_type=self.node.op_type.lower(),
         )
 
         logger.info(f"Parsed MatMul node {self.node.name}")  # pylint disable=W1203

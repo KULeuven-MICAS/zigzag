@@ -35,7 +35,6 @@
 
 
 class ListElement:
-    """!  Description missing"""
 
     def __init__(self, value, next):
         self.value = value
@@ -85,29 +84,3 @@ def permutations(multiset):
         j = i.next
         h = t
         yield visit(h)
-
-
-if __name__ == "__main__":
-    multiset = [
-        ("OX", 2),
-        ("OX", 2),
-        ("OX", 3),
-        ("OY", 2),
-        ("K", 2),
-        ("K", 2),
-        ("K", 2),
-        ("K", 3),
-        ("K", 3),
-        ("K", 3),
-        ("K", 3),
-        ("C", 2),
-        ("C", 2),
-        ("C", 2),
-        ("C", 2),
-        ("C", 2),
-    ]
-    i = 0
-    for ordering in permutations(multiset):
-        # print(ordering)
-        i += 1
-    print(i)

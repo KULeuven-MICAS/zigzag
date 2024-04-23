@@ -5,11 +5,12 @@ from typing import Iterator
 from typeguard import typechecked
 from sympy import divisors, primefactors
 
+from zigzag.classes.datatypes import Dimension, LayerOperand
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
-from zigzag.classes.hardware.architecture.Dimension import Dimension
 from zigzag.classes.hardware.architecture.memory_level import ServedMemDimensions
-from zigzag.classes.workload.layer_node import LayerNode, MemOperandStr, OperandStr, Relevancy
+from zigzag.classes.workload.workload_attributes import MemoryOperandLinks
+from zigzag.classes.workload.layer_node import LayerNode
 from zigzag.classes.mapping.spatial.SpatialMapping import (
     LayerDim,
     SpatialMapping,
@@ -29,7 +30,6 @@ class UserSpatialMappingGenerator:
         self,
         layer: LayerNode,
         accelerator: Accelerator,
-        provided_mapping: SpatialMapping = SpatialMapping.empty(),
         enable_mix_spatial_mapping_generation=False,
         enable_weight_diagonal_mapping=False,
         nb_mappings_generated=3,
@@ -37,23 +37,26 @@ class UserSpatialMappingGenerator:
         """!  The class constructor
         @param enable_mix_spatial_mapping_generation Indicate wether to generate `mixed` spatial mappings i.e. unroll
           multiple LayerDims over same OA Dim
-        @param enable_weight_diagonal_mapping #TODO
+        @param enable_weight_diagonal_mapping #TODO fix explanation
         @param nb_mappings_generated Maximal number of mappings generated, to limit simulation time
         """
         self.layer = layer
         self.accelerator = accelerator
-        self.provided_mapping = provided_mapping
+        # Mapping defined by the user: may or may not be complete
+        self.provided_mapping = self.layer.user_spatial_mapping
         # Functional parameters
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
         self.nb_mappings_generated = nb_mappings_generated
 
-        core: Core = self.accelerator.get_core(core_id=layer.core_allocation)
+        core_id = layer.core_allocation
+        core = self.accelerator.get_core(core_id)
         self.oa_dims = core.operational_array.dimensions
         self.layer_dim_sizes = self.layer.layer_dim_sizes
         self.innermost_levels = core.memory_hierarchy.get_inner_memories()
+
         self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
-        self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, {LayerDim(x) for x in self.layer.loop_dim_list})
+        self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, set(self.layer.loop_dim_list))
 
     def run(self):
         return self.generate_user_spatial_mappings()
@@ -66,9 +69,15 @@ class UserSpatialMappingGenerator:
 
         # Start from given mapping if provided, create empty one instead
         mapping_template = self.provided_mapping if self.provided_mapping is not None else SpatialMapping.empty()
-        mapping_template.check_and_reduce(max_unrollings, self.oa_dims, self.layer_dim_sizes)
+        mapping_template.initialize_oa_dims(self.oa_dims)
+        mapping_template.check_and_reduce(max_unrollings, self.layer_dim_sizes.data)  # type: ignore
 
         oa_dims_to_fill = [x for x in self.oa_dims if x not in mapping_template]
+        # Full Spatial Mapping is already defined by user
+        if len(oa_dims_to_fill) == 0:
+            assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims)  # type: ignore
+            return mapping_template
+
         # For each OA Dimension to fill, generate a list of MappingSingleOADim candidates
         mappings_per_oa_dim: list[list[MappingSingleOADim]] = [
             list(
@@ -86,11 +95,11 @@ class UserSpatialMappingGenerator:
             for idx, oa_dim in enumerate(oa_dims_to_fill):
                 candidate[oa_dim] = combination[idx]
             # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
-            if candidate.is_valid(max_unrollings, self.oa_dims, self.layer_dim_sizes):
+            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims):  # type: ignore
                 candidate_mappings.append(candidate)
 
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
-        assert len(candidate_mappings) == len(set(candidate_mappings)), "Generated mappings are not unique"
+        # assert len(candidate_mappings) == len(set(candidate_mappings)), "Generated mappings are not unique"
 
         # Sort according to expected performance
         candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
@@ -114,7 +123,7 @@ class UserSpatialMappingGenerator:
                 mem_bandwidth = mem_level.write_bw if (layer_op == "O") else mem_level.read_bw
                 # Bit precision of layer operand
                 precision = self.layer.operand_precision[layer_op]
-                irrelevant_dimensions = self.layer.get_operand_irrelevant_dimensions(layer_op)
+                irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
 
                 for oa_dim in mem_level.served_dimensions:
                     # Iterate over all possible LayerDims and rescale max unroll factor
@@ -143,15 +152,16 @@ class UserSpatialMappingGenerator:
             {
                 oa_dim: MappingSingleOADim(
                     {
-                        LayerDim(layer_dim): int(min(layer_size, oa_dim.size))
-                        for layer_dim, layer_size in self.layer.loop_dim_size.items()
+                        layer_dim: int(min(layer_size, oa_dim.size))
+                        for layer_dim, layer_size in self.layer.layer_dim_sizes.items()
                     }
                 )
                 for oa_dim in self.oa_dims
             }
         )
 
-        return self.limit_unrolling_to_mem_bandwidth(max_unrolling)
+        max_unrolling = self.limit_unrolling_to_mem_bandwidth(max_unrolling)
+        return max_unrolling
 
     def generate_user_spatial_mapping_single_dim(
         self,
@@ -165,9 +175,9 @@ class UserSpatialMappingGenerator:
         """
         # Unroll a single LayerDim over this OA Dim
         for layer_dim in unroll_hints:
-            max_factor: UnrollFactor = max_unrollings[layer_dim]
+            max_factor: UnrollFactor = int(max_unrollings[layer_dim])
             # NOTE the unroll factor may equal one
-            for factor in divisors(max_factor):  # type: ignore # TODO fix UnrollFactor type
+            for factor in divisors(max_factor):
                 yield MappingSingleOADim({layer_dim: factor})
 
         if self.enable_mix_spatial_mapping_generation:
@@ -205,81 +215,73 @@ class UserSpatialMappingGenerator:
     def add_input_pr_spatial_loop(self, spatial_mapping: SpatialMapping) -> SpatialMapping:
         """! This function is used to support diagonal spatial mapping
         when input/activation is served in the innermost memories and the weight is stationary.
+        # TODO needs cleanup
         """
-
-        layer_dim_size_remainder: dict[LayerDim, UnrollFactor] = {
-            LayerDim(layer_dim): layer_size for layer_dim, layer_size in self.layer.loop_dim_size.items()
-        }
-        for _, mapping_single_oa_dim in spatial_mapping.items():
-            for layer_dim, unroll_factor in mapping_single_oa_dim.items():
-                layer_dim_size_remainder[layer_dim] //= unroll_factor
-
-        # get the link from layer op to mem op
-        memory_operand_links: dict[OperandStr, MemOperandStr] = self.layer.memory_operand_links
         # check if it is weight stationary.
-        # keep the spatial loop as it was if it is not weight stationary.
+        # TODO should it also skip when len == 0?
         if len(self.layer.constant_operands) > 1:
             return spatial_mapping
+
+        # Convert LayerDimStr to LayerDim
+        layer_dim_size_remainder: dict[LayerDim, UnrollFactor] = dict(self.layer.layer_dim_sizes.items())
+
+        for x in spatial_mapping.get_all_contained_layer_dims():
+            layer_dim_size_remainder[x] //= spatial_mapping.get_total_unrolling_of_layer_dim(x)
 
         act_operand, const_operand = self.identify_layer_operand_representation(self.layer)
         # No solution if there is no constant operand (e.g. for Matrix Multiply)
         if act_operand is None or const_operand is None:
             return spatial_mapping
 
-        # get output operand name
         output_operand = self.layer.output_operand
-        # get name of OX, OY (weight ir layer dims)
-        weight_ir_layer_dims: list[LayerDim] = [
-            LayerDim(x) for x in self.layer.operand_loop_dim[const_operand][Relevancy.IR]
+        weight_ir_layer_dims: list[LayerDim] = self.layer.loop_relevancy_info.get_ir_layer_dims(const_operand)
+
+        memory_operand_links: MemoryOperandLinks = self.layer.memory_operand_links
+
+        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one dimension
+        act_served_oa_dims_list: list[ServedMemDimensions] = [
+            mem_level.served_dimensions
+            for mem_level in self.innermost_levels
+            if memory_operand_links[act_operand] in mem_level.operands and len(mem_level.served_dimensions) == 1
+        ]
+        output_served_oa_dims_list: list[ServedMemDimensions] = [
+            mem_level.served_dimensions
+            for mem_level in self.innermost_levels
+            if memory_operand_links[output_operand] in mem_level.operands and len(mem_level.served_dimensions) == 1
         ]
 
-        # TODO this code doesn't currently work
-        # get the oa_dim name served by input / output innermost memory level
-        for mem_level in self.innermost_levels:
-            if memory_operand_links[act_operand] in mem_level.operands:
-                act_served_oa_dims: ServedMemDimensions = mem_level.served_dimensions
-            if memory_operand_links[output_operand] in mem_level.operands:
-                output_served_oa_dims: ServedMemDimensions = mem_level.served_dimensions
-        # check if act is not served in the innermost memories, or act/output is not multicasting on only one dimension.
-
-        # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:
-            return spatial_mapping
-        if "output_served_oa_dim" not in locals() or len(output_served_oa_dims) != 1:
+        if len(act_served_oa_dims_list) == 0 or len(output_served_oa_dims_list) == 0:
             return spatial_mapping
 
-        # TODO why only first element?
-        act_served_oa_dim: Dimension = list(act_served_oa_dims)[0]
-        output_served_oa_dim: Dimension = list(output_served_oa_dims)[0]
-        act_served_oa_dim_size = act_served_oa_dim.size
-        output_served_oa_dim_size = output_served_oa_dim.size
+        # Get served dims for arbitrary memory level
+        act_served_oa_dims = act_served_oa_dims_list.pop()
+        output_served_oa_dims = output_served_oa_dims_list.pop()
+        # Get arbitrary served oa dim (there is only 1)
+        act_served_oa_dim: Dimension = next(iter(act_served_oa_dims))
+        output_served_oa_dim: Dimension = next(iter(output_served_oa_dims))
 
         # check if OX / OY in spatial_mapping_hint. Or else target_layer_dim will be empty.
-        target_layer_dim: list[LayerDim] = []  # OX or OY or both
-        for layer_dim in weight_ir_layer_dims:
-            if layer_dim in self.spatial_mapping_hint[act_served_oa_dim]:
-                target_layer_dim.append(layer_dim)
+        target_layer_dim: list[LayerDim] = [
+            x for x in weight_ir_layer_dims if x in self.spatial_mapping_hint[act_served_oa_dim]
+        ]
 
         # no further execution if OX / OY unrolling is not in spatial_mapping_hint
         if len(target_layer_dim) == 0:
             return spatial_mapping
 
-        # ###########################################
         # Get existed mapping size on act_served_oa_dim, which will be added with OX, OY later.
-        if act_served_oa_dim in spatial_mapping:  # there already is sm loop
-            mapping_served_dim = spatial_mapping[act_served_oa_dim]
-            exist_act_loop_size = mapping_served_dim.get_utilization()
-        else:  # there is no sm loop mapped on act served dim
-            exist_act_loop_size = 1
+        exist_act_loop_size = (
+            spatial_mapping[act_served_oa_dim].get_utilization() if act_served_oa_dim in spatial_mapping else 1
+        )
 
         # Check if the existed mapping size is more than half of current oa dim size.
         # If so, it means there is no space for extra mapping even with a size of 2.
         # In that case, we will do nothing but return the orignal spatial mapping
-        if exist_act_loop_size * 2 > act_served_oa_dim_size:
+        if exist_act_loop_size * 2 > act_served_oa_dim.size:
             return spatial_mapping
 
         # fetch pr loop pairs for activation, e.g. {"IX": ["OX", "FX"]}
-        act_pr_layer_dims = [LayerDim(x) for x in self.layer.operand_loop_dim[act_operand][Relevancy.PR]]
+        act_pr_layer_dims = self.layer.loop_relevancy_info.get_pr_layer_dims(act_operand)
 
         # Next we get existed mapping size on output_served_oa_dim
         # there are two classes of mapping:
@@ -314,7 +316,7 @@ class UserSpatialMappingGenerator:
         for layer_dim, unroll_factor in sm_loop.items():
             if layer_dim in loops_name_for_kernel_size:  # layer_dim in ["FX", "FY"]
                 paired_pr_layer_dim = pr_sm_link[layer_dim]  # "FX" -> "OX", "FY" -> "OY"
-                weight_r_loop[paired_pr_layer_dim][layer_dim] *= unroll_factor
+                weight_r_loop[paired_pr_layer_dim][layer_dim] *= unroll_factor  # type: ignore
             else:  # not care
                 weight_ir_loop_size *= unroll_factor
 
@@ -327,12 +329,12 @@ class UserSpatialMappingGenerator:
         # sm_pools = {"OX": [("OX",2),("OX",5),("OX",5)], "OY": [("OY",2),("OY",5),("OY",5)]}
         sm_pools_to_add: dict[LayerDim, list[tuple[LayerDim, int]]] = {}
         for layer_dim in target_layer_dim:
-            layer_size = self.layer.loop_dim_size[layer_dim.name]
+            layer_size = self.layer.layer_dim_sizes[layer_dim]
             layer_size_breakdown: list[int] = primefactors(layer_size)
 
             # try to find the maximum OX / OY and add it to the list
             # (1) check on act_served_oa_dim (ceil down to integer)
-            max_allowed_dim_size_on_act_served_dim = math.floor(act_served_oa_dim_size / exist_act_loop_size)
+            max_allowed_dim_size_on_act_served_dim = math.floor(act_served_oa_dim.size / exist_act_loop_size)
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
             for key in weight_r_loop:
@@ -342,7 +344,7 @@ class UserSpatialMappingGenerator:
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
             )[0]
             max_allowed_dim_size_on_output_served_dim = (
-                output_served_oa_dim_size / weight_ir_loop_size / existed_pr_mapping_but_ir_to_current_layer_dim
+                output_served_oa_dim.size / weight_ir_loop_size / existed_pr_mapping_but_ir_to_current_layer_dim
             ) - (existed_pr_mapping - 1)
             # ceil down to integer
             max_allowed_dim_size_on_output_served_dim = math.floor(max_allowed_dim_size_on_output_served_dim)
@@ -410,7 +412,7 @@ class UserSpatialMappingGenerator:
                         # (2) check on act_served_oa_dim
                         comb_size = math.prod([v for v in comb_mapping.values()])
                         required_oa_dim_size = exist_act_loop_size * comb_size
-                        if required_oa_dim_size > act_served_oa_dim_size:
+                        if required_oa_dim_size > act_served_oa_dim.size:
                             continue  # the comb is not possible on act_served_oa_dim
                         # (3) check on output_served_oa_dim
                         required_oa_dim_size = weight_ir_loop_size
@@ -420,12 +422,12 @@ class UserSpatialMappingGenerator:
                             required_oa_dim_size *= new_mapping_size
                         if len(comb_mapping) == 1:  # only OX or OY
                             # add the other existed pr loop to required_oa_dim_size,
-                            # because previously it is not counted in output_served_oa_dim_size.
+                            # because previously it is not counted in output_served_oa_dim.size.
                             sole_dim = list(comb_mapping.keys())[0]
                             the_other_pr_mapping_name = [key for key in weight_r_loop.keys() if key != sole_dim][0]
                             the_other_pr_mapping_size = list(weight_r_loop[the_other_pr_mapping_name].values())[0]
                             required_oa_dim_size *= the_other_pr_mapping_size
-                        if required_oa_dim_size > output_served_oa_dim_size:
+                        if required_oa_dim_size > output_served_oa_dim.size:
                             continue  # this comb is not possible on output_served_oa_dim
                         # (4) compare with best_comb
                         if comb_size > best_comb_size:
@@ -456,26 +458,29 @@ class UserSpatialMappingGenerator:
         return list(filter(lambda x: 1 < x < n, divisors(n)))
 
     @staticmethod
-    def identify_layer_operand_representation(layer: LayerNode) -> tuple[str | None, str | None]:
+    def identify_layer_operand_representation(layer: LayerNode) -> tuple[LayerOperand | None, LayerOperand | None]:
+        """! No docstring
+        # TODO requires documentation
+        """
         # activation representation: list (conv layers)
-        act_operands_pool: list[str] = [
-            op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op][Relevancy.PR]) > 0
+        act_operands_pool: list[LayerOperand] = [
+            op for op in layer.layer_operands if len(layer.loop_relevancy_info.get_pr_layer_dims(op)) > 0
         ]
         # true for fully-connected (fc) layers
         if len(act_operands_pool) == 0:
             # weight representation (fc layers)
             const_operands_pool = [
-                op for op in layer.operand_loop_dim if len(layer.operand_loop_dim[op][Relevancy.IR]) == 0
+                op for op in layer.layer_operands if len(layer.loop_relevancy_info.get_ir_layer_dims(op)) == 0
             ]
-            const_operand = None if len(const_operands_pool) == 0 else const_operands_pool[0]
+            const_operand = None if len(const_operands_pool) == 0 else const_operands_pool.pop()
             # activation representation (fc layers)
             act_operands_pool = [operand for operand in layer.input_operands if operand != const_operand]
-            act_operand = None if len(act_operands_pool) == 0 else act_operands_pool[0]
+            act_operand = None if len(act_operands_pool) == 0 else act_operands_pool.pop()
 
         else:
-            act_operand = act_operands_pool[0]
+            act_operand = act_operands_pool.pop()
             # weight representation (conv layers)
             const_operands_pool = [operand for operand in layer.input_operands if operand != act_operand]
-            const_operand = None if len(const_operands_pool) == 0 else const_operands_pool[0]
+            const_operand = None if len(const_operands_pool) == 0 else const_operands_pool.pop()
 
         return act_operand, const_operand

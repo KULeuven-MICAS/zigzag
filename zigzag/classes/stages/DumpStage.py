@@ -1,10 +1,13 @@
 import pickle
 from typing import Generator, Any, Tuple
+
+from typeguard import typechecked
 from zigzag.classes.stages.Stage import Stage
 from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 import os
 
 
+@typechecked
 class DumpStage(Stage):
     """!  Class that passes through all results yielded by substages, but dumps the results as a pickled list to a file
     at the end of the iteration

@@ -1,6 +1,8 @@
 from typing import Generator, overload
 import logging
 
+from typeguard import typechecked
+
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
@@ -12,29 +14,31 @@ from zigzag.classes.stages.Stage import Stage
 
 logger = logging.getLogger(__name__)
 
-# ################### Description ####################
-# # This stage must be processed behind WorkloadStage.
-# # This stage removes unused memory level found by SearchUnusedMemoryStage.
-# ################## Pseudo-code ####################
-# # Initialization:
-# #  target_act_mem_level, target_output_mem_level: get from mem_update_list
-# #  target_const_mem_level = mem_udpate_weight
-# # 1. Modify mem structure:
-# # for mem in mem_levels(sort_order: from bottom to top):
-# #   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
-# #     remove ['I'] in mem.served_operand, mem_port_alloc
-# #   if ['O'] in mem.served_operand and mem.mem_level > target_output_mem_level:
-# #     remove ['O'] in mem.served_operand, mem_port_alloc
-# #   if ['W'] in mem.served_operand and mem.mem_level > target_const_mem_level:
-# #     remove ['W'] in mem.served_operand, mem_port_alloc
-# # 2. Remove unused memory
-# # for mem in mem_levels(sort_order: from top to bottom):
-# #   if mem.served_operand == empty:
-# #     do not add the current mem into the modified architecture
-# ####################################################
 
-
+@typechecked
 class RemoveUnusedMemoryStage(Stage):
+    """! # ################### Description ####################
+    # # This stage must be processed behind WorkloadStage.
+    # # This stage removes unused memory level found by SearchUnusedMemoryStage.
+    # ################## Pseudo-code ####################
+    # # Initialization:
+    # #  target_act_mem_level, target_output_mem_level: get from mem_update_list
+    # #  target_const_mem_level = mem_udpate_weight
+    # # 1. Modify mem structure:
+    # # for mem in mem_levels(sort_order: from bottom to top):
+    # #   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
+    # #     remove ['I'] in mem.served_operand, mem_port_alloc
+    # #   if ['O'] in mem.served_operand and mem.mem_level > target_output_mem_level:
+    # #     remove ['O'] in mem.served_operand, mem_port_alloc
+    # #   if ['W'] in mem.served_operand and mem.mem_level > target_const_mem_level:
+    # #     remove ['W'] in mem.served_operand, mem_port_alloc
+    # # 2. Remove unused memory
+    # # for mem in mem_levels(sort_order: from top to bottom):
+    # #   if mem.served_operand == empty:
+    # #     do not add the current mem into the modified architecture
+    # TODO requires cleanup
+    """
+
     def __init__(
         self,
         list_of_callables,
@@ -111,7 +115,7 @@ class RemoveUnusedMemoryStage(Stage):
                 target_act_mem_level = self.mem_update_list[curr_id][pos][act_operand]
             if list(ele.keys())[0] == output_operand:
                 target_output_mem_level = self.mem_update_list[curr_id][pos][output_operand]
-        if len(self.layer.constant_operands) == 0:
+        if self.layer.constant_operands is None or len(self.layer.constant_operands) == 0:
             # special case when defining workload manually:
             # the constant operands list is empty for such as "Adder" layers
             # Here we make a trick: treating the other input as const_operand

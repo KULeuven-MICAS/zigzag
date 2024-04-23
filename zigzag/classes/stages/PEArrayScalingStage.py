@@ -1,4 +1,6 @@
 from math import ceil
+
+from typeguard import typechecked
 from zigzag.classes.hardware.architecture.accelerator import Accelerator
 from zigzag.classes.hardware.architecture.core import Core
 from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
@@ -13,6 +15,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+@typechecked
 class PEArrayScalingStage(Stage):
     """!  This stage scales the PE array of the given accelerator.
     Because the user-defined spatial mapping resides in the different workload layer nodes,

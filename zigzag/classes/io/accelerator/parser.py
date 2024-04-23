@@ -1,7 +1,4 @@
 import importlib
-
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-
 import logging
 
 logger = logging.getLogger(__name__)
@@ -22,9 +19,7 @@ class AcceleratorParser:
             self.accelerator_path = None
             self.accelerator = accelerator
         else:
-            raise TypeError(
-                "Given accelerator is nor a module path string or an Accelerator object."
-            )
+            raise TypeError("Given accelerator is nor a module path string or an Accelerator object.")
 
         self.supported_accelerators = {
             "ascend": "zigzag.inputs.examples.hardware.Ascend_like",
@@ -41,9 +36,7 @@ class AcceleratorParser:
                 accelerator = self.parse_accelerator_from_path(self.accelerator_path)
             except ModuleNotFoundError:
                 try:
-                    accelerator = self.parse_supported_accelerator(
-                        self.accelerator_path
-                    )
+                    accelerator = self.parse_supported_accelerator(self.accelerator_path)
                 except KeyError:
                     raise ValueError(
                         f"Provided accelerator path ({self.accelerator_path}) is not a valid module path, nor a supported standard accelerator. \
@@ -59,9 +52,7 @@ class AcceleratorParser:
         global module
         module = importlib.import_module(accelerator_path)
         accelerator = module.accelerator
-        logger.info(
-            f"Parsed accelerator with cores {[core.id for core in accelerator.cores]}."
-        )
+        logger.info(f"Parsed accelerator with cores {[core.id for core in accelerator.cores]}.")
         return accelerator
 
     def parse_supported_accelerator(self, standard_accelerator):

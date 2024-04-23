@@ -1,7 +1,5 @@
 import pytest
-import sys
 
-sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag
 
 workloads = (
