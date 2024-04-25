@@ -25,34 +25,9 @@ class TemporalOrderingConversionStage(Stage):
         **kwargs,
     ):
         super().__init__(list_of_callables, **kwargs)
-        self.check_layer(layer)
         self.layer = layer
         self.spatial_mapping = spatial_mapping
         self.accelerator = accelerator
-
-    @staticmethod
-    def check_layer(layer: LayerNode):
-        """!  Check the layer attribute of the main_inputs:
-
-        check that the layer includes:
-        - the core which it is allocated to
-        - the user-defined spatial mapping
-
-        If not, a ValueError is raised.
-
-        @return: True
-        # TODO move to LayerNode
-        """
-        if not layer.core_allocation:
-            logger.critical(f"Layer {layer} has no core allocation.")
-            raise ValueError()
-        if not layer.user_temporal_ordering:
-            logger.critical(f"Layer {layer} has no user-defined temporal ordering.")
-            raise ValueError(
-                f"Layer {layer} has no user-defined temporal ordering. Use LomaStage to generate automatically."
-            )
-
-        return True
 
     def run(self):
         """!  Run this stage by converting the user-defined temporal loop ordering

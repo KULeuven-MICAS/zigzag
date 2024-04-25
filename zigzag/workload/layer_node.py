@@ -76,7 +76,7 @@ class LoopRelevancyInfo:
         self = LoopRelevancyInfo()
         self.__orig_pr_loop = pr_loop
 
-        dimension_list = layer_dim_sizes.layer_dims()
+        dimension_list = layer_dim_sizes.layer_dims
         for layer_op in equation.get_contained_operands():
             r_loop_list = equation.get_r_layer_dims(layer_op)
             ir_loop_list = list(set(dimension_list).difference(r_loop_list))
@@ -136,7 +136,7 @@ class LayerNode:
         self.layer_operands = self.equation.get_contained_operands()
         self.output_operand: LayerOperand = self.layer_operands[0]
         self.input_operands: list[LayerOperand] = self.layer_operands[1:]
-        self.layer_dims = list(self.layer_dim_sizes.layer_dims())
+        self.layer_dims = list(self.layer_dim_sizes.layer_dims)
 
         self.pr_loop, pr_loop_list, self.pr_scaling_factors = self.build_pr_funcs()
         self.pr_layer_dim_sizes = (
@@ -252,7 +252,7 @@ class LayerNode:
     def extract_layer_info(self):
         """!  This function extract basic information for each layer node."""
 
-        self.total_MAC_count = self.layer_dim_sizes.get_total_size()
+        self.total_MAC_count = self.layer_dim_sizes.total_size
 
         # each operand's size (Unit: # of data element)
         for layer_op in self.layer_operands:
@@ -279,7 +279,7 @@ class LayerNode:
         """!  Return the irrelevant dimensions of layer operand 'layer_op'."""
         return self.loop_relevancy_info.get_ir_layer_dims(layer_op)
 
-    def get_layer_operand(self, mem_op: MemoryOperand) -> LayerOperand:
+    def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
         """!  Return the layer operand associated with the given memory operand for this layer.
         If there is no such memory operand, an error is raised.
         """
@@ -287,18 +287,3 @@ class LayerNode:
         if layer_op is not None:
             return layer_op
         raise ValueError(f"The memory operand {mem_op} is not present in layer {self}.")
-
-    @staticmethod
-    def check_layer(layer: "LayerNode"):
-        """!Check that the layer includes:
-        - the core which it is allocated to
-        If not, a ValueError is raised.
-        If the layer in main_inputs is not set, False is returned
-        @return: True if layer is set correctly
-        """
-        if layer is None:
-            raise ValueError()
-        if layer.core_allocation is None:
-            logger.critical(f"Layer {layer} has no core allocation.")  # pylint: disable=W1203
-            raise ValueError()
-        return True

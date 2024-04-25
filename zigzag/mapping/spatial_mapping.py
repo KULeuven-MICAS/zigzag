@@ -20,19 +20,23 @@ class MappingSingleOADim:
         # float type is used in `SpatialMappingConversionStage`
         self.data: dict[LayerDim, UnrollFactor] | dict[LayerDim, float] = data
 
-    def get_nb_unrolled_dims(self):
-        """! Return the number of different layer dimensions unrolled (unroll factor > 1) over this
-        Operational Array (spatial) Dimension"""
-        return len([x for x in self.data.values() if x > 1])
+    # @property
+    # def nb_unrolled_dims(self):
+    #     """! Return the number of different layer dimensions unrolled (unroll factor > 1) over this
+    #     Operational Array (spatial) Dimension"""
+    #     return len([x for x in self.data.values() if x > 1])
 
-    def is_nested(self):
-        """! Return True iff multiple layer dimensions are unrolled over this MappingSingleOADim"""
-        return self.get_nb_unrolled_dims() > 1
+    # @property
+    # def is_nested(self):
+    #     """! Return True iff multiple layer dimensions are unrolled over this MappingSingleOADim"""
+    #     return self.nb_unrolled_dims > 1
 
-    def get_utilization(self):
+    @property
+    def utilization(self):
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
         return math.prod([factor for factor in self.data.values()])
 
+    @property
     def layer_dims(self) -> set[LayerDim]:
         return set(self.keys())
 
@@ -67,9 +71,9 @@ class MappingSingleOADim:
         """! Return true if the contained LayerDims are the same and all unrollings are the same"""
         return (
             isinstance(other, MappingSingleOADim)
-            and all([layer_dim in other for layer_dim in self.layer_dims()])
-            and all([layer_dim in self for layer_dim in other.layer_dims()])
-            and all([self[layer_dim] == other[layer_dim] for layer_dim in self.layer_dims()])
+            and all([layer_dim in other for layer_dim in self.layer_dims])
+            and all([layer_dim in self for layer_dim in other.layer_dims])
+            and all([self[layer_dim] == other[layer_dim] for layer_dim in self.layer_dims])
         )
 
     def __hash__(self):
@@ -94,7 +98,7 @@ class SpatialMapping(LayerAttribute):
         """
         assert not self.__oa_dims_are_initialized, "OA Dimensions were already initialized"
 
-        for this_oa_dim in self.oa_dims():
+        for this_oa_dim in self.oa_dims:
             given_oa_dim = oa_dims[oa_dims.index(this_oa_dim)]
             this_oa_dim.size = given_oa_dim.size
 
@@ -105,8 +109,8 @@ class SpatialMapping(LayerAttribute):
 
     def is_valid(
         self,
-        max_unrollings: "SpatialMapping",
-        layer_dim_sizes: dict[LayerDim, UnrollFactorInt],
+        max_unrollings: dict[Dimension, dict[LayerDim, UnrollFactorInt]],
+        layer_dim_sizes: dict[LayerDim, UnrollFactor],
         oa_dims: list[Dimension],
     ):
         """! Return True iff
@@ -126,11 +130,11 @@ class SpatialMapping(LayerAttribute):
         # 1)
         assert self.oa_dims_are_initialized(), "Initialize OA Dimensions first"
         # 2)
-        assert all(self_oa_dim in oa_dims for self_oa_dim in self.oa_dims()), "Illegal OA Dimension found"
+        assert all(self_oa_dim in oa_dims for self_oa_dim in self.oa_dims), "Illegal OA Dimension found"
         # 3)
         assert all(given_oa_dim in self for given_oa_dim in oa_dims), "SpatialMapping misses OA Dimension"
 
-        for oa_dim in self.oa_dims():
+        for oa_dim in self.oa_dims:
 
             for layer_dim, unrolling in self[oa_dim].items():
                 # 4)
@@ -140,11 +144,11 @@ class SpatialMapping(LayerAttribute):
                 if unrolling > max_unrollings[oa_dim][layer_dim]:
                     return False
             # 6)
-            if self[oa_dim].get_utilization() > oa_dim.size:
+            if self[oa_dim].utilization > oa_dim.size:
                 return False
 
         # 7)
-        if not all([layer_dim in layer_dim_sizes for layer_dim in self.get_all_contained_layer_dims()]):
+        if not all([layer_dim in layer_dim_sizes for layer_dim in self.all_contained_layer_dims]):
             return False
 
         # 8)
@@ -157,8 +161,8 @@ class SpatialMapping(LayerAttribute):
 
     def check_and_reduce(
         self,
-        max_unrollings: "SpatialMapping",
-        layer_dim_sizes: dict[LayerDim, UnrollFactorInt],
+        max_unrollings: dict[Dimension, dict[LayerDim, UnrollFactorInt]],
+        layer_dim_sizes: dict[LayerDim, UnrollFactor],
     ):
         """! Verify
         - that the utilization at each OA Dimension does not exceed the size of the Dimension
@@ -170,7 +174,7 @@ class SpatialMapping(LayerAttribute):
         assert self.oa_dims_are_initialized(), "Initialize OA Dimensions first"
 
         # Remove LayerDim if not listed in `layer_dim_sizes`
-        for layer_dim in self.get_all_contained_layer_dims():
+        for layer_dim in self.all_contained_layer_dims:
             if layer_dim not in layer_dim_sizes:
                 logger.warning(
                     "User provided spatial unrolling %s is not defined in Loop Dimension Sizes %s. Removing %s.",
@@ -196,19 +200,19 @@ class SpatialMapping(LayerAttribute):
                     self[oa_dim][layer_dim] = max_unrolling
 
             # Check full OA Dimension
-            if mapping_this_oa_dim.get_utilization() > oa_dim.size:
+            if mapping_this_oa_dim.utilization > oa_dim.size:
                 logger.info(
                     "User provided spatial unrolling of for Dimension %s exceeded maximally allowed unrolling of %i. Removing arbitrary Layer unrollings to meet this constraint",
                     oa_dim,
                     oa_dim.size,
                 )
-                while mapping_this_oa_dim.get_utilization() > oa_dim.size:
+                while mapping_this_oa_dim.utilization > oa_dim.size:
                     # Remove any LayerDim
-                    some_layer_dim = mapping_this_oa_dim.layer_dims().pop()
+                    some_layer_dim = next(iter(mapping_this_oa_dim.layer_dims))
                     del mapping_this_oa_dim[some_layer_dim]
 
         # Check every LayerDim separately, over all OA Dims
-        for layer_dim in self.get_all_contained_layer_dims():
+        for layer_dim in self.all_contained_layer_dims:
             layer_size = layer_dim_sizes[layer_dim]
             if self.get_total_unrolling_of_layer_dim(layer_dim) > layer_size:
                 logger.warning(
@@ -219,23 +223,22 @@ class SpatialMapping(LayerAttribute):
                 )
                 while self.get_total_unrolling_of_layer_dim(layer_dim) > layer_size:
                     some_oa_dim = set(
-                        filter(lambda x: layer_dim in self[x], self.oa_dims())  # pylint: disable=W0640
+                        filter(lambda x: layer_dim in self[x], self.oa_dims)  # pylint: disable=W0640
                     ).pop()
                     del self[some_oa_dim][layer_dim]
 
-    # TODO make the return type clearer
-    def get_hw_utilization(self) -> UnrollFactor:
+    @property
+    def hw_utilization(self) -> UnrollFactor:
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
-        return int(math.prod([x.get_utilization() for x in self.values()]))
+        return int(math.prod([x.utilization for x in self.values()]))
 
-    def get_all_contained_layer_dims(self) -> set[LayerDim]:
+    @property
+    def all_contained_layer_dims(self) -> set[LayerDim]:
         """! Return a set containing all the LayerDims contained in the mapping at any OA Dim"""
         return set([layer_dim for layer_dim, _ in self.flatten_unrollings()])
 
     def get_total_unrolling_of_layer_dim(self, layer_dim: LayerDim) -> UnrollFactor:
         """! Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions"""
-        if self.get_hw_utilization() > 64:
-            pass
         return math.prod([v for k, v in self.flatten_unrollings() if k == layer_dim])
 
     def get_performance_indicator(self) -> float:
@@ -251,10 +254,8 @@ class SpatialMapping(LayerAttribute):
         The rational behind this function is that it costs less computation time to estimate the performance than
         actually computing the CMEs for each SpatialMapping
         """
-        hw_utilization = float(self.get_hw_utilization())
-        unrolling_per_layer_dim = [
-            self.get_total_unrolling_of_layer_dim(dim) for dim in self.get_all_contained_layer_dims()
-        ]
+        hw_utilization = float(self.hw_utilization)
+        unrolling_per_layer_dim = [self.get_total_unrolling_of_layer_dim(dim) for dim in self.all_contained_layer_dims]
         diversity_indicator = hw_utilization / max(unrolling_per_layer_dim) - 1
         assert diversity_indicator < hw_utilization, "error in the performance indicator formula"
         return hw_utilization + diversity_indicator
@@ -268,11 +269,12 @@ class SpatialMapping(LayerAttribute):
         )
 
     def delete_layer_dim(self, layer_dim: LayerDim) -> None:
-        assert layer_dim in self.get_all_contained_layer_dims()
-        for oa_dim in self.oa_dims():
+        assert layer_dim in self.all_contained_layer_dims
+        for oa_dim in self.oa_dims:
             if layer_dim in self[oa_dim]:
                 del self[oa_dim][layer_dim]
 
+    @property
     def oa_dims(self) -> set[Dimension]:
         return set(self.keys())
 
@@ -311,9 +313,9 @@ class SpatialMapping(LayerAttribute):
         """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""
         return (
             isinstance(other, SpatialMapping)
-            and all([oa_dim in other for oa_dim in self.oa_dims()])
-            and all([oa_dim in self for oa_dim in other.oa_dims()])
-            and all([self[oa_dim] == other[oa_dim] for oa_dim in self.oa_dims()])
+            and all([oa_dim in other for oa_dim in self.oa_dims])
+            and all([oa_dim in self for oa_dim in other.oa_dims])
+            and all([self[oa_dim] == other[oa_dim] for oa_dim in self.oa_dims])
         )
 
     def __hash__(self):

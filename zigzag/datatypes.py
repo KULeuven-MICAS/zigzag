@@ -1,4 +1,5 @@
 from abc import ABCMeta
+from ast import Constant
 import re
 from typing import Any, Generator, TypeAlias
 from typeguard import typechecked
@@ -36,16 +37,22 @@ class DimensionABC(metaclass=ABCMeta):
 class LayerOperand(DimensionABC):
     """! Operand from the layer definition, e.g. `I`, `W`, `O`."""
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def is_output(self):
+        return self == Constants.OUTPUT_LAYER_OP
+
+    def is_final_output(self):
+        return self == Constants.FINAL_OUTPUT_LAYER_OP
 
 
 @typechecked
 class MemoryOperand(DimensionABC):
     """! Operand from the memory definition, e.g. `I1`, `I2`, `O`."""
 
-    def __init__(self, name: str):
-        super().__init__(name)
+    def is_output(self):
+        return self == Constants.OUTPUT_MEM_OP
+
+    def is_final_output(self):
+        return self == Constants.FINAL_OUTPUT_MEM_OP
 
 
 @typechecked

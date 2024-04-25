@@ -74,10 +74,12 @@ class LayerDimSizes(LayerAttribute):
     def __init__(self, data: dict[LayerDim, UnrollFactor]):
         self.data = data
 
+    @property
     def layer_dims(self) -> list[LayerDim]:
         return list(self.data.keys())
 
-    def get_total_size(self) -> UnrollFactor:
+    @property
+    def total_size(self) -> UnrollFactor:
         return math.prod(self.data.values())
 
     def items(self):
@@ -107,7 +109,8 @@ class LayerOperandPrecision(LayerAttribute):
     def __init__(self, data: dict[LayerOperand, int]):
         self.data = data
 
-    def get_final_output_precision(self) -> int:
+    @property
+    def final_output_precision(self) -> int:
         """! Return the precision of either the final output (if defined by user) or the intermediate output"""
         if Constants.FINAL_OUTPUT_LAYER_OP in self.data:
             return self.data[Constants.FINAL_OUTPUT_LAYER_OP]
@@ -135,14 +138,13 @@ class MemoryOperandLinks(LayerAttribute):
         assert layer_op in self.data
         return self.data[layer_op]
 
-    def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand | None:
+    def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
         """! Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained
         within"""
         assert mem_op in self.data.values()
         candidates = {k for k, v in self.items() if v == mem_op}
-        assert len(candidates) <= 1, "MemoryOperandLinks contains duplicate MemoryOperand"
-        if len(candidates) == 0:
-            return None
+        assert len(candidates) <= 1, f"MemoryOperandLinks contains duplicate MemoryOperand {mem_op}"
+        assert len(candidates) > 0, f"Memory operand {mem_op} is not present"
         return candidates.pop()
 
     def items(self):

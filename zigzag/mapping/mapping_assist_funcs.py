@@ -9,31 +9,11 @@ from zigzag.workload.layer_node import LayerNode
 SpatialMappingPerMEMLvl: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor | float]]]]
 
 
-# class Loop:
-#     """!  Collect information of each single loop tuple in mapping.
-#     Applied range: from the lowest architectural level to the current level.
-#     """
-
-#     def __init__(self, loop: tuple, MAC_op: int, data_elem: int):
-#         self.loop = loop
-#         self.MAC_op = MAC_op
-#         self.data_elem = data_elem
-#         self.reuse = MAC_op / data_elem
-
-#     def __str__(self):
-#         return str(self.loop)
-
-#     def __repr__(self):
-#         return str(self.loop)
-
-
 def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNode") -> SpatialMappingPerMEMLvl:
     """!  This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
     It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
     # TODO requires cleanup
     """
-    # ! This essentially creates a copy of layer_node.loop_relevancy_info, but skips layer_ops that would not be in mapping_dict (is this possible?)
-    #  = {layer_op: layer_node.[layer_op] for layer_op in mapping_dict}
 
     relevancy_info = layer_node.loop_relevancy_info
     r_ir_operand_loop_lut: dict[LayerOperand, list[LayerDim]] = {

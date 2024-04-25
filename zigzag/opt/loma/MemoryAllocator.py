@@ -55,7 +55,7 @@ class MemoryAllocator:
             mem_op: self.layer.operand_precision[layer_op] for layer_op, mem_op in self.layer_to_mem_op.items()
         }
         # Final output precision
-        self.precision[Constants.FINAL_OUTPUT_MEM_OP] = self.layer.operand_precision.get_final_output_precision()
+        self.precision[Constants.FINAL_OUTPUT_MEM_OP] = self.layer.operand_precision.final_output_precision
         # Initialize the unallocated loops with the ordering for each operand
         self.unallocated: dict[MemoryOperand, list[Loop]] = {}
         for mem_op in self.mem_ops:

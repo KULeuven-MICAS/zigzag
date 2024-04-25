@@ -33,29 +33,8 @@ class SpatialMappingConversionStage(Stage):
         Initialize the accelerator and layer attributes.
         """
         super().__init__(list_of_callables, **kwargs)
-        self.check_layer(layer)  # raise ValueError in case anything is wrong
         self.layer = layer
         self.accelerator = accelerator
-
-    @staticmethod
-    def check_layer(layer: LayerNode):
-        """!  Check the layer attribute of the main_inputs:
-
-        check that the layer includes:
-        - the core which it is allocated to
-        - the user-defined spatial mapping
-
-        If not, a ValueError is raised.
-        @return: True
-        """
-        if not isinstance(layer.core_allocation, int):
-            logger.critical(f"Layer {layer} has no core allocation.")
-            raise ValueError(f"Missing core allocation for {layer}.")
-        if not layer.user_spatial_mapping:
-            logger.critical(f"Layer {layer} has no user-defined spatial mapping.")
-            raise ValueError("Missing spatial mapping for {layer}. Please provide 'spatial_mapping' for {layer}.")
-
-        return True
 
     def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
         user_spatial_mapping = self.layer.user_spatial_mapping
@@ -151,7 +130,7 @@ class SpatialMappingConversionStage(Stage):
         user_spatial_mapping: SpatialMapping,
         limited_user_spatial_mapping: SpatialMapping,
         allow_decimal_sm_loop_size=True,
-    ) -> None | tuple[LayerDim, float | int]:
+    ) -> None | tuple[LayerDim, UnrollFactor]:
         layer_dim, unroll_factor = spatial_loop
 
         # Check 0: Skip this spatial dimension if it doesn't exist in the layer
@@ -285,7 +264,7 @@ class SpatialMappingConversionStage(Stage):
 
     def calc_unrolled_loop_size_on_early_oa_dims(
         self, oa_dim: Dimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
-    ) -> UnrollFactor | float:
+    ) -> UnrollFactor:
         # calculate the unrolled loop size for the specific layer dim on oa dims earlier than current oa dim
         loop_unrolled_size_already = 1
         for curr_oa_dim, mapping_this_oa_dim in user_spatial_mapping.items():

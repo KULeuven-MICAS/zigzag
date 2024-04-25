@@ -1,18 +1,13 @@
 from typeguard import typechecked
 from typing import Any, Generator
-
-from zigzag.cost_model.cost_model import CostModelEvaluation
-
-from zigzag.stages.Stage import Stage
 import os
 import pickle
 import json
 import yaml
-import re
-import numpy as np
-
 import logging
 
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.stages.Stage import Stage
 from zigzag.utils import json_repr_handler
 
 logger = logging.getLogger(__name__)
