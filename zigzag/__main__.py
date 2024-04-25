@@ -1,5 +1,20 @@
-from zigzag.classes.stages import *
+from zigzag.stages import *
 import argparse
+
+from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.MainStage import MainStage
+from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
+from zigzag.stages.PEArrayScalingStage import PEArrayScalingStage
+from zigzag.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
+from zigzag.stages.WorkloadStage import WorkloadStage
+from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
+from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
+from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.LomaStage import LomaStage
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
+from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
 
 
 def main():

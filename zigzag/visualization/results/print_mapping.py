@@ -1,7 +1,7 @@
 from copy import deepcopy
 
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-from zigzag.classes.datatypes import LayerOperand, MemoryOperand
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.datatypes import LayerOperand, MemoryOperand
 
 
 def create_printing_block(row, col):

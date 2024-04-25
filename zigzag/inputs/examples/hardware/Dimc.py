@@ -1,14 +1,14 @@
 import os
 import random
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.core import Core
-from zigzag.classes.hardware.architecture.ImcArray import ImcArray
-from zigzag.classes.hardware.architecture.get_cacti_cost import (
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.Core import Core
+from zigzag.hardware.architecture.ImcArray import ImcArray
+from zigzag.hardware.architecture.get_cacti_cost import (
     get_w_cost_per_weight_from_cacti,
 )
-from zigzag.classes.hardware.architecture.get_cacti_cost import get_cacti_cost
+from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
 
 # Digital In-Memory Computing (DIMC) core definition
 # This example will define an DIMC core with a single macro, sized 32 rows x 32 columns.

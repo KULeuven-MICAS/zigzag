@@ -9,14 +9,14 @@ from extended_int import int_inf
 
 
 sys.path.append("../zigzag")
-from zigzag.classes.stages import *  #  pylint: disable=C0413
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.core import Core  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.operational_array import MultiplierArray  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.operational_unit import Multiplier  # pylint: disable=C0413
-from zigzag.classes.hardware.architecture.accelerator import Accelerator  # pylint: disable=C0413
+from zigzag.stages import *  #  pylint: disable=C0413
+from zigzag.cost_model.cost_model import CostModelEvaluation  # pylint: disable=C0413
+from zigzag.hardware.architecture.Core import Core  # pylint: disable=C0413
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy  # pylint: disable=C0413
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance  # pylint: disable=C0413
+from zigzag.hardware.architecture.operational_array import MultiplierArray  # pylint: disable=C0413
+from zigzag.hardware.architecture.operational_unit import Multiplier  # pylint: disable=C0413
+from zigzag.hardware.architecture.Accelerator import Accelerator  # pylint: disable=C0413
 
 
 from zigzag import api
@@ -185,8 +185,8 @@ pickle_filename = f"outputs/TPU-{model}-saved_list_of_cmes.pickle"
 ###### Run stages ######
 
 
-opt_stage = MinimalEDPStage
-workload_parser_stage = WorkloadParserStage
+# opt_stage = MinimalEDPStage
+# workload_parser_stage = WorkloadParserStage
 
 # mainstage = MainStage(
 #     [  # Initialize the MainStage as entry point

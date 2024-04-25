@@ -1,4 +1,4 @@
-from zigzag.classes.stages import *
+from zigzag.stages import *
 import argparse
 import re
 

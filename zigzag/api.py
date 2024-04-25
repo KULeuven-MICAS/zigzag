@@ -1,9 +1,21 @@
 from onnx import ModelProto
 
-from zigzag.classes.stages import *
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
 from typing import Type
 import re
+
+from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.MainStage import MainStage
+from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
+from zigzag.stages.PEArrayScalingStage import PEArrayScalingStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
+from zigzag.stages.WorkloadStage import WorkloadStage
+from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
+from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
+from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.LomaStage import LomaStage
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
+from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
 
 
 def get_hardware_performance_zigzag(
@@ -408,10 +420,3 @@ if __name__ == "__main__":
         dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",
         pickle_filename=f"outputs/{pkl_name}.pickle",
     )
-    # print(f'Answer = {answer}')
-
-    # import pickle
-    # path = f"outputs/{pkl_name}.pickle"
-    # with open(path, 'rb') as f:
-    #     data = pickle.load(f)
-    # f.close()

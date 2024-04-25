@@ -2,8 +2,8 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import numpy as np
-from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-from zigzag.classes.mapping.data_movement import FourWayDataMoving
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.mapping.data_movement import FourWayDataMoving
 
 # MPL FONT SIZES
 SMALLEST_SIZE = 10
