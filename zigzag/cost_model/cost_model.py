@@ -1,123 +1,18 @@
 import logging
 from math import ceil
-from typing import Any, Generator, TypeAlias
 import numpy as np
 from typeguard import typechecked
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.mapping.Mapping import Mapping
-from zigzag.mapping.data_movement import FourWayDataMoving
+from zigzag.mapping.data_movement import DataDirection, FourWayDataMoving
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import json_repr_handler, pickle_deepcopy
 
 logger = logging.getLogger(__name__)
-
-
-def get_total_inst_bandwidth(cme: "CostModelEvaluation", memory_instance: MemoryInstance):
-    """!  Given a cost model evaluation and a memory instance, compute the memory's
-    total instantaneous bandwidth required throughout this layer's execution.
-    """
-    # Check which operands require offchip memory throughout the computation
-    offchip_mem_operands = []
-    for op, memory_levels in cme.mem_hierarchy_dict.items():
-        last_mem_level = memory_levels[-1]
-        if last_mem_level.memory_instance == memory_instance:
-            offchip_mem_operands.append(op)
-    # Obtain the required instantaneous bandwidth to/from offchip for these operands
-    total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
-    for mem_op in offchip_mem_operands:
-        layer_op = next(l_op for l_op, m_op in cme.layer.memory_operand_links.items() if m_op == mem_op)
-        inst_bw_4way = cme.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
-        total_inst_bw += inst_bw_4way
-    return total_inst_bw
-
-
-def get_shared_mem_list(
-    mem_op: MemoryOperand,
-    mem_lv: int,
-    memory_sharing_list: list[dict[MemoryOperand, int]],
-) -> list[tuple[MemoryOperand, int]] | None:
-    """!  Given a certain operand's storage level (for example (A,1): operand A's 1st memory level),
-    return a list of the rest operand's storage levels that share physical memory with the former one (A1)
-    """
-    for mem_share_group in memory_sharing_list:
-        mem_share_grp = list(mem_share_group.items())
-        mem_target = (mem_op, mem_lv)
-        if mem_target in mem_share_grp:
-            return mem_share_grp
-
-
-def spatial_mapping_fractional_to_int(spatial_mapping: dict):
-    """!  Generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
-    Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
-
-    """
-    spatial_mapping_int = pickle_deepcopy(spatial_mapping)
-    for op, su_all_lv in spatial_mapping.items():
-        if not su_all_lv:
-            continue
-        for lv, su_one_level in enumerate(su_all_lv):
-            for idx, su in enumerate(su_one_level):
-                if type(su[1]) != int:
-                    spatial_mapping_int[op][lv][idx] = (su[0], ceil(su[1]))
-
-    return spatial_mapping_int
-
-
-def calc_MUW_union(port_duty_list):
-    """!   This function calculates the union length of all the share-port MUW (memory updating window).
-    The following encoding has to be used:
-    - 'P' for single period length
-    - 'A' for allowed MUW per period
-    - 'PC' for period count within the whole layer computation
-
-    Pre-process the port_duty_list to generate input_dict, which looks like:
-    - input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}
-
-    @param port_duty_list List of port activity objects
-    """
-
-    input_dict = {}
-    # As long as one of the port duty can make use of the whole computation time, the MUW union is
-    # set to the whole computation time
-    for port_duty in port_duty_list:
-        if port_duty.period == port_duty.allowed_cycle:
-            return port_duty.period * port_duty.period_count
-        key = str(port_duty.served_op_lv_dir)
-        input_dict[key] = {
-            "P": port_duty.period,
-            "A": port_duty.allowed_cycle,
-            "PC": port_duty.period_count,
-        }
-
-    max_period = 0
-    max_period_operand = None
-    for op, values in input_dict.items():
-        if values["P"] > max_period:
-            max_period = values["P"]
-            max_period_operand = op
-
-    indicators = np.zeros((len(input_dict), max_period), dtype=np.int8)
-    for i, op in enumerate(input_dict):
-        # reshape to period of this operand
-        indicators_reshape = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
-        # fill in first few time units as used
-        indicators_reshape[i, :, : input_dict[op]["A"]] = 1
-
-    union = max_period - (~indicators.any(0)).sum(dtype=np.uint64)
-
-    # take sum across operands => how many operand need memory for every time unit
-    # Subtract 1 => number of stalls
-    # Clip by 0 (-1 is not -1 stall)
-    # Sum across time units (only remaining axis)
-    # stall = (indicators.sum(0, dtype=np.int8) - 1).clip(min=0).sum()
-
-    # Multiply with number of periods of largest period (as it was normalized to largest period)
-    return union * input_dict[max_period_operand]["PC"]
 
 
 @typechecked
@@ -149,7 +44,7 @@ class CostModelEvaluation:
         spatial_mapping: SpatialMappingInternal,
         spatial_mapping_int: SpatialMappingInternal,
         temporal_mapping: TemporalMapping,
-        access_same_data_considered_as_no_access=True,
+        access_same_data_considered_as_no_access: bool = True,
     ):
         """!  The class constructor
         After initialization, the cost model evaluation is run
@@ -157,8 +52,8 @@ class CostModelEvaluation:
         @param layer the layer to run
         @param access_same_data_considered_as_no_access (optional)
         """
-        self.accelerator = accelerator
-        self.layer = layer
+        self.accelerator: Accelerator = accelerator
+        self.layer: LayerNode = layer
         self.spatial_mapping = spatial_mapping
         self.spatial_mapping_int = spatial_mapping_int  # the original spatial mapping without decimal
         self.temporal_mapping = temporal_mapping
@@ -173,6 +68,9 @@ class CostModelEvaluation:
         self.mem_r_bw_min_dict, self.mem_w_bw_min_dict = core.get_memory_bw_min_dict()
         self.mem_sharing_list = core.get_memory_sharing_list()
         self.memory_operand_links = layer.memory_operand_links
+
+        self.cumulative_layer_ids: list[int] = []  # In case the CME results from adding other CMEs together
+        self.cumulative_core_ids: list[int] = []
 
         # generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
         # Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
@@ -198,7 +96,6 @@ class CostModelEvaluation:
         # Run the cost model evaluation
         self.run()
 
-
     def run(self) -> None:
         """!  Run the cost model evaluation."""
         self.calc_memory_utilization()
@@ -206,7 +103,72 @@ class CostModelEvaluation:
         self.calc_energy()
         self.calc_latency()
 
-    def calc_memory_utilization(self):
+    def __get_shared_mem_list(
+        self,
+        mem_op: MemoryOperand,
+        mem_lv: int,
+        memory_sharing_list: list[dict[MemoryOperand, int]],
+    ) -> list[tuple[MemoryOperand, int]] | None:
+        """!  Given a certain operand's storage level (for example (A,1): operand A's 1st memory level),
+        return a list of the rest operand's storage levels that share physical memory with the former one (A1)
+        """
+        for mem_share_group in memory_sharing_list:
+            mem_share_grp = list(mem_share_group.items())
+            mem_target = (mem_op, mem_lv)
+            if mem_target in mem_share_grp:
+                return mem_share_grp
+
+    def __calc_MUW_union(self, port_duty_list: list[PortActivity]) -> int | float:
+        """!   This function calculates the union length of all the share-port MUW (memory updating window).
+        The following encoding has to be used:
+        - 'P' for single period length
+        - 'A' for allowed MUW per period
+        - 'PC' for period count within the whole layer computation
+
+        Pre-process the port_duty_list to generate input_dict, which looks like:
+        - input_dict = {'O1': {'P': 3, 'A': 1, 'PC': 8}, 'O2': {'P': 6, 'A': 2, 'PC': 4}, 'O3': {'P': 12, 'A': 4, 'PC': 2}}
+        # TODO clean up
+        """
+
+        input_dict: dict[str, dict[str, int | float]] = {}
+        # As long as one of the port duty can make use of the whole computation time, the MUW union is
+        # set to the whole computation time
+        for port_duty in port_duty_list:
+            if port_duty.period == port_duty.allowed_cycle:
+                return port_duty.period * port_duty.period_count
+            key = str(port_duty.served_op_lv_dir)
+            input_dict[key] = {
+                "P": port_duty.period,
+                "A": port_duty.allowed_cycle,
+                "PC": port_duty.period_count,
+            }
+
+        max_period = 0
+        max_period_operand: str = ""
+        for op, values in input_dict.items():
+            if values["P"] > max_period:
+                max_period = values["P"]
+                max_period_operand = op
+
+        indicators: np.ndarray = np.zeros((len(input_dict), max_period), dtype=np.int8)
+        for i, op in enumerate(input_dict):
+            # reshape to period of this operand
+            indicators_reshape: np.ndarray = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
+            # fill in first few time units as used
+            indicators_reshape[i, :, : input_dict[op]["A"]] = 1
+
+        union = max_period - (~indicators.any(0)).sum(dtype=np.uint64)
+
+        # take sum across operands => how many operand need memory for every time unit
+        # Subtract 1 => number of stalls
+        # Clip by 0 (-1 is not -1 stall)
+        # Sum across time units (only remaining axis)
+        # stall = (indicators.sum(0, dtype=np.int8) - 1).clip(min=0).sum()
+
+        # Multiply with number of periods of largest period (as it was normalized to largest period)
+        return union * input_dict[max_period_operand]["PC"]
+
+    def calc_memory_utilization(self) -> None:
         """!  Calculate occupancy for each physical memory based on the mapping."""
         # mem_utili_individual: the memory utilization of each operand individually.
         # mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
@@ -240,9 +202,9 @@ class CostModelEvaluation:
             mem_utilization = 0
             effective_mem_utilization = 0
             for mem_op, mem_lv in mem_share_dict.items():
-                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
                 # mem to layer op might not contain this mem op (e.g. pooling layer)
-                if layer_op is not None:
+                if self.memory_operand_links.contains_mem_op(mem_op):
+                    layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
                     mem_utilization += mem_utili_individual[layer_op][mem_lv]
                     effective_mem_utilization += effective_mem_utili_individual[layer_op][mem_lv]
             assert mem_utilization <= 1, (
@@ -251,17 +213,17 @@ class CostModelEvaluation:
                 f"(memory level starts from 0)."
             )
             for mem_op, mem_lv in mem_share_dict.items():
-                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                if layer_op is not None:
-                    mem_utili_shared[layer_op][mem_lv] = mem_utilization  # type: ignore
-                    effective_mem_utili_shared[layer_op][mem_lv] = effective_mem_utilization  # type: ignore
+                if self.memory_operand_links.contains_mem_op(mem_op):
+                    layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+                    mem_utili_shared[layer_op][mem_lv] = mem_utilization
+                    effective_mem_utili_shared[layer_op][mem_lv] = effective_mem_utilization
 
         self.mem_utili_individual = mem_utili_individual
         self.mem_utili_shared = mem_utili_shared
         self.effective_mem_utili_individual = effective_mem_utili_individual
         self.effective_mem_utili_shared = effective_mem_utili_shared
 
-    def calc_memory_word_access(self):
+    def calc_memory_word_access(self) -> None:
         """!  Calculates the memory word access based on unit memory's data element move count and the physical memory bw."""
         memory_word_access: dict[LayerOperand, list[FourWayDataMoving]] = {}
         for layer_op in self.layer.layer_operands:
@@ -273,14 +235,14 @@ class CostModelEvaluation:
                 ].data_trans_amount_per_period.wr_in_by_low
                 data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_low
                 if data_elem_move_per_period == 0 or data_precision == 0:
-                    wr_in_by_low = 0
+                    wr_in_by_low: int = 0
                 else:
                     total_period_count = self.mapping.unit_mem_data_movement[layer_op][
                         mem_lv
                     ].data_trans_period_count.wr_in_by_low
                     max_bw = self.mem_w_bw_dict[self.memory_operand_links[layer_op]][mem_lv]
                     min_bw = self.mem_w_bw_min_dict[self.memory_operand_links[layer_op]][mem_lv]
-                    wr_in_by_low = (
+                    wr_in_by_low = int(
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
                         * (min_bw / max_bw)
                         * total_period_count
@@ -293,14 +255,14 @@ class CostModelEvaluation:
                 ].data_trans_amount_per_period.rd_out_to_low
                 data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.rd_out_to_low
                 if data_elem_move_per_period == 0 or data_precision == 0:
-                    rd_out_to_low = 0
+                    rd_out_to_low: int = 0
                 else:
                     total_period_count = self.mapping.unit_mem_data_movement[layer_op][
                         mem_lv
                     ].data_trans_period_count.rd_out_to_low
                     max_bw = self.mem_r_bw_dict[self.memory_operand_links[layer_op]][mem_lv]
                     min_bw = self.mem_r_bw_min_dict[self.memory_operand_links[layer_op]][mem_lv]
-                    rd_out_to_low = (
+                    rd_out_to_low = int(
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
                         * (min_bw / max_bw)
                         * total_period_count
@@ -312,7 +274,7 @@ class CostModelEvaluation:
                     mem_lv
                 ].data_trans_amount_per_period.rd_out_to_high
                 if data_elem_move_per_period == 0:
-                    rd_out_to_high = 0
+                    rd_out_to_high: int = 0
                 else:
                     data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.rd_out_to_high
                     total_period_count = self.mapping.unit_mem_data_movement[layer_op][
@@ -320,7 +282,7 @@ class CostModelEvaluation:
                     ].data_trans_period_count.rd_out_to_high
                     max_bw = self.mem_r_bw_dict[self.memory_operand_links[layer_op]][mem_lv]
                     min_bw = self.mem_r_bw_min_dict[self.memory_operand_links[layer_op]][mem_lv]
-                    rd_out_to_high = (
+                    rd_out_to_high = int(
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
                         * (min_bw / max_bw)
                         * total_period_count
@@ -332,7 +294,7 @@ class CostModelEvaluation:
                     mem_lv
                 ].data_trans_amount_per_period.wr_in_by_high
                 if data_elem_move_per_period == 0:
-                    wr_in_by_high = 0
+                    wr_in_by_high: int = 0
                 else:
                     data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_high
                     total_period_count = self.mapping.unit_mem_data_movement[layer_op][
@@ -340,7 +302,7 @@ class CostModelEvaluation:
                     ].data_trans_period_count.wr_in_by_high
                     max_bw = self.mem_w_bw_dict[self.memory_operand_links[layer_op]][mem_lv]
                     min_bw = self.mem_w_bw_min_dict[self.memory_operand_links[layer_op]][mem_lv]
-                    wr_in_by_high = (
+                    wr_in_by_high = int(
                         ceil((data_elem_move_per_period * data_precision) / min_bw)
                         * (min_bw / max_bw)
                         * total_period_count
@@ -355,13 +317,13 @@ class CostModelEvaluation:
 
         self.memory_word_access = memory_word_access
 
-    def calc_energy(self):
+    def calc_energy(self) -> None:
         """!  Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy."""
         # TODO: Interconnection energy
         self.calc_MAC_energy_cost()
         self.calc_memory_energy_cost()
 
-    def calc_MAC_energy_cost(self):
+    def calc_MAC_energy_cost(self) -> None:
         """!  Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
         single_MAC_energy = core.operational_array.unit.cost
@@ -378,8 +340,8 @@ class CostModelEvaluation:
         core = self.accelerator.get_core(self.core_id)
         mem_hierarchy = core.memory_hierarchy
 
-        mem_energy_breakdown = {}
-        mem_energy_breakdown_further = {}
+        mem_energy_breakdown: dict[LayerOperand, list[float]] = {}
+        mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = {}
         energy_total = 0
 
         # Retrieve the memory levels in the hierarchy for this memory operand
@@ -387,25 +349,28 @@ class CostModelEvaluation:
             mem_op = self.memory_operand_links[layer_op]
             memory_levels = mem_hierarchy.get_memory_levels(mem_op=mem_op)
 
-            breakdown = []  # Stores the energy breakdown of a single layer operand (W, I, ...)
-            breakdown_further = []  # Stores
+            breakdown: list[float] = []  # Stores the energy breakdown of a single layer operand (W, I, ...)
+            breakdown_further: list[FourWayDataMoving] = []
             for access_count, memory_level in zip(mem_access_list_per_op, memory_levels):
                 energy_cost_per_read_out = memory_level.read_energy
                 energy_cost_per_write_in = memory_level.write_energy
-                read_out_energy_to_above = access_count.get_total_read_outs_to_above(scaling=energy_cost_per_read_out)
-                write_in_energy_from_above = access_count.get_total_write_ins_from_above(
+                read_out_energy_to_above: float = access_count.get_total_read_outs_to_above(
+                    scaling=energy_cost_per_read_out
+                )
+                write_in_energy_from_above: float = access_count.get_total_write_ins_from_above(
                     scaling=energy_cost_per_write_in
                 )
-                read_out_energy_to_below = access_count.get_total_read_outs_to_below(scaling=energy_cost_per_read_out)
-                write_in_energy_from_below = access_count.get_total_write_ins_from_below(
+                read_out_energy_to_below: float = access_count.get_total_read_outs_to_below(
+                    scaling=energy_cost_per_read_out
+                )
+                write_in_energy_from_below: float = access_count.get_total_write_ins_from_below(
                     scaling=energy_cost_per_write_in
                 )
                 total_read_out_energy = read_out_energy_to_above + read_out_energy_to_below
                 total_write_in_energy = write_in_energy_from_above + write_in_energy_from_below
                 total_energy_cost_memory = total_read_out_energy + total_write_in_energy
-                breakdown.append(
-                    total_energy_cost_memory
-                )  # Here the breakdown only saves the total energy cost per memory level
+                # Here the breakdown only saves the total energy cost per memory level
+                breakdown.append(total_energy_cost_memory)
                 breakdown_further.append(
                     FourWayDataMoving(
                         read_out_energy_to_below,
@@ -413,17 +378,17 @@ class CostModelEvaluation:
                         read_out_energy_to_above,
                         write_in_energy_from_above,
                     )
-                )  # here it contains the full split
+                )
                 energy_total += total_energy_cost_memory
             mem_energy_breakdown[layer_op] = breakdown
             mem_energy_breakdown_further[layer_op] = breakdown_further
-        self.mem_energy_breakdown = mem_energy_breakdown
-        self.mem_energy_breakdown_further = mem_energy_breakdown_further
+        self.mem_energy_breakdown: dict[LayerOperand, list[float]] = mem_energy_breakdown
+        self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = mem_energy_breakdown_further
         self.mem_energy = energy_total
         self.energy_total: float = self.mem_energy + self.MAC_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
 
-    def calc_latency(self):
+    def calc_latency(self) -> None:
         """!   Calculate latency in 4 steps
 
         1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
@@ -441,12 +406,12 @@ class CostModelEvaluation:
         4) Finally, we combine the stall/slack of each memory port to get the final latency.
         """
         self.calc_double_buffer_flag()
-        self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
-        self.combine_data_transfer_rate_per_physical_port()
+        self.__calc_allowed_and_real_data_transfer_cycle_per_DTL()
+        self.__combine_data_transfer_rate_per_physical_port()
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
 
-    def calc_double_buffer_flag(self):
+    def calc_double_buffer_flag(self) -> None:
         """!  This function checks the double-buffer possibility for each operand at each memory level
         (minimal memory BW requirement case) by comparing the physical memory size with the effective
         data size, taking into account the memory sharing between operands.
@@ -464,14 +429,14 @@ class CostModelEvaluation:
                     <= 1 - self.effective_mem_utili_shared[layer_op][mem_lv]
                 ):
                     double_buffer_true[layer_op].append(True)
-                    shared_mem_list = get_shared_mem_list(mem_op, mem_lv, self.mem_sharing_list)
+                    shared_mem_list = self.__get_shared_mem_list(mem_op, mem_lv, self.mem_sharing_list)
                     # When one of the operand in the shared memory get the "double-buffer" chance,
                     # all operands of that shared memory level need to update the memory utilization
                     # for later memory free space evaluation
                     if shared_mem_list is not None:
                         for shared_mem_op, shared_mem_lv in shared_mem_list:
-                            shared_layer_op = self.memory_operand_links.mem_to_layer_op(shared_mem_op)
-                            if shared_layer_op is not None:
+                            if self.memory_operand_links.contains_mem_op(shared_mem_op):
+                                shared_layer_op = self.memory_operand_links.mem_to_layer_op(shared_mem_op)
                                 self.effective_mem_utili_shared[shared_layer_op][
                                     shared_mem_lv
                                 ] += self.effective_mem_utili_individual[layer_op][mem_lv]
@@ -480,13 +445,13 @@ class CostModelEvaluation:
 
         self.double_buffer_true = double_buffer_true
 
-    def calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
+    def __calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
         """!  Construct a 4-way data transfer pattern for each unit mem, calculate
         {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
         # TODO cleanup
         """
-        allowed_mem_updat_cycle = {}
-        real_data_trans_cycle = {}
+        allowed_mem_updat_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
+        real_data_trans_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
         # stall (+) or slack (-) cycle within each period per virtual data transfer link (DTL)
         DTL_SS_cycle = {}
 
@@ -496,7 +461,6 @@ class CostModelEvaluation:
             DTL_SS_cycle[layer_op] = []
             mem_op = self.memory_operand_links[layer_op]
             for mem_lv in range(self.mapping_int.mem_level[layer_op]):
-                # allowed_mem_updating_cycle(below
                 #  wr_in_by_low & rd_out_to_low
                 if self.double_buffer_true[layer_op][mem_lv]:
                     wr_in_by_low_allowed = self.mapping_int.unit_mem_data_movement[layer_op][
@@ -537,9 +501,7 @@ class CostModelEvaluation:
                     wr_in_by_high_allowed,
                 )
                 allowed_mem_updat_cycle[layer_op].append(updating_window)
-                # allowed_mem_updating_cycle(above
 
-                # real_data_trans_cycle(below
                 # wr_in_by_low
                 data_precision = self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_low
                 data_trans_amount = self.mapping_int.unit_mem_data_movement[layer_op][
@@ -580,12 +542,11 @@ class CostModelEvaluation:
                     wr_in_by_high_real,
                 )
                 real_data_trans_cycle[layer_op].append(real_data_trans)
-                # real_data_trans_cycle(above
 
         self.allowed_mem_updat_cycle = allowed_mem_updat_cycle
         self.real_data_trans_cycle = real_data_trans_cycle
 
-    def combine_data_transfer_rate_per_physical_port(self):
+    def __combine_data_transfer_rate_per_physical_port(self) -> None:
         """!  Consider memory sharing and port sharing, combine the data transfer activity
         Step 1: collect port activity per memory instance per physical memory port
         Step 2: calculate SS combine and MUW union parameters per physical memory port
@@ -598,21 +559,19 @@ class CostModelEvaluation:
             for port in port_list:
                 port_activity_single[str(port)] = []
                 for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
-                    layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                    if layer_op is not None:
-                        period_count = getattr(
-                            self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_period_count,
-                            mov_dir,
-                        )
+                    if self.memory_operand_links.contains_mem_op(mem_op):
+                        layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+                        period_count = self.mapping_int.unit_mem_data_movement[layer_op][
+                            mem_lv
+                        ].data_trans_period_count.get_single_dir_data(mov_dir)
                         if period_count == 0:
                             # skip the inactive data movement activities because they won't impact SS
                             continue
-                        period = getattr(
-                            self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_period,
-                            mov_dir,
-                        )
-                        real_cycle = getattr(self.real_data_trans_cycle[layer_op][mem_lv], mov_dir)
-                        allowed_cycle = getattr(self.allowed_mem_updat_cycle[layer_op][mem_lv], mov_dir)
+                        period = self.mapping_int.unit_mem_data_movement[layer_op][
+                            mem_lv
+                        ].data_trans_period.get_single_dir_data(mov_dir)
+                        real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+                        allowed_cycle = self.allowed_mem_updat_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
                         port_activity = PortActivity(
                             real_cycle,
                             allowed_cycle,
@@ -627,12 +586,12 @@ class CostModelEvaluation:
         self.port_activity_collect = port_activity_collect
 
         # Step 2: calculate SS combine and MUW union parameters per physical memory port
-        SS_comb_collect: list[dict[str, int | None]] = [
-            {port: None for port in mem_ports} for mem_ports in port_activity_collect
+        SS_comb_collect: list[dict[str, int | float]] = [
+            {port: 0 for port in mem_ports} for mem_ports in port_activity_collect
         ]
-        SS_comb_list = [0]
+        SS_comb_list: list[int | float] = [0]
         # intermediate parameters saved for debugging purpose
-        MUW_union_collect: list[dict[str, int]] = [{} for _ in port_activity_collect]
+        MUW_union_collect: list[dict[str, int | float]] = [{} for _ in port_activity_collect]
 
         for idx, mem_ports in enumerate(port_activity_collect):
             for port_name, port_activity in mem_ports.items():
@@ -641,7 +600,7 @@ class CostModelEvaluation:
                     SS_comb_collect[idx][port_name] = port_activity[0].SS
                     SS_comb_list.append(port_activity[0].SS)
                 elif len(port_activity) != 0:
-                    MUW_union_collect[idx][port_name] = calc_MUW_union(port_activity)
+                    MUW_union_collect[idx][port_name] = self.__calc_MUW_union(port_activity)
                     SS_positive_sum = 0
                     SS_negative_sum = 0
                     MUW_sum = 0
@@ -666,13 +625,15 @@ class CostModelEvaluation:
         on corresponding ports.
         """
         # Collect ports' initial data-loading and final data-offloading activities
-        data_loading_per_mem_inst = []
-        data_loading_cc_per_op = {op: {} for op in self.layer.input_operands}
-        data_offloading_per_mem_inst = []
-        data_offloading_cc_per_op = {}
+        data_loading_per_mem_inst: list[dict[str, list[PortBeginOrEndActivity]]] = []
+        data_loading_cc_per_op: dict[LayerOperand, dict[str, tuple[int | float, bool]]] = {
+            op: {} for op in self.layer.input_operands
+        }
+        data_offloading_per_mem_inst: list[dict[str, list[PortBeginOrEndActivity]]] = []
+        data_offloading_cc_per_op: dict[str, int | float] = {}
         for mem_instance in self.mem_level_list:
             data_loading_single: dict[str, list[PortBeginOrEndActivity]] = {}
-            data_offloading_single = {}
+            data_offloading_single: dict[str, list[PortBeginOrEndActivity]] = {}
             port_list = mem_instance.port_list
             for port in port_list:
                 data_loading_single[str(port)] = []
@@ -682,25 +643,28 @@ class CostModelEvaluation:
                 )
                 port_is_shared_by_two_input_operands = len(served_operands) > 1
                 for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
-                    layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                    if layer_op is not None:
-                        period_count = getattr(
-                            self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_period_count,
-                            mov_dir,
-                        )
+                    if self.memory_operand_links.contains_mem_op(mem_op):
+                        layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+                        period_count = self.mapping_int.unit_mem_data_movement[layer_op][
+                            mem_lv
+                        ].data_trans_period_count.get_single_dir_data(mov_dir)
                         if period_count == 0:
                             # skip for the inactive data movement
                             continue
                         if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2]:
-                            real_cycle = getattr(self.real_data_trans_cycle[layer_op][mem_lv], mov_dir)
-                            data_in_charge = getattr(
-                                self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_amount_per_period,
-                                mov_dir,
-                            ) * getattr(
-                                self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_precision,
-                                mov_dir,
+                            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+                            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
+                                mem_lv
+                            ].data_trans_amount_per_period.get_single_dir_data(
+                                mov_dir
+                            ) * self.mapping_int.unit_mem_data_movement[
+                                layer_op
+                            ][
+                                mem_lv
+                            ].data_precision.get_single_dir_data(
+                                mov_dir
                             )
-                            if mov_dir[:2] == "rd":
+                            if mov_dir == DataDirection.RD_OUT_TO_HIGH or mov_dir == DataDirection.RD_OUT_TO_LOW:
                                 mem_bw = self.mem_r_bw_dict[mem_op][mem_lv]
                             else:
                                 mem_bw = self.mem_w_bw_dict[mem_op][mem_lv]
@@ -713,26 +677,31 @@ class CostModelEvaluation:
                                 mov_dir,
                             )
                             data_loading_single[str(port)].append(port_activity)
-                            data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv) + "_" + mov_dir] = (
+                            data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = (
                                 real_cycle,
                                 port_is_shared_by_two_input_operands,
                             )
                         else:
-                            if mov_dir in ["rd_out_to_low", "wr_in_by_high"]:
+                            if mov_dir == DataDirection.RD_OUT_TO_LOW or mov_dir == DataDirection.WR_IN_BY_HIGH:
                                 # don't consider partial sum flowing in the final data off-loading stage
                                 continue
-                            real_cycle = getattr(self.real_data_trans_cycle[layer_op][mem_lv], mov_dir)
-                            data_in_charge = getattr(
-                                self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_trans_amount_per_period,
-                                mov_dir,
-                            ) * getattr(
-                                self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_precision,
-                                mov_dir,
+                            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+                            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
+                                mem_lv
+                            ].data_trans_amount_per_period.get_single_dir_data(
+                                mov_dir
+                            ) * self.mapping_int.unit_mem_data_movement[
+                                layer_op
+                            ][
+                                mem_lv
+                            ].data_precision.get_single_dir_data(
+                                mov_dir
                             )
-                            if mov_dir[:2] == "rd":
+                            if mov_dir == DataDirection.RD_OUT_TO_HIGH:
                                 mem_bw = self.mem_r_bw_dict[mem_op][mem_lv]
                             else:
                                 mem_bw = self.mem_w_bw_dict[mem_op][mem_lv]
+
                             port_activity = PortBeginOrEndActivity(
                                 real_cycle,
                                 data_in_charge,
@@ -742,7 +711,7 @@ class CostModelEvaluation:
                                 mov_dir,
                             )
                             data_offloading_single[str(port)].append(port_activity)
-                            data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + mov_dir] = real_cycle
+                            data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = real_cycle
 
             data_loading_per_mem_inst.append(data_loading_single)
             data_offloading_per_mem_inst.append(data_offloading_single)
@@ -752,14 +721,20 @@ class CostModelEvaluation:
         self.data_offloading_per_op = data_offloading_cc_per_op
 
         # Combine ports' initial data-loading activities to get the data loading cycle amount
-        data_loading_cc_pair_combined_per_op = {op: [] for op in self.layer.input_operands}
-        data_loading_individual_part = {op: 0 for op in self.layer.input_operands}
-        data_loading_half_shared_part = {op: 0 for op in self.layer.input_operands}
-        data_loading_shared_part = {op: 0 for op in self.layer.input_operands}
+        data_loading_cc_pair_combined_per_op: dict[LayerOperand, list[int | float]] = {
+            op: [] for op in self.layer.input_operands
+        }
+        data_loading_individual_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
+        data_loading_half_shared_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
+        data_loading_shared_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
         for layer_op in self.layer.input_operands:
             for mem_lv in range(self.active_mem_level[layer_op] - 1):
-                elem1 = data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv) + "_" + "wr_in_by_high"]
-                elem2 = data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv + 1) + "_" + "rd_out_to_low"]
+                elem1 = data_loading_cc_per_op[layer_op][
+                    layer_op.name + str(mem_lv) + "_" + str(DataDirection.WR_IN_BY_HIGH)
+                ]
+                elem2 = data_loading_cc_per_op[layer_op][
+                    layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.RD_OUT_TO_LOW)
+                ]
                 completely_shared = elem1[1] and elem2[1]
                 completely_separate = not (elem1[1]) and not (elem2[1])
                 longest_loading_cc = max(elem1[0], elem2[0])
@@ -800,11 +775,11 @@ class CostModelEvaluation:
         # Combine ports' final data-offloading activities to get the data offloading cycle amount
         # TODO Only considered the worst case for now
         #  (assumed that all the ports are working in series during the final data off-loading phase)
-        data_offloading_cc_pair_combined = []
+        data_offloading_cc_pair_combined: list[int | float] = []
         layer_op = self.layer.output_operand
         for mem_lv in range(self.active_mem_level[layer_op] - 1):
-            elem1 = data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + "rd_out_to_high"]
-            elem2 = data_offloading_cc_per_op[layer_op.name + str(mem_lv + 1) + "_" + "wr_in_by_low"]
+            elem1 = data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + str(DataDirection.RD_OUT_TO_HIGH)]
+            elem2 = data_offloading_cc_per_op[layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.WR_IN_BY_LOW)]
             longest_offloading_cc = max(elem1, elem2)
             # for the ports that serve the same data movement purpose, take the longest data loading cycle
             data_offloading_cc_pair_combined.append(longest_offloading_cc)
@@ -813,11 +788,11 @@ class CostModelEvaluation:
         self.data_offloading_cc_pair_combined = data_offloading_cc_pair_combined
         self.data_offloading_cycle = data_offloading_cycle
 
-    def calc_overall_latency(self, cycles_per_mac=1):
+    def calc_overall_latency(self, cycles_per_mac: int = 1) -> None:
         """!  This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency"""
         # @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
         # the ideal cycle count assuming the MAC array is 100% utilized
-        ideal_cycle = (
+        ideal_cycle = int(
             ceil(
                 self.layer.total_MAC_count / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
             )
@@ -858,25 +833,25 @@ class CostModelEvaluation:
         sum.mem_energy += other.mem_energy
         for op in sum.mem_energy_breakdown.keys():
             if op in other.mem_energy_breakdown.keys():
-                l = []
+                list_temp: list[float] = []
                 for i in range(
                     min(
                         len(self.mem_energy_breakdown[op]),
                         len(other.mem_energy_breakdown[op]),
                     )
                 ):
-                    l.append(self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i])
+                    list_temp.append(self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i])
                 i = min(
                     len(self.mem_energy_breakdown[op]),
                     len(other.mem_energy_breakdown[op]),
                 )
-                l += self.mem_energy_breakdown[op][i:]
-                l += other.mem_energy_breakdown[op][i:]
-                sum.mem_energy_breakdown[op] = l
+                list_temp += self.mem_energy_breakdown[op][i:]
+                list_temp += other.mem_energy_breakdown[op][i:]
+                sum.mem_energy_breakdown[op] = list_temp
 
         for op in sum.mem_energy_breakdown_further.keys():
             if op in other.mem_energy_breakdown_further.keys():
-                l = []
+                l: list[FourWayDataMoving] = []
                 for i in range(
                     min(
                         len(self.mem_energy_breakdown_further[op]),
@@ -934,22 +909,18 @@ class CostModelEvaluation:
         sum.MAC_utilization2 = sum.ideal_cycle / sum.latency_total2
 
         ## layer
-        if type(sum.layer) != list:
-            sum.layer = [sum.layer.id]
-        if type(other.layer) != list:
-            other_layer = [other.layer.id]
-        sum.layer += other_layer
+        sum_layers = [sum.layer.id] if len(sum.cumulative_layer_ids) == 0 else sum.cumulative_layer_ids
+        other_layers = [other.layer.id] if len(other.cumulative_layer_ids) == 0 else other.cumulative_layer_ids
+        sum.cumulative_layer_ids = sum_layers + other_layers
 
-        ## core_id
-        if type(sum.core_id) != list:
-            sum.core_id = [sum.core_id]
-        if type(other.layer) != list:
-            other_core_id = [other.core_id]
-        sum.core_id += other_core_id
+        sum_core_ids = [sum.core_id] if len(sum.cumulative_core_ids) == 0 else sum.cumulative_core_ids
+        other_core_ids = [other.core_id] if len(other.cumulative_core_ids) == 0 else other.cumulative_core_ids
+        sum.cumulative_core_ids = sum_core_ids + other_core_ids
 
+        # TODO this is very confusing. Make an `AddedCME` class?
         ## Not addable
         func = [
-            "calc_allowed_and_real_data_transfer_cycle_per_DTL",
+            "__calc_allowed_and_real_data_transfer_cycle_per_DTL",
             "calc_data_loading_offloading_latency",
             "calc_double_buffer_flag",
             "calc_overall_latency",
@@ -959,7 +930,7 @@ class CostModelEvaluation:
             "calc_memory_energy_cost",
             "calc_memory_utilization",
             "calc_memory_word_access",
-            "combine_data_transfer_rate_per_physical_port",
+            "__combine_data_transfer_rate_per_physical_port",
             "run",
         ]
         add_attr = [
@@ -990,8 +961,6 @@ class CostModelEvaluation:
                 add_attr.append("accelerator")
             elif other.accelerator.name.startswith(self.accelerator.name):
                 add_attr.append("accelerator")
-        else:
-            pass
 
         for attr in dir(sum):
             if attr not in (func + add_attr) and attr[0] != "_":
@@ -1041,7 +1010,7 @@ class CostModelEvaluation:
 
         # Not addable
         func = [
-            "calc_allowed_and_real_data_transfer_cycle_per_DTL",
+            "__calc_allowed_and_real_data_transfer_cycle_per_DTL",
             "calc_data_loading_offloading_latency",
             "calc_double_buffer_flag",
             "calc_overall_latency",
@@ -1051,7 +1020,7 @@ class CostModelEvaluation:
             "calc_memory_energy_cost",
             "calc_memory_utilization",
             "calc_memory_word_access",
-            "combine_data_transfer_rate_per_physical_port",
+            "__combine_data_transfer_rate_per_physical_port",
             "run",
         ]
         mul_attr = [

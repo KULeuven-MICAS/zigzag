@@ -89,7 +89,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_W_128B,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O_2B,
@@ -104,7 +104,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_2M_with_16_128K_bank_128_1r_1w,
         operands=("I1", "O"),
         port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
+            {"fh": "w_port_1", "tl": "r_port_1"},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
         served_dimensions=("D1", "D2"),
@@ -116,8 +116,8 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=dram,
         operands=("I1", "I2", "O"),
         port_alloc=(
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
             {
                 "fh": "rw_port_1",
                 "tl": "rw_port_1",

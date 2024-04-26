@@ -1,10 +1,11 @@
 import pickle
 from copy import deepcopy
+from typing import Any
 
 import numpy as np
 
 
-def pickle_deepcopy(to_copy):
+def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))
         return copy
@@ -12,19 +13,19 @@ def pickle_deepcopy(to_copy):
         return deepcopy(to_copy)
 
 
-def pickle_save(to_save, path):
+def pickle_save(to_save: str, path: str):
     with open(path, "wb") as fp:
         status = pickle.dump(to_save, fp)
     return status
 
 
-def pickle_load(path):
+def pickle_load(path: str):
     with open(path, "rb") as fp:
         obj = pickle.load(fp)
     return obj
 
 
-def json_repr_handler(obj, simple=False):
+def json_repr_handler(obj: Any, simple: bool = False) -> Any:
     """! Recursively converts objects into a json representation"""
     attr = "__simplejsonrepr__" if simple else "__jsonrepr__"
 

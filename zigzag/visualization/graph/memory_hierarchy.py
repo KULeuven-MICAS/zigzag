@@ -29,7 +29,7 @@ def visualize_memory_hierarchy_graph(G: MemoryHierarchy, save_path: str = ""):
             pos[node] = (x, y)
             node_list.append(node)
             node_size_list.append(node_size)
-            node_label_dict[node] = f"{node.name}\n{node.operands}\nx{node.calc_unroll_count()}"
+            node_label_dict[node] = f"{node.name}\n{node.operands}\nx{node.unroll_count}"
 
     nx.draw(
         G,

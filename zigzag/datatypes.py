@@ -1,7 +1,6 @@
 from abc import ABCMeta
-from ast import Constant
 import re
-from typing import Any, Generator, TypeAlias
+from typing import Any, TypeAlias
 from typeguard import typechecked
 
 
@@ -11,7 +10,7 @@ class DimensionABC(metaclass=ABCMeta):
     def __init__(self, name: str):
         self.name = name
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any):
         return isinstance(other, type(self)) and self.name == other.name
 
     def __hash__(self):
@@ -23,10 +22,10 @@ class DimensionABC(metaclass=ABCMeta):
     def __repr__(self):
         return str(self)
 
-    def __lt__(self, other):
+    def __lt__(self, other: "DimensionABC"):
         return self.name < other.name
 
-    def __ge__(self, other):
+    def __ge__(self, other: "DimensionABC"):
         return self.name >= other.name
 
     def __jsonrepr__(self):
@@ -95,7 +94,7 @@ class Dimension(DimensionABC):
         self.id = index
         self.size = size
 
-    def __eq__(self, other):
+    def __eq__(self, other: Any):
         if not isinstance(other, Dimension):
             return False
         assert not (

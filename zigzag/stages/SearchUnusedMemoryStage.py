@@ -300,7 +300,7 @@ class SearchUnusedMemoryStage(Stage):
                 for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
                     served_operands = list(mem.mem_level_of_operands.keys())  # Check the served operand of current mem
                     ## Update input, weight, output mem level
-                    avail_mem_size = mem.memory_instance.size * mem.calc_unroll_count()  # available hardware mem size
+                    avail_mem_size = mem.memory_instance.size * mem.unroll_count  # available hardware mem size
 
                     try:
                         # we need to grab the next layer name, which is a non-Adder layer for sure

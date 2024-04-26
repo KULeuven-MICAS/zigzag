@@ -1,7 +1,7 @@
 from typing import TypeAlias
 from math import prod
 
-from zigzag.datatypes import LayerOperand, PrLoop, UnrollFactor, LayerDim, UnrollFactorInt
+from zigzag.datatypes import LayerOperand, PrLoop, UnrollFactor, LayerDim
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_node import LayerNode
@@ -30,19 +30,19 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNo
     mapping_dict_reform: SpatialMappingPerMEMLvl = pickle_deepcopy(mapping_dict)
 
     # current and below level pr data size
-    cabl_pr_data_size: dict = {}
+    cabl_pr_data_size: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = {}
     # current and below level pr data reuse
-    cabl_pr_data_reuse: dict[LayerOperand, dict[LayerDim, list]] = dict()
+    cabl_pr_data_reuse: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = dict()
 
     # each single pr loop data size
-    per_pr_data_size: dict = {}
+    per_pr_data_size: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = dict()
     # each single pr loop data reuse
-    per_pr_data_reuse: dict = {}
+    per_pr_data_reuse: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = dict()
 
     for operand in pr_operand_list:
 
         # initialize current and below level pr loop size
-        cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactorInt]] = {
+        cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactor]] = {
             pr_data_dim: {pr_loop_dim: 1 for pr_loop_dim in pr_operand_loop_lut[operand][pr_data_dim]}
             for pr_data_dim in pr_operand_loop_lut[operand]
         }
@@ -117,10 +117,10 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNo
 
 def replace_pr_loop_in_mapping(
     single_operand_mapping: list[list[tuple[LayerDim, UnrollFactor]]],
-    per_pr_data_size: dict,
-    per_pr_data_reuse: dict,
+    per_pr_data_size: dict[LayerDim, list[list[float]]],
+    per_pr_data_reuse: dict[LayerDim, list[list[float]]],
     pr_operand_loop_lut: PrLoop,
-    r_ir_operand_loop_lut: list,
+    r_ir_operand_loop_lut: list[LayerDim],
 ) -> list[list[tuple[LayerDim, UnrollFactor]]]:
     """!  This function replaces all pr loops in a mapping of a single operand with r and ir loops."""
     mapping_new: list[list[tuple[LayerDim, UnrollFactor]]] = pickle_deepcopy(single_operand_mapping)
@@ -129,7 +129,7 @@ def replace_pr_loop_in_mapping(
         # Introduce the current level pr loop index to distinguish different pr loops at the same architectural level
         cl_pr_lp_idx_local = {pr_data_dim: 0 for pr_data_dim in pr_operand_loop_lut.keys()}
         cl_pr_lp_idx_global = 0
-        for idx, (loop_type, loop_size) in enumerate(loop_list):
+        for idx, (loop_type, _) in enumerate(loop_list):
             if loop_type in r_ir_operand_loop_lut:
                 continue
             for pr_data_dim in pr_operand_loop_lut.keys():
@@ -157,21 +157,3 @@ def replace_pr_loop_in_mapping(
                     cl_pr_lp_idx_global += 1
 
     return mapping_new
-
-
-# ! Not used?
-# def calc_data_size_MAC_count_per_loop(mapping_dict_reform: SpatialMappingPerMEMLvl, _reform: Dict):
-#     """! This function generates detailed information for each single loop item for each operand."""
-#     detailed_mapping_dict = deepcopy(mapping_dict_reform)
-#     for operand, mapping_list in mapping_dict_reform.items():
-#         MAC_count = 1
-#         data_elem = 1
-#         for level, loop_list in enumerate(mapping_dict_reform[operand]):
-#             for idx, (loop_type, loop_size) in enumerate(loop_list):
-#                 MAC_count *= loop_size
-#                 if loop_type in _reform[operand][Relevancy.R]:
-#                     data_elem *= loop_size
-#                 detailed_mapping_dict[operand][level][idx] = Loop(
-#                     (loop_type, loop_size), round(MAC_count), round(data_elem)
-#                 )
-#     return detailed_mapping_dict

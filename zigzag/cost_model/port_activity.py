@@ -1,5 +1,6 @@
 from typeguard import typechecked
 from zigzag.datatypes import LayerOperand
+from zigzag.hardware.architecture.memory_port import DataDirection
 
 
 @typechecked
@@ -8,13 +9,13 @@ class PortActivity:
 
     def __init__(
         self,
-        real_cycle: int,
-        allowed_cycle: int,
-        period: int,
-        period_count: int,
+        real_cycle: int | float,
+        allowed_cycle: int | float,
+        period: int | float,
+        period_count: int | float,
         layer_op: LayerOperand,
         mem_lv: int,
-        mov_dir: str,
+        mov_dir: DataDirection,
     ):
         """!  The class constructor
         @param real_cycle Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
@@ -29,7 +30,7 @@ class PortActivity:
         self.period = period
         ## The total number of period across the whole NN layer computation.
         self.period_count = period_count
-        self.served_op_lv_dir = (layer_op, mem_lv, mov_dir)
+        self.served_op_lv_dir: tuple[LayerOperand, int, DataDirection] = (layer_op, mem_lv, mov_dir)
         """ stalling (+) or slacking (-) cycle in one period """
         self.SS_per_period = real_cycle - allowed_cycle
         """ stalling (+) or slacking (-) cycle in total computation """
@@ -43,8 +44,8 @@ class PortActivity:
     def __repr__(self):
         return str(self.served_op_lv_dir)
 
-    def __eq__(self, other) -> bool:
-        return str(self.served_op_lv_dir) == other
+    # def __eq__(self, other: Any) -> bool:
+    #     return isinstance(other, PortActivity) and str(self.served_op_lv_dir) == other
 
     def __hash__(self):
         return hash(self.served_op_lv_dir)
@@ -56,12 +57,12 @@ class PortBeginOrEndActivity:
 
     def __init__(
         self,
-        real_cycle: int,
-        data_in_charge: int,
-        mem_bw: int,
+        real_cycle: int | float,
+        data_in_charge: int | float,
+        mem_bw: int | float,
         layer_op: LayerOperand,
         mem_lv: int,
-        mov_dir: str,
+        mov_dir: DataDirection,
     ):
         """!  The class constructor
         @param real_cycle The actual number of cycles used for transferring the amount of data, depended on the memory

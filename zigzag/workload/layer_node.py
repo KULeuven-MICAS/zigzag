@@ -9,7 +9,6 @@ from typeguard import typechecked
 from zigzag.datatypes import (
     LayerDim,
     LayerOperand,
-    MemoryOperand,
     LoopList,
     PrLoop,
     PrScalingFactors,
@@ -102,7 +101,7 @@ class LoopRelevancyInfo:
 class LayerNode:
     """! Represents a single layer in a workload."""
 
-    def __init__(self, layer_id: int, layer_attrs: LayerAttributes, node_name="", layer_type=None):
+    def __init__(self, layer_id: int, layer_attrs: LayerAttributes, node_name: str = "", layer_type: str | None = None):
         """! The class constructor
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -115,7 +114,7 @@ class LayerNode:
         self.id = layer_id
         self.layer_attrs = layer_attrs
         self.name = node_name
-        self.type = layer_type
+        self.type: str | None = layer_type
 
         # Parsed attributes
         self.equation: LayerEquation = layer_attrs.parse_equation()
@@ -278,12 +277,3 @@ class LayerNode:
     def get_operand_irrelevant_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:
         """!  Return the irrelevant dimensions of layer operand 'layer_op'."""
         return self.loop_relevancy_info.get_ir_layer_dims(layer_op)
-
-    def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
-        """!  Return the layer operand associated with the given memory operand for this layer.
-        If there is no such memory operand, an error is raised.
-        """
-        layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-        if layer_op is not None:
-            return layer_op
-        raise ValueError(f"The memory operand {mem_op} is not present in layer {self}.")

@@ -46,9 +46,9 @@ class SpatialMappingGeneratorStage(Stage):
         *,
         accelerator: Accelerator,
         layer: LayerNode,
-        enable_mix_spatial_mapping_generation=False,
-        enable_weight_diagonal_mapping=False,
-        nb_mappings_generated=3,
+        enable_mix_spatial_mapping_generation: bool=False,
+        enable_weight_diagonal_mapping : bool=False,
+        nb_mappings_generated:int=3,
         **kwargs,
     ):
         """! The class constructor
@@ -391,9 +391,9 @@ class SpatialMappingGeneratorStage(Stage):
             max_allowed_dim_size_on_act_served_dim = math.floor(act_served_oa_dim.size / exist_act_loop_size)
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
-            for key in weight_r_loop:
-                if key != layer_dim:
-                    ir_layer_dim_to_current_layer_dim = key
+
+            ir_layer_dim_to_current_layer_dim = next(filter(lambda x: x != layer_dim, weight_r_loop.keys()))
+
             existed_pr_mapping_but_ir_to_current_layer_dim = list(
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
             )[0]
@@ -407,7 +407,7 @@ class SpatialMappingGeneratorStage(Stage):
                 max_allowed_dim_size_on_output_served_dim,
             )
             # check whether the element in layer_size_breakdown is allowed to add
-            legal_layer_size_breakdown = []
+            legal_layer_size_breakdown: list[int] = []
             for factor in layer_size_breakdown:
                 if factor <= max_allowed_target_dim_size and factor <= layer_dim_size_remainder[layer_dim]:
                     legal_layer_size_breakdown.append(factor)
@@ -548,11 +548,9 @@ class SpatialMappingGeneratorStage(Stage):
         # to avoid the MemoryTooSmallException in loma stage.
         innermost_levels = self.memory_hierarchy.get_inner_memories()
 
-        # get the link from layer op to mem op
-        layer_op_to_mem_op = self.layer.memory_operand_links
         # check if it is weight stationary.
         # keep the spatial loop as it was if it is not weight stationary.
-        if self.layer.constant_operands is None or len(self.layer.constant_operands) != 1:
+        if len(self.layer.constant_operands) != 1:
             return self.accelerator
         # get weight operand name
         const_operand = self.layer.constant_operands[0]  # weight representation
@@ -563,9 +561,10 @@ class SpatialMappingGeneratorStage(Stage):
         # get the oa_dim name served by input innermost memory level
         for memory_level in innermost_levels:
             mem_ops = memory_level.operands
-            if layer_op_to_mem_op[act_operand] in mem_ops:
+            if self.layer.memory_operand_links.layer_to_mem_op(act_operand) in mem_ops:
                 act_innermost_mem_level = memory_level
                 act_served_oa_dims: ServedMemDimensions = memory_level.served_dimensions
+
         # check if act is not served in the innermost memories, or it is uti-casting for act.
         # keep the spatial loop as it was if act is not served.
         if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:

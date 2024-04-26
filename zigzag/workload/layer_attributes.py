@@ -135,26 +135,40 @@ class MemoryOperandLinks(LayerAttribute):
         self.data = data
 
     def layer_to_mem_op(self, layer_op: LayerOperand) -> MemoryOperand:
-        assert layer_op in self.data
+        assert self.contains_layer_op(layer_op)
         return self.data[layer_op]
 
     def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
         """! Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained
         within"""
-        assert mem_op in self.data.values()
-        candidates = {k for k, v in self.items() if v == mem_op}
+        assert self.contains_mem_op(mem_op)
+        candidates = {k for k, v in self.data.items() if v == mem_op}
         assert len(candidates) <= 1, f"MemoryOperandLinks contains duplicate MemoryOperand {mem_op}"
         assert len(candidates) > 0, f"Memory operand {mem_op} is not present"
         return candidates.pop()
 
-    def items(self):
-        return self.data.items()
+    def contains_layer_op(self, layer_op: LayerOperand) -> bool:
+        return layer_op in self.layer_operands
+
+    def contains_mem_op(self, mem_op: MemoryOperand) -> bool:
+        return mem_op in self.mem_operands
+
+    @property
+    def layer_operands(self) -> set[LayerOperand]:
+        return set(self.data.keys())
+
+    @property
+    def mem_operands(self) -> set[MemoryOperand]:
+        return set(self.data.values())
+
+    # def items(self):
+    #     return self.data.items()
 
     def copy(self):
         return MemoryOperandLinks(self.data.copy())
 
     def __str__(self):
-        return str({str(k): str(v) for k, v in self.items()})
+        return str({str(k): str(v) for k, v in self.data.items()})
 
     @staticmethod
     def parse_user_input(x: dict[OperandStr, MemOperandStr]):
@@ -286,14 +300,14 @@ class LayerAttributes:
         return LayerOperandPrecision.parse_user_input(self.data[key])
 
     def parse_operand_source(self) -> InputOperandSource:
-        key = "operand_source"
+        key: str = "operand_source"
         assert key in self, f"Workload does not contain `{key}` definition"
         x = self.data[key]
         assert isinstance(x, dict)
-        assert all([isinstance(key, str) for key in x.keys()])
-        assert all([isinstance(value, list) for value in x.values()])
-        assert all([all([isinstance(elem, int) for elem in value]) for value in x.values()])
-        return {LayerOperand(key): [elem for elem in value] for key, value in x.items()}
+        assert all([isinstance(k, str) for k in x.keys()])
+        assert all([isinstance(v, list) for v in x.values()])
+        assert all([all([isinstance(elem, int) for elem in v]) for v in x.values()])
+        return {LayerOperand(k): [elem for elem in v] for k, v in x.items()}
 
     def parse_layer_dim_relations(self) -> LayerDimRelations | None:
         key = "dimension_relations"
@@ -355,7 +369,7 @@ class LayerAttributes:
             return None
         return self.data[key]
 
-    def __contains__(self, x):
+    def __contains__(self, x: str):
         return x in self.data
 
     @staticmethod

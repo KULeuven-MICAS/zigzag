@@ -137,7 +137,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_W1,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
         served_dimensions=("D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
@@ -151,13 +151,13 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1KB_256_1r_1w_I,
         operands=("I1",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
         served_dimensions=("D1", "D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1KB_256_1r_1w_W,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
         served_dimensions=("D1", "D2", "D3"),
     )
     # memory_hierarchy_graph.add_memory(memory_instance=sram_2KB_with_2_1KB_256_1r_1w, operands=('O',),
@@ -167,14 +167,14 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_W,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
         served_dimensions=("D1", "D2", "D3"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=sram_1M_with_8_128K_bank_128_1r_1w_A,
         operands=("I1", "O"),
         port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
+            {"fh": "w_port_1", "tl": "r_port_1"},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
         served_dimensions=("D1", "D2", "D3"),
@@ -186,8 +186,8 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=dram,
         operands=("I1", "I2", "O"),
         port_alloc=(
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
             {
                 "fh": "rw_port_1",
                 "tl": "rw_port_1",

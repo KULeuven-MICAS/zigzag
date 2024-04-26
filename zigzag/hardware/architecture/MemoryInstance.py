@@ -19,8 +19,8 @@ class MemoryInstance:
         w_port: int = 1,
         rw_port: int = 0,
         latency: int = 1,
-        min_r_granularity=None,
-        min_w_granularity=None,
+        min_r_granularity: int | None = None,
+        min_w_granularity: int | None = None,
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
         double_buffering_support: bool = False,
@@ -63,19 +63,14 @@ class MemoryInstance:
         self.r_cost = r_cost
         self.w_cost = w_cost
         self.area = area
-        self.r_port = r_port
-        self.w_port = w_port
-        self.rw_port = rw_port
+        self.r_port_nb = r_port
+        self.w_port_nb = w_port
+        self.rw_port_nb = rw_port
         self.latency = latency
         self.double_buffering_support = double_buffering_support
-        if not min_r_granularity:
-            self.r_bw_min = r_bw
-        else:
-            self.r_bw_min = min_r_granularity
-        if not min_w_granularity:
-            self.w_bw_min = w_bw
-        else:
-            self.w_bw_min = min_w_granularity
+
+        self.r_bw_min: int = min_r_granularity if min_r_granularity is not None else r_bw
+        self.w_bw_min: int = min_w_granularity if min_w_granularity is not None else w_bw
 
     def update_size(self, new_size: int) -> None:
         """! Update the memory size of this instance."""

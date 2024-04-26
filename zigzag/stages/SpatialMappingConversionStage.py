@@ -35,6 +35,7 @@ class SpatialMappingConversionStage(Stage):
         super().__init__(list_of_callables, **kwargs)
         self.layer = layer
         self.accelerator = accelerator
+        self.memory_operand_links = layer.memory_operand_links
 
     def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
         user_spatial_mapping = self.layer.user_spatial_mapping
@@ -129,7 +130,7 @@ class SpatialMappingConversionStage(Stage):
         spatial_loop: tuple[LayerDim, UnrollFactor],
         user_spatial_mapping: SpatialMapping,
         limited_user_spatial_mapping: SpatialMapping,
-        allow_decimal_sm_loop_size=True,
+        allow_decimal_sm_loop_size: bool = True,
     ) -> None | tuple[LayerDim, UnrollFactor]:
         layer_dim, unroll_factor = spatial_loop
 
@@ -183,11 +184,12 @@ class SpatialMappingConversionStage(Stage):
         # TODO This should be a class
         """
         mapping_per_mem_lvl: SpatialMappingPerMEMLvl = {}
-        layer_to_mem_op = self.layer.memory_operand_links
-        mem_to_layer_op = {mem_op: layer_op for (layer_op, mem_op) in layer_to_mem_op.items()}
+        # layer_to_mem_op = self.layer.memory_operand_links
+        # mem_to_layer_op = {mem_op: layer_op for (layer_op, mem_op) in layer_to_mem_op.items()}
         core_id = self.layer.core_allocation
         mem_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
-        for mem_op, layer_op in mem_to_layer_op.items():
+        for layer_op in self.memory_operand_links.layer_operands:
+            mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)
             usm_copy = user_spatial_mapping.copy()
             mapping_per_mem_lvl[layer_op] = []
             memory_levels = mem_hierarchy.get_memory_levels(mem_op)

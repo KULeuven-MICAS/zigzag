@@ -2,6 +2,7 @@ from functools import reduce
 import copy
 import logging
 import math
+from typing import Any
 from typeguard import typechecked
 
 from zigzag.datatypes import Dimension, LayerDim, UnrollFactor, UnrollFactorInt
@@ -19,17 +20,6 @@ class MappingSingleOADim:
     def __init__(self, data: dict[LayerDim, UnrollFactor]):
         # float type is used in `SpatialMappingConversionStage`
         self.data: dict[LayerDim, UnrollFactor] | dict[LayerDim, float] = data
-
-    # @property
-    # def nb_unrolled_dims(self):
-    #     """! Return the number of different layer dimensions unrolled (unroll factor > 1) over this
-    #     Operational Array (spatial) Dimension"""
-    #     return len([x for x in self.data.values() if x > 1])
-
-    # @property
-    # def is_nested(self):
-    #     """! Return True iff multiple layer dimensions are unrolled over this MappingSingleOADim"""
-    #     return self.nb_unrolled_dims > 1
 
     @property
     def utilization(self):
@@ -67,7 +57,7 @@ class MappingSingleOADim:
     def __jsonrepr__(self):
         return json_repr_handler(self.data)
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """! Return true if the contained LayerDims are the same and all unrollings are the same"""
         return (
             isinstance(other, MappingSingleOADim)
@@ -207,7 +197,7 @@ class SpatialMapping(LayerAttribute):
                     oa_dim.size,
                 )
                 while mapping_this_oa_dim.utilization > oa_dim.size:
-                    # Remove any LayerDim
+                    # Remove arbitrary LayerDim
                     some_layer_dim = next(iter(mapping_this_oa_dim.layer_dims))
                     del mapping_this_oa_dim[some_layer_dim]
 
@@ -265,7 +255,7 @@ class SpatialMapping(LayerAttribute):
         list of tuples.
         e.g. -> [('K', 4), ('C', 2), ('K', 8)]"""
         return reduce(
-            lambda a, b: a + b, [list(mapping_single_dim.items()) for mapping_single_dim in self.mappings()], []
+            lambda a, b: a + b, [list(mapping_single_dim.items()) for mapping_single_dim in self.mappings], []
         )
 
     def delete_layer_dim(self, layer_dim: LayerDim) -> None:
@@ -278,6 +268,7 @@ class SpatialMapping(LayerAttribute):
     def oa_dims(self) -> set[Dimension]:
         return set(self.keys())
 
+    @property
     def mappings(self) -> list[MappingSingleOADim]:
         """! Return a list with all of the MappingSingleOADims contained in this instance.
         Note: converting this to a set may cause problems since MappingSingleOADim objects with identical unrollings
@@ -300,16 +291,13 @@ class SpatialMapping(LayerAttribute):
     def __setitem__(self, key: Dimension, value: MappingSingleOADim):
         self.data[key] = value
 
-    def __delitem__(self, b):
-        pass
-
     def copy(self) -> "SpatialMapping":
         return copy.deepcopy(self)
 
     def __str__(self):
         return str({str(k): str(v) for k, v in self.items()})
 
-    def __eq__(self, other) -> bool:
+    def __eq__(self, other: Any) -> bool:
         """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""
         return (
             isinstance(other, SpatialMapping)
@@ -326,12 +314,12 @@ class SpatialMapping(LayerAttribute):
         return SpatialMapping({})
 
     @staticmethod
-    def parse_user_input(x: dict[str, tuple[str, str | int] | tuple[tuple]]) -> "SpatialMapping":
+    def parse_user_input(x: dict[str, tuple[str, int] | tuple[tuple[str, int], ...]]) -> "SpatialMapping":
         """! Parse legacy notation
         Example input: {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
         NOTE: this does not (yet) check wether the input sizes are valid
         """
-        if x is None:
+        if x is None:  # type: ignore
             return SpatialMapping.empty()
 
         if isinstance(x, list):
@@ -347,17 +335,16 @@ class SpatialMapping(LayerAttribute):
             mapping_single_dim_dict: dict[LayerDim, UnrollFactor] = {}
 
             ## Nested layer dimensions e.g. (("FX", 3), ("FY", 3))
-            if all([isinstance(x, tuple) and len(x) == 2 for x in v]):
-                assert all([isinstance(x, tuple)])
-                v_nested: tuple[tuple] = v  # type: ignore
+            if all([isinstance(elem, tuple) and len(elem) == 2 for elem in v]):
+                v_nested: tuple[tuple[str, int], ...] = v  # type: ignore
                 for layer_dim, factor in v_nested:
                     assert isinstance(layer_dim, str)
-                    assert isinstance(factor, str | int)
+                    assert isinstance(factor, int)
                     mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
             # e.g. ("OX", 3)
             else:
                 assert len(v) == 2
-                v_single: tuple[str, str | int] = v
+                v_single: tuple[str, int] = v  # type: ignore
                 layer_dim, factor = v_single
                 mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
 
@@ -384,9 +371,10 @@ class SpatialMappingHint(LayerAttribute):
         return SpatialMappingHint({})
 
     @staticmethod
-    def parse_user_input(x: dict[str, list]) -> "SpatialMappingHint":
-        if x is None:
+    def parse_user_input(x: dict[str, list[str]]) -> "SpatialMappingHint":
+        if x is None:  # type: ignore
             return SpatialMappingHint.empty()
+        assert isinstance(x, dict)
         return SpatialMappingHint(
-            {Dimension.parse_user_input(k): {LayerDim(layer_dim) for layer_dim in v} for k, v in x.items()}
+            {Dimension.parse_user_input(k): {LayerDim(layer_dim_str) for layer_dim_str in v} for k, v in x.items()}
         )

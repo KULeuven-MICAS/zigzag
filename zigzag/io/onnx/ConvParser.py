@@ -69,8 +69,7 @@ class ConvParser(Parser):
             oa_shape,
             node_mapping,
         ) -> dict[str, Any]:
-            """!  Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a
-            given Layer Attribute, the Layer Attribute is not included in the returned dict."""
+            """!  Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a given Layer Attribute, the Layer Attribute is not included in the returned dict."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation

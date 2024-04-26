@@ -55,7 +55,7 @@ class SpatialMappingInternal:
         """
         return self.mapping_dict_origin[op][level]
 
-    def get_unrolling_all(self, op: LayerOperand, min_level: int) -> list:
+    def get_unrolling_all(self, op: LayerOperand, min_level: int) -> list[tuple[LayerDim, UnrollFactor]]:
         """Return all the spatial loops at a given level and above for a given operand.
 
         Args:
@@ -64,8 +64,9 @@ class SpatialMappingInternal:
 
         Returns:
             list: A list of all spatial loops at given level and above.
+        # TODO this has the same functionality as SpatialMapping.flatten_unrollings()
         """
-        spatial_loops = []
+        spatial_loops: list[tuple[LayerDim, UnrollFactor]] = []
         for level in range(min_level, self.arch_level[op]):
             spatial_loops += self.get_unrolling(op, level)
         return spatial_loops

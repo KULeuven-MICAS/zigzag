@@ -27,11 +27,10 @@ def mapping():
     tpu_like_mapping = {
         "default": {
             "core_allocation": 1,
-            # "spatial_mapping": {
-            #     "D1": ("K", 32),
-            #     "D2": (("C", 2), ("FX", 3), ("FY", 3)),
-            # },
-            # D3 and D4 in spatial_mapping_hint will not work, since they do not exist in the hardware dimensions.
+            "spatial_mapping": {
+                "D1": ("K", 32),
+                "D2": (("C", 2), ("FX", 3), ("FY", 3)),
+            },
             "spatial_mapping_hint": {
                 "D1": ["K"],
                 "D2": ["C", "FX", "FY"],

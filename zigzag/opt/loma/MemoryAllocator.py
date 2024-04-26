@@ -10,7 +10,7 @@ from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping, TemporalMappingDict
 from zigzag.opt.loma.Loop import Loop
-from zigzag.workload.layer_attributes import LayerDimSizes, MemoryOperandLinks
+from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
 
 
@@ -46,10 +46,15 @@ class MemoryAllocator:
         # On the HW side, these are always called 'I1' 'I2' and 'O', but on the layer side, they can be anything.
         layer_ops = self.layer.layer_operands
         self.mem_ops: list[MemoryOperand] = [self.layer.memory_operand_links[layer_op] for layer_op in layer_ops]
-        # Translation dict from layer op to mem op
-        self.layer_to_mem_op: MemoryOperandLinks = self.layer.memory_operand_links
-        # Translation dict from mem op to layer op
-        self.mem_to_layer_op = {mem_op: layer_op for (layer_op, mem_op) in self.layer_to_mem_op.items()}
+        self.layer_to_mem_op: dict[LayerOperand, MemoryOperand] = {
+            layer_op: self.layer.memory_operand_links.layer_to_mem_op(layer_op)
+            for layer_op in self.layer.memory_operand_links.layer_operands
+        }
+        self.mem_to_layer_op: dict[MemoryOperand, LayerOperand] = {
+            mem_op: self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+            for mem_op in self.layer.memory_operand_links.mem_operands
+        }
+
         # Bit precision for the different mem ops
         self.precision: dict[MemoryOperand, int] = {
             mem_op: self.layer.operand_precision[layer_op] for layer_op, mem_op in self.layer_to_mem_op.items()
@@ -101,7 +106,7 @@ class MemoryAllocator:
         """!  Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
         @param node: The MemoryLevel to which we will allocate loops.
         @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
-        #TODO cleanup, fix mistakes in docstring
+        #TODO cleanup
         """
 
         # Find out which mem operands this node stores
@@ -200,7 +205,7 @@ class MemoryAllocator:
     ) -> UnrollFactor:
         """!  Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
         @param loops: The loops we want to calculate the size for.
-        @para mmem_op: The memory operand we are calculating the size for.
+        @para mem_op: The memory operand we are calculating the size for.
         @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
         """
 
@@ -224,7 +229,7 @@ class MemoryAllocator:
             ir_dims = self.layer.loop_relevancy_info.get_ir_layer_dims(corresponding_layer_op)
             layer_op = self.mem_to_layer_op[mem_op]
             unallocated_spatial_dims: list[LayerDim] = [
-                dim for (dim, size) in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])
+                dim for dim, _ in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])
             ]
             unallocated_temporal_dims = [unallocated_loop.layer_dim for unallocated_loop in all_unallocated_loops]
             unallocated_dims = unallocated_spatial_dims + unallocated_temporal_dims
@@ -247,9 +252,9 @@ class MemoryAllocator:
         node: MemoryLevel,
         top_levels: dict[MemoryOperand, MemoryLevel],
     ) -> list[int]:
-        """!  Find the best combination of loops from different mem_ops.
-        Best is defined as the combination that minimizes the number of accesses
-        to the memory level above.
+        """!  Find the best combination of loops from different mem_ops. Best is defined as the combination that
+        minimizes the number of accesses to the memory level above.
+        # TODO cleanup
         """
         # TODO: Take into account the operand precision which can change based on the loops picked
         mem_capacity = node.memory_instance.size
@@ -287,13 +292,13 @@ class MemoryAllocator:
 
         all_max_nb_loops = {mem_op: len(all_sizes[mem_op]) for mem_op in mem_ops}
         all_max_nb_loops_list = list(all_max_nb_loops.values())
-        best_loop_idxs = [0 for mem_op in mem_ops]
+        best_loop_idxs = [0 for _ in mem_ops]
         best_accesses = np.inf
         nb_combinations = prod(len(sizes) for sizes in all_sizes.values())
         for i in range(nb_combinations):
             size_comb = 0
             accesses_comb = 0
-            current_loop_idxs = []
+            current_loop_idxs: list[int] = []
             for mem_op_idx, mem_op in enumerate(mem_ops):
                 this_max_nb_loops = all_max_nb_loops_list[mem_op_idx]
                 current_loop_idx = (i // prod(all_max_nb_loops_list[mem_op_idx + 1 :])) % this_max_nb_loops

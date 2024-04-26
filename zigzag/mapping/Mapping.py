@@ -1,6 +1,7 @@
 import math
 from typeguard import typechecked
 from zigzag.datatypes import Constants, LayerOperand
+from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import DataMovePattern
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
@@ -633,5 +634,5 @@ class Mapping:
         """
         for operand in self.operand_list:
             mem_level = self.mem_level[operand] - 1
-            self.unit_mem_data_movement[operand][mem_level].update_single_dir_data("rd_out_to_high", 0)
-            self.unit_mem_data_movement[operand][mem_level].update_single_dir_data("wr_in_by_high", 0)
+            self.unit_mem_data_movement[operand][mem_level].update_single_dir_data(DataDirection.RD_OUT_TO_HIGH, 0)
+            self.unit_mem_data_movement[operand][mem_level].update_single_dir_data(DataDirection.WR_IN_BY_HIGH, 0)
