@@ -301,12 +301,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         self.core_id = layer.core_allocation
         core = accelerator.get_core(self.core_id)
-        self.mem_level_list = core.get_memory_hierarchy().mem_level_list
-        self.mem_hierarchy_dict = core.get_memory_hierarchy_dict()
-        self.mem_size_dict = core.get_memory_size_dict()
+        self.mem_level_list = core.memory_hierarchy.mem_level_list
+        self.mem_hierarchy_dict = core.mem_hierarchy_dict
+        self.mem_size_dict = core.mem_size_dict
         self.mem_r_bw_dict, self.mem_w_bw_dict = core.get_memory_bw_dict()
         self.mem_r_bw_min_dict, self.mem_w_bw_min_dict = core.get_memory_bw_min_dict()
-        self.mem_sharing_list = core.get_memory_sharing_list()
+        self.mem_sharing_list = core.mem_sharing_list
         self.memory_operand_links = layer.memory_operand_links
 
         self.cumulative_layer_ids: list[int] = []  # In case the CME results from adding other CMEs together

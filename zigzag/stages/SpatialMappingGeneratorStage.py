@@ -607,15 +607,11 @@ class SpatialMappingGeneratorStage(Stage):
                 served_dimensions=new_served_dimensions,
             )
         # Create the new core
-        dataflows = self.core.dataflows
         new_id = self.core.id
-        new_dataflows = pickle_deepcopy(dataflows)
-
         new_core = Core(
             id=new_id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
-            dataflows=new_dataflows,
         )
 
         # Create the new accelerator

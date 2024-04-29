@@ -11,10 +11,10 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/examples/workload/alexnet.onnx": (5771558839.89, 8400651),
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (1731935837.864999, 3594631),
-    "zigzag/inputs/examples/workload/resnet18.onnx": (1869519792.3449998, 3408373),
-    "zigzag.inputs.examples.workload.resnet18": (2419893343.4549994, 4176163),
+    "zigzag/inputs/examples/workload/alexnet.onnx": (5766869514.52, 8338950),
+    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (1728388906.7599993, 3429446),
+    "zigzag/inputs/examples/workload/resnet18.onnx": (1868963025.12, 3366695),
+    "zigzag.inputs.examples.workload.resnet18": (2352271282.04, 4129027),
 }
 
 

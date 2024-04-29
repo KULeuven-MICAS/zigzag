@@ -118,17 +118,11 @@ class PEArrayScalingStage(Stage):
 
         # Create the new core
         id = core.id
-        dataflows = core.dataflows
-        if dataflows is not None:
-            raise NotImplementedError("Scale your core-defined dataflows accordingly here.")
-
         new_id = id
-        new_dataflows: list = pickle_deepcopy(dataflows)
         new_core = Core(
             id=new_id,
             operational_array=new_operational_array,
             memory_hierarchy=new_memory_hierarchy,
-            dataflows=new_dataflows,
         )
 
         # Create the new accelerator
