@@ -1,5 +1,3 @@
-from typeguard import typechecked
-
 from zigzag.datatypes import LayerDim, UnrollFactor
 
 

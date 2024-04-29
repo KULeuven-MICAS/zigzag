@@ -2,7 +2,6 @@ import copy
 import logging
 import math
 from typing import Any
-from typeguard import typechecked
 
 from zigzag.datatypes import Dimension, LayerDim, UnrollFactor, UnrollFactorInt
 from zigzag.workload.LayerAttribute import LayerAttribute

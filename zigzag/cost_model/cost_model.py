@@ -2,7 +2,6 @@ from abc import ABCMeta, abstractmethod
 import logging
 from math import ceil
 import numpy as np
-from typeguard import typechecked
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator

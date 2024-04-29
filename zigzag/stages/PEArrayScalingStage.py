@@ -5,7 +5,6 @@
 from math import ceil
 from typing import Any
 
-from typeguard import typechecked
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core

@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from zigzag.cacti.cacti_parser import CactiParser
 from zigzag.utils import json_repr_handler
 

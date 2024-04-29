@@ -5,8 +5,6 @@
 from typing import Any
 import logging
 
-from typeguard import typechecked
-
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core

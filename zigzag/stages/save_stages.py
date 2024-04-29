@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from typing import Any, Generator
 import os
 import pickle

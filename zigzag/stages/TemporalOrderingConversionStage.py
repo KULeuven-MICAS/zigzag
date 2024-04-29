@@ -5,7 +5,6 @@
 import logging
 from typing import Any
 
-from typeguard import typechecked
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal

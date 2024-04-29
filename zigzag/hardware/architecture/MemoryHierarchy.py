@@ -2,7 +2,6 @@ from collections import defaultdict
 from typing import Any
 import networkx as nx
 from networkx import DiGraph
-from typeguard import typechecked
 
 from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance

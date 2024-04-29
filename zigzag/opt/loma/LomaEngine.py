@@ -7,8 +7,6 @@ from sympy.ntheory import factorint
 import logging
 
 
-from typeguard import typechecked
-
 from zigzag.datatypes import LayerDim
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy

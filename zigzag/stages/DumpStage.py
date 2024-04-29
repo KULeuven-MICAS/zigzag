@@ -1,7 +1,6 @@
 import pickle
 from typing import Generator, Any
 
-from typeguard import typechecked
 
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation

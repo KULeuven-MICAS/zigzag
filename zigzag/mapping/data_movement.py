@@ -1,5 +1,3 @@
-from typeguard import typechecked
-
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
 

@@ -1,7 +1,6 @@
 from abc import ABCMeta
 import re
 from typing import Any, TypeAlias
-from typeguard import typechecked
 
 
 class OperandABC(metaclass=ABCMeta):

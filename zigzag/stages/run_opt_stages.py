@@ -1,6 +1,5 @@
 from typing import Any, Callable
 
-from typeguard import typechecked
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable

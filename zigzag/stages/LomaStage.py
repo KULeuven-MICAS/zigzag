@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from zigzag.cost_model.cost_model import CostModelEvaluation
 
 from zigzag.hardware.architecture.Accelerator import Accelerator

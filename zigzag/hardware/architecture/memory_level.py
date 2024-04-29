@@ -1,5 +1,4 @@
 from typing import Any, TypeAlias
-from typeguard import typechecked
 import math
 
 from zigzag.datatypes import Dimension, MemoryOperand

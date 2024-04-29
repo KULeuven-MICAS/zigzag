@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 import numpy as np
-from typeguard import typechecked
 
 from zigzag.datatypes import Dimension
 from zigzag.hardware.architecture.Accelerator import Accelerator

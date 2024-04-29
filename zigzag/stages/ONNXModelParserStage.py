@@ -1,6 +1,5 @@
 from typing import Any
 
-from typeguard import typechecked
 
 from zigzag.io.onnx.ONNXModelParser import ONNXModelParser
 from zigzag.stages.Stage import Stage, StageCallable

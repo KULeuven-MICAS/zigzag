@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from zigzag.io.onnx.Parser import Parser
 from zigzag.io.onnx.utils import (
     get_node_input_output_dimension_shapes,

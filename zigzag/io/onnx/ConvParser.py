@@ -1,7 +1,6 @@
 from math import ceil
 from typing import Any
 
-from typeguard import typechecked
 
 from zigzag.io.onnx.Parser import Parser
 from zigzag.io.onnx.utils import (

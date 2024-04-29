@@ -1,6 +1,5 @@
 import importlib
 from typing import Any
-from typeguard import typechecked
 
 
 from zigzag.io.AcceleratorParser import AcceleratorParser

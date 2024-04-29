@@ -7,4 +7,6 @@ collected 20 items
 
 tests/main/test_origin/test_ascend_like.py FFFF                          [ 20%]
 tests/main/test_origin/test_edge_tpu_like.py FFFF                        [ 40%]
-tests/main/test_origin/test_meta_prototype_like.py F
+tests/main/test_origin/test_meta_prototype_like.py FFFF                  [ 60%]
+tests/main/test_origin/test_tesla_npu_like.py FFFF                       [ 80%]
+tests/main/test_origin/test_tpu_like.py 

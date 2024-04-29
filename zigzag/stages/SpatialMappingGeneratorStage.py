@@ -2,11 +2,9 @@ import logging
 import itertools
 import math
 import copy
-from typeguard import typechecked
-from typing import Any, Generator, Iterator
-from sympy import divisors, primefactors
+from typing import Any, Generator
+from sympy import divisors, primefactors  # type: ignore
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.datatypes import Dimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
@@ -80,18 +78,18 @@ class SpatialMappingGeneratorStage(Stage):
     def run(self):
         """! Generate SpatialMappings and convert to internal representation"""
 
-        user_spatial_mappings = list(self.generate_spatial_mappings())
-        nb_user_spatial_mappings = len(user_spatial_mappings)
-        assert nb_user_spatial_mappings > 0, "No SpatialMappings found"
+        generated_mappings = list(self.generate_spatial_mappings())
+        nb_generated_mappings = len(generated_mappings)
+        assert nb_generated_mappings > 0, "No SpatialMappings found"
 
-        for i, user_spatial_mapping in enumerate(user_spatial_mappings):
+        for i, generated_mapping in enumerate(generated_mappings):
             logger.info(  # pylint: disable=W1203
-                f"Launching spatial mapping {i+1}/{nb_user_spatial_mappings}: {user_spatial_mapping}."
+                f"Launching spatial mapping {i+1}/{nb_generated_mappings}: {generated_mapping}."
             )
 
             # Modify the size of lower input mem to support weight diagonal spatial unrolling (for OX/OY)
             accelerator_under_test = (
-                self.modify_innermost_input_mem_size(user_spatial_mapping)
+                self.modify_innermost_input_mem_size(generated_mapping)
                 if self.enable_weight_diagonal_mapping
                 else self.accelerator
             )
@@ -103,13 +101,13 @@ class SpatialMappingGeneratorStage(Stage):
                 **self.kwargs,
             )
 
-            # Set the user_spatial_mapping in the layer, as this is required by SpatialMappingConversionStage
-            self.layer.user_spatial_mapping = user_spatial_mapping
+            # Set the generated_mapping in the layer, as this is required by SpatialMappingConversionStage
+            self.layer.user_spatial_mapping = generated_mapping
 
             for cme, extra_info in spatial_mapping_conversion_stage.run():
                 # recover back the accelerator in case the memory size had been adjusted
                 cme.accelerator = self.accelerator
-                yield cme, (user_spatial_mapping, extra_info)
+                yield cme, (generated_mapping, extra_info)
 
     def generate_spatial_mappings(self) -> Generator[SpatialMapping, None, None]:
         """! Generator that yields SpatialMappings
@@ -126,21 +124,17 @@ class SpatialMappingGeneratorStage(Stage):
 
         # Full Spatial Mapping is already defined by user
         if len(oa_dims_to_fill) == 0:
-            assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims)  # type: ignore
+            assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims)
             yield mapping_template
             return
 
-        # For each OA Dimension to fill, generate a list of MappingSingleOADim candidates
-        mappings_per_oa_dim: list[list[MappingSingleOADim]] = [
-            list(
-                self.generate_spatial_mapping_single_oa_dim(
-                    self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], oa_dim.size
-                )
+        # For each OA Dimension to fill, create a generator of MappingSingleOADim candidates
+        mappings_per_oa_dim: list[Generator[MappingSingleOADim, None, None]] = [
+            self.generate_spatial_mapping_single_oa_dim(
+                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], oa_dim.size
             )
             for oa_dim in oa_dims_to_fill
         ]
-
-        assert all([len(x) > 0 for x in mappings_per_oa_dim]), "No mapping found for some OADimension"
 
         candidate_mappings: list[SpatialMapping] = []
         for combination in itertools.product(*mappings_per_oa_dim):
@@ -149,20 +143,17 @@ class SpatialMappingGeneratorStage(Stage):
             for idx, oa_dim in enumerate(oa_dims_to_fill):
                 candidate[oa_dim] = combination[idx]
             # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
-            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims):  # type: ignore
+            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims):
                 candidate_mappings.append(candidate)
 
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
-        # assert len(candidate_mappings) == len(set(candidate_mappings)), "Generated mappings are not unique"
 
         # Sort according to expected performance
         candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
-
-        indicators = [x.get_performance_indicator() for x in candidate_mappings]
-        nb_top_mappings = len([x for x in indicators if x == indicators[0]])
+        # indicators = [x.get_performance_indicator() for x in candidate_mappings]
 
         # Limit the number of mappings generated
-        for i in range(min(nb_top_mappings, self.nb_mappings_generated)):
+        for i in range(self.nb_mappings_generated):
             candidate = candidate_mappings[i]
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
@@ -221,7 +212,7 @@ class SpatialMappingGeneratorStage(Stage):
         unroll_hints: set[LayerDim],
         max_unrollings: dict[LayerDim, UnrollFactorInt],
         oa_dim_size: int,
-    ) -> Iterator[MappingSingleOADim]:
+    ) -> Generator[MappingSingleOADim, None, None]:
         """! Generate a list of possible mappings for the given Operational Array Dimension. Possible mappings include
         unrolling all LayerDims in `unroll_hints` for all unique divisors upto the maximal value defined in
         `max_unrolling`.

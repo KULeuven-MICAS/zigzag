@@ -6,7 +6,6 @@ import os
 
 from typing import Any
 
-from typeguard import typechecked
 
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation

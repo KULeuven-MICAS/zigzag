@@ -1,7 +1,6 @@
 from enum import Enum
 import re
 from typing import Any, TypeAlias
-from typeguard import typechecked
 
 from zigzag.datatypes import Constants, MemoryOperand
 

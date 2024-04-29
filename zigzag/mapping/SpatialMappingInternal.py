@@ -1,6 +1,5 @@
 from math import prod
 
-from typeguard import typechecked
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
 from zigzag.workload.layer_node import LayerNode

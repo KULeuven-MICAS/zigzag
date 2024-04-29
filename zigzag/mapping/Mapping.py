@@ -1,5 +1,4 @@
 import math
-from typeguard import typechecked
 from zigzag.datatypes import Constants, LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import DataMovePattern

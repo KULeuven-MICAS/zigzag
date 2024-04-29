@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from zigzag.hardware.architecture.Core import Core
 from zigzag.utils import json_repr_handler
 

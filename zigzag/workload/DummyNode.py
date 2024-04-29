@@ -1,4 +1,3 @@
-from typeguard import typechecked
 from zigzag.datatypes import LayerOperand
 from zigzag.workload.layer_attributes import InputOperandSource
 

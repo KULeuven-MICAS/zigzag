@@ -33,7 +33,6 @@ import numpy as np
 import logging
 import random
 
-from typeguard import typechecked
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.workload.layer_node import LayerNode

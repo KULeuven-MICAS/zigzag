@@ -1,7 +1,6 @@
 import numpy as np
 from math import prod
 
-from typeguard import typechecked
 
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, MemoryOperand, UnrollFactor, UnrollFactorInt
 from zigzag.hardware.architecture.Accelerator import Accelerator

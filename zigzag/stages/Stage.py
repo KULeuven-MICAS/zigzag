@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Generator, Protocol, runtime_checkable
 
-from typeguard import typechecked
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 

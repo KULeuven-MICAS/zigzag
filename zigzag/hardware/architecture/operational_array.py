@@ -1,5 +1,4 @@
 import numpy as np
-from typeguard import typechecked
 from zigzag.datatypes import Dimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
 from zigzag.hardware.architecture.operational_unit import (

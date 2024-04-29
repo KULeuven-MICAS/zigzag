@@ -2,7 +2,6 @@ import networkx as nx
 import logging
 from typing import Any, Generator
 
-from typeguard import typechecked
 
 from zigzag.cost_model.cost_model import CostModelEvaluation
 

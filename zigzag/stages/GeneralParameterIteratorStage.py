@@ -5,8 +5,6 @@
 import logging
 from typing import Any
 
-from typeguard import typechecked
-
 
 from zigzag.stages.Stage import Stage, StageCallable
 

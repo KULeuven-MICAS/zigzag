@@ -1,6 +1,5 @@
 from typing import Any
 from onnx import ModelProto
-from typeguard import typechecked
 
 from zigzag.io.onnx.DefaultNodeParser import DefaultNodeParser
 from zigzag.io.onnx.GemmParser import GemmParser

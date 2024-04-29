@@ -1,7 +1,6 @@
 from typing import TypeAlias
 import math
 
-from typeguard import typechecked
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import json_repr_handler, pickle_deepcopy

@@ -1,6 +1,3 @@
-import networkx as nx
-from typeguard import typechecked
-
 from zigzag.workload.Workload import Workload
 from zigzag.workload.layer_attributes import LayerAttributes
 from zigzag.workload.layer_node import LayerNode
@@ -17,7 +14,7 @@ class DNNWorkload(Workload):
         super().__init__(**attr)
 
         layer_id_to_obj: dict[int, LayerNode] = {}  # Lookup dict for id to LayerNode object translation
-        self.layer_node_list = []
+        self.layer_node_list: list[LayerNode] = []
 
         for layer_id, layer in workload.items():
             # TODO Support other type of layers, such as concatenation, max pooling, BN, etc.
@@ -37,23 +34,14 @@ class DNNWorkload(Workload):
             # Save this layer_id and LayerNode pair in the layer_id_to_obj dict
             layer_id_to_obj[layer_id] = layer_node
             # self.add_node(layer_id, info=layer_node)
-            self.add_node(layer_node)
+            self.add_workload_node(layer_node)
             self.layer_node_list.append(layer_node)
             # Find all of its operand sources and add edges accordingly
-            edges = []
-            for op, parent_list in layer.get("operand_source", {}).items():
+            edges: list[tuple[LayerNode, LayerNode]] = []
+            for _, parent_list in layer.get("operand_source", {}).items():
                 for parent_id in parent_list:
                     assert parent_id in layer_id_to_obj, f"Illegal reference to non-existent layer with id {parent_id}"
                     parent_layer = layer_id_to_obj[parent_id]
                     edges.append((parent_layer, layer_node))
-                    # layer_node.input_operand_source[op] = parent_layer # ! This feature is not used?
-            self.add_edges_from(edges)
-
-    def topological_sort(self):
-        return nx.topological_sort(self)
-
-    def get_node_with_id(self, id):
-        for node in self.nodes:
-            if node.id == id:
-                return node
-        raise ValueError("DNNWorkload instance does not have a node with the requested id")
+                    # layer_node.input_operand_source[op] = parent_layer # TODO This feature is not used?
+            self.add_workload_edges_from(edges)
