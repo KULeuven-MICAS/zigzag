@@ -6,11 +6,11 @@ from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_node import LayerNode
 
-SpatialMappingPerMEMLvl: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor | float]]]]
+SpatialMappingPerMemLvl: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor | float]]]]
 
 
-def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNode") -> SpatialMappingPerMEMLvl:
-    """!  This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
+def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNode") -> SpatialMappingPerMemLvl:
+    """! This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
     It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
     # TODO requires cleanup
     """
@@ -27,7 +27,7 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNo
     }
 
     pr_operand_list = list(pr_operand_loop_lut.keys())
-    mapping_dict_reform: SpatialMappingPerMEMLvl = pickle_deepcopy(mapping_dict)
+    mapping_dict_reform: SpatialMappingPerMemLvl = pickle_deepcopy(mapping_dict)
 
     # current and below level pr data size
     cabl_pr_data_size: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = {}
@@ -122,7 +122,7 @@ def replace_pr_loop_in_mapping(
     pr_operand_loop_lut: PrLoop,
     r_ir_operand_loop_lut: list[LayerDim],
 ) -> list[list[tuple[LayerDim, UnrollFactor]]]:
-    """!  This function replaces all pr loops in a mapping of a single operand with r and ir loops."""
+    """! This function replaces all pr loops in a mapping of a single operand with r and ir loops."""
     mapping_new: list[list[tuple[LayerDim, UnrollFactor]]] = pickle_deepcopy(single_operand_mapping)
 
     for level, loop_list in enumerate(single_operand_mapping):
@@ -142,9 +142,10 @@ def replace_pr_loop_in_mapping(
                         per_pr_data_size[pr_data_dim][level][pr_idx_local],
                     )
                     # insert ir loop after the r loop
-                    # NOTE: Here we insert the ir loop after/above the r loop, which indicates that we ignore the input FIFO effect
-                    # during current level feeds data to below level. We could also insert the ir loop before/below the r loop,
-                    # which leads to more energy-efficient mapping if the innermost ir loop merging down is enabled.
+                    # NOTE: Here we insert the ir loop after/above the r loop, which indicates that we ignore the input
+                    # FIFO effect during current level feeds data to below level. We could also insert the ir loop
+                    # before/below the r loop, which leads to more energy-efficient mapping if the innermost ir loop
+                    # merging down is enabled.
                     mapping_new[level].insert(
                         idx + pr_idx_global + 1,
                         (

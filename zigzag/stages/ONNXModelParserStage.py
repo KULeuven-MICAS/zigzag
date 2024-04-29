@@ -1,24 +1,22 @@
-from typing import Any, Generator
+from typing import Any
 
 from typeguard import typechecked
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.io.onnx.ONNXModelParser import ONNXModelParser
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class ONNXModelParserStage(Stage):
 
-    def __init__(self, list_of_callables, *, workload, mapping, **kwargs):
+    def __init__(self, list_of_callables: list[StageCallable], *, workload: str, mapping: str, **kwargs: Any):
         super().__init__(list_of_callables, **kwargs)
         self.onnx_model_parser = ONNXModelParser(workload, mapping)
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         self.onnx_model_parser.run()
         onnx_model = self.onnx_model_parser.get_onnx_model()
         workload = self.onnx_model_parser.get_workload()

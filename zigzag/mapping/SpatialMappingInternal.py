@@ -4,18 +4,17 @@ from typeguard import typechecked
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
 from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMEMLvl, decouple_pr_loop
+from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl, decouple_pr_loop
 from zigzag.utils import json_repr_handler
 
 
-@typechecked
 class SpatialMappingInternal:
-    """!  Class that collect all the info related to spatial mapping."""
+    """! Class that collect all the info related to spatial mapping."""
 
-    def __init__(self, spatial_mapping_dict: SpatialMappingPerMEMLvl, layer_node: "LayerNode"):
+    def __init__(self, spatial_mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNode"):
 
         self.mapping_dict_origin = spatial_mapping_dict
-        self.mapping_dict_reform: SpatialMappingPerMEMLvl = decouple_pr_loop(spatial_mapping_dict, layer_node)
+        self.mapping_dict_reform: SpatialMappingPerMemLvl = decouple_pr_loop(spatial_mapping_dict, layer_node)
         self.layer_node = layer_node
         self.layer_operands: list[LayerOperand] = layer_node.layer_operands
 
@@ -29,7 +28,8 @@ class SpatialMappingInternal:
         self.calc_unit_count()
 
         # Calculate data serve scope: each data element serves/(is served by) how many unit at below level
-        # NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.
+        # NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping
+        # attributes.
         self.calc_data_serve_scope()
 
         # Calculate memory bandwidth incremental factor between architectural levels
@@ -46,11 +46,11 @@ class SpatialMappingInternal:
         return str(self)
 
     def __jsonrepr__(self):
-        """!  JSON representation of this object to save it to a file."""
+        """! JSON representation of this object to save it to a file."""
         return json_repr_handler({"spatial_mapping": self.mapping_dict_origin})
 
     def get_unrolling(self, op: LayerOperand, level: int):
-        """!  Return the unrolled loops for operand 'op' at level 'level'.
+        """! Return the unrolled loops for operand 'op' at level 'level'.
         'level' = 0 would signify the operational level.
         """
         return self.mapping_dict_origin[op][level]
@@ -72,7 +72,7 @@ class SpatialMappingInternal:
         return spatial_loops
 
     def calc_unroll_size(self) -> None:
-        """!  Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level"""
+        """! Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level"""
 
         # Initialization
         unroll_size_r: dict[LayerOperand, list[UnrollFactor]] = {
@@ -101,7 +101,7 @@ class SpatialMappingInternal:
         self.unroll_size_total = unroll_size_total
 
     def calc_unit_count(self):
-        """!  Calculate total/unique/duplicate unit count per operand per architecture level"""
+        """! Calculate total/unique/duplicate unit count per operand per architecture level"""
         # Number of unit at each level (for each operand)
         # Added round call as number doesn't remain integer due to self.mapping_dict_reform number instability
         unit_count = {
@@ -135,7 +135,7 @@ class SpatialMappingInternal:
         self.unit_duplicate = unit_duplicate
 
     def calc_data_serve_scope(self):
-        """!  Calculate data serve scope, i.e., for input operands, it means that each data element
+        """! Calculate data serve scope, i.e., for input operands, it means that each data element
         is broadcast to how many unit at below level; for output operand, it means that how
         many unit add/collect their output values to one result, and push it to above level
 
@@ -151,7 +151,7 @@ class SpatialMappingInternal:
         self.data_serve_scope = data_serve_scope
 
     def calc_mem_bw_boost_factor(self):
-        """!  Calculate memory bandwidth incremental factor between architectural levels.
+        """! Calculate memory bandwidth incremental factor between architectural levels.
 
         NOTE: mem_bw_boost doesn't include MAC level, thus is one level less than other spatial mapping attributes.
 

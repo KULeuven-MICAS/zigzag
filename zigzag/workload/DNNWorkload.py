@@ -7,11 +7,10 @@ from zigzag.workload.layer_node import LayerNode
 from typing import Any
 
 
-@typechecked
 class DNNWorkload(Workload):
 
-    def __init__(self, workload: dict[int, dict], mapping: dict[str, dict[str, Any]], **attr):
-        """!  The class constructor
+    def __init__(self, workload: dict[int, dict[str, Any]], mapping: dict[str, dict[str, Any]], **attr: Any):
+        """! The class constructor
         Collect all the algorithmic workload information here.
         @return (self): Directed Graph with nodes the layers and edges the connections between layers.
         """

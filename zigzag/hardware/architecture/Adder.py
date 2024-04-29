@@ -1,5 +1,5 @@
 class Adder:
-    """!  This class represents one single adder."""
+    """! This class represents one single adder."""
 
     def __init__(
         self,
@@ -9,7 +9,7 @@ class Adder:
         input_precision: list[int] | int,
         output_precision: int,
     ):
-        """!  The class constructor
+        """! The class constructor
         @param fan_in: the number of input data to be added together.
         @param unit_cost: one addition energy.
         @param unit_area: one adder area.

@@ -1,5 +1,6 @@
+from typing import Any
 from onnx import ModelProto
-from typeguard import typechecked  # type: ignore
+from typeguard import typechecked
 
 from zigzag.io.onnx.DefaultNodeParser import DefaultNodeParser
 from zigzag.io.onnx.GemmParser import GemmParser
@@ -18,11 +19,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class ONNXModelParser:
-    """!  Parse the ONNX model into a workload."""
+    """! Parse the ONNX model into a workload."""
 
-    def __init__(self, onnx_model, mapping_path) -> None:
+    def __init__(self, onnx_model: str | ModelProto, mapping_path: str | dict[str, dict[Any]] | None) -> None:
 
         # Sanity checks on given onnx_model
         if isinstance(onnx_model, str):
@@ -49,7 +49,7 @@ class ONNXModelParser:
         self.workload = None
 
     def run(self):
-        """!  Run the parser
+        """! Run the parser
         - parse the onnx_model_path into an onnx model
         - parse the mapping_path into a mapping dict
         - iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes
@@ -68,7 +68,7 @@ class ONNXModelParser:
         self.workload = workload
 
     def parse_workload_from_onnx_model_and_mapping(self):
-        """!  Converts an onnx model into a workload object.
+        """! Converts an onnx model into a workload object.
         We scan the model for all convolutional layers, and setup a Layer object for each of those using the mapping.
         Then we combine the layers into a workload graph.
 

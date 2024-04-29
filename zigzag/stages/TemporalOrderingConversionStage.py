@@ -1,28 +1,34 @@
+"""
+# TODO this file isn't used. Remove?
+"""
+
 import logging
+from typing import Any
 
 from typeguard import typechecked
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
+from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.workload.layer_attributes import LayerTemporalOrdering
 from zigzag.workload.layer_node import LayerNode
 
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class TemporalOrderingConversionStage(Stage):
 
     def __init__(
         self,
-        list_of_callables,
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(list_of_callables, **kwargs)
         self.layer = layer
@@ -30,7 +36,7 @@ class TemporalOrderingConversionStage(Stage):
         self.accelerator = accelerator
 
     def run(self):
-        """!  Run this stage by converting the user-defined temporal loop ordering
+        """! Run this stage by converting the user-defined temporal loop ordering
         to the memory-level based temporal mapping representation.
         """
         temporal_mapping = self.convert_user_temporal_mapping(self.layer.user_temporal_ordering)
@@ -43,7 +49,10 @@ class TemporalOrderingConversionStage(Stage):
         for cme, extra_info in substage.run():
             yield cme, extra_info
 
-    def convert_user_temporal_mapping(self, user_temporal_mapping):
+    def convert_user_temporal_mapping(self, user_temporal_mapping: LayerTemporalOrdering | None) -> TemporalMapping:
+        """!
+        # TODO move to `LayerTemporalOrdering`, fix types. What is user_temporal_mapping is None?
+        """
         spatial_mapping = self.spatial_mapping
         layer = self.layer
         layer_dim_sizes = layer.layer_dim_sizes

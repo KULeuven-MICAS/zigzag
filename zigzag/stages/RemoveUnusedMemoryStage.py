@@ -1,23 +1,25 @@
-from typing import Any, Generator, overload
+"""
+# TODO this file needs to be reworked
+"""
+
+from typing import Any
 import logging
 
 from typeguard import typechecked
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_level import ServedMemDimensions, ServedMemDimsUserFormat
+from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class RemoveUnusedMemoryStage(Stage):
     """! # ################### Description ####################
     # # This stage must be processed behind WorkloadStage.
@@ -43,14 +45,14 @@ class RemoveUnusedMemoryStage(Stage):
 
     def __init__(
         self,
-        list_of_callables,
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
         mem_update_list,
         mem_update_weight,
         layer_list,
-        **kwargs,
+        **kwargs: Any,
     ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
@@ -59,7 +61,7 @@ class RemoveUnusedMemoryStage(Stage):
         self.mem_update_list = mem_update_list
         self.mem_update_weight = mem_update_weight
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         modified_accelerator = self.generate_accelerator_with_removing_unused_memory()
         sub_stage = self.list_of_callables[0](
             self.list_of_callables[1:],

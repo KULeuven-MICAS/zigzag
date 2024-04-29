@@ -7,13 +7,12 @@ from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping, TemporalMappingDict
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMEMLvl
+from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl
 import zigzag.mapping.mapping_assist_funcs as mapping_assist_funcs
 
 
-@typechecked
 class Mapping:
-    """!  Collect information of a complete mapping (spatial and temporal)
+    """! Collect information of a complete mapping (spatial and temporal)
 
     NOTE: Mapping is HW-unaware, i.e. Mapping doesn't take in HW information
     like memory bw, access cost, size and so on.
@@ -22,7 +21,7 @@ class Mapping:
     def __init__(
         self,
         accelerator: Accelerator,
-        spatial_mapping: SpatialMappingPerMEMLvl | SpatialMappingInternal,
+        spatial_mapping: SpatialMappingPerMemLvl | SpatialMappingInternal,
         temporal_mapping: TemporalMappingDict | TemporalMapping,
         layer_node: LayerNode,
         access_same_data_considered_as_no_access: bool = False,
@@ -89,7 +88,7 @@ class Mapping:
         self.disable_data_traffic_external()
 
     def combine_spatial_temporal_mapping_dict(self):
-        """!  Combine spatial and temporal mapping dictionary into combined_mapping_dict by
+        """! Combine spatial and temporal mapping dictionary into combined_mapping_dict by
         inserting spatial loops above temporal loops at each level.
 
         - combined_mapping_dict_1s1t: corresponding level's smap and tmap are merged together.
@@ -123,7 +122,7 @@ class Mapping:
         self.combined_mapping_dict_1s2t = combined_mapping_dict_1s2t
 
     def get_psum_flags(self) -> list[bool]:
-        """!  This function generates an list "psum_flag" that identify whether an output memory
+        """! This function generates an list "psum_flag" that identify whether an output memory
         level holds partial or final output.
         E.g., psum_flag = [True, True, False] means that there are 3 memory levels for output and only the outermost
         memory level hold the final output, the 1st and 2nd memory levels need to store partial output for some time.
@@ -148,7 +147,7 @@ class Mapping:
         return psum_flag_L2H[1:] + [False]  # add an extra False on top for later indexing convenience
 
     def gen_data_precision_dict(self):
-        """!  This function generates a dictionary that collect data precision for each operand at each arch level"""
+        """! This function generates a dictionary that collect data precision for each operand at each arch level"""
         input_operands = self.layer_node.input_operands
         output_operand = self.layer_node.output_operand
         data_precision_dict: dict[LayerOperand, list[int]] = {
@@ -165,7 +164,7 @@ class Mapping:
         self.data_precision_dict = data_precision_dict
 
     def gen_r_ir_loop_list(self):
-        """!  Given the combined mapping, generate r/ir loop size list at each level for each operand
+        """! Given the combined mapping, generate r/ir loop size list at each level for each operand
         # TODO cleanup
         """
         combined_mapping = self.combined_mapping_dict_1s1t_reform
@@ -271,7 +270,7 @@ class Mapping:
         self.O_ir_loop_size_caal = O_ir_loop_size_caal
 
     def calc_data_size(self):
-        """!  Based on the r loop size list, calculate the data size held by each architectural level."""
+        """! Based on the r loop size list, calculate the data size held by each architectural level."""
         # data_elem_per_level_unrolled: data size held inside of each unrolled unit at each architectural level
         # data_elem_per_level: total data size at each architectural level (= data_elem_per_level_unrolled * unique unit count)
         data_elem_per_level_unrolled = {
@@ -309,7 +308,7 @@ class Mapping:
         self.data_bit_per_level = data_bit_per_level
 
     def calc_effective_data_size(self):
-        """!  Calculate the effective data size for getting the allowed memory updating window in latency calculation.
+        """! Calculate the effective data size for getting the allowed memory updating window in latency calculation.
         The effective data size is calculated by using data_elem_per_level_unrolled divided by the top r loops.
         """
         effective_data_elem = {
@@ -331,7 +330,7 @@ class Mapping:
         self.effective_data_bit = effective_data_bit
 
     def calc_data_access(self):
-        """!  Based on the ir loop size list and the total MAC Op count, calculate the data access
+        """! Based on the ir loop size list and the total MAC Op count, calculate the data access
         at each memory level in a bottom-up way.
         """
         total_MAC_count = self.layer_node.total_MAC_count
@@ -450,7 +449,7 @@ class Mapping:
             self.unit_mem_data_movement[output_operand][mem_level] = unit_mem_data_movement
 
     def calc_req_mem_bw_and_data_transfer_rate(self):
-        """!  This function calculates the average & instant required memory bw and the periodic data transfer pattern."""
+        """! This function calculates the average & instant required memory bw and the periodic data transfer pattern."""
 
         if self.access_same_data_considered_as_no_access:
             # For input operands, add operational array level's 'MAC_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level
@@ -629,7 +628,7 @@ class Mapping:
                 )
 
     def disable_data_traffic_external(self):
-        """!  This function set all the data traffic between the top level memory and the external world to 0
+        """! This function set all the data traffic between the top level memory and the external world to 0
         in unit_mem_data_movement.
         """
         for operand in self.operand_list:

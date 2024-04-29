@@ -4,7 +4,7 @@ from typing import Any, TypeAlias
 from typeguard import typechecked
 
 
-class DimensionABC(metaclass=ABCMeta):
+class OperandABC(metaclass=ABCMeta):
     """! Abstract Base Class for all dimension- and operand-like classes"""
 
     def __init__(self, name: str):
@@ -22,18 +22,17 @@ class DimensionABC(metaclass=ABCMeta):
     def __repr__(self):
         return str(self)
 
-    def __lt__(self, other: "DimensionABC"):
+    def __lt__(self, other: "OperandABC"):
         return self.name < other.name
 
-    def __ge__(self, other: "DimensionABC"):
+    def __ge__(self, other: "OperandABC"):
         return self.name >= other.name
 
     def __jsonrepr__(self):
         return self.name
 
 
-@typechecked
-class LayerOperand(DimensionABC):
+class LayerOperand(OperandABC):
     """! Operand from the layer definition, e.g. `I`, `W`, `O`."""
 
     def is_output(self):
@@ -43,8 +42,7 @@ class LayerOperand(DimensionABC):
         return self == Constants.FINAL_OUTPUT_LAYER_OP
 
 
-@typechecked
-class MemoryOperand(DimensionABC):
+class MemoryOperand(OperandABC):
     """! Operand from the memory definition, e.g. `I1`, `I2`, `O`."""
 
     def is_output(self):
@@ -54,11 +52,8 @@ class MemoryOperand(DimensionABC):
         return self == Constants.FINAL_OUTPUT_MEM_OP
 
 
-@typechecked
-class LayerDim(DimensionABC):
-    """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)
-    # TODO make layer_dim_size a property of LayerDim
-    """
+class LayerDim(OperandABC):
+    """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)"""
 
     def __init__(self, name: str):
         assert name.isalpha(), "LayerDim name contains special characters or numbers"
@@ -72,20 +67,20 @@ class LayerDim(DimensionABC):
         return new_instance
 
     def create_ir_version(self) -> "LayerDim":
-        """! Create a new LayerDim instance with is tagged `irrelevant` and can be distinguished from non-tagged LayerDims"""
+        """! Create a new LayerDim instance with is tagged `irrelevant` and can be distinguished from non-tagged
+        LayerDims"""
         new_instance = LayerDim(self.name)
         new_instance.name = self.name + "_ir"
         return new_instance
 
 
-@typechecked
-class Dimension(DimensionABC):
+class Dimension(OperandABC):
     """! Operational Array Dimension
     # TODO rename to `OADimension
     """
 
     def __init__(self, index: int = 0, name: str = "", size: int = 1):
-        """!  The class constructor
+        """! The class constructor
         @param index: The integer index of this Dimension.
         @param name: The user-provided name of this Dimension.
         @param size: The user-provided size of this Dimension.
@@ -136,9 +131,6 @@ class Constants:
 
 
 ###### Type aliases ######
-OperandStr: TypeAlias = str
-MemOperandStr: TypeAlias = str
-LayerDimStr: TypeAlias = str
 UnrollFactor: TypeAlias = int | float
 UnrollFactorInt: TypeAlias = int
 

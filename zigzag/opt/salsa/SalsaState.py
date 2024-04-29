@@ -27,6 +27,7 @@
 #
 
 from copy import deepcopy
+from zigzag.datatypes import LayerDim, UnrollFactorInt
 from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
 from zigzag.cost_model.cost_model import CostModelEvaluation
 
@@ -37,14 +38,14 @@ from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 
 
 class SalsaState:
-    """!  State of SALSA, storing an ordering, his temporal mapping and his energy value."""
+    """! State of SALSA, storing an ordering, his temporal mapping and his energy value."""
 
     def __init__(
         self,
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        ordering,
+        ordering: list[tuple[LayerDim, UnrollFactorInt]],
         opt_criterion_name: str,
     ):
         assert opt_criterion_name in ("energy", "latency")  # TODO make this an enum
@@ -73,10 +74,8 @@ class SalsaState:
         elif self.opt_criterion_name == "latency":
             self.opt_criterion = self.cme.latency_total0
 
-    def swap(self, i, j):
-        """!  Swap between the element at positon i and j in the ordering
-        and return the new resulting state.
-        """
+    def swap(self, i: int, j: int):
+        """! Swap between the element at position i and j in the ordering and return the new resulting state."""
 
         swapped_ordering = deepcopy(self.ordering)
         temp = swapped_ordering[i]

@@ -27,6 +27,7 @@
 #
 
 from copy import deepcopy
+from typing import Any
 from sympy.ntheory import factorint
 import numpy as np
 import logging
@@ -45,9 +46,8 @@ from zigzag.opt.temporal.salsa.state import SalsaState
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class SalsaEngine:
-    """!  Class that handles optimization of temporal mapping given a:
+    """! Class that handles optimization of temporal mapping given a:
     - layer
     - spatial mapping
     - memory hierarchy
@@ -64,7 +64,7 @@ class SalsaEngine:
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        **kwargs,
+        **kwargs: Any,
     ):
         """! Initialize the engine with the given:
         - LayerNode

@@ -15,20 +15,19 @@ from zigzag.workload.layer_node import LayerNode
 
 
 class MemoryHierarchyTooSmallException(Exception):
-    """!  Missing description"""
+    """! Missing description"""
 
     pass
 
 
 class MemoryTooSmallException(Exception):
-    """!  Missing description"""
+    """! Missing description"""
 
     pass
 
 
-@typechecked
 class MemoryAllocator:
-    """!  Class that handles allocation of a loop ordering to the memories in the hierarchy."""
+    """! Class that handles allocation of a loop ordering to the memories in the hierarchy."""
 
     def __init__(
         self,
@@ -83,7 +82,7 @@ class MemoryAllocator:
         self.temporal_mapping_dict: TemporalMappingDict = {layer_op: [] for layer_op in layer_ops}
 
     def run(self):
-        """!  Run the memory allocation process.
+        """! Run the memory allocation process.
         Start by the lowest memory hierarchy level and allocate as much loops as possible
         for the different operands. The spatial unrolling has to be taken into account at
         each memory level in the hierarchy.
@@ -103,7 +102,7 @@ class MemoryAllocator:
         return temporal_mapping
 
     def allocate_node(self, node: MemoryLevel, top_levels: dict[MemoryOperand, MemoryLevel]):
-        """!  Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
+        """! Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
         @param node: The MemoryLevel to which we will allocate loops.
         @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
         #TODO cleanup
@@ -111,7 +110,8 @@ class MemoryAllocator:
 
         # Find out which mem operands this node stores
         mem_ops = node.operands
-        # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem op less)
+        # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem
+        # op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
         # Does this node support double buffering # TODO this is not used
         db_support = node.memory_instance.double_buffering_support
@@ -164,8 +164,8 @@ class MemoryAllocator:
     def calc_size_slices(
         self, mem_op: MemoryOperand, mem_capacity: int, db_support: bool = False
     ) -> list[UnrollFactor]:
-        """!  Calculate the required memory size to store different
-        slices of the unallocated loops, with 'mem_capacity' as an upper bound.
+        """! Calculate the required memory size to store different slices of the unallocated loops, with 'mem_capacity'
+        as an upper bound.
         @param mem_capacity Capacity of the memory node in bits.
         @param db_support Double buffering support of this node
         """
@@ -203,7 +203,7 @@ class MemoryAllocator:
     def calc_loops_size(
         self, loops: list[Loop], mem_op: MemoryOperand, all_unallocated_loops: list[Loop]
     ) -> UnrollFactor:
-        """!  Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
+        """! Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
         @param loops: The loops we want to calculate the size for.
         @para mem_op: The memory operand we are calculating the size for.
         @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
@@ -252,7 +252,7 @@ class MemoryAllocator:
         node: MemoryLevel,
         top_levels: dict[MemoryOperand, MemoryLevel],
     ) -> list[int]:
-        """!  Find the best combination of loops from different mem_ops. Best is defined as the combination that
+        """! Find the best combination of loops from different mem_ops. Best is defined as the combination that
         minimizes the number of accesses to the memory level above.
         # TODO cleanup
         """
@@ -308,7 +308,8 @@ class MemoryAllocator:
             if size_comb > mem_capacity:
                 if i == 0:
                     raise MemoryTooSmallException(
-                        "The memory can't store all loops assigned to lower level memories. Likely due to spatial unrolling."
+                        """The memory can't store all loops assigned to lower level memories. Likely due to spatial 
+                        unrolling."""
                     )
                 continue
             if accesses_comb <= best_accesses:

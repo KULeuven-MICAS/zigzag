@@ -18,22 +18,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class ConvParser(Parser):
-    """!  Parser for ONNX Conv and QLinearConv nodes into LayerNode."""
+    """! Parser for ONNX Conv and QLinearConv nodes into LayerNode."""
 
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
 
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
     def run(self) -> LayerNode:
-        """!  Run the parser and return the created LayerNode object"""
+        """! Run the parser and return the created LayerNode object"""
         layer_node = self.generate_layer_node_for_conv()
         return layer_node
 
     def generate_layer_node_for_conv(self):
         def get_weight_name(node):
-            """!  Return the name of the weight input of this node depending on its operator type
+            """! Return the name of the weight input of this node depending on its operator type
             @param node (NodeProto): The node
             """
             op_type = node.op_type  # 'Conv', 'QLinearConv', ...
@@ -45,7 +44,7 @@ class ConvParser(Parser):
                 raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
 
         def get_input_output_weight_data_type(node, model):
-            """!  Return the data type of the input, output and weight tensors of this node.
+            """! Return the data type of the input, output and weight tensors of this node.
             @param node
             @param model
             """
@@ -69,7 +68,7 @@ class ConvParser(Parser):
             oa_shape,
             node_mapping,
         ) -> dict[str, Any]:
-            """!  Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a given Layer Attribute, the Layer Attribute is not included in the returned dict."""
+            """! Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a given Layer Attribute, the Layer Attribute is not included in the returned dict."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation

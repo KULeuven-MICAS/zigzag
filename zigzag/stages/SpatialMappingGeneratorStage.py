@@ -13,7 +13,7 @@ from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
@@ -29,7 +29,6 @@ from zigzag.mapping.spatial_mapping import (
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class SpatialMappingGeneratorStage(Stage):
     """! Pipeline stage that finds spatial mappings given a:
     - accelerator
@@ -42,14 +41,14 @@ class SpatialMappingGeneratorStage(Stage):
 
     def __init__(
         self,
-        list_of_callables,
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
-        enable_mix_spatial_mapping_generation: bool=False,
-        enable_weight_diagonal_mapping : bool=False,
-        nb_mappings_generated:int=3,
-        **kwargs,
+        enable_mix_spatial_mapping_generation: bool = False,
+        enable_weight_diagonal_mapping: bool = False,
+        nb_mappings_generated: int = 3,
+        **kwargs: Any,
     ):
         """! The class constructor
         @param enable_mix_spatial_mapping_generation Indicate wether to generate `mixed` spatial mappings i.e. unroll
@@ -78,8 +77,8 @@ class SpatialMappingGeneratorStage(Stage):
         self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
         self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, set(self.layer.layer_dims))
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
-        """!  Generate SpatialMappings and convert to internal representation"""
+    def run(self):
+        """! Generate SpatialMappings and convert to internal representation"""
 
         user_spatial_mappings = list(self.generate_spatial_mappings())
         nb_user_spatial_mappings = len(user_spatial_mappings)
@@ -113,7 +112,7 @@ class SpatialMappingGeneratorStage(Stage):
                 yield cme, (user_spatial_mapping, extra_info)
 
     def generate_spatial_mappings(self) -> Generator[SpatialMapping, None, None]:
-        """!  Generator that yields SpatialMappings
+        """! Generator that yields SpatialMappings
         # TODO this function first does all the work before it yield the first element
         """
         max_unrollings = self.get_max_unrolling()

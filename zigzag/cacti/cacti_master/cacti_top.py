@@ -17,7 +17,7 @@ parser.add_argument("--technology")
 args = parser.parse_args()
 
 
-mem_pool_path = args.mem_pool_path
+mem_pool_path: str = args.mem_pool_path
 cacti_master_path = os.path.dirname(mem_pool_path)
 print(f"{cacti_master_path=}")
 
@@ -43,12 +43,12 @@ C = CactiConfig()
 
 #  Combining Function 1 & 4 to do multi-variable sweep
 
-mem_type = args.mem_type
+mem_type: str = args.mem_type
 
 if mem_type == "sram":
     mem_type = '"ram"'
 else:
-    mem_type == '"main memory"'
+    mem_type = '"main memory"'
 
 cache_size = args.cache_size
 IO_bus_width = args.IO_bus_width

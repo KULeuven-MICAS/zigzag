@@ -1,13 +1,11 @@
 from typeguard import typechecked
 
 from zigzag.datatypes import LayerOperand
-from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.memory_port import DataDirection
 
 
-@typechecked
 class FourWayDataMoving:
-    """!  The standard four-way data moving attribute of a memory interface."""
+    """! The standard four-way data moving attribute of a memory interface."""
 
     def __init__(
         self,
@@ -52,25 +50,25 @@ class FourWayDataMoving:
                 self.wr_in_by_high = new_value
 
     def get_total_read_outs_to_above(self, scaling: float = 1) -> float:
-        """!  Return the total amount of times this memory interface is read from to the level above.
+        """! Return the total amount of times this memory interface is read from to the level above.
         If scaling is the energy cost per read, this returns the total read energy.
         """
         return scaling * self.rd_out_to_high
 
     def get_total_read_outs_to_below(self, scaling: float = 1) -> float:
-        """!  Return the total amount of times this memory interface is read from to the level below.
+        """! Return the total amount of times this memory interface is read from to the level below.
         If scaling is the energy cost per read, this returns the total read energy.
         """
         return scaling * self.rd_out_to_low
 
     def get_total_write_ins_from_above(self, scaling: float = 1) -> float:
-        """!  Return the total amount of times this memory interface is written to from the level above.
+        """! Return the total amount of times this memory interface is written to from the level above.
         If scaling is the energy cost per write, this returns the total read energy.
         """
         return scaling * self.wr_in_by_high
 
     def get_total_write_ins_from_below(self, scaling: float = 1) -> float:
-        """!  Return the total amount of times this memory interface is written to from the level below.
+        """! Return the total amount of times this memory interface is written to from the level below.
         If scaling is the energy cost per write, this returns the total read energy.
         """
         return scaling * self.wr_in_by_low
@@ -98,9 +96,8 @@ class FourWayDataMoving:
         return repr(self)
 
 
-@typechecked
 class DataMovePattern:
-    """!  Collect the memory access pattern for each unit memory (memory that only hold one operand at one level)."""
+    """! Collect the memory access pattern for each unit memory (memory that only hold one operand at one level)."""
 
     def __init__(self, operand: LayerOperand, mem_level: int):
         self.name = operand.name + str(mem_level)
@@ -113,7 +110,13 @@ class DataMovePattern:
         self.data_trans_amount_per_period = FourWayDataMoving(0, 0, 0, 0)
         self.inst_data_trans_window = FourWayDataMoving(0, 0, 0, 0)
 
-    def set_data_elem_move_count(self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int):
+    def set_data_elem_move_count(
+        self,
+        rd_out_to_low: int | float,
+        wr_in_by_low: int | float,
+        rd_out_to_high: int | float,
+        wr_in_by_high: int | float,
+    ):
         self.data_elem_move_count = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def set_data_precision(self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int):
@@ -155,7 +158,7 @@ class DataMovePattern:
         self.inst_data_trans_window = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def update_single_dir_data(self, direction: DataDirection, new_value: float | int):
-        """!  update a single direction value for all data move attributes"""
+        """! update a single direction value for all data move attributes"""
         self.data_elem_move_count.update_single_dir_data(direction, new_value)
         self.data_precision.update_single_dir_data(direction, new_value)
         self.req_mem_bw_aver.update_single_dir_data(direction, new_value)

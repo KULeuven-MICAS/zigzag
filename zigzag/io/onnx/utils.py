@@ -16,7 +16,7 @@ BRANCH_ATTRIBUTE = "branch"
 
 
 def parse_mapping_from_path(mapping_path):
-    """!  Parse the input accelerator residing in accelerator_path.
+    """! Parse the input accelerator residing in accelerator_path.
     @param mapping_path
     """
     # Sanity check on mapping_path
@@ -103,7 +103,7 @@ def is_dynamic(model):
 
 
 def parse_dynamic_onnx_model(model):
-    """!  Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
+    """! Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
     All nodes are assigned a 'branch' attribute which specifies in which branch they live.
     The branch attribute starts from 0 and increases for each seen If operator.
     The nested graphs of the 'If' operators are then unrolled into a planar onnx model.

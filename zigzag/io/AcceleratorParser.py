@@ -5,10 +5,10 @@ logger = logging.getLogger(__name__)
 
 
 class AcceleratorParser:
-    """!  Parse an accelerator module path into an accelerator object"""
+    """! Parse an accelerator module path into an accelerator object"""
 
     def __init__(self, accelerator) -> None:
-        """!  The class constructor
+        """! The class constructor
         Initialize the parser by checking if the provided argument is a module path or accelerator object
         @param accelerator_path (str or Accelerator): The accelerator path or accelerator object
         """
@@ -46,7 +46,7 @@ class AcceleratorParser:
 
     @staticmethod
     def parse_accelerator_from_path(accelerator_path):
-        """!  Parse the input accelerator residing in accelerator_path
+        """! Parse the input accelerator residing in accelerator_path
         @param accelerator_path
         """
         global module

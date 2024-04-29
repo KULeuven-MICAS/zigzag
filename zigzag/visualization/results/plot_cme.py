@@ -1,8 +1,13 @@
 from collections import defaultdict
+from typing import Any
 import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import numpy as np
 from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.datatypes import LayerOperand
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.memory_level import MemoryLevel
+from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import FourWayDataMoving
 
 # MPL FONT SIZES
@@ -23,7 +28,7 @@ plt.rc("figure", titlesize=MEDIUM_SIZE)  # fontsize of the figure title
 
 def bar_plot_cost_model_evaluations_total(
     cmes: list[CostModelEvaluation],
-    labels,
+    labels: list[str],
     save_path: str = "plot.png",
 ):
     """Plot total energy and latency of each cost model evaluation in a bar chart.
@@ -74,12 +79,14 @@ def bar_plot_cost_model_evaluations_total(
     plt.savefig(save_path)
 
 
-def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluation], save_path: str, xtick_rotation=90):
-    memory_word_access_summed = {
+def bar_plot_cost_model_evaluations_breakdown(
+    cmes: list[CostModelEvaluation], save_path: str, xtick_rotation: int = 90
+):
+    memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {
         idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
     }
-    mac_costs = defaultdict(lambda: 0.0)
-    memory_instances = {}
+    mac_costs: defaultdict[int, float] = defaultdict(lambda: 0.0)
+    memory_instances: dict[str, MemoryLevel] = {}
     la_break_down: dict[int, dict[str, float]] = {
         idx: {
             "Ideal computation": 0,
@@ -109,17 +116,17 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluation], s
                 memory_instances[mem] = operand_memory_levels[j]
                 memory_word_access_summed[idx][operand][mem] += cme.mem_energy_breakdown_further[operand][j]
 
-    all_mems = set()
+    all_mems_set: set[str] = set()
     for v in memory_word_access_summed.values():
         for vv in v.values():
             for vvv in vv.keys():
-                all_mems.add(vvv)
-    all_mems = sorted(list(all_mems), key=lambda m: memory_instances[m].memory_instance.size)
-    all_ops = set()
+                all_mems_set.add(vvv)
+    all_mems = sorted(list(all_mems_set), key=lambda m: memory_instances[m].memory_instance.size)
+    all_ops_set: set[LayerOperand] = set()
     for v in memory_word_access_summed.values():
         for vv in v.keys():
-            all_ops.add(vv)
-    all_ops = sorted(list(all_ops))
+            all_ops_set.add(vv)
+    all_ops = sorted(list(all_ops_set))
 
     # plotting start
     # Energy part
@@ -142,15 +149,16 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluation], s
         for mem in all_mems:
             bottom = 0
             for op_i, operand in enumerate(all_ops):
-                for dir_i, dir in enumerate(memory_word_access_summed[idx][operand][mem]):
-                    height = memory_word_access_summed[idx][operand][mem][dir]
+                for dir_idx, direction in enumerate(DataDirection):
+                    data_movement = memory_word_access_summed[idx][operand][mem]
+                    height = data_movement.get_single_dir_data(direction)
                     ax1.bar(
                         [x],
                         [height],
                         width=1,
                         bottom=[bottom],
                         facecolor=hsv_to_rgb((hues[op_i], 1, 1)),
-                        hatch=hatches[dir_i],
+                        hatch=hatches[dir_idx],
                     )
 
                     bottom += height
@@ -172,15 +180,15 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluation], s
     for op, h in zip(all_ops, hues):
         ax1.bar(0, 0, width=1, facecolor=hsv_to_rgb((h, 1, 1)), label=op)
 
-    for dir_i, dir in enumerate(memory_word_access_summed[idx][operand][mem]):
+    for idx, direction in enumerate(DataDirection):
         ax1.bar(
             [0],
             [0],
             width=1,
             bottom=0,
             facecolor=(1, 1, 1),
-            hatch=hatches[dir_i],
-            label=dir,
+            hatch=hatches[idx],
+            label=str(direction),
         )
 
     ax1.legend(loc="upper left")

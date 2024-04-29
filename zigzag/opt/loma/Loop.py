@@ -3,9 +3,8 @@ from typeguard import typechecked
 from zigzag.datatypes import LayerDim, UnrollFactor
 
 
-@typechecked
 class Loop:
-    """!  Class that stores a single for-loop's information."""
+    """! Class that stores a single for-loop's information."""
 
     def __init__(self, layer_dim: LayerDim, size: UnrollFactor, type: str = "temporal"):
         """! Initialize the loop with the given layer_dim string and size"""

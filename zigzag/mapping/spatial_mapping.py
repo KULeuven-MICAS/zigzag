@@ -1,4 +1,3 @@
-from functools import reduce
 import copy
 import logging
 import math
@@ -13,7 +12,6 @@ from zigzag.utils import json_repr_handler
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class MappingSingleOADim:
     """! Spatial unrolling for a single Operational Array Dimension"""
 
@@ -70,7 +68,6 @@ class MappingSingleOADim:
         return hash(frozenset(self.data))
 
 
-@typechecked
 class SpatialMapping(LayerAttribute):
     """! Spatial unrollings defined for every operational array dimension"""
 
@@ -254,9 +251,10 @@ class SpatialMapping(LayerAttribute):
         """! Convert all unrollings (pair of LayerDim and UnrollFactor) at all Operational Array Dimension to a single
         list of tuples.
         e.g. -> [('K', 4), ('C', 2), ('K', 8)]"""
-        return reduce(
-            lambda a, b: a + b, [list(mapping_single_dim.items()) for mapping_single_dim in self.mappings], []
-        )
+        result: list[tuple[LayerDim, UnrollFactor]] = []
+        for mapping_single_dim in self.mappings:
+            result += list(mapping_single_dim.items())
+        return result
 
     def delete_layer_dim(self, layer_dim: LayerDim) -> None:
         assert layer_dim in self.all_contained_layer_dims
@@ -352,7 +350,6 @@ class SpatialMapping(LayerAttribute):
         return SpatialMapping(data)
 
 
-@typechecked
 class SpatialMappingHint(LayerAttribute):
     """! Suggested LayerDims to be unrolled for every Operational Array Dimension"""
 

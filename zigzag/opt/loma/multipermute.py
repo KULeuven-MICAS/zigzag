@@ -58,7 +58,7 @@ def init(multiset):
 
 
 def visit(h):
-    """!  Converts our bespoke linked list to a python list."""
+    """! Converts our bespoke linked list to a python list."""
     o = h
     l = []
     while o is not None:
@@ -68,7 +68,7 @@ def visit(h):
 
 
 def permutations(multiset):
-    """!  Generator providing all multiset permutations of a multiset."""
+    """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
     yield visit(h)
     while j.next is not None or j.value < h.value:

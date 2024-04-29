@@ -4,7 +4,7 @@ import networkx as nx
 from networkx import DiGraph
 from typeguard import typechecked
 
-from zigzag.datatypes import Constants, MemoryOperand
+from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions, ServedMemDimsUserFormat
 from zigzag.hardware.architecture.memory_port import PortAllocUserFormat, PortAllocation
@@ -12,9 +12,8 @@ from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.utils import json_repr_handler
 
 
-@typechecked
 class MemoryHierarchy(DiGraph):
-    """!  Class that represents a memory hierarchy as a directed networkx graph.
+    """! Class that represents a memory hierarchy as a directed networkx graph.
     The memory hierarchy graph is directed, with the root nodes representing the lowest level
     in the memory hierarchy.
     """
@@ -23,9 +22,9 @@ class MemoryHierarchy(DiGraph):
         self,
         operational_array: OperationalArray,
         name: str = "Memory Hierarchy",
-        **attr,
+        **attr: Any,
     ):
-        """!  The class constructor
+        """! The class constructor
         Initialize the memory hierarchy graph.
         The initialization sets the operational array this memory hierarchy will connect to.
         The graph nodes are the given nodes. The edges are extracted from the operands the memory levels store.
@@ -42,8 +41,8 @@ class MemoryHierarchy(DiGraph):
         self.memory_level_id = 0
 
     def __jsonrepr__(self):
-        """!  JSON Representation of this object to save it to a json file."""
-        return json_repr_handler({"memory_levels": [node for node in nx.topological_sort(self)]})
+        """! JSON Representation of this object to save it to a json file."""
+        return json_repr_handler({"memory_levels": list(nx.topological_sort(self))})
 
     def __eq__(self, other: object) -> bool:
         return (
@@ -57,10 +56,9 @@ class MemoryHierarchy(DiGraph):
         memory_instance: MemoryInstance,
         operands: tuple[str, ...],
         port_alloc: PortAllocUserFormat = (),
-        # Default setting: no served dimensions = unroll over every Operational Array unit
         served_dimensions: ServedMemDimsUserFormat = (),
     ):
-        """!  Adds a memory to the memory hierarchy graph.
+        """! Adds a memory to the memory hierarchy graph.
         NOTE: memory level need to be added from bottom level (e.g., Reg) to top level (e.g., DRAM) for each operand !!!
 
         Internally a MemoryLevel object is built, which represents the memory node.
@@ -68,9 +66,8 @@ class MemoryHierarchy(DiGraph):
         Edges are added from all sink nodes in the graph to this node if the memory operands match
         @param memory_instance: The MemoryInstance containing the different memory characteristics.
         @param operands: The memory operands the memory level stores.
-        @param served_dimensions: The operational array dimensions this memory level serves.
-        Each vector in the set is a direction that is served.
-        Use 'all' to represent all dimensions (i.e. the memory level is not unrolled).
+        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served
+          dimensions -> unroll over every Operational Array unit
         """
         operands_parsed: list[MemoryOperand] = [MemoryOperand(x) for x in operands]
         served_dims_parsed = ServedMemDimensions.parse_user_format(served_dimensions)
@@ -123,7 +120,7 @@ class MemoryHierarchy(DiGraph):
             self.add_edge(sink_node, memory_level)
 
     def get_memory_levels(self, mem_op: MemoryOperand) -> list[MemoryLevel]:
-        """!  Returns a list of memories in the memory hierarchy for the memory operand.
+        """! Returns a list of memories in the memory hierarchy for the memory operand.
         The first entry in the returned list is the innermost memory level.
         """
         # Sort the nodes topologically and filter out all memories that don't store mem_op
@@ -131,21 +128,21 @@ class MemoryHierarchy(DiGraph):
         return memories
 
     def get_operands(self) -> set[MemoryOperand]:
-        """!  Returns all the memory operands this memory hierarchy graph contains as a set."""
+        """! Returns all the memory operands this memory hierarchy graph contains as a set."""
         return self.operands
 
     def get_inner_memories(self) -> list[MemoryLevel]:
-        """!  Returns the inner-most memory levels for all memory operands."""
+        """! Returns the inner-most memory levels for all memory operands."""
         memories: list[MemoryLevel] = [node for node, in_degree in self.in_degree() if in_degree == 0]
         return memories
 
     def get_outer_memories(self) -> list[MemoryLevel]:
-        """!  Returns the outer-most memory levels for all memory operands."""
+        """! Returns the outer-most memory levels for all memory operands."""
         memories: list[MemoryLevel] = [node for node, out_degree in self.out_degree() if out_degree == 0]
         return memories
 
     def get_top_memories(self) -> tuple[list[MemoryLevel], int]:
-        """!  Returns the 'top'-most MemoryLevels, where 'the' level of MemoryLevel is considered to be the largest
+        """! Returns the 'top'-most MemoryLevels, where 'the' level of MemoryLevel is considered to be the largest
         level it has across its assigned operands
         @return (list_of_memories_on_top_level, top_level)
         """
@@ -157,7 +154,7 @@ class MemoryHierarchy(DiGraph):
         return level_to_mems[top_level], top_level
 
     def get_operator_top_level(self, operand: MemoryOperand) -> tuple[list[MemoryLevel], int]:
-        """!  Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
+        """! Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
         instance on this level that have the operand assigned to it.
         'The' level of a MemoryLevel is considered to be the largest
         level it has across its assigned operands.
@@ -171,7 +168,7 @@ class MemoryHierarchy(DiGraph):
         return level_to_mems[top_level], top_level
 
     def get_operand_top_level(self, operand: MemoryOperand) -> MemoryLevel:
-        """!  Finds the highest level of memory that have the given operand assigned to, and returns the MemoryLevel"""
+        """! Finds the highest level of memory that have the given operand assigned to, and returns the MemoryLevel"""
         top_lv = self.nb_levels[operand] - 1
         for mem in reversed(self.mem_level_list):
             if operand in mem.mem_level_of_operands.keys():

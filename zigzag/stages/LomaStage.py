@@ -5,26 +5,25 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.loma.LomaEngine import LomaEngine
 from zigzag.workload.layer_node import LayerNode
-from typing import Any, Callable, Generator
-from zigzag.stages.Stage import Stage
+from typing import Any
+from zigzag.stages.Stage import Stage, StageCallable
 
 
-@typechecked
 class LomaStage(Stage):
-    """!  Class that iterates through the different temporal mappings generated through
+    """! Class that iterates through the different temporal mappings generated through
     the loop order based memory allocation (loma) engine
     """
 
     def __init__(
         self,
-        list_of_callables: list[Callable],
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        **kwargs,
+        **kwargs: Any,
     ):
-        """!  The class constructor
+        """! The class constructor
         Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
         @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
         """
@@ -33,7 +32,7 @@ class LomaStage(Stage):
         self.layer = layer
         self.spatial_mapping = spatial_mapping
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         engine = LomaEngine(
             accelerator=self.accelerator,
             layer=self.layer,

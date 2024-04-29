@@ -23,7 +23,6 @@ OperandDirection: TypeAlias = tuple[MemoryOperand, int, DataDirection]
 PortAllocUserFormat: TypeAlias = tuple[dict[str, str], ...]
 
 
-@typechecked
 class MemoryPort:
 
     port_id_counter = 0
@@ -36,11 +35,10 @@ class MemoryPort:
         port_attr: MemoryPortType,
         port_id: int | None = None,
     ):
-        """!  The class constructor
+        """! The class constructor
         Collect all the physical memory port related information here.
         @param port_name:
         @param port_bw: bit/cc
-        @param port_bw_in:
         @param port_attr: read_only (r), write_only (w), read_write (rw)
         @param port_id: port index per memory
         """
@@ -79,7 +77,6 @@ class MemoryPort:
         return self.port_id
 
 
-@typechecked
 class PortAllocation:
     def __init__(self, data: dict[MemoryOperand, dict[DataDirection, str]]):
         assert all(

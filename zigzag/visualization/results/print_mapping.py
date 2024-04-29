@@ -1,7 +1,7 @@
 from copy import deepcopy
 
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.datatypes import LayerOperand, MemoryOperand
+from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, UnrollFactor
 
 
 def create_printing_block(row, col):
@@ -27,7 +27,7 @@ def print_good_tm_format(
     mem_op_to_layer_op: dict[MemoryOperand, LayerOperand],
 ):
     """!
-    # TODO requires cleanup, documentation
+    # TODO cleanup, documentation
     """
     op_list = list(tm.keys())
     tm_list = [tp for li in tm[op_list[0]] for tp in li]
@@ -84,9 +84,10 @@ def print_good_tm_format(
 
 
 def print_mapping(cme: CostModelEvaluation):
-    tm: dict[LayerOperand, list] = cme.temporal_mapping.mapping_dic_stationary
-    layer_op_to_mem_op = cme.memory_operand_links
-    mem_op_to_layer_op = {mem_op: layer_op for layer_op, mem_op in cme.memory_operand_links.items()}
+    tm: dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]] = cme.temporal_mapping.mapping_dic_stationary
+    mem_op_to_layer_op = {
+        mem_op: cme.memory_operand_links.mem_to_layer_op(mem_op) for mem_op in cme.memory_operand_links.mem_operands
+    }
     mem_name: dict[LayerOperand, list[str]] = {}
     for mem_op, mems_all_levels in cme.accelerator.cores[0].mem_hierarchy_dict.items():
         layer_op = mem_op_to_layer_op[mem_op]

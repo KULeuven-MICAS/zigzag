@@ -26,18 +26,16 @@
 #
 
 import multiprocessing_on_dill as multiprocessing
-from sympy.ntheory import factorint
-from copy import deepcopy
 import logging
 
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.salsa.SalsaEngine import SalsaEngine
-from typing import Callable
-from zigzag.stages.Stage import Stage
+from typing import Any
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
 
 
@@ -51,12 +49,12 @@ class SalsaStage(Stage):
 
     def __init__(
         self,
-        list_of_callables: list[Callable],
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        **kwargs,
+        **kwargs : Any,
     ):
         """! The class constructor
         Initialize the SalsaStage by setting the accelerator, layer, and spatial mapping.
@@ -69,7 +67,7 @@ class SalsaStage(Stage):
             spatial_mapping,
         )
         self.engine = None
-        self.best_cme: CostModelEvaluation | None = None
+        self.best_cme: CostModelEvaluationABC | None = None
 
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.number_of_core_allocated = kwargs.get("salsa_number_of_core", 1)
@@ -86,7 +84,7 @@ class SalsaStage(Stage):
             raise Exception("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
 
     ## Set up and start salsa engine, then collect and return the best cost model evaluation
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
 
         logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
 
@@ -99,7 +97,7 @@ class SalsaStage(Stage):
 
         # Get the number of core the user wants to allocate
         if self.number_of_core_allocated <= multiprocessing.cpu_count():
-            self.number_of_core = self.number_of_core_allocated
+            self.number_of_core : int= self.number_of_core_allocated
         else:
             self.number_of_core = multiprocessing.cpu_count()
 
@@ -127,7 +125,7 @@ class SalsaStage(Stage):
         kwargs["layer"] = self.layer
         kwargs["spatial_mapping"] = self.spatial_mapping
         kwargs["temporal_mapping"] = self.best_cme.mapping.temporal_mapping
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
+        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs : Any)
 
         for cme, extra_info in sub_stage.run():
             yield cme, (self.best_cme.mapping.temporal_mapping, extra_info)

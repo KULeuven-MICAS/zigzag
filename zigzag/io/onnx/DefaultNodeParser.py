@@ -3,14 +3,14 @@ from zigzag.workload.DummyNode import DummyNode
 
 
 class DefaultNodeParser(Parser):
-    """!  This class parses an ONNX node into a DummyNode."""
+    """! This class parses an ONNX node into a DummyNode."""
 
     def __init__(self, node_id, node, nodes_outputs) -> None:
 
         super().__init__(node_id, node, nodes_outputs, mapping=None, onnx_model=None)
 
     def run(self) -> DummyNode:
-        """!  Run the parser"""
+        """! Run the parser"""
         dummy_node = self.generate_dummy_node()
         return dummy_node
 

@@ -2,7 +2,7 @@ from zigzag.utils import json_repr_handler
 
 
 class OperationalUnit:
-    """!  General class for a unit that performs a certain operation. For example: a multiplier unit."""
+    """! General class for a unit that performs a certain operation. For example: a multiplier unit."""
 
     def __init__(
         self,
@@ -11,7 +11,7 @@ class OperationalUnit:
         unit_cost: float,
         unit_area: float,
     ):
-        """!  The class constructor
+        """! The class constructor
         @param input_precision: The bit precision of the operation inputs.
         @param output_precision: The bit precision of the operation outputs.
         @param unit_cost: The energy cost of performing a single operation.
@@ -24,7 +24,7 @@ class OperationalUnit:
         self.area = unit_area
 
     def __jsonrepr__(self):
-        """!  JSON Representation of this class to save it to a json file."""
+        """! JSON Representation of this class to save it to a json file."""
         return json_repr_handler(self.__dict__)
 
     def __eq__(self, __o: object) -> bool:
@@ -36,7 +36,7 @@ class OperationalUnit:
 class Multiplier(OperationalUnit):
 
     def __init__(self, input_precision: list[int], energy_cost: float, area: float):
-        """!  The class constructor
+        """! The class constructor
         @param input_precision: The bit precision of the multiplication inputs.
         @param energy_cost: The energy cost of performing a single multiplication.
         @param area: The area of a single multiplier.

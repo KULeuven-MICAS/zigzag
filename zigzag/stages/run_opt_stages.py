@@ -1,9 +1,9 @@
-from typing import Generator, Tuple, Any
+from typing import Any, Callable
 
 from typeguard import typechecked
 
-from zigzag.stages.Stage import Stage
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.cost_model.cost_model import CostModelEvaluationABC
+from zigzag.stages.Stage import Stage, StageCallable
 
 import logging
 import os
@@ -11,59 +11,56 @@ import os
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class RemoveExtraInfoStage(Stage):
-    """!  Strips extra info for subcallables to save memory"""
+    """! Strips extra info for subcallables to save memory"""
 
-    def __init__(self, list_of_callables, **kwargs):
-        """!  The class constructor
+    def __init__(self, list_of_callables: list[StageCallable], **kwargs: Any):
+        """! The class constructor
         Initialize the remove extra info stage.
         """
         super().__init__(list_of_callables, **kwargs)
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
-        """!  Run the remove extra info stage by running the substage and discarding the extra_info."""
+    def run(self):
+        """! Run the remove extra info stage by running the substage and discarding the extra_info."""
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
-        for cme, extra_info in substage.run():
+        for cme, _ in substage.run():
             yield cme, None
 
 
-@typechecked
 class CacheBeforeYieldStage(Stage):
-    """!  Caches results in a list and then yields them.
+    """! Caches results in a list and then yields them.
     This breaks the yield flow from top to bottom.
     """
 
-    def __init__(self, list_of_callables, **kwargs):
-        """!  The class constructor
+    def __init__(self, list_of_callables: list[StageCallable], **kwargs: Any):
+        """! The class constructor
         Initialize the cache before yield stage.
         """
         super().__init__(list_of_callables, **kwargs)
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
-        """!  Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything."""
+    def run(self):
+        """! Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything."""
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
-        to_yield = []
+        to_yield: list[tuple[CostModelEvaluationABC, Any]] = []
         for ty in substage.run():
             to_yield.append(ty)
         for ty in to_yield:
             yield ty
 
 
-@typechecked
 class SkipIfDumpExistsStage(Stage):
-    """!  Check if the output file is already generated, skip the run if so."""
+    """! Check if the output file is already generated, skip the run if so."""
 
-    def __init__(self, list_of_callables, *, dump_filename_pattern, **kwargs):
-        """!  The class constructor"""
+    def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
+        """! The class constructor"""
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         filename = self.dump_filename_pattern.format(**self.kwargs)
         if os.path.isfile(filename):
             print(
@@ -85,7 +82,7 @@ import multiprocessing
 threadpool = None
 
 
-def get_threadpool(nb_threads_if_non_existent):
+def get_threadpool(nb_threads_if_non_existent: int | None):
     global threadpool
     if threadpool is None:
         threadpool = multiprocessing.Pool(nb_threads_if_non_existent)
@@ -111,9 +108,8 @@ def raise_exception(e):
     raise e
 
 
-@typechecked
 class MultiProcessingSpawnStage(Stage):
-    """!  Multiprocessing support stage.
+    """! Multiprocessing support stage.
 
     Warning: does not yield (CostModelEvaluation, extra_info) pairs.
 
@@ -130,13 +126,13 @@ class MultiProcessingSpawnStage(Stage):
 
     def __init__(
         self,
-        list_of_callables,
+        list_of_callables: list[StageCallable],
         *,
-        multiprocessing_callback,
-        nb_multiprocessing_threads=multiprocessing.cpu_count(),
-        **kwargs,
+        multiprocessing_callback: Callable[[object], None],
+        nb_multiprocessing_threads: int = multiprocessing.cpu_count(),
+        **kwargs: Any,
     ):
-        """!  The class constructor
+        """! The class constructor
         @param list_of_callables: may not contain lambda functions, as this will break pickling which is required for
         by multiprocessing.
         @param multiprocessing_callback: intended to be set by MultiProcessingGatherStage
@@ -157,9 +153,8 @@ class MultiProcessingSpawnStage(Stage):
         yield None, None
 
 
-@typechecked
 class MultiProcessingGatherStage(Stage):
-    """!  Multiprocessing support stage.
+    """! Multiprocessing support stage.
 
     Use as follows in a list_of_callables:
     - [..., ..., MultiProcessingGatherStage, some stage(s) that loop over stuff and just yield (cme, extra_info) pairs
@@ -169,7 +164,7 @@ class MultiProcessingGatherStage(Stage):
             by multiprocessing
     """
 
-    def _callback(self, ans):
+    def _callback(self, ans: object):
         self.queue.put(ans)
 
     def run(self):
@@ -179,7 +174,7 @@ class MultiProcessingGatherStage(Stage):
 
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
         count_to_get = 0
-        for i in sub_stage.run():
+        for _ in sub_stage.run():
             count_to_get += 1
         logger.info(f"Multiprocessing results to get: {count_to_get}")
         count = 0

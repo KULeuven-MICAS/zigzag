@@ -1,19 +1,23 @@
+"""
+# TODO this file is not used -> remove?
+"""
+
 import logging
+from typing import Any
 
 from typeguard import typechecked
 
 
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class GeneralParameterIteratorStage(Stage):
-    """!  General iterator over any parameter whose values can be set from a predetermined list"""
+    """! General iterator over any parameter whose values can be set from a predetermined list"""
 
-    def __init__(self, list_of_callables, *, general_parameter_iterations, **kwargs):
-        """!  The class constructor
+    def __init__(self, list_of_callables: list[StageCallable], *, general_parameter_iterations, **kwargs: Any):
+        """! The class constructor
         @param list_of_callables: see Stage
         @param general_parameter_iterations: dictionary with:
            - keys: variables to iterate over, or tuples of variables to iterate over
@@ -52,5 +56,5 @@ class GeneralParameterIteratorStage(Stage):
             for cme, extra_info in sub_stage.run():
                 yield cme, (tuple(), extra_info)
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         return self.recursive_run(self.param_iters, self.kwargs)

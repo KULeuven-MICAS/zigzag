@@ -1,35 +1,35 @@
 import logging
-from typing import Any, Generator
+from typing import Any
 
 import numpy as np
 from typeguard import typechecked
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.datatypes import Dimension
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal, SpatialMappingPerMEMLvl
+from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal, SpatialMappingPerMemLvl
 from zigzag.mapping.spatial_mapping import (
     LayerDim,
     MappingSingleOADim,
     SpatialMapping,
     UnrollFactor,
 )
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class SpatialMappingConversionStage(Stage):
-    """!  Pipeline stage that converts the spatial mapping from a
+    """! Pipeline stage that converts the spatial mapping from a
     user-provided spatial mapping across operational array dimensions
     to the internal spatial mapping representation used in the cost model.
     """
 
-    def __init__(self, list_of_callables, *, accelerator: Accelerator, layer: LayerNode, **kwargs):
-        """!  The class constructor
+    def __init__(
+        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, layer: LayerNode, **kwargs: Any
+    ):
+        """! The class constructor
         Initialize the accelerator and layer attributes.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -37,7 +37,7 @@ class SpatialMappingConversionStage(Stage):
         self.accelerator = accelerator
         self.memory_operand_links = layer.memory_operand_links
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         user_spatial_mapping = self.layer.user_spatial_mapping
 
         spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(user_spatial_mapping)
@@ -55,7 +55,7 @@ class SpatialMappingConversionStage(Stage):
     def convert_user_spatial_mapping(
         self, user_spatial_mapping: SpatialMapping
     ) -> tuple[SpatialMappingInternal, SpatialMappingInternal]:
-        """!  Convert the SpatialMapping instance in `user-defined` format (spatial mapping across operational array
+        """! Convert the SpatialMapping instance in `user-defined` format (spatial mapping across operational array
         dimensions) to the  SpatialMappingInternal representation. For this conversion we need to know:
         - the user defined spatial mapping
         - the core (i.e. operational array) on which the unrolling happens,and the memory hierarchy that is connected
@@ -68,8 +68,8 @@ class SpatialMappingConversionStage(Stage):
         # Adjust the user defined spatial mapping size based on the operational array dimension and the layer dimension:
         # E.g. user-provided unrolling is 16 but operational array dimension size iso only 12: change unrolling to 12
         # E.g. user-provided unrolling is 16 but layer dimension is only 12: change unrolling to 12
-        # E.g. user-provided unrolling is 16 but layer dimension is not a multiple of 16: change unrolling to fractional number
-        # so that the temporal remainder is an integer.
+        # E.g. user-provided unrolling is 16 but layer dimension is not a multiple of 16: change unrolling to fractional
+        # number so that the temporal remainder is an integer.
 
         layer_dim_sizes = self.layer.layer_dim_sizes
         limited_usm: SpatialMapping = SpatialMapping.empty()
@@ -151,7 +151,8 @@ class SpatialMappingConversionStage(Stage):
             )
             unroll_factor = oa_dim.size
 
-        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't exist (should be the case)
+        # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't
+        # exist (should be the case)
         layer_dim_size = layer_dim_sizes[layer_dim]
         assert unroll_factor <= layer_dim_size
 
@@ -178,12 +179,12 @@ class SpatialMappingConversionStage(Stage):
         else:
             return layer_dim, unroll_factor
 
-    def generate_mapping_per_mem_lvl(self, user_spatial_mapping: SpatialMapping) -> SpatialMappingPerMEMLvl:
+    def generate_mapping_per_mem_lvl(self, user_spatial_mapping: SpatialMapping) -> SpatialMappingPerMemLvl:
         """! This function is to convert spatial mapping to mapping_per_mem_lvl,
         which attaches spatial mapping to different memory levels.
         # TODO This should be a class
         """
-        mapping_per_mem_lvl: SpatialMappingPerMEMLvl = {}
+        mapping_per_mem_lvl: SpatialMappingPerMemLvl = {}
         # layer_to_mem_op = self.layer.memory_operand_links
         # mem_to_layer_op = {mem_op: layer_op for (layer_op, mem_op) in layer_to_mem_op.items()}
         core_id = self.layer.core_allocation

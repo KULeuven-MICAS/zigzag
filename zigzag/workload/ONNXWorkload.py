@@ -1,3 +1,4 @@
+from typing import Any
 import networkx as nx
 from typeguard import typechecked
 
@@ -6,18 +7,17 @@ from zigzag.workload.DummyNode import DummyNode
 from zigzag.workload.layer_node import LayerNode
 
 
-@typechecked
 class ONNXWorkload(Workload):
 
-    def __init__(self, **attr):
-        """!  Collect all the algorithmic workload information here."""
+    def __init__(self, **attr: Any):
+        """! Collect all the algorithmic workload information here."""
         super().__init__(**attr)
 
         self.node_id_to_obj = {}
         self.node_list = []
 
     def add(self, node_id, node_obj: LayerNode | DummyNode):
-        """!  Add a node object to the ONNX workload graph.
+        """! Add a node object to the ONNX workload graph.
         This can be a different object based on if it's an "accelerateable" node or not.
         """
         self.node_list.append(node_obj)
@@ -35,7 +35,7 @@ class ONNXWorkload(Workload):
     def topological_sort(self):
         return nx.topological_sort(self)
 
-    def get_node_with_id(self, id):
+    def get_node_with_id(self, id: int):
         for node in self.nodes:
             if node.id == id:
                 return node

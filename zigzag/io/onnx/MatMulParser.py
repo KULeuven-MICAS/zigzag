@@ -25,7 +25,7 @@ class MatMulParser(Parser):
 
     def generate_layer_node_for_matmul(self):
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
-            """!  Generate the necessary dictionary items required for the Node creation."""
+            """! Generate the necessary dictionary items required for the Node creation."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation

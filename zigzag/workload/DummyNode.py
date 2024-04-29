@@ -3,15 +3,14 @@ from zigzag.datatypes import LayerOperand
 from zigzag.workload.layer_attributes import InputOperandSource
 
 
-@typechecked
 class DummyNode:
-    """!  A class to represent an ONNX node that is not "accelerateable".
+    """! A class to represent an ONNX node that is not "accelerateable".
     This node is created to preserve the original ONNX model graph structure,
     but will be skipped by the underlying engines, treating it as a 0 HW cost node.
     """
 
-    def __init__(self, id, preds: list[int], node_name="", type=None) -> None:
-        """!  The class constructor
+    def __init__(self, id: int, preds: list[int], node_name: str = "", type: str | None = None) -> None:
+        """! The class constructor
         Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
         @param id (int): id for this node
         @param preds (list): list of ids of this node's predecessor nodes
@@ -33,35 +32,35 @@ class DummyNode:
         return str(self)
 
     def __jsonrepr__(self):
-        """!  JSON representation used for saving this object to a json file."""
+        """! JSON representation used for saving this object to a json file."""
         return {"id": self.id}
 
-    def set_start(self, start):
-        """!  Set the start time in ccyles of this node
-        @param start (int): start time in cycles
+    def set_start(self, start: int):
+        """! Set the start time in ccyles of this node
+        @param start : start time in cycles
         """
         self.start = start
 
-    def set_end(self, end):
-        """!  Set the end time in cycles of this node
-        @param end (int): end time in cycles
+    def set_end(self, end: int):
+        """! Set the end time in cycles of this node
+        @param end: end time in cycles
         """
         self.end = end
 
     def get_start(self):
-        """!  Get the start time in cycles of this node."""
+        """! Get the start time in cycles of this node."""
         return self.start
 
     def get_end(self):
-        """!  Get the end time in cycles of this node."""
+        """! Get the end time in cycles of this node."""
         return self.end
 
     def get_runtime(self):
-        """!  Return the runtime of running this node."""
+        """! Return the runtime of running this node."""
         return self.runtime
 
     def has_end(self) -> bool:
-        """!  Check if this node has already been assigned an end time.
+        """! Check if this node has already been assigned an end time.
         @return (bool) True if this node has been assigned an end time
         """
         return self.end is not None

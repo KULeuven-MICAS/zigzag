@@ -1,9 +1,11 @@
-from math import factorial
+from math import factorial, inf
 import operator
+from typing import Any, Generator
 from tqdm import tqdm
 import numpy as np
 from sympy.ntheory import factorint
 import logging
+
 
 from typeguard import typechecked
 
@@ -27,7 +29,6 @@ class NoValidLoopOrderingFoundException(Exception):
     pass
 
 
-@typechecked
 class LomaEngine:
     """! Class that handles optimization of temporal mapping given a:
     - layer
@@ -47,15 +48,10 @@ class LomaEngine:
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        loma_lpf_limit=np.inf,
-        **kwargs,
+        loma_lpf_limit: int | None = None,
+        **kwargs: Any,
     ):
-        """!  The class constructor
-        Initialize the engine with the given:
-        - Accelerator
-        - LayerNode
-        - SpatialMapping
-
+        """! The class constructor
         The memory hierarchy from the correct core is extracted from the accelerator.
 
         @param accelerator: accelerator to use the memory hierarchy of
@@ -80,7 +76,7 @@ class LomaEngine:
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
 
     def run(self):
-        """!  Runs the LomaEngine
+        """! Runs the LomaEngine
         @return Generator that yields all temporal mappings
         """
         # TODO: add the criterion(s) as inputs to this function.
@@ -110,11 +106,12 @@ class LomaEngine:
         if not yielded:
             # TODO this warning is unclear: an invalid spatial mapping is not necessarily its cause
             raise NoValidLoopOrderingFoundException(
-                f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is compatible with the architecture."
+                f"""No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is 
+                compatible with the architecture."""
             )
 
     def get_temporal_loops(self) -> None:
-        """!  Get all loops that have to be temporally scheduled given layer and spatial mapping.
+        """! Get all loops that have to be temporally scheduled given layer and spatial mapping.
         # TODO clean up (and make use of `LayerDimSizes` methods)
         """
         layer_dim_sizes = self.layer.layer_dim_sizes.copy()  # init with all loop sizes
@@ -135,15 +132,16 @@ class LomaEngine:
 
         self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
-        if self.lpf_limit < min_nb_temporal_loops:
+        if self.lpf_limit is not None and self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
                 f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs."
             )
             self.lpf_limit = min_nb_temporal_loops
 
     def get_prime_factors(self) -> None:
-        """!  Get the prime factors for all temporal loops.
-        This is saved in three separate class attributes (temporal_loop_pfs, temporal_loop_pf_counts, temporal_loop_pf_count_sums)
+        """! Get the prime factors for all temporal loops.
+        This is saved in three separate class attributes (temporal_loop_pfs, temporal_loop_pf_counts,
+        temporal_loop_pf_count_sums)
         # TODO clean up (functions should not change class state variables...)
         """
         # temporal_loop_pfs: a dict that for each temporal loop dimension contains the prime factors
@@ -154,17 +152,14 @@ class LomaEngine:
         temporal_loop_pf_counts: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_count_sums: dict[LayerDim, int] = {}
         lpfs = []
-        for (
-            tl_dim,
-            tl_size,
-        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
-            factors = factorint(tl_size)
+        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
+            factors: dict[int, int] = factorint(tl_size)
             pfs = []
             counts = []
             for pf, multiplicity in factors.items():
                 pfs.append(pf)
                 counts.append(multiplicity)
-                for i in range(multiplicity):
+                for _ in range(multiplicity):
                     lpfs.append((tl_dim, pf))
             temporal_loop_pfs[tl_dim] = tuple(pfs)
             temporal_loop_pf_counts[tl_dim] = tuple(counts)
@@ -193,7 +188,7 @@ class LomaEngine:
         self.compute_nb_permutations()
 
     def compute_nb_permutations(self):
-        """!  Compute the number of permutations that will have to be considered given the LPF distribution"""
+        """! Compute the number of permutations that will have to be considered given the LPF distribution"""
         nb_permutations = factorial(sum(self.temporal_loop_pf_count_sums.values()))
         for nb_duplicated_pfs in self.temporal_loop_pf_counts.values():
             for nb_duplicated_pf in nb_duplicated_pfs:
@@ -202,13 +197,13 @@ class LomaEngine:
         logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
 
     def limit_lpfs(self) -> None:
-        """!  Function to limit the total number of loop prime factors present in this instance.
+        """! Function to limit the total number of loop prime factors present in this instance.
         This function scans the lpfs and while the number of lpfs is greater than self.lpf_limit it:
         - picks the loop dimension that has the most lpfs
         - merges the smallest two lpfs of that loop dimension (multiplying their values)
         """
         n_pf = sum(self.temporal_loop_pf_count_sums.values())
-        if n_pf <= self.lpf_limit:
+        if self.lpf_limit is None or n_pf <= self.lpf_limit:
             logger.debug(f"No lpf limiting performed for layer {self.layer}")
             return
         while n_pf > self.lpf_limit:
@@ -249,16 +244,15 @@ class LomaEngine:
             n_pf -= 1
 
         # Update self.lpfs for these new factors
-        lpfs = []
-        for dim in self.temporal_loop_pfs.keys():
-            for pf, count in zip(self.temporal_loop_pfs[dim], self.temporal_loop_pf_counts[dim]):
-                lpfs += list(((dim, pf),) * count)
+        lpfs: list[tuple[LayerDim, int]] = []
+        for layer_dim, loop in self.temporal_loop_pfs.items():
+            for pf, count in zip(loop, self.temporal_loop_pf_counts[layer_dim]):
+                lpfs += list(((layer_dim, pf),) * count)
         self.lpfs = lpfs
 
         logger.debug(f"Limited layer {self.layer} to {len(self.lpfs)} lpfs.")
         return
 
-    def ordering_generator(self):
-        """!  Generator that yields all orderings of the temporal loops."""
-        # The lpfs are stored in self.lpfs
-        return permutations(self.lpfs)
+    def ordering_generator(self) -> Generator[list[tuple[LayerDim, int]], None, None]:
+        """! Generator that yields all orderings of the temporal loops."""
+        return permutations(self.lpfs)  # type:ignore

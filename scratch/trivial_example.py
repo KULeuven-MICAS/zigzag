@@ -5,7 +5,6 @@ data movements based on the results.
 
 import pickle
 import sys
-from extended_int import int_inf
 
 
 sys.path.append("../zigzag")
@@ -70,6 +69,7 @@ reg_O1 = MemoryInstance(
     w_port=2,
     rw_port=0,
     latency=1,
+    # auto_cost_extraction=True
 )
 x = 8
 sram_32KB_512_1r_1w = MemoryInstance(

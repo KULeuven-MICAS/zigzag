@@ -11,9 +11,6 @@ from zigzag.datatypes import (
     LayerDim,
     MemoryOperand,
     LoopList,
-    MemOperandStr,
-    OperandStr,
-    LayerDimStr,
     PrLoop,
     PrScalingFactors,
     UnrollFactor,
@@ -95,9 +92,9 @@ class LayerDimSizes(LayerAttribute):
         del self.data[key]
 
     @staticmethod
-    def parse_user_input(x: dict[LayerDimStr, UnrollFactor]):
+    def parse_user_input(x: dict[str, UnrollFactor]):
         assert isinstance(x, dict)
-        assert all([isinstance(k, LayerDimStr) for k in x.keys()])
+        assert all([isinstance(k, str) for k in x.keys()])
         assert all([isinstance(k, UnrollFactor) for k in x.values()])
         data = {LayerDim(layer_dim_str): size for layer_dim_str, size in x.items()}
         return LayerDimSizes(data)
@@ -117,9 +114,9 @@ class LayerOperandPrecision(LayerAttribute):
         return self.data[Constants.OUTPUT_LAYER_OP]
 
     @staticmethod
-    def parse_user_input(x: dict[OperandStr, int]):
+    def parse_user_input(x: dict[str, int]):
         assert isinstance(x, dict)
-        assert all([isinstance(k, OperandStr) for k in x.keys()])
+        assert all([isinstance(k, str) for k in x.keys()])
         assert all([isinstance(k, int) for k in x.values()])
         assert (
             Constants.OUTPUT_OPERAND_STR in x or Constants.FINAL_OUTPUT_OPERAND_STR in x
@@ -161,9 +158,6 @@ class MemoryOperandLinks(LayerAttribute):
     def mem_operands(self) -> set[MemoryOperand]:
         return set(self.data.values())
 
-    # def items(self):
-    #     return self.data.items()
-
     def copy(self):
         return MemoryOperandLinks(self.data.copy())
 
@@ -171,10 +165,10 @@ class MemoryOperandLinks(LayerAttribute):
         return str({str(k): str(v) for k, v in self.data.items()})
 
     @staticmethod
-    def parse_user_input(x: dict[OperandStr, MemOperandStr]):
+    def parse_user_input(x: dict[str, str]):
         assert isinstance(x, dict)
-        assert all([isinstance(k, OperandStr) for k in x.keys()])
-        assert all([isinstance(k, MemOperandStr) for k in x.values()])
+        assert all([isinstance(k, str) for k in x.keys()])
+        assert all([isinstance(k, str) for k in x.values()])
         data = {LayerOperand(layer_op_str): MemoryOperand(mem_op_str) for layer_op_str, mem_op_str in x.items()}
         return MemoryOperandLinks(data)
 
@@ -227,12 +221,15 @@ class LayerTemporalOrdering(LayerAttribute):
         self.data = data
 
     @staticmethod
-    def parse_user_input(x: dict[OperandStr, int]):
+    def parse_user_input(x: dict[str, int]):
         assert isinstance(x, dict)
-        assert all([isinstance(k, OperandStr) for k in x.keys()])
+        assert all([isinstance(k, str) for k in x.keys()])
         assert all([isinstance(v, int) for v in x.values()])
         data = {LayerOperand(layer_op_str): factor for layer_op_str, factor in x.items()}
         return LayerTemporalOrdering(data)
+
+    def __delitem__(self, x: LayerOperand):
+        del self.data[x]
 
 
 class LayerPadding(LayerAttribute):
@@ -245,9 +242,9 @@ class LayerPadding(LayerAttribute):
         return self.data[key] if key in self.data else LayerPadding.DEFAULT
 
     @staticmethod
-    def parse_user_input(x: dict[LayerDimStr, tuple[int, int]]):
+    def parse_user_input(x: dict[str, tuple[int, int]]):
         assert isinstance(x, dict)
-        assert all([isinstance(k, LayerDimStr) for k in x.keys()])
+        assert all([isinstance(k, str) for k in x.keys()])
         assert all(
             [isinstance(v, tuple) and len(v) == 2 and all([isinstance(elem, int) for elem in v]) for v in x.values()]
         )
@@ -261,10 +258,10 @@ class LayerConstantOperands(LayerAttribute):
         self.data = data
 
     @staticmethod
-    def parse_user_input(x: list[OperandStr]):
+    def parse_user_input(x: list[str]):
         # TODO should this check wether the list is empty?
         assert isinstance(x, list)
-        assert all([isinstance(elem, OperandStr) for elem in x])
+        assert all([isinstance(elem, str) for elem in x])
         data = [LayerOperand(layer_op_str) for layer_op_str in x]
         return LayerConstantOperands(data)
 
@@ -302,7 +299,7 @@ class LayerAttributes:
     def parse_operand_source(self) -> InputOperandSource:
         key: str = "operand_source"
         assert key in self, f"Workload does not contain `{key}` definition"
-        x = self.data[key]
+        x: dict[str, list[int]] = self.data[key]
         assert isinstance(x, dict)
         assert all([isinstance(k, str) for k in x.keys()])
         assert all([isinstance(v, list) for v in x.values()])
@@ -359,8 +356,9 @@ class LayerAttributes:
         if key not in self:
             return list()
         x = self.data[key]
+        x: list[str]
         assert isinstance(x, list)
-        assert all([isinstance(elem, OperandStr) for elem in x])
+        assert all([isinstance(elem, str) for elem in x])
         return [LayerOperand(layer_op_str) for layer_op_str in x]
 
     def parse_operator_type(self) -> str | None:

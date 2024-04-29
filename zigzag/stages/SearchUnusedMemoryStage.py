@@ -5,7 +5,7 @@ from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.memory_level import MemoryLevel
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 
 import networkx as nx
 from zigzag.workload.Workload import Workload
@@ -90,9 +90,10 @@ logger = logging.getLogger(__name__)
 #   which is a networkx graph.
 
 
-@typechecked
 class SearchUnusedMemoryStage(Stage):
-    def __init__(self, list_of_callables: list[Callable], *, accelerator: Accelerator, workload: Workload, **kwargs):
+    def __init__(
+        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, workload: Workload, **kwargs: Any
+    ):
         """
         # TODO needs cleanup
         """

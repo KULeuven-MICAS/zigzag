@@ -11,7 +11,6 @@ import math
 import copy
 
 from zigzag.workload.layer_node import LayerNode
-from zigzag.opt.UserSpatialMappingGenerator import UserSpatialMappingGenerator
 
 if __name__ == "__main__" or __name__ == "DimcArray":
     # branch when the script is run locally or called by AimcArray.py
@@ -46,7 +45,7 @@ class DimcArray(ImcUnit):
         pass
 
     def get_area(self):
-        """!  area of imc macros (cells, mults, adders, adders_pv, accumulators. Not include input/output regs)"""
+        """! area of imc macros (cells, mults, adders, adders_pv, accumulators. Not include input/output regs)"""
         # area of cell array
         tech_node = self.logic_unit.tech_param["tech_node"]
         group_depth = self.hd_param["group_depth"]

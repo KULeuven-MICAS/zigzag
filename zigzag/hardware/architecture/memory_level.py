@@ -11,7 +11,6 @@ from zigzag.hardware.architecture.operational_array import OperationalArray
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 
 
-@typechecked
 class ServedMemDimensions:
     """! Represents a collection of Operational Array Dimensions (served by some Memory Instance)
     # TODO let this inherit from some `Attribute` ABC
@@ -50,7 +49,8 @@ class ServedMemDimensions:
         """
         assert all(
             [served_dim in oa_dims for served_dim in self]
-        ), f"User-specified served dimensions {self.data} contains element not part of the Operational Array Dimensions {oa_dims}"
+        ), f"""User-specified served dimensions {self.data} contains element not part of the Operational
+        Array Dimensions {oa_dims}"""
 
     def to_user_format(self) -> ServedMemDimsUserFormat:
         return tuple(oa_dim.name for oa_dim in self)
@@ -84,7 +84,6 @@ class ServedMemDimensions:
         return ServedMemDimensions(data)
 
 
-@typechecked
 class MemoryLevel:
 
     def __init__(
@@ -171,11 +170,12 @@ class MemoryLevel:
         return math.prod(oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions)
 
     def __jsonrepr__(self):
-        """!  JSON Representation of this class to save it to a json file."""
+        """! JSON Representation of this class to save it to a json file."""
         return str(self)
 
     def __update_formatted_string(self):
-        self.formatted_string = f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands},served_dimensions={self.served_dimensions})"
+        self.formatted_string = f"""MemoryLevel(instance={self.memory_instance.name},operands={self.operands},
+        served_dimensions={self.served_dimensions})"""
 
     def __str__(self):
         self.__update_formatted_string()

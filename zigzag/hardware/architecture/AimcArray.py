@@ -84,7 +84,7 @@ class AimcArray(ImcUnit):
         return dac_area, dac_delay, dac_energy
 
     def get_area(self):
-        """!  get area of AIMC macros (cells, mults, adders, adders_pv, accumulators. Not include input/output regs)"""
+        """! get area of AIMC macros (cells, mults, adders, adders_pv, accumulators. Not include input/output regs)"""
         # area of cell array
         tech_node = self.logic_unit.tech_param["tech_node"]
         group_depth = self.hd_param["group_depth"]
@@ -155,7 +155,7 @@ class AimcArray(ImcUnit):
         # return self.area_breakdown
 
     def get_delay(self):
-        """!  get delay of imc macros (worst path: dacs -> mults -> adcs -> adders -> accumulators)"""
+        """! get delay of imc macros (worst path: dacs -> mults -> adcs -> adders -> accumulators)"""
         # delay of dacs
         dly_dacs = self.get_dac_cost()[1]
 
@@ -207,7 +207,7 @@ class AimcArray(ImcUnit):
         # return self.delay_breakdown
 
     def get_peak_energy_single_cycle(self):
-        """!  macro-level one-cycle energy of imc arrays (fully utilization, no weight updating)
+        """! macro-level one-cycle energy of imc arrays (fully utilization, no weight updating)
         (components: cells, mults, adders, adders_pv, accumulators. Not include input/output regs)
         """
         layer_const_operand_pres = self.hd_param["weight_precision"]
@@ -275,7 +275,7 @@ class AimcArray(ImcUnit):
         return peak_energy_breakdown
 
     def get_macro_level_peak_performance(self):
-        """!  macro-level peak performance of imc arrays (fully utilization, no weight updating)"""
+        """! macro-level peak performance of imc arrays (fully utilization, no weight updating)"""
         nb_of_macs_per_cycle = (
             self.wl_dim_size
             * self.bl_dim_size

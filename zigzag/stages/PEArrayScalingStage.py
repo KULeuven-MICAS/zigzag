@@ -1,5 +1,9 @@
+"""
+# TODO this file needs to be reworked
+"""
+
 from math import ceil
-from typing import Any, Generator
+from typing import Any
 
 from typeguard import typechecked
 from zigzag.cost_model.cost_model import CostModelEvaluation
@@ -10,21 +14,28 @@ from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.hardware.architecture.operational_unit import OperationalUnit
 from zigzag.utils import pickle_deepcopy
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 
 import logging
 
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class PEArrayScalingStage(Stage):
-    """!  This stage scales the PE array of the given accelerator.
+    """! This stage scales the PE array of the given accelerator.
     Because the user-defined spatial mapping resides in the different workload layer nodes,
     We also have to modify those to scale accordingly
     """
 
-    def __init__(self, list_of_callables, *, workload, accelerator, pe_array_scaling, **kwargs):
+    def __init__(
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        workload,
+        accelerator: Accelerator,
+        pe_array_scaling: int,
+        **kwargs: Any,
+    ):
         super().__init__(list_of_callables, **kwargs)
 
         # SANITY CHECKS
@@ -38,7 +49,7 @@ class PEArrayScalingStage(Stage):
         self.accelerator = accelerator
         self.pe_array_scaling = pe_array_scaling
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
+    def run(self):
         scaled_accelerator = self.generate_scaled_accelerator()
         modified_workload = self.scale_workload_spatial_mapping()
         sub_stage = self.list_of_callables[0](
@@ -76,7 +87,7 @@ class PEArrayScalingStage(Stage):
         memory_hierarchy = core.memory_hierarchy
 
         # Create new operational array
-        new_operational_unit: OperationalUnit = pickle_deepcopy(operational_unit)  # type: ignore
+        new_operational_unit: OperationalUnit = pickle_deepcopy(operational_unit)
         new_dimension_sizes = [ceil(self.pe_array_scaling * dim_size) for dim_size in dimension_sizes]
         new_dimensions = {f"D{i}": new_dim_size for i, new_dim_size in enumerate(new_dimension_sizes, start=1)}
         new_operational_array = OperationalArray(new_operational_unit, new_dimensions)
@@ -95,9 +106,9 @@ class PEArrayScalingStage(Stage):
             assert len(served_dimensions_vec) >= 1
             served_dimensions = served_dimensions_vec[0]
 
-            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
-            new_operands: tuple[str] = pickle_deepcopy(operands)  # type: ignore
-            new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)  # type: ignore
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
+            new_operands: tuple[str] = pickle_deepcopy(operands)
+            new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)
             new_served_dimensions = pickle_deepcopy(served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,
@@ -113,7 +124,7 @@ class PEArrayScalingStage(Stage):
             raise NotImplementedError("Scale your core-defined dataflows accordingly here.")
 
         new_id = id
-        new_dataflows: list = pickle_deepcopy(dataflows)  # type: ignore
+        new_dataflows: list = pickle_deepcopy(dataflows)
         new_core = Core(
             id=new_id,
             operational_array=new_operational_array,

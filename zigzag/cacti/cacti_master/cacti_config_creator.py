@@ -373,20 +373,14 @@ class CactiConfig:
     def call_cacti(self, cacti_master_path, self_gen_cfg_path):
         # os.system('./cacti -infile ./self_gen/cache.cfg')
 
-        print(
-            "##########################################################################################"
-        )
+        print("##########################################################################################")
         original_cwd = os.getcwd()
         # Change the directory to the cacti master directory as using absolute paths yields a "Segmentation fault"
         os.chdir(cacti_master_path)
         common_path = os.path.commonpath([cacti_master_path, self_gen_cfg_path])
         if common_path != cacti_master_path:
-            raise NotImplementedError(
-                "Config path for cacti should be inside cacti_master folder."
-            )
-        self_gen_cfg_path_relative = (
-            f"./{os.path.relpath(self_gen_cfg_path, start=cacti_master_path)}"
-        )
+            raise NotImplementedError("Config path for cacti should be inside cacti_master folder.")
+        self_gen_cfg_path_relative = f"./{os.path.relpath(self_gen_cfg_path, start=cacti_master_path)}"
         cacti_cmd = f"./cacti -infile {self_gen_cfg_path_relative}"
         stream = os.popen(cacti_cmd)
         output = stream.readlines()
@@ -407,11 +401,7 @@ class CactiConfig:
         user_config = []
         if user_input[0] == "default":
             for itm in self.config_options.keys():
-                user_config.append(
-                    self.config_options[itm]["string"]
-                    + str(self.config_options[itm]["default"])
-                    + "\n"
-                )
+                user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
             self.write_config(user_config, self_gen_cfg_path)
             self.call_cacti(cacti_master_path, self_gen_cfg_path)
 
@@ -419,16 +409,10 @@ class CactiConfig:
             for itm in self.config_options.keys():
                 if itm in user_input[1][0]:
                     ii = user_input[1][0].index(itm)
-                    user_config.append(
-                        self.config_options[itm]["string"]
-                        + str(user_input[1][1][ii])
-                        + "\n"
-                    )
+                    user_config.append(self.config_options[itm]["string"] + str(user_input[1][1][ii]) + "\n")
                 else:
                     user_config.append(
-                        self.config_options[itm]["string"]
-                        + str(self.config_options[itm]["default"])
-                        + "\n"
+                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
                     )
             self.write_config(user_config, self_gen_cfg_path)
             self.call_cacti(cacti_master_path, self_gen_cfg_path)
@@ -439,16 +423,12 @@ class CactiConfig:
             for itm in self.config_options.keys():
                 if itm not in user_input[1]:
                     common_part.append(
-                        self.config_options[itm]["string"]
-                        + str(self.config_options[itm]["default"])
-                        + "\n"
+                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
                     )
 
             for itm in user_input[1]:
                 for va in self.config_options[itm]["option"]:
-                    user_config.append(
-                        [self.config_options[itm]["string"] + str(va) + "\n"]
-                    )
+                    user_config.append([self.config_options[itm]["string"] + str(va) + "\n"])
 
             for ii in range(len(user_config)):
                 user_config[ii] += common_part

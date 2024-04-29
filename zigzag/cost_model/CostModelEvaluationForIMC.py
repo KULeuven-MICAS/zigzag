@@ -1,5 +1,4 @@
 import logging
-from typing import Generator
 from zigzag.utils import pickle_deepcopy
 from zigzag.cost_model.cost_model import CostModelEvaluation, PortActivity
 
@@ -7,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 class CostModelEvaluationForIMC(CostModelEvaluation):
-    """!  Class that stores inputs and runs them through the zigzag cost model.
+    """! Class that stores inputs and runs them through the zigzag cost model.
 
     Initialize the cost model evaluation with the following inputs:
     - accelerator: the accelerator that includes the core on which to run the layer
@@ -27,7 +26,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
     """
 
     def run(self) -> None:
-        """!  Run the cost model evaluation."""
+        """! Run the cost model evaluation."""
         super().calc_memory_utilization()
         super().calc_memory_word_access()
         self.calc_energy()
@@ -51,19 +50,19 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         self.area_total = self.imc_area + self.mem_area
 
     def calc_energy(self):
-        """!  Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy."""
+        """! Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy."""
         # - TODO: Interconnection energy
         self.calc_MAC_energy_cost()
         super().calc_memory_energy_cost()
 
     def calc_MAC_energy_cost(self):
-        """!  Calculate the dynamic MAC energy"""
+        """! Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
         self.MAC_energy_breakdown = core.operational_array.unit.get_energy_for_a_layer(self.layer, self.mapping)
         self.MAC_energy = sum([energy for energy in self.MAC_energy_breakdown.values()])
 
     def calc_latency(self):
-        """!   Calculate latency in 4 steps
+        """!  Calculate latency in 4 steps
 
         1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
         here we start with calculating the required (or allowed) memory updating window by comparing the effective
@@ -91,7 +90,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         super().calc_overall_latency(cycles_per_mac=cycles_per_mac)
 
     def combine_data_transfer_rate_per_physical_port(self):
-        """!  This function calculate the stalling cycles for IMC (In-Memory-Computing) hardware template
+        """! This function calculate the stalling cycles for IMC (In-Memory-Computing) hardware template
         Consider memory sharing and port sharing, combine the data transfer activity
         Step 1: collect port activity per memory instance per physical memory port
         Step 2: calculate SS combine and MUW union parameters per physical memory port
@@ -416,7 +415,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         }
 
     def __simplejsonrepr__(self):
-        """!  Simple JSON representation used for saving this object to a simple json file."""
+        """! Simple JSON representation used for saving this object to a simple json file."""
         return {
             "energy": self.energy_total,
             "latency": self.latency_total2,

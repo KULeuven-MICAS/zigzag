@@ -1,0 +1,8 @@
+============================= test session starts ==============================
+platform linux -- Python 3.11.5, pytest-8.1.1, pluggy-1.4.0
+rootdir: /volume1/users/rgeens/zigzag
+configfile: pyproject.toml
+plugins: typeguard-4.2.1
+collected 20 items
+
+tests/main/test_origin/test_ascend_like.py FFF

@@ -3,9 +3,8 @@ from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
 
 
-@typechecked
 class PortActivity:
-    """!   Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link)."""
+    """!  Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link)."""
 
     def __init__(
         self,
@@ -17,16 +16,18 @@ class PortActivity:
         mem_lv: int,
         mov_dir: DataDirection,
     ):
-        """!  The class constructor
+        """! The class constructor
         @param real_cycle Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
         @param period The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
         @param period_count The total number of period across the whole NN layer computation.
 
         """
-        ## Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
+        # Within each period, the actual number of cycles used for transferring the amount of data, depended on the
+        # memory bw and the data amount to be transferred at that memory level.
         self.real_cycle = real_cycle
         self.allowed_cycle = allowed_cycle
-        ## The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
+        # The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current
+        # and below memory level.
         self.period = period
         ## The total number of period across the whole NN layer computation.
         self.period_count = period_count
@@ -44,16 +45,12 @@ class PortActivity:
     def __repr__(self):
         return str(self.served_op_lv_dir)
 
-    # def __eq__(self, other: Any) -> bool:
-    #     return isinstance(other, PortActivity) and str(self.served_op_lv_dir) == other
-
     def __hash__(self):
         return hash(self.served_op_lv_dir)
 
 
-@typechecked
 class PortBeginOrEndActivity:
-    """!  Class that collects all the data transfer rate information for each DTL (data transfer link)."""
+    """! Class that collects all the data transfer rate information for each DTL (data transfer link)."""
 
     def __init__(
         self,
@@ -64,14 +61,15 @@ class PortBeginOrEndActivity:
         mem_lv: int,
         mov_dir: DataDirection,
     ):
-        """!  The class constructor
+        """! The class constructor
         @param real_cycle The actual number of cycles used for transferring the amount of data, depended on the memory
           bw and the data amount to be transferred at that memory level
         @param data_in_charge One-period data transfer amount (bit)
         @param mem_bw Unit: bit/cycle
 
         """
-        ## the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level
+        # the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data
+        # amount to be transferred at that memory level
         self.real_cycle = real_cycle
         ## one-period data transfer amount (bit)
         self.data_in_charge = data_in_charge

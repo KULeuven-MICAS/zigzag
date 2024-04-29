@@ -1,9 +1,9 @@
-from typing import Generator, Callable, Any
+from typing import Generator, Any
 
 from typeguard import typechecked
 
 
-from zigzag.stages.Stage import Stage
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.cost_model.CostModelEvaluationForIMC import CostModelEvaluationForIMC
 from zigzag.hardware.architecture.Accelerator import Accelerator
@@ -16,21 +16,20 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class CostModelStage(Stage):
-    """!   Pipeline stage that calls a cost model to evaluate a mapping on a HW config."""
+    """!  Pipeline stage that calls a cost model to evaluate a mapping on a HW config."""
 
     def __init__(
         self,
-        list_of_callables: list[Callable],
+        list_of_callables: list[StageCallable],
         *,
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
         spatial_mapping_int: SpatialMappingInternal,
         temporal_mapping: TemporalMapping,
-        access_same_data_considered_as_no_access=True,
-        **kwargs,
+        access_same_data_considered_as_no_access: bool = True,
+        **kwargs: Any,
     ):
         super().__init__(list_of_callables, **kwargs)
 
@@ -41,8 +40,8 @@ class CostModelStage(Stage):
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
-    def run(self) -> Generator[tuple[CostModelEvaluation, Any], None, None]:
-        """!  Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""
+    def run(self):
+        """! Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""
         core_id = self.layer.core_allocation
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array

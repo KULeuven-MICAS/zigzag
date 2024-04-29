@@ -19,7 +19,6 @@ class LayerAttribute(metaclass=ABCMeta):
         return iter(self.data)
 
     def __getitem__(self, key: Any):
-        # TODO: this is dangerous for some subclasses
         return self.data[key]
 
     def __contains__(self, key: Any) -> bool:

@@ -2,16 +2,15 @@ from typing import TypeAlias
 import math
 
 from typeguard import typechecked
-from zigzag.datatypes import Constants, LayerDim, LayerOperand, MemoryOperand, UnrollFactor
+from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import json_repr_handler, pickle_deepcopy
 
 TemporalMappingDict: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]]
 
 
-@typechecked
 class TemporalMapping:
-    """!  Class that collect all the info related to temporal mapping."""
+    """! Class that collect all the info related to temporal mapping."""
 
     def __init__(self, temporal_mapping_dict: TemporalMappingDict, layer_node: LayerNode):
         self.mapping_dic_origin = temporal_mapping_dict
@@ -39,11 +38,11 @@ class TemporalMapping:
         return str(self)
 
     def __jsonrepr__(self):
-        """!  JSON representation of this object to save it to a json file."""
+        """! JSON representation of this object to save it to a json file."""
         return json_repr_handler({"temporal_mapping": self.mapping_dic_stationary})
 
     def innermost_stationary_loop_merge_down(self):
-        """!  Iteratively merging down the ir loops which located at the bottom position of each memory level.
+        """! Iteratively merging down the ir loops which located at the bottom position of each memory level.
         Also calculate the MAC level data stationary cycle, i,e., the innermost memory level's bottom ir loops.
         """
         # Initialization
@@ -82,7 +81,7 @@ class TemporalMapping:
         self.MAC_level_data_stationary_cycle = MAC_level_st
 
     def calc_cycle_cabl_level(self):
-        """!  Calculate the iteration cycles that each memory level covers"""
+        """! Calculate the iteration cycles that each memory level covers"""
         # iteration_each_level only counts for the current level for-loops
         iteration_each_level = {
             op: [

@@ -12,22 +12,21 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-@typechecked
 class GemmParser(Parser):
-    """!  Parses an ONNX Gemm operator into a LayerNode"""
+    """! Parses an ONNX Gemm operator into a LayerNode"""
 
     def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
 
         super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
 
     def run(self):
-        """!  Run the parser"""
+        """! Run the parser"""
         layer_node = self.generate_layer_node_for_gemm()
         return layer_node
 
     def generate_layer_node_for_gemm(self):
         def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
-            """!  Generate the necessary dictionary items required for the Node creation."""
+            """! Generate the necessary dictionary items required for the Node creation."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation
