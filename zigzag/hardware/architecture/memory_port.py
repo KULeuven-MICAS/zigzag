@@ -1,17 +1,17 @@
-from enum import Enum
+from enum import StrEnum
 import re
 from typing import Any, TypeAlias
 
 from zigzag.datatypes import Constants, MemoryOperand
 
 
-class MemoryPortType(Enum):
-    READ = 0
-    WRITE = 1
-    READ_WRITE = 2
+class MemoryPortType(StrEnum):
+    READ = "r"
+    WRITE = "w"
+    READ_WRITE = "rw"
 
 
-class DataDirection(Enum):
+class DataDirection(StrEnum):
     RD_OUT_TO_LOW = "rd_out_to_low"
     WR_IN_BY_LOW = "wr_in_by_low"
     RD_OUT_TO_HIGH = "rd_out_to_high"
@@ -34,7 +34,7 @@ class MemoryPort:
         port_attr: MemoryPortType,
         port_id: int | None = None,
     ):
-        """! The class constructor
+        """
         Collect all the physical memory port related information here.
         @param port_name:
         @param port_bw: bit/cc

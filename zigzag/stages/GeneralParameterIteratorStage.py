@@ -15,7 +15,7 @@ class GeneralParameterIteratorStage(Stage):
     """! General iterator over any parameter whose values can be set from a predetermined list"""
 
     def __init__(self, list_of_callables: list[StageCallable], *, general_parameter_iterations, **kwargs: Any):
-        """! The class constructor
+        """
         @param list_of_callables: see Stage
         @param general_parameter_iterations: dictionary with:
            - keys: variables to iterate over, or tuples of variables to iterate over

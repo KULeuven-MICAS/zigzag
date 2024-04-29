@@ -6,6 +6,7 @@ from typing import Any
 import logging
 
 
+from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
@@ -19,10 +20,10 @@ logger = logging.getLogger(__name__)
 
 
 class RemoveUnusedMemoryStage(Stage):
-    """! # ################### Description ####################
+    """! # ########## Description ##########
     # # This stage must be processed behind WorkloadStage.
     # # This stage removes unused memory level found by SearchUnusedMemoryStage.
-    # ################## Pseudo-code ####################
+    # ######### Pseudo-code ##########
     # # Initialization:
     # #  target_act_mem_level, target_output_mem_level: get from mem_update_list
     # #  target_const_mem_level = mem_udpate_weight
@@ -49,7 +50,7 @@ class RemoveUnusedMemoryStage(Stage):
         layer: LayerNode,
         mem_update_list,
         mem_update_weight,
-        layer_list,
+        layer_list: dict[LayerNode, int],
         **kwargs: Any,
     ):
         super().__init__(list_of_callables, **kwargs)
@@ -70,11 +71,13 @@ class RemoveUnusedMemoryStage(Stage):
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
-    def generate_accelerator_with_removing_unused_memory(self):
-        ## Remove nouse memory level according to update_mem_list and mem_update_weight
-        curr_id = self.layer_list[self.layer]  # current layer id (key) in mem_udpate_list
-        curr_id = str(curr_id)
-        output_operand = self.layer.memory_operand_links[self.layer.output_operand]  # output representation in memory
+    def generate_accelerator_with_removing_unused_memory(self) -> Accelerator:
+        """
+        # Todo cleanup
+        """
+        # Remove no-use memory level according to update_mem_list and mem_update_weight
+        curr_id: int = self.layer_list[self.layer]
+        output_operand = self.layer.memory_operand_links[self.layer.output_operand]
         core = next(iter(self.accelerator.cores))
         operational_array = core.operational_array
         memory_hierarchy = core.memory_hierarchy
@@ -90,7 +93,8 @@ class RemoveUnusedMemoryStage(Stage):
         elif len(self.layer.constant_operands) == 0:
             # special case when defining workload manually:
             # the constant operands list is empty for such as "Adder" layers
-            # for input operand, we will represent all inputs as one input, since only their data size is used for required mem size calculation.
+            # for input operand, we will represent all inputs as one input, since only their data size is used for
+            # required mem size calculation.
             act_operand = self.layer.memory_operand_links[self.layer.input_operands[0]]  # act representation in memory
             const_operand = self.layer.memory_operand_links[
                 self.layer.input_operands[1]
@@ -103,13 +107,15 @@ class RemoveUnusedMemoryStage(Stage):
                 layer_op: self.layer.equation.get_r_layer_dims(layer_op)
                 for layer_op in self.layer.equation.get_contained_operands()
             }
+            act_operand: LayerOperand | None = None
             for operand, related_loop in related_loop_dict.items():
                 if pr_loop_keys[0] in related_loop:
                     act_operand = operand
             # weight representation in layer
-            weight_operand_temp: list = [x for x in self.layer.constant_operands if x != act_operand]
+            assert act_operand is not None
+            weight_operand_temp: list[LayerOperand] = [x for x in self.layer.constant_operands if x != act_operand]
             assert len(weight_operand_temp) == 1
-            weight_operand: str = weight_operand_temp[0]
+            weight_operand: LayerOperand = weight_operand_temp[0]
             # map from layer representation to hardware memory representation
             act_operand = self.layer.memory_operand_links[act_operand]
             # weight representation in memory
@@ -189,15 +195,4 @@ class RemoveUnusedMemoryStage(Stage):
 
         logger.info(f"Update mem architecture for layer {self.layer}...")
 
-        # RemoveUnusedMemoryStage.visulize_modified_memory_structure(new_memory_hierarchy)
-
         return new_accelerator
-
-    @staticmethod
-    def visulize_modified_memory_structure(new_memory_hierarchy):
-        # Visualization for debugging
-        from zigzag.visualization.graph.memory_hierarchy import (
-            visualize_memory_hierarchy_graph,
-        )
-
-        visualize_memory_hierarchy_graph(new_memory_hierarchy)

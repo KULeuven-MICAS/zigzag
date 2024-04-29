@@ -8,7 +8,7 @@ class AcceleratorParser:
     """! Parse an accelerator module path into an accelerator object"""
 
     def __init__(self, accelerator) -> None:
-        """! The class constructor
+        """
         Initialize the parser by checking if the provided argument is a module path or accelerator object
         @param accelerator_path (str or Accelerator): The accelerator path or accelerator object
         """

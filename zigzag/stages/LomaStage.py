@@ -22,7 +22,7 @@ class LomaStage(Stage):
         spatial_mapping: SpatialMappingInternal,
         **kwargs: Any,
     ):
-        """! The class constructor
+        """
         Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
         @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
         """

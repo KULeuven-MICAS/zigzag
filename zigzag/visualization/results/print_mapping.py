@@ -1,110 +1,126 @@
-from copy import deepcopy
-
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, UnrollFactor
+from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
+from zigzag.utils import pickle_deepcopy
 
 
-def create_printing_block(row, col):
-    return [[" "] * col for _ in range(row)]
-
-
-def modify_printing_block(old_block, start_row, start_col, new_str):
-    new_block = deepcopy(old_block)
-    new_block[start_row][start_col : start_col + len(new_str)] = new_str
-    return new_block
-
-
-def print_printing_block(printing_block):
-    print()
-    for i in range(len(printing_block)):
-        print("".join(printing_block[i]))
-
-
-def print_good_tm_format(
-    tm: dict[LayerOperand, list],
-    mem_name: dict[LayerOperand, list[str]],
-    cme_name: str,
-    mem_op_to_layer_op: dict[MemoryOperand, LayerOperand],
-):
-    """!
-    # TODO cleanup, documentation
+def get_temporal_spatial_loops(
+    cme: CostModelEvaluation,
+) -> tuple[
+    list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]],
+    list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]],
+    list[str],
+]:
     """
-    op_list = list(tm.keys())
-    tm_list = [tp for li in tm[op_list[0]] for tp in li]
+    # TODO documentation, split this up into multiple, sensible functions
+    """
+    core = cme.accelerator.get_core(cme.layer.core_allocation)
+    operand_links = cme.layer.memory_operand_links
 
-    # get required interval between operands (e.g., 'W', 'I', 'O'), based on actual mem name length
-    max_mem_name_len = 0
-    for operand in op_list:
-        for lv in range(len(mem_name[operand])):
-            if len(mem_name[operand][lv]) > max_mem_name_len:
-                max_mem_name_len = len(mem_name[operand][lv])
-    interval = max_mem_name_len + 10
+    tm: dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]] = pickle_deepcopy(
+        cme.temporal_mapping.mapping_dic_stationary
+    )
+    tls = [loop for level in tm[Constants.OUTPUT_LAYER_OP] for loop in level]
+    temporal_loops: list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]] = []
+    all_mem_names: set[str] = set()
+    for tl in tls:
+        mem_names: list[str] = []
+        for layer_op in operand_links.layer_operands:
+            mem_op = operand_links.layer_to_mem_op(layer_op)
+            # Find in which memory level this temporal loop is stored
+            contains = [tl in level for level in tm[layer_op]]
+            level = contains.index(True)
+            # Remove it from the tm dict
+            idx = tm[layer_op][level].index(tl)
+            tm[layer_op][level].pop(idx)
+            # Get the name of this memory level
+            mem_name = core.get_memory_level(mem_op, level).memory_instance.name
+            mem_names.append(mem_name)
+            all_mem_names.add(mem_name)
+        mem_names_tuple = tuple(mem_names)
+        temporal_loops.append((tl[0], (0, tl[1]), mem_names_tuple))
+    temporal_loops.reverse()
+    sls = [l for level in cme.spatial_mapping_dict_int[Constants.OUTPUT_LAYER_OP] for l in level]
+    spatial_loops: list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]] = [
+        (sl[0], (0, sl[1]), ("", "", "")) for sl in sls
+    ]
+    spatial_loops.reverse()
+    memories = list(all_mem_names)
+    return temporal_loops, spatial_loops, memories
 
-    tot_row = 2 * (len(tm_list) + 1) + 8
-    tot_col = int(2 * (len(tm_list) + 1) + 3.75 * interval)
-    tot_col_cut = 2 * (len(tm_list) + 1) + interval
-    tm_block = create_printing_block(tot_row, tot_col)
-    title = f" Temporal Mapping - {cme_name} "
-    dash = "*" * int((tot_col - len(title)) / 2)
-    tm_block = modify_printing_block(tm_block, 1, 0, dash + title + dash)
-    i = 2
-    for mem_op, layer_op in mem_op_to_layer_op.items():
-        tm_block = modify_printing_block(tm_block, i, 1, f"{mem_op} ({layer_op.name}): " + str(tm[layer_op]))
-        i += 1
-    tm_block = modify_printing_block(tm_block, 6, 0, "-" * tot_col)
-    tm_block = modify_printing_block(tm_block, 7, 1, "Temporal Loops")
-    tm_block = modify_printing_block(tm_block, 8, 0, "-" * tot_col)
-    finish_row = 2 * len(tm_list) + 7
-    for i, li in enumerate(tm_list):
-        tm_block = modify_printing_block(
-            tm_block,
-            finish_row - 2 * i,
-            len(tm_list) - i,
-            "for " + str(li[0]) + " in " + "[0:" + str(li[1]) + ")",
+
+def print_mapping(cme: CostModelEvaluation, offsets: int = 2):
+    """
+    Prints a structured representation of a CostModelEvaluation mapping.
+
+    :param cme: The CostModelEvaluation to print the mapping of.
+    :param offsets: The number of spaces to offset nested loops.
+    """
+    # Extract the temporal loops, spatial loops, and memories from the cme
+    temporal_loops, spatial_loops, memories = get_temporal_spatial_loops(cme)
+    loop_column_width = (
+        max([len(l[0].name) for l in temporal_loops]) + 14 + offsets * (len(temporal_loops) + len(spatial_loops)) + 5
+    )
+    memory_column_width = max([len(i) for i in memories]) + 5
+
+    def print_single_loop(
+        loop_var: LayerDim, loop_range: tuple[int, UnrollFactor], memory: tuple[str, ...], loop_str: str, indent: int
+    ):
+        """
+        Prints a single loop with its memory assignment at the given indentation level.
+        """
+        print(
+            f"{' ' * indent}{loop_str} {loop_var} in [{loop_range[0]}, {loop_range[1]}):".ljust(loop_column_width),
+            end="",
         )
-        tm_block = modify_printing_block(tm_block, 2 * (i + 1) + 1 + 7, 0, "-" * tot_col)
+        print(f"{memory[0]:<{memory_column_width}}{memory[1]:<{memory_column_width}}{memory[2]:<{memory_column_width}}")
+        print("".ljust(loop_column_width + 3 * memory_column_width, "-"))
 
-    # print mem name to each level
-    for idx, operand in enumerate(op_list):
-        column_position = tot_col_cut + idx * interval
-        tm_block = modify_printing_block(tm_block, 7, column_position, operand.name)
-        i = 0
-        for level, lv_li in enumerate(tm[operand]):
-            for _ in lv_li:
-                tm_block = modify_printing_block(
-                    tm_block,
-                    finish_row - 2 * i,
-                    column_position,
-                    str(mem_name[operand][level]),
-                )
-                i += 1
-    # tm_block = modify_printing_block(tm_block, finish_row + 2, 1,
-    #                                  "(Notes: Temporal Mapping starts from the innermost memory level. MAC level is out of Temporal Mapping's scope.)")
-    print_printing_block(tm_block)
+    def recursive_print(
+        loops: list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]],
+        loop_str: str,
+        offset: int = 0,
+        indent: bool = True,
+    ) -> int:
+        """
+        Recursively prints loops and their nested structure.
+        """
+        if not loops:
+            return offset
+        loop_var, loop_range, memory = loops[0]
+        print_single_loop(loop_var, loop_range, memory, loop_str, offset)
+        if indent:
+            new_offset = recursive_print(loops[1:], loop_str, offset + offsets, indent=indent)
+        else:
+            new_offset = recursive_print(loops[1:], loop_str, offset, indent=indent)
+        return new_offset
 
+    def print_header(text: str, operands: list[str]):
+        assert len(operands) == 3, "Three operands are expected"
+        print("".ljust(loop_column_width + 3 * memory_column_width, "="))
+        print(f"{text.ljust(loop_column_width)}", end="")
+        print(
+            f"""{operands[0]:<{memory_column_width}}{operands[1]:<{memory_column_width}}
+            {operands[2]:<{memory_column_width}}"""
+        )
+        print("".ljust(loop_column_width + 3 * memory_column_width, "="))
 
-def print_mapping(cme: CostModelEvaluation):
-    tm: dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]] = cme.temporal_mapping.mapping_dic_stationary
-    mem_op_to_layer_op = {
-        mem_op: cme.memory_operand_links.mem_to_layer_op(mem_op) for mem_op in cme.memory_operand_links.mem_operands
-    }
-    mem_name: dict[LayerOperand, list[str]] = {}
-    for mem_op, mems_all_levels in cme.accelerator.cores[0].mem_hierarchy_dict.items():
-        layer_op = mem_op_to_layer_op[mem_op]
-        mem_name[layer_op] = []
-        for mem_a_level in mems_all_levels:
-            mem_name[layer_op].append(mem_a_level.name)
-        assert len(tm[layer_op]) == len(
-            mem_name[layer_op]
-        ), f"Temporal mapping level {len(tm[layer_op])} and memory hierarchy level {len(mem_name[layer_op])} of operand {layer_op} do not match."
-    cme_name = str(cme)
-    print_good_tm_format(tm, mem_name, cme_name, mem_op_to_layer_op)
+    # Print Temporal loops header
+    operands = list(map(lambda x: x.name, cme.layer.memory_operand_links.layer_operands))
+    print_header("Temporal Loops", operands)
+    # Start recursive temporal loops printing
+    indent = recursive_print(temporal_loops, loop_str="for", offset=0, indent=True)
+    # Print Spatial loops header
+    operands = ["", "", ""]
+    print_header("Spatial Loops", operands)
+    # Start recursive spatial loops printing
+    indent = recursive_print(spatial_loops, loop_str="parfor", offset=indent, indent=False)
 
 
 if __name__ == "__main__":
+    # Example usage
     import pickle
 
-    with open("../list_of_cmes.pickle", "rb") as handle:
-        list_of_cme = pickle.load(handle)
-    for cme in list_of_cme:
-        print_mapping(cme)
+    with open("zigzag/visualization/list_of_cmes.pickle", "rb") as fp:
+        cmes = pickle.load(fp)
+    cme = cmes[0]
+    print_mapping(cme)

@@ -12,7 +12,7 @@ class OperationalArray:
     """! This class captures multi-dimensional operational array size."""
 
     def __init__(self, operational_unit: OperationalUnit, dimensions: dict[str, int]):
-        """! The class constructor
+        """
         @param operational_unit: an OperationalUnit object including precision and single operation energy, later we
         can add idle energy also (e.g. for situations that one or two of the input operands is zero).
         @param dimensions: define the name and size of each multiplier array dimensions, e.g. {'D1': 3, 'D2': 5}.

@@ -11,7 +11,7 @@ class OperationalUnit:
         unit_cost: float,
         unit_area: float,
     ):
-        """! The class constructor
+        """
         @param input_precision: The bit precision of the operation inputs.
         @param output_precision: The bit precision of the operation outputs.
         @param unit_cost: The energy cost of performing a single operation.
@@ -36,7 +36,7 @@ class OperationalUnit:
 class Multiplier(OperationalUnit):
 
     def __init__(self, input_precision: list[int], energy_cost: float, area: float):
-        """! The class constructor
+        """
         @param input_precision: The bit precision of the multiplication inputs.
         @param energy_cost: The energy cost of performing a single multiplication.
         @param area: The area of a single multiplier.

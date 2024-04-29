@@ -13,7 +13,7 @@ class Stage(metaclass=ABCMeta):
         list_of_callables: list["StageCallable"],
         **kwargs: Any,
     ):
-        """! The class constructor
+        """
         @param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
         and return a Stage instance. This is used to flexibly build iterators upon other iterators.
         @param kwargs: any keyword arguments, irrelevant to the specific class in question but passed on down

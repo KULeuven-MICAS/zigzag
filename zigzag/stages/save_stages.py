@@ -18,7 +18,7 @@ class CompleteSaveStage(Stage):
     """
 
     def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
-        """! The class constructor
+        """
         @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
         in kwargs (thus supplied by higher level runnables). Must contain `?`
         @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
@@ -68,7 +68,7 @@ class SimpleSaveStage(Stage):
     """
 
     def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
-        """! The class constructor
+        """
         @param list_of_callables: see Stage
         @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
         in kwargs (thus supplied by higher level runnables)
@@ -110,7 +110,7 @@ class PickleSaveStage(Stage):
     """! Class that dumps all received CMEs into a list and saves that list to a pickle file."""
 
     def __init__(self, list_of_callables: list[StageCallable], *, pickle_filename: str, **kwargs: Any):
-        """! The class constructor
+        """
         @param list_of_callables: see Stage
         @param pickle_filename: output pickle filename
         @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern

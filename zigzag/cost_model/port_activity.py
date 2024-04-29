@@ -15,7 +15,7 @@ class PortActivity:
         mem_lv: int,
         mov_dir: DataDirection,
     ):
-        """! The class constructor
+        """
         @param real_cycle Within each period, the actual number of cycles used for transferring the amount of data, depended on the memory bw and the data amount to be transferred at that memory level.
         @param period The turnaround cycle at that memory level, which equals to the product of all the temporal loops of current and below memory level.
         @param period_count The total number of period across the whole NN layer computation.
@@ -60,7 +60,7 @@ class PortBeginOrEndActivity:
         mem_lv: int,
         mov_dir: DataDirection,
     ):
-        """! The class constructor
+        """
         @param real_cycle The actual number of cycles used for transferring the amount of data, depended on the memory
           bw and the data amount to be transferred at that memory level
         @param data_in_charge One-period data transfer amount (bit)

@@ -4,8 +4,6 @@ import pickle
 import sys
 
 
-# import onnx
-
 sys.path.append("../zigzag")
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag import api

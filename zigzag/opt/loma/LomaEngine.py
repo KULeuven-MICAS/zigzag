@@ -49,7 +49,7 @@ class LomaEngine:
         loma_lpf_limit: int | None = None,
         **kwargs: Any,
     ):
-        """! The class constructor
+        """
         The memory hierarchy from the correct core is extracted from the accelerator.
 
         @param accelerator: accelerator to use the memory hierarchy of

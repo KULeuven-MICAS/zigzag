@@ -1,4 +1,7 @@
+from typing import Any
 import onnx
+from onnx import ModelProto
+from onnx import NodeProto
 
 from zigzag.io.onnx.Parser import Parser
 from zigzag.io.onnx.utils import get_node_input_output_dimension_shapes
@@ -15,21 +18,32 @@ class MatMulParser(Parser):
     Parses an ONNX MatMul operator into a LayerNode
     """
 
-    def __init__(self, node_id, node, nodes_outputs, mapping, onnx_model) -> None:
-        super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
-
     def run(self) -> LayerNode:
         """Run the parser"""
         layer_node = self.generate_layer_node_for_matmul()
         return layer_node
 
+    def __init__(
+        self,
+        node_id: int,
+        node: NodeProto,
+        nodes_outputs: dict[int, Any],
+        mapping: dict[str, dict[str, Any]] | None,
+        onnx_model: ModelProto | None,
+    ) -> None:
+        assert mapping is not None
+        assert onnx_model is not None
+        super().__init__(node_id, node, nodes_outputs, mapping, onnx_model)
+
     def generate_layer_node_for_matmul(self):
-        def get_layer_node_input_format(B, C, K, node_mapping, nodes_outputs):
+        def get_layer_node_input_format(
+            B: int, C: int, K: int, node_mapping: dict[str, Any], nodes_outputs: dict[int, Any]
+        ) -> dict[str, Any]:
             """! Generate the necessary dictionary items required for the Node creation."""
             # convert the data types to precisions based on the onnx definition
 
             # Equation
-            d = {}
+            d: dict[str, Any] = {}
             d["equation"] = "O[b][k]+=B[k][c]*A[b][c]"
 
             # Get dimension sizes from input parameters

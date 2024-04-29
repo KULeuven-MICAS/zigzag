@@ -13,7 +13,7 @@ class DumpStage(Stage):
     """
 
     def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
-        """! The class constructor
+        """
         @param list_of_callables: see Stage
         @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
         in kwargs (thus supplied by higher level runnables)

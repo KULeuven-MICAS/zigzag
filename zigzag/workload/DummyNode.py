@@ -9,7 +9,7 @@ class DummyNode:
     """
 
     def __init__(self, id: int, preds: list[int], node_name: str = "", type: str | None = None) -> None:
-        """! The class constructor
+        """
         Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
         @param id (int): id for this node
         @param preds (list): list of ids of this node's predecessor nodes

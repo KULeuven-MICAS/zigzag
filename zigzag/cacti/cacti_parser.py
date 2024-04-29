@@ -19,7 +19,7 @@ class CactiParser:
     CACTI_TOP_PATH = f"{cacti_path}/cacti_master/cacti_top.py"
 
     def __init__(self):
-        """! The class constructor"""
+        """"""
         pass
 
     def item_exists(

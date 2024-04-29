@@ -79,7 +79,7 @@ class Dimension(OperandABC):
     """
 
     def __init__(self, index: int = 0, name: str = "", size: int = 1):
-        """! The class constructor
+        """
         @param index: The integer index of this Dimension.
         @param name: The user-provided name of this Dimension.
         @param size: The user-provided size of this Dimension.

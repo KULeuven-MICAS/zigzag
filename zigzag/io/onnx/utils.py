@@ -4,18 +4,22 @@ import logging
 from dataclasses import dataclass
 from enum import auto
 from os import path
-from typing import List
+from typing import Any, List
 import pickle
 
 import onnx
-from onnx import AttributeProto, helper, compose  # type: ignore
+from onnx import AttributeProto, helper, compose
+from onnx import ModelProto
+from onnx import GraphProto
+from onnx import NodeProto
+from onnx import TypeProto
 
 logger = logging.getLogger(__name__)
 
 BRANCH_ATTRIBUTE = "branch"
 
 
-def parse_mapping_from_path(mapping_path):
+def parse_mapping_from_path(mapping_path: str | None) -> dict[str, dict[str, Any]]:
     """! Parse the input accelerator residing in accelerator_path.
     @param mapping_path
     """
@@ -46,11 +50,11 @@ def parse_mapping_from_path(mapping_path):
     return mapping
 
 
-def parse_onnx_model_from_path(onnx_model_path):
-    return onnx.load(onnx_model_path, load_external_data=False)
+def parse_onnx_model_from_path(onnx_model_path: str) -> ModelProto:
+    return onnx.load(onnx_model_path, load_external_data=False)  # type: ignore
 
 
-def add_attribute(node, name, value):
+def add_attribute(node: NodeProto, name: str, value: Any):
     attr = helper.make_attribute(name, value)
     if hasattr(node, "attribute"):
         node.attribute.append(attr)
@@ -58,7 +62,7 @@ def add_attribute(node, name, value):
         raise ValueError(f"{node} doesn't have an attribute field.")
 
 
-def add_branch_attribute(graph, branch=0):
+def add_branch_attribute(graph: GraphProto, branch: int = 0):
     for node in graph.node:
         add_attribute(node, BRANCH_ATTRIBUTE, branch)
         if node.op_type in ["If"]:
@@ -68,7 +72,7 @@ def add_branch_attribute(graph, branch=0):
             add_branch_attribute(g1, branch + 1)
 
 
-def unroll_branches(graph):
+def unroll_branches(graph: GraphProto) -> GraphProto:
     seen_if = False
     new_graph = graph
     for node in graph.node:
@@ -98,11 +102,11 @@ def unroll_branches(graph):
     return new_graph
 
 
-def is_dynamic(model):
+def is_dynamic(model: ModelProto):
     return "If" in [n.op_type for n in model.graph.node]
 
 
-def parse_dynamic_onnx_model(model):
+def parse_dynamic_onnx_model(model: ModelProto) -> ModelProto:
     """! Modifies the given onnx model if there's dynamic behavior in terms of an 'If' operator.
     All nodes are assigned a 'branch' attribute which specifies in which branch they live.
     The branch attribute starts from 0 and increases for each seen If operator.
@@ -117,16 +121,13 @@ def parse_dynamic_onnx_model(model):
     return new_model
 
 
-def get_attribute_ints_with_name(name, attrs, default=None):
+def get_attribute_ints_with_name(name: str, attrs: Any, default: Any = None):
     """! Retrieves the attrs[name_idx].ints from attrs.
     If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
     If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
     If name does not exist in attrs, the default provided by the caller is used.
     If the caller doesn't supply a default, an error is thrown.
 
-    @param name
-    @param attrs
-    @param default
     """
     attrs_names = [attr.name for attr in attrs]
     try:
@@ -177,14 +178,14 @@ class OnnxTensorType:
     category: OnnxTensorCategory
 
     @staticmethod
-    def from_tensor_type(tensor_type, category: OnnxTensorCategory):
+    def from_tensor_type(tensor_type: TypeProto.Tensor, category: OnnxTensorCategory):
         shape = [d.dim_value for d in tensor_type.shape.dim]
         elem_type = tensor_type.elem_type
 
         return OnnxTensorType(shape, elem_type, category)
 
 
-def get_onnx_tensor_type(name, model):
+def get_onnx_tensor_type(name: str, model: ModelProto):
     for input in model.graph.input:
         if input.name == name:
             return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.Input)
@@ -210,7 +211,7 @@ def get_onnx_tensor_type(name, model):
     )
 
 
-def get_node_input_output_dimension_shapes(node, model):
+def get_node_input_output_dimension_shapes(node: NodeProto, model: ModelProto):
     # assumed it is the first input, don't see a way to otherwise know
     input_name = node.input[0]
     input_shape = get_onnx_tensor_type(input_name, model).shape

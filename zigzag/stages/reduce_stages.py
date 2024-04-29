@@ -17,7 +17,7 @@ class MinimalEnergyStage(Stage):
     def __init__(
         self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
     ):
-        """! The class constructor
+        """
         Initialize the compare stage.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -56,7 +56,7 @@ class MinimalLatencyStage(Stage):
     def __init__(
         self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
     ):
-        """! The class constructor
+        """
         Initialize the compare stage.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -92,7 +92,7 @@ class MinimalEDPStage(Stage):
     def __init__(
         self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
     ) -> None:
-        """! The class constructor
+        """
         Initialize the compare stage.
         """
         super().__init__(list_of_callables, **kwargs)

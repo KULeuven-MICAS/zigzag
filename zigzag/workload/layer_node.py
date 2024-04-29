@@ -98,8 +98,10 @@ class LoopRelevancyInfo:
 class LayerNode:
     """! Represents a single layer in a workload."""
 
-    def __init__(self, layer_id: int, layer_attrs: LayerAttributes, node_name: str = "", layer_type: str | None = None):
-        """! The class constructor
+    def __init__(
+        self, layer_id: int, layer_attrs: LayerAttributes, node_name: str | None = None, layer_type: str | None = None
+    ):
+        """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
         Equal-to-1 loop dimensions are eliminated.
@@ -161,7 +163,7 @@ class LayerNode:
         return pr_loop, pr_loop_list, pr_scaling_factors
 
     def __str__(self):
-        return f"LayerNode_{self.id}"
+        return f"LayerNode_{self.name}"
 
     def __repr__(self):
         return str(self)

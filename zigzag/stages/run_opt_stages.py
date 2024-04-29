@@ -14,7 +14,7 @@ class RemoveExtraInfoStage(Stage):
     """! Strips extra info for subcallables to save memory"""
 
     def __init__(self, list_of_callables: list[StageCallable], **kwargs: Any):
-        """! The class constructor
+        """
         Initialize the remove extra info stage.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -34,7 +34,7 @@ class CacheBeforeYieldStage(Stage):
     """
 
     def __init__(self, list_of_callables: list[StageCallable], **kwargs: Any):
-        """! The class constructor
+        """
         Initialize the cache before yield stage.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -55,7 +55,7 @@ class SkipIfDumpExistsStage(Stage):
     """! Check if the output file is already generated, skip the run if so."""
 
     def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
-        """! The class constructor"""
+        """"""
         super().__init__(list_of_callables, **kwargs)
         self.dump_filename_pattern = dump_filename_pattern
 
@@ -131,7 +131,7 @@ class MultiProcessingSpawnStage(Stage):
         nb_multiprocessing_threads: int = multiprocessing.cpu_count(),
         **kwargs: Any,
     ):
-        """! The class constructor
+        """
         @param list_of_callables: may not contain lambda functions, as this will break pickling which is required for
         by multiprocessing.
         @param multiprocessing_callback: intended to be set by MultiProcessingGatherStage

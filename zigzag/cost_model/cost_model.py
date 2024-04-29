@@ -75,7 +75,6 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         # Add the operands from other that are either in `self` or `other`, but not yet in `result`
         op_diff_self = set(self.mem_energy_breakdown.keys()) - set(result.mem_energy_breakdown.keys())
         op_diff_other = set(other.mem_energy_breakdown.keys()) - set(result.mem_energy_breakdown.keys())
-        assert len(op_diff_self) + len(op_diff_other) == len(set.union(op_diff_self, op_diff_other))
         for layer_op in op_diff_self:
             result.mem_energy_breakdown[layer_op] = self.mem_energy_breakdown[layer_op]
             result.mem_energy_breakdown_further[layer_op] = self.mem_energy_breakdown_further[layer_op]
@@ -286,7 +285,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         temporal_mapping: TemporalMapping,
         access_same_data_considered_as_no_access: bool = True,
     ):
-        """! The class constructor
+        """
         After initialization, the cost model evaluation is run
         @param accelerator the accelerator that includes the core on which to run the
         @param layer the layer to run
@@ -1071,7 +1070,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.MAC_utilization2 = MAC_utilization2
 
     def __str__(self):
-        return f"CostModelEvaluation(layer={self.layer}, core={self.core_id})"
+        return f"CostModelEvaluation({self.layer}, core {self.core_id})"
 
     def __repr__(self):
         return str(self)

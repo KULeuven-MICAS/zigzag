@@ -35,10 +35,9 @@ from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
 from zigzag.stages.SalsaStage import SalsaStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
-from zigzag.stages.reduce_stages import MinimalLatencyStage, SumStage
-from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
-from zigzag.stages.LomaStage import LomaStage
+from zigzag.stages.input_parser_stages import AcceleratorParserStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage
+from zigzag.stages.save_stages import SimpleSaveStage
 
 # Get the onnx model, the mapping and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag inputs")

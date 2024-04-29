@@ -1,5 +1,4 @@
 from zigzag.datatypes import MemoryOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
@@ -23,7 +22,6 @@ class Core:
         self.id = id
         self.operational_array = operational_array
         self.memory_hierarchy = memory_hierarchy
-
         self.recalculate_memory_hierarchy_information()
 
     def __str__(self) -> str:
@@ -32,28 +30,25 @@ class Core:
     def __repr__(self) -> str:
         return str(self)
 
-    # JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):
         return json_repr_handler(self.__dict__)
 
     def __hash__(self) -> int:
         return hash(self.id)
 
-    def __eq__(self, __o: object) -> bool:
-        if not isinstance(__o, Core):
-            return False
-        return (
-            self.id == __o.id
-            and self.operational_array == __o.operational_array
-            and self.memory_hierarchy == __o.memory_hierarchy
-        )
-
     def equals(self, other: object) -> bool:
         return (
             isinstance(other, Core)
+            and self.id == other.id
             and self.operational_array == other.operational_array
             and self.memory_hierarchy == other.memory_hierarchy
         )
+
+    def get_memory_level(self, mem_op: MemoryOperand, mem_lv: int) -> MemoryLevel:
+        """! Returns a specific memory level in the memory hierarchy for the memory operand"""
+        # Sort the nodes topologically and filter out all memories that don't store mem_op
+        memory = [node for node in self.memory_hierarchy.topological_sort() if mem_op in node.operands]
+        return memory[mem_lv]
 
     def recalculate_memory_hierarchy_information(self):
         self.__generate_memory_hierarchy_dict()
@@ -104,7 +99,8 @@ class Core:
         self.mem_w_bw_min_dict = mem_w_bw_min_dict
 
     def __generate_memory_sharing_list(self):
-        """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same physical memory"""
+        """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same
+        physical memory"""
         memory_sharing_list: list[dict[MemoryOperand, int]] = []
         for mem_lv in self.mem_hierarchy_dict.values():
             for mem in mem_lv:

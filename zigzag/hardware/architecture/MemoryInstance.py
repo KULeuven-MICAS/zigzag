@@ -23,11 +23,11 @@ class MemoryInstance:
         auto_cost_extraction: bool = False,
         double_buffering_support: bool = False,
     ):
-        """! The class constructor
+        """
         Collect all the basic information of a physical memory module.
         @param name: memory module name, e.g. 'SRAM_512KB_BW_16b', 'I_RF'.
         @param size: total memory capacity (unit: bit).
-        @param r_bw/w_bw: memory bandwidth (or wordlength) (unit: bit/cycle).
+        @param r_bw/w_bw: memory bandwidth (or word length) (unit: bit/cycle).
         @param r_cost/w_cost: memory unit data access energy (unit: pJ/access).
         @param area: memory area (unit can be whatever user-defined unit).
         @param r_port: number of memory read port.

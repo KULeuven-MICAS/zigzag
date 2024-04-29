@@ -28,7 +28,7 @@ class SpatialMappingConversionStage(Stage):
     def __init__(
         self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, layer: LayerNode, **kwargs: Any
     ):
-        """! The class constructor
+        """
         Initialize the accelerator and layer attributes.
         """
         super().__init__(list_of_callables, **kwargs)

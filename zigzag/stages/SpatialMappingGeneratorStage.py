@@ -48,7 +48,7 @@ class SpatialMappingGeneratorStage(Stage):
         nb_mappings_generated: int = 3,
         **kwargs: Any,
     ):
-        """! The class constructor
+        """
         @param enable_mix_spatial_mapping_generation Indicate wether to generate `mixed` spatial mappings i.e. unroll
         multiple LayerDims over same OA Dim
         @param nb_mappings_generated Maximal number of mappings generated, to limit simulation time

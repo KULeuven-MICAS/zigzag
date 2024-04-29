@@ -23,7 +23,7 @@ class MemoryHierarchy(DiGraph):
         name: str = "Memory Hierarchy",
         **attr: Any,
     ):
-        """! The class constructor
+        """
         Initialize the memory hierarchy graph.
         The initialization sets the operational array this memory hierarchy will connect to.
         The graph nodes are the given nodes. The edges are extracted from the operands the memory levels store.
@@ -93,7 +93,7 @@ class MemoryHierarchy(DiGraph):
         self.mem_level_list.append(memory_level)
         self.memory_level_id += 1
 
-        # Precompute appropriate edges
+        # Pre-compute appropriate edges
         to_edge_from: set[MemoryLevel] = set()
         for mem_op in operands_parsed:
             # Find top level memories of the operands
