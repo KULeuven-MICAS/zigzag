@@ -1,5 +1,3 @@
-from zigzag.cost_model.cost_model import CostModelEvaluation
-
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.loma.LomaEngine import LomaEngine

@@ -1,4 +1,4 @@
-from typing import Any, Generator
+from typing import Any
 import os
 import pickle
 import json
