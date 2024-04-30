@@ -1,4 +1,0 @@
-<map id="item_exists" name="item_exists">
-<area shape="rect" id="node1" title="This function checks if the provided memory configuration was already used in the past." alt="" coords="133,5,232,32"/>
-<area shape="rect" id="node2" href="$classcacti__parser_1_1CactiParser.html#aae9a51d338ae80f570e0e5c193366654" title="This functions checks first if the memory with the provided parameters was already simulated once." alt="" coords="5,5,85,32"/>
-</map>

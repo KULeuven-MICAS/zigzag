@@ -1,5 +1,0 @@
-<map id="calc_energy" name="calc_energy">
-<area shape="rect" id="node1" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,42,105,69"/>
-<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="153,5,423,47"/>
-<area shape="rect" id="node3" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ab1b4f62c85a45ec1133298486549b22b" title="Calculate the dynamic MAC energy." alt="" coords="203,71,373,98"/>
-</map>

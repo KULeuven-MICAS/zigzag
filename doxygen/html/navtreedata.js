@@ -24,36 +24,12 @@
 */
 var NAVTREE =
 [
-  [ "ZigZag - Deep Learning Hardware Design Space Exploration", "index.html", [
-    [ "Cacti7_automation", "md__home_runner_work_zigzag_zigzag_zigzag_classes_cacti_README.html", null ],
-    [ "Package Functions", "namespacemembers.html", [
-      [ "All", "namespacemembers.html", null ],
-      [ "Functions", "namespacemembers_func.html", null ],
-      [ "Variables", "namespacemembers_vars.html", null ]
-    ] ],
-    [ "Classes", "annotated.html", [
-      [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ]
-      ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
-    ] ]
-  ] ]
+  [ "ZigZag - Deep Learning Hardware Design Space Exploration", "index.html", ]
 ];
 
 var NAVTREEINDEX =
 [
-"AimcArray_8py.html",
-"classcore_1_1Core.html",
-"classget__cacti__cost_1_1CactiConfig.html#a443926814c07635c63774d0b23c5ef4f",
-"classoperational__array_1_1OperationalArray.html#a668bc49f9e06cce6e422e6c9bd1ab6f9",
-"classzigzag_1_1classes_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ae901391514d161c6c6548dfab6888b09"
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

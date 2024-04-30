@@ -1,5 +1,0 @@
-<map id="get_operator_top_level" name="get_operator_top_level">
-<area shape="rect" id="node1" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="216,35,388,61"/>
-<area shape="rect" id="node2" href="$classmemory__hierarchy_1_1MemoryHierarchy.html#aec3b3042454ea17fdec1c37d20d2dd90" title="Adds a memory to the memory hierarchy graph." alt="" coords="33,5,141,32"/>
-<area shape="rect" id="node3" href="$classmemory__hierarchy_1_1MemoryHierarchy.html#afa317998d8d167b6c4449710490ac76e" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="5,57,168,98"/>
-</map>
