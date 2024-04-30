@@ -76,11 +76,12 @@ class GemmParser(Parser):
 
             return d
 
+        # Already verified in __init__, but helps with type hint
+        assert self.onnx_model is not None
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
         # The Gemm node includes flags for transpose of both of its inputs.
         # If the first input is transposed, we need to transpose its shape here.
-        # TODO this doesn't actually perform the transpose?
         transA = get_attribute_ints_with_name("transA", self.node.attribute, default=0)
         if transA:
             assert len(ia_dimension_shape) == 2

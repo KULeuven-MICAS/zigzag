@@ -1,7 +1,7 @@
 from typing import Any, TypeAlias
 import math
 
-from zigzag.datatypes import Dimension, MemoryOperand
+from zigzag.datatypes import OADimension, MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType, PortAllocation
 from zigzag.hardware.architecture.operational_array import OperationalArray
@@ -11,13 +11,11 @@ ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 
 
 class ServedMemDimensions:
-    """! Represents a collection of Operational Array Dimensions (served by some Memory Instance)
-    # TODO let this inherit from some `Attribute` ABC
-    """
+    """! Represents a collection of Operational Array Dimensions (served by some Memory Instance)"""
 
-    def __init__(self, data: set[Dimension]):
+    def __init__(self, data: set[OADimension]):
         assert isinstance(data, set)
-        assert all([isinstance(x, Dimension) for x in data])
+        assert all([isinstance(x, OADimension) for x in data])
         self.data = data
 
     def to_vec_format(self, nb_oa_dims: int, nb_operands: int) -> tuple[set[tuple[int, ...]], ...]:
@@ -25,14 +23,13 @@ class ServedMemDimensions:
         e.g. ({(1,0), (1,1)}, {(1,0), (1,1)}, {(1,0), (1,1)}) - identical copy for each memory operand
         # TODO replace the legacy code parts with the new representation
         """
-        assert all([x.id < nb_oa_dims for x in self.data])
         default = [0] * nb_oa_dims
         vec_single_operand: set[tuple[int, ...]] = set()
         if len(self.data) == 0:
             vec_single_operand = {tuple(default)}
-        for oa_dim in self.data:
+        for idx, _ in enumerate(sorted(list(self.data))):
             encoding = default.copy()
-            encoding[oa_dim.id] = 1
+            encoding[idx] = 1
             vec_single_operand.add(tuple(encoding))
 
         return tuple(vec_single_operand for _ in range(nb_operands))
@@ -40,16 +37,16 @@ class ServedMemDimensions:
     def nb_dims(self):
         return len(self.data)
 
-    def assert_valid(self, oa_dims: list[Dimension]) -> None:
+    def assert_valid(self, oa_dim_sizes: dict[OADimension, int]) -> None:
         """! Return True iff:
         - all served dimensions are contained within the given Operational Array Dimensions
         (Not the other way around: the served dimensions are a subset of the Dimensions of the Operational Array)
         @param oa_dims a list with OA Dimensions to compare to
         """
         assert all(
-            [served_dim in oa_dims for served_dim in self]
+            [served_dim in oa_dim_sizes for served_dim in self]
         ), f"""User-specified served dimensions {self.data} contains element not part of the Operational
-        Array Dimensions {oa_dims}"""
+        Array Dimensions {oa_dim_sizes.keys()}"""
 
     def to_user_format(self) -> ServedMemDimsUserFormat:
         return tuple(oa_dim.name for oa_dim in self)
@@ -64,7 +61,7 @@ class ServedMemDimensions:
     def __str__(self):
         return str(self.data)
 
-    def __contains__(self, other: Dimension):
+    def __contains__(self, other: OADimension):
         return other in self.data
 
     def __iter__(self):
@@ -79,7 +76,7 @@ class ServedMemDimensions:
         assert isinstance(x, tuple), "User provided served memory dimensions must be a tuple"
         assert all([isinstance(x, str) for x in x])
 
-        data = {Dimension.parse_user_input(oa_dim) for oa_dim in x}
+        data = {OADimension.parse_user_input(oa_dim) for oa_dim in x}
         return ServedMemDimensions(data)
 
 
@@ -100,20 +97,20 @@ class MemoryLevel:
         @param id: an identifier used for reference check.
         """
         self.memory_instance = memory_instance
-        self.name = self.memory_instance.name
-        # TODO encapsulate
+        # Convert to MemoryOperand
         self.operands = [MemoryOperand(x) for x in operands]
         self.mem_level_of_operands = mem_level_of_operands
-        self.oa_dims: list[Dimension] = operational_array.dimensions
+        self.oa_dim_sizes: dict[OADimension, int] = operational_array.oa_dim_sizes
         self.id: int = id
         self.served_dimensions: ServedMemDimensions = served_dimensions
-        self.served_dimensions.assert_valid(self.oa_dims)
+        self.served_dimensions.assert_valid(self.oa_dim_sizes)
+        self.name = self.memory_instance.name
 
         # To be compatible with legacy code
-        self.served_dimensions_vec = served_dimensions.to_vec_format(len(self.oa_dims), len(self.operands))
+        self.served_dimensions_vec = served_dimensions.to_vec_format(len(self.oa_dim_sizes), len(self.operands))
 
-        #  for each operand that current memory level holds, allocate
-        # physical memory ports to its 4 potential data movement
+        # for each operand that current memory level holds, allocate physical memory ports to its 4 potential data
+        # movement
         self.port_alloc_raw = port_alloc
         self.__allocate_ports()
 
@@ -166,7 +163,7 @@ class MemoryLevel:
     @property
     def unroll_count(self) -> int:
         """! Calculate how many times this memory instance is unrolled (duplicated) on the Operational Array"""
-        return math.prod(oa_dim.size for oa_dim in self.oa_dims if oa_dim in self.served_dimensions)
+        return math.prod(self.oa_dim_sizes[oa_dim] for oa_dim in self.oa_dim_sizes if oa_dim in self.served_dimensions)
 
     def __jsonrepr__(self):
         """! JSON Representation of this class to save it to a json file."""

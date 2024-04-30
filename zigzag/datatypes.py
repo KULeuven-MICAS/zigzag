@@ -73,41 +73,23 @@ class LayerDim(OperandABC):
         return new_instance
 
 
-class Dimension(OperandABC):
-    """! Operational Array Dimension
-    # TODO rename to `OADimension
-    """
+class OADimension(OperandABC):
+    """! Operational Array Dimension"""
 
-    def __init__(self, index: int = 0, name: str = "", size: int = 1):
-        """
-        @param index: The integer index of this Dimension.
-        @param name: The user-provided name of this Dimension.
-        @param size: The user-provided size of this Dimension.
-        """
+    def __init__(self, name: str):
+        assert bool(re.match(r"D\d", name)), f"OADimension {name} does not resemble `D1`"
         super().__init__(name)
-        self.id = index
-        self.size = size
 
     def __eq__(self, other: Any):
-        if not isinstance(other, Dimension):
-            return False
-        assert not (
-            self.id == other.id and self.name != other.name
-        ), "OADims found with same id but different name, perhaps this was a mistake?"
-        assert not (
-            self.name == other.name and self.id != other.id
-        ), "OADims found with same name but different id, perhaps this was a mistake?"
-        return self.id == other.id
+        return isinstance(other, OADimension) and other.name == self.name
 
     def __hash__(self):
-        return hash(self.id)
+        return hash(self.name)
 
     @staticmethod
     def parse_user_input(x: str):
-        assert bool(re.match(r"D\d", x)), f"User specified dimension {x} not recognized"
-        # Dimension id starts at 0, user format starts at D1
-        idx: int = int(re.findall(r"\d", x).pop()) - 1
-        return Dimension(idx, x)
+        assert bool(re.match(r"D\d", x)), f"OADimension {x} does not resemble `D1`"
+        return OADimension(x)
 
 
 class Constants:

@@ -48,7 +48,7 @@ class SalsaState:
         ordering: list[tuple[LayerDim, UnrollFactorInt]],
         opt_criterion_name: str,
     ):
-        assert opt_criterion_name in ("energy", "latency")  # TODO make this an enum
+        assert opt_criterion_name in ("energy", "latency")  # TODO make this an enum?
         self.ordering = ordering
         self.accelerator = accelerator
         self.layer = layer
@@ -74,7 +74,7 @@ class SalsaState:
         elif self.opt_criterion_name == "latency":
             self.opt_criterion = self.cme.latency_total0
 
-    def swap(self, i: int, j: int):
+    def swap(self, i: int, j: int) -> "SalsaState":
         """! Swap between the element at position i and j in the ordering and return the new resulting state."""
 
         swapped_ordering = deepcopy(self.ordering)

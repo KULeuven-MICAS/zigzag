@@ -5,7 +5,7 @@ import copy
 from typing import Any, Generator
 from sympy import divisors, primefactors  # type: ignore
 
-from zigzag.datatypes import Dimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
+from zigzag.datatypes import OADimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.Core import Core
@@ -69,11 +69,11 @@ class SpatialMappingGeneratorStage(Stage):
         self.layer_dim_sizes = self.layer.layer_dim_sizes
         core_id = layer.core_allocation
         self.core = self.accelerator.get_core(core_id)
-        self.oa_dims = self.core.operational_array.dimensions
+        self.oa_dim_sizes = self.core.operational_array.oa_dim_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
         self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
-        self.spatial_mapping_hint.complete_with_defaults(self.oa_dims, set(self.layer.layer_dims))
+        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, set(self.layer.layer_dims))
 
     def run(self):
         """! Generate SpatialMappings and convert to internal representation"""
@@ -117,21 +117,21 @@ class SpatialMappingGeneratorStage(Stage):
 
         # Start from the given mapping
         mapping_template = self.provided_mapping
-        mapping_template.initialize_oa_dims(self.oa_dims)
+        mapping_template.initialize_oa_dims(self.oa_dim_sizes)
         mapping_template.check_and_reduce(max_unrollings, self.layer_dim_sizes.data)
 
-        oa_dims_to_fill = [x for x in self.oa_dims if x not in mapping_template]
+        oa_dims_to_fill = [x for x in self.oa_dim_sizes if x not in mapping_template]
 
         # Full Spatial Mapping is already defined by user
         if len(oa_dims_to_fill) == 0:
-            assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims)
+            assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data)
             yield mapping_template
             return
 
-        # For each OA Dimension to fill, create a generator of MappingSingleOADim candidates
+        # For each OADimension to fill, create a generator of MappingSingleOADim candidates
         mappings_per_oa_dim: list[Generator[MappingSingleOADim, None, None]] = [
             self.generate_spatial_mapping_single_oa_dim(
-                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], oa_dim.size
+                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], self.oa_dim_sizes[oa_dim]
             )
             for oa_dim in oa_dims_to_fill
         ]
@@ -143,7 +143,7 @@ class SpatialMappingGeneratorStage(Stage):
             for idx, oa_dim in enumerate(oa_dims_to_fill):
                 candidate[oa_dim] = combination[idx]
             # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
-            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data, self.oa_dims):
+            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data):
                 candidate_mappings.append(candidate)
 
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
@@ -160,8 +160,8 @@ class SpatialMappingGeneratorStage(Stage):
             yield candidate
 
     def limit_unrolling_to_mem_bandwidth(
-        self, mapping: dict[Dimension, dict[LayerDim, UnrollFactorInt]]
-    ) -> dict[Dimension, dict[LayerDim, UnrollFactorInt]]:
+        self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
+    ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure"""
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
@@ -190,18 +190,18 @@ class SpatialMappingGeneratorStage(Stage):
 
         return mapping
 
-    def get_max_unrolling(self) -> dict[Dimension, dict[LayerDim, UnrollFactorInt]]:
+    def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Generate a SpatialMapping that contains the maximal unroll factor for every Operational
-        Array Dimension and every Layer Dimension. Note that this is NOT a valid mapping as each
-        OA Dimension contains ALL Layer Dimensions, maximally unrolled."""
+        Array OADimension and every Layer Dimensions. Note that this is NOT a valid mapping as each
+        OADimension contains ALL Layer Dimensions, maximally unrolled."""
 
-        # Initialize and limit unrolling to the size of the layer or the size of the OA Dimension
+        # Initialize and limit unrolling to the size of the layer or the size of the OADimension
         max_unrolling = {
             oa_dim: {
-                layer_dim: int(min(layer_size, oa_dim.size))
+                layer_dim: int(min(layer_size, self.oa_dim_sizes[oa_dim]))
                 for layer_dim, layer_size in self.layer.layer_dim_sizes.items()
             }
-            for oa_dim in self.oa_dims
+            for oa_dim in self.oa_dim_sizes
         }
 
         max_unrolling = self.limit_unrolling_to_mem_bandwidth(max_unrolling)
@@ -213,7 +213,7 @@ class SpatialMappingGeneratorStage(Stage):
         max_unrollings: dict[LayerDim, UnrollFactorInt],
         oa_dim_size: int,
     ) -> Generator[MappingSingleOADim, None, None]:
-        """! Generate a list of possible mappings for the given Operational Array Dimension. Possible mappings include
+        """! Generate a list of possible mappings for the given OADimension. Possible mappings include
         unrolling all LayerDims in `unroll_hints` for all unique divisors upto the maximal value defined in
         `max_unrolling`.
         """
@@ -233,7 +233,7 @@ class SpatialMappingGeneratorStage(Stage):
         max_unrolling: dict[LayerDim, UnrollFactorInt],
         unrolling_hints: set[LayerDim],
     ) -> Generator[MappingSingleOADim, None, None]:
-        """! Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimension,
+        """! Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimensions,
         generate new MappingSingleOADim instances that each contain multiple Layer Dimensions (`mixed`),
         constrained to the maximal Operational Array dimension that corresponds to the MappingSingleOADim
         instance.
@@ -301,8 +301,8 @@ class SpatialMappingGeneratorStage(Stage):
         act_served_oa_dims = act_served_oa_dims_list.pop()
         output_served_oa_dims = output_served_oa_dims_list.pop()
         # Get arbitrary served oa dim (there is only 1)
-        act_served_oa_dim: Dimension = next(iter(act_served_oa_dims))
-        output_served_oa_dim: Dimension = next(iter(output_served_oa_dims))
+        act_served_oa_dim: OADimension = next(iter(act_served_oa_dims))
+        output_served_oa_dim: OADimension = next(iter(output_served_oa_dims))
 
         # check if OX / OY in spatial_mapping_hint. Or else target_layer_dim will be empty.
         target_layer_dim: list[LayerDim] = [
@@ -321,7 +321,7 @@ class SpatialMappingGeneratorStage(Stage):
         # Check if the existed mapping size is more than half of current oa dim size.
         # If so, it means there is no space for extra mapping even with a size of 2.
         # In that case, we will do nothing but return the orignal spatial mapping
-        if exist_act_loop_size * 2 > act_served_oa_dim.size:
+        if exist_act_loop_size * 2 > self.oa_dim_sizes[act_served_oa_dim]:
             return spatial_mapping
 
         # fetch pr loop pairs for activation, e.g. {"IX": ["OX", "FX"]}
@@ -378,7 +378,9 @@ class SpatialMappingGeneratorStage(Stage):
 
             # try to find the maximum OX / OY and add it to the list
             # (1) check on act_served_oa_dim (ceil down to integer)
-            max_allowed_dim_size_on_act_served_dim = math.floor(act_served_oa_dim.size / exist_act_loop_size)
+            max_allowed_dim_size_on_act_served_dim = math.floor(
+                self.oa_dim_sizes[act_served_oa_dim] / exist_act_loop_size
+            )
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
 
@@ -388,7 +390,9 @@ class SpatialMappingGeneratorStage(Stage):
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
             )[0]
             max_allowed_dim_size_on_output_served_dim = (
-                output_served_oa_dim.size / weight_ir_loop_size / existed_pr_mapping_but_ir_to_current_layer_dim
+                self.oa_dim_sizes[output_served_oa_dim]
+                / weight_ir_loop_size
+                / existed_pr_mapping_but_ir_to_current_layer_dim
             ) - (existed_pr_mapping - 1)
             # ceil down to integer
             max_allowed_dim_size_on_output_served_dim = math.floor(max_allowed_dim_size_on_output_served_dim)
@@ -456,7 +460,7 @@ class SpatialMappingGeneratorStage(Stage):
                         # (2) check on act_served_oa_dim
                         comb_size = math.prod([v for v in comb_mapping.values()])
                         required_oa_dim_size = exist_act_loop_size * comb_size
-                        if required_oa_dim_size > act_served_oa_dim.size:
+                        if required_oa_dim_size > self.oa_dim_sizes[act_served_oa_dim]:
                             continue  # the comb is not possible on act_served_oa_dim
                         # (3) check on output_served_oa_dim
                         required_oa_dim_size = weight_ir_loop_size
@@ -466,12 +470,12 @@ class SpatialMappingGeneratorStage(Stage):
                             required_oa_dim_size *= new_mapping_size
                         if len(comb_mapping) == 1:  # only OX or OY
                             # add the other existed pr loop to required_oa_dim_size,
-                            # because previously it is not counted in output_served_oa_dim.size.
+                            # because previously it is not counted in output_served_self.oa_dim_sizes[oa_dim].
                             sole_dim = list(comb_mapping.keys())[0]
                             the_other_pr_mapping_name = [key for key in weight_r_loop.keys() if key != sole_dim][0]
                             the_other_pr_mapping_size = list(weight_r_loop[the_other_pr_mapping_name].values())[0]
                             required_oa_dim_size *= the_other_pr_mapping_size
-                        if required_oa_dim_size > output_served_oa_dim.size:
+                        if required_oa_dim_size > self.oa_dim_sizes[output_served_oa_dim]:
                             continue  # this comb is not possible on output_served_oa_dim
                         # (4) compare with best_comb
                         if comb_size > best_comb_size:
@@ -560,7 +564,7 @@ class SpatialMappingGeneratorStage(Stage):
         if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:
             return self.accelerator
 
-        act_served_oa_dim: Dimension = next(iter(act_served_oa_dims))
+        act_served_oa_dim: OADimension = next(iter(act_served_oa_dims))
         # get the mem scaling f#actor if OX, OY exist
         mem_scaling_factor: int = 1
         if act_served_oa_dim not in user_spatial_mapping:  # there is no sm loop

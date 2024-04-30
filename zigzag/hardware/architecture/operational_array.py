@@ -1,5 +1,6 @@
+from typing import Any
 import numpy as np
-from zigzag.datatypes import Dimension
+from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
 from zigzag.hardware.architecture.operational_unit import (
     OperationalUnit,
@@ -19,23 +20,22 @@ class OperationalArray:
         """
         self.unit: OperationalUnit = operational_unit
         self.total_unit_count = int(np.prod(list(dimensions.values())))
+        self.oa_dim_sizes: dict[OADimension, int] = {
+            OADimension(oa_dim_str): size for oa_dim_str, size in dimensions.items()
+        }
+
         if isinstance(operational_unit, OperationalUnit):
             self.total_area = operational_unit.area * self.total_unit_count
         else:  # branch for IMC
             self.total_area = operational_unit.area
 
-        self.dimensions: list[Dimension] = [
-            Dimension(idx, name, size) for idx, (name, size) in enumerate(dimensions.items())
-        ]
-
-    # JSON Representation of this class to save it to a json file.
     def __jsonrepr__(self):
-        return json_repr_handler({"operational_unit": self.unit, "dimensions": self.dimensions})
+        return json_repr_handler({"operational_unit": self.unit, "dimensions": self.oa_dim_sizes})
 
-    def __eq__(self, other) -> bool:
-        if not isinstance(other, OperationalArray):
-            return False
-        return self.unit == other.unit and self.dimensions == other.dimensions
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, OperationalArray) and self.unit == other.unit and self.oa_dim_sizes == other.oa_dim_sizes
+        )
 
 
 class MultiplierArray(OperationalArray):

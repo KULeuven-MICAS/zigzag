@@ -12,7 +12,7 @@ SpatialMappingPerMemLvl: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim
 def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNode") -> SpatialMappingPerMemLvl:
     """! This function decouples the pr loops into data size (r loops) and data reuse (ir loops).
     It also provides a transferred mapping dictionary in which the pr loops are replaced by r and ir loops.
-    # TODO requires cleanup
+    # TODO cleanup
     """
 
     relevancy_info = layer_node.loop_relevancy_info

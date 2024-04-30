@@ -387,7 +387,7 @@ class SearchUnusedMemoryStage(Stage):
         # check if mem serve all hardare dimensions
         core = accelerator.cores[0]
         operational_array = core.operational_array
-        oa_dim_nb = len(operational_array.dimensions)
+        oa_dim_nb = len(operational_array.oa_dim_sizes)
         mem_served_oa_dim_nb = mem.served_dimensions.nb_dims()
         return mem_served_oa_dim_nb == oa_dim_nb
 

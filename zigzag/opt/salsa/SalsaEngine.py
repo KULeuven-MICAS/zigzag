@@ -27,6 +27,7 @@
 #
 
 from copy import deepcopy
+from multiprocessing_on_dill import Queue
 from typing import Any
 from sympy.ntheory import factorint
 import numpy as np
@@ -38,9 +39,9 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.opt.temporal.loma.multipermute import permutations
+from zigzag.opt.loma.multipermute import permutations
 from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
-from zigzag.opt.temporal.salsa.state import SalsaState
+from zigzag.opt.salsa.SalsaState import SalsaState
 
 logger = logging.getLogger(__name__)
 
@@ -86,8 +87,9 @@ class SalsaEngine:
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.lpf_limit = kwargs.get("loma_lpf_limit", 4)
 
-    def run(self, cme_queue):
-        """! Call the necessary methods, start the processes and collect the best temporal mapping found during the run."""
+    def run(self, cme_queue: Queue):
+        """! Call the necessary methods, start the processes and collect the best temporal mapping found during the
+        run."""
         self.cme_queue = cme_queue
         self.get_temporal_loops()
         self.get_prime_factors()
@@ -129,8 +131,8 @@ class SalsaEngine:
             temperature = self.start_temperature * (0.995**it)
 
             # Get the index of the loop to swap
-            i = np.random.randint(0, len(current_state.ordering))
-            j = np.random.randint(0, len(current_state.ordering))
+            i = int(np.random.randint(0, len(current_state.ordering)))
+            j = int(np.random.randint(0, len(current_state.ordering)))
 
             # Swap the loops
             next_state = current_state.swap(i, j)

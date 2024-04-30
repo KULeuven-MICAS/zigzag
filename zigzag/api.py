@@ -27,6 +27,9 @@ def get_hardware_performance_zigzag(
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """
+    # TODO the API should probably be better documented
+    """
     # Initialize the logger
     import logging as _logging
 
@@ -74,7 +77,6 @@ def get_hardware_performance_zigzag(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=lpf_limit,  # required by LomaStage
         loma_show_progress_bar=True,
-        # TODO Enabling this option seems to cause errors
         enable_weight_diagonal_mapping=False,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,

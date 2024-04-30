@@ -1,12 +1,13 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 import matplotlib.pyplot as plt
+from networkx import Graph
 
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 
 
-def visualize_memory_hierarchy_graph(G: MemoryHierarchy, save_path: str = ""):
+def visualize_memory_hierarchy_graph(G: Graph, save_path: str = ""):
     """
     Visualizes a memory hierarchy graph.
     """

@@ -3,7 +3,7 @@ from typing import Any
 
 import numpy as np
 
-from zigzag.datatypes import Dimension
+from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal, SpatialMappingPerMemLvl
 from zigzag.mapping.spatial_mapping import (
@@ -35,11 +35,16 @@ class SpatialMappingConversionStage(Stage):
         self.layer = layer
         self.accelerator = accelerator
         self.memory_operand_links = layer.memory_operand_links
+        self.user_spatial_mapping = self.layer.user_spatial_mapping
+
+        assert (
+            self.user_spatial_mapping.oa_dim_sizes is not None
+        ), "SpatialMapping's OA Dimension sizes have not been initialized"
+        self.oa_dim_sizes: dict[OADimension, int] = self.user_spatial_mapping.oa_dim_sizes
 
     def run(self):
-        user_spatial_mapping = self.layer.user_spatial_mapping
 
-        spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(user_spatial_mapping)
+        spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(self.user_spatial_mapping)
 
         kwargs = self.kwargs.copy()
         kwargs["spatial_mapping"] = spatial_mapping
@@ -62,7 +67,6 @@ class SpatialMappingConversionStage(Stage):
         @param user_spatial_mapping: The SpatialMapping in `user-defined` format to be converted.
         @returns: A SpatialMappingInternal object with the converted spatial mapping.
         """
-        assert user_spatial_mapping.oa_dims_are_initialized()
 
         # Adjust the user defined spatial mapping size based on the operational array dimension and the layer dimension:
         # E.g. user-provided unrolling is 16 but operational array dimension size iso only 12: change unrolling to 12
@@ -125,7 +129,7 @@ class SpatialMappingConversionStage(Stage):
     def generate_limited_user_spatial_mapping(
         self,
         layer_dim_sizes: LayerDimSizes,
-        oa_dim: Dimension,
+        oa_dim: OADimension,
         spatial_loop: tuple[LayerDim, UnrollFactor],
         user_spatial_mapping: SpatialMapping,
         limited_user_spatial_mapping: SpatialMapping,
@@ -138,17 +142,18 @@ class SpatialMappingConversionStage(Stage):
             return None
 
         # Check 1: Limit unrolling if operational array dimension is smaller than provided unrolling
-        if unroll_factor > oa_dim.size:
+        oa_dim_size = self.oa_dim_sizes[oa_dim]
+        if unroll_factor > oa_dim_size:
             logger.warning(
                 "Provided unrolling (%s:%i) exceeds Operational Array size (%s:%i). Changing to (%s:%i).",
                 layer_dim,
                 unroll_factor,
                 oa_dim,
-                oa_dim.size,
+                oa_dim_size,
                 layer_dim,
-                oa_dim.size,
+                oa_dim_size,
             )
-            unroll_factor = oa_dim.size
+            unroll_factor = oa_dim_size
 
         # Check 2: Limit unrolling if layer dimension is smaller than provided unrolling or if the loop dim doesn't
         # exist (should be the case)
@@ -238,7 +243,7 @@ class SpatialMappingConversionStage(Stage):
         return mapping_per_mem_lvl
 
     def check_if_there_is_further_oa_mapping_for_current_layer_dim(
-        self, oa_dim: Dimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
+        self, oa_dim: OADimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
     ):
         """! For the case when there is layer dimension that is mapped on multiple oa dimensions.
         We need to decide on which oa dimension to adjust the unrolling
@@ -265,7 +270,7 @@ class SpatialMappingConversionStage(Stage):
         return no_more_mapping_for_current_layer_dim
 
     def calc_unrolled_loop_size_on_early_oa_dims(
-        self, oa_dim: Dimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
+        self, oa_dim: OADimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
     ) -> UnrollFactor:
         # calculate the unrolled loop size for the specific layer dim on oa dims earlier than current oa dim
         loop_unrolled_size_already = 1
