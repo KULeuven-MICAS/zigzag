@@ -38,9 +38,6 @@ import random
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.opt.loma.multipermute import permutations
-from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
 from zigzag.opt.salsa.SalsaState import SalsaState
 
 logger = logging.getLogger(__name__)
@@ -54,7 +51,8 @@ class SalsaEngine:
     - number of iterations
     - start temperature
     This optimization is carried out through simulated annealing loop order based.
-    Each loop is broken down to the smallest possible part (prime factors), then a runtime estimation is performed to choose the fastest engine to use (LOMA or SALSA).
+    Each loop is broken down to the smallest possible part (prime factors), then a runtime estimation is performed to
+    choose the fastest engine to use (LOMA or SALSA).
     # TODO cleanup
     """
 

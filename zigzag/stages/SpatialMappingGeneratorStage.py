@@ -5,12 +5,13 @@ import copy
 from typing import Any, Generator
 from sympy import divisors, primefactors  # type: ignore
 
-from zigzag.datatypes import OADimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
+from zigzag.datatypes import MemoryOperand, OADimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.memory_port import PortAllocUserFormat
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
@@ -600,9 +601,9 @@ class SpatialMappingGeneratorStage(Stage):
             assert len(served_dimensions_vec) >= 1
             served_dimensions = served_dimensions_vec[0]
 
-            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
-            new_operands: tuple[str] = pickle_deepcopy(operands)  # type: ignore
-            new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)  # type: ignore
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
+            new_operands: tuple[MemoryOperand, ...] = pickle_deepcopy(operands)
+            new_port_alloc: PortAllocUserFormat = pickle_deepcopy(port_alloc)
             new_served_dimensions = pickle_deepcopy(served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,

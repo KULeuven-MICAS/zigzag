@@ -1,5 +1,5 @@
 import pickle
-from typing import Generator, Any
+from typing import Any
 
 
 from zigzag.stages.Stage import Stage, StageCallable

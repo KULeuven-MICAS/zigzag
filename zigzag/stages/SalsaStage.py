@@ -54,7 +54,7 @@ class SalsaStage(Stage):
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
-        **kwargs : Any,
+        **kwargs: Any,
     ):
         """
         Initialize the SalsaStage by setting the accelerator, layer, and spatial mapping.
@@ -97,7 +97,7 @@ class SalsaStage(Stage):
 
         # Get the number of core the user wants to allocate
         if self.number_of_core_allocated <= multiprocessing.cpu_count():
-            self.number_of_core : int= self.number_of_core_allocated
+            self.number_of_core: int = self.number_of_core_allocated
         else:
             self.number_of_core = multiprocessing.cpu_count()
 
@@ -125,7 +125,7 @@ class SalsaStage(Stage):
         kwargs["layer"] = self.layer
         kwargs["spatial_mapping"] = self.spatial_mapping
         kwargs["temporal_mapping"] = self.best_cme.mapping.temporal_mapping
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs : Any)
+        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
 
         for cme, extra_info in sub_stage.run():
             yield cme, (self.best_cme.mapping.temporal_mapping, extra_info)
