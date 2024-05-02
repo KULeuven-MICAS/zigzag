@@ -2,7 +2,6 @@ import importlib
 from typing import Any
 
 
-from zigzag.io.AcceleratorParser import AcceleratorParser
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.DNNWorkload import DNNWorkload
 from zigzag.utils import pickle_deepcopy
@@ -10,20 +9,6 @@ from zigzag.utils import pickle_deepcopy
 import logging
 
 logger = logging.getLogger(__name__)
-
-
-class AcceleratorParserStage(Stage):
-
-    def __init__(self, list_of_callables: list[StageCallable], *, accelerator: str, **kwargs: Any):
-        super().__init__(list_of_callables, **kwargs)
-        self.accelerator_parser = AcceleratorParser(accelerator)
-
-    def run(self):
-        self.accelerator_parser.run()
-        accelerator = self.accelerator_parser.get_accelerator()
-        sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, **self.kwargs)
-        for cme, extra_info in sub_stage.run():
-            yield cme, extra_info
 
 
 class WorkloadParserStage(Stage):
@@ -61,8 +46,8 @@ class WorkloadParserStage(Stage):
         workload_copy: dict[int, dict[str, Any]] = pickle_deepcopy(workload_dict)
         workload_converted = DNNWorkload(workload_copy, mapping_dict)
         logger.info(
-            f"""Created workload graph with {workload_converted.number_of_nodes()} nodes and 
-            {workload_converted.number_of_edges()} edges."""
+            f"Created workload graph with {workload_converted.number_of_nodes()} nodes and "
+            f"{workload_converted.number_of_edges()} edges."
         )
 
         return workload_converted

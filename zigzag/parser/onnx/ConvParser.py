@@ -2,8 +2,8 @@ from math import ceil
 from typing import Any
 
 
-from zigzag.io.onnx.Parser import Parser
-from zigzag.io.onnx.utils import (
+from zigzag.parser.onnx.Parser import Parser
+from zigzag.parser.onnx.utils import (
     get_attribute_ints_with_name,
     get_node_input_output_dimension_shapes,
     get_onnx_tensor_type,

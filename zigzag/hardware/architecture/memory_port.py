@@ -2,7 +2,8 @@ from enum import StrEnum
 import re
 from typing import Any, TypeAlias
 
-from zigzag.datatypes import Constants, MemoryOperand
+from zigzag.datatypes import MemoryOperand
+from zigzag.parser.AcceleratorValidator import AcceleratorValidator
 
 
 class MemoryPortType(StrEnum):
@@ -77,67 +78,19 @@ class MemoryPort:
 
 
 class PortAllocation:
+    """Port allocation for a single memory instance. Stores which ports are available for which memory operands and
+    their corresponding direction.
+
+    """
+
     def __init__(self, data: dict[MemoryOperand, dict[DataDirection, str]]):
         assert all(
             [
-                all([isinstance(v, str) and re.match(r"^[r]?[w]?_port_\d+$", v) for v in d.values()])
+                all([isinstance(v, str) and re.match(AcceleratorValidator.PORT_REGEX, v) for v in d.values()])
                 for d in data.values()
             ]
         )
         self.data = data
 
-    def get_alloc_for_mem_op(self, mem_op: MemoryOperand):
+    def get_alloc_for_mem_op(self, mem_op: MemoryOperand) -> dict[DataDirection, str]:
         return self.data[mem_op]
-
-    @staticmethod
-    def get_default(mem_operands: list[MemoryOperand]) -> "PortAllocation":
-        data: dict[MemoryOperand, dict[DataDirection, str]] = dict()
-        for mem_op in mem_operands:
-            if mem_op == Constants.OUTPUT_MEM_OP:
-                data[mem_op] = {
-                    DataDirection.WR_IN_BY_HIGH: "w_port_1",
-                    DataDirection.WR_IN_BY_LOW: "w_port_1",
-                    DataDirection.RD_OUT_TO_HIGH: "r_port_1",
-                    DataDirection.RD_OUT_TO_LOW: "r_port_1",
-                }
-            else:
-                data[mem_op] = {
-                    DataDirection.WR_IN_BY_HIGH: "w_port_1",
-                    DataDirection.RD_OUT_TO_LOW: "r_port_1",
-                }
-        return PortAllocation(data)
-
-    @staticmethod
-    def parse_user_input(x: PortAllocUserFormat, mem_operands: list[MemoryOperand]) -> "PortAllocation":
-        """!
-        The order of the port allocations matches the order of the MemoryOperands from the given list.
-        """
-
-        def translate_to_data_direction(x: str) -> DataDirection:
-            match x:
-                case "fh":
-                    return DataDirection.WR_IN_BY_HIGH
-                case "fl":
-                    return DataDirection.WR_IN_BY_LOW
-                case "th":
-                    return DataDirection.RD_OUT_TO_HIGH
-                case "tl":
-                    return DataDirection.RD_OUT_TO_LOW
-                case _:
-                    raise ValueError(f"Data direction must be either `fh`, `th`, `fl`, or `tl`. Not {x}")
-
-        assert isinstance(x, tuple)
-        assert all([isinstance(d, dict) for d in x])
-        assert all([isinstance(d, dict) for d in x])
-        assert all([all([isinstance(k, str) for k in d.keys()]) for d in x])
-        assert all([all([isinstance(v, str) for v in d.values()]) for d in x])
-        assert all(
-            [all([re.match(r"^[r]?[w]?_port_\d+$", v) for v in d.values()]) for d in x]
-        ), "Port name should follow the pattern `r_`, `w_` or `rw_port_1`" + str(x)
-        assert len(x) == len(mem_operands)
-
-        data: dict[MemoryOperand, dict[DataDirection, str]] = {
-            mem_op: {translate_to_data_direction(k): v for k, v in x[idx].items()}
-            for idx, mem_op in enumerate(mem_operands)
-        }
-        return PortAllocation(data)

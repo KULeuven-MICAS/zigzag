@@ -1,11 +1,11 @@
 from typing import Any
 from onnx import ModelProto
 
-from zigzag.io.onnx.DefaultNodeParser import DefaultNodeParser
-from zigzag.io.onnx.GemmParser import GemmParser
-from zigzag.io.onnx.MatMulParser import MatMulParser
-from zigzag.io.onnx.ConvParser import ConvParser
-from zigzag.io.onnx.utils import (
+from zigzag.parser.onnx.DefaultNodeParser import DefaultNodeParser
+from zigzag.parser.onnx.GemmParser import GemmParser
+from zigzag.parser.onnx.MatMulParser import MatMulParser
+from zigzag.parser.onnx.ConvParser import ConvParser
+from zigzag.parser.onnx.utils import (
     parse_mapping_from_path,
     parse_onnx_model_from_path,
     parse_dynamic_onnx_model,

@@ -4,6 +4,7 @@ import math
 from typing import Any
 
 from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
+from zigzag.parser.accelerator_factory import AcceleratorFactory
 from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.utils import json_repr_handler
 
@@ -321,7 +322,7 @@ class SpatialMapping(LayerAttribute):
         for k, v in x.items():
             assert isinstance(k, str)
             assert isinstance(v, tuple)
-            oa_dim = OADimension.parse_user_input(k)
+            oa_dim = AcceleratorFactory.create_oa_dim(k)
             mapping_single_dim_dict: dict[LayerDim, UnrollFactor] = {}
 
             ## Nested layer dimensions e.g. (("FX", 3), ("FY", 3))
@@ -365,5 +366,8 @@ class SpatialMappingHint(LayerAttribute):
             return SpatialMappingHint.empty()
         assert isinstance(x, dict)
         return SpatialMappingHint(
-            {OADimension.parse_user_input(k): {LayerDim(layer_dim_str) for layer_dim_str in v} for k, v in x.items()}
+            {
+                AcceleratorFactory.create_oa_dim(k): {LayerDim(layer_dim_str) for layer_dim_str in v}
+                for k, v in x.items()
+            }
         )

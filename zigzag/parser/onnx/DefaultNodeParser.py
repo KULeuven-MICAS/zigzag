@@ -1,7 +1,7 @@
 from typing import Any
 
 from onnx import NodeProto
-from zigzag.io.onnx.Parser import Parser
+from zigzag.parser.onnx.Parser import Parser
 from zigzag.workload.DummyNode import DummyNode
 
 

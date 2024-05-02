@@ -4,6 +4,7 @@ from typing import Any, TypeAlias
 
 
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
+from zigzag.parser.AcceleratorValidator import AcceleratorValidator
 from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.datatypes import (
     Constants,
@@ -119,7 +120,7 @@ class LayerOperandPrecision(LayerAttribute):
         assert all([isinstance(k, str) for k in x.keys()])
         assert all([isinstance(k, int) for k in x.values()])
         assert (
-            Constants.OUTPUT_OPERAND_STR in x or Constants.FINAL_OUTPUT_OPERAND_STR in x
+            AcceleratorValidator.OUTPUT_OPERAND_STR in x or AcceleratorValidator.FINAL_OUTPUT_OPERAND_STR in x
         ), "Operand precision does not contain `O` or `O_final` as operand"
         data = {LayerOperand(operand_str): size for operand_str, size in x.items()}
         return LayerOperandPrecision(data)

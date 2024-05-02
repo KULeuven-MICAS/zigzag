@@ -1,7 +1,7 @@
 from typing import Any
 
 
-from zigzag.io.onnx.ONNXModelParser import ONNXModelParser
+from zigzag.parser.onnx.ONNXModelParser import ONNXModelParser
 from zigzag.stages.Stage import Stage, StageCallable
 
 import logging

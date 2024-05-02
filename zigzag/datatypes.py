@@ -2,6 +2,8 @@ from abc import ABCMeta
 import re
 from typing import Any, TypeAlias
 
+from zigzag.parser.AcceleratorValidator import AcceleratorValidator
+
 
 class OperandABC(metaclass=ABCMeta):
     """! Abstract Base Class for all dimension- and operand-like classes"""
@@ -77,7 +79,7 @@ class OADimension(OperandABC):
     """! Operational Array Dimension"""
 
     def __init__(self, name: str):
-        assert bool(re.match(r"D\d", name)), f"OADimension {name} does not resemble `D1`"
+        assert bool(re.match(AcceleratorValidator.DIMENSION_REGEX, name)), f"OADimension {name} does not resemble `D1`"
         super().__init__(name)
 
     def __eq__(self, other: Any):
@@ -86,29 +88,22 @@ class OADimension(OperandABC):
     def __hash__(self):
         return hash(self.name)
 
-    @staticmethod
-    def parse_user_input(x: str):
-        assert bool(re.match(r"D\d", x)), f"OADimension {x} does not resemble `D1`"
-        return OADimension(x)
+    # @staticmethod
+    # def parse_user_input(x: str):
+    #     assert bool(re.match(AcceleratorValidator.DIMENSION_REGEX, x)), f"OADimension {x} does not resemble `D1`"
+    #     return OADimension(x)
 
 
 class Constants:
     """! Store constant objects used throughout ZigZag (instead of hardcoding them)"""
 
-    # Intermediate output operand. Hard coded, and must be specified by the user as such
-    OUTPUT_OPERAND_STR = "O"
-    # Final output operand after scaling. Hard coded, and must be specified by the user as such
-    FINAL_OUTPUT_OPERAND_STR = "O_final"
+    OUTPUT_LAYER_OP = LayerOperand(AcceleratorValidator.OUTPUT_OPERAND_STR)
+    FINAL_OUTPUT_LAYER_OP = LayerOperand(AcceleratorValidator.FINAL_OUTPUT_OPERAND_STR)
+    OUTPUT_MEM_OP = MemoryOperand(AcceleratorValidator.OUTPUT_OPERAND_STR)
+    FINAL_OUTPUT_MEM_OP = MemoryOperand(AcceleratorValidator.FINAL_OUTPUT_OPERAND_STR)
 
-    OUTPUT_LAYER_OP = LayerOperand(OUTPUT_OPERAND_STR)
-    FINAL_OUTPUT_LAYER_OP = LayerOperand(FINAL_OUTPUT_OPERAND_STR)
-    OUTPUT_MEM_OP = MemoryOperand(OUTPUT_OPERAND_STR)
-    FINAL_OUTPUT_MEM_OP = MemoryOperand(FINAL_OUTPUT_OPERAND_STR)
-
-    MEM_OP_1_STR = "I1"
-    MEM_OP_2_STR = "I2"
-    MEM_OP_1 = MemoryOperand(MEM_OP_1_STR)
-    MEM_OP_2 = MemoryOperand(MEM_OP_2_STR)
+    MEM_OP_1 = MemoryOperand(AcceleratorValidator.MEM_OP_1_STR)
+    MEM_OP_2 = MemoryOperand(AcceleratorValidator.MEM_OP_2_STR)
 
 
 ###### Type aliases ######

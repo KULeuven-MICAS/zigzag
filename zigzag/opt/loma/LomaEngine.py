@@ -104,8 +104,8 @@ class LomaEngine:
         if not yielded:
             # TODO this warning is unclear: an invalid spatial mapping is not necessarily its cause
             raise NoValidLoopOrderingFoundException(
-                f"""No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is 
-                compatible with the architecture."""
+                f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is "
+                f"compatible with the architecture."
             )
 
     def get_temporal_loops(self) -> None:

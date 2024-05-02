@@ -1,4 +1,5 @@
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from numpy import isin
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
 from zigzag.utils import pickle_deepcopy
 
@@ -48,13 +49,18 @@ def get_temporal_spatial_loops(
     return temporal_loops, spatial_loops, memories
 
 
-def print_mapping(cme: CostModelEvaluation, offsets: int = 2):
+def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     """
     Prints a structured representation of a CostModelEvaluation mapping.
 
     :param cme: The CostModelEvaluation to print the mapping of.
     :param offsets: The number of spaces to offset nested loops.
     """
+    # Skip CumulativeCMEs
+    if isinstance(cme, CumulativeCME):
+        return
+    assert isinstance(cme, CostModelEvaluation)
+
     # Extract the temporal loops, spatial loops, and memories from the cme
     temporal_loops, spatial_loops, memories = get_temporal_spatial_loops(cme)
     loop_column_width = (
@@ -99,8 +105,8 @@ def print_mapping(cme: CostModelEvaluation, offsets: int = 2):
         print("".ljust(loop_column_width + 3 * memory_column_width, "="))
         print(f"{text.ljust(loop_column_width)}", end="")
         print(
-            f"""{operands[0]:<{memory_column_width}}{operands[1]:<{memory_column_width}}
-            {operands[2]:<{memory_column_width}}"""
+            f"{operands[0]:<{memory_column_width}}{operands[1]:<{memory_column_width}}"
+            f"{operands[2]:<{memory_column_width}}"
         )
         print("".ljust(loop_column_width + 3 * memory_column_width, "="))
 
