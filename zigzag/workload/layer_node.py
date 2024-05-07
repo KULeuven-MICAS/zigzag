@@ -15,8 +15,7 @@ from zigzag.datatypes import (
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
-    LayerAttributes,
-    LayerDimRelations,
+    LayerDimRelation,
     LayerDimSizes,
     LayerEquation,
     LayerOperandPrecision,
@@ -99,7 +98,23 @@ class LayerNode:
     """! Represents a single layer in a workload."""
 
     def __init__(
-        self, layer_id: int, layer_attrs: LayerAttributes, node_name: str | None = None, layer_type: str | None = None
+        self,
+        layer_id: int,
+        node_name: str,
+        *,
+        layer_type: str,
+        equation: LayerEquation,
+        layer_dim_sizes: LayerDimSizes,
+        operand_precision: LayerOperandPrecision,
+        dimension_relations: list[LayerDimRelation],
+        spatial_mapping: SpatialMapping,
+        spatial_mapping_hint: SpatialMappingHint,
+        core_allocation: int,
+        memory_operand_links: MemoryOperandLinks,
+        temporal_ordering: LayerTemporalOrdering,
+        padding: LayerPadding,
+        constant_operands: list[LayerOperand],
+        input_operand_source: InputOperandSource,
     ):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
@@ -111,24 +126,38 @@ class LayerNode:
         # TODO clean up this method. Too many lines for a clean init method.
         """
         self.id = layer_id
-        self.layer_attrs = layer_attrs
         self.name = node_name
-        self.type: str | None = layer_type
+        self.type = layer_type
+
+        self.equation = equation
+        self.layer_dim_sizes = layer_dim_sizes
+        self.operand_precision = operand_precision
+        self.dimension_relations = dimension_relations
+        self.spatial_mapping = spatial_mapping
+        self.spatial_mapping_hint = spatial_mapping_hint
+        self.core_allocation = core_allocation
+        self.memory_operand_links = memory_operand_links
+        self.temporal_ordering = temporal_ordering
+        self.padding = padding
+        self.constant_operands = constant_operands
+        self.input_operand_source = input_operand_source
 
         # Parsed attributes
-        self.equation: LayerEquation = layer_attrs.parse_equation()
-        self.layer_dim_sizes: LayerDimSizes = layer_attrs.parse_layer_dim_sizes()
-        self.operand_precision: LayerOperandPrecision = layer_attrs.parse_operand_precision()
-        self.dimension_relations: LayerDimRelations | None = layer_attrs.parse_layer_dim_relations()
-        self.user_spatial_mapping: SpatialMapping = layer_attrs.parse_spatial_mapping()
-        self.user_spatial_mapping_hint: SpatialMappingHint = layer_attrs.parse_spatial_mapping_hint()
-        self.core_allocation: int = layer_attrs.parse_core_allocation()
-        self.memory_operand_links: MemoryOperandLinks = layer_attrs.parse_mem_operand_links()
-        self.user_temporal_ordering: LayerTemporalOrdering | None = layer_attrs.parse_temporal_ordering()
-        self.padding: LayerPadding | None = layer_attrs.parse_padding()
-        self.constant_operands: list[LayerOperand] = layer_attrs.parse_constant_operands()
-        pr_layer_dim_sizes: LayerDimSizes | None = layer_attrs.parse_pr_layer_dim_sizes()
-        self.input_operand_source: InputOperandSource = layer_attrs.parse_operand_source()
+        # self.equation: LayerEquation = layer_attrs.parse_equation()
+        # self.layer_dim_sizes: LayerDimSizes = layer_attrs.parse_layer_dim_sizes()
+        # self.operand_precision: LayerOperandPrecision = layer_attrs.parse_operand_precision()
+        # self.dimension_relations: LayerDimRelations | None = layer_attrs.parse_layer_dim_relations()
+        # self.user_spatial_mapping: SpatialMapping = layer_attrs.parse_spatial_mapping()
+        # self.user_spatial_mapping_hint: SpatialMappingHint = layer_attrs.parse_spatial_mapping_hint()
+        # self.core_allocation: int = layer_attrs.parse_core_allocation()
+        # self.memory_operand_links: MemoryOperandLinks = layer_attrs.parse_mem_operand_links()
+        # self.user_temporal_ordering: LayerTemporalOrdering | None = layer_attrs.parse_temporal_ordering()
+        # self.padding: LayerPadding | None = layer_attrs.parse_padding()
+        # self.constant_operands: list[LayerOperand] = layer_attrs.parse_constant_operands()
+        # self.input_operand_source: InputOperandSource = layer_attrs.parse_operand_source()
+
+        # TODO should this be supported as user input?
+        # pr_layer_dim_sizes: LayerDimSizes | None = None
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
@@ -139,8 +168,8 @@ class LayerNode:
         self.pr_loop, pr_loop_list, self.pr_scaling_factors = self.build_pr_funcs()
         self.pr_layer_dim_sizes = (
             LayerDimSizes({dim: self.calc_pr_dimension_size_total(dim) for dim in self.pr_loop})
-            if (pr_layer_dim_sizes is None or len(pr_layer_dim_sizes) == 0)
-            else pr_layer_dim_sizes
+            # if (pr_layer_dim_sizes is None or len(pr_layer_dim_sizes) == 0)
+            # else pr_layer_dim_sizes
         )
         self.loop_relevancy_info = LoopRelevancyInfo.extract_relevancy_info(
             self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list
@@ -155,15 +184,15 @@ class LayerNode:
         """!
         # TODO requires documentation
         """
-        if self.dimension_relations is not None and len(self.dimension_relations) > 0:
-            pr_loop, pr_loop_list, pr_scaling_factors = self.dimension_relations.extract_pr_loop_info()
+        if len(self.dimension_relations) > 0:
+            pr_loop, pr_loop_list, pr_scaling_factors = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
     def __str__(self):
-        return f"LayerNode_{self.name}"
+        return self.name
 
     def __repr__(self):
         return str(self)
@@ -177,7 +206,7 @@ class LayerNode:
                 "loop_dimensions": self.layer_dim_sizes,
                 "operand_precision": self.operand_precision,
                 "core_allocation": self.core_allocation,
-                "user_spatial_mapping": self.user_spatial_mapping,
+                "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
                 # "source_storage_level": self.source_storage_level, # NOTE not used?
             }
@@ -237,7 +266,7 @@ class LayerNode:
         total_pr_dim_size = self.calc_pr_dimension_size(*args)
         # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and
         # subtract
-        padding = LayerPadding.DEFAULT if self.padding is None else self.padding[dim]
+        padding = LayerPadding.DEFAULT if dim not in self.padding else self.padding[dim]
         total_pr_dim_size_without_padding = int(total_pr_dim_size - sum(padding))
         return total_pr_dim_size_without_padding
 

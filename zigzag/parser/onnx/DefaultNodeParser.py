@@ -1,32 +1,28 @@
-from typing import Any
-
-from onnx import NodeProto
-from zigzag.parser.onnx.Parser import Parser
+from zigzag.parser.onnx.ONNXOperatorParser import ONNXOperatorParser
 from zigzag.workload.DummyNode import DummyNode
 
 
-class DefaultNodeParser(Parser):
+class DefaultNodeParser(ONNXOperatorParser):
     """! This class parses an ONNX node into a DummyNode."""
-
-    def __init__(self, node_id: int, node: NodeProto, nodes_outputs: dict[int, Any]) -> None:
-
-        super().__init__(node_id, node, nodes_outputs, mapping=None, onnx_model=None)
 
     def run(self) -> DummyNode:
         """! Run the parser"""
-        dummy_node = self.generate_dummy_node()
-        return dummy_node
+        return self.generate_dummy_node()
 
     def generate_dummy_node(self) -> DummyNode:
-        preds: list[int] = []
+        predecessors: list[int] = []
         for node_input in self.node.input:
             for n in self.nodes_outputs:
                 if node_input in self.nodes_outputs[n]:
-                    preds.append(n)
+                    predecessors.append(n)
+
+        # TODO DummyLayer cannot deal with two operand sources
+        # assert len(predecessors) <= 1, "Only a single layer operand source expected"
+        prev_node_id = None if len(predecessors) == 0 else predecessors.pop()
 
         node_obj = DummyNode(
             self.node_id,
-            preds,
+            prev_node_id,
             node_name=self.node.name,
             type=self.node.op_type.lower(),
         )

@@ -1,4 +1,4 @@
-from math import factorial, inf
+from math import factorial
 import operator
 from typing import Any, Generator
 from tqdm import tqdm

@@ -16,9 +16,8 @@ class ONNXModelParserStage(Stage):
         self.onnx_model_parser = ONNXModelParser(workload, mapping)
 
     def run(self):
-        self.onnx_model_parser.run()
-        onnx_model = self.onnx_model_parser.get_onnx_model()
-        workload = self.onnx_model_parser.get_workload()
+        workload = self.onnx_model_parser.run()
+        onnx_model = self.onnx_model_parser.onnx_model
 
         sub_stage = self.list_of_callables[0](
             self.list_of_callables[1:],

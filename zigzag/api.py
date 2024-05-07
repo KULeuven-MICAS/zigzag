@@ -29,7 +29,7 @@ def get_hardware_performance_zigzag(
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     """
-    # TODO the API should probably be better documented
+    # TODO the API should be better documented
     """
     # Initialize the logger
     import logging as _logging

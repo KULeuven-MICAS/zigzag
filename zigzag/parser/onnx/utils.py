@@ -1,18 +1,13 @@
-import enum
 import importlib
 import logging
 from dataclasses import dataclass
 from enum import auto
 from os import path
 from typing import Any, List
+from enum import Enum
 import pickle
-
 import onnx
-from onnx import AttributeProto, helper, compose
-from onnx import ModelProto
-from onnx import GraphProto
-from onnx import NodeProto
-from onnx import TypeProto
+from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +116,7 @@ def parse_dynamic_onnx_model(model: ModelProto) -> ModelProto:
     return new_model
 
 
-def get_attribute_ints_with_name(name: str, attrs: Any, default: Any = None):
+def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int | None = None) -> list[int] | int:
     """! Retrieves the attrs[name_idx].ints from attrs.
     If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
     If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
@@ -134,9 +129,9 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: Any = None):
         name_idx = attrs_names.index(name)
         attr_type = attrs[name_idx].type
         if attr_type == AttributeProto.AttributeType.INT:
-            return attrs[name_idx].i
+            return int(attrs[name_idx].i)
         elif attr_type == AttributeProto.AttributeType.INTS:
-            return attrs[name_idx].ints
+            return list(attrs[name_idx].ints)
         else:
             raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
     except ValueError:
@@ -146,7 +141,7 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: Any = None):
             raise ValueError(f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}.")
 
 
-class OnnxTensorCategory(enum.Enum):
+class OnnxTensorCategory(Enum):
 
     Input = auto()
     Output = auto()

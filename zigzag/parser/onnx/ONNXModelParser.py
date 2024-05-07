@@ -6,66 +6,43 @@ from zigzag.parser.onnx.GemmParser import GemmParser
 from zigzag.parser.onnx.MatMulParser import MatMulParser
 from zigzag.parser.onnx.ConvParser import ConvParser
 from zigzag.parser.onnx.utils import (
-    parse_mapping_from_path,
     parse_onnx_model_from_path,
     parse_dynamic_onnx_model,
 )
+from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.workload.ONNXWorkload import ONNXWorkload
 
 
 import logging
 
+
 logger = logging.getLogger(__name__)
 
 
 class ONNXModelParser:
-    """! Parse the ONNX model into a workload."""
+    """! Parses the ONNX model into a workload."""
 
-    def __init__(self, onnx_model: str | ModelProto, mapping_path: str | dict[str, dict[str, Any]] | None) -> None:
+    def __init__(self, onnx_model: str | ModelProto, mapping_yaml_path: str) -> None:
+        assert isinstance(onnx_model, (str, ModelProto)), f"Given onnx_model is of type {type(onnx_model)}."
+        assert isinstance(mapping_yaml_path, str) and mapping_yaml_path.split(".")[-1] == "yaml"
 
-        # Sanity checks on given onnx_model
         if isinstance(onnx_model, str):
-            self.onnx_model_path = onnx_model
-            self.onnx_model = None
-        elif isinstance(onnx_model, ModelProto):
-            self.onnx_model_path = None
+            self.onnx_model: ModelProto = parse_onnx_model_from_path(onnx_model)
+        else:
             self.onnx_model = onnx_model
-        else:
-            raise TypeError(f"Given onnx_model is of type {type(onnx_model)}.")
-
-        # Sanity checks on given mapping
-        if isinstance(mapping_path, str):
-            self.mapping_path = mapping_path
-            self.mapping = None
-        elif isinstance(mapping_path, dict):
-            self.mapping_path = None
-            self.mapping = mapping_path
-        elif mapping_path is None:
-            self.mapping_path = None
-            self.mapping = None
-        else:
-            raise TypeError(f"Given mapping is of type {type(mapping_path)}.")
 
         self.workload = None
+        self.mapping_yaml_path = mapping_yaml_path
 
-    def run(self):
-        """! Run the parser
-        - parse the onnx_model_path into an onnx model
-        - parse the mapping_path into a mapping dict
-        - iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes
-        """
-        if self.onnx_model_path is not None:
-            self.onnx_model = parse_onnx_model_from_path(self.onnx_model_path)
-        # Check for dynamicity in the model in the form of if statements
+    def run(self) -> ONNXWorkload:
+        """! Iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes"""
+
+        # Check for dynamically in the model in the form of if statements
         assert self.onnx_model is not None
         self.onnx_model = parse_dynamic_onnx_model(self.onnx_model)
+        self.mapping_data = WorkloadParserStage.parse_mapping_data(self.mapping_yaml_path)
 
-        if not self.mapping:
-            mapping = parse_mapping_from_path(self.mapping_path)
-            self.mapping = mapping
-
-        workload = self.parse_workload_from_onnx_model_and_mapping()
-        self.workload = workload
+        return self.parse_workload_from_onnx_model_and_mapping()
 
     def parse_workload_from_onnx_model_and_mapping(self):
         """! Converts an onnx model into a workload object.
@@ -74,7 +51,8 @@ class ONNXModelParser:
 
         If the model isn't in the format with external data, it will be slow to manipulate it, so better to work with
         raw models with external data. The line below accomplishes this.
-        onnx.save_model(model, 'model_external.onnx', save_as_external_data=True, all_tensors_to_one_file=True, location='model_external_raw_data', size_threshold=1024, convert_attribute=False)
+        onnx.save_model(model, 'model_external.onnx', save_as_external_data=True, all_tensors_to_one_file=True,
+        location='model_external_raw_data', size_threshold=1024, convert_attribute=False)
 
         In the future, assume we will have a model saved with external data, then we have to execute the code below
         if the model isn't inferred yet
@@ -98,28 +76,22 @@ class ONNXModelParser:
             nodes_outputs[node_id] = node.output
 
             if node.op_type in ["QLinearConv", "Conv"]:
-                parser = ConvParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+                parser = ConvParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
             elif node.op_type in ["MatMul"]:
-                parser = MatMulParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
+                parser = MatMulParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
             elif node.op_type in ["Gemm"]:
-                parser = GemmParser(node_id, node, nodes_outputs, self.mapping, self.onnx_model)
-            else:  # it is not a convolutional node, so create a DummyNode
+                parser = GemmParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
+            # it is not a convolutional node, so create a DummyNode
+            else:
                 parser = DefaultNodeParser(node_id, node, nodes_outputs)
+
             node_obj = parser.run()
             # Add the node_obj to the ONNXWorkload
             workload.add(node_id, node_obj)
 
         logger.info(  # pylint: disable=W1203
-            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and {workload.number_of_edges()} edges."
+            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and "
+            f"{workload.number_of_edges()} edges."  # type: ignore
         )
 
         return workload
-
-    def get_onnx_model(self):
-        return self.onnx_model
-
-    def get_mapping(self):
-        return self.mapping
-
-    def get_workload(self):
-        return self.workload

@@ -1,14 +1,13 @@
 from typing import Any
 
-import yaml
-
-
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.parser.accelerator_factory import AcceleratorFactory
 from zigzag.parser.AcceleratorValidator import AcceleratorValidator
 from zigzag.stages.Stage import Stage, StageCallable
 
 import logging
+
+from zigzag.utils import open_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -28,7 +27,7 @@ class AcceleratorParserStage(Stage):
             yield cme, extra_info
 
     def parse_accelerator(self) -> Accelerator:
-        accelerator_data = self.open_yaml(self.accelerator_yaml_path)
+        accelerator_data = open_yaml(self.accelerator_yaml_path)
 
         validator = AcceleratorValidator(accelerator_data)
         accelerator_data = validator.normalized_data
@@ -38,8 +37,3 @@ class AcceleratorParserStage(Stage):
 
         factory = AcceleratorFactory(accelerator_data)
         return factory.create()
-
-    def open_yaml(self, path: str):
-        with open(path, encoding="utf-8") as f:
-            data = yaml.safe_load(f)
-        return data

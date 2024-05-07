@@ -17,7 +17,7 @@ from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
 from zigzag.workload.layer_node import LayerNode
-from zigzag.utils import pickle_deepcopy
+from zigzag.utils import UniqueMessageFilter, pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
 from zigzag.mapping.spatial_mapping import (
     SpatialMapping,
@@ -26,6 +26,7 @@ from zigzag.mapping.spatial_mapping import (
 )
 
 logger = logging.getLogger(__name__)
+logger.addFilter(UniqueMessageFilter())
 
 
 class SpatialMappingGeneratorStage(Stage):
@@ -60,7 +61,7 @@ class SpatialMappingGeneratorStage(Stage):
 
         self.accelerator = accelerator
         self.layer = layer
-        self.provided_mapping = self.layer.user_spatial_mapping
+        self.provided_mapping = self.layer.spatial_mapping
 
         # Control parameters
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
@@ -73,7 +74,7 @@ class SpatialMappingGeneratorStage(Stage):
         self.oa_dim_sizes = self.core.operational_array.oa_dim_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
-        self.spatial_mapping_hint: SpatialMappingHint = self.layer.user_spatial_mapping_hint
+        self.spatial_mapping_hint: SpatialMappingHint = self.layer.spatial_mapping_hint
         self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, set(self.layer.layer_dims))
 
     def run(self):
@@ -103,7 +104,7 @@ class SpatialMappingGeneratorStage(Stage):
             )
 
             # Set the generated_mapping in the layer, as this is required by SpatialMappingConversionStage
-            self.layer.user_spatial_mapping = generated_mapping
+            self.layer.spatial_mapping = generated_mapping
 
             for cme, extra_info in spatial_mapping_conversion_stage.run():
                 # recover back the accelerator in case the memory size had been adjusted

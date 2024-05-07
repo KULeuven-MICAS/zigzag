@@ -1,6 +1,6 @@
-from typing import Any
 import logging
-import cerberus
+from typing import Any
+from cerberus import Validator
 
 
 logger = logging.getLogger(__name__)
@@ -92,7 +92,7 @@ class AcceleratorValidator:
 
     def __init__(self, data: Any):
         """Initialize Validator object, assign schema and store normalize user-given data"""
-        self.validator = cerberus.Validator()
+        self.validator = Validator()
         self.validator.schema = AcceleratorValidator.SCHEMA
         self.data: dict[str, Any] = self.validator.normalized(data)
         self.is_valid = True

@@ -1,4 +1,3 @@
-from numpy import isin
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
 from zigzag.utils import pickle_deepcopy

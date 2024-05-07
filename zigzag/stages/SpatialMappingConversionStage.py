@@ -35,7 +35,7 @@ class SpatialMappingConversionStage(Stage):
         self.layer = layer
         self.accelerator = accelerator
         self.memory_operand_links = layer.memory_operand_links
-        self.user_spatial_mapping = self.layer.user_spatial_mapping
+        self.user_spatial_mapping = self.layer.spatial_mapping
 
         assert (
             self.user_spatial_mapping.oa_dim_sizes is not None

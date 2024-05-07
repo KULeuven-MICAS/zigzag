@@ -134,22 +134,3 @@ class SumStage(Stage):
             total_cme += cme
             all_cmes.append((cme, extra_info))
         yield total_cme, all_cmes
-
-
-#
-# class ListifyStage:
-#     """! Class yields all the cost model evaluations yielded by its substages as a single list instead of as a generator.
-#     NOTE this cannot inherit from `Stage` because the return type of `run` is different"""
-
-#     def __init__(self, list_of_callables : list[StageCallable], **kwargs : Any) -> None:
-#         """! Initialize the compare stage."""
-#         super().__init__(list_of_callables, **kwargs)
-#         self.list: list[tuple[CostModelEvaluation, Any]] = []
-
-#     def run(self) -> Generator[tuple[list[tuple[CostModelEvaluation, Any]], Any], None, None]:
-#         """! Run the compare stage by comparing a new cost model output with the current best found result."""
-#         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
-
-#         for cme, extra_info in substage.run():
-#             self.list.append((cme, extra_info))
-#         yield self.list, None

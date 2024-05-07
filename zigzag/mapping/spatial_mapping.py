@@ -4,12 +4,12 @@ import math
 from typing import Any
 
 from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
-from zigzag.parser.accelerator_factory import AcceleratorFactory
 from zigzag.workload.LayerAttribute import LayerAttribute
-from zigzag.utils import json_repr_handler
+from zigzag.utils import UniqueMessageFilter, json_repr_handler
 
 
 logger = logging.getLogger(__name__)
+logger.addFilter(UniqueMessageFilter())
 
 
 class MappingSingleOADim:
@@ -17,7 +17,7 @@ class MappingSingleOADim:
 
     def __init__(self, data: dict[LayerDim, UnrollFactor]):
         # float type is used in `SpatialMappingConversionStage`
-        self.data: dict[LayerDim, UnrollFactor] | dict[LayerDim, float] = data
+        self.data: dict[LayerDim, UnrollFactor] = data
 
     @property
     def utilization(self):
@@ -168,8 +168,8 @@ class SpatialMapping(LayerAttribute):
                 max_unrolling = max_unrollings[oa_dim][layer_dim]
                 if unrolling > max_unrolling:
                     logger.warning(
-                        """User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling
-                        of %i. Reducing unrolling to this value.""",
+                        "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
+                        "of %i. Reducing unrolling to this value.",
                         layer_dim,
                         unrolling,
                         oa_dim,
@@ -304,44 +304,6 @@ class SpatialMapping(LayerAttribute):
     def empty() -> "SpatialMapping":
         return SpatialMapping({})
 
-    @staticmethod
-    def parse_user_input(x: dict[str, tuple[str, int] | tuple[tuple[str, int], ...]]) -> "SpatialMapping":
-        """! Parse legacy notation
-        Example input: {"D1": ("OX", 25), "D2": (("FX", 3), ("FY", 3))}
-        NOTE: this does not (yet) check wether the input sizes are valid
-        """
-        if x is None:  # type: ignore
-            return SpatialMapping.empty()
-
-        if isinstance(x, list):
-            raise NotImplementedError("No support for multiple provided spatial mappings by user")
-
-        assert isinstance(x, dict)
-
-        data: dict[OADimension, MappingSingleOADim] = {}
-        for k, v in x.items():
-            assert isinstance(k, str)
-            assert isinstance(v, tuple)
-            oa_dim = AcceleratorFactory.create_oa_dim(k)
-            mapping_single_dim_dict: dict[LayerDim, UnrollFactor] = {}
-
-            ## Nested layer dimensions e.g. (("FX", 3), ("FY", 3))
-            if all([isinstance(elem, tuple) and len(elem) == 2 for elem in v]):
-                v_nested: tuple[tuple[str, int], ...] = v  # type: ignore
-                for layer_dim, factor in v_nested:
-                    assert isinstance(layer_dim, str)
-                    assert isinstance(factor, int)
-                    mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
-            # e.g. ("OX", 3)
-            else:
-                assert len(v) == 2
-                v_single: tuple[str, int] = v  # type: ignore
-                layer_dim, factor = v_single
-                mapping_single_dim_dict[LayerDim(layer_dim)] = int(factor)
-
-            data[oa_dim] = MappingSingleOADim(mapping_single_dim_dict)
-        return SpatialMapping(data)
-
 
 class SpatialMappingHint(LayerAttribute):
     """! Suggested LayerDims to be unrolled for every OADimension"""
@@ -359,15 +321,3 @@ class SpatialMappingHint(LayerAttribute):
     @staticmethod
     def empty() -> "SpatialMappingHint":
         return SpatialMappingHint({})
-
-    @staticmethod
-    def parse_user_input(x: dict[str, list[str]]) -> "SpatialMappingHint":
-        if x is None:  # type: ignore
-            return SpatialMappingHint.empty()
-        assert isinstance(x, dict)
-        return SpatialMappingHint(
-            {
-                AcceleratorFactory.create_oa_dim(k): {LayerDim(layer_dim_str) for layer_dim_str in v}
-                for k, v in x.items()
-            }
-        )

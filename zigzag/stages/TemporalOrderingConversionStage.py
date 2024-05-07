@@ -38,7 +38,7 @@ class TemporalOrderingConversionStage(Stage):
         """! Run this stage by converting the user-defined temporal loop ordering
         to the memory-level based temporal mapping representation.
         """
-        temporal_mapping = self.convert_user_temporal_mapping(self.layer.user_temporal_ordering)
+        temporal_mapping = self.convert_user_temporal_mapping(self.layer.temporal_ordering)
         kwargs = self.kwargs.copy()
         kwargs["temporal_mapping"] = temporal_mapping
         kwargs["spatial_mapping"] = self.spatial_mapping
@@ -48,9 +48,9 @@ class TemporalOrderingConversionStage(Stage):
         for cme, extra_info in substage.run():
             yield cme, extra_info
 
-    def convert_user_temporal_mapping(self, user_temporal_mapping: LayerTemporalOrdering | None) -> TemporalMapping:
+    def convert_user_temporal_mapping(self, user_temporal_mapping: LayerTemporalOrdering) -> TemporalMapping:
         """!
-        # TODO move to `LayerTemporalOrdering`, fix types. What is user_temporal_mapping is None?
+        # TODO move to `LayerTemporalOrdering`, fix types.
         """
         spatial_mapping = self.spatial_mapping
         layer = self.layer

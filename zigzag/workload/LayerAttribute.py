@@ -4,9 +4,7 @@ from zigzag.utils import json_repr_handler
 
 
 class LayerAttribute(metaclass=ABCMeta):
-    """! Abstract Base Class to represent any layer attribute
-    # TODO make this `user_defined_attribute`
-    """
+    """! Abstract Base Class to represent any layer attribute"""
 
     @abstractmethod
     def __init__(self, data: Any):
@@ -32,7 +30,3 @@ class LayerAttribute(metaclass=ABCMeta):
 
     def __jsonrepr__(self) -> Any:
         return json_repr_handler(self.data)
-
-    @staticmethod
-    @abstractmethod
-    def parse_user_input(x: Any) -> "LayerAttribute": ...

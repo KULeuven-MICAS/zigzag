@@ -56,6 +56,8 @@ class AcceleratorFactory:
 
 
 class MemoryFactory:
+    """! Create MemoryInstances and adds them to memory hierarchy."""
+
     def __init__(self, name: str, mem_data: dict[str, Any]):
         self.data = mem_data
         self.name = name

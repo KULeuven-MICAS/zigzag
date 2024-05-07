@@ -70,7 +70,7 @@ memories:
     area: 0
     r_port: 0
     w_port: 0
-    rw_port: 0
+    rw_port: 1
     latency: 1
     operands: [I1, I2, O]
     ports:
