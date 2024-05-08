@@ -34,18 +34,9 @@ jobs:
           cd docs
           pip install -r requirements.txt
           sphinx-build --version
+          sphinx-apidoc -o source ..
           sphinx-build -b html source build
       
-      # Run doxygen, copy html files and enable ZigZag html icon
-      - name: build doxygen    
-        run: | 
-          cd docs
-          sudo apt-get install doxygen graphviz -y
-          doxygen doxygen-conf
-          mkdir build/doxygen
-          mv html/ build/doxygen/
-          cp source/zigzag_logo_white_32x32.svg build/doxygen/html/
-
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4
         with:
