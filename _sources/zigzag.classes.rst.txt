@@ -1,0 +1,18 @@
+zigzag.classes package
+======================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   zigzag.classes.stages
+
+Module contents
+---------------
+
+.. automodule:: zigzag.classes
+   :members:
+   :undoc-members:
+   :show-inheritance:
