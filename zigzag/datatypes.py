@@ -88,11 +88,6 @@ class OADimension(OperandABC):
     def __hash__(self):
         return hash(self.name)
 
-    # @staticmethod
-    # def parse_user_input(x: str):
-    #     assert bool(re.match(AcceleratorValidator.DIMENSION_REGEX, x)), f"OADimension {x} does not resemble `D1`"
-    #     return OADimension(x)
-
 
 class Constants:
     """! Store constant objects used throughout ZigZag (instead of hardcoding them)"""

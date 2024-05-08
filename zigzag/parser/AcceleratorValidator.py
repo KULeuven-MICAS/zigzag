@@ -23,7 +23,7 @@ class AcceleratorValidator:
         "memories": {
             "type": "dict",
             "required": True,
-            "valueschema": {
+            "valuesrules": {
                 "type": "dict",
                 "schema": {
                     "size": {"type": "integer", "required": True},
@@ -140,10 +140,11 @@ class AcceleratorValidator:
                 self.invalidate(f"Invalid served dimension {served_dimension} in memory {mem_name}")
 
         # Number of allocated ports per type equals given number of ports
+        port_data: list[dict[str, str]] = mem_data["ports"]
         r_ports: set[str] = set()
         w_ports: set[str] = set()
         rw_ports: set[str] = set()
-        for port_dict in mem_data["ports"]:
+        for port_dict in port_data:
             for port_name in port_dict.values():
                 match port_name[0:2]:
                     case "r_":
@@ -169,6 +170,14 @@ class AcceleratorValidator:
                 f"Number of given read/write ports ({mem_data['rw_port']}) does not equal number of allocated "
                 f"read/write ports ({len(rw_ports)}) for {mem_name}"
             )
+
+        # Direction of ports is valid
+        for port_dict in port_data:
+            for direction, port_name in port_dict.items():
+                if (direction == "fh" or direction == "fl") and (port_name.startswith("r_")):
+                    self.invalidate(f"Read port given for write direction in {mem_name}")
+                if (direction == "th" or direction == "tl") and (port_name.startswith("w_")):
+                    self.invalidate(f"Write port given for read direction in {mem_name}")
 
         # # Contains output operand - This is not required
         # if AcceleratorValidator.OUTPUT_OPERAND_STR not in mem_data["operands"]:

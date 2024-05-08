@@ -3,7 +3,6 @@ Copyright jdotjdot (https://github.com/pyeve/cerberus/issues/220#issuecomment-20
 """
 
 import copy
-from sre_constants import ANY
 from typing import Any
 from cerberus import Validator
 

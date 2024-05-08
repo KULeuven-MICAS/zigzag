@@ -223,7 +223,7 @@ class SearchUnusedMemoryStage(Stage):
             curr_id = self.layer_list[layer]  # current layer id (key) in mem_update_list
             # weight representation in memory
             if len(layer.constant_operands) == 1:
-                const_operand: MemoryOperand = layer.memory_operand_links[layer.constant_operands[0]]
+                const_operand = layer.memory_operand_links[layer.constant_operands[0]]
                 # act representation in memory
                 act_operand: MemoryOperand = layer.memory_operand_links[
                     [operand for operand in layer.input_operands if operand not in layer.constant_operands][0]

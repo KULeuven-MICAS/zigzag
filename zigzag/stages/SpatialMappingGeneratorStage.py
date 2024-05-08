@@ -85,8 +85,12 @@ class SpatialMappingGeneratorStage(Stage):
         assert nb_generated_mappings > 0, "No SpatialMappings found"
 
         for i, generated_mapping in enumerate(generated_mappings):
-            logger.info(  # pylint: disable=W1203
-                f"Launching spatial mapping {i+1}/{nb_generated_mappings}: {generated_mapping}."
+            logger.info(
+                "%s: Launching spatial mapping %i/%i :%s.",
+                self.layer.name,
+                (i + 1),
+                nb_generated_mappings,
+                generated_mapping,
             )
 
             # Modify the size of lower input mem to support weight diagonal spatial unrolling (for OX/OY)

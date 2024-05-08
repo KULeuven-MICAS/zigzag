@@ -8,7 +8,6 @@ How to use this file?
 
 import math
 
-from zigzag.opt.UserSpatialMappingGenerator import UserSpatialMappingGenerator
 
 if __name__ == "__main__":
     from imc_unit import ImcUnit

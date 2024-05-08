@@ -55,7 +55,7 @@ class LayerDimSizes(LayerAttribute):
     """! Contains the size of each computation loop as defined in the workload,
     e.g. `{'B': 1, 'K': 32, 'C': 64, 'OY': 28, 'OX': 28, 'FY': 1, 'FX': 1, 'G': 1`"""
 
-    def __init__(self, data: dict[LayerDim, UnrollFactor]):
+    def __init__(self, data: dict[LayerDim, UnrollFactorInt]):
         self.data = data
 
     @property

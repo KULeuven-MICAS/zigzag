@@ -65,6 +65,7 @@ class LayerNodeFactory:
         constant_operands = self.create_constant_operands()
         input_operand_source = self.create_operand_source()
         padding = self.create_padding()
+        pr_layer_dim_sizes = self.create_pr_layer_dim_sizes()
 
         # From mapping data
         mapping_factory = MappingFactory(layer_type, self.mapping_data)
@@ -90,6 +91,7 @@ class LayerNodeFactory:
             memory_operand_links=memory_operand_links,
             temporal_ordering=temporal_ordering,
             padding=padding,
+            pr_layer_dim_sizes=pr_layer_dim_sizes,
         )
 
     def create_equation(self) -> LayerEquation:
@@ -157,6 +159,15 @@ class LayerNodeFactory:
         }
         return LayerPadding(padding_dict)
 
+    def create_pr_layer_dim_sizes(self) -> LayerDimSizes | None:
+        if "pr_loop_sizes" not in self.node_data:
+            return None
+
+        pr_layer_dims: list[LayerDim] = [self.create_layer_dim(x) for x in self.node_data["pr_loop_dims"]]
+        pr_sizes: list[int] = self.node_data["pr_loop_sizes"]
+        size_dict = {layer_dim: size for layer_dim, size in zip(pr_layer_dims, pr_sizes)}
+        return LayerDimSizes(size_dict)
+
     @staticmethod
     def create_layer_dim(name: str) -> LayerDim:
         return LayerDim(name)
@@ -176,7 +187,7 @@ class MappingFactory:
             self.mapping_data: dict[str, Any] = next(filter(lambda x: x["name"] == operation_type, mapping_data))
         else:
             self.mapping_data = next(filter(lambda x: x["name"] == "default", mapping_data))
-            logger.warning("Operator %s not defined in mapping. Using default mapping instead", operation_type)
+            logger.warning("Operator %s not defined in mapping. Using default mapping instead.", operation_type)
 
     def get_core_allocation(self) -> int:
         return self.mapping_data["core_allocation"]

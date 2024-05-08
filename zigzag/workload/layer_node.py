@@ -115,6 +115,7 @@ class LayerNode:
         padding: LayerPadding,
         constant_operands: list[LayerOperand],
         input_operand_source: InputOperandSource,
+        pr_layer_dim_sizes: LayerDimSizes | None,
     ):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
@@ -156,9 +157,6 @@ class LayerNode:
         # self.constant_operands: list[LayerOperand] = layer_attrs.parse_constant_operands()
         # self.input_operand_source: InputOperandSource = layer_attrs.parse_operand_source()
 
-        # TODO should this be supported as user input?
-        # pr_layer_dim_sizes: LayerDimSizes | None = None
-
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
         self.output_operand: LayerOperand = self.layer_operands[0]
@@ -168,8 +166,8 @@ class LayerNode:
         self.pr_loop, pr_loop_list, self.pr_scaling_factors = self.build_pr_funcs()
         self.pr_layer_dim_sizes = (
             LayerDimSizes({dim: self.calc_pr_dimension_size_total(dim) for dim in self.pr_loop})
-            # if (pr_layer_dim_sizes is None or len(pr_layer_dim_sizes) == 0)
-            # else pr_layer_dim_sizes
+            if (pr_layer_dim_sizes is None or len(pr_layer_dim_sizes) == 0)
+            else pr_layer_dim_sizes
         )
         self.loop_relevancy_info = LoopRelevancyInfo.extract_relevancy_info(
             self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list

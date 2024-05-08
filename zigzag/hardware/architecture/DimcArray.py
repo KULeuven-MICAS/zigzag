@@ -398,7 +398,7 @@ class DimcArray(ImcUnit):
             # We then calculate the number of mapped rows in each macro.
             # As there might be OX / OY unrolling, which results in a diagonal mapping, we will have a special check on that
             # Firstly check if there is OX / OY unrolling
-            weight_ir_layer_dims: list = layer.[layer_const_operand]["ir"]
+            weight_ir_layer_dims: list = layer[layer_const_operand]["ir"]
             weight_ir_loop_on_wl_dim = False  # set default value
             if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
                 weight_ir_loop_on_wl_dim = True if sm_on_wl_dim[0] in weight_ir_layer_dims else False

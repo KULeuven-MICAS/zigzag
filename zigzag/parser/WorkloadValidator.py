@@ -1,8 +1,6 @@
 import logging
 from typing import Any
 
-from sympy import true
-
 # from cerberus import Validator
 
 from zigzag.parser.UpgradedValidator import UpgradedValidator
