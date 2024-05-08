@@ -1,0 +1,4 @@
+<map id="CostModelStage" name="CostModelStage">
+<area shape="rect" id="node1" title="Pipeline stage that calls a cost model to evaluate a mapping on a HW config." alt="" coords="5,80,133,107"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="40,5,99,32"/>
+</map>

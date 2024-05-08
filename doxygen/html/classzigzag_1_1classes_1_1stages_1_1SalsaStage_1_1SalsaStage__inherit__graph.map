@@ -1,0 +1,4 @@
+<map id="SalsaStage" name="SalsaStage">
+<area shape="rect" id="node1" title="Class that return the best temporal mapping found by the Simulated Annealing Loop&#45;ordering Scheduler ..." alt="" coords="5,80,100,107"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="23,5,82,32"/>
+</map>

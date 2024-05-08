@@ -1,0 +1,8 @@
+<map id="calc_MAC_energy_cost" name="calc_MAC_energy_cost">
+<area shape="rect" id="node1" title="Calculate the dynamic MAC energy." alt="" coords="891,42,1061,69"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="573,5,843,47"/>
+<area shape="rect" id="node6" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22ff0f507e556e080a27e79c267b09d" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="658,71,758,98"/>
+<area shape="rect" id="node3" href="$classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,17,525,43"/>
+<area shape="rect" id="node5" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="372,67,415,94"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,35,213,76"/>
+</map>

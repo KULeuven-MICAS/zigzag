@@ -1,0 +1,7 @@
+<map id="__init__" name="__init__">
+<area shape="rect" id="node1" title="The class constructor." alt="" coords="5,97,76,123"/>
+<area shape="rect" id="node2" href="$classmemory__level_1_1MemoryLevel.html#a6cd9c4b86713ce9fd99c1cfac74f7050" title="Assert if the served_dimension of this MemoryLevel is valid." alt="" coords="124,5,377,47"/>
+<area shape="rect" id="node3" href="$classadder__hierarchy_1_1AdderHierarchy.html#a22155fda71d16711354d9effac48d239" title="A valid adder hierarchy need to match operand_spatial_sharing (especially the output reduction dimens..." alt="" coords="200,71,301,98"/>
+<area shape="rect" id="node4" href="$classadder__hierarchy_1_1AdderHierarchy.html#a7edcaca84cb87a55aaacbe43e7cd75bf" title="From dimensions and operand_spatial_sharing defined by user, calculate total output&#45;sharing dimension..." alt="" coords="151,122,350,149"/>
+<area shape="rect" id="node5" href="$classadder__hierarchy_1_1AdderHierarchy.html#ab9c4cbd1d82021a644ad642d76de2a43" title="Construct adder level from the innermost level (close to multiplier) to the outermost." alt="" coords="165,173,337,199"/>
+</map>

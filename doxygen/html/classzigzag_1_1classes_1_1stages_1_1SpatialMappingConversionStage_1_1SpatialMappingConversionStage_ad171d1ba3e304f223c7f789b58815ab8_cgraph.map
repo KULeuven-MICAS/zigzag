@@ -1,0 +1,6 @@
+<map id="__init__" name="__init__">
+<area shape="rect" id="node1" title="The class constructor Initialize the accelerator and layer attributes." alt="" coords="5,71,76,97"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#aabad3f669570aa74fd9fef354b6f7074" title="Check the layer attribute of the main_inputs:" alt="" coords="217,5,317,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aabad3f669570aa74fd9fef354b6f7074" title=" " alt="" coords="124,56,409,112"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1classes_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html#aabad3f669570aa74fd9fef354b6f7074" title="Check the layer attribute of the main_inputs:" alt="" coords="131,136,402,192"/>
+</map>

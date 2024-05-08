@@ -1,0 +1,28 @@
+var classspatial__mapping_1_1SpatialMapping =
+[
+    [ "__init__", "classspatial__mapping_1_1SpatialMapping.html#affe6259bb9e2307adc4442483e91db8b", null ],
+    [ "__jsonrepr__", "classspatial__mapping_1_1SpatialMapping.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
+    [ "__repr__", "classspatial__mapping_1_1SpatialMapping.html#a9a47563093dfc5ba12274b66e368920c", null ],
+    [ "__str__", "classspatial__mapping_1_1SpatialMapping.html#a23e8041ce1015febe4fdace3225714f9", null ],
+    [ "calc_data_serve_scope", "classspatial__mapping_1_1SpatialMapping.html#ae7967c8d4e0d2e36538cd5275fad2a07", null ],
+    [ "calc_mem_bw_boost_factor", "classspatial__mapping_1_1SpatialMapping.html#a9bc4d10b339b7694f7b1ccabf59e7dc0", null ],
+    [ "calc_unit_count", "classspatial__mapping_1_1SpatialMapping.html#a7a8eadc13ab1a1f902862cbd046a8ef8", null ],
+    [ "calc_unroll_size", "classspatial__mapping_1_1SpatialMapping.html#adceaf4eab27ea6d800d11194e37c2781", null ],
+    [ "get_unrolling", "classspatial__mapping_1_1SpatialMapping.html#aa2c9d4c8282970bda3d167c1f0c329e6", null ],
+    [ "get_unrolling_all", "classspatial__mapping_1_1SpatialMapping.html#ad85b5789cc3e9a1f439f4f2239facd4d", null ],
+    [ "save_spatial_loop_dim_size", "classspatial__mapping_1_1SpatialMapping.html#a87e359be8063594da630da6cbd2dc9a8", null ],
+    [ "arch_level", "classspatial__mapping_1_1SpatialMapping.html#a3761bcd8f0ad87adeee3d484a58dd567", null ],
+    [ "data_serve_scope", "classspatial__mapping_1_1SpatialMapping.html#aebbe7326c30e28c8dad4453b6312bccc", null ],
+    [ "layer_node", "classspatial__mapping_1_1SpatialMapping.html#a8c358fbbc89e1cc3019ab7fd0cf7f317", null ],
+    [ "mapping_dict_origin", "classspatial__mapping_1_1SpatialMapping.html#a733b66cd9fa7c989f7766d114ed404fd", null ],
+    [ "mapping_dict_reform", "classspatial__mapping_1_1SpatialMapping.html#a0c6cd2bfeec93ff8f987ae6f21fe2ca6", null ],
+    [ "mem_bw_boost", "classspatial__mapping_1_1SpatialMapping.html#a762437e198d850e26d4476bbb0525942", null ],
+    [ "operand_list", "classspatial__mapping_1_1SpatialMapping.html#aeba8abf5c1c0d9160c08a2db01ecf78e", null ],
+    [ "spatial_loop_dim_size", "classspatial__mapping_1_1SpatialMapping.html#ac9e879d84b126d342d893f0940698aee", null ],
+    [ "unit_count", "classspatial__mapping_1_1SpatialMapping.html#ad03278c85d7f89240f914bba68191df2", null ],
+    [ "unit_duplicate", "classspatial__mapping_1_1SpatialMapping.html#a5b4ac1637fe0c3b014f9e17c8dfe60e0", null ],
+    [ "unit_unique", "classspatial__mapping_1_1SpatialMapping.html#aaad091068e3e2e7ca323cd3c564242d9", null ],
+    [ "unroll_size_ir", "classspatial__mapping_1_1SpatialMapping.html#a598da6d8d1b967812f6e867f292c9d25", null ],
+    [ "unroll_size_r", "classspatial__mapping_1_1SpatialMapping.html#a95e119fcafad269c55c5f0d9b28a4b5f", null ],
+    [ "unroll_size_total", "classspatial__mapping_1_1SpatialMapping.html#ad5bb6d1957b8922301aee5acd876c6ee", null ]
+];

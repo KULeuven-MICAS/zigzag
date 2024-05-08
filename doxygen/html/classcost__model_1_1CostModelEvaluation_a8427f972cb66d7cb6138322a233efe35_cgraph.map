@@ -1,0 +1,10 @@
+<map id="calc_latency" name="calc_latency">
+<area shape="rect" id="node1" title="Calculate latency in 4 steps." alt="" coords="5,177,108,204"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="179,5,348,61"/>
+<area shape="rect" id="node3" href="$classcost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="158,86,369,127"/>
+<area shape="rect" id="node4" href="$classcost__model_1_1CostModelEvaluation.html#a34f654d20dae08e1af87294fc1b7b3f6" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="176,152,351,179"/>
+<area shape="rect" id="node6" href="$classcost__model_1_1CostModelEvaluation.html#a3824b783ca11b11e88a01313a99cebc5" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="186,203,341,229"/>
+<area shape="rect" id="node7" href="$classcost__model_1_1CostModelEvaluation.html#a1460fbd3870e5773893c6f372c4673e5" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="175,254,352,295"/>
+<area shape="rect" id="node8" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#a1460fbd3870e5773893c6f372c4673e5" title="This function calculate the stalling cycles for IMC (In&#45;Memory&#45;Computing) hardware template Consider ..." alt="" coords="156,319,371,390"/>
+<area shape="rect" id="node5" href="$namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="419,145,592,186"/>
+</map>

@@ -1,7 +1,0 @@
-main\_onnx module
-=================
-
-.. automodule:: main_onnx
-   :members:
-   :undoc-members:
-   :show-inheritance:

@@ -1,7 +1,0 @@
-main\_onnx\_salsa module
-========================
-
-.. automodule:: main_onnx_salsa
-   :members:
-   :undoc-members:
-   :show-inheritance:

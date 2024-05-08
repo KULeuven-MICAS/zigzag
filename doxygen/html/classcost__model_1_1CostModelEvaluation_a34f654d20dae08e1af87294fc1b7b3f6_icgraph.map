@@ -1,0 +1,7 @@
+<map id="calc_double_buffer_flag" name="calc_double_buffer_flag">
+<area shape="rect" id="node1" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="675,39,849,65"/>
+<area shape="rect" id="node2" href="$classcost__model_1_1CostModelEvaluation.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="524,39,627,65"/>
+<area shape="rect" id="node3" href="$classcost__model_1_1CostModelEvaluation.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="347,5,390,32"/>
+<area shape="rect" id="node5" href="$classcost__model__for__sram__imc_1_1CostModelEvaluationForIMC.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model evaluation." alt="" coords="261,56,476,112"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,213,73"/>
+</map>

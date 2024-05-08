@@ -1,0 +1,4 @@
+<map id="remove_top_level" name="remove_top_level">
+<area shape="rect" id="node1" title="Removes the top level of this memory hierarchy." alt="" coords="5,5,144,32"/>
+<area shape="rect" id="node2" href="$classmemory__hierarchy_1_1MemoryHierarchy.html#a544afc2738f7727e985fbfdc5aa5960c" title="Returns the &#39;top&#39;&#45;most MemoryLevels, where &#39;the&#39; level of MemoryLevel is considered to be the largest..." alt="" coords="192,5,336,32"/>
+</map>

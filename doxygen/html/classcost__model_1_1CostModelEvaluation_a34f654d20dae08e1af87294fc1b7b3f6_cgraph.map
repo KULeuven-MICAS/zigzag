@@ -1,0 +1,4 @@
+<map id="calc_double_buffer_flag" name="calc_double_buffer_flag">
+<area shape="rect" id="node1" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="5,13,180,39"/>
+<area shape="rect" id="node2" href="$namespacecost__model.html#addfd72f2b701c2142cc9c9463b24bf7b" title="Given a certain operand&#39;s storage level (for example (A,1): operand A&#39;s 1st memory level),..." alt="" coords="228,5,401,47"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="allocate_node" name="allocate_node">
+<area shape="rect" id="node1" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="5,31,119,57"/>
+<area shape="rect" id="node2" href="$classmemory__allocator_1_1MemoryAllocator.html#aa8e11aa3495c9878d091d3c6bf0acf7d" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="206,5,331,32"/>
+<area shape="rect" id="node4" href="$classmemory__allocator_1_1MemoryAllocator.html#a27fc942d253c16d5f5df55d84cab1c4d" title="Find the best combination of loops from different mem_ops." alt="" coords="167,56,371,83"/>
+<area shape="rect" id="node3" href="$classmemory__allocator_1_1MemoryAllocator.html#a2ee18dda10d0934c8707685ed35fe161" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="419,5,541,32"/>
+</map>
