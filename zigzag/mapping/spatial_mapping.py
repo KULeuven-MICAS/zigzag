@@ -47,7 +47,7 @@ class MappingSingleOADim:
         self.data[key] = value  # type: ignore
 
     def __str__(self):
-        return str({str(k): str(v) for k, v in self.items()})
+        return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
 
     def __repr__(self):
         return str(self)
@@ -286,7 +286,7 @@ class SpatialMapping(LayerAttribute):
         return copy.deepcopy(self)
 
     def __str__(self):
-        return str({str(k): str(v) for k, v in self.items()})
+        return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
 
     def __eq__(self, other: Any) -> bool:
         """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""

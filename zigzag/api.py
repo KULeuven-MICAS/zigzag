@@ -1,7 +1,7 @@
 from onnx import ModelProto
-
-from typing import Any
 import re
+from datetime import datetime
+from typing import Any
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -24,7 +24,7 @@ def get_hardware_performance_zigzag(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/{datetime}.json",
+    dump_filename_pattern: str = f"outputs/{datetime.now()}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
