@@ -27,7 +27,11 @@ class MappingValidator:
         },
         "memory_operand_links": {
             "type": "dict",
-            "schema": {"O": {"type": "string"}, "W": {"type": "string"}, "I": {"type": "string"}},
+            "schema": {
+                "O": {"type": "string", "required": True},
+                "W": {"type": "string", "required": True},
+                "I": {"type": "string", "required": True},
+            },
             "default": {"O": "O", "I": "I1", "W": "I2"},
         },
         "spatial_mapping_hint": {
@@ -40,8 +44,6 @@ class MappingValidator:
             },
             "required": False,
         },
-        # TODO support temporal mapping (or remove concept from code altogether)
-        # TODO support padding (or remove concept from code altogether)
     }
 
     def __init__(self, data: Any):

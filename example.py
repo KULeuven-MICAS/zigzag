@@ -8,7 +8,7 @@ from zigzag.visualization.graph.memory_hierarchy import visualize_memory_hierarc
 
 
 model = "resnet"
-workload_path = "inputs/workload/resnet18.yaml"
+workload_path = "inputs/workload/resnet18.onnx"
 accelerator_path = "inputs/hardware/tpu_like.yaml"
 mapping_path = "inputs/mapping/tpu_like.yaml"
 pickle_filename = f"outputs/TPU-{model}-saved_list_of_cmes.pickle"
@@ -37,5 +37,5 @@ visualize_memory_hierarchy_graph(
     save_path="outputs/mem_hierarchy.png",
 )
 
-for cme in cmes:
-    print_mapping(cme)
+# for cme in cmes:
+#     print_mapping(cme)
