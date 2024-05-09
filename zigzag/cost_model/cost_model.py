@@ -1074,8 +1074,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
         required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
         requirements if the given memory instance is not included in this CME's memory hierarchy.
-        @param memory_instance
-        @return total_inst_bw
+        NOTE: this function is used in Stream
         """
         # Check which operands require offchip memory throughout the computation
         offchip_mem_operands: list[MemoryOperand] = []

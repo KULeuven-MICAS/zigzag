@@ -2,10 +2,9 @@ import re
 import logging
 from typing import Any
 
-from zigzag.datatypes import LayerDim, LayerOperand, OADimension, UnrollFactor
+from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, OADimension, UnrollFactor, UnrollFactorInt
 from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping, SpatialMappingHint
 from zigzag.parser.WorkloadValidator import WorkloadValidator
-from zigzag.parser.accelerator_factory import AcceleratorFactory
 from zigzag.utils import UniqueMessageFilter
 from zigzag.workload.DNNWorkload import DNNWorkload
 from zigzag.workload.layer_attributes import (
@@ -105,7 +104,7 @@ class LayerNodeFactory:
 
     def create_layer_dim_sizes(self) -> LayerDimSizes:
         loop_dims = [self.create_layer_dim(x) for x in self.node_data["loop_dims"]]
-        loop_sizes: list[UnrollFactor] = self.node_data["loop_sizes"]
+        loop_sizes: list[UnrollFactorInt] = self.node_data["loop_sizes"]
 
         data = {dim: size for dim, size in zip(loop_dims, loop_sizes)}
         return LayerDimSizes(data)
@@ -200,7 +199,7 @@ class MappingFactory:
         spatial_mapping_dict: dict[OADimension, MappingSingleOADim] = {}
 
         for oa_dim_str, unrolling_list in user_data.items():
-            oa_dim = AcceleratorFactory.create_oa_dim(oa_dim_str)
+            oa_dim = OADimension(oa_dim_str)
             mapping_this_oa_dim = self.create_mapping_single_oa_dim(unrolling_list)
             spatial_mapping_dict[oa_dim] = mapping_this_oa_dim
 
@@ -223,7 +222,7 @@ class MappingFactory:
 
         user_data: dict[str, list[str]] = self.mapping_data["spatial_mapping_hint"]
         mapping_hint_dict: dict[OADimension, set[LayerDim]] = {
-            AcceleratorFactory.create_oa_dim(oa_dim_str): {LayerDim(layer_dim_str) for layer_dim_str in hint_list}
+            OADimension(oa_dim_str): {LayerDim(layer_dim_str) for layer_dim_str in hint_list}
             for oa_dim_str, hint_list in user_data.items()
         }
         return SpatialMappingHint(mapping_hint_dict)
@@ -231,8 +230,7 @@ class MappingFactory:
     def create_memory_operand_links(self) -> MemoryOperandLinks:
         user_data: dict[str, str] = self.mapping_data["memory_operand_links"]
         links_dict = {
-            LayerNodeFactory.create_layer_operand(layer_op_str): AcceleratorFactory.create_memory_operand(mem_op_str)
-            for layer_op_str, mem_op_str in user_data.items()
+            LayerOperand(layer_op_str): MemoryOperand(mem_op_str) for layer_op_str, mem_op_str in user_data.items()
         }
         return MemoryOperandLinks(links_dict)
 

@@ -1,5 +1,5 @@
 from typing import Any
-from zigzag.datatypes import Constants, MemoryOperand, OADimension
+from zigzag.datatypes import Constants, LayerDim, MemoryOperand, OADimension, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
@@ -8,6 +8,7 @@ from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
 from zigzag.hardware.architecture.operational_array import MultiplierArray, OperationalArray
 from zigzag.hardware.architecture.operational_unit import Multiplier
+from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping
 
 
 class AcceleratorFactory:
@@ -21,15 +22,33 @@ class AcceleratorFactory:
         """! Create an Accelerator instance from the user-provided data.
         NOTE the memory instances must be defined from lowest to highest.
         """
+        core_factory = CoreFactory(self.data)
+        core = core_factory.create()
+        return Accelerator(name=self.data["name"], core_set={core})
+
+
+class CoreFactory:
+    """! Converts valid user-provided accelerator data into a `Core` instance"""
+
+    def __init__(self, data: dict[str, Any]):
+        """! Generate an `Core` instance from the validated user-provided data."""
+        self.data = data
+
+    def create(self, core_id: int = 1) -> Core:
+        """! Create an Core instance from the user-provided data.
+        NOTE the memory instances must be defined from lowest to highest.
+        """
         operational_array = self.create_operational_array()
         mem_graph = MemoryHierarchy(operational_array)
+        dataflows = self.create_dataflows()
 
         for mem_name in self.data["memories"]:
             memory_factory = MemoryFactory(mem_name, self.data["memories"][mem_name])
             memory_factory.add_memory_to_graph(mem_graph)
 
-        core = Core(id=1, operational_array=operational_array, memory_hierarchy=mem_graph)
-        return Accelerator(name=self.data["name"], core_set={core})
+        return Core(
+            core_id=core_id, operational_array=operational_array, memory_hierarchy=mem_graph, dataflows=dataflows
+        )
 
     def create_operational_array(self) -> OperationalArray:
         mul_data: dict[str, Any] = self.data["multipliers"]
@@ -41,18 +60,37 @@ class AcceleratorFactory:
 
         oa_dims: list[str] = mul_data["dimensions"]
         dimension_sizes: dict[OADimension, int] = {
-            self.create_oa_dim(oa_dim): mul_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
+            OADimension(oa_dim): mul_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
         }
         multiplier_array = MultiplierArray(multiplier, dimension_sizes)
         return multiplier_array
 
-    @staticmethod
-    def create_oa_dim(name: str) -> OADimension:
-        return OADimension(name)
+    def create_dataflows(self) -> SpatialMapping | None:
+        if "dataflows" not in self.data:
+            return None
+        if self.data["dataflows"] is None:
+            return None
 
-    @staticmethod
-    def create_memory_operand(name: str) -> MemoryOperand:
-        return MemoryOperand(name)
+        user_data: dict[str, list[str]] = self.data["dataflows"]
+        spatial_mapping_dict: dict[OADimension, MappingSingleOADim] = {}
+
+        for oa_dim_str, unrolling_list in user_data.items():
+            oa_dim = OADimension(oa_dim_str)
+            mapping_this_oa_dim = self.__create_dataflow_single_oa_dim(unrolling_list)
+            spatial_mapping_dict[oa_dim] = mapping_this_oa_dim
+
+        return SpatialMapping(spatial_mapping_dict)
+
+    def __create_dataflow_single_oa_dim(self, mapping_data: list[str]) -> MappingSingleOADim:
+        mapping_dict: dict[LayerDim, UnrollFactor] = {}
+
+        for single_unrolling in mapping_data:
+            layer_dim_str = single_unrolling.split(",")[0]
+            unrolling = int(single_unrolling.split(",")[-1])
+            layer_dim = LayerDim(layer_dim_str)
+            mapping_dict[layer_dim] = unrolling
+
+        return MappingSingleOADim(mapping_dict)
 
 
 class MemoryFactory:
@@ -95,7 +133,7 @@ class MemoryFactory:
         )
 
     def create_served_mem_dimensions(self) -> ServedMemDimensions:
-        data = {AcceleratorFactory.create_oa_dim(oa_dim_str) for oa_dim_str in self.data["served_dimensions"]}
+        data = {OADimension(oa_dim_str) for oa_dim_str in self.data["served_dimensions"]}
         return ServedMemDimensions(data)
 
     def create_port_allocation(self) -> PortAllocation:
@@ -105,7 +143,7 @@ class MemoryFactory:
         port_data: list[dict[str, str]] = self.data["ports"]
 
         data: dict[MemoryOperand, dict[DataDirection, str]] = {
-            AcceleratorFactory.create_memory_operand(mem_op_str): {
+            MemoryOperand(mem_op_str): {
                 self.translate_to_data_direction(direction): port_name
                 for direction, port_name in port_data[idx].items()
             }
@@ -116,7 +154,7 @@ class MemoryFactory:
     def create_default_port_allocation(self) -> PortAllocation:
         data: dict[MemoryOperand, dict[DataDirection, str]] = dict()
         for mem_op_str in self.data["operands"]:
-            mem_op = AcceleratorFactory.create_memory_operand(mem_op_str)
+            mem_op = MemoryOperand(mem_op_str)
             if mem_op == Constants.OUTPUT_MEM_OP:
                 data[mem_op] = {
                     DataDirection.WR_IN_BY_HIGH: "w_port_1",

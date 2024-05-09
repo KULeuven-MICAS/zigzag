@@ -58,7 +58,6 @@ class AcceleratorValidator:
                             },
                         },
                     },
-                    # "served_dimensions": {"type": "string", "required": True, "allowed": ["D1", "D2"]},
                     "served_dimensions": {
                         "type": "list",
                         "required": True,
@@ -87,6 +86,17 @@ class AcceleratorValidator:
                 },
                 "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 1}},
             },
+        },
+        "dataflows": {
+            "type": "dict",
+            "schema": {
+                "D1": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+                "D2": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+                "D3": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+                "D4": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+            },
+            "required": False,
+            "nullable": False,
         },
     }
 
