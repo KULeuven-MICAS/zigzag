@@ -78,7 +78,7 @@ class AcceleratorValidator:
                     "maxlength": 2,
                 },
                 "multiplier_energy": {"type": "float", "required": True},
-                "multiplier_area": {"type": "integer", "required": True},
+                "multiplier_area": {"type": "float", "required": True},
                 "dimensions": {
                     "type": "list",
                     "required": True,
