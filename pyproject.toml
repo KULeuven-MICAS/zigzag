@@ -32,7 +32,7 @@ dependencies = [
     'pyyaml',
     'tomli; python_version < "3.11"',
 ]
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 
 
 [project.optional-dependencies]
