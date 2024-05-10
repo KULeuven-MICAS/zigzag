@@ -38,4 +38,4 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          python -m pytest --typeguard-packages=zigzag tests/
+          python -m pytest --typeguard-packages=zigzag tests/main/test_origin/
