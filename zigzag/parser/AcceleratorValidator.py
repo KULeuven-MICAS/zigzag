@@ -31,7 +31,7 @@ class AcceleratorValidator:
                     "w_bw": {"type": "integer", "required": True},
                     "r_cost": {"type": "float", "required": True},
                     "w_cost": {"type": "float", "required": True},
-                    "area": {"type": "integer", "required": True},
+                    "area": {"type": "float", "required": True},
                     "r_port": {"type": "integer", "required": True},
                     "w_port": {"type": "integer", "required": True},
                     "rw_port": {"type": "integer", "required": True},
