@@ -30,9 +30,9 @@ dependencies = [
     'tqdm',
     'multiprocessing_on_dill',
     'pyyaml',
-    'tomli; python_version < "3.11"',
+    'tomli',
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 
 [project.optional-dependencies]
