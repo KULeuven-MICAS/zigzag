@@ -1,4 +1,0 @@
-<map id="run" name="run">
-<area shape="rect" id="node1" title="Runs the runnable." alt="" coords="5,20,48,47"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1classes_1_1stages_1_1MainInputParserStages.html#a6c3eb7e85e89200bde8b4f7da3b4d741" title="Parse the input workload residing in workload_path." alt="" coords="96,5,373,61"/>
-</map>

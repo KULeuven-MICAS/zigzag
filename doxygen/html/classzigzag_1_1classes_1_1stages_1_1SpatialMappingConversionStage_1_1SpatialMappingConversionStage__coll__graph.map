@@ -1,4 +1,0 @@
-<map id="SpatialMappingConversionStage" name="SpatialMappingConversionStage">
-<area shape="rect" id="node1" title="Pipeline stage that converts the spatial mapping from a user&#45;provided spatial mapping across operatio..." alt="" coords="5,80,201,121"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="74,5,133,32"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="get_delay" name="get_delay">
-<area shape="rect" id="node1" title="get delay of imc macros (worst path: dacs &#45;&gt; mults &#45;&gt; adcs &#45;&gt; adders &#45;&gt; accumulators)" alt="" coords="5,31,92,57"/>
-<area shape="rect" id="node2" href="$classAimcArray_1_1AimcArray.html#ab9b08098b91c90468bf35e05e1c983e1" title=" " alt="" coords="140,5,247,32"/>
-<area shape="rect" id="node3" href="$classAimcArray_1_1AimcArray.html#a1f5ce72ed2f3a6e36741f66f8f7dfb9d" title=" " alt="" coords="140,56,247,83"/>
-</map>

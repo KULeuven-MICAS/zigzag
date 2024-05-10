@@ -1,7 +1,0 @@
-<map id="get_single_cell_array_cost_from_cacti" name="get_single_cell_array_cost_from_cacti">
-<area shape="rect" id="node1" title=" " alt="" coords="561,39,721,80"/>
-<area shape="rect" id="node2" href="$classAimcArray_1_1AimcArray.html#aa10a579ff9076a72afe56f183c7a8213" title="get area of AIMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="293,21,512,47"/>
-<area shape="rect" id="node5" href="$classDimcArray_1_1DimcArray.html#aa10a579ff9076a72afe56f183c7a8213" title="area of imc macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="292,71,513,98"/>
-<area shape="rect" id="node3" href="$classAimcArray_1_1AimcArray.html#a04279f840c374a0a5c3d6b12a81d3452" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="5,5,244,47"/>
-<area shape="rect" id="node4" href="$classDimcArray_1_1DimcArray.html#a04279f840c374a0a5c3d6b12a81d3452" title=" " alt="" coords="5,71,244,112"/>
-</map>

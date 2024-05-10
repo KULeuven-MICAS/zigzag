@@ -1,7 +1,0 @@
-<map id="run" name="run">
-<area shape="rect" id="node1" title="Run the simple save stage by running the substage and saving the CostModelEvaluation simple json repr..." alt="" coords="5,53,48,80"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage.html#aebc480151867260418fc93deed575a99" title=" " alt="" coords="96,5,327,61"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage.html#aebc480151867260418fc93deed575a99" title=" " alt="" coords="158,85,265,112"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1CompleteSaveStage.html#a1769a06f968be8773ae41725bf73bc39" title=" " alt="" coords="375,5,629,61"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1classes_1_1stages_1_1SaveStage_1_1SimpleSaveStage.html#a1769a06f968be8773ae41725bf73bc39" title=" " alt="" coords="437,85,567,112"/>
-</map>

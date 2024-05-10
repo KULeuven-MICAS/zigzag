@@ -1,5 +1,0 @@
-<map id="check_layer" name="check_layer">
-<area shape="rect" id="node1" title="Check the layer attribute of the main_inputs:" alt="" coords="305,39,405,65"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1classes_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#ad171d1ba3e304f223c7f789b58815ab8" title="The class constructor Initialize the accelerator and layer attributes." alt="" coords="96,5,167,32"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1classes_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html#aeca7ca86141553363b944be71b70c9cc" title="The class constructor Initialize the accelerator and layer attributes." alt="" coords="5,56,257,112"/>
-</map>

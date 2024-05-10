@@ -1,7 +1,0 @@
-<map id="parse_dynamic_onnx_model" name="parse_dynamic_onnx_model">
-<area shape="rect" id="node1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="5,49,165,90"/>
-<area shape="rect" id="node2" href="$namespaceutils.html#a9c6d5faf0e5a5361c9c681771432b498" title=" " alt="" coords="213,5,373,32"/>
-<area shape="rect" id="node4" href="$namespaceutils.html#a126f93938e1b985a3ff09eba0da3d3e0" title=" " alt="" coords="245,56,341,83"/>
-<area shape="rect" id="node5" href="$namespaceutils.html#a6a6d50ac0c550fcd9fbddc15602182a3" title=" " alt="" coords="231,107,356,133"/>
-<area shape="rect" id="node3" href="$namespaceutils.html#ada7a29b58004dd6ba5231b3910cd1160" title=" " alt="" coords="421,5,531,32"/>
-</map>
