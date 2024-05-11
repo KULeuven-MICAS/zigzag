@@ -1,5 +1,5 @@
 - name: default
-  core_allocation: 1
+  core_allocation: [1]
   memory_operand_links:
     O: O
     W: I2
@@ -14,7 +14,7 @@
       - FY
 
 - name: Add
-  core_allocation: 1
+  core_allocation: [1]
   memory_operand_links:
     O: O
     W: I2

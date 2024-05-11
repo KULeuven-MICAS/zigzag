@@ -1,5 +1,5 @@
 - name: default
-  core_allocation: 1
+  core_allocation: [1]
   spatial_mapping:
     D1:
       - K, 16
@@ -15,7 +15,7 @@
     I: I1
 
 - name: Add
-  core_allocation: 1
+  core_allocation: [1]
   spatial_mapping:
     D1:
       - G, 16

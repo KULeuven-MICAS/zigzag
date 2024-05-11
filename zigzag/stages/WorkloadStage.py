@@ -32,7 +32,7 @@ class WorkloadStage(Stage):
             # Skip a layer if the layer type is "Pooling" and the hardware template is an IMC core.
             # This wil have impact when the workload is defined manually.
             # If the workload is from onnx, no skipping will be done.
-            core_id: int = layer.core_allocation
+            core_id: int = layer.core_allocation[0]
             core = self.accelerator.get_core(core_id)
             operational_array = core.operational_array
             pe_type = getattr(operational_array, "pe_type", None)

@@ -53,7 +53,7 @@ class SalsaState:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
-        self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(layer.core_allocation).memory_hierarchy
+        self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(layer.core_allocation[0]).memory_hierarchy
         self.opt_criterion_name = opt_criterion_name
 
         allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)

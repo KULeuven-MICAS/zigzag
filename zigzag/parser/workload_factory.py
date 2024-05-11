@@ -191,7 +191,7 @@ class MappingFactory:
             self.mapping_data = next(filter(lambda x: x["name"] == "default", mapping_data))
             logger.warning("Operator %s not defined in mapping. Using default mapping instead.", operation_type)
 
-    def get_core_allocation(self) -> int:
+    def get_core_allocation(self) -> list[int]:
         return self.mapping_data["core_allocation"]
 
     def create_spatial_mapping(self) -> SpatialMapping:

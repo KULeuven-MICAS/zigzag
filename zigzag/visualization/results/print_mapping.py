@@ -13,7 +13,7 @@ def get_temporal_spatial_loops(
     """
     # TODO documentation, split this up into multiple, sensible functions
     """
-    core = cme.accelerator.get_core(cme.layer.core_allocation)
+    core = cme.accelerator.get_core(cme.layer.core_allocation[0])
     operand_links = cme.layer.memory_operand_links
 
     tm: dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]] = pickle_deepcopy(

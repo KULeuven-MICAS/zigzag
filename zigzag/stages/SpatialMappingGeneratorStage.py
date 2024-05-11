@@ -69,7 +69,7 @@ class SpatialMappingGeneratorStage(Stage):
         self.nb_mappings_generated = nb_mappings_generated
 
         self.layer_dim_sizes = self.layer.layer_dim_sizes
-        core_id = layer.core_allocation
+        core_id = layer.core_allocation[0]
         self.core = self.accelerator.get_core(core_id)
         self.oa_dim_sizes = self.core.operational_array.oa_dim_sizes
         self.memory_hierarchy = self.core.memory_hierarchy

@@ -68,7 +68,7 @@ class LomaEngine:
         # TODO: Take into account that data might be stored in lower level,
         # TODO: thus adapt the memory hierarchy.
         # TODO: The fact that there is a global buffer above the cores requires attention.
-        core_id = layer.core_allocation
+        core_id = layer.core_allocation[0]
         self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(core_id).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)

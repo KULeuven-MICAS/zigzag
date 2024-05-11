@@ -13,7 +13,7 @@ class MappingValidator:
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True, "allowed": WorkloadValidator.ALLOWED_OPERATORS + ["default"]},
-        "core_allocation": {"type": "integer", "default": 1},
+        "core_allocation": {"type": "list", "schema": {"type": "integer"}, "default": [0]},
         "spatial_mapping": {
             "type": "dict",
             "schema": {

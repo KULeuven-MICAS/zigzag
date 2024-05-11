@@ -104,7 +104,7 @@ class LayerNodeAttributes:
     dimension_relations: list[LayerDimRelation]
     spatial_mapping: SpatialMapping
     spatial_mapping_hint: SpatialMappingHint
-    core_allocation: int
+    core_allocation: list[int]
     memory_operand_links: MemoryOperandLinks
     temporal_ordering: LayerTemporalOrdering
     padding: LayerPadding

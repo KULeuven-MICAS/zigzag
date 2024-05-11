@@ -104,7 +104,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             continue
         assert isinstance(cme, CostModelEvaluation)
 
-        mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation).memory_hierarchy
+        mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation[0]).memory_hierarchy
         mac_costs[idx] = cme.MAC_energy
         la_break_down[idx]["Ideal computation"] = cme.ideal_cycle
         la_break_down[idx]["Spatial stall"] = cme.ideal_temporal_cycle - cme.ideal_cycle

@@ -299,7 +299,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
-        self.core_id = layer.core_allocation
+        self.core_id = layer.core_allocation[0]
         core = accelerator.get_core(self.core_id)
         self.mem_level_list = core.memory_hierarchy.mem_level_list
         self.mem_hierarchy_dict = core.mem_hierarchy_dict
