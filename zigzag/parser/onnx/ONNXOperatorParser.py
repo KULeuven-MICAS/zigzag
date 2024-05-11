@@ -4,8 +4,7 @@ from typing import Any
 from onnx import ModelProto, NodeProto
 
 from zigzag.parser.onnx.utils import get_onnx_tensor_type
-from zigzag.workload.DummyNode import DummyNode
-from zigzag.workload.layer_node import LayerNode
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 
 class ONNXOperatorParser(metaclass=ABCMeta):
@@ -24,7 +23,7 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         self.onnx_model = onnx_model
 
     @abstractmethod
-    def run(self) -> LayerNode | DummyNode: ...
+    def run(self) -> LayerNodeABC: ...
 
     def get_input_output_weight_data_type(self):
         """! Return the data type of the input, output and weight tensors of this node."""

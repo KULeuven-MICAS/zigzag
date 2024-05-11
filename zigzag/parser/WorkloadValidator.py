@@ -13,7 +13,17 @@ class WorkloadValidator:
     EQUATION_REGEX = r"^O(\[\w+\])+\+?=\w(\[\w+\])+[*+]\w(\[\w+\])+$"
     LAYER_DIM_RELATION_REGEX = r"^(\w+)\s*=\s*(?:(\w+)\s*\*\s*)?(\w+)\s*\+\s*(?:(\w+)\s*\*\s*)?(\w+)$"
     # TODO add more operators from ONNX
-    ALLOWED_OPERATORS: list[str] = ["Conv", "Pooling", "Add", "Conv_downsample"]
+    ALLOWED_OPERATORS: list[str] = [
+        "Conv",
+        "Pooling",
+        "Add",
+        "Conv_downsample",
+        "Gemm",
+        "Pool",
+        "MaxPool",
+        "AveragePool",
+        "GlobalAveragePool",
+    ]
 
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
     LAYER_SCHEMA: dict[str, Any] = {

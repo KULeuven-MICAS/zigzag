@@ -14,6 +14,7 @@ from zigzag.datatypes import (
     UnrollFactor,
 )
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
     LayerDimRelation,
@@ -113,7 +114,7 @@ class LayerNodeAttributes:
     pr_layer_dim_sizes: LayerDimSizes | None
 
 
-class LayerNode:
+class LayerNode(LayerNodeABC):
     """! Represents a single layer in a workload."""
 
     def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes):
@@ -126,8 +127,7 @@ class LayerNode:
 
         # TODO clean up this method. Too many lines for a clean init method.
         """
-        self.id = layer_id
-        self.name = node_name
+        super().__init__(layer_id, node_name)
 
         # Unpack attributes
         self.type = node_attr.layer_type
@@ -179,9 +179,6 @@ class LayerNode:
 
     def __str__(self):
         return self.name
-
-    def __repr__(self):
-        return str(self)
 
     def __jsonrepr__(self):
         """! JSON representation used for saving this object to a json file."""
