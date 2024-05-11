@@ -37,7 +37,6 @@ class ONNXModelParser:
     def run(self) -> ONNXWorkload:
         """! Iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes"""
 
-        # Check for dynamically in the model in the form of if statements
         assert self.onnx_model is not None
         self.onnx_model = parse_dynamic_onnx_model(self.onnx_model)
         self.mapping_data = WorkloadParserStage.parse_mapping_data(self.mapping_yaml_path)
@@ -83,7 +82,7 @@ class ONNXModelParser:
                 parser = GemmParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
             # it is not a convolutional node, so create a DummyNode
             else:
-                parser = DefaultNodeParser(node_id, node, nodes_outputs)
+                parser = DefaultNodeParser(node_id, node, nodes_outputs, self.onnx_model)
 
             node_obj = parser.run()
             # Add the node_obj to the ONNXWorkload

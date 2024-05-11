@@ -17,7 +17,7 @@ from zigzag.workload.layer_attributes import (
     LayerTemporalOrdering,
     MemoryOperandLinks,
 )
-from zigzag.workload.layer_node import LayerNode
+from zigzag.workload.layer_node import LayerNode, LayerNodeAttributes
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())
@@ -53,9 +53,14 @@ class LayerNodeFactory:
         self.mapping_data = mapping_data
 
     def create(self) -> LayerNode:
-        # From node data
         layer_id: int = self.node_data["id"]
         node_name: str = f"Layer{layer_id}"
+        node_attr = self.create_node_attr()
+
+        return LayerNode(layer_id=layer_id, node_name=node_name, node_attr=node_attr)
+
+    def create_node_attr(self) -> LayerNodeAttributes:
+        # From node data
         layer_type: str = self.node_data["operator_type"]
         equation = self.create_equation()
         layer_dim_sizes = self.create_layer_dim_sizes()
@@ -74,9 +79,7 @@ class LayerNodeFactory:
         memory_operand_links = mapping_factory.create_memory_operand_links()
         temporal_ordering = mapping_factory.create_temporal_ordering()
 
-        return LayerNode(
-            layer_id=layer_id,
-            node_name=node_name,
+        return LayerNodeAttributes(
             layer_type=layer_type,
             equation=equation,
             layer_dim_sizes=layer_dim_sizes,

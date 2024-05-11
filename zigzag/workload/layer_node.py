@@ -1,4 +1,5 @@
 from copy import deepcopy
+from dataclasses import dataclass
 from math import gcd
 import logging as _logging
 import math
@@ -94,29 +95,28 @@ class LoopRelevancyInfo:
         return self
 
 
+@dataclass
+class LayerNodeAttributes:
+    layer_type: str
+    equation: LayerEquation
+    layer_dim_sizes: LayerDimSizes
+    operand_precision: LayerOperandPrecision
+    dimension_relations: list[LayerDimRelation]
+    spatial_mapping: SpatialMapping
+    spatial_mapping_hint: SpatialMappingHint
+    core_allocation: int
+    memory_operand_links: MemoryOperandLinks
+    temporal_ordering: LayerTemporalOrdering
+    padding: LayerPadding
+    constant_operands: list[LayerOperand]
+    input_operand_source: InputOperandSource
+    pr_layer_dim_sizes: LayerDimSizes | None
+
+
 class LayerNode:
     """! Represents a single layer in a workload."""
 
-    def __init__(
-        self,
-        layer_id: int,
-        node_name: str,
-        *,
-        layer_type: str,
-        equation: LayerEquation,
-        layer_dim_sizes: LayerDimSizes,
-        operand_precision: LayerOperandPrecision,
-        dimension_relations: list[LayerDimRelation],
-        spatial_mapping: SpatialMapping,
-        spatial_mapping_hint: SpatialMappingHint,
-        core_allocation: int,
-        memory_operand_links: MemoryOperandLinks,
-        temporal_ordering: LayerTemporalOrdering,
-        padding: LayerPadding,
-        constant_operands: list[LayerOperand],
-        input_operand_source: InputOperandSource,
-        pr_layer_dim_sizes: LayerDimSizes | None,
-    ):
+    def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -128,34 +128,22 @@ class LayerNode:
         """
         self.id = layer_id
         self.name = node_name
-        self.type = layer_type
 
-        self.equation = equation
-        self.layer_dim_sizes = layer_dim_sizes
-        self.operand_precision = operand_precision
-        self.dimension_relations = dimension_relations
-        self.spatial_mapping = spatial_mapping
-        self.spatial_mapping_hint = spatial_mapping_hint
-        self.core_allocation = core_allocation
-        self.memory_operand_links = memory_operand_links
-        self.temporal_ordering = temporal_ordering
-        self.padding = padding
-        self.constant_operands = constant_operands
-        self.input_operand_source = input_operand_source
-
-        # Parsed attributes
-        # self.equation: LayerEquation = layer_attrs.parse_equation()
-        # self.layer_dim_sizes: LayerDimSizes = layer_attrs.parse_layer_dim_sizes()
-        # self.operand_precision: LayerOperandPrecision = layer_attrs.parse_operand_precision()
-        # self.dimension_relations: LayerDimRelations | None = layer_attrs.parse_layer_dim_relations()
-        # self.user_spatial_mapping: SpatialMapping = layer_attrs.parse_spatial_mapping()
-        # self.user_spatial_mapping_hint: SpatialMappingHint = layer_attrs.parse_spatial_mapping_hint()
-        # self.core_allocation: int = layer_attrs.parse_core_allocation()
-        # self.memory_operand_links: MemoryOperandLinks = layer_attrs.parse_mem_operand_links()
-        # self.user_temporal_ordering: LayerTemporalOrdering | None = layer_attrs.parse_temporal_ordering()
-        # self.padding: LayerPadding | None = layer_attrs.parse_padding()
-        # self.constant_operands: list[LayerOperand] = layer_attrs.parse_constant_operands()
-        # self.input_operand_source: InputOperandSource = layer_attrs.parse_operand_source()
+        # Unpack attributes
+        self.type = node_attr.layer_type
+        self.equation = node_attr.equation
+        self.layer_dim_sizes = node_attr.layer_dim_sizes
+        self.operand_precision = node_attr.operand_precision
+        self.dimension_relations = node_attr.dimension_relations
+        self.spatial_mapping = node_attr.spatial_mapping
+        self.spatial_mapping_hint = node_attr.spatial_mapping_hint
+        self.core_allocation = node_attr.core_allocation
+        self.memory_operand_links = node_attr.memory_operand_links
+        self.temporal_ordering = node_attr.temporal_ordering
+        self.padding = node_attr.padding
+        self.constant_operands = node_attr.constant_operands
+        self.input_operand_source = node_attr.input_operand_source
+        pr_layer_dim_sizes = node_attr.pr_layer_dim_sizes
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()

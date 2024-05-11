@@ -84,7 +84,7 @@ class AcceleratorValidator:
                     "required": True,
                     "schema": {"type": "string", "regex": DIMENSION_REGEX},
                 },
-                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 1}},
+                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
             },
         },
         "dataflows": {

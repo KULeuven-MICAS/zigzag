@@ -55,31 +55,3 @@ class WorkloadParserStage(Stage):
         if not mapping_validate_succes:
             raise ValueError("Failed to validate user provided mapping.")
         return mapping_data
-
-    # def parse_workload_from_path_or_from_module(
-    #     self, workload: str | dict[int, dict[str, Any]], mapping: str | dict[str, dict[str, Any]]
-    # ) -> DNNWorkload:
-    #     """! Parse the input workload residing in workload_path.
-    #     The "workload" dict is converted to a NetworkX graph.
-    #     """
-    #     if isinstance(workload, str):  # load from path
-    #         module = importlib.import_module(workload)
-    #         workload_dict: dict[int, dict[str, Any]] = module.workload
-    #     else:
-    #         workload_dict = workload
-
-    #     if isinstance(mapping, str):  # load from path
-    #         module = importlib.import_module(mapping)
-    #         mapping_dict: dict[str, dict[str, Any]] = module.mapping
-    #     else:
-    #         mapping_dict = mapping
-
-    #     # make a copy here to prevent later it is being changed in the following stages
-    #     workload_copy: dict[int, dict[str, Any]] = pickle_deepcopy(workload_dict)
-    #     workload_converted = DNNWorkload(workload_copy, mapping_dict)
-    #     logger.info(
-    #         f"Created workload graph with {workload_converted.number_of_nodes()} nodes and "
-    #         f"{workload_converted.number_of_edges()} edges."
-    #     )
-
-    #     return workload_converted

@@ -25,7 +25,7 @@ class MatMulParser(ONNXOperatorParser):
         mapping_data: list[dict[str, Any]],
         onnx_model: ModelProto,
     ) -> None:
-        super().__init__(node_id, node, nodes_outputs)
+        super().__init__(node_id, node, nodes_outputs, onnx_model)
         self.mapping_data = mapping_data
         self.onnx_model = onnx_model
 
