@@ -127,7 +127,7 @@ class LayerNode(LayerNodeABC):
 
         # TODO clean up this method. Too many lines for a clean init method.
         """
-        super().__init__(layer_id, node_name)
+        LayerNodeABC.__init__(self, node_id=layer_id, node_name=node_name)
 
         # Unpack attributes
         self.type = node_attr.layer_type
@@ -290,3 +290,25 @@ class LayerNode(LayerNodeABC):
     def get_operand_irrelevant_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:
         """! Return the irrelevant dimensions of layer operand 'layer_op'."""
         return self.loop_relevancy_info.get_ir_layer_dims(layer_op)
+
+    def extract_node_attr(self) -> LayerNodeAttributes:
+        """Pack this layer node's attributes in a LayerNodeAttributes instance. Useful for instantiating new layer nodes
+        (used in Stream)"""
+        attributes = LayerNodeAttributes(
+            layer_type=self.type,
+            equation=self.equation,
+            layer_dim_sizes=self.layer_dim_sizes,
+            operand_precision=self.operand_precision,
+            dimension_relations=self.dimension_relations,
+            spatial_mapping=self.spatial_mapping,
+            spatial_mapping_hint=self.spatial_mapping_hint,
+            core_allocation=self.core_allocation,
+            memory_operand_links=self.memory_operand_links,
+            temporal_ordering=self.temporal_ordering,
+            padding=self.padding,
+            constant_operands=self.constant_operands,
+            input_operand_source=self.input_operand_source,
+            pr_layer_dim_sizes=self.pr_layer_dim_sizes,
+        )
+        # Make sure the new attributes don't simply point to the old instances
+        return deepcopy(attributes)

@@ -22,7 +22,11 @@ class Workload(DiGraph, metaclass=ABCMeta):
         self.add_edges_from(edges)  # type: ignore
 
     def get_node_with_id(self, node_id: int) -> LayerNodeABC:
-        for node in self.nodes:  # type: ignore
-            if node.id == node_id:  # type: ignore
-                return node  # type: ignore
+        for node in self.node_iterator:
+            if node.id == node_id:
+                return node
         raise ValueError(f"Node with id {node_id} not found in workload")
+
+    @property
+    def node_iterator(self) -> Iterator[LayerNodeABC]:
+        return self.nodes()

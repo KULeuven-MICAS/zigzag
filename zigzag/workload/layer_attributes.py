@@ -42,9 +42,9 @@ class LayerEquation(LayerAttribute):
     def get_r_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:
         """! Return a list with all LayerDims that are `relevant` for the given LayerOperand"""
         layer_operands = self.get_contained_operands()
-        assert layer_op in layer_operands
+        assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
         layer_op_idx = layer_operands.index(layer_op)
-        slice_indices = self.__get_operand_start_indices() + [len(self.disassembly)]
+        slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         disassembly_start_idx = slice_indices[layer_op_idx] + 1
         disassembly_end_idx = slice_indices[layer_op_idx + 1] - 1
         equation_slice = self.disassembly[disassembly_start_idx:disassembly_end_idx]

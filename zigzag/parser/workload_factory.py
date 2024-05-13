@@ -106,7 +106,7 @@ class LayerNodeFactory:
         return LayerEquation(equation)
 
     def create_layer_dim_sizes(self) -> LayerDimSizes:
-        loop_dims = [self.create_layer_dim(x) for x in self.node_data["loop_dims"]]
+        loop_dims = [LayerDim(x) for x in self.node_data["loop_dims"]]
         loop_sizes: list[UnrollFactorInt] = self.node_data["loop_sizes"]
 
         data = {dim: size for dim, size in zip(loop_dims, loop_sizes)}
@@ -114,9 +114,7 @@ class LayerNodeFactory:
 
     def create_operand_precision(self) -> LayerOperandPrecision:
         precisions: dict[str, int] = self.node_data["operand_precision"]
-        data: dict[LayerOperand, int] = {
-            self.create_layer_operand(operand_str): size for operand_str, size in precisions.items()
-        }
+        data: dict[LayerOperand, int] = {LayerOperand(operand_str): size for operand_str, size in precisions.items()}
         return LayerOperandPrecision(data)
 
     def create_layer_dim_relations(self) -> list[LayerDimRelation]:
@@ -126,9 +124,9 @@ class LayerNodeFactory:
             assert match is not None
             dim_1, coef_2, dim_2, coef_3, dim_3 = match.groups()
             layer_dim_relation = LayerDimRelation(
-                dim_1=self.create_layer_dim(dim_1),
-                dim_2=self.create_layer_dim(dim_2),
-                dim_3=self.create_layer_dim(dim_3),
+                dim_1=LayerDim(dim_1),
+                dim_2=LayerDim(dim_2),
+                dim_3=LayerDim(dim_3),
                 coef_2=int(coef_2) if coef_2 is not None else 1,
                 coef_3=int(coef_3) if coef_3 is not None else 1,
             )
@@ -139,12 +137,12 @@ class LayerNodeFactory:
     def create_constant_operands(self) -> list[LayerOperand]:
         operand_sources: dict[str, int] = self.node_data["operand_source"]
         constant_operands: list[str] = [op for op, source in operand_sources.items() if source == self.node_data["id"]]
-        return [self.create_layer_operand(layer_op_str) for layer_op_str in constant_operands]
+        return [LayerOperand(layer_op_str) for layer_op_str in constant_operands]
 
     def create_operand_source(self) -> InputOperandSource:
         operand_sources: dict[str, int] = self.node_data["operand_source"]
         return {
-            self.create_layer_operand(layer_dim_str): source
+            LayerOperand(layer_dim_str): source
             for layer_dim_str, source in operand_sources.items()
             if source != self.node_data["id"]
         }
@@ -153,7 +151,7 @@ class LayerNodeFactory:
         if "padding" not in self.node_data:
             return LayerPadding.empty()
 
-        pr_layer_dims: list[LayerDim] = [self.create_layer_dim(x) for x in self.node_data["pr_loop_dims"]]
+        pr_layer_dims: list[LayerDim] = [LayerDim(x) for x in self.node_data["pr_loop_dims"]]
         # length of the inner list equals 2
         padding_data: list[list[int]] = self.node_data["padding"]
         padding_dict: dict[LayerDim, tuple[int, int]] = {
@@ -165,18 +163,10 @@ class LayerNodeFactory:
         if "pr_loop_sizes" not in self.node_data:
             return None
 
-        pr_layer_dims: list[LayerDim] = [self.create_layer_dim(x) for x in self.node_data["pr_loop_dims"]]
+        pr_layer_dims: list[LayerDim] = [LayerDim(x) for x in self.node_data["pr_loop_dims"]]
         pr_sizes: list[int] = self.node_data["pr_loop_sizes"]
         size_dict = {layer_dim: size for layer_dim, size in zip(pr_layer_dims, pr_sizes)}
         return LayerDimSizes(size_dict)
-
-    @staticmethod
-    def create_layer_dim(name: str) -> LayerDim:
-        return LayerDim(name)
-
-    @staticmethod
-    def create_layer_operand(name: str) -> LayerOperand:
-        return LayerOperand(name)
 
 
 class MappingFactory:
@@ -214,7 +204,7 @@ class MappingFactory:
         for single_unrolling in mapping_data:
             layer_dim_str = single_unrolling.split(",")[0]
             unrolling = int(single_unrolling.split(",")[-1])
-            layer_dim = LayerNodeFactory.create_layer_dim(layer_dim_str)
+            layer_dim = LayerDim(layer_dim_str)
             mapping_dict[layer_dim] = unrolling
 
         return MappingSingleOADim(mapping_dict)
