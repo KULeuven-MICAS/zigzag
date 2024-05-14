@@ -68,7 +68,7 @@ class AcceleratorValidator:
         },
         "multipliers": {
             "type": "dict",
-            "required": True,
+            "required": False,
             "schema": {
                 "input_precision": {
                     "type": "list",
@@ -79,6 +79,45 @@ class AcceleratorValidator:
                 },
                 "multiplier_energy": {"type": "float", "required": True},
                 "multiplier_area": {"type": "float", "required": True},
+                "dimensions": {
+                    "type": "list",
+                    "required": True,
+                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
+                },
+                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
+            },
+        },
+        "imc": {
+            "type": "dict",
+            "required": False,
+            "schema": {
+                "type": {
+                    "type": "string",
+                    "required": True,
+                    "schema": {"type": "string"},
+                },
+                "cell": {
+                    "type": "string",
+                    "required": True,
+                    "schema": {"type": "string"},
+                },
+                "input_precision": {
+                    "type": "list",
+                    "required": True,
+                    "schema": {"type": "integer"},
+                    "minlength": 2,
+                    "maxlength": 2,
+                },
+                "bit_serial_precision": {
+                    "type": "float",
+                    "required": True,
+                    "schema": {"type": "float"},
+                },
+                "adc_resolution": {
+                    "type": "float",
+                    "required": False,
+                    "schema": {"type": "float"},
+                },
                 "dimensions": {
                     "type": "list",
                     "required": True,
@@ -123,10 +162,34 @@ class AcceleratorValidator:
 
         # Extra validation rules outside of schema
 
+        # Contains either multipliers or imc
+        multipliers_defined = "multipliers" in self.data.keys()
+        imc_defined = "imc" in self.data.keys()
+        if multipliers_defined and imc_defined:
+            self.invalidate("Multiplier and imc cannot be defined simultaneously.")
+        if not multipliers_defined and not imc_defined:
+            self.invalidate("Neither of multiplier and imc is defined.")
+
+        # imc type can only be analog or digital
+        if imc_defined:
+            imc_type = self.data["imc"]["type"]
+            if imc_type not in ["analog", "digital"]:
+                self.invalidate("Imc type is neither analog or digital.")
+
+        # imc cell type can only be sram
+        if imc_defined:
+            cell_type = self.data["imc"]["cell"]
+            if cell_type != "sram":
+                self.invalidate("Imc cell is not defined as sram.")
+
         # Dimension sizes are consistent
-        oa_dims: list[str] = self.data["multipliers"]["dimensions"]
-        if len(oa_dims) != len(self.data["multipliers"]["sizes"]):
-            self.invalidate("Multiplier dimensions and sizes do not match.")
+        if multipliers_defined:
+            core_type = "multipliers"
+        else:
+            core_type = "imc"
+        oa_dims: list[str] = self.data[core_type]["dimensions"]
+        if len(oa_dims) != len(self.data[core_type]["sizes"]):
+            self.invalidate("Core dimensions and sizes do not match.")
 
         for mem_name in self.data["memories"]:
             self.validate_single_memory(mem_name, oa_dims)
