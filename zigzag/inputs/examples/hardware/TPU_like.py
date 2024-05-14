@@ -1,16 +1,16 @@
 import os
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
-from zigzag.classes.hardware.architecture.operational_unit import Multiplier
-from zigzag.classes.hardware.architecture.operational_array import MultiplierArray
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.core import Core
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.memory_level import MemoryLevel
+from zigzag.hardware.architecture.operational_unit import Multiplier
+from zigzag.hardware.architecture.operational_array import MultiplierArray
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.Core import Core
 
 
 def memory_hierarchy_dut(multiplier_array, visualize=False):
-    """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    """! Memory hierarchy variables
+    size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy)"""
 
     reg_W_128B = MemoryInstance(
         name="rf_128B",
@@ -89,16 +89,13 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_W_128B,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions={(0, 0)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=reg_O_2B,
         operands=("O",),
-        port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},
-        ),
-        served_dimensions={(0, 1)},
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_2", "th": "r_port_2"},),
+        served_dimensions=("D2",),
     )
 
     ##################################### on-chip highest memory hierarchy initialization #####################################
@@ -107,10 +104,10 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=sram_2M_with_16_128K_bank_128_1r_1w,
         operands=("I1", "O"),
         port_alloc=(
-            {"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},
+            {"fh": "w_port_1", "tl": "r_port_1"},
             {"fh": "w_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "r_port_1"},
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
 
     ####################################################################################################################
@@ -119,8 +116,8 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
         memory_instance=dram,
         operands=("I1", "I2", "O"),
         port_alloc=(
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
             {
                 "fh": "rw_port_1",
                 "tl": "rw_port_1",
@@ -128,7 +125,7 @@ def memory_hierarchy_dut(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -146,9 +143,7 @@ def multiplier_array_dut():
     multiplier_area = 1
     dimensions = {"D1": 32, "D2": 32}  # {'D1': ('K', 32), 'D2': ('C', 32)}
 
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array

@@ -1,33 +1,52 @@
 import pickle
 from copy import deepcopy
-from typing import Dict, List, Tuple
-from typing import TYPE_CHECKING
-from collections import defaultdict
+from typing import Any
+
+import numpy as np
 
 
-if TYPE_CHECKING:
-    from zigzag.classes.cost_model.cost_model import CostModelEvaluation
-
-
-def pickle_deepcopy(to_copy):
-    copy = None
-    copied = False
+def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))
         return copy
     except:
-        pass
-        # fallback to other options
-
-    if not copied:
         return deepcopy(to_copy)
-    
-def pickle_save(to_save, path):
+
+
+def pickle_save(to_save: str, path: str):
     with open(path, "wb") as fp:
         status = pickle.dump(to_save, fp)
     return status
 
-def pickle_load(path):
+
+def pickle_load(path: str):
     with open(path, "rb") as fp:
         obj = pickle.load(fp)
     return obj
+
+
+def json_repr_handler(obj: Any, simple: bool = False) -> Any:
+    """! Recursively converts objects into a json representation"""
+    attr = "__simplejsonrepr__" if simple else "__jsonrepr__"
+
+    # Recursive: catch end nodes
+    if obj is None:
+        return None
+    if isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, bool) or isinstance(obj, str):
+        return obj
+    if isinstance(obj, np.int32):
+        return int(obj)
+    if hasattr(obj, attr):
+        return obj.__simplejsonrepr__() if simple else obj.__jsonrepr__()
+
+    # Recursive calls
+    if isinstance(obj, dict):
+        return {json_repr_handler(k, simple): json_repr_handler(v, simple) for k, v in obj.items()}
+    if isinstance(obj, set):
+        return json_repr_handler(list(obj), simple)
+    if isinstance(obj, list):
+        return [json_repr_handler(x, simple) for x in obj]
+    if isinstance(obj, tuple):
+        return tuple(json_repr_handler(x, simple) for x in obj)
+
+    raise TypeError(f"Object of type {type(obj)} is not serializable. Create a {attr} method.")

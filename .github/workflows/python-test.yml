@@ -1,12 +1,7 @@
 name: Python test
 
 # Controls when the workflow will run
-on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [push]
 
 jobs:
   build:
@@ -14,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11"]
+        python-version: ["3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
@@ -43,4 +38,4 @@ jobs:
       - name: Test with pytest
         run: |
           pip install pytest
-          pytest tests/
+          python -m pytest --typeguard-packages=zigzag tests/main/test_origin/

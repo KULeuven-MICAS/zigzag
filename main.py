@@ -1,44 +1,63 @@
-from zigzag.classes.stages import *
 import argparse
 import re
 
+from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.MainStage import MainStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
+from zigzag.stages.WorkloadStage import WorkloadStage
+from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage, SumStage
+from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.LomaStage import LomaStage
+
+
 # Parse the workload and accelerator arguments
 parser = argparse.ArgumentParser(description="Setup zigzag-v2 inputs")
-parser.add_argument('--model', metavar='path', required=True, help='module path to workload, e.g. inputs.examples.workloads.resnet18')
-parser.add_argument('--mapping', metavar='path', required=True, help='path to mapping file, e.g., inputs.examples.mapping.tpu_like')
-parser.add_argument('--accelerator', metavar='path', required=True, help='module path to the accelerator, e.g. inputs.examples.hardware.TPU_like')
+parser.add_argument(
+    "--model", metavar="path", required=True, help="module path to workload, e.g. inputs.examples.workloads.resnet18"
+)
+parser.add_argument(
+    "--mapping", metavar="path", required=True, help="path to mapping file, e.g., inputs.examples.mapping.tpu_like"
+)
+parser.add_argument(
+    "--accelerator",
+    metavar="path",
+    required=True,
+    help="module path to the accelerator, e.g. inputs.examples.hardware.TPU_like",
+)
 args = parser.parse_args()
 
 # Initialize the logger
 import logging as _logging
+
 _logging_level = _logging.INFO
-_logging_format = '%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
-_logging.basicConfig(level=_logging_level,
-                     format=_logging_format)
+_logging_format = "%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+_logging.basicConfig(level=_logging_level, format=_logging_format)
 
 hw_name = args.accelerator.split(".")[-1]
 wl_name = re.split(r"/|\.", args.model)[-1]
-if wl_name == 'onnx':
+if wl_name == "onnx":
     wl_name = re.split(r"/|\.", args.model)[-2]
 experiment_id = f"{hw_name}-{wl_name}"
-pkl_name = f'{experiment_id}-saved_list_of_cmes'
+pkl_name = f"{experiment_id}-saved_list_of_cmes"
 
 # Initialize the MainStage which will start execution.
 # The first argument of this init is the list of stages that will be executed in sequence.
 # The second argument of this init are the arguments required for these different stages.
-mainstage = MainStage([
-    WorkloadParserStage,
-    AcceleratorParserStage,
-    SimpleSaveStage,
-    PickleSaveStage,
-    SumStage,
-    CompleteSaveStage,
-    WorkloadStage,
-    SpatialMappingGeneratorStage,
-    MinimalLatencyStage,
-    LomaStage,
-    CostModelStage,
-],
+mainstage = MainStage(
+    [
+        WorkloadParserStage,
+        AcceleratorParserStage,
+        SimpleSaveStage,
+        PickleSaveStage,
+        SumStage,
+        CompleteSaveStage,
+        WorkloadStage,
+        SpatialMappingGeneratorStage,
+        MinimalLatencyStage,
+        LomaStage,
+        CostModelStage,
+    ],
     accelerator=args.accelerator,
     workload=args.model,
     mapping=args.mapping,

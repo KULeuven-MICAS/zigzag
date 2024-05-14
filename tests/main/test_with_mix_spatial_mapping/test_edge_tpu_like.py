@@ -1,5 +1,7 @@
 import pytest
+import sys
 
+sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_with_mix_spatial_mapping
 
 # Test case for when both spatial_mapping and spatial_mapping_hint are provided.
@@ -71,9 +73,7 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(
-        workload, accelerator, mapping
-    )
+    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

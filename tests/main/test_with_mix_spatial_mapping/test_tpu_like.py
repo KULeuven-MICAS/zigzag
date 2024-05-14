@@ -1,5 +1,7 @@
 import pytest
+import sys
 
+sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_with_mix_spatial_mapping
 
 # Test case for when more non-existent dimensions are provided in spatial_mapping_hint.
@@ -25,11 +27,10 @@ def mapping():
     tpu_like_mapping = {
         "default": {
             "core_allocation": 1,
-            # "spatial_mapping": {
-            #     "D1": ("K", 32),
-            #     "D2": (("C", 2), ("FX", 3), ("FY", 3)),
-            # },
-            # D3 and D4 in spatial_mapping_hint will not work, since they do not exist in the hardware dimensions.
+            "spatial_mapping": {
+                "D1": ("K", 32),
+                "D2": (("C", 2), ("FX", 3), ("FY", 3)),
+            },
             "spatial_mapping_hint": {
                 "D1": ["K"],
                 "D2": ["C", "FX", "FY"],
@@ -60,9 +61,7 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(
-        workload, accelerator, mapping
-    )
+    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

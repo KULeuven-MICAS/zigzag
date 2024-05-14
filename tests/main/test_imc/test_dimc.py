@@ -1,5 +1,7 @@
 import pytest
+import sys
 
+sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_imc
 
 workloads = (
@@ -30,9 +32,7 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload, accelerator, mapping):
-    (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(
-        workload, accelerator, mapping
-    )
+    (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
     (expected_energy, expected_latency, expected_tclk, expected_area) = ens_lats_clks_areas[workload]
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

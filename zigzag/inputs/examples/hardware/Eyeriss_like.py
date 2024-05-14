@@ -1,15 +1,15 @@
-from zigzag.classes.hardware.architecture.memory_hierarchy import MemoryHierarchy
-from zigzag.classes.hardware.architecture.memory_level import MemoryLevel
-from zigzag.classes.hardware.architecture.operational_unit import Multiplier
-from zigzag.classes.hardware.architecture.operational_array import MultiplierArray
-from zigzag.classes.hardware.architecture.memory_instance import MemoryInstance
-from zigzag.classes.hardware.architecture.accelerator import Accelerator
-from zigzag.classes.hardware.architecture.core import Core
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.memory_level import MemoryLevel
+from zigzag.hardware.architecture.operational_unit import Multiplier
+from zigzag.hardware.architecture.operational_array import MultiplierArray
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.Core import Core
 
 
 def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
-    """Memory hierarchy variables"""
-    """ size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy) """
+    """! Memory hierarchy variables
+    size=#bit, bw=(read bw, write bw), cost=(read word energy, write work energy)"""
     rf1 = MemoryInstance(
         name="rf_64B",
         size=512,
@@ -101,22 +101,17 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
     memory_hierarchy_graph.add_memory(
         memory_instance=rf1,
         operands=("I1",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions=set(),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=rf1,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions=set(),
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=rf2,
         operands=("O",),
-        port_alloc=(
-            {"fh": "rw_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "rw_port_1"},
-        ),
-        served_dimensions=set(),
+        port_alloc=({"fh": "rw_port_1", "tl": "r_port_1", "fl": "w_port_1", "th": "rw_port_1"},),
     )
 
     memory_hierarchy_graph.add_memory(
@@ -130,19 +125,19 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=lb2_64KB,
         operands=("I2",),
-        port_alloc=({"fh": "w_port_1", "tl": "r_port_1", "fl": None, "th": None},),
-        served_dimensions="all",
+        port_alloc=({"fh": "w_port_1", "tl": "r_port_1"},),
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=gb,
         operands=("I1", "O"),
         port_alloc=(
-            {"fh": "rw_port_1", "tl": "rw_port_2", "fl": None, "th": None},
+            {"fh": "rw_port_1", "tl": "rw_port_2"},
             {
                 "fh": "rw_port_1",
                 "tl": "rw_port_2",
@@ -150,14 +145,14 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     memory_hierarchy_graph.add_memory(
         memory_instance=dram,
         operands=("I1", "I2", "O"),
         port_alloc=(
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
-            {"fh": "rw_port_1", "tl": "rw_port_1", "fl": None, "th": None},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
+            {"fh": "rw_port_1", "tl": "rw_port_1"},
             {
                 "fh": "rw_port_1",
                 "tl": "rw_port_1",
@@ -165,7 +160,7 @@ def memory_hierarchy_latency_test1(multiplier_array, visualize=False):
                 "th": "rw_port_1",
             },
         ),
-        served_dimensions="all",
+        served_dimensions=("D1", "D2"),
     )
     if visualize:
         from zigzag.visualization.graph.memory_hierarchy import (
@@ -182,9 +177,7 @@ def multiplier_array_latency_test1():
     multiplier_energy = 0.5
     multiplier_area = 0.1
     dimensions = {"D1": 14, "D2": 12}
-    multiplier = Multiplier(
-        multiplier_input_precision, multiplier_energy, multiplier_area
-    )
+    multiplier = Multiplier(multiplier_input_precision, multiplier_energy, multiplier_area)
     multiplier_array = MultiplierArray(multiplier, dimensions)
 
     return multiplier_array
