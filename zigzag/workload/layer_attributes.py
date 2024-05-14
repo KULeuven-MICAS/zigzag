@@ -78,6 +78,9 @@ class LayerDimSizes(LayerAttribute):
     def __delitem__(self, key: LayerDim):
         del self.data[key]
 
+    def __add__(self, other: "LayerDimSizes"):
+        return LayerDimSizes(self.data | other.data)
+
 
 class LayerOperandPrecision(LayerAttribute):
     """! Contains the bit precision of each layer operand"""

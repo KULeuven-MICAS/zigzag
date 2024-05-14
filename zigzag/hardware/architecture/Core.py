@@ -24,6 +24,8 @@ class Core:
         self.id = core_id
         self.operational_array = operational_array
         self.memory_hierarchy = memory_hierarchy
+        self.mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
+
         self.dataflows = dataflows
         self.recalculate_memory_hierarchy_information()
 

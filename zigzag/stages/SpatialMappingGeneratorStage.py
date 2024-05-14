@@ -85,6 +85,7 @@ class SpatialMappingGeneratorStage(Stage):
         assert nb_generated_mappings > 0, "No SpatialMappings found"
 
         for i, generated_mapping in enumerate(generated_mappings):
+            self.layer.spatial_mapping = generated_mapping
             logger.info(
                 "%s: Launching spatial mapping %i/%i :%s.",
                 self.layer.name,
@@ -122,7 +123,7 @@ class SpatialMappingGeneratorStage(Stage):
         max_unrollings = self.get_max_unrolling()
 
         # Start from the given mapping
-        mapping_template = self.provided_mapping
+        mapping_template = copy.deepcopy(self.provided_mapping)
         mapping_template.initialize_oa_dims(self.oa_dim_sizes)
         mapping_template.check_and_reduce(max_unrollings, self.layer_dim_sizes.data)
 
