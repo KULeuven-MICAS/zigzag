@@ -11,10 +11,10 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "inputs/workload/alexnet.onnx": (5646369654.200001, 8221207),
-    "inputs/workload/mobilenetv2.onnx": (1680400085.4500012, 3562331),
-    "inputs/workload/resnet18.onnx": (1902488242.3499994, 3333310),
-    "inputs/workload/resnet18.yaml": (2347758970.83, 4187369),
+    "inputs/workload/alexnet.onnx": (5657178248.6, 8221391.0),
+    "inputs/workload/mobilenetv2.onnx": (1680773377.4499998, 3562331.0),
+    "inputs/workload/resnet18.onnx": (1902637139.1499994, 3333310.0),
+    "inputs/workload/resnet18.yaml": (2413348670.67, 4268451.0),
 }
 
 
@@ -32,5 +32,6 @@ def accelerator():
 def test_api(workload, accelerator, mapping):
     (energy, latency, cmes) = get_hardware_performance_zigzag(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
+    print(f"'{workload}': ({energy}, {latency}),")
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

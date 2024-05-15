@@ -148,7 +148,9 @@ class LayerNodeFactory:
         }
 
     def create_padding(self) -> LayerPadding:
-        if "padding" not in self.node_data or self.node_data["padding"]:
+        if "pr_loop_dims" not in self.node_data or self.node_data["pr_loop_dims"] is None:
+            return LayerPadding.empty()
+        if "padding" not in self.node_data or self.node_data["padding"] is None:
             return LayerPadding.empty()
 
         pr_layer_dims: list[LayerDim] = [LayerDim(x) for x in self.node_data["pr_loop_dims"]]
@@ -160,6 +162,8 @@ class LayerNodeFactory:
         return LayerPadding(padding_dict)
 
     def create_pr_layer_dim_sizes(self) -> LayerDimSizes | None:
+        if "pr_loop_dims" not in self.node_data or self.node_data["pr_loop_dims"] is None:
+            return None
         if "pr_loop_sizes" not in self.node_data or self.node_data["pr_loop_sizes"] is None:
             return None
 
