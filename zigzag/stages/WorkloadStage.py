@@ -25,18 +25,18 @@ class WorkloadStage(Stage):
         self.accelerator = accelerator
 
     def run(self):
-        for id, layer in enumerate(self.workload.topological_sort()):
+        for layer in self.workload.topological_sort():
             # skip the DummyNodes
             if isinstance(layer, DummyNode):
                 continue
             # Skip a layer if the layer type is "Pooling" and the hardware template is an IMC core.
             # This wil have impact when the workload is defined manually.
             # If the workload is from onnx, no skipping will be done.
-            core_id: int = layer.core_allocation
+            core_id: int = layer.core_allocation[0]
             core = self.accelerator.get_core(core_id)
             operational_array = core.operational_array
-            pe_type = getattr(operational_array, "pe_type", None)  # return None if it does not exist
-            layer_type: str | None = layer.layer_attrs.parse_operator_type()
+            pe_type = getattr(operational_array, "pe_type", None)
+            layer_type = layer.type
 
             if (pe_type in ["in_sram_computing"]) and (layer_type in ["Pooling", "Add"]):
                 continue
@@ -44,9 +44,8 @@ class WorkloadStage(Stage):
             kwargs = self.kwargs.copy()
             kwargs["layer"] = layer
             kwargs["accelerator"] = self.accelerator
-            layer_name = layer.name if layer.name is not None else id
 
-            logger.info(f"Processing  {layer_name}...")
+            logger.info(f"Processing  {layer.name}...")
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
             for cme, extra_info in sub_stage.run():
                 yield cme, (layer, extra_info)

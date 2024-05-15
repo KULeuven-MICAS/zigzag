@@ -1,4 +1,4 @@
-from math import factorial, inf
+from math import factorial
 import operator
 from typing import Any, Generator
 from tqdm import tqdm
@@ -68,7 +68,7 @@ class LomaEngine:
         # TODO: Take into account that data might be stored in lower level,
         # TODO: thus adapt the memory hierarchy.
         # TODO: The fact that there is a global buffer above the cores requires attention.
-        core_id = layer.core_allocation
+        core_id = layer.core_allocation[0]
         self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(core_id).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
@@ -104,8 +104,8 @@ class LomaEngine:
         if not yielded:
             # TODO this warning is unclear: an invalid spatial mapping is not necessarily its cause
             raise NoValidLoopOrderingFoundException(
-                f"""No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is 
-                compatible with the architecture."""
+                f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is "
+                f"compatible with the architecture."
             )
 
     def get_temporal_loops(self) -> None:

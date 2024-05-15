@@ -10,6 +10,7 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.memory_port import PortAllocation
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.hardware.architecture.operational_unit import OperationalUnit
 from zigzag.utils import pickle_deepcopy
@@ -80,9 +81,9 @@ class PEArrayScalingStage(Stage):
         """
         # Get the relevant accelerator attributes
         core = next(iter(self.accelerator.cores))
-        operational_array = core.operational_array
+        operational_array: OperationalArray = core.operational_array
         operational_unit = operational_array.unit
-        dimension_sizes = operational_array.dimension_sizes
+        dimension_sizes = operational_array.oa_dim_sizes
         memory_hierarchy = core.memory_hierarchy
 
         # Create new operational array
@@ -107,7 +108,7 @@ class PEArrayScalingStage(Stage):
 
             new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
             new_operands: tuple[str] = pickle_deepcopy(operands)
-            new_port_alloc: tuple[dict] = pickle_deepcopy(port_alloc)
+            new_port_alloc: PortAllocation = pickle_deepcopy(port_alloc)
             new_served_dimensions = pickle_deepcopy(served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,

@@ -35,7 +35,7 @@ class SpatialMappingConversionStage(Stage):
         self.layer = layer
         self.accelerator = accelerator
         self.memory_operand_links = layer.memory_operand_links
-        self.user_spatial_mapping = self.layer.user_spatial_mapping
+        self.user_spatial_mapping = self.layer.spatial_mapping
 
         assert (
             self.user_spatial_mapping.oa_dim_sizes is not None
@@ -189,9 +189,7 @@ class SpatialMappingConversionStage(Stage):
         # TODO This should be a class
         """
         mapping_per_mem_lvl: SpatialMappingPerMemLvl = {}
-        # layer_to_mem_op = self.layer.memory_operand_links
-        # mem_to_layer_op = {mem_op: layer_op for (layer_op, mem_op) in layer_to_mem_op.items()}
-        core_id = self.layer.core_allocation
+        core_id = self.layer.core_allocation[0]
         mem_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
         for layer_op in self.memory_operand_links.layer_operands:
             mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)

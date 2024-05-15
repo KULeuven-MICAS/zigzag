@@ -40,7 +40,7 @@ class CostModelStage(Stage):
 
     def run(self):
         """! Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""
-        core_id = self.layer.core_allocation
+        core_id = self.layer.core_allocation[0]
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array
         pe_type = getattr(operational_array, "pe_type", None)

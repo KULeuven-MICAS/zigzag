@@ -1,4 +1,6 @@
 import logging
+from termios import ICANON
+from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.utils import pickle_deepcopy
 from zigzag.cost_model.cost_model import CostModelEvaluation, PortActivity
 
@@ -25,6 +27,13 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
     After initialization, the cost model evaluation is run.
     """
 
+    def __init__(self):
+        super().__init__(...)  # TODO
+        operational_array = self.accelerator.get_core(self.core_id).operational_array
+        self.imc_area = operational_array.total_area
+        assert isinstance(operational_array, ImcArray)
+        self.operational_array: ImcArray = operational_array
+
     def run(self) -> None:
         """! Run the cost model evaluation."""
         super().calc_memory_utilization()
@@ -35,9 +44,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
     def collect_area_data(self):
         # get imc area
-        operational_array = self.accelerator.get_core(self.core_id).operational_array
-        self.imc_area = operational_array.total_area
-        self.imc_area_breakdown = operational_array.area_breakdown
+
+        self.imc_area_breakdown = self.operational_array.area_breakdown
         # get mem area
         self.mem_area = 0
         self.mem_area_breakdown = {}

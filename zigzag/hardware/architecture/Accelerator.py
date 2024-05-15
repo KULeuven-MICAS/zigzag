@@ -21,7 +21,7 @@ class Accelerator:
         """! JSON representation used for saving this object to a json file."""
         return json_repr_handler({"name": self.name, "cores": self.cores})
 
-    def get_core(self, core_id: int | str) -> Core:
+    def get_core(self, core_id: int) -> Core:
         """! Return the core with id 'core_id'.
         Raises ValueError() when a core_id is not found in the available cores.
         """

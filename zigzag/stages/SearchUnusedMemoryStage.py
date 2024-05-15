@@ -223,7 +223,7 @@ class SearchUnusedMemoryStage(Stage):
             curr_id = self.layer_list[layer]  # current layer id (key) in mem_update_list
             # weight representation in memory
             if len(layer.constant_operands) == 1:
-                const_operand: MemoryOperand = layer.memory_operand_links[layer.constant_operands[0]]
+                const_operand = layer.memory_operand_links[layer.constant_operands[0]]
                 # act representation in memory
                 act_operand: MemoryOperand = layer.memory_operand_links[
                     [operand for operand in layer.input_operands if operand not in layer.constant_operands][0]
@@ -388,7 +388,7 @@ class SearchUnusedMemoryStage(Stage):
         core = accelerator.cores[0]
         operational_array = core.operational_array
         oa_dim_nb = len(operational_array.oa_dim_sizes)
-        mem_served_oa_dim_nb = mem.served_dimensions.nb_dims()
+        mem_served_oa_dim_nb = mem.served_dimensions.nb_dims
         return mem_served_oa_dim_nb == oa_dim_nb
 
     def update_mem_level_for_loading_data(self):
@@ -403,8 +403,10 @@ class SearchUnusedMemoryStage(Stage):
         self.remove_dummy_nodes_in_workload()  # remove dummy nodes for the ease of telling the branch starting or final nodes
 
         # Update mem_update_list and mem_update_weight
-        for id, layer in enumerate(nx.topological_sort(self.workload)):
-            layer: LayerNode
+        for id, layer in enumerate(self.workload.topological_sort()):
+            if isinstance(layer, DummyNode):
+                continue
+
             # act representation
             act_operand = layer.memory_operand_links[
                 [operand for operand in layer.input_operands if operand not in layer.constant_operands][0]

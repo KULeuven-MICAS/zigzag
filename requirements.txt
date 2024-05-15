@@ -8,3 +8,4 @@ multiprocessing_on_dill
 pyyaml
 pytest
 typeguard
+cerberus

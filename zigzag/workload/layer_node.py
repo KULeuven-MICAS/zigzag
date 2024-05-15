@@ -1,4 +1,5 @@
 from copy import deepcopy
+from dataclasses import dataclass
 from math import gcd
 import logging as _logging
 import math
@@ -13,10 +14,10 @@ from zigzag.datatypes import (
     UnrollFactor,
 )
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
-    LayerAttributes,
-    LayerDimRelations,
+    LayerDimRelation,
     LayerDimSizes,
     LayerEquation,
     LayerOperandPrecision,
@@ -95,12 +96,28 @@ class LoopRelevancyInfo:
         return self
 
 
-class LayerNode:
+@dataclass
+class LayerNodeAttributes:
+    layer_type: str
+    equation: LayerEquation
+    layer_dim_sizes: LayerDimSizes
+    operand_precision: LayerOperandPrecision
+    dimension_relations: list[LayerDimRelation]
+    spatial_mapping: SpatialMapping
+    spatial_mapping_hint: SpatialMappingHint
+    core_allocation: list[int]
+    memory_operand_links: MemoryOperandLinks
+    temporal_ordering: LayerTemporalOrdering
+    padding: LayerPadding
+    constant_operands: list[LayerOperand]
+    input_operand_source: InputOperandSource
+    pr_layer_dim_sizes: LayerDimSizes | None
+
+
+class LayerNode(LayerNodeABC):
     """! Represents a single layer in a workload."""
 
-    def __init__(
-        self, layer_id: int, layer_attrs: LayerAttributes, node_name: str | None = None, layer_type: str | None = None
-    ):
+    def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -110,25 +127,23 @@ class LayerNode:
 
         # TODO clean up this method. Too many lines for a clean init method.
         """
-        self.id = layer_id
-        self.layer_attrs = layer_attrs
-        self.name = node_name
-        self.type: str | None = layer_type
+        LayerNodeABC.__init__(self, node_id=layer_id, node_name=node_name)
 
-        # Parsed attributes
-        self.equation: LayerEquation = layer_attrs.parse_equation()
-        self.layer_dim_sizes: LayerDimSizes = layer_attrs.parse_layer_dim_sizes()
-        self.operand_precision: LayerOperandPrecision = layer_attrs.parse_operand_precision()
-        self.dimension_relations: LayerDimRelations | None = layer_attrs.parse_layer_dim_relations()
-        self.user_spatial_mapping: SpatialMapping = layer_attrs.parse_spatial_mapping()
-        self.user_spatial_mapping_hint: SpatialMappingHint = layer_attrs.parse_spatial_mapping_hint()
-        self.core_allocation: int = layer_attrs.parse_core_allocation()
-        self.memory_operand_links: MemoryOperandLinks = layer_attrs.parse_mem_operand_links()
-        self.user_temporal_ordering: LayerTemporalOrdering | None = layer_attrs.parse_temporal_ordering()
-        self.padding: LayerPadding | None = layer_attrs.parse_padding()
-        self.constant_operands: list[LayerOperand] = layer_attrs.parse_constant_operands()
-        pr_layer_dim_sizes: LayerDimSizes | None = layer_attrs.parse_pr_layer_dim_sizes()
-        self.input_operand_source: InputOperandSource = layer_attrs.parse_operand_source()
+        # Unpack attributes
+        self.type = node_attr.layer_type
+        self.equation = node_attr.equation
+        self.layer_dim_sizes = node_attr.layer_dim_sizes
+        self.operand_precision = node_attr.operand_precision
+        self.dimension_relations = node_attr.dimension_relations
+        self.spatial_mapping = node_attr.spatial_mapping
+        self.spatial_mapping_hint = node_attr.spatial_mapping_hint
+        self.core_allocation = node_attr.core_allocation
+        self.memory_operand_links = node_attr.memory_operand_links
+        self.temporal_ordering = node_attr.temporal_ordering
+        self.padding = node_attr.padding
+        self.constant_operands = node_attr.constant_operands
+        self.input_operand_source = node_attr.input_operand_source
+        pr_layer_dim_sizes = node_attr.pr_layer_dim_sizes
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
@@ -155,18 +170,15 @@ class LayerNode:
         """!
         # TODO requires documentation
         """
-        if self.dimension_relations is not None and len(self.dimension_relations) > 0:
-            pr_loop, pr_loop_list, pr_scaling_factors = self.dimension_relations.extract_pr_loop_info()
+        if len(self.dimension_relations) > 0:
+            pr_loop, pr_loop_list, pr_scaling_factors = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
     def __str__(self):
-        return f"LayerNode_{self.name}"
-
-    def __repr__(self):
-        return str(self)
+        return self.name
 
     def __jsonrepr__(self):
         """! JSON representation used for saving this object to a json file."""
@@ -177,7 +189,7 @@ class LayerNode:
                 "loop_dimensions": self.layer_dim_sizes,
                 "operand_precision": self.operand_precision,
                 "core_allocation": self.core_allocation,
-                "user_spatial_mapping": self.user_spatial_mapping,
+                "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
                 # "source_storage_level": self.source_storage_level, # NOTE not used?
             }
@@ -204,9 +216,10 @@ class LayerNode:
             pr_dim_size = min(self.pr_layer_dim_sizes[dim], pr_dim_size)
             return pr_dim_size
         elif dim in self.layer_dim_sizes:
-            assert (
-                self.layer_dim_sizes[dim] == 1
-            ), "This line should only be reached when the dim has a size of 1 in the layer."
+            # This case is possible when the `layer_dim_sizes` is used to scope which LayerDims should be accounted for
+            # assert (
+            #     self.layer_dim_sizes[dim] == 1
+            # ), "This line should only be reached when the dim has a size of 1 in the layer."
             return 1
         else:
             raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")
@@ -237,7 +250,7 @@ class LayerNode:
         total_pr_dim_size = self.calc_pr_dimension_size(*args)
         # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and
         # subtract
-        padding = LayerPadding.DEFAULT if self.padding is None else self.padding[dim]
+        padding = LayerPadding.DEFAULT if dim not in self.padding else self.padding[dim]
         total_pr_dim_size_without_padding = int(total_pr_dim_size - sum(padding))
         return total_pr_dim_size_without_padding
 
@@ -278,3 +291,25 @@ class LayerNode:
     def get_operand_irrelevant_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:
         """! Return the irrelevant dimensions of layer operand 'layer_op'."""
         return self.loop_relevancy_info.get_ir_layer_dims(layer_op)
+
+    def extract_node_attr(self) -> LayerNodeAttributes:
+        """Pack this layer node's attributes in a LayerNodeAttributes instance. Useful for instantiating new layer nodes
+        (used in Stream)"""
+        attributes = LayerNodeAttributes(
+            layer_type=self.type,
+            equation=self.equation,
+            layer_dim_sizes=self.layer_dim_sizes,
+            operand_precision=self.operand_precision,
+            dimension_relations=self.dimension_relations,
+            spatial_mapping=self.spatial_mapping,
+            spatial_mapping_hint=self.spatial_mapping_hint,
+            core_allocation=self.core_allocation,
+            memory_operand_links=self.memory_operand_links,
+            temporal_ordering=self.temporal_ordering,
+            padding=self.padding,
+            constant_operands=self.constant_operands,
+            input_operand_source=self.input_operand_source,
+            pr_layer_dim_sizes=self.pr_layer_dim_sizes,
+        )
+        # Make sure the new attributes don't simply point to the old instances
+        return deepcopy(attributes)

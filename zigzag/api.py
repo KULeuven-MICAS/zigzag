@@ -1,7 +1,7 @@
 from onnx import ModelProto
-
-from typing import Any
 import re
+from datetime import datetime
+from typing import Any
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -9,7 +9,8 @@ from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
 from zigzag.stages.PEArrayScalingStage import PEArrayScalingStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
+from zigzag.stages.WorkloadParserStage import WorkloadParserStage
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
 from zigzag.stages.LomaStage import LomaStage
@@ -23,12 +24,12 @@ def get_hardware_performance_zigzag(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/{datetime}.json",
+    dump_filename_pattern: str = f"outputs/{datetime.now()}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     """
-    # TODO the API should probably be better documented
+    # TODO the API should be better documented
     """
     # Initialize the logger
     import logging as _logging

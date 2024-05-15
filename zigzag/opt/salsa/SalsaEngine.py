@@ -77,7 +77,6 @@ class SalsaEngine:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
-        # self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(layer.core_allocation).memory_hierarchy
 
         # Algorithm related inputs
         self.iteration_number = kwargs.get("salsa_iteration_number", 1000)
