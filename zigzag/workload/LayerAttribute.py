@@ -30,3 +30,6 @@ class LayerAttribute(metaclass=ABCMeta):
 
     def __jsonrepr__(self) -> Any:
         return json_repr_handler(self.data)
+
+    def __eq__(self, other: object):
+        return isinstance(other, LayerAttribute) and self.data == other.data
