@@ -23,7 +23,11 @@ class WorkloadValidator:
         "MaxPool",
         "AveragePool",
         "GlobalAveragePool",
-        "Operation",
+        # Used for testing
+        "layer_on_core0",
+        "layer_on_core1",
+        "layer_on_core2",
+        "layer_on_core3",
     ]
 
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
@@ -60,8 +64,20 @@ class WorkloadValidator:
                 "I": {"type": "integer", "required": False},
             },
         },
-        "pr_loop_dims": {"type": "list", "schema": {"type": "string"}, "required": False, "default": None},
-        "pr_loop_sizes": {"type": "list", "schema": {"type": "integer"}, "required": False, "default": None},
+        "pr_loop_dims": {
+            "type": "list",
+            "schema": {"type": "string"},
+            "required": False,
+            "nullable": True,
+            "default": None,
+        },
+        "pr_loop_sizes": {
+            "type": "list",
+            "schema": {"type": "integer"},
+            "required": False,
+            "nullable": True,
+            "default": None,
+        },
         "padding": {
             "type": "list",
             "schema": {
@@ -72,6 +88,8 @@ class WorkloadValidator:
                 "maxlength": 2,
             },
             "required": False,
+            "nullable": True,
+            "default": None,
         },
     }
 

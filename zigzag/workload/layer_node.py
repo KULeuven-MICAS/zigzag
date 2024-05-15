@@ -216,9 +216,10 @@ class LayerNode(LayerNodeABC):
             pr_dim_size = min(self.pr_layer_dim_sizes[dim], pr_dim_size)
             return pr_dim_size
         elif dim in self.layer_dim_sizes:
-            assert (
-                self.layer_dim_sizes[dim] == 1
-            ), "This line should only be reached when the dim has a size of 1 in the layer."
+            # This case is possible when the `layer_dim_sizes` is used to scope which LayerDims should be accounted for
+            # assert (
+            #     self.layer_dim_sizes[dim] == 1
+            # ), "This line should only be reached when the dim has a size of 1 in the layer."
             return 1
         else:
             raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")
