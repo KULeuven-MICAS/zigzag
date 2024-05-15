@@ -66,10 +66,18 @@ class AcceleratorValidator:
                 },
             },
         },
-        "multipliers": {
+        "operational_array": {
             "type": "dict",
-            "required": False,
+            "required": True,
             "schema": {
+                # Shared for regular and IMC
+                "dimensions": {
+                    "type": "list",
+                    "required": True,
+                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
+                },
+                "is_imc": {"type": "boolean", "default": False},
+                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
                 "input_precision": {
                     "type": "list",
                     "required": True,
@@ -77,53 +85,19 @@ class AcceleratorValidator:
                     "minlength": 2,
                     "maxlength": 2,
                 },
+                # Non-IMC properties
                 "multiplier_energy": {"type": "float", "required": True},
                 "multiplier_area": {"type": "float", "required": True},
-                "dimensions": {
-                    "type": "list",
-                    "required": True,
-                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
-                },
-                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
-            },
-        },
-        "imc": {
-            "type": "dict",
-            "required": False,
-            "schema": {
-                "type": {
+                # IMC properties
+                "imc-type": {
                     "type": "string",
-                    "required": True,
-                    "schema": {"type": "string"},
+                    "allowed": ["analog", "digital"],
+                    "nullable": True,
+                    "default": None,
                 },
-                "cell": {
-                    "type": "string",
-                    "required": True,
-                    "schema": {"type": "string"},
-                },
-                "input_precision": {
-                    "type": "list",
-                    "required": True,
-                    "schema": {"type": "integer"},
-                    "minlength": 2,
-                    "maxlength": 2,
-                },
-                "bit_serial_precision": {
-                    "type": "float",
-                    "required": True,
-                    "schema": {"type": "float"},
-                },
-                "adc_resolution": {
-                    "type": "float",
-                    "required": False,
-                    "schema": {"type": "float"},
-                },
-                "dimensions": {
-                    "type": "list",
-                    "required": True,
-                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
-                },
-                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
+                "cell": {"type": "string", "required": False, "allowed": ["sram"], "nullable": True, "default": None},
+                "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": None},
+                "bit_serial_precision": {"type": "float", "required": False, "nullable": True, "default": None},
             },
         },
         "dataflows": {
@@ -161,43 +135,16 @@ class AcceleratorValidator:
             self.invalidate(f"The following restrictions apply: {errors}")
 
         # Extra validation rules outside of schema
-
-        # Contains either multipliers or imc
-        multipliers_defined = "multipliers" in self.data.keys()
-        imc_defined = "imc" in self.data.keys()
-        if multipliers_defined and imc_defined:
-            self.invalidate("Multiplier and imc cannot be defined simultaneously.")
-        if not multipliers_defined and not imc_defined:
-            self.invalidate("Neither of multiplier and imc is defined.")
-
-        # imc type can only be analog or digital
-        if imc_defined:
-            imc_type = self.data["imc"]["type"]
-            if imc_type not in ["analog", "digital"]:
-                self.invalidate("Imc type is neither analog or digital.")
-
-        # imc cell type can only be sram
-        if imc_defined:
-            cell_type = self.data["imc"]["cell"]
-            if cell_type != "sram":
-                self.invalidate("Imc cell is not defined as sram.")
-
-        # Dimension sizes are consistent
-        if multipliers_defined:
-            core_type = "multipliers"
-        else:
-            core_type = "imc"
-        oa_dims: list[str] = self.data[core_type]["dimensions"]
-        if len(oa_dims) != len(self.data[core_type]["sizes"]):
-            self.invalidate("Core dimensions and sizes do not match.")
+        self.validate_operational_array()
 
         for mem_name in self.data["memories"]:
-            self.validate_single_memory(mem_name, oa_dims)
+            self.validate_single_memory(mem_name)
 
         return self.is_valid
 
-    def validate_single_memory(self, mem_name: str, expected_oa_dims: list[str]) -> None:
+    def validate_single_memory(self, mem_name: str) -> None:
         mem_data: dict[str, Any] = self.data["memories"][mem_name]
+        expected_oa_dims: list[str] = self.data["operational_array"]["dimensions"]
 
         # Number of port allocations is consistent with memory operands
         nb_operands = len(mem_data["operands"])
@@ -252,9 +199,39 @@ class AcceleratorValidator:
                 if (direction == "th" or direction == "tl") and (port_name.startswith("w_")):
                     self.invalidate(f"Write port given for read direction in {mem_name}")
 
-        # # Contains output operand - This is not required
-        # if AcceleratorValidator.OUTPUT_OPERAND_STR not in mem_data["operands"]:
-        #     self.invalidate(f"{mem_name} does not contain output operand `{AcceleratorValidator.OUTPUT_OPERAND_STR}`")
+    def validate_operational_array(self):
+        multiplier_data = self.data["operational_array"]
+
+        # For both IMC and non-IMC:
+        oa_dims: list[str] = multiplier_data["dimensions"]
+        if len(oa_dims) != len(multiplier_data["sizes"]):
+            self.invalidate("Core dimensions and sizes do not match.")
+
+        is_imc = multiplier_data["is_imc"]
+
+        if is_imc:
+            self.validate_operational_array_imc()
+        else:
+            self.validate_operational_array_non_imc()
+
+    def validate_operational_array_imc(self):
+        """Assumes that the multiplier type is IMC"""
+        # All previous IMC checks are now part of the schema
+        # TODO check that the non-IMC properties are None
+        pass
+
+    def validate_operational_array_non_imc(self):
+        """Assumes that the multiplier type is not IMC"""
+        multiplier_data = self.data["operational_array"]
+        # All IMC related properties should be None
+        if multiplier_data["imc-type"] is not None:
+            self.invalidate("Multiplier are non-IMC but `imc-type` is defined")
+        if multiplier_data["cell-type"] is not None:
+            self.invalidate("Multiplier are non-IMC but `cell` is defined")
+        if multiplier_data["adc_resolution"] is not None:
+            self.invalidate("Multiplier are non-IMC but `adc_resolution` is defined")
+        if multiplier_data["bit_serial_precision"] is not None:
+            self.invalidate("Multiplier are non-IMC but `bit_serial_precision` is defined")
 
     @property
     def normalized_data(self) -> dict[str, Any]:

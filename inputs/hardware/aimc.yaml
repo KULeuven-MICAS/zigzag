@@ -101,11 +101,11 @@ memories:
         th: rw_port_1
     served_dimensions: [D1, D2]
 
-imc:
+operational_array:
   type: analog
   cell: sram
-  input_precision: [8, 8]  # unit: bit
-  bit_serial_precision: 2  # unit: bit
-  adc_resolution: 8  # unit: bit
+  input_precision: [8, 8] # unit: bit
+  bit_serial_precision: 2 # unit: bit
+  adc_resolution: 8 # unit: bit
   dimensions: [D1, D2]
   sizes: [32, 32]
