@@ -3,7 +3,7 @@ from typing import Any
 import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import numpy as np
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
@@ -80,7 +80,7 @@ def bar_plot_cost_model_evaluations_total(
 
 
 def bar_plot_cost_model_evaluations_breakdown(
-    cmes: list[CostModelEvaluation], save_path: str, xtick_rotation: int = 90
+    cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
 ):
     memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {
         idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
@@ -100,7 +100,11 @@ def bar_plot_cost_model_evaluations_breakdown(
     la_tot: dict[int, float] = {idx: 0 for idx in range(len(cmes))}
 
     for idx, cme in enumerate(cmes):
-        mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation).memory_hierarchy
+        if isinstance(cme, CumulativeCME):
+            continue
+        assert isinstance(cme, CostModelEvaluation)
+
+        mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation[0]).memory_hierarchy
         mac_costs[idx] = cme.MAC_energy
         la_break_down[idx]["Ideal computation"] = cme.ideal_cycle
         la_break_down[idx]["Spatial stall"] = cme.ideal_temporal_cycle - cme.ideal_cycle

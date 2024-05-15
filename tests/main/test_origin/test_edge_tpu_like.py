@@ -3,34 +3,35 @@ import pytest
 from zigzag.api import get_hardware_performance_zigzag
 
 workloads = (
-    "zigzag/inputs/examples/workload/alexnet.onnx",
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx",
-    "zigzag/inputs/examples/workload/resnet18.onnx",
-    "zigzag.inputs.examples.workload.resnet18",
+    "inputs/workload/alexnet.onnx",
+    "inputs/workload/mobilenetv2.onnx",
+    "inputs/workload/resnet18.onnx",
+    "inputs/workload/resnet18.yaml",
 )
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/examples/workload/alexnet.onnx": (5646369654.200001, 8221207),
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (1680400085.4500012, 3562331),
-    "zigzag/inputs/examples/workload/resnet18.onnx": (1902488242.3499994, 3333310),
-    "zigzag.inputs.examples.workload.resnet18": (2347758970.83, 4187369),
+    "inputs/workload/alexnet.onnx": (5657178248.6, 8221391.0),
+    "inputs/workload/mobilenetv2.onnx": (1680773377.4499998, 3562331.0),
+    "inputs/workload/resnet18.onnx": (1902637139.1499994, 3333310.0),
+    "inputs/workload/resnet18.yaml": (2413348670.67, 4268451.0),
 }
 
 
 @pytest.fixture
 def mapping():
-    return "zigzag.inputs.examples.mapping.edge_tpu_like"
+    return "inputs/mapping/edge_tpu_like.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Edge_TPU_like"
+    return "inputs/hardware/edge_tpu_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload, accelerator, mapping):
     (energy, latency, cmes) = get_hardware_performance_zigzag(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
+    print(f"'{workload}': ({energy}, {latency}),")
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

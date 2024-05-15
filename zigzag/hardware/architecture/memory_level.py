@@ -34,22 +34,9 @@ class ServedMemDimensions:
 
         return tuple(vec_single_operand for _ in range(nb_operands))
 
+    @property
     def nb_dims(self):
         return len(self.data)
-
-    def assert_valid(self, oa_dim_sizes: dict[OADimension, int]) -> None:
-        """! Return True iff:
-        - all served dimensions are contained within the given Operational Array Dimensions
-        (Not the other way around: the served dimensions are a subset of the Dimensions of the Operational Array)
-        @param oa_dims a list with OA Dimensions to compare to
-        """
-        assert all(
-            [served_dim in oa_dim_sizes for served_dim in self]
-        ), f"""User-specified served dimensions {self.data} contains element not part of the Operational
-        Array Dimensions {oa_dim_sizes.keys()}"""
-
-    def to_user_format(self) -> ServedMemDimsUserFormat:
-        return tuple(oa_dim.name for oa_dim in self)
 
     def __eq__(self, other: Any):
         return (
@@ -70,40 +57,29 @@ class ServedMemDimensions:
     def __len__(self):
         return len(self.data)
 
-    @staticmethod
-    def parse_user_format(x: ServedMemDimsUserFormat) -> "ServedMemDimensions":
-        """! Initialize an instance from the given data in user format"""
-        assert isinstance(x, tuple), "User provided served memory dimensions must be a tuple"
-        assert all([isinstance(x, str) for x in x])
-
-        data = {OADimension.parse_user_input(oa_dim) for oa_dim in x}
-        return ServedMemDimensions(data)
-
 
 class MemoryLevel:
 
     def __init__(
         self,
         memory_instance: MemoryInstance,
-        operands: tuple[str, ...],
+        operands: list[MemoryOperand],
         mem_level_of_operands: dict[MemoryOperand, int],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
         operational_array: OperationalArray,
-        id: int,
+        identifier: int,
     ):
         """! Initialize the memory level in the hierarchy with the physical memory instance
         @param port_alloc: memory port allocation (physical memory port -> functional memory port)
         @param id: an identifier used for reference check.
         """
         self.memory_instance = memory_instance
-        # Convert to MemoryOperand
-        self.operands = [MemoryOperand(x) for x in operands]
+        self.operands = operands
         self.mem_level_of_operands = mem_level_of_operands
-        self.oa_dim_sizes: dict[OADimension, int] = operational_array.oa_dim_sizes
-        self.id: int = id
-        self.served_dimensions: ServedMemDimensions = served_dimensions
-        self.served_dimensions.assert_valid(self.oa_dim_sizes)
+        self.oa_dim_sizes = operational_array.oa_dim_sizes
+        self.id: int = identifier
+        self.served_dimensions = served_dimensions
         self.name = self.memory_instance.name
 
         # To be compatible with legacy code
@@ -143,7 +119,8 @@ class MemoryLevel:
             port_list.append(new_port)
         for i in range(1, rw_port_nb + 1):
             port_name = "rw_port_" + str(i)
-            port_bw = self.memory_instance.r_bw  # we assume the read-write port has the same bw for read and write
+            # we assume the read-write port has the same bw for read and write
+            port_bw = self.memory_instance.r_bw
             port_bw_min = self.memory_instance.r_bw_min
             port_attr = MemoryPortType.READ_WRITE
             new_port = MemoryPort(port_name, port_bw, port_bw_min, port_attr)
@@ -170,8 +147,10 @@ class MemoryLevel:
         return str(self)
 
     def __update_formatted_string(self):
-        self.formatted_string = f"""MemoryLevel(instance={self.memory_instance.name},operands={self.operands},
-        served_dimensions={self.served_dimensions})"""
+        self.formatted_string = (
+            f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands}, "
+            f"served_dimensions={self.served_dimensions})"
+        )
 
     def __str__(self):
         self.__update_formatted_string()

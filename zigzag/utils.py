@@ -1,8 +1,10 @@
+import logging
 import pickle
 from copy import deepcopy
 from typing import Any
 
 import numpy as np
+import yaml
 
 
 def pickle_deepcopy(to_copy: Any) -> Any:
@@ -23,6 +25,12 @@ def pickle_load(path: str):
     with open(path, "rb") as fp:
         obj = pickle.load(fp)
     return obj
+
+
+def open_yaml(path: str):
+    with open(path, encoding="utf-8") as f:
+        data = yaml.safe_load(f)
+    return data
 
 
 def json_repr_handler(obj: Any, simple: bool = False) -> Any:
@@ -50,3 +58,18 @@ def json_repr_handler(obj: Any, simple: bool = False) -> Any:
         return tuple(json_repr_handler(x, simple) for x in obj)
 
     raise TypeError(f"Object of type {type(obj)} is not serializable. Create a {attr} method.")
+
+
+class UniqueMessageFilter(logging.Filter):
+    """! Prevents the logger from filtering duplicate messages"""
+
+    def __init__(self):
+        self.recorded_messages: set[str] = set()
+
+    def filter(self, record):
+        message = record.getMessage()
+        if message in self.recorded_messages:
+            return False  # Skip this message
+        else:
+            self.recorded_messages.add(message)
+            return True

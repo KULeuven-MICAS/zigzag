@@ -1,8 +1,10 @@
 from zigzag.datatypes import MemoryOperand
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 
+from zigzag.mapping.spatial_mapping import SpatialMapping
 from zigzag.utils import json_repr_handler
 
 
@@ -14,14 +16,18 @@ class Core:
 
     def __init__(
         self,
-        id: int,
+        core_id: int,
         operational_array: OperationalArray,
         memory_hierarchy: MemoryHierarchy,
+        dataflows: SpatialMapping | None = None,
     ):
 
-        self.id = id
+        self.id = core_id
         self.operational_array = operational_array
         self.memory_hierarchy = memory_hierarchy
+        self.mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
+
+        self.dataflows = dataflows
         self.recalculate_memory_hierarchy_information()
 
     def get_memory_level(self, mem_op: MemoryOperand, mem_lv: int) -> MemoryLevel:
@@ -89,6 +95,13 @@ class Core:
                     memory_sharing_list.append(operand_mem_share)
 
         self.mem_sharing_list = memory_sharing_list
+
+    def get_top_memory_instance(self, mem_op: MemoryOperand) -> MemoryInstance:
+        if mem_op not in self.memory_hierarchy.get_operands():
+            raise ValueError(f"Memory operand {mem_op} not in {self}.")
+        mem_level = self.memory_hierarchy.get_operand_top_level(mem_op)
+        mem_instance = mem_level.memory_instance
+        return mem_instance
 
     def get_memory_bw_dict(self):
         return self.mem_r_bw_dict, self.mem_w_bw_dict

@@ -5,7 +5,8 @@ from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.input_parser_stages import AcceleratorParserStage, WorkloadParserStage
+from zigzag.stages.WorkloadParserStage import WorkloadParserStage
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
 from zigzag.stages.LomaStage import LomaStage

@@ -364,7 +364,7 @@ class Mapping:
                 if (
                     self.access_same_data_considered_as_no_access
                     and mem_level == 0
-                    and self.accelerator.get_core(self.layer_node.core_allocation).mem_r_bw_dict[
+                    and self.accelerator.get_core(self.layer_node.core_allocation[0]).mem_r_bw_dict[
                         self.layer_node.memory_operand_links[operand]
                     ][mem_level]
                     >= self.data_bit_per_level[operand][mem_level]
