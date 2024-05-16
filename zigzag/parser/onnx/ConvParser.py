@@ -32,30 +32,6 @@ class ConvParser(ONNXOperatorParser):
         """! Run the parser and return the created LayerNode object"""
         return self.generate_layer_node_for_conv()
 
-    # def get_weight_name(self, node: NodeProto):
-    #     """! Return the name of the weight input of this node depending on its operator type
-    #     @param node (NodeProto): The node
-    #     """
-    #     op_type = node.op_type  # 'Conv', 'QLinearConv', ...
-    #     if op_type == "Conv":
-    #         return node.input[1]
-    #     elif op_type == "QLinearConv":
-    #         return node.input[3]
-    #     else:
-    #         raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
-
-    # def get_input_output_weight_data_type(self):
-    #     """! Return the data type of the input, output and weight tensors of this node."""
-    #     input_name = self.node.input[0]
-    #     output_name = self.node.output[0]
-    #     weight_name = self.get_weight_name(self.node)
-
-    #     input_elem_type = get_onnx_tensor_type(input_name, self.onnx_model).elem_type
-    #     output_elem_type = get_onnx_tensor_type(output_name, self.onnx_model).elem_type
-    #     weight_elem_type = get_onnx_tensor_type(weight_name, self.onnx_model).elem_type
-
-    #     return input_elem_type, output_elem_type, weight_elem_type
-
     def get_layer_node_input_format(
         self,
         kernel_shape: list[int],
@@ -73,7 +49,7 @@ class ConvParser(ONNXOperatorParser):
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
-        data["name"] = f"Layer{self.node_id}"
+        data["name"] = self.node_name
         data["operator_type"] = self.node.op_type
         # IMPORTANT: If any of the input loops require padding, they should be defined as the rightmost dimensions
         # in the equation.  This is because we construct the dimensionality order and then add the padding to those last

@@ -170,19 +170,14 @@ class LayerDimRelation(LayerAttribute):
 
 
 class LayerTemporalOrdering(LayerAttribute):
-    """
-    # TODO is this ever used?
-    """
+    DEFAULT = []
 
-    def __init__(self, data: dict[LayerOperand, UnrollFactorInt]):
-        self.data = data
+    def __init__(self, data: list[list[str, int]]):
+        self.data = [(LayerDim(loop[0]), loop[1]) for loop in data]
 
     @staticmethod
     def empty():
-        return LayerTemporalOrdering({})
-
-    def __delitem__(self, x: LayerOperand):
-        del self.data[x]
+        return LayerTemporalOrdering(LayerTemporalOrdering.DEFAULT)
 
 
 class LayerPadding(LayerAttribute):

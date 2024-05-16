@@ -46,6 +46,18 @@ class MappingValidator:
             },
             "required": False,
         },
+        "temporal_ordering": {
+            "type": "list",
+            "schema": {
+                "type": "list",
+                "items": [
+                    {"type": "string"},
+                    {"type": "integer"}
+                ],
+                "minlength": 2,
+                "maxlength": 2
+            }
+        }
     }
 
     def __init__(self, data: Any):
