@@ -18,6 +18,7 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         onnx_model: ModelProto,
     ) -> None:
         self.node_id = node_id
+        self.node_name = node.name if node.name else f"Layer{node_id}"
         self.node = node
         self.nodes_outputs = nodes_outputs
         self.onnx_model = onnx_model
