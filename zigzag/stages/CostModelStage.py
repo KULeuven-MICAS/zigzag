@@ -3,7 +3,7 @@ from typing import Any
 
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.cost_model.CostModelEvaluationForIMC import CostModelEvaluationForIMC
+from zigzag.cost_model.cost_model_imc import CostModelEvaluationForIMC
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
