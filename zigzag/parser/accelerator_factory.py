@@ -2,6 +2,8 @@ from typing import Any
 from zigzag.datatypes import Constants, LayerDim, MemoryOperand, OADimension, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
+from zigzag.hardware.architecture.AimcArray import AimcArray
+from zigzag.hardware.architecture.DimcArray import DimcArray
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
@@ -35,10 +37,13 @@ class CoreFactory:
         self.data = data
 
     def create(self, core_id: int = 1) -> Core:
-        """! Create an Core instance from the user-provided data.
+        """! Create a Core instance from the user-provided data.
         NOTE the memory instances must be defined from lowest to highest.
         """
-        operational_array = self.create_operational_array()
+        if self.data["operational_array"]["is_imc"]:
+            operational_array = self.create_imc_array()
+        else:
+            operational_array = self.create_operational_array()
         mem_graph = MemoryHierarchy(operational_array)
         dataflows = self.create_dataflows()
 
@@ -50,8 +55,18 @@ class CoreFactory:
             core_id=core_id, operational_array=operational_array, memory_hierarchy=mem_graph, dataflows=dataflows
         )
 
+    def create_imc_array(self) -> AimcArray or DimcArray:
+        # Imc settings
+        cells_size: int = self.data["memories"]["cells"]["size"]
+        imc_data: dict[str, Any] = self.data["operational_array"]
+        if imc_data["imc_type"] == "analog":
+            imc_array = AimcArray(cells_size, imc_data)
+        else:
+            imc_array = DimcArray(cells_size, imc_data)
+        return imc_array
+
     def create_operational_array(self) -> OperationalArray:
-        mul_data: dict[str, Any] = self.data["multipliers"]
+        mul_data: dict[str, Any] = self.data["operational_array"]
         multiplier = Multiplier(
             input_precision=mul_data["input_precision"],
             energy_cost=mul_data["multiplier_energy"],
