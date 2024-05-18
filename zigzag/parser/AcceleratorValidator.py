@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 from cerberus import Validator
+from math import log2
 
 
 logger = logging.getLogger(__name__)
@@ -86,18 +87,17 @@ class AcceleratorValidator:
                     "maxlength": 2,
                 },
                 # Non-IMC properties
-                "multiplier_energy": {"type": "float", "required": True},
-                "multiplier_area": {"type": "float", "required": True},
+                "multiplier_energy": {"type": "float", "required": False},
+                "multiplier_area": {"type": "float", "required": False},
                 # IMC properties
-                "imc-type": {
+                "imc_type": {
                     "type": "string",
                     "allowed": ["analog", "digital"],
                     "nullable": True,
                     "default": None,
                 },
-                "cell": {"type": "string", "required": False, "allowed": ["sram"], "nullable": True, "default": None},
                 "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": None},
-                "bit_serial_precision": {"type": "float", "required": False, "nullable": True, "default": None},
+                "bit_serial_precision": {"type": "float", "required": True, "nullable": True, "default": None},
             },
         },
         "dataflows": {
@@ -139,6 +139,10 @@ class AcceleratorValidator:
 
         for mem_name in self.data["memories"]:
             self.validate_single_memory(mem_name)
+
+        is_imc = self.data["operational_array"]["is_imc"]
+        if is_imc:
+            self.validate_cells_imc()
 
         return self.is_valid
 
@@ -199,6 +203,11 @@ class AcceleratorValidator:
                 if (direction == "th" or direction == "tl") and (port_name.startswith("w_")):
                     self.invalidate(f"Write port given for read direction in {mem_name}")
 
+    def validate_cells_imc(self):
+        # TODO: (1) lowest memory level should only serve weight; (2) served dimension should be empty; (3)
+        # memory size should be a multiply (e.g. 1,2,..) of weight precision.
+        pass
+
     def validate_operational_array(self):
         multiplier_data = self.data["operational_array"]
 
@@ -217,8 +226,15 @@ class AcceleratorValidator:
     def validate_operational_array_imc(self):
         """Assumes that the multiplier type is IMC"""
         # All previous IMC checks are now part of the schema
-        # TODO check that the non-IMC properties are None
-        pass
+        imc_data = self.data["operational_array"]
+        if imc_data["bit_serial_precision"] > imc_data["input_precision"][0]:
+            self.invalidate("Bit serial input precision for IMC are bigger than activation precision.")
+        if log2(imc_data["bit_serial_precision"]) % 1 != 0:
+            self.invalidate("Bit serial input precision is not in the power of 2.")
+        if log2(imc_data["input_precision"][0]) % 1 != 0:
+            self.invalidate("Activation precision is not in the power of 2.")
+        if log2(imc_data["input_precision"][1]) % 1 != 0:
+            self.invalidate("Weight precision is not in the power of 2.")
 
     def validate_operational_array_non_imc(self):
         """Assumes that the multiplier type is not IMC"""
