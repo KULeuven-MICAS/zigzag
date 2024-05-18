@@ -147,56 +147,47 @@ class ImcUnit:
         layer_const_operand: str = layer.constant_operands[0]
         layer_act_operand: str = [operand for operand in layer.input_operands if operand != layer_const_operand][0]
 
-        spatial_mapping = copy.deepcopy(layer.spatial_mapping)
+        spatial_mapping: dict = copy.deepcopy(layer.spatial_mapping.data)
 
         # Figure out the spatial mapping in a single macro
-        spatial_mapping_in_macro = []
-        for layer_dim, loop in spatial_mapping.items():
-            if layer_dim in [wl_dim, bl_dim]:  # serve the dimension inside the macro
-                if isinstance(loop[0], str):  # single layer_dim unrolling
-                    spatial_mapping_in_macro.append(loop)
-                else:  # mix layer_dim unrolling
-                    for element in loop:
-                        spatial_mapping_in_macro.append(element)
+        spatial_mapping_size_in_macro = 1
+        for oa_dim, loop in spatial_mapping.items():
+            if oa_dim in [wl_dim, bl_dim]:  # serve the dimension inside the macro
+                spatial_unroll_sizes: list = [unroll_size for unroll_size in loop.data.values()]
+                spatial_mapping_size_in_macro *= np.prod(spatial_unroll_sizes)
 
         # We will derive how many number of PE columns and rows are mapping.
         # Energy of unmapped rows and columns will be set to 0.
         if wl_dim not in spatial_mapping.keys():
             mapped_cols = 1
-            sm_on_wl_dim = tuple()
             weight_ir_loop_on_wl_dim = False  # if there is OX / OY mapped on wl dims
         else:
-            sm_on_wl_dim = spatial_mapping[wl_dim]  # spatial mapping on wl_dimension
-            if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
-                mapped_cols = sm_on_wl_dim[1]  # floating number is also supported for calculation
-            else:  # mix layer_dim mapping (e.g. (("K",2), ("OX",2)) )
-                mapped_cols = math.prod([v[1] for v in sm_on_wl_dim])
+            sm_on_wl_dim: dict = spatial_mapping[wl_dim].data  # spatial mapping on wl_dimension
+            wl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_wl_dim.keys()]
+            wl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_wl_dim.values()]
+            mapped_cols = np.prod(wl_dim_unroll_sizes)
 
             # Calculate the number of mapped rows in each macro.
             # As there might be OX / OY unrolling, resulting in a diagonal mapping, we will have a special check on that
             # Firstly check if there is OX / OY unrolling
-            weight_ir_layer_dims: list = layer[layer_const_operand]["ir"]
+            weight_ir_layer_dims: list = layer.loop_relevancy_info.ir_dims[layer_const_operand]
             weight_ir_loop_on_wl_dim = False  # set default value
-            if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
-                weight_ir_loop_on_wl_dim = True if sm_on_wl_dim[0] in weight_ir_layer_dims else False
+            if len(wl_dim_unroll_dims) == 1:  # single layer mapping (e.g. {"K", 2})
+                weight_ir_loop_on_wl_dim = True if wl_dim_unroll_dims[0] in weight_ir_layer_dims else False
             else:  # mix layer_dim mapping (e.g. (("K",2), ("OX",2)) )
-                for element in sm_on_wl_dim:
-                    layer_dim = element[0]
-                    if layer_dim in weight_ir_layer_dims:
+                for unroll_dim in wl_dim_unroll_dims:
+                    if unroll_dim in weight_ir_layer_dims:
                         weight_ir_loop_on_wl_dim = True
                         break
 
         # Calculate total mapped number of rows
         if bl_dim in spatial_mapping.keys():
-            sm_on_bl_dim: tuple = spatial_mapping[bl_dim]  # spatial mapping on bl_dimension
+            sm_on_bl_dim: dict = spatial_mapping[bl_dim].data  # spatial mapping on bl_dimension
+            bl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_bl_dim.values()]
             if (
                 not weight_ir_loop_on_wl_dim
             ):  # if False: mean there is no OX / OY unrolling on wl_dim, so no diagonal unrolling required
-                if isinstance(sm_on_bl_dim[0], str):  # single layer mapping (e.g. ("FX", 2))
-                    mapped_rows_total = sm_on_bl_dim[1]  # floating number is also supported for calculation
-                else:  # mix layer_dim mapping (e.g. (("C",2), ("FX",2)) )
-                    mapped_rows_total = math.prod([v[1] for v in sm_on_bl_dim])
-                mapped_rows_total = math.ceil(mapped_rows_total)  # must be an integer, as it is used for adder trees.
+                mapped_rows_total = math.ceil(np.prod(bl_dim_unroll_sizes))
                 mapped_rows_for_adder = mapped_rows_total
             else:
                 mapped_rows_total, mapped_rows_for_adder = (
@@ -215,7 +206,7 @@ class ImcUnit:
         # Get the number of time of activating macro
         # Note: it is normalized to a hardware that has only one macro (see equation below)
         # Equation = total MAC number of a layer/spatial mapping on a single macro
-        macro_activation_times = layer.total_MAC_count / np.prod([x[1] for x in spatial_mapping_in_macro])
+        macro_activation_times = layer.total_MAC_count / float(spatial_mapping_size_in_macro)
         return (
             mapped_rows_total,
             mapped_rows_for_adder,
@@ -225,7 +216,7 @@ class ImcUnit:
 
     @staticmethod
     def calculate_mapped_rows_when_diagonal_mapping_found(
-        layer: LayerNode, layer_const_operand: str, layer_act_operand: str, sm_on_wl_dim: tuple, sm_on_bl_dim: tuple
+        layer: LayerNode, layer_const_operand: str, layer_act_operand: str, sm_on_wl_dim: dict, sm_on_bl_dim: dict
     ) -> tuple:
         # This function is used for calculating the total mapped number of rows when OX, OY unroll is found,
         # which requires a diagonal data mapping.
@@ -249,20 +240,23 @@ class ImcUnit:
         # Third, check if they are mapped on wl_dim and record down the mapped value if exist
         for weight_ir_layer_dim in weight_ir_layer_dims:
             pr_sm_key = pr_sm_link[weight_ir_layer_dim]
-            if isinstance(sm_on_wl_dim[0], str):  # single layer mapping (e.g. ("K", 2))
-                if weight_ir_layer_dim == sm_on_wl_dim[0]:
-                    pr_sm[pr_sm_key][weight_ir_layer_dim] = sm_on_wl_dim[1]
+            wl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_wl_dim.keys()]
+            if len(wl_dim_unroll_dims) == 1:  # single layer mapping (e.g. ("K", 2))
+                if weight_ir_layer_dim == wl_dim_unroll_dims[0]:
+                    pr_sm[pr_sm_key][weight_ir_layer_dim] = sm_on_wl_dim[wl_dim_unroll_dims[0]]
             else:  # mix layer_dim mapping (e.g. (("K",2), ("OX",2)) )
-                for element in sm_on_wl_dim:
-                    if weight_ir_layer_dim == element[0]:
+                for unroll_dim in wl_dim_unroll_dims:
+                    if weight_ir_layer_dim == unroll_dim:
                         # use *= in case there are multiple OX / OY in a mix sm loop
-                        pr_sm[pr_sm_key][weight_ir_layer_dim] *= element[1]
+                        pr_sm[pr_sm_key][weight_ir_layer_dim] *= sm_on_wl_dim[unroll_dim]
         # Then, we calculate the total mapped number of rows
         # mapped_rows_total: used for energy estimation of wordline and multipliers
         # mapped_rows_for_adder: number of activated inputs of an adder tree, used for energy estimation of adder trees
-        if isinstance(sm_on_bl_dim[0], str):  # single layer mapping
-            layer_dim = sm_on_bl_dim[0]
-            layer_dim_size = sm_on_bl_dim[1]
+        bl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_bl_dim.keys()]
+        bl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_bl_dim.values()]
+        if len(bl_dim_unroll_dims) == 1:  # single layer mapping
+            layer_dim = bl_dim_unroll_dims[0]
+            layer_dim_size = bl_dim_unroll_sizes[1]
             # pr_sm.keys() include FX, FY
             if layer_dim not in pr_sm.keys():  # e.g. ("C", 2)
                 additional_diag_rows = 0
@@ -276,9 +270,9 @@ class ImcUnit:
             # In reality, OXu, OYu will not both exist. But the function still support this by the equation above.
             mapped_rows_total = 1
             mapped_rows_for_adder = 1
-            for element in sm_on_bl_dim:
-                layer_dim = element[0]
-                layer_dim_size = element[1]
+            for bl_dim_idx in range(len(bl_dim_unroll_dims)):
+                layer_dim = bl_dim_unroll_dims[bl_dim_idx]
+                layer_dim_size = bl_dim_unroll_sizes[bl_dim_idx]
                 if layer_dim not in pr_sm.keys():
                     additional_diag_rows = 0
                 else:
