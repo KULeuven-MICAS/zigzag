@@ -29,10 +29,11 @@ class ImcUnit:
         "xor2_dly": 0.0478 * 2.4,  # unit: ns
     }
 
-    def __init__(self, cells_size: int, imc_data: dict, dimensions: dict[OADimension, int]):
+    def __init__(self, cells_data: dict, imc_data: dict, dimensions: dict[OADimension, int]):
         # initialization
         self.tech_param = ImcUnit.TECH_PARAM_28NM
-        self.cells_size = cells_size
+        self.total_unit_count = int(np.prod(imc_data["sizes"]))
+        self.cells_data = cells_data
         self.imc_data = imc_data
         self.oa_dim_sizes = dimensions
         self.activation_precision = imc_data["input_precision"][0]
@@ -53,6 +54,7 @@ class ImcUnit:
         self.delay_breakdown = None
         self.mapped_rows_total = None
         self.mapped_group_depth = None
+        self.cells_w_cost = None
 
     def get_1b_adder_energy(self) -> float:
         """energy of 1b full adder
@@ -112,23 +114,23 @@ class ImcUnit:
 
     @staticmethod
     def get_single_cell_array_cost_from_cacti(tech_node: dict, wl_dim_size: float, bl_dim_size: float,
-                                              group_depth: float, weight_precision: int) -> tuple:
+                                              cells_size: float, weight_precision: int) -> tuple:
         """get the area, energy cost of a single macro (cell array) using CACTI
         this function is called when cacti is required for cost estimation
         @param tech_node:   the technology node (e.g. 0.028, 0.032, 0.022 ... unit: um)
         @param wl_dim_size: the size of dimension where wordline is.
         @param bl_dim_size: the size of dimension where bitline (adder tree) is.
-        @param group_depth: the size of each cell group (number of SRAM cells on local bitline)
+        @param cells_size: the size of each cell group (unit: bit)
         @param weight_precision: weight precision (number of SRAM cells required to store a operand)
         """
-        cell_array_size = wl_dim_size * bl_dim_size * group_depth * weight_precision / 8  # array size. unit: byte
+        cell_array_size = wl_dim_size * bl_dim_size * cells_size / 8  # array size. unit: byte
         array_bw = wl_dim_size * weight_precision  # imc array bandwidth. unit: bit
 
         # we will call cacti to get the area (mm^2), access_time (ns), r_cost (nJ/access), w_cost (nJ/access)
         if __name__ == "imc_unit":
             cacti_path = "../../cacti/cacti_master"
         else:
-            cacti_path = "zigzag/classes/cacti/cacti_master"
+            cacti_path = "zigzag/cacti/cacti_master"
         access_time, area, r_cost, w_cost = get_cacti_cost(
             cacti_path=cacti_path,
             tech_node=tech_node,
@@ -287,7 +289,7 @@ class ImcUnit:
     def get_precharge_energy(self, tech_param: dict, layer: LayerNode, mapping: Mapping) -> tuple:
         # calculate pre-charging energy on local bitlines for specific layer and mapping
         # also calculate mapped group depth (number of weights stored in a cell group)
-        group_depth = self.cells_size / self.weight_precision
+        group_depth = self.cells_data["size"] / self.weight_precision
         if group_depth > 1:
             # Pre-charge operation is required on local bitline if group_depth > 1
             # The final pre-charge energy = energy/PE * nb_of_precharge_times
