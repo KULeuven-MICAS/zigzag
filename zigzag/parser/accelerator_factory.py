@@ -59,10 +59,14 @@ class CoreFactory:
         # Imc settings
         cells_size: int = self.data["memories"]["cells"]["size"]
         imc_data: dict[str, Any] = self.data["operational_array"]
+        oa_dims: list[str] = imc_data["dimensions"]
+        dimension_sizes: dict[OADimension, int] = {
+            OADimension(oa_dim): imc_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
+        }
         if imc_data["imc_type"] == "analog":
-            imc_array = AimcArray(cells_size, imc_data)
+            imc_array = AimcArray(cells_size, imc_data, dimension_sizes)
         else:
-            imc_array = DimcArray(cells_size, imc_data)
+            imc_array = DimcArray(cells_size, imc_data, dimension_sizes)
         return imc_array
 
     def create_operational_array(self) -> OperationalArray:
