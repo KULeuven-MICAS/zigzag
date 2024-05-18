@@ -382,7 +382,6 @@ class AimcArray(ImcUnit):
 
 
 if __name__ == "__main__":
-    from zigzag.datatypes import OADimension
     #
     # #### IMC hardware dimension illustration (keypoint: adders' accumulation happens on D2)
     #
