@@ -240,10 +240,8 @@ class AcceleratorValidator:
         """Assumes that the multiplier type is not IMC"""
         multiplier_data = self.data["operational_array"]
         # All IMC related properties should be None
-        if multiplier_data["imc-type"] is not None:
-            self.invalidate("Multiplier are non-IMC but `imc-type` is defined")
-        if multiplier_data["cell-type"] is not None:
-            self.invalidate("Multiplier are non-IMC but `cell` is defined")
+        if multiplier_data["imc_type"] is not None or multiplier_data["imc_type"] is True:
+            self.invalidate("Multiplier are non-IMC but `imc_type` is defined as True")
         if multiplier_data["adc_resolution"] is not None:
             self.invalidate("Multiplier are non-IMC but `adc_resolution` is defined")
         if multiplier_data["bit_serial_precision"] is not None:
