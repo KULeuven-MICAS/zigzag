@@ -1,7 +1,7 @@
 name: aimc
 
 memories:
-  cell_1B:
+  cells:
     size: 8
     r_bw: 8
     w_bw: 8
@@ -102,8 +102,8 @@ memories:
     served_dimensions: [D1, D2]
 
 operational_array:
-  type: analog
-  cell: sram
+  is_imc: True
+  imc_type: analog
   input_precision: [8, 8] # unit: bit
   bit_serial_precision: 2 # unit: bit
   adc_resolution: 8 # unit: bit
