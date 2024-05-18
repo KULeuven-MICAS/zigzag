@@ -25,7 +25,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.mem_energy_breakdown: dict[LayerOperand, list[float]]
         self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]]
         self.memory_word_access: dict[LayerOperand, list[FourWayDataMoving]]
-        self.MAC_energy: float
+        self.mac_energy: float
         self.mem_energy: float
         self.energy_total: float
         self.data_loading_cycle: float
@@ -46,7 +46,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result = CumulativeCME()
 
         # Energy
-        result.MAC_energy = self.MAC_energy + other.MAC_energy
+        result.mac_energy = self.mac_energy + other.mac_energy
         result.mem_energy = self.mem_energy + other.mem_energy
         result.energy_total = self.energy_total + other.energy_total
 
@@ -144,7 +144,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result: "CostModelEvaluationABC" = pickle_deepcopy(self)
 
         # Energy
-        result.MAC_energy *= number
+        result.mac_energy *= number
         result.mem_energy *= number
         result.energy_total *= number
 
@@ -198,7 +198,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
                     },
                     "energy": {
                         "energy_total": self.energy_total,
-                        "operational_energy": self.MAC_energy,
+                        "operational_energy": self.mac_energy,
                         "memory_energy": self.mem_energy,
                         "memory_energy_breakdown_per_level": self.mem_energy_breakdown,
                         "memory_energy_breakdown_per_level_per_operand": self.mem_energy_breakdown_further,
@@ -242,7 +242,7 @@ class CumulativeCME(CostModelEvaluationABC):
         self.layer_ids: list[int] = []
         self.core_ids: list[int] = []
 
-        self.MAC_energy: float = 0.0
+        self.mac_energy: float = 0.0
         self.mem_energy: float = 0.0
         self.energy_total: float = 0.0
         self.data_loading_cycle: float = 0.0
@@ -563,14 +563,14 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """! Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing
         energy."""
         # TODO: Interconnection energy
-        self.calc_MAC_energy_cost()
+        self.calc_mac_energy_cost()
         self.calc_memory_energy_cost()
 
-    def calc_MAC_energy_cost(self) -> None:
+    def calc_mac_energy_cost(self) -> None:
         """! Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
-        single_MAC_energy = core.operational_array.unit.cost
-        self.MAC_energy = single_MAC_energy * self.layer.total_MAC_count
+        single_mac_energy = core.operational_array.unit.cost
+        self.mac_energy = single_mac_energy * self.layer.total_MAC_count
 
     def calc_memory_energy_cost(self):
         """! Computes the memories reading/writing energy by converting the access patterns in self.mapping to
@@ -628,7 +628,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mem_energy_breakdown: dict[LayerOperand, list[float]] = mem_energy_breakdown
         self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = mem_energy_breakdown_further
         self.mem_energy = energy_total
-        self.energy_total: float = self.mem_energy + self.MAC_energy
+        self.energy_total: float = self.mem_energy + self.mac_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
 
     def calc_latency(self) -> None:
