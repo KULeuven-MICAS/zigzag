@@ -421,6 +421,6 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         return {
             "energy": self.energy_total,
             "latency": self.latency_total2,
-            "tclk": self.tclk,
+            "tclk (ns)": self.tclk,
             "area": self.area_total,
         }
