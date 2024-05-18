@@ -291,10 +291,9 @@ class AimcArray(ImcUnit):
 
         # # energy calculation
         # # energy of precharging
-        energy_precharging, mapped_group_depth = self.get_precharge_energy(
+        energy_precharging, self.mapped_group_depth = self.get_precharge_energy(
             self.tech_param, layer, mapping
         )
-        self.mapped_group_depth = mapped_group_depth
 
         # # energy of DACs
         energy_dacs = (
