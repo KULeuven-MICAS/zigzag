@@ -29,11 +29,12 @@ class ImcUnit:
         "xor2_dly": 0.0478 * 2.4,  # unit: ns
     }
 
-    def __init__(self, cells_size: int, imc_data: dict):
+    def __init__(self, cells_size: int, imc_data: dict, dimensions: dict[OADimension, int]):
         # initialization
         self.tech_param = ImcUnit.TECH_PARAM_28NM
         self.cells_size = cells_size
         self.imc_data = imc_data
+        self.oa_dim_sizes = dimensions
         self.activation_precision = imc_data["input_precision"][0]
         self.weight_precision = imc_data["input_precision"][1]
         # wl_dim should be the same with the dimension served by input_reg.
