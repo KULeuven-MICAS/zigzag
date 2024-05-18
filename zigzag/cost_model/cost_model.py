@@ -689,7 +689,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         self.double_buffer_true = double_buffer_true
 
-    def __calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
+    def calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
         """! Construct a 4-way data transfer pattern for each unit mem, calculate
         {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
         # TODO cleanup
@@ -790,7 +790,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.allowed_mem_updat_cycle = allowed_mem_updat_cycle
         self.real_data_trans_cycle = real_data_trans_cycle
 
-    def __combine_data_transfer_rate_per_physical_port(self) -> None:
+    def combine_data_transfer_rate_per_physical_port(self) -> None:
         """! Consider memory sharing and port sharing, combine the data transfer activity
         Step 1: collect port activity per memory instance per physical memory port
         Step 2: calculate SS combine and MUW union parameters per physical memory port
