@@ -10,7 +10,6 @@ from zigzag.hardware.architecture.DimcArray import UserSpatialMappingGenerator
 
 if __name__ == "__main__":
     from imc_unit import ImcUnit
-    from DimcArray import DimcArray
     import logging as _logging
 
     _logging_level = _logging.INFO
@@ -19,7 +18,6 @@ if __name__ == "__main__":
 else:
     import logging as _logging
     from zigzag.hardware.architecture.imc_unit import ImcUnit
-    from zigzag.hardware.architecture.DimcArray import DimcArray
 
 
 class AimcArray(ImcUnit):
@@ -27,11 +25,11 @@ class AimcArray(ImcUnit):
     # constraint:
     #     -- activation precision must be in the power of 2.
     #     -- input_bit_per_cycle must be in the power of 2.
-    def __init__(self, cells_size: int, imc_data: dict):
+    def __init__(self, cells_size: int, imc_data: dict, dimensions):
         # @param cells_size: cell group size (unit: bit)
         # @param imc_data: IMC cores' parameters
-        # @param dimension_sizes: IMC cores' dimension_sizes
-        super().__init__(cells_size, imc_data)
+        # @param dimensions: IMC cores' dimensions
+        super().__init__(cells_size, imc_data, dimensions)
         self.get_area()
         self.get_tclk()
         self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
@@ -428,7 +426,7 @@ if __name__ == "__main__":
     }
     cells_size = 8  # unit: bit
 
-    aimc = AimcArray(cells_size, imc_data)
+    aimc = AimcArray(cells_size, imc_data, None)
     logger = _logging.getLogger(__name__)
     logger.info(f"Total IMC area (mm^2): {aimc.area}")
     logger.info(f"area breakdown: {aimc.area_breakdown}")
