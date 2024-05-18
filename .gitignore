@@ -156,5 +156,5 @@ html/
 debug*
 
 # cacti cache files for imc
-zigzag/classes/cacti/cacti_master/self_gen/*
-zigzag/classes/cacti/cacti_master/*.yaml
+zigzag/cacti/cacti_master/self_gen/*
+zigzag/cacti/cacti_master/*.yaml
