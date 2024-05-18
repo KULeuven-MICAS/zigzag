@@ -32,6 +32,9 @@ class AimcArray(ImcUnit):
         # @param imc_data: IMC cores' parameters
         # @param dimension_sizes: IMC cores' dimension_sizes
         super().__init__(cells_size, imc_data)
+        self.get_area()
+        self.get_tclk()
+        self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
 
     def __jsonrepr__(self):
         """
@@ -135,8 +138,8 @@ class AimcArray(ImcUnit):
         }
         self.area = sum([v for v in self.area_breakdown.values()])
 
-    def get_delay(self):
-        """! get delay of imc macros (worst path: dacs -> mults -> adcs -> adders -> accumulators)"""
+    def get_tclk(self):
+        """! get clock cycle time of imc macros (worst path: dacs -> mults -> adcs -> adders -> accumulators)"""
         # delay of dacs
         dly_dacs = self.get_dac_cost()[1]
 
@@ -178,14 +181,14 @@ class AimcArray(ImcUnit):
             )
 
         # total delay of imc
-        self.delay_breakdown = {
+        self.tclk_breakdown = {
             "dacs": dly_dacs,
             "mults": dly_mults,
             "adcs": dly_adcs,
             "adders_pv": dly_adders_pv,
             "accumulators": dly_accumulators,
         }
-        self.delay = sum([v for v in self.delay_breakdown.values()])
+        self.tclk = sum([v for v in self.tclk_breakdown.values()])
 
     def get_peak_energy_single_cycle(self) -> dict:
         """! macro-level one-cycle energy of imc arrays (fully utilization, no weight updating)
@@ -264,10 +267,7 @@ class AimcArray(ImcUnit):
                 * self.nb_of_banks
         )
 
-        self.get_area()  # configure self.area and self.area_breakdown
-        self.get_delay()  # configure self.delay and self.delay_breakdown
-
-        clock_cycle_period = self.delay  # unit: ns
+        clock_cycle_period = self.tclk  # unit: ns
         peak_energy_per_cycle = sum([v for v in self.get_peak_energy_single_cycle().values()])  # unit: pJ
         imc_area = self.area  # unit: mm^2
 
@@ -429,12 +429,9 @@ if __name__ == "__main__":
     cells_size = 8  # unit: bit
 
     aimc = AimcArray(cells_size, imc_data)
-    aimc.get_area()
-    aimc.get_delay()
     logger = _logging.getLogger(__name__)
     logger.info(f"Total IMC area (mm^2): {aimc.area}")
     logger.info(f"area breakdown: {aimc.area_breakdown}")
-    logger.info(f"delay (ns): {aimc.delay}")
-    logger.info(f"delay breakdown (ns): {aimc.delay_breakdown}")
-    aimc.get_macro_level_peak_performance()
+    logger.info(f"Tclk (ns): {aimc.tclk}")
+    logger.info(f"Tclk breakdown (ns): {aimc.tclk_breakdown}")
     exit()
