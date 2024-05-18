@@ -25,11 +25,11 @@ class AimcArray(ImcUnit):
     # constraint:
     #     -- activation precision must be in the power of 2.
     #     -- input_bit_per_cycle must be in the power of 2.
-    def __init__(self, cells_size: int, imc_data: dict, dimensions):
-        # @param cells_size: cell group size (unit: bit)
+    def __init__(self, cells_data: dict, imc_data: dict, dimensions):
+        # @param cells_data: cells parameters
         # @param imc_data: IMC cores' parameters
         # @param dimensions: IMC cores' dimensions
-        super().__init__(cells_size, imc_data, dimensions)
+        super().__init__(cells_data, imc_data, dimensions)
         self.get_area()
         self.get_tclk()
         self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
@@ -81,11 +81,20 @@ class AimcArray(ImcUnit):
     def get_area(self):
         """! get area of AIMC logics (mults, adders, adders_pv, accumulators. Exclude sram cells, input/output regs)"""
         # area of cells
-        area_cells = 0  # TODO
+        if self.cells_data["auto_cost_extraction"]:
+            cost_per_bank = self.get_single_cell_array_cost_from_cacti(tech_node=self.tech_param["tech_node"],
+                                                                       wl_dim_size=self.wl_dim_size,
+                                                                       bl_dim_size=self.bl_dim_size,
+                                                                       cells_size=self.cells_data["size"],
+                                                                       weight_precision=self.weight_precision)
+            area_cells = cost_per_bank[1] * self.nb_of_banks
+            self.cells_w_cost = cost_per_bank[3] / self.wl_dim_size
+        else:
+            area_cells = self.total_unit_count * self.cells_data["area"]
 
         # area of multiplier array
         area_mults = (
-            self.get_1b_multiplier_area() * self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
+                self.get_1b_multiplier_area() * self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
         )
 
         # area of ADCs
@@ -355,7 +364,8 @@ class AimcArray(ImcUnit):
         if self.imc_data["bit_serial_precision"] == self.activation_precision:
             energy_accumulators = 0
         else:
-            accumulator_output_pres = self.activation_precision + self.weight_precision + self.imc_data["adc_resolution"]
+            accumulator_output_pres = self.activation_precision + self.weight_precision + self.imc_data[
+                "adc_resolution"]
             energy_accumulators = (
                     (self.get_1b_adder_energy() + self.get_1b_reg_energy())
                     * accumulator_output_pres
@@ -423,9 +433,21 @@ if __name__ == "__main__":
         "dimensions": ["D1", "D2"],
         "sizes": [32, 32],
     }
-    cells_size = 8  # unit: bit
+    cells_data = {
+        "size": 8,
+        "r_bw": 8,
+        "w_bw": 8,
+        "r_cost": 0,
+        "w_cost": 0,
+        "area": 0,
+        "r_port": 0,
+        "w_port": 0,
+        "rw_port": 1,
+        "latency": 0,
+        "auto_cost_extraction": True
+    }
 
-    aimc = AimcArray(cells_size, imc_data, None)
+    aimc = AimcArray(cells_data, imc_data, None)
     logger = _logging.getLogger(__name__)
     logger.info(f"Total IMC area (mm^2): {aimc.area}")
     logger.info(f"area breakdown: {aimc.area_breakdown}")
