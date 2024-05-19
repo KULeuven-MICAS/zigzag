@@ -245,6 +245,8 @@ class AcceleratorValidator:
             self.invalidate("Activation precision is not in the power of 2.")
         if log2(imc_data["input_precision"][1]) % 1 != 0:
             self.invalidate("Weight precision is not in the power of 2.")
+        if imc_data["imc_type"] == "digital" and imc_data["adc_resolution"] is not None:
+            self.invalidate("Digital IMC core but 'adc_resolution' is defined")
 
     def validate_operational_array_non_imc(self):
         """Assumes that the multiplier type is not IMC"""
