@@ -11,7 +11,7 @@ model = "resnet"
 workload_path = "inputs/workload/resnet18.onnx"
 accelerator_path = "inputs/hardware/aimc.yaml"
 mapping_path = "inputs/mapping/default_imc.yaml"
-pickle_filename = f"outputs/TPU-{model}-saved_list_of_cmes.pickle"
+pickle_filename = f"outputs/aimc-{model}-saved_list_of_cmes.pickle"
 
 
 energy, latency, cmes = api.get_hardware_performance_zigzag(
