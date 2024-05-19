@@ -146,7 +146,7 @@ class ImcUnit:
         """
 
         # activation/weight representation
-        layer_const_operand: str = layer.constant_operands[0]
+        layer_const_operand: str = layer.constant_operands[-1]
         layer_act_operand: str = [operand for operand in layer.input_operands if operand != layer_const_operand][0]
 
         spatial_mapping: dict = copy.deepcopy(layer.spatial_mapping.data)
@@ -296,7 +296,7 @@ class ImcUnit:
             # nb_of_precharge_times is normalized to single PE.
 
             # activation/weight representation
-            layer_const_operand: str = layer.constant_operands[0]
+            layer_const_operand: str = layer.constant_operands[-1]
 
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
