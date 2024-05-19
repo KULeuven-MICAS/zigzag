@@ -149,9 +149,6 @@ def get_hardware_performance_zigzag_imc(
         dump_filename_pattern=dump_filename_pattern,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
-        enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
-        maximize_hardware_utilization=True,  # only evaluate spatial mapping with top2 utilization (fast simulation)
-        enable_weight_diagonal_mapping=True,  # required by SpatialMappingGeneratorStage
         loma_show_progress_bar=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
