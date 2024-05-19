@@ -100,7 +100,7 @@ def get_hardware_performance_zigzag_imc(
     opt: str = "latency",
     dump_filename_pattern: str = "outputs/layer_?.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
-) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     # Initialize the logger
     import logging as _logging
 
