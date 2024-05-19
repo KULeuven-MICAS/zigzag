@@ -35,6 +35,7 @@ class ImcUnit:
         self.total_unit_count = int(np.prod(imc_data["sizes"]))
         self.cells_data = cells_data
         self.imc_data = imc_data
+        self.is_aimc = imc_data["imc_type"] == "analog"
         self.oa_dim_sizes = dimensions
         self.activation_precision = imc_data["input_precision"][0]
         self.weight_precision = imc_data["input_precision"][1]
@@ -52,7 +53,7 @@ class ImcUnit:
         self.area_breakdown = None
         self.delay = None
         self.delay_breakdown = None
-        self.mapped_rows_total = None
+        self.mapped_rows_total_per_macro = None
         self.mapped_group_depth = None
         self.cells_w_cost = None
 
@@ -162,13 +163,13 @@ class ImcUnit:
         # We will derive how many number of PE columns and rows are mapping.
         # Energy of unmapped rows and columns will be set to 0.
         if wl_dim not in spatial_mapping.keys():
-            mapped_cols = 1
+            mapped_cols_per_macro = 1
             weight_ir_loop_on_wl_dim = False  # if there is OX / OY mapped on wl dims
         else:
             sm_on_wl_dim: dict = spatial_mapping[wl_dim].data  # spatial mapping on wl_dimension
             wl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_wl_dim.keys()]
             wl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_wl_dim.values()]
-            mapped_cols = np.prod(wl_dim_unroll_sizes)
+            mapped_cols_per_macro = np.prod(wl_dim_unroll_sizes)
 
             # Calculate the number of mapped rows in each macro.
             # As there might be OX / OY unrolling, resulting in a diagonal mapping, we will have a special check on that
@@ -190,10 +191,10 @@ class ImcUnit:
             if (
                 not weight_ir_loop_on_wl_dim
             ):  # if False: mean there is no OX / OY unrolling on wl_dim, so no diagonal unrolling required
-                mapped_rows_total = math.ceil(np.prod(bl_dim_unroll_sizes))
-                mapped_rows_for_adder = mapped_rows_total
+                mapped_rows_total_per_macro = math.ceil(np.prod(bl_dim_unroll_sizes))
+                mapped_rows_total_per_macro = mapped_rows_total_per_macro
             else:
-                mapped_rows_total, mapped_rows_for_adder = (
+                mapped_rows_total_per_macro, mapped_rows_total_per_macro = (
                     ImcUnit.calculate_mapped_rows_when_diagonal_mapping_found(
                         layer,
                         layer_const_operand,
@@ -203,17 +204,17 @@ class ImcUnit:
                     )
                 )
         else:  # there is no sm loop on bl_dim
-            mapped_rows_total = 1
-            mapped_rows_for_adder = 1
+            mapped_rows_total_per_macro = 1
+            mapped_rows_total_per_macro = 1
 
         # Get the number of time of activating macro
         # Note: it is normalized to a hardware that has only one macro (see equation below)
         # Equation = total MAC number of a layer/spatial mapping on a single macro
         macro_activation_times = layer.total_MAC_count / float(spatial_mapping_size_in_macro)
         return (
-            mapped_rows_total,
-            mapped_rows_for_adder,
-            mapped_cols,
+            mapped_rows_total_per_macro,
+            mapped_rows_total_per_macro,
+            mapped_cols_per_macro,
             macro_activation_times,
         )
 
@@ -253,8 +254,8 @@ class ImcUnit:
                         # use *= in case there are multiple OX / OY in a mix sm loop
                         pr_sm[pr_sm_key][weight_ir_layer_dim] *= sm_on_wl_dim[unroll_dim]
         # Then, we calculate the total mapped number of rows
-        # mapped_rows_total: used for energy estimation of wordline and multipliers
-        # mapped_rows_for_adder: number of activated inputs of an adder tree, used for energy estimation of adder trees
+        # mapped_rows_total_per_macro: used for energy estimation of wordline and multipliers
+        # mapped_rows_total_per_macro: number of activated inputs of an adder tree, used for energy estimation of adder trees
         bl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_bl_dim.keys()]
         bl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_bl_dim.values()]
         if len(bl_dim_unroll_dims) == 1:  # single layer mapping
@@ -265,14 +266,14 @@ class ImcUnit:
                 additional_diag_rows = 0
             else:  # e.g. ("FX", 2)
                 additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
-            mapped_rows_total = layer_dim_size + additional_diag_rows
-            mapped_rows_for_adder = layer_dim_size
+            mapped_rows_total_per_macro = layer_dim_size + additional_diag_rows
+            mapped_rows_total_per_macro = layer_dim_size
         else:  # mix layer_dim mapping (e.g. (("C",2), ("FX",2)) )
-            # mapped_rows_total = Cu * (OYu + FYu - 1) * (OXu + FXu - 1)
-            # mapped_rows_for_adder = Cu * FYu * FXu
+            # mapped_rows_total_per_macro = Cu * (OYu + FYu - 1) * (OXu + FXu - 1)
+            # mapped_rows_total_per_macro = Cu * FYu * FXu
             # In reality, OXu, OYu will not both exist. But the function still support this by the equation above.
-            mapped_rows_total = 1
-            mapped_rows_for_adder = 1
+            mapped_rows_total_per_macro = 1
+            mapped_rows_total_per_macro = 1
             for bl_dim_idx in range(len(bl_dim_unroll_dims)):
                 layer_dim = bl_dim_unroll_dims[bl_dim_idx]
                 layer_dim_size = bl_dim_unroll_sizes[bl_dim_idx]
@@ -280,12 +281,12 @@ class ImcUnit:
                     additional_diag_rows = 0
                 else:
                     additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
-                mapped_rows_total *= layer_dim_size + additional_diag_rows
-                mapped_rows_for_adder *= layer_dim_size
+                mapped_rows_total_per_macro *= layer_dim_size + additional_diag_rows
+                mapped_rows_total_per_macro *= layer_dim_size
         # Lastly, ceil to an upper integer, as required in the adder-trees model.
-        mapped_rows_total = math.ceil(mapped_rows_total)
-        mapped_rows_for_adder = math.ceil(mapped_rows_for_adder)
-        return mapped_rows_total, mapped_rows_for_adder
+        mapped_rows_total_per_macro = math.ceil(mapped_rows_total_per_macro)
+        mapped_rows_total_per_macro = math.ceil(mapped_rows_total_per_macro)
+        return mapped_rows_total_per_macro, mapped_rows_total_per_macro
 
     def get_precharge_energy(self, tech_param: dict, layer: LayerNode, mapping: Mapping) -> tuple:
         # calculate pre-charging energy on local bitlines for specific layer and mapping
@@ -333,42 +334,22 @@ class ImcUnit:
             mapped_group_depth = 1
         return energy_precharging, mapped_group_depth
 
-    def get_mults_energy(
+    def get_regular_adder_trees_energy(
         self,
-        mapped_rows_total: float,
-        wl_dim_size: float,
-        macro_activation_times: float,
+        adder_input_precision: int,
+        active_inputs_number: float,
+        physical_inputs_number: float,
     ) -> float:
         """
-        calculate energy spent on multipliers for specific layer and mapping
+        get the energy spent on regular RCA adder trees without place values
         """
-        nb_of_mapped_mults_in_macro = (
-            self.weight_precision * self.imc_data["bit_serial_precision"] * mapped_rows_total * wl_dim_size
-        )
-        nb_of_activation_times = macro_activation_times * (
-                self.activation_precision / self.imc_data["bit_serial_precision"])
-        energy_mults = self.get_1b_multiplier_energy() * nb_of_mapped_mults_in_macro * nb_of_activation_times
-        return energy_mults
-
-    def get_adder_trees_energy_of_dimc(
-        self,
-        mapped_rows_for_adder: float,
-        bl_dim_size: float,
-        mapped_cols: float,
-        macro_activation_times: float,
-    ) -> tuple:
-        """
-        get the energy spent on RCA adder trees for specific layer and mapping in DIMC
-        """
-        adder_input_pres = self.weight_precision  # input precision for a single adder tree
-        nb_inputs_of_adder = bl_dim_size  # physical number of inputs in a single adder tree
-        adder_depth = math.log2(nb_inputs_of_adder)
+        adder_depth = math.log2(physical_inputs_number)
         adder_depth = int(adder_depth)  # float -> int for simplicity
-        mapped_inputs = mapped_rows_for_adder  # number of used inputs for an adder tree
+        mapped_inputs = active_inputs_number  # number of used inputs for an adder tree
 
-        adder_output_pres = adder_input_pres + adder_depth
+        adder_output_pres = adder_input_precision + adder_depth
         # nb of 1b adders in a single adder tree
-        nb_of_1b_adder = nb_inputs_of_adder * (adder_input_pres + 1) - (adder_input_pres + adder_depth + 1)
+        nb_of_1b_adder = physical_inputs_number * (adder_input_precision + 1) - (adder_input_precision + adder_depth + 1)
 
         # In the adders' model, we classify the basic FA (1-b full adder) as two types:
         # 1. fully activated FA: two of its inputs having data comes in. (higher energy cost)
@@ -376,7 +357,7 @@ class ImcUnit:
         # The 2nd type has lower energy cost, because no carry will be generated and the carry path stays unchanged.
         # Below we figure out how many there are of fully activated FA and half activated FA
         if mapped_inputs >= 1:
-            if mapped_inputs >= nb_inputs_of_adder:
+            if mapped_inputs >= physical_inputs_number:
                 # @param fully_activated_number_of_1b_adder: fully activated 1b adder, probably will produce a carry
                 # @param half_activated_number_of_1b_adder: only 1 input is activate and the other port is 0, so carry path is activated.
                 fully_activated_number_of_1b_adder = nb_of_1b_adder
@@ -389,59 +370,35 @@ class ImcUnit:
                 fully_activated_number_of_1b_adder = 0
                 half_activated_number_of_1b_adder = 0
                 left_input = mapped_inputs
-                baseline = nb_inputs_of_adder
+                baseline = physical_inputs_number
                 while left_input != 0:
                     baseline = baseline / 2
                     activated_depth = int(math.log2(baseline))
                     if left_input <= 1 and baseline == 1:  # special case
                         fully_activated_number_of_1b_adder += 0
-                        half_activated_number_of_1b_adder += adder_input_pres
+                        half_activated_number_of_1b_adder += adder_input_precision
                         left_input = 0
                     elif left_input > baseline:
                         fully_activated_number_of_1b_adder += (
-                            baseline * (adder_input_pres + 1)
-                            - (adder_input_pres + activated_depth + 1)
-                            + (adder_input_pres + activated_depth)
+                            baseline * (adder_input_precision + 1)
+                            - (adder_input_precision + activated_depth + 1)
+                            + (adder_input_precision + activated_depth)
                         )
                         half_activated_number_of_1b_adder += 0
                         left_input = left_input - baseline
                     elif left_input < baseline:
-                        half_activated_number_of_1b_adder += adder_input_pres + activated_depth
+                        half_activated_number_of_1b_adder += adder_input_precision + activated_depth
                     else:  # left_input == baseline
-                        fully_activated_number_of_1b_adder += baseline * (adder_input_pres + 1) - (
-                            adder_input_pres + activated_depth + 1
+                        fully_activated_number_of_1b_adder += baseline * (adder_input_precision + 1) - (
+                            adder_input_precision + activated_depth + 1
                         )
-                        half_activated_number_of_1b_adder += adder_input_pres + activated_depth
+                        half_activated_number_of_1b_adder += adder_input_precision + activated_depth
                         left_input = left_input - baseline
 
             single_adder_tree_energy = (
                 fully_activated_number_of_1b_adder * self.get_1b_adder_energy()
                 + half_activated_number_of_1b_adder * self.get_1b_adder_energy_half_activated()
             )
-            nb_of_activation_times = mapped_cols * self.activation_precision * macro_activation_times
-            energy_adders = single_adder_tree_energy * nb_of_activation_times
         else:
-            energy_adders = 0
-        return energy_adders, adder_output_pres
-
-    def get_adder_pv_energy(
-        self,
-        nb_inputs_of_adder_pv: float,
-        input_precision: int,
-        mapped_cols: float,
-        macro_activation_times: float,
-    ) -> float:
-        """
-        get the energy for adder tree with input having place value (pv)
-        """
-        if nb_inputs_of_adder_pv == 1:
-            energy_adders_pv = 0
-        else:
-            adder_pv_input_precision = input_precision
-            nb_of_1b_adder_pv = adder_pv_input_precision * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
-                math.log2(nb_inputs_of_adder_pv) - 0.5
-            )
-            nb_of_activation_times = mapped_cols * self.activation_precision / self.imc_data[
-                "bit_serial_precision"] * macro_activation_times
-            energy_adders_pv = self.get_1b_adder_energy() * nb_of_1b_adder_pv * nb_of_activation_times
-        return energy_adders_pv
+            single_adder_tree_energy = 0
+        return single_adder_tree_energy
