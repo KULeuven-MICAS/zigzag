@@ -135,13 +135,13 @@ class AcceleratorValidator:
             self.invalidate(f"The following restrictions apply: {errors}")
 
         # Extra validation rules outside of schema
+        self.is_imc = self.data["operational_array"]["is_imc"]
         self.validate_operational_array()
 
         for mem_name in self.data["memories"]:
             self.validate_single_memory(mem_name)
 
-        is_imc = self.data["operational_array"]["is_imc"]
-        if is_imc:
+        if self.is_imc:
             self.validate_cells_imc()
 
         return self.is_valid
@@ -204,9 +204,20 @@ class AcceleratorValidator:
                     self.invalidate(f"Write port given for read direction in {mem_name}")
 
     def validate_cells_imc(self):
-        # TODO: (1) lowest memory level should only serve weight; (2) served dimension should be empty; (3)
-        # memory size should be a multiply (e.g. 1,2,..) of weight precision.
-        pass
+        if "cells" not in self.data["memories"]:
+            self.invalidate("IMC architecture has no memory level called `cells`.")
+
+        cells_data = self.data["memories"]["cells"]
+        # Lowest memory level should only serve weight
+        if cells_data["operands"] != ["I2"]:
+            self.invalidate("IMC cells can only serve weights. Set `operands` to `I2`.")
+        # Served dimension should be empty;
+        if cells_data["served_dimensions"] != []:
+            self.invalidate("IMC cells must be fully unrolled. Set `served_dimensions` to `[]`")
+        # TODO Memory size should be a multiply (e.g. 1,2,..) of weight precision.
+        # The weight precision is defined in the workload, this information is not available at this scope. I'd suggest
+        # to move this check to a place where this info is available, e.g. in one of the stages, and raise a ValueError
+        # there
 
     def validate_operational_array(self):
         multiplier_data = self.data["operational_array"]
@@ -214,11 +225,10 @@ class AcceleratorValidator:
         # For both IMC and non-IMC:
         oa_dims: list[str] = multiplier_data["dimensions"]
         if len(oa_dims) != len(multiplier_data["sizes"]):
+            # TODO Alternatively, you can force the user to not
             self.invalidate("Core dimensions and sizes do not match.")
 
-        is_imc = multiplier_data["is_imc"]
-
-        if is_imc:
+        if self.is_imc:
             self.validate_operational_array_imc()
         else:
             self.validate_operational_array_non_imc()
