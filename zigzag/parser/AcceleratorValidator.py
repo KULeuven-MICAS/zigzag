@@ -214,10 +214,9 @@ class AcceleratorValidator:
         # Served dimension should be empty;
         if cells_data["served_dimensions"] != []:
             self.invalidate("IMC cells must be fully unrolled. Set `served_dimensions` to `[]`")
-        # TODO Memory size should be a multiply (e.g. 1,2,..) of weight precision.
-        # The weight precision is defined in the workload, this information is not available at this scope. I'd suggest
-        # to move this check to a place where this info is available, e.g. in one of the stages, and raise a ValueError
-        # there
+        # Memory size should be a multiply (e.g. 1,2,..) of weight precision.
+        if cells_data["size"]%self.data["operational_array"]["input_precision"][1] != 0:
+            self.invalidate("IMC cells' size must be a multiply of the weight precision")
 
     def validate_operational_array(self):
         multiplier_data = self.data["operational_array"]
