@@ -44,6 +44,17 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
 
     def __add__(self, other: "CostModelEvaluationABC") -> "CumulativeCME":
         result = CumulativeCME()
+        is_imc = hasattr(other, "tclk")
+        if is_imc:
+            result.tclk = other.tclk
+            result.tclk_breakdown = other.tclk_breakdown
+            result.area_total = other.area_total
+            result.mac_energy_breakdown = {}
+            for component, energy in other.mac_energy_breakdown.items():
+                if not hasattr(self, "mac_energy_breakdown"):
+                    result.mac_energy_breakdown[component] = energy
+                else:
+                    result.mac_energy_breakdown[component] = self.mac_energy_breakdown[component] + energy
 
         # Energy
         result.mac_energy = self.mac_energy + other.mac_energy
