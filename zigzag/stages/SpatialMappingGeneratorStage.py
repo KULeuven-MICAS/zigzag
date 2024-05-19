@@ -226,10 +226,11 @@ class SpatialMappingGeneratorStage(Stage):
         """
         # Unroll a single LayerDim over this OA Dim
         for layer_dim in unroll_hints:
-            max_factor: UnrollFactor = int(max_unrollings[layer_dim])
-            # Start with largest unrollings
-            for factor in sorted(divisors(max_factor), reverse=True):
-                yield MappingSingleOADim({layer_dim: factor})
+            if layer_dim in max_unrollings.keys():
+                max_factor: UnrollFactor = int(max_unrollings[layer_dim])
+                # Start with largest unrollings
+                for factor in sorted(divisors(max_factor), reverse=True):
+                    yield MappingSingleOADim({layer_dim: factor})
 
         if self.enable_mix_spatial_mapping_generation:
             mixed_mappings = self.generate_mapping_single_oa_dim_mixed(max_unrollings, unroll_hints)
