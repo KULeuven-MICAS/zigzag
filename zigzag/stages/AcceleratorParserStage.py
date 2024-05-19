@@ -19,19 +19,15 @@ class AcceleratorParserStage(Stage):
         super().__init__(list_of_callables, **kwargs)
         assert accelerator.split(".")[-1] == "yaml", "Expected a yaml file as accelerator input"
         self.accelerator_yaml_path = accelerator
-        self.is_imc = False
 
     def run(self):
         accelerator = self.parse_accelerator()
-        self.kwargs["is_imc"] = self.is_imc
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
     def parse_accelerator(self) -> Accelerator:
         accelerator_data = open_yaml(self.accelerator_yaml_path)
-        if accelerator_data["operational_array"]["is_imc"]:
-            self.is_imc = True
 
         validator = AcceleratorValidator(accelerator_data)
         accelerator_data = validator.normalized_data
