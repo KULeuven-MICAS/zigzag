@@ -169,14 +169,14 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                     nb_of_weight_reload_periods = port.period_count
 
         # get the number of mapped rows in a macro
-        mapped_rows_total = operational_array.mapped_rows_total
+        mapped_rows_total_per_macro = operational_array.mapped_rows_total_per_macro
 
         # get the number of weights stored in each cell group
         mapped_group_depth = operational_array.mapped_group_depth
 
         # calculate the total number of weight loading cycles
         if require_weight_loading:
-            weight_loading_cycles = nb_of_weight_reload_periods * mapped_rows_total * mapped_group_depth
+            weight_loading_cycles = nb_of_weight_reload_periods * mapped_rows_total_per_macro * mapped_group_depth
         else:
             weight_loading_cycles = 0
         self.SS_comb_collect.append(weight_loading_cycles)
