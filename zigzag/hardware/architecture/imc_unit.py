@@ -147,6 +147,7 @@ class ImcUnit:
 
         # activation/weight representation
         layer_const_operand: str = layer.constant_operands[-1]
+        assert len(layer.loop_relevancy_info.get_pr_layer_dims(layer_const_operand)) == 0
         layer_act_operand: str = [operand for operand in layer.input_operands if operand != layer_const_operand][0]
 
         spatial_mapping: dict = copy.deepcopy(layer.spatial_mapping.data)
@@ -297,6 +298,7 @@ class ImcUnit:
 
             # activation/weight representation
             layer_const_operand: str = layer.constant_operands[-1]
+            assert len(layer.loop_relevancy_info.get_pr_layer_dims(layer_const_operand)) == 0
 
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
