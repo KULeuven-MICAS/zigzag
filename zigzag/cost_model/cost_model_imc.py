@@ -1,7 +1,7 @@
 import logging
 from termios import ICANON
 from zigzag.hardware.architecture.ImcArray import ImcArray
-from zigzag.utils import pickle_deepcopy
+from zigzag.utils import json_repr_handler, pickle_deepcopy
 from zigzag.cost_model.cost_model import CostModelEvaluation, PortActivity
 
 logger = logging.getLogger(__name__)
@@ -364,57 +364,59 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             "weight_loading": self.SS_comb,
         }
 
-        return {
-            "outputs": {
-                "memory": {
-                    "utilization": (self.mem_utili_shared if hasattr(self, "mem_utili_shared") else None),
-                    "word_accesses": self.memory_word_access,
-                },
-                "energy": {
-                    "energy_total": self.energy_total,
-                    "operational_energy": self.mac_energy,
-                    "operational_energy_breakdown": self.mac_energy_breakdown,
-                    "memory_energy": self.mem_energy,
-                    "memory_energy_breakdown_per_level": self.mem_energy_breakdown,
-                    "memory_energy_breakdown_per_level_per_operand": self.mem_energy_breakdown_further,
-                },
-                "latency": {
-                    "data_onloading": self.latency_total1 - self.latency_total0,
-                    "computation": self.latency_total0,
-                    "data_offloading": self.latency_total2 - self.latency_total1,
-                    "computation_breakdown": computation_breakdown,
-                },
-                "clock": {
-                    "tclk (ns)": self.tclk,
-                    "tclk_breakdown (ns)": self.tclk_breakdown,
-                },
-                "area (mm^2)": {
-                    "total_area": self.area_total,
-                    "total_area_breakdown:": {
-                        "imc_area": self.imc_area,
-                        "mem_area": self.mem_area,
+        return json_repr_handler(
+            {
+                "outputs": {
+                    "memory": {
+                        "utilization": (self.mem_utili_shared if hasattr(self, "mem_utili_shared") else None),
+                        "word_accesses": self.memory_word_access,
                     },
-                    "total_area_breakdown_further": {
-                        "imc_area_breakdown": self.imc_area_breakdown,
-                        "mem_area_breakdown": self.mem_area_breakdown,
+                    "energy": {
+                        "energy_total": self.energy_total,
+                        "operational_energy": self.mac_energy,
+                        "operational_energy_breakdown": self.mac_energy_breakdown,
+                        "memory_energy": self.mem_energy,
+                        "memory_energy_breakdown_per_level": self.mem_energy_breakdown,
+                        "memory_energy_breakdown_per_level_per_operand": self.mem_energy_breakdown_further,
+                    },
+                    "latency": {
+                        "data_onloading": self.latency_total1 - self.latency_total0,
+                        "computation": self.latency_total0,
+                        "data_offloading": self.latency_total2 - self.latency_total1,
+                        "computation_breakdown": computation_breakdown,
+                    },
+                    "clock": {
+                        "tclk (ns)": self.tclk,
+                        "tclk_breakdown (ns)": self.tclk_breakdown,
+                    },
+                    "area (mm^2)": {
+                        "total_area": self.area_total,
+                        "total_area_breakdown:": {
+                            "imc_area": self.imc_area,
+                            "mem_area": self.mem_area,
+                        },
+                        "total_area_breakdown_further": {
+                            "imc_area_breakdown": self.imc_area_breakdown,
+                            "mem_area_breakdown": self.mem_area_breakdown,
+                        },
+                    },
+                    "spatial": {
+                        "mac_utilization": {
+                            "ideal": self.MAC_spatial_utilization,
+                            "stalls": self.MAC_utilization0,
+                            "stalls_onloading": self.MAC_utilization1,
+                            "stalls_onloading_offloading": self.MAC_utilization2,
+                        }
                     },
                 },
-                "spatial": {
-                    "mac_utilization": {
-                        "ideal": self.MAC_spatial_utilization,
-                        "stalls": self.MAC_utilization0,
-                        "stalls_onloading": self.MAC_utilization1,
-                        "stalls_onloading_offloading": self.MAC_utilization2,
-                    }
+                "inputs": {
+                    "accelerator": self.accelerator,
+                    "layer": self.layer,
+                    "spatial_mapping": (self.spatial_mapping_int if hasattr(self, "spatial_mapping_int") else None),
+                    "temporal_mapping": (self.temporal_mapping if hasattr(self, "temporal_mapping") else None),
                 },
-            },
-            "inputs": {
-                "accelerator": self.accelerator,
-                "layer": self.layer,
-                "spatial_mapping": (self.spatial_mapping_int if hasattr(self, "spatial_mapping_int") else None),
-                "temporal_mapping": (self.temporal_mapping if hasattr(self, "temporal_mapping") else None),
-            },
-        }
+            }
+        )
 
     def __simplejsonrepr__(self):
         """! Simple JSON representation used for saving this object to a simple json file."""
