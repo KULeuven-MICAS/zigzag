@@ -8,8 +8,7 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.workload.layer_node import LayerNode
-from zigzag.hardware.architecture.AimcArray import AimcArray
-from zigzag.hardware.architecture.DimcArray import DimcArray
+from zigzag.hardware.architecture.ImcArray import ImcArray
 
 import logging
 
@@ -45,7 +44,7 @@ class CostModelStage(Stage):
         core_id = self.layer.core_allocation[0]
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array
-        if isinstance(operational_array, AimcArray or DimcArray):
+        if isinstance(operational_array, ImcArray):
             cme = CostModelEvaluationForIMC(
                 accelerator=self.accelerator,
                 layer=self.layer,

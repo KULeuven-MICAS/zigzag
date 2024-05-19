@@ -6,9 +6,7 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.Workload import Workload
 from zigzag.workload.DummyNode import DummyNode
-from zigzag.hardware.architecture.AimcArray import AimcArray
-from zigzag.hardware.architecture.DimcArray import DimcArray
-
+from zigzag.hardware.architecture.ImcArray import ImcArray
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +34,7 @@ class WorkloadStage(Stage):
             core_id: int = layer.core_allocation[0]
             core = self.accelerator.get_core(core_id)
             operational_array = core.operational_array
-            if isinstance(operational_array, AimcArray or DimcArray) and layer.type in ["Pooling", "Add"]:
+            if isinstance(operational_array, ImcArray) and layer.type in ["Pooling", "Add"]:
                 continue
 
             kwargs = self.kwargs.copy()

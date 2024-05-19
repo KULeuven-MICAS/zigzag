@@ -2,8 +2,7 @@ from typing import Any
 from zigzag.datatypes import Constants, LayerDim, MemoryOperand, OADimension, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
-from zigzag.hardware.architecture.AimcArray import AimcArray
-from zigzag.hardware.architecture.DimcArray import DimcArray
+from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
@@ -59,7 +58,7 @@ class CoreFactory:
             core_id=core_id, operational_array=operational_array, memory_hierarchy=mem_graph, dataflows=dataflows
         )
 
-    def create_imc_array(self) -> AimcArray or DimcArray:
+    def create_imc_array(self) -> ImcArray:
         # Imc settings
         cells_data: dict = self.data["memories"]["cells"]
         imc_data: dict[str, Any] = self.data["operational_array"]
@@ -67,10 +66,7 @@ class CoreFactory:
         dimension_sizes: dict[OADimension, int] = {
             OADimension(oa_dim): imc_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
         }
-        if imc_data["imc_type"] == "analog":
-            imc_array = AimcArray(cells_data, imc_data, dimension_sizes)
-        else:
-            imc_array = DimcArray(cells_data, imc_data, dimension_sizes)
+        imc_array = ImcArray(cells_data, imc_data, dimension_sizes)
         return imc_array
 
     def create_operational_array(self) -> OperationalArray:
