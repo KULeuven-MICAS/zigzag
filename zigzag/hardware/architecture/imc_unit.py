@@ -10,6 +10,7 @@ if __name__ == "__main__" or __name__ == "imc_unit":
     from get_cacti_cost import get_cacti_cost
 else:
     from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
+    from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 
 
 class ImcUnit:
@@ -151,10 +152,10 @@ class ImcUnit:
         get the mapped oa_dim in current mapping. The energy of unmapped oa_dim will be set to 0.
         """
 
-        # activation/weight representation
-        layer_const_operand: str = layer.constant_operands[-1]  # weight operand representation
-        assert len(layer.loop_relevancy_info.get_pr_layer_dims(layer_const_operand)) == 0  # to ensure it is weight
-        layer_act_operand: str = [operand for operand in layer.input_operands if operand != layer_const_operand][0]
+        # activation/weight representation in layer
+        layer_act_operand, layer_const_operand, __, __ = SearchUnusedMemoryStage.get_act_weight_operand_names(
+            layer=layer
+        )
 
         spatial_mapping: dict = copy.deepcopy(layer.spatial_mapping.data)
 
@@ -303,9 +304,10 @@ class ImcUnit:
             # The final pre-charge energy = energy/PE * nb_of_precharge_times
             # nb_of_precharge_times is normalized to single PE.
 
-            # activation/weight representation
-            layer_const_operand: str = layer.constant_operands[-1]  # weight operand representation
-            assert len(layer.loop_relevancy_info.get_pr_layer_dims(layer_const_operand)) == 0  # to ensure it is weight
+            # activation/weight representation in layer
+            __, layer_const_operand, __, __ = SearchUnusedMemoryStage.get_act_weight_operand_names(
+                layer=layer
+            )
 
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
