@@ -1,6 +1,4 @@
 import logging
-from termios import ICANON
-from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.utils import json_repr_handler, pickle_deepcopy
 from zigzag.cost_model.cost_model import CostModelEvaluation, PortActivity
 
@@ -26,21 +24,6 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
     After initialization, the cost model evaluation is run.
     """
-
-    def __init__(self,
-                 accelerator,
-                 layer,
-                 spatial_mapping,
-                 spatial_mapping_int,
-                 temporal_mapping,
-                 access_same_data_considered_as_no_access):
-        super().__init__(
-            accelerator=accelerator,
-            layer=layer,
-            spatial_mapping=spatial_mapping,
-            spatial_mapping_int=spatial_mapping_int,
-            temporal_mapping=temporal_mapping,
-            access_same_data_considered_as_no_access=access_same_data_considered_as_no_access,)
 
     def run(self) -> None:
         """! Run the cost model evaluation."""
