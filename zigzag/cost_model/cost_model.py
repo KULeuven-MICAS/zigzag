@@ -47,7 +47,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         is_imc = hasattr(other, "tclk")
         if is_imc:
             result.tclk = other.tclk
-            result.tclk_b   reakdown = other.tclk_breakdown
+            result.tclk_breakdown = other.tclk_breakdown
             result.area_total = other.area_total
             result.mac_energy_breakdown = {}
             for component, energy in other.mac_energy_breakdown.items():
