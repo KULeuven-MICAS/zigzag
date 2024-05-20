@@ -50,23 +50,23 @@ class ImcArray(ImcUnit):
     def get_adc_cost(self) -> tuple[float, float, float]:
         """single ADC cost calculation"""
         # area (mm^2)
-        if self.imc_data["adc_resolution"] == 1:
+        if self.adc_resolution == 1:
             adc_area = 0
         else:  # formula extracted and validated against 3 AIMC papers on 28nm
             k1 = -0.0369
             k2 = 1.206
             adc_area = (
-                10 ** (k1 * self.imc_data["adc_resolution"] + k2) * 2 ** self.imc_data["adc_resolution"] * (10**-6)
+                10 ** (k1 * self.adc_resolution + k2) * 2 ** self.adc_resolution * (10**-6)
             )  # unit: mm^2
         # delay (ns)
         k3 = 0.00653  # ns
         k4 = 0.640  # ns
-        adc_delay = self.imc_data["adc_resolution"] * (k3 * self.bl_dim_size + k4)  # unit: ns
+        adc_delay = self.adc_resolution * (k3 * self.bl_dim_size + k4)  # unit: ns
         # energy (fJ)
         k5 = 100  # fF
         k6 = 0.001  # fF
         adc_energy = (  # unit: fJ
-            k5 * self.imc_data["adc_resolution"] + k6 * 4 ** self.imc_data["adc_resolution"]
+            k5 * self.adc_resolution + k6 * 4 ** self.adc_resolution
         ) * self.tech_param["vdd"] ** 2
         adc_energy = adc_energy / 1000  # unit: pJ
         return adc_area, adc_delay, adc_energy
@@ -78,11 +78,11 @@ class ImcArray(ImcUnit):
         # delay (ns)
         dac_delay = 0  # neglected
         # energy (fJ)
-        if self.imc_data["bit_serial_precision"] == 1:
+        if self.bit_serial_precision == 1:
             dac_energy = 0
         else:
             k0 = 50e-3  # pF
-            dac_energy = k0 * self.imc_data["bit_serial_precision"] * self.tech_param["vdd"] ** 2  # unit: pJ
+            dac_energy = k0 * self.bit_serial_precision * self.tech_param["vdd"] ** 2  # unit: pJ
         return dac_area, dac_delay, dac_energy
 
     def get_area(self):
@@ -118,7 +118,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_multiplier = self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
         else:
             nb_of_1b_multiplier = (
-                self.imc_data["bit_serial_precision"]
+                self.bit_serial_precision
                 * self.weight_precision
                 * self.wl_dim_size
                 * self.bl_dim_size
@@ -141,15 +141,15 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_regular = nb_inputs_of_adder_regular * (adder_input_precision_regular + 1) - (
                 adder_input_precision_regular + adder_depth_regular + 1
             )  # nb of 1b adders in a single adder tree
-            nb_of_adder_trees = self.imc_data["bit_serial_precision"] * self.wl_dim_size * self.nb_of_banks
+            nb_of_adder_trees = self.bit_serial_precision * self.wl_dim_size * self.nb_of_banks
             area_adders_regular = self.get_1b_adder_area() * nb_of_1b_adder_per_tree_regular * nb_of_adder_trees
 
         # area of adder trees with place values (type: RCA)
         if self.is_aimc:
             nb_inputs_of_adder_pv = self.weight_precision
-            input_precision_pv = self.imc_data["adc_resolution"]
+            input_precision_pv = self.adc_resolution
         else:
-            nb_inputs_of_adder_pv = self.imc_data["bit_serial_precision"]
+            nb_inputs_of_adder_pv = self.bit_serial_precision
             input_precision_pv = adder_output_precision_regular
 
         if nb_inputs_of_adder_pv == 1:
@@ -167,12 +167,12 @@ class ImcArray(ImcUnit):
         area_adders_pv = self.get_1b_adder_area() * nb_of_1b_adder_per_tree_pv * nb_of_adder_trees_pv
 
         # area of accumulators (adder type: RCA)
-        if self.imc_data["bit_serial_precision"] == self.activation_precision:
+        if self.bit_serial_precision == self.activation_precision:
             area_accumulators = 0
         else:
             if self.is_aimc:
                 accumulator_output_precision = (
-                    self.activation_precision + self.imc_data["adc_resolution"] + self.weight_precision
+                    self.activation_precision + self.adc_resolution + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
@@ -240,9 +240,9 @@ class ImcArray(ImcUnit):
         # worst path: in-to-sum -> in-to-sum -> ... -> in-to-cout -> cin-to-cout -> ... -> cin-to-cout
         if self.is_aimc:
             nb_inputs_of_adder_pv = self.weight_precision
-            input_precision_pv = self.imc_data["adc_resolution"]
+            input_precision_pv = self.adc_resolution
         else:
-            nb_inputs_of_adder_pv = self.imc_data["bit_serial_precision"]
+            nb_inputs_of_adder_pv = self.bit_serial_precision
             input_precision_pv = adder_output_precision_regular
 
         if nb_inputs_of_adder_pv == 1:
@@ -259,13 +259,13 @@ class ImcArray(ImcUnit):
             )
 
         # delay of accumulators (adder type: RCA)
-        if self.imc_data["bit_serial_precision"] == self.activation_precision:
+        if self.bit_serial_precision == self.activation_precision:
             dly_accumulators = 0
         else:
             accumulator_input_precision = adder_pv_output_precision
             if self.is_aimc:
                 accumulator_output_precision = (
-                    self.activation_precision + self.imc_data["adc_resolution"] + self.weight_precision
+                    self.activation_precision + self.adc_resolution + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
@@ -316,7 +316,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_multiplier = self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
         else:
             nb_of_1b_multiplier = (
-                self.imc_data["bit_serial_precision"]
+                self.bit_serial_precision
                 * self.weight_precision
                 * self.wl_dim_size
                 * self.bl_dim_size
@@ -350,15 +350,15 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_regular = nb_inputs_of_adder_regular * (adder_input_precision_regular + 1) - (
                 adder_input_precision_regular + adder_depth_regular + 1
             )  # nb of 1b adders in a single adder tree
-            nb_of_adder_trees = self.imc_data["bit_serial_precision"] * self.wl_dim_size * self.nb_of_banks
+            nb_of_adder_trees = self.bit_serial_precision * self.wl_dim_size * self.nb_of_banks
             energy_adders_regular = self.get_1b_adder_energy() * nb_of_1b_adder_per_tree_regular * nb_of_adder_trees
 
         # energy of adder trees with place values (type: RCA)
         if self.is_aimc:
             nb_inputs_of_adder_pv = self.weight_precision
-            input_precision_pv = self.imc_data["adc_resolution"]
+            input_precision_pv = self.adc_resolution
         else:
-            nb_inputs_of_adder_pv = self.imc_data["bit_serial_precision"]
+            nb_inputs_of_adder_pv = self.bit_serial_precision
             input_precision_pv = adder_output_precision_regular
 
         if nb_inputs_of_adder_pv == 1:
@@ -371,12 +371,12 @@ class ImcArray(ImcUnit):
         energy_adders_pv = self.get_1b_adder_energy() * nb_of_1b_adder_per_tree_pv * nb_of_adder_trees_pv
 
         # energy of accumulators (adder type: RCA)
-        if self.imc_data["bit_serial_precision"] == self.activation_precision:
+        if self.bit_serial_precision == self.activation_precision:
             energy_accumulators = 0
         else:
             if self.is_aimc:
                 accumulator_output_precision = (
-                    self.activation_precision + self.imc_data["adc_resolution"] + self.weight_precision
+                    self.activation_precision + self.adc_resolution + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
@@ -406,7 +406,7 @@ class ImcArray(ImcUnit):
         nb_of_macs_per_cycle = (
             self.wl_dim_size
             * self.bl_dim_size
-            / (self.activation_precision / self.imc_data["bit_serial_precision"])
+            / (self.activation_precision / self.bit_serial_precision)
             * self.nb_of_banks
         )
 
@@ -444,7 +444,7 @@ class ImcArray(ImcUnit):
             energy_dacs = (
                 self.get_dac_cost()[2]
                 * mapped_rows_total_per_macro
-                * (self.activation_precision / self.imc_data["bit_serial_precision"])
+                * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
         else:
@@ -456,7 +456,7 @@ class ImcArray(ImcUnit):
                 self.get_adc_cost()[2]
                 * self.weight_precision
                 * mapped_cols_per_macro
-                * (self.activation_precision / self.imc_data["bit_serial_precision"])
+                * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
         else:
@@ -469,13 +469,13 @@ class ImcArray(ImcUnit):
             )
         else:
             nb_of_active_1b_multiplier_per_macro = (
-                self.imc_data["bit_serial_precision"] * self.weight_precision * self.wl_dim_size * self.bl_dim_size
+                self.bit_serial_precision * self.weight_precision * self.wl_dim_size * self.bl_dim_size
             )
 
         energy_mults = (
             self.get_1b_multiplier_energy()
             * nb_of_active_1b_multiplier_per_macro
-            * (self.activation_precision / self.imc_data["bit_serial_precision"])
+            * (self.activation_precision / self.bit_serial_precision)
             * macro_activation_times
         )
 
@@ -485,7 +485,7 @@ class ImcArray(ImcUnit):
                 (self.tech_param["bl_cap"] * (self.tech_param["vdd"] ** 2) * self.weight_precision)
                 * mapped_cols_per_macro
                 * self.bl_dim_size
-                * (self.activation_precision / self.imc_data["bit_serial_precision"])
+                * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
         else:
@@ -501,7 +501,7 @@ class ImcArray(ImcUnit):
             adder_depth_regular = int(adder_depth_regular)  # float -> int for simplicity
             adder_output_precision_regular = adder_input_precision_regular + adder_depth_regular
 
-            nb_of_active_adder_trees_per_macro = self.imc_data["bit_serial_precision"] * mapped_cols_per_macro
+            nb_of_active_adder_trees_per_macro = self.bit_serial_precision * mapped_cols_per_macro
             energy_adders_per_tree_regular = self.get_regular_adder_trees_energy(
                 adder_input_precision=adder_input_precision_regular,
                 active_inputs_number=mapped_rows_total_per_macro,
@@ -510,16 +510,16 @@ class ImcArray(ImcUnit):
             energy_adders_regular = (
                 energy_adders_per_tree_regular
                 * nb_of_active_adder_trees_per_macro
-                * (self.activation_precision / self.imc_data["bit_serial_precision"])
+                * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
 
         # energy of adder trees with place values (type: RCA)
         if self.is_aimc:
             nb_inputs_of_adder_pv = self.weight_precision
-            input_precision_pv = self.imc_data["adc_resolution"]
+            input_precision_pv = self.adc_resolution
         else:
-            nb_inputs_of_adder_pv = self.imc_data["bit_serial_precision"]
+            nb_inputs_of_adder_pv = self.bit_serial_precision
             input_precision_pv = adder_output_precision_regular
 
         if nb_inputs_of_adder_pv == 1:
@@ -532,17 +532,17 @@ class ImcArray(ImcUnit):
             self.get_1b_adder_energy()
             * nb_of_1b_adder_per_tree_pv
             * mapped_cols_per_macro
-            * (self.activation_precision / self.imc_data["bit_serial_precision"])
+            * (self.activation_precision / self.bit_serial_precision)
             * macro_activation_times
         )
 
         # energy of accumulators (adder type: RCA)
-        if self.imc_data["bit_serial_precision"] == self.activation_precision:
+        if self.bit_serial_precision == self.activation_precision:
             energy_accumulators = 0
         else:
             if self.is_aimc:
                 accumulator_output_precision = (
-                    self.activation_precision + self.imc_data["adc_resolution"] + self.weight_precision
+                    self.activation_precision + self.adc_resolution + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
@@ -553,7 +553,7 @@ class ImcArray(ImcUnit):
                 (self.get_1b_adder_energy() + self.get_1b_reg_energy())
                 * accumulator_output_precision
                 * mapped_cols_per_macro
-                * (self.activation_precision / self.imc_data["bit_serial_precision"])
+                * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
 
