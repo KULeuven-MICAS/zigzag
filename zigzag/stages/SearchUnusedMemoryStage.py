@@ -41,8 +41,8 @@ class SearchUnusedMemoryStage(Stage):
         # derive top mem level of input, weight, output
         layer_0 = [layer for layer in self.workload.topological_sort()][0]
         (
-            __,
-            __,
+            act_operand_in_layer,
+            weight_operand_in_layer,
             act_operand_in_hardware,
             weight_operand_in_hardware
         ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer_0)
