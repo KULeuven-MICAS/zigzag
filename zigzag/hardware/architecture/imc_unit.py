@@ -115,7 +115,8 @@ class ImcUnit:
 
     @staticmethod
     def get_single_cell_array_cost_from_cacti(tech_node: dict, wl_dim_size: float, bl_dim_size: float,
-                                              cells_size: float, weight_precision: int) -> tuple:
+                                              cells_size: float, weight_precision: int
+                                              ) -> tuple[float, float, float, float]:
         """get the area, energy cost of a single macro (cell array) using CACTI
         this function is called when cacti is required for cost estimation
         @param tech_node:   the technology node (e.g. 0.028, 0.032, 0.022 ... unit: um)
@@ -290,7 +291,7 @@ class ImcUnit:
         mapped_rows_for_adder_per_macro = math.ceil(mapped_rows_for_adder_per_macro)
         return mapped_rows_total_per_macro, mapped_rows_for_adder_per_macro
 
-    def get_precharge_energy(self, tech_param: dict, layer: LayerNode, mapping: Mapping) -> tuple:
+    def get_precharge_energy(self, tech_param: dict, layer: LayerNode, mapping: Mapping) -> tuple[float, float]:
         # calculate pre-charging energy on local bitlines for specific layer and mapping
         # also calculate mapped group depth (number of weights stored in a cell group)
         group_depth = self.cells_data["size"] / self.weight_precision

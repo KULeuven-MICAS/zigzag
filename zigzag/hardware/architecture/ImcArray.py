@@ -71,7 +71,7 @@ class ImcArray(ImcUnit):
         adc_energy = adc_energy / 1000  # unit: pJ
         return adc_area, adc_delay, adc_energy
 
-    def get_dac_cost(self) -> tuple:
+    def get_dac_cost(self) -> tuple[float, float, float]:
         """single DAC cost calculation"""
         # area (mm^2)
         dac_area = 0  # neglected
@@ -292,7 +292,7 @@ class ImcArray(ImcUnit):
         }
         self.tclk = sum([v for v in self.tclk_breakdown.values()])
 
-    def get_peak_energy_single_cycle(self) -> dict:
+    def get_peak_energy_single_cycle(self) -> dict[str: float]:
         """! macro-level one-cycle energy of imc arrays (fully utilization, no weight updating)
         (components: cells, mults, adders, adders_pv, accumulators. Not include input/output regs)
         """
@@ -401,7 +401,7 @@ class ImcArray(ImcUnit):
         }
         return peak_energy_breakdown
 
-    def get_macro_level_peak_performance(self) -> tuple:
+    def get_macro_level_peak_performance(self) -> tuple[float, float, float]:
         """! macro-level peak performance of imc arrays (fully utilization, no weight updating)"""
         nb_of_macs_per_cycle = (
             self.wl_dim_size
@@ -424,7 +424,7 @@ class ImcArray(ImcUnit):
 
         return tops_peak, topsw_peak, topsmm2_peak
 
-    def get_energy_for_a_layer(self, layer, mapping):
+    def get_energy_for_a_layer(self, layer, mapping) -> dict[str: float]:
         # parameter extraction
         (
             mapped_rows_total_per_macro,
