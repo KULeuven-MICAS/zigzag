@@ -153,7 +153,12 @@ class ImcUnit:
         """
 
         # activation/weight representation in layer
-        layer_act_operand, layer_const_operand, __, __ = SearchUnusedMemoryStage.get_act_weight_operand_names(
+        (
+            layer_act_operand,
+            layer_const_operand,
+            act_operand_in_hardware,
+            const_operand_in_hardware
+        ) = SearchUnusedMemoryStage.get_act_weight_operand_names(
             layer=layer
         )
 
