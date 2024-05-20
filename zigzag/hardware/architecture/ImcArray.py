@@ -6,12 +6,13 @@ How to use this file?
   . It can also be run independently. An example is given at the end of the file.
 """
 
-import sys
-
-sys.path.append("../zigzag")
 import math
 
 if __name__ == "__main__":
+    import sys
+
+    sys.path.append("../../../")
+
     from imc_unit import ImcUnit
     import logging as _logging
 
@@ -24,10 +25,10 @@ else:
 
 
 class ImcArray(ImcUnit):
-    """definition of an Analog/Digital In-SRAM-Computing (DIMC) core
+    """definition of an Analog/Digital In-SRAM-Computing (A/DIMC) core
     constraint:
         -- activation precision must be in the power of 2.
-        -- input_bit_per_cycle must be in the power of 2.
+        -- bit_serial_precision must be in the power of 2.
     """
 
     def __init__(self, cells_data: dict, imc_data: dict, dimensions):
