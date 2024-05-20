@@ -141,7 +141,8 @@ class ImcUnit:
         )
         return access_time, area, r_cost, w_cost
 
-    def get_mapped_oa_dim(self, layer: LayerNode, wl_dim: OADimension, bl_dim: OADimension) -> tuple:
+    def get_mapped_oa_dim(self, layer: LayerNode, wl_dim: OADimension, bl_dim: OADimension
+                          ) -> tuple[float, float, float, float]:
         """
         get the mapped oa_dim in current mapping. The energy of unmapped oa_dim will be set to 0.
         """
@@ -192,9 +193,9 @@ class ImcUnit:
                 not weight_ir_loop_on_wl_dim
             ):  # if False: mean there is no OX / OY unrolling on wl_dim, so no diagonal unrolling required
                 mapped_rows_total_per_macro = math.ceil(np.prod(bl_dim_unroll_sizes))
-                mapped_rows_total_per_macro = mapped_rows_total_per_macro
+                mapped_rows_for_adder_per_macro = mapped_rows_total_per_macro
             else:
-                mapped_rows_total_per_macro, mapped_rows_total_per_macro = (
+                mapped_rows_total_per_macro, mapped_rows_for_adder_per_macro = (
                     ImcUnit.calculate_mapped_rows_when_diagonal_mapping_found(
                         layer,
                         layer_const_operand,
@@ -205,7 +206,7 @@ class ImcUnit:
                 )
         else:  # there is no sm loop on bl_dim
             mapped_rows_total_per_macro = 1
-            mapped_rows_total_per_macro = 1
+            mapped_rows_for_adder_per_macro = 1
 
         # Get the number of time of activating macro
         # Note: it is normalized to a hardware that has only one macro (see equation below)
@@ -213,7 +214,7 @@ class ImcUnit:
         macro_activation_times = layer.total_MAC_count / float(spatial_mapping_size_in_macro)
         return (
             mapped_rows_total_per_macro,
-            mapped_rows_total_per_macro,
+            mapped_rows_for_adder_per_macro,
             mapped_cols_per_macro,
             macro_activation_times,
         )
@@ -221,7 +222,7 @@ class ImcUnit:
     @staticmethod
     def calculate_mapped_rows_when_diagonal_mapping_found(
         layer: LayerNode, layer_const_operand: str, layer_act_operand: str, sm_on_wl_dim: dict, sm_on_bl_dim: dict
-    ) -> tuple:
+    ) -> tuple[float, float]:
         # This function is used for calculating the total mapped number of rows when OX, OY unroll is found,
         # which requires a diagonal data mapping.
         # If OX, OY unroll does not exist, you can also use this function to calculate the total mapped number of rows.
@@ -255,7 +256,8 @@ class ImcUnit:
                         pr_sm[pr_sm_key][weight_ir_layer_dim] *= sm_on_wl_dim[unroll_dim]
         # Then, we calculate the total mapped number of rows
         # mapped_rows_total_per_macro: used for energy estimation of wordline and multipliers
-        # mapped_rows_total_per_macro: number of activated inputs of an adder tree, used for energy estimation of adder trees
+        # mapped_rows_for_adder_per_macro: number of activated inputs of an adder tree, 
+        # used for energy estimation of adder trees
         bl_dim_unroll_dims: list = [unroll_dim for unroll_dim in sm_on_bl_dim.keys()]
         bl_dim_unroll_sizes: list = [unroll_size for unroll_size in sm_on_bl_dim.values()]
         if len(bl_dim_unroll_dims) == 1:  # single layer mapping
@@ -267,13 +269,13 @@ class ImcUnit:
             else:  # e.g. ("FX", 2)
                 additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
             mapped_rows_total_per_macro = layer_dim_size + additional_diag_rows
-            mapped_rows_total_per_macro = layer_dim_size
+            mapped_rows_for_adder_per_macro = layer_dim_size
         else:  # mix layer_dim mapping (e.g. (("C",2), ("FX",2)) )
             # mapped_rows_total_per_macro = Cu * (OYu + FYu - 1) * (OXu + FXu - 1)
-            # mapped_rows_total_per_macro = Cu * FYu * FXu
+            # mapped_rows_for_adder_per_macro = Cu * FYu * FXu
             # In reality, OXu, OYu will not both exist. But the function still support this by the equation above.
             mapped_rows_total_per_macro = 1
-            mapped_rows_total_per_macro = 1
+            mapped_rows_for_adder_per_macro = 1
             for bl_dim_idx in range(len(bl_dim_unroll_dims)):
                 layer_dim = bl_dim_unroll_dims[bl_dim_idx]
                 layer_dim_size = bl_dim_unroll_sizes[bl_dim_idx]
@@ -282,11 +284,11 @@ class ImcUnit:
                 else:
                     additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
                 mapped_rows_total_per_macro *= layer_dim_size + additional_diag_rows
-                mapped_rows_total_per_macro *= layer_dim_size
+                mapped_rows_for_adder_per_macro *= layer_dim_size
         # Lastly, ceil to an upper integer, as required in the adder-trees model.
         mapped_rows_total_per_macro = math.ceil(mapped_rows_total_per_macro)
-        mapped_rows_total_per_macro = math.ceil(mapped_rows_total_per_macro)
-        return mapped_rows_total_per_macro, mapped_rows_total_per_macro
+        mapped_rows_for_adder_per_macro = math.ceil(mapped_rows_for_adder_per_macro)
+        return mapped_rows_total_per_macro, mapped_rows_for_adder_per_macro
 
     def get_precharge_energy(self, tech_param: dict, layer: LayerNode, mapping: Mapping) -> tuple:
         # calculate pre-charging energy on local bitlines for specific layer and mapping
