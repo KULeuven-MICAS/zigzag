@@ -44,7 +44,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
 
     def __add__(self, other: "CostModelEvaluationABC") -> "CumulativeCME":
         result = CumulativeCME()
-        is_imc = hasattr(other, "tclk")
+        is_imc = other.is_imc
         if is_imc:
             result.tclk = other.tclk
             result.tclk_breakdown = other.tclk_breakdown
