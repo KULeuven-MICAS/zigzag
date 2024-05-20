@@ -580,7 +580,7 @@ if __name__ == "__main__":
     #    ^  +                                                           +  +  D3 (nb_of_macros)
     #    |  +         ^     +++++++                                     +   +  \
     #    |  +         |     +  W  +                                     +   +
-    #    |  +   group_depth +++++++                                     +   +
+    #    |  +        size   +++++++                                     +   +
     #    |  +         |     +  W  +                                     +   +
     #    |  +         v     +++++++                                     +   +
     #    |  +                  |                                        +   +
@@ -594,7 +594,7 @@ if __name__ == "__main__":
     #    |  +                  |                 |                      +   +
     #    |  +         ^     +++++++              v                      +   +
     #    |  +         |     +  W  +          adders_pv (place value)    +   +
-    #    |  +   group_depth +++++++              |                      +   +
+    #    |  +        size   +++++++              |                      +   +
     #    |  +         |     +  W  +              v                      +   +
     #    |  +         v     +++++++         accumulators                +   +
     #    |  +                                    |                      +   +
@@ -602,33 +602,18 @@ if __name__ == "__main__":
     #    -  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   +
     #          +                                 |                        + +
     #           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    #   (nb_of_rows/macro = D2 * group_depth)    |
+    #   (nb_of_rows/macro = D2 * cells size)     |
     #                                            v
     #                                        outputs
     #
-    # imc_data example for AIMC/DIMC
-    imc_data = {
-        "is_imc": True,
-        "imc_type": "analog",
-        "input_precision": [8, 8],
-        "bit_serial_precision": 2,
-        "adc_resolution": 8,
-        "dimensions": ["D1", "D2"],
-        "sizes": [32, 32],
-    }
-    cells_data = {
-        "size": 8,
-        "r_bw": 8,
-        "w_bw": 8,
-        "r_cost": 0,
-        "w_cost": 0,
-        "area": 0,
-        "r_port": 0,
-        "w_port": 0,
-        "rw_port": 1,
-        "latency": 0,
-        "auto_cost_extraction": True,
-    }
+    # lab for imc macro-level peak performance
+    import yaml
+    imc_hardware_filepath = "../../../inputs/hardware/imc_macro.yaml"
+    with open(imc_hardware_filepath, "r") as fp:
+        imc_macros = yaml.safe_load(fp)
+
+    imc_data = imc_macros["operational_array"]
+    cells_data = imc_macros["memories"]["cells"]
 
     imc = ImcArray(cells_data, imc_data, None)
     logger = _logging.getLogger(__name__)
