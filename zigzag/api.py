@@ -131,9 +131,9 @@ def get_hardware_performance_zigzag_imc(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            # SearchUnusedMemoryStage,  # Detect unnecessary memory instances
+            SearchUnusedMemoryStage,  # Detect unnecessary memory instances
             WorkloadStage,  # Iterate through the different layers in the workload
-            # RemoveUnusedMemoryStage,  # Remove unnecessary memory instances
+            RemoveUnusedMemoryStage,  # Remove unnecessary memory instances
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
