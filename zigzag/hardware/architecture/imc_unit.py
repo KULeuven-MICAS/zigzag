@@ -36,6 +36,9 @@ class ImcUnit:
         self.cells_data = cells_data
         self.imc_data = imc_data
         self.is_aimc = imc_data["imc_type"] == "analog"
+        self.bit_serial_precision = imc_data["bit_serial_precision"]
+        if self.is_aimc:
+            self.adc_resolution = imc_data["adc_resolution"]
         self.oa_dim_sizes = dimensions
         self.activation_precision = imc_data["input_precision"][0]
         self.weight_precision = imc_data["input_precision"][1]
