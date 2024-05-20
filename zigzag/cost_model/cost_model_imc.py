@@ -27,6 +27,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
     def run(self) -> None:
         """! Run the cost model evaluation."""
+        # create handler for __add__ in cost model
+        self.is_imc = True
         super().calc_memory_utilization()
         super().calc_memory_word_access()
         self.calc_energy()
