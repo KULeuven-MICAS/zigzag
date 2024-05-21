@@ -7,24 +7,29 @@ How to use this file?
 """
 
 import math
-from zigzag.mapping.Mapping import Mapping
-from zigzag.datatypes import OADimension
-from zigzag.workload.layer_node import LayerNode
+from typing import TYPE_CHECKING
+import logging as _logging
+
+if TYPE_CHECKING:
+    from zigzag.workload.layer_node import LayerNode
+    from zigzag.mapping.Mapping import Mapping
+    from zigzag.datatypes import OADimension
+
 
 if __name__ == "__main__":
     import sys
 
     sys.path.append("../../../")
-
-    from imc_unit import ImcUnit
-    import logging as _logging
+    print(sys.path)
+    from zigzag.hardware.architecture.imc_unit import ImcUnit
+    from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 
     _logging_level = _logging.INFO
     _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
 else:
-    import logging as _logging
     from zigzag.hardware.architecture.imc_unit import ImcUnit
+    from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 
 
 class ImcArray(ImcUnit):
@@ -622,16 +627,12 @@ if __name__ == "__main__":
     #                                        outputs
     #
     # lab for imc macro-level peak performance
-    import yaml
+    accelerator_yaml = "../../../inputs/hardware/imc_macro.yaml"
+    accelerator = AcceleratorParserStage.parse_accelerator(accelerator_yaml)
+    core = accelerator.get_core(0)
+    imc = core.operational_array
+    assert isinstance(imc, ImcArray)
 
-    imc_hardware_filepath = "../../../inputs/hardware/imc_macro.yaml"
-    with open(imc_hardware_filepath, "r") as fp:
-        imc_macros = yaml.safe_load(fp)
-
-    imc_data = imc_macros["operational_array"]
-    cells_data = imc_macros["memories"]["cells"]
-
-    imc = ImcArray(cells_data, imc_data, None)
     logger = _logging.getLogger(__name__)
     logger.info(f"Total IMC area (mm^2): {imc.area}")
     logger.info(f"area breakdown: {imc.area_breakdown}")

@@ -21,13 +21,14 @@ class AcceleratorParserStage(Stage):
         self.accelerator_yaml_path = accelerator
 
     def run(self):
-        accelerator = self.parse_accelerator()
+        accelerator = self.parse_accelerator(self.accelerator_yaml_path)
         sub_stage = self.list_of_callables[0](self.list_of_callables[1:], accelerator=accelerator, **self.kwargs)
         for cme, extra_info in sub_stage.run():
             yield cme, extra_info
 
-    def parse_accelerator(self) -> Accelerator:
-        accelerator_data = open_yaml(self.accelerator_yaml_path)
+    @staticmethod
+    def parse_accelerator(accelerator_yaml_path: str) -> Accelerator:
+        accelerator_data = open_yaml(accelerator_yaml_path)
 
         validator = AcceleratorValidator(accelerator_data)
         accelerator_data = validator.normalized_data
