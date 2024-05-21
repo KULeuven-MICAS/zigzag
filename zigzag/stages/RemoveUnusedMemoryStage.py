@@ -2,12 +2,13 @@ from typing import Any
 import logging
 
 
-from zigzag.datatypes import LayerOperand
+from zigzag.datatypes import LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
+from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 from zigzag.stages.Stage import Stage, StageCallable
@@ -76,12 +77,9 @@ class RemoveUnusedMemoryStage(Stage):
         memory_hierarchy = core.memory_hierarchy
 
         # derive act_operand/weight_operand_in_hardware
-        (
-            act_operand_in_layer,
-            weight_operand_in_layer,
-            act_operand_in_hardware,
-            weight_operand_in_hardware
-        ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=self.layer)
+        (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+            SearchUnusedMemoryStage.get_act_weight_operand_names(layer=self.layer)
+        )
         output_operand_in_layer = self.layer.output_operand
         output_operand_in_hardware = self.layer.memory_operand_links[output_operand_in_layer]
 
@@ -109,40 +107,43 @@ class RemoveUnusedMemoryStage(Stage):
         for curr_mem_level, memory_level in enumerate(memory_hierarchy.mem_level_list):
             memory_instance = memory_level.memory_instance
             operands = tuple(memory_level.operands)
-            port_alloc = memory_level.port_alloc_raw
+            port_alloc: PortAllocation = memory_level.port_alloc_raw
             served_dimensions = memory_level.served_dimensions
 
-            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
-            new_operands = []
-            new_port_alloc = []
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
+            new_operands: list[MemoryOperand] = []
+            new_port_alloc_data: dict[MemoryOperand, dict[DataDirection, str]] = {}
+
             if (act_operand_in_hardware in operands) and curr_mem_level <= target_act_mem_level:
                 new_operands.append(act_operand_in_hardware)
-                index_in_operands = operands.index(act_operand_in_hardware)
-                new_port_alloc.append(port_alloc[index_in_operands])  # TODO: to be changed
+                new_port_alloc_data[act_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(act_operand_in_hardware)
+                # TODO I think you need
             if (weight_operand_in_hardware in operands) and curr_mem_level <= target_const_mem_level:
                 new_operands.append(weight_operand_in_hardware)
-                index_in_operands = operands.index(weight_operand_in_hardware)
-                new_port_alloc.append(port_alloc[index_in_operands])  # TODO: to be changed
+                new_port_alloc_data[weight_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
+                    weight_operand_in_hardware
+                )
             if (output_operand_in_hardware in operands) and curr_mem_level <= target_output_mem_level:
                 new_operands.append(output_operand_in_hardware)
-                index_in_operands = operands.index(output_operand_in_hardware)
-                new_port_alloc.append(port_alloc[index_in_operands])  # TODO: to be changed
-            new_operands = tuple(new_operands)
-            new_port_alloc = tuple(new_port_alloc)
+                new_port_alloc_data[output_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
+                    output_operand_in_hardware
+                )
+
+            new_port_alloc = PortAllocation(new_port_alloc_data)
             new_served_dimensions: ServedMemDimensions = pickle_deepcopy(served_dimensions)
             if len(new_operands) > 0:
                 new_memory_hierarchy.add_memory(
                     memory_instance=new_memory_instance,
                     operands=new_operands,
                     port_alloc=new_port_alloc,
-                    served_dimensions=new_served_dimensions.to_user_format(),
+                    served_dimensions=new_served_dimensions,
                 )
 
         # Create the new core
         id = core.id
         new_id = id
         new_core = Core(
-            id=new_id,
+            core_id=new_id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )

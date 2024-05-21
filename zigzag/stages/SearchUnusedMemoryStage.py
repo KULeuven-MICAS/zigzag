@@ -185,12 +185,12 @@ class SearchUnusedMemoryStage(Stage):
                     # check if curr_mem_level serve the next layer input
                     if not is_final_layer:
                         # grab the next layer name, which is a non-Adder layer for sure
-                        next_layer: LayerNode = list(self.workload.successors(layer))[0]
+                        next_layer: LayerNode = list(self.workload.successors(layer))[0]  # type: ignore
                         (
-                            next_layer_act_operand_in_layer,
-                            next_layer_weight_operand_in_layer,
+                            _,
+                            _,
                             next_layer_act_operand_in_hardware,
-                            next_layer_weight_operand_in_hardware,
+                            _,
                         ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=next_layer)
                         mem_serve_act_in_next_layer = (
                             True if (next_layer_act_operand_in_hardware in served_operands) else False
@@ -285,7 +285,7 @@ class SearchUnusedMemoryStage(Stage):
         # check if mem serve all hardare dimensions
         core = accelerator.cores[0]
         operational_array = core.operational_array
-        oa_dim_nb = len(operational_array.oa_dim_sizes)
+        oa_dim_nb = len(operational_array.dimension_sizes)
         mem_served_oa_dim_nb = mem.served_dimensions.nb_dims
         return mem_served_oa_dim_nb == oa_dim_nb
 

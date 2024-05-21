@@ -7,13 +7,12 @@ How to use this file?
 """
 
 import math
-from typing import TYPE_CHECKING
 import logging as _logging
 
-if TYPE_CHECKING:
-    from zigzag.workload.layer_node import LayerNode
-    from zigzag.mapping.Mapping import Mapping
-    from zigzag.datatypes import OADimension
+from zigzag.workload.layer_node import LayerNode
+from zigzag.mapping.Mapping import Mapping
+from zigzag.datatypes import OADimension
+from zigzag.hardware.architecture.imc_unit import ImcUnit
 
 
 if __name__ == "__main__":
@@ -21,15 +20,11 @@ if __name__ == "__main__":
 
     sys.path.append("../../../")
     print(sys.path)
-    from zigzag.hardware.architecture.imc_unit import ImcUnit
     from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 
     _logging_level = _logging.INFO
     _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
     _logging.basicConfig(level=_logging_level, format=_logging_format)
-else:
-    from zigzag.hardware.architecture.imc_unit import ImcUnit
-    from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 
 
 class ImcArray(ImcUnit):
@@ -628,6 +623,8 @@ if __name__ == "__main__":
     #
     # lab for imc macro-level peak performance
     accelerator_yaml = "../../../inputs/hardware/imc_macro.yaml"
+
+    # TODO this won't work due to circular import -> put in separate example script
     accelerator = AcceleratorParserStage.parse_accelerator(accelerator_yaml)
     core = accelerator.get_core(0)
     imc = core.operational_array

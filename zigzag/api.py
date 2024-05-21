@@ -392,7 +392,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
 
 
 if __name__ == "__main__":
-    workload = "zigzag/inputs/examples/workload/mobilenetv2.onnx"
+    workload = "inputs/workload/mobilenetv2.onnx"
     # workload = 'inputs.examples.workload.resnet18'
     accelerator = "zigzag.inputs.examples.hardware.TPU_like"
     mapping = "zigzag.inputs.examples.mapping.tpu_like"
