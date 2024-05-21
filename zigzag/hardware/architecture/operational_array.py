@@ -1,6 +1,6 @@
 from abc import ABCMeta
 from typing import Any
-import numpy as np
+import math
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.operational_unit import (
     OperationalUnit,
@@ -29,7 +29,7 @@ class OperationalArray(OperationalArrayABC):
         """
         OperationalArrayABC.__init__(self, dimension_sizes=dimension_sizes)
         self.unit: OperationalUnit = operational_unit
-        self.total_unit_count = int(np.prod(list(dimension_sizes.values())))
+        self.total_unit_count = int(math.prod(list(dimension_sizes.values())))
         self.total_area = operational_unit.area * self.total_unit_count
 
     def __jsonrepr__(self):
