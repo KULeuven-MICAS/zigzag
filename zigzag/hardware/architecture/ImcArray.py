@@ -1,11 +1,3 @@
-"""
-README
-  . class ImcArray (defines the energy/area/delay cost of an AIMC/DIMC array)
-How to use this file?
-  . This file is internally called in ZigZag-IMC framework.
-  . It can also be run independently. An example is given at the end of the file.
-"""
-
 import math
 import logging as _logging
 
@@ -13,18 +5,6 @@ from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
-
-
-if __name__ == "__main__":
-    import sys
-
-    sys.path.append("../../../")
-    print(sys.path)
-    from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
 
 
 class ImcArray(ImcUnit):
@@ -434,8 +414,10 @@ class ImcArray(ImcUnit):
         topsmm2_peak = tops_peak / imc_area
 
         logger = _logging.getLogger(__name__)
-        logger.info(f"Current macro-level peak performance ({'analog' if self.is_aimc else 'digital'} imc):")
-        logger.info(f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}")
+        imc_type_info = f"Current macro-level peak performance ({'analog' if self.is_aimc else 'digital'} imc):"
+        peak_performance_info = f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}"
+        logger.info(imc_type_info)
+        logger.info(peak_performance_info)
 
         return tops_peak, topsw_peak, topsmm2_peak
 
@@ -584,55 +566,3 @@ class ImcArray(ImcUnit):
         }
         self.energy = sum([v for v in self.energy_breakdown.values()])
         return self.energy_breakdown
-
-
-if __name__ == "__main__":
-    #
-    # #### IMC hardware dimension illustration (keypoint: adders' accumulation happens on D2)
-    #
-    #       |<------------------------ D1 ----------------------------->| (nb_of_columns/macro = D1 * weight_precision)
-    #    -  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++    \
-    #    ^  +                                                           +  +  D3 (nb_of_macros)
-    #    |  +         ^     +++++++                                     +   +  \
-    #    |  +         |     +  W  +                                     +   +
-    #    |  +        size   +++++++                                     +   +
-    #    |  +         |     +  W  +                                     +   +
-    #    |  +         v     +++++++                                     +   +
-    #    |  +                  |                                        +   +
-    #    |  +                  v                                        +   +
-    #    |  +               multipliers -\                              +   +
-    #    |  +        .                    \                             +   +
-    #       +        .                     - adders (DIMC)              +   +
-    #   D2  +        .                    / OR adcs (AIMC)              +   +
-    #       +               multipliers -/       |                      +   +
-    #    |  +                  ^                 |                      +   +
-    #    |  +                  |                 |                      +   +
-    #    |  +         ^     +++++++              v                      +   +
-    #    |  +         |     +  W  +          adders_pv (place value)    +   +
-    #    |  +        size   +++++++              |                      +   +
-    #    |  +         |     +  W  +              v                      +   +
-    #    |  +         v     +++++++         accumulators                +   +
-    #    |  +                                    |                      +   +
-    #    v  +                                    |                      +   +
-    #    -  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++   +
-    #          +                                 |                        + +
-    #           +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    #   (nb_of_rows/macro = D2 * cells size)     |
-    #                                            v
-    #                                        outputs
-    #
-    # lab for imc macro-level peak performance
-    accelerator_yaml = "../../../inputs/hardware/imc_macro.yaml"
-
-    # TODO this won't work due to circular import -> put in separate example script
-    accelerator = AcceleratorParserStage.parse_accelerator(accelerator_yaml)
-    core = accelerator.get_core(0)
-    imc = core.operational_array
-    assert isinstance(imc, ImcArray)
-
-    logger = _logging.getLogger(__name__)
-    logger.info(f"Total IMC area (mm^2): {imc.area}")
-    logger.info(f"area breakdown: {imc.area_breakdown}")
-    logger.info(f"Tclk (ns): {imc.tclk}")
-    logger.info(f"Tclk breakdown (ns): {imc.tclk_breakdown}")
-    exit()
