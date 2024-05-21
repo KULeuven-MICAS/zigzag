@@ -14,6 +14,7 @@ class MappingValidator:
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True, "allowed": WorkloadValidator.ALLOWED_OPERATORS + ["default"]},
         "core_allocation": {"type": "list", "schema": {"type": "integer"}, "default": [0]},
+        "core_allocation_is_fixed": {"type": "boolean", "default": False},
         "spatial_mapping": {
             "type": "dict",
             "schema": {
