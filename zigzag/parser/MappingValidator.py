@@ -16,6 +16,7 @@ class MappingValidator:
             "required": True,
         },
         "core_allocation": {"type": "list", "schema": {"type": "integer"}, "default": [0]},
+        "core_allocation_is_fixed": {"type": "boolean", "default": False},
         "spatial_mapping": {
             "type": "dict",
             "schema": {

@@ -76,6 +76,7 @@ class LayerNodeFactory:
         spatial_mapping = mapping_factory.create_spatial_mapping()
         spatial_mapping_hint = mapping_factory.create_spatial_mapping_hint()
         core_allocation = mapping_factory.get_core_allocation()
+        core_allocation_is_fixed = mapping_factory.get_core_allocation_is_fixed()
         memory_operand_links = mapping_factory.create_memory_operand_links()
         temporal_ordering = mapping_factory.create_temporal_ordering()
 
@@ -90,6 +91,7 @@ class LayerNodeFactory:
             spatial_mapping=spatial_mapping,
             spatial_mapping_hint=spatial_mapping_hint,
             core_allocation=core_allocation,
+            core_allocation_is_fixed=core_allocation_is_fixed,
             memory_operand_links=memory_operand_links,
             temporal_ordering=temporal_ordering,
             padding=padding,
@@ -197,6 +199,9 @@ class MappingFactory:
 
     def get_core_allocation(self) -> list[int]:
         return self.mapping_data["core_allocation"]
+
+    def get_core_allocation_is_fixed(self) -> bool:
+        return self.mapping_data["core_allocation_is_fixed"]
 
     def create_spatial_mapping(self) -> SpatialMapping:
         if self.mapping_data["spatial_mapping"] is None:

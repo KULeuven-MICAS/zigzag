@@ -106,6 +106,7 @@ class LayerNodeAttributes:
     spatial_mapping: SpatialMapping
     spatial_mapping_hint: SpatialMappingHint
     core_allocation: list[int]
+    core_allocation_is_fixed: bool
     memory_operand_links: MemoryOperandLinks
     temporal_ordering: LayerTemporalOrdering
     padding: LayerPadding
@@ -138,6 +139,7 @@ class LayerNode(LayerNodeABC):
         self.spatial_mapping = node_attr.spatial_mapping
         self.spatial_mapping_hint = node_attr.spatial_mapping_hint
         self.core_allocation = node_attr.core_allocation
+        self.core_allocation_is_fixed = node_attr.core_allocation_is_fixed
         self.memory_operand_links = node_attr.memory_operand_links
         self.temporal_ordering = node_attr.temporal_ordering
         self.padding = node_attr.padding
@@ -189,6 +191,7 @@ class LayerNode(LayerNodeABC):
                 "loop_dimensions": self.layer_dim_sizes,
                 "operand_precision": self.operand_precision,
                 "core_allocation": self.core_allocation,
+                "core_allocation_is_fixed": self.core_allocation_is_fixed,
                 "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
                 # "source_storage_level": self.source_storage_level, # NOTE not used?
@@ -304,6 +307,7 @@ class LayerNode(LayerNodeABC):
             spatial_mapping=self.spatial_mapping,
             spatial_mapping_hint=self.spatial_mapping_hint,
             core_allocation=self.core_allocation,
+            core_allocation_is_fixed=self.core_allocation_is_fixed,
             memory_operand_links=self.memory_operand_links,
             temporal_ordering=self.temporal_ordering,
             padding=self.padding,
