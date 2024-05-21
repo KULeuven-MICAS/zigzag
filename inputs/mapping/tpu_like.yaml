@@ -16,9 +16,9 @@
   core_allocation: [1]
   spatial_mapping:
     D1:
-      - K, 32
-    D2:
       - C, 32
+    D2:
+      - K, 32
   memory_operand_links:
     O: O
     W: I2
@@ -29,9 +29,9 @@
   core_allocation: [1]
   spatial_mapping:
     D1:
-      - G, 32
-    D2:
       - C, 1
+    D2:
+      - G, 32
   memory_operand_links:
     O: O
     W: I2
@@ -42,9 +42,9 @@
   core_allocation: [1]
   spatial_mapping:
     D1:
-      - G, 32
-    D2:
       - C, 1
+    D2:
+      - G, 32
   memory_operand_links:
     O: O
     W: I2
