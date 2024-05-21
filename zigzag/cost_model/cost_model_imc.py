@@ -120,7 +120,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # latency_total0 breakdown
         computation_breakdown = {
             "mac_computation": self.ideal_temporal_cycle,
-            "weight_loading": self.SS_comb,
+            "memory_stalling": self.SS_comb,
         }
 
         return json_repr_handler(
