@@ -140,7 +140,7 @@ class MemoryLevel:
     @property
     def unroll_count(self) -> int:
         """! Calculate how many times this memory instance is unrolled (duplicated) on the Operational Array"""
-        return math.prod(self.oa_dim_sizes[oa_dim] for oa_dim in self.oa_dim_sizes if oa_dim in self.served_dimensions)
+        return math.prod(self.oa_dim_sizes[oa_dim] for oa_dim in self.oa_dim_sizes if oa_dim not in self.served_dimensions)
 
     def __jsonrepr__(self):
         """! JSON Representation of this class to save it to a json file."""
