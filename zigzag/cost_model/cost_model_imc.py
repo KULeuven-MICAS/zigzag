@@ -184,10 +184,10 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
         # calculate the total number of weight loading cycles
         if require_weight_loading:
-            weight_loading_cycles = nb_of_weight_reload_periods * mapped_rows_total_per_macro * mapped_group_depth
+            weight_loading_cycles: float = nb_of_weight_reload_periods * mapped_rows_total_per_macro * mapped_group_depth
         else:
-            weight_loading_cycles = 0
-        self.SS_comb_collect.append(weight_loading_cycles)
+            weight_loading_cycles: float = 0
+        self.SS_comb_collect.append({"weight_loading_cycles": weight_loading_cycles})
 
         # Step 3: update SS_comb
         self.SS_comb = max(self.SS_comb, weight_loading_cycles)
