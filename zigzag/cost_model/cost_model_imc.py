@@ -41,6 +41,10 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         temporal_mapping: TemporalMapping,
         access_same_data_considered_as_no_access: bool = True,
     ):
+        self.is_imc = True
+        self.core = next(iter(accelerator.cores))
+        assert isinstance(self.core.operational_array, ImcArray)
+        self.operational_array: ImcArray = self.core.operational_array
         super().__init__(
             accelerator=accelerator,
             layer=layer,
@@ -49,11 +53,6 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             temporal_mapping=temporal_mapping,
             access_same_data_considered_as_no_access=access_same_data_considered_as_no_access,
         )
-
-        self.is_imc = True
-        self.core = next(iter(self.accelerator.cores))
-        assert isinstance(self.core.operational_array, ImcArray)
-        self.operational_array: ImcArray = self.core.operational_array
 
     def run(self) -> None:
         """! Run the cost model evaluation."""
