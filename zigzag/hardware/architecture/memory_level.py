@@ -4,7 +4,7 @@ import math
 from zigzag.datatypes import OADimension, MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType, PortAllocation
-from zigzag.hardware.architecture.operational_array import OperationalArray
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 
 
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
@@ -67,7 +67,7 @@ class MemoryLevel:
         mem_level_of_operands: dict[MemoryOperand, int],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
-        operational_array: OperationalArray,
+        operational_array: OperationalArrayABC,
         identifier: int,
     ):
         """! Initialize the memory level in the hierarchy with the physical memory instance
@@ -77,7 +77,7 @@ class MemoryLevel:
         self.memory_instance = memory_instance
         self.operands = operands
         self.mem_level_of_operands = mem_level_of_operands
-        self.oa_dim_sizes = operational_array.oa_dim_sizes
+        self.oa_dim_sizes = operational_array.dimension_sizes
         self.id: int = identifier
         self.served_dimensions = served_dimensions
         self.name = self.memory_instance.name

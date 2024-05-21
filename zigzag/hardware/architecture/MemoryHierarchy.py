@@ -7,7 +7,7 @@ from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
-from zigzag.hardware.architecture.operational_array import OperationalArray
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import json_repr_handler
 
 
@@ -19,7 +19,7 @@ class MemoryHierarchy(DiGraph):
 
     def __init__(
         self,
-        operational_array: OperationalArray,
+        operational_array: OperationalArrayABC,
         name: str = "Memory Hierarchy",
         **attr: Any,
     ):

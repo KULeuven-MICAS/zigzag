@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 
 class SearchUnusedMemoryStage(Stage):
     def __init__(
-            self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, workload: Workload, **kwargs: Any
+        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, workload: Workload, **kwargs: Any
     ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
@@ -39,13 +39,10 @@ class SearchUnusedMemoryStage(Stage):
         self.layer_list: dict[LayerNodeABC, int] = {}
 
         # derive top mem level of input, weight, output
-        layer_0 = [layer for layer in self.workload.topological_sort()][0]
-        (
-            act_operand_in_layer,
-            weight_operand_in_layer,
-            act_operand_in_hardware,
-            weight_operand_in_hardware
-        ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer_0)
+        layer_0: LayerNode = [layer for layer in self.workload.topological_sort()][0]  # type: ignore
+        (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+            SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer_0)
+        )
         output_operand_in_layer = layer_0.output_operand
         output_operand_in_hardware = layer_0.memory_operand_links[output_operand_in_layer]
         self.top_mem_level_act: int = -1
@@ -69,12 +66,9 @@ class SearchUnusedMemoryStage(Stage):
                 continue
 
             # input, weight operand name in hardware
-            (
-                act_operand_in_layer,
-                weight_operand_in_layer,
-                act_operand_in_hardware,
-                weight_operand_in_hardware
-            ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+                SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            )
             output_operand_in_layer = layer.output_operand
             output_operand_in_hardware = layer.memory_operand_links[output_operand_in_layer]
 
@@ -85,10 +79,7 @@ class SearchUnusedMemoryStage(Stage):
                 input_data_size = 0
                 for operand in layer.input_operands:
                     input_data_size += layer.operand_size_bit[operand]
-                self.mem_update_list[str(idx)] = {
-                    act_operand_in_hardware: -1,
-                    output_operand_in_hardware: -1
-                }
+                self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
                 self.each_layer_IO_data_size[str(idx)] = [
                     {
                         output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
@@ -99,14 +90,11 @@ class SearchUnusedMemoryStage(Stage):
                 continue
 
             # update info for regular layers
-            self.mem_update_list[str(idx)] = {
-                    act_operand_in_hardware: -1,
-                    output_operand_in_hardware: -1
-            }
+            self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
             self.each_layer_IO_data_size[str(idx)] = [
                 {
                     act_operand_in_hardware: layer.operand_size_bit[act_operand_in_layer],
-                    output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer]
+                    output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
                 }
             ]
             self.weight_size_entire_workload += layer.operand_size_bit[weight_operand_in_layer]
@@ -136,13 +124,14 @@ class SearchUnusedMemoryStage(Stage):
     def update_top_mem_level(self):
         """
         Update mem_update_list and mem_update_weight according to the algorithm description at the file beginning.
+        # TODO clean up (way too many lines)
         """
         # remove dummy (non-conv) layers (ReLU, Pooling..) in the layer graph
         self.remove_dummy_nodes_in_workload()
 
         # calculate the allowed lowest mem level per operand per layer
-        layer_list_without_dummy = [layer for layer in self.workload.topological_sort()]
-        for id, layer in enumerate(layer_list_without_dummy):
+        layer_list_without_dummy: list[LayerNode] = [layer for layer in self.workload.topological_sort()]  # type: ignore
+        for _, layer in enumerate(layer_list_without_dummy):
             # handler for the first layer
             if layer == layer_list_without_dummy[0]:
                 is_first_layer = True
@@ -158,22 +147,16 @@ class SearchUnusedMemoryStage(Stage):
             # original layer index before removing dummy nodes
             curr_id = self.layer_list[layer]
             # activation, weight operand name
-            (
-                act_operand_in_layer,
-                weight_operand_in_layer,
-                act_operand_in_hardware,
-                weight_operand_in_hardware
-            ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            (_, _, act_operand_in_hardware, weight_operand_in_hardware) = (
+                SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            )
             # output operand name
             output_operand_in_layer: LayerOperand = layer.output_operand
             output_operand_in_hardware: MemoryOperand = layer.memory_operand_links[output_operand_in_layer]
 
             is_branch_starting_node = True if self.workload.out_degree(layer) > 1 else False
-            is_branch_final_node = (
-                True
-                if self.workload.out_degree(layer) == 1
-                   and self.workload.in_degree(list(self.workload.successors(layer))[0]) > 1
-                else False
+            is_branch_final_node: bool = (self.workload.out_degree(layer) == 1) and (
+                self.workload.in_degree(list(self.workload.successors(layer))[0]) > 1
             )
 
             if not is_first_layer:
@@ -182,7 +165,8 @@ class SearchUnusedMemoryStage(Stage):
                 prev_layer_id = self.layer_list[prev_layer]
                 prev_layer_output_operand_in_layer = prev_layer.output_operand
                 prev_layer_output_operand_in_hardware = prev_layer.memory_operand_links.layer_to_mem_op(
-                    prev_layer_output_operand_in_layer)
+                    prev_layer_output_operand_in_layer
+                )
                 # starting node of branches
                 mem_level_record_prev_layer = self.mem_update_list[f"{prev_layer_id}"]
                 assert prev_layer_output_operand_in_hardware in mem_level_record_prev_layer.keys()
@@ -206,7 +190,7 @@ class SearchUnusedMemoryStage(Stage):
                             next_layer_act_operand_in_layer,
                             next_layer_weight_operand_in_layer,
                             next_layer_act_operand_in_hardware,
-                            next_layer_weight_operand_in_hardware
+                            next_layer_weight_operand_in_hardware,
                         ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=next_layer)
                         mem_serve_act_in_next_layer = (
                             True if (next_layer_act_operand_in_hardware in served_operands) else False
@@ -217,8 +201,9 @@ class SearchUnusedMemoryStage(Stage):
 
                     # both next layer input and current layer output in mem.served_operands
                     mem_serve_io_both = (
-                        True if mem_serve_act_in_next_layer and (
-                                    output_operand_in_hardware in served_operands) else False
+                        True
+                        if mem_serve_act_in_next_layer and (output_operand_in_hardware in served_operands)
+                        else False
                     )
                     mem_serve_weight = True if (weight_operand_in_hardware in served_operands) else False
 
@@ -256,42 +241,44 @@ class SearchUnusedMemoryStage(Stage):
         # assert check if there is -1 value in mem_update_list
         for layer_info in self.mem_update_list.values():
             for mem_level_in_info in layer_info.values():
-                assert (mem_level_in_info >= 0), \
-                    f"There are still layers with top mem levels not figured out."
+                assert mem_level_in_info >= 0, f"There are still layers with top mem levels not figured out."
 
     @staticmethod
-    def get_act_weight_operand_names(layer: LayerNode
-                                     ) -> tuple[
-        LayerOperand, LayerOperand or None, MemoryOperand, MemoryOperand or None]:
+    def get_act_weight_operand_names(
+        layer: LayerNode,
+    ) -> tuple[LayerOperand, LayerOperand | None, MemoryOperand, MemoryOperand | None]:
         # the function is also called within imc cost model
         if len(layer.constant_operands) == 1:
             # regular layers
-            weight_operand_in_layer: LayerOperand = layer.constant_operands[0]
-            weight_operand_in_hardware: MemoryOperand = layer.memory_operand_links[weight_operand_in_layer]
+            weight_operand_in_layer: LayerOperand | None = layer.constant_operands[0]
+            weight_operand_in_hardware: MemoryOperand | None = layer.memory_operand_links[weight_operand_in_layer]
             act_operand_in_layer: LayerOperand = [
-                operand for operand in layer.input_operands if operand != weight_operand_in_layer][0]
+                operand for operand in layer.input_operands if operand != weight_operand_in_layer
+            ][0]
             act_operand_in_hardware: MemoryOperand = layer.memory_operand_links[act_operand_in_layer]
         elif len(layer.constant_operands) == 0:
             # Adder layers
-            weight_operand_in_layer: None = None
-            weight_operand_in_hardware: None = None
+            weight_operand_in_layer = None
+            weight_operand_in_hardware = None
             act_operand_in_layer: LayerOperand = layer.input_operands[0]
             act_operand_in_hardware: MemoryOperand = layer.memory_operand_links[act_operand_in_layer]
         else:
             # len(layer.constant_operands) == 2, both input, activation exist in layer.constant_operands
-            pr_loop_keys = tuple(layer.pr_loop.keys())
+            pr_loop_key = next(iter(layer.pr_loop.keys()))
             related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
                 layer_op: layer.equation.get_r_layer_dims(layer_op)
                 for layer_op in layer.equation.get_contained_operands()
             }
-            for operand_in_layer, related_loop in related_loop_dict.items():
-                if pr_loop_keys[0] in related_loop:
-                    act_operand_in_layer: LayerOperand = operand_in_layer
-                    break
+
+            act_operand_in_layer = [
+                operand_in_layer
+                for operand_in_layer, related_loop in related_loop_dict.items()
+                if pr_loop_key in related_loop
+            ].pop()
+
             act_operand_in_hardware: MemoryOperand = layer.memory_operand_links[act_operand_in_layer]
-            weight_operand_in_layer: LayerOperand = [x for x in layer.constant_operands if x != act_operand_in_layer][0]
-            weight_operand_in_hardware: MemoryOperand = layer.memory_operand_links.layer_to_mem_op(
-                weight_operand_in_layer)
+            weight_operand_in_layer = [x for x in layer.constant_operands if x != act_operand_in_layer][0]
+            weight_operand_in_hardware = layer.memory_operand_links.layer_to_mem_op(weight_operand_in_layer)
         return act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware
 
     def check_if_mem_serve_all_oa_dims(self, mem: MemoryLevel, accelerator: Accelerator):
@@ -327,12 +314,9 @@ class SearchUnusedMemoryStage(Stage):
             else:
                 is_final_layer = False
 
-            (
-                act_operand_in_layer,
-                weight_operand_in_layer,
-                act_operand_in_hardware,
-                weight_operand_in_hardware
-            ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+                SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            )
             output_operand_in_layer = layer.output_operand
             output_operand_in_hardware = layer.memory_operand_links.layer_to_mem_op(output_operand_in_layer)
             curr_id = self.layer_list[layer]

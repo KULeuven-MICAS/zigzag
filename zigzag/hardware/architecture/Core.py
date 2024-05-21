@@ -1,6 +1,6 @@
 from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.memory_level import MemoryLevel
-from zigzag.hardware.architecture.operational_array import OperationalArray
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 
 from zigzag.mapping.spatial_mapping import SpatialMapping
@@ -16,7 +16,7 @@ class Core:
     def __init__(
         self,
         core_id: int,
-        operational_array: OperationalArray,
+        operational_array: OperationalArrayABC,
         memory_hierarchy: MemoryHierarchy,
         dataflows: SpatialMapping | None = None,
     ):

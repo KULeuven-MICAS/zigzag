@@ -6,6 +6,7 @@ from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.mapping.Mapping import Mapping
 from zigzag.mapping.data_movement import DataDirection, FourWayDataMoving
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
@@ -44,17 +45,6 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
 
     def __add__(self, other: "CostModelEvaluationABC") -> "CumulativeCME":
         result = CumulativeCME()
-        is_imc = other.is_imc
-        if is_imc:
-            result.tclk = other.tclk
-            result.tclk_breakdown = other.tclk_breakdown
-            result.area_total = other.area_total
-            result.mac_energy_breakdown = {}
-            for component, energy in other.mac_energy_breakdown.items():
-                if not hasattr(self, "mac_energy_breakdown"):
-                    result.mac_energy_breakdown[component] = energy
-                else:
-                    result.mac_energy_breakdown[component] = self.mac_energy_breakdown[component] + energy
 
         # Energy
         result.mac_energy = self.mac_energy + other.mac_energy
@@ -580,7 +570,11 @@ class CostModelEvaluation(CostModelEvaluationABC):
     def calc_mac_energy_cost(self) -> None:
         """! Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
-        single_mac_energy = core.operational_array.unit.cost
+        operational_array = core.operational_array
+        assert isinstance(
+            operational_array, OperationalArray
+        ), "This method expects an OperationalArray instance. Otherwise, the method should be overridden in a subclass."
+        single_mac_energy = operational_array.unit.cost
         self.mac_energy = single_mac_energy * self.layer.total_MAC_count
 
     def calc_memory_energy_cost(self):
@@ -661,8 +655,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         4) Finally, we combine the stall/slack of each memory port to get the final latency.
         """
         self.calc_double_buffer_flag()
-        self.__calc_allowed_and_real_data_transfer_cycle_per_DTL()
-        self.__combine_data_transfer_rate_per_physical_port()
+        self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
+        self.combine_data_transfer_rate_per_physical_port()
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
 
@@ -1043,7 +1037,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.data_offloading_cc_pair_combined = data_offloading_cc_pair_combined
         self.data_offloading_cycle = data_offloading_cycle
 
-    def calc_overall_latency(self, cycles_per_mac: int = 1) -> None:
+    def calc_overall_latency(self, cycles_per_mac: float = 1) -> None:
         """! This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the
         overall latency"""
         # @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)

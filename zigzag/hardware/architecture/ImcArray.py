@@ -7,6 +7,9 @@ How to use this file?
 """
 
 import math
+from zigzag.mapping.Mapping import Mapping
+from zigzag.datatypes import OADimension
+from zigzag.workload.layer_node import LayerNode
 
 if __name__ == "__main__":
     import sys
@@ -31,43 +34,48 @@ class ImcArray(ImcUnit):
         -- bit_serial_precision must be in the power of 2.
     """
 
-    def __init__(self, cells_data: dict, imc_data: dict, dimensions):
-        """
-        @param cells_data: cells parameters
-        @param imc_data: IMC cores' parameters
-        @param dimensions: IMC cores' dimensions"""
-        super().__init__(cells_data, imc_data, dimensions)
+    def __init__(
+        self,
+        is_analog_imc: bool,
+        bit_serial_precision: int,
+        input_precision: list[int],
+        adc_resolution: int,
+        cells_size: int,
+        cells_area: float | None,
+        dimension_sizes: dict[OADimension, int],
+        auto_cost_extraction: bool = False,
+    ):
+        super().__init__(
+            is_analog_imc=is_analog_imc,
+            bit_serial_precision=bit_serial_precision,
+            input_precision=input_precision,
+            adc_resolution=adc_resolution,
+            cells_size=cells_size,
+            cells_area=cells_area,
+            dimension_sizes=dimension_sizes,
+            auto_cost_extraction=auto_cost_extraction,
+        )
         self.get_area()
         self.get_tclk()
         self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
-
-    def __jsonrepr__(self):
-        """
-        JSON Representation of this class to save it to a json file.
-        """
-        pass
 
     def get_adc_cost(self) -> tuple[float, float, float]:
         """single ADC cost calculation"""
         # area (mm^2)
         if self.adc_resolution == 1:
-            adc_area = 0
+            adc_area: float = 0
         else:  # formula extracted and validated against 3 AIMC papers on 28nm
             k1 = -0.0369
             k2 = 1.206
-            adc_area = (
-                10 ** (k1 * self.adc_resolution + k2) * 2 ** self.adc_resolution * (10**-6)
-            )  # unit: mm^2
+            adc_area = 10 ** (k1 * self.adc_resolution + k2) * 2**self.adc_resolution * (10**-6)  # unit: mm^2
         # delay (ns)
         k3 = 0.00653  # ns
         k4 = 0.640  # ns
-        adc_delay = self.adc_resolution * (k3 * self.bl_dim_size + k4)  # unit: ns
+        adc_delay = self.adc_resolution * (k3 * self.bitline_dim_size + k4)  # unit: ns
         # energy (fJ)
         k5 = 100  # fF
         k6 = 0.001  # fF
-        adc_energy = (  # unit: fJ
-            k5 * self.adc_resolution + k6 * 4 ** self.adc_resolution
-        ) * self.tech_param["vdd"] ** 2
+        adc_energy = (k5 * self.adc_resolution + k6 * 4**self.adc_resolution) * self.tech_param["vdd"] ** 2  # unit: fJ
         adc_energy = adc_energy / 1000  # unit: pJ
         return adc_area, adc_delay, adc_energy
 
@@ -88,40 +96,45 @@ class ImcArray(ImcUnit):
     def get_area(self):
         """! get area of IMC macros (cells, mults, adders, adders_pv, accumulators. Exclude input/output regs)"""
         # area of cells
-        if self.cells_data["auto_cost_extraction"]:
+        if self.auto_cost_extraction:
             cost_per_bank = self.get_single_cell_array_cost_from_cacti(
                 tech_node=self.tech_param["tech_node"],
-                wl_dim_size=self.wl_dim_size,
-                bl_dim_size=self.bl_dim_size,
-                cells_size=self.cells_data["size"],
+                wordline_dim_size=self.wordline_dim_size,
+                bitline_dim_size=self.bitline_dim_size,
+                cells_size=self.cells_size,
                 weight_precision=self.weight_precision,
             )
             area_cells = cost_per_bank[1] * self.nb_of_banks
-            self.cells_w_cost = cost_per_bank[3] / self.wl_dim_size
+            self.cells_w_cost = cost_per_bank[3] / self.wordline_dim_size
         else:
-            area_cells = self.total_unit_count * self.cells_data["area"]
+            assert (
+                self.cells_area is not None
+            ), "No cells area given by user yet `auto_cost_extraction` is set to `false`"
+            area_cells = self.total_unit_count * self.cells_area
 
         # area of DACs
         if self.is_aimc:
-            area_dacs = self.get_dac_cost()[0] * self.bl_dim_size * self.nb_of_banks
+            area_dacs = self.get_dac_cost()[0] * self.bitline_dim_size * self.nb_of_banks
         else:
             area_dacs = 0
 
         # area of ADCs
         if self.is_aimc:
-            area_adcs = self.get_adc_cost()[0] * self.weight_precision * self.wl_dim_size * self.nb_of_banks
+            area_adcs = self.get_adc_cost()[0] * self.weight_precision * self.wordline_dim_size * self.nb_of_banks
         else:
             area_adcs = 0
 
         # area of multiplier array
         if self.is_aimc:
-            nb_of_1b_multiplier = self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
+            nb_of_1b_multiplier = (
+                self.weight_precision * self.wordline_dim_size * self.bitline_dim_size * self.nb_of_banks
+            )
         else:
             nb_of_1b_multiplier = (
                 self.bit_serial_precision
                 * self.weight_precision
-                * self.wl_dim_size
-                * self.bl_dim_size
+                * self.wordline_dim_size
+                * self.bitline_dim_size
                 * self.nb_of_banks
             )
         area_mults = self.get_1b_multiplier_area() * nb_of_1b_multiplier
@@ -131,7 +144,7 @@ class ImcArray(ImcUnit):
             area_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
-            nb_inputs_of_adder_regular = self.bl_dim_size  # the number of inputs of the adder tree
+            nb_inputs_of_adder_regular = self.bitline_dim_size  # the number of inputs of the adder tree
             adder_depth_regular = math.log2(nb_inputs_of_adder_regular)
             assert (
                 adder_depth_regular % 1 == 0
@@ -141,7 +154,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_regular = nb_inputs_of_adder_regular * (adder_input_precision_regular + 1) - (
                 adder_input_precision_regular + adder_depth_regular + 1
             )  # nb of 1b adders in a single adder tree
-            nb_of_adder_trees = self.bit_serial_precision * self.wl_dim_size * self.nb_of_banks
+            nb_of_adder_trees = self.bit_serial_precision * self.wordline_dim_size * self.nb_of_banks
             area_adders_regular = self.get_1b_adder_area() * nb_of_1b_adder_per_tree_regular * nb_of_adder_trees
 
         # area of adder trees with place values (type: RCA)
@@ -163,7 +176,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_pv = input_precision_pv * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
                 adder_depth_pv - 0.5
             )  # nb of 1b adders in a single place-value adder tree
-        nb_of_adder_trees_pv = self.wl_dim_size * self.nb_of_banks
+        nb_of_adder_trees_pv = self.wordline_dim_size * self.nb_of_banks
         area_adders_pv = self.get_1b_adder_area() * nb_of_1b_adder_per_tree_pv * nb_of_adder_trees_pv
 
         # area of accumulators (adder type: RCA)
@@ -176,9 +189,9 @@ class ImcArray(ImcUnit):
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
-                    self.activation_precision + math.log2(self.bl_dim_size) + self.weight_precision
+                    self.activation_precision + math.log2(self.bitline_dim_size) + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
-            nb_of_1b_adder_accumulator = accumulator_output_precision * self.wl_dim_size * self.nb_of_banks
+            nb_of_1b_adder_accumulator = accumulator_output_precision * self.wordline_dim_size * self.nb_of_banks
             nb_of_1b_reg_accumulator = nb_of_1b_adder_accumulator  # number of regs in an accumulator
             area_accumulators = (
                 self.get_1b_adder_area() * nb_of_1b_adder_accumulator
@@ -223,7 +236,7 @@ class ImcArray(ImcUnit):
             dly_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
-            nb_inputs_of_adder_regular = self.bl_dim_size  # the number of inputs of the adder tree
+            nb_inputs_of_adder_regular = self.bitline_dim_size  # the number of inputs of the adder tree
             adder_depth_regular = math.log2(nb_inputs_of_adder_regular)
             assert (
                 adder_depth_regular % 1 == 0
@@ -269,7 +282,7 @@ class ImcArray(ImcUnit):
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
-                    self.activation_precision + math.log2(self.bl_dim_size) + self.weight_precision
+                    self.activation_precision + math.log2(self.bitline_dim_size) + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
             assert accumulator_input_precision < accumulator_output_precision, (
                 f"accumulator_input_precision {accumulator_input_precision} must be smaller than "
@@ -292,7 +305,7 @@ class ImcArray(ImcUnit):
         }
         self.tclk = sum([v for v in self.tclk_breakdown.values()])
 
-    def get_peak_energy_single_cycle(self) -> dict[str: float]:
+    def get_peak_energy_single_cycle(self) -> dict[str, float]:
         """! macro-level one-cycle energy of imc arrays (fully utilization, no weight updating)
         (components: cells, mults, adders, adders_pv, accumulators. Not include input/output regs)
         """
@@ -301,25 +314,27 @@ class ImcArray(ImcUnit):
 
         # energy of DACs
         if self.is_aimc:
-            energy_dacs = self.get_dac_cost()[2] * self.bl_dim_size * self.nb_of_banks
+            energy_dacs = self.get_dac_cost()[2] * self.bitline_dim_size * self.nb_of_banks
         else:
             energy_dacs = 0
 
         # energy of ADCs
         if self.is_aimc:
-            energy_adcs = self.get_adc_cost()[2] * self.weight_precision * self.wl_dim_size * self.nb_of_banks
+            energy_adcs = self.get_adc_cost()[2] * self.weight_precision * self.wordline_dim_size * self.nb_of_banks
         else:
             energy_adcs = 0
 
         # energy of multiplier array
         if self.is_aimc:
-            nb_of_1b_multiplier = self.weight_precision * self.wl_dim_size * self.bl_dim_size * self.nb_of_banks
+            nb_of_1b_multiplier = (
+                self.weight_precision * self.wordline_dim_size * self.bitline_dim_size * self.nb_of_banks
+            )
         else:
             nb_of_1b_multiplier = (
                 self.bit_serial_precision
                 * self.weight_precision
-                * self.wl_dim_size
-                * self.bl_dim_size
+                * self.wordline_dim_size
+                * self.bitline_dim_size
                 * self.nb_of_banks
             )
         energy_mults = self.get_1b_multiplier_energy() * nb_of_1b_multiplier
@@ -328,8 +343,8 @@ class ImcArray(ImcUnit):
         if self.is_aimc:
             energy_analog_bl_addition = (
                 (self.tech_param["bl_cap"] * (self.tech_param["vdd"] ** 2) * self.weight_precision)
-                * self.wl_dim_size
-                * self.bl_dim_size
+                * self.wordline_dim_size
+                * self.bitline_dim_size
                 * self.nb_of_banks
             )
         else:
@@ -340,7 +355,7 @@ class ImcArray(ImcUnit):
             energy_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
-            nb_inputs_of_adder_regular = self.bl_dim_size  # the number of inputs of the adder tree
+            nb_inputs_of_adder_regular = self.bitline_dim_size  # the number of inputs of the adder tree
             adder_depth_regular = math.log2(nb_inputs_of_adder_regular)
             assert (
                 adder_depth_regular % 1 == 0
@@ -350,7 +365,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_regular = nb_inputs_of_adder_regular * (adder_input_precision_regular + 1) - (
                 adder_input_precision_regular + adder_depth_regular + 1
             )  # nb of 1b adders in a single adder tree
-            nb_of_adder_trees = self.bit_serial_precision * self.wl_dim_size * self.nb_of_banks
+            nb_of_adder_trees = self.bit_serial_precision * self.wordline_dim_size * self.nb_of_banks
             energy_adders_regular = self.get_1b_adder_energy() * nb_of_1b_adder_per_tree_regular * nb_of_adder_trees
 
         # energy of adder trees with place values (type: RCA)
@@ -367,7 +382,7 @@ class ImcArray(ImcUnit):
             nb_of_1b_adder_per_tree_pv = input_precision_pv * (nb_inputs_of_adder_pv - 1) + nb_inputs_of_adder_pv * (
                 math.log2(nb_inputs_of_adder_pv) - 0.5
             )
-        nb_of_adder_trees_pv = self.wl_dim_size * self.nb_of_banks
+        nb_of_adder_trees_pv = self.wordline_dim_size * self.nb_of_banks
         energy_adders_pv = self.get_1b_adder_energy() * nb_of_1b_adder_per_tree_pv * nb_of_adder_trees_pv
 
         # energy of accumulators (adder type: RCA)
@@ -380,9 +395,9 @@ class ImcArray(ImcUnit):
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
-                    self.activation_precision + math.log2(self.bl_dim_size) + self.weight_precision
+                    self.activation_precision + math.log2(self.bitline_dim_size) + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
-            nb_of_1b_adder_accumulator = accumulator_output_precision * self.wl_dim_size * self.nb_of_banks
+            nb_of_1b_adder_accumulator = accumulator_output_precision * self.wordline_dim_size * self.nb_of_banks
             nb_of_1b_reg_accumulator = nb_of_1b_adder_accumulator  # number of regs in an accumulator
             energy_accumulators = (
                 self.get_1b_adder_energy() * nb_of_1b_adder_accumulator
@@ -404,8 +419,8 @@ class ImcArray(ImcUnit):
     def get_macro_level_peak_performance(self) -> tuple[float, float, float]:
         """! macro-level peak performance of imc arrays (fully utilization, no weight updating)"""
         nb_of_macs_per_cycle = (
-            self.wl_dim_size
-            * self.bl_dim_size
+            self.wordline_dim_size
+            * self.bitline_dim_size
             / (self.activation_precision / self.bit_serial_precision)
             * self.nb_of_banks
         )
@@ -419,16 +434,16 @@ class ImcArray(ImcUnit):
         topsmm2_peak = tops_peak / imc_area
 
         logger = _logging.getLogger(__name__)
-        logger.info(f"Current macro-level peak performance ({self.imc_data['imc_type']} imc):")
+        logger.info(f"Current macro-level peak performance ({'analog' if self.is_aimc else 'digital'} imc):")
         logger.info(f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}")
 
         return tops_peak, topsw_peak, topsmm2_peak
 
-    def get_energy_for_a_layer(self, layer, mapping) -> dict[str: float]:
+    def get_energy_for_a_layer(self, layer: LayerNode, mapping: Mapping) -> dict[str, float]:
         # parameter extraction
         (
             mapped_rows_total_per_macro,
-            mapped_rows_for_adder_per_macro,
+            _,
             mapped_cols_per_macro,
             macro_activation_times,  # normalized to only one imc macro (bank)
         ) = self.get_mapped_oa_dim(layer, self.wl_dim, self.bl_dim)
@@ -465,11 +480,11 @@ class ImcArray(ImcUnit):
         # energy of multiplier array
         if self.is_aimc:
             nb_of_active_1b_multiplier_per_macro = (
-                self.weight_precision * self.wl_dim_size * mapped_rows_total_per_macro
+                self.weight_precision * self.wordline_dim_size * mapped_rows_total_per_macro
             )
         else:
             nb_of_active_1b_multiplier_per_macro = (
-                self.bit_serial_precision * self.weight_precision * self.wl_dim_size * self.bl_dim_size
+                self.bit_serial_precision * self.weight_precision * self.wordline_dim_size * self.bitline_dim_size
             )
 
         energy_mults = (
@@ -484,7 +499,7 @@ class ImcArray(ImcUnit):
             energy_analog_bl_addition = (
                 (self.tech_param["bl_cap"] * (self.tech_param["vdd"] ** 2) * self.weight_precision)
                 * mapped_cols_per_macro
-                * self.bl_dim_size
+                * self.bitline_dim_size
                 * (self.activation_precision / self.bit_serial_precision)
                 * macro_activation_times
             )
@@ -496,7 +511,7 @@ class ImcArray(ImcUnit):
             energy_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
-            nb_inputs_of_adder_regular = self.bl_dim_size  # the number of inputs of the adder tree
+            nb_inputs_of_adder_regular = self.bitline_dim_size  # the number of inputs of the adder tree
             adder_depth_regular = math.log2(nb_inputs_of_adder_regular)
             adder_depth_regular = int(adder_depth_regular)  # float -> int for simplicity
             adder_output_precision_regular = adder_input_precision_regular + adder_depth_regular
@@ -505,7 +520,7 @@ class ImcArray(ImcUnit):
             energy_adders_per_tree_regular = self.get_regular_adder_trees_energy(
                 adder_input_precision=adder_input_precision_regular,
                 active_inputs_number=mapped_rows_total_per_macro,
-                physical_inputs_number=self.bl_dim_size,
+                physical_inputs_number=self.bitline_dim_size,
             )
             energy_adders_regular = (
                 energy_adders_per_tree_regular
@@ -546,7 +561,7 @@ class ImcArray(ImcUnit):
                 )  # output precision from adders_pv + required shifted bits
             else:
                 accumulator_output_precision = (
-                    self.activation_precision + math.log2(self.bl_dim_size) + self.weight_precision
+                    self.activation_precision + math.log2(self.bitline_dim_size) + self.weight_precision
                 )  # output precision from adders_pv + required shifted bits
 
             energy_accumulators = (
@@ -608,6 +623,7 @@ if __name__ == "__main__":
     #
     # lab for imc macro-level peak performance
     import yaml
+
     imc_hardware_filepath = "../../../inputs/hardware/imc_macro.yaml"
     with open(imc_hardware_filepath, "r") as fp:
         imc_macros = yaml.safe_load(fp)

@@ -1,6 +1,13 @@
 import logging
-from zigzag.utils import json_repr_handler, pickle_deepcopy
+from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.ImcArray import ImcArray
+from zigzag.hardware.architecture.memory_level import MemoryLevel
+from zigzag.hardware.architecture.memory_port import DataDirection
+from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
+from zigzag.mapping.TemporalMapping import TemporalMapping
+from zigzag.utils import json_repr_handler
 from zigzag.cost_model.cost_model import CostModelEvaluation, PortActivity
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -25,10 +32,31 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
     After initialization, the cost model evaluation is run.
     """
 
+    def __init__(
+        self,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        spatial_mapping: SpatialMappingInternal,
+        spatial_mapping_int: SpatialMappingInternal,
+        temporal_mapping: TemporalMapping,
+        access_same_data_considered_as_no_access: bool = True,
+    ):
+        super().__init__(
+            accelerator=accelerator,
+            layer=layer,
+            spatial_mapping=spatial_mapping,
+            spatial_mapping_int=spatial_mapping_int,
+            temporal_mapping=temporal_mapping,
+            access_same_data_considered_as_no_access=access_same_data_considered_as_no_access,
+        )
+
+        self.is_imc = True
+        self.core = next(iter(self.accelerator.cores))
+        assert isinstance(self.core.operational_array, ImcArray)
+        self.operational_array: ImcArray = self.core.operational_array
+
     def run(self) -> None:
         """! Run the cost model evaluation."""
-        # create handler for __add__ in cost model
-        self.is_imc = True
         super().calc_memory_utilization()
         super().calc_memory_word_access()
         self.calc_energy()
@@ -37,13 +65,11 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
     def collect_area_data(self):
         # get imc area
-        core = next(iter(self.accelerator.cores))
-        operational_array = core.operational_array
-        self.imc_area_breakdown = operational_array.area_breakdown
-        self.imc_area = operational_array.area
+        self.imc_area_breakdown = self.operational_array.area_breakdown
+        self.imc_area = self.operational_array.area
         # get mem area
         self.mem_area = 0
-        self.mem_area_breakdown = {}
+        self.mem_area_breakdown: dict[str, float] = {}
         for mem in self.mem_level_list:
             memory_instance = mem.memory_instance
             memory_instance_name = memory_instance.name
@@ -52,16 +78,11 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # get total area
         self.area_total = self.imc_area + self.mem_area
 
-    def calc_energy(self):
-        """! Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing energy."""
-        # - TODO: Interconnection energy
-        self.calc_mac_energy_cost()
-        super().calc_memory_energy_cost()
-
     def calc_mac_energy_cost(self):
-        """! Calculate the dynamic MAC energy"""
-        core = self.accelerator.get_core(self.core_id)
-        self.mac_energy_breakdown = core.operational_array.get_energy_for_a_layer(self.layer, self.mapping)
+        """Calculate the dynamic MAC energy
+        Overrides superclass' method
+        """
+        self.mac_energy_breakdown = self.operational_array.get_energy_for_a_layer(self.layer, self.mapping)
         self.mac_energy = sum([energy for energy in self.mac_energy_breakdown.values()])
 
     def calc_latency(self):
@@ -88,9 +109,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         self.update_stalling_count_based_on_weight_reloading()
         super().calc_data_loading_offloading_latency()
         # find the cycle count per mac
-        operational_array = self.accelerator.get_core(self.core_id).operational_array
-        imc_data: dict = operational_array.imc_data
-        cycles_per_mac = operational_array.activation_precision / imc_data["bit_serial_precision"]
+        cycles_per_mac = self.operational_array.activation_precision / self.operational_array.bit_serial_precision
         super().calc_overall_latency(cycles_per_mac=cycles_per_mac)
 
     def update_stalling_count_based_on_weight_reloading(self):
@@ -136,28 +155,33 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # Step 2: calculate weight loading cycles
         layer_const_operand = self.layer.constant_operands[0]  # e.g. "W"
         # get spatial mapping in a macro
-        core = next(iter(self.accelerator.cores))
-        operational_array = core.operational_array
-        memory_hierarchy = core.mem_hierarchy_dict
+        memory_hierarchy = self.core.mem_hierarchy_dict
         # check if there is only one mem level for weight in accelerator. No weight loading required if that is the case.
         weight_mem_op = self.memory_operand_links.layer_to_mem_op(layer_const_operand)
-        weight_mem_hierarchy: list = memory_hierarchy[weight_mem_op]
-        if len(weight_mem_hierarchy) == 1:  # there is only one mem level for weight
-            require_weight_loading = False
-        else:
-            require_weight_loading = True
+        weight_mem_hierarchy: list[MemoryLevel] = memory_hierarchy[weight_mem_op]
+        require_weight_loading = len(weight_mem_hierarchy) != 1
+
         # check how many times of weight reloading is required
         # here assume imc cells is the lowest mem level for weight and rw_port
-        for imc_port, imc_ports in port_activity_collect[0].items():  # 0: the lowest mem node in the graph
+        for _, imc_ports in port_activity_collect[0].items():  # 0: the lowest mem node in the graph
             for port in imc_ports:
-                if port.served_op_lv_dir[2] == "wr_in_by_high":
+                if port.served_op_lv_dir[2] == DataDirection.WR_IN_BY_HIGH:
                     nb_of_weight_reload_periods = port.period_count
 
+        all_port_activity: list[PortActivity] = []
+        for imc_ports in port_activity_collect[0].values():
+            all_port_activity.extend(imc_ports)
+
+        port_activity = [
+            port_act for port_act in all_port_activity if port_act.served_op_lv_dir[2] == DataDirection.WR_IN_BY_HIGH
+        ].pop()
+        nb_of_weight_reload_periods = port_activity.period_count
+
         # get the number of mapped rows in a macro
-        mapped_rows_total_per_macro = operational_array.mapped_rows_total_per_macro
+        mapped_rows_total_per_macro = self.operational_array.mapped_rows_total_per_macro
 
         # get the number of weights stored in each cell group
-        mapped_group_depth = operational_array.mapped_group_depth
+        mapped_group_depth = self.operational_array.mapped_group_depth
 
         # calculate the total number of weight loading cycles
         if require_weight_loading:
@@ -170,176 +194,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         self.SS_comb = max(self.SS_comb, weight_loading_cycles)
 
         # Step 4: update tclk information
-        self.tclk = operational_array.tclk
-        self.tclk_breakdown = operational_array.tclk_breakdown
-
-    def __add__(self, other):
-        sum = pickle_deepcopy(self)
-
-        ## Energy
-        sum.mac_energy += other.mac_energy
-        sum.mem_energy += other.mem_energy
-        for op in sum.mac_energy_breakdown.keys():
-            if op in other.mac_energy_breakdown.keys():
-                sum.mac_energy_breakdown[op] = self.mac_energy_breakdown[op] + other.mac_energy_breakdown[op]
-
-        for op in sum.mem_energy_breakdown.keys():
-            if op in other.mem_energy_breakdown.keys():
-                l = []
-                for i in range(
-                    min(
-                        len(self.mem_energy_breakdown[op]),
-                        len(other.mem_energy_breakdown[op]),
-                    )
-                ):
-                    l.append(self.mem_energy_breakdown[op][i] + other.mem_energy_breakdown[op][i])
-                i = min(
-                    len(self.mem_energy_breakdown[op]),
-                    len(other.mem_energy_breakdown[op]),
-                )
-                l += self.mem_energy_breakdown[op][i:]
-                l += other.mem_energy_breakdown[op][i:]
-                sum.mem_energy_breakdown[op] = l
-
-        for op in sum.mem_energy_breakdown_further.keys():
-            if op in other.mem_energy_breakdown_further.keys():
-                l = []
-                for i in range(
-                    min(
-                        len(self.mem_energy_breakdown_further[op]),
-                        len(other.mem_energy_breakdown_further[op]),
-                    )
-                ):
-                    l.append(self.mem_energy_breakdown_further[op][i] + other.mem_energy_breakdown_further[op][i])
-                i = min(
-                    len(self.mem_energy_breakdown_further[op]),
-                    len(other.mem_energy_breakdown_further[op]),
-                )
-                l += self.mem_energy_breakdown_further[op][i:]
-                l += other.mem_energy_breakdown_further[op][i:]
-                sum.mem_energy_breakdown_further[op] = l
-
-        # Get all the operands from other that are not in self and add them to the energy breakdown as well
-        op_diff = set(other.mem_energy_breakdown.keys()) - set(self.mem_energy_breakdown.keys())
-        for op in op_diff:
-            sum.mem_energy_breakdown[op] = other.mem_energy_breakdown[op]
-            sum.mem_energy_breakdown_further[op] = other.mem_energy_breakdown_further[op]
-
-        op_diff = set(other.mac_energy_breakdown.keys()) - set(self.mac_energy_breakdown.keys())
-        for op in op_diff:
-            sum.mac_energy_breakdown[op] = other.mac_energy_breakdown[op]
-
-        sum.energy_total += other.energy_total
-
-        ## Memory access
-        for op in sum.memory_word_access.keys():
-            if op in other.memory_word_access.keys():
-                l = []
-                for i in range(
-                    min(
-                        len(self.memory_word_access[op]),
-                        len(other.memory_word_access[op]),
-                    )
-                ):
-                    l.append(self.memory_word_access[op][i] + other.memory_word_access[op][i])
-                i = min(len(self.memory_word_access[op]), len(other.memory_word_access[op]))
-                l += self.memory_word_access[op][i:]
-                l += other.memory_word_access[op][i:]
-                sum.memory_word_access[op] = l
-        for op in op_diff:
-            sum.memory_word_access[op] = other.memory_word_access[op]
-
-        ## Latency
-        sum.data_loading_cycle += other.data_loading_cycle
-        sum.data_offloading_cycle += other.data_offloading_cycle
-        sum.ideal_cycle += other.ideal_cycle
-        sum.SS_comb += other.SS_comb  # stalling cycles
-        sum.ideal_temporal_cycle += other.ideal_temporal_cycle  # ideal computation cycles without stalling
-        sum.latency_total0 += other.latency_total0
-        sum.latency_total1 += other.latency_total1
-        sum.latency_total2 += other.latency_total2
-
-        ## MAC utilization
-        sum.MAC_spatial_utilization = sum.ideal_cycle / sum.ideal_temporal_cycle
-        sum.MAC_utilization0 = sum.ideal_cycle / sum.latency_total0
-        sum.MAC_utilization1 = sum.ideal_cycle / sum.latency_total1
-        sum.MAC_utilization2 = sum.ideal_cycle / sum.latency_total2
-
-        ## layer
-        if type(sum.layer) != list:
-            sum.layer = [sum.layer.id]
-        if type(other.layer) != list:
-            other_layer = [other.layer.id]
-        sum.layer += other_layer
-
-        ## core_id
-        if type(sum.core_id) != list:
-            sum.core_id = [sum.core_id]
-        if type(other.layer) != list:
-            other_core_id = [other.core_id]
-        sum.core_id += other_core_id
-
-        ## Not addable
-        func = [
-            "calc_allowed_and_real_data_transfer_cycle_per_DTL",
-            "calc_data_loading_offloading_latency",
-            "calc_double_buffer_flag",
-            "calc_overall_latency",
-            "calc_mac_energy_cost",
-            "calc_energy",
-            "calc_latency",
-            "calc_memory_energy_cost",
-            "calc_memory_utilization",
-            "calc_memory_word_access",
-            "combine_data_transfer_rate_per_physical_port",
-            "collect_area_data",
-            "run",
-        ]
-        add_attr = [
-            "mac_energy",
-            "mem_energy",
-            "mac_energy_breakdown",
-            "mem_energy_breakdown",
-            "mem_energy_breakdown_further",
-            "energy_total",
-            "memory_word_access",
-            "data_loading_cycle",
-            "data_offloading_cycle",
-            "ideal_cycle",
-            "ideal_temporal_cycle",
-            "SS_comb",
-            "latency_total0",
-            "latency_total1",
-            "latency_total2",
-            "tclk",
-            "tclk_breakdown",
-            "MAC_spatial_utilization",
-            "MAC_utilization0",
-            "MAC_utilization1",
-            "MAC_utilization2",
-            "area_total",
-            "imc_area",
-            "mem_area",
-            "imc_area_breakdown",
-            "mem_area_breakdown",
-            "layer",
-            "core_id",
-        ]
-
-        if hasattr(self, "accelerator") and hasattr(other, "accelerator"):
-            if self.accelerator.name.startswith(other.accelerator.name):
-                sum.accelerator = other.accelerator
-                add_attr.append("accelerator")
-            elif other.accelerator.name.startswith(self.accelerator.name):
-                add_attr.append("accelerator")
-        else:
-            pass
-
-        for attr in dir(sum):
-            if attr not in (func + add_attr) and attr[0] != "_":
-                delattr(sum, attr)
-
-        return sum
+        self.tclk = self.operational_array.tclk
+        self.tclk_breakdown = self.operational_array.tclk_breakdown
 
     # JSON representation used for saving this object to a json file.
     def __jsonrepr__(self):

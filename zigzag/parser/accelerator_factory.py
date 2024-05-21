@@ -7,7 +7,7 @@ from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
-from zigzag.hardware.architecture.operational_array import MultiplierArray, OperationalArray
+from zigzag.hardware.architecture.operational_array import MultiplierArray, OperationalArrayABC
 from zigzag.hardware.architecture.operational_unit import Multiplier
 from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping
 
@@ -39,14 +39,8 @@ class CoreFactory:
         """! Create a Core instance from the user-provided data.
         NOTE the memory instances must be defined from lowest to highest.
         """
-        if self.data["operational_array"]["is_imc"]:
-            operational_array = self.create_imc_array()
-            if self.data["memories"]["cells"]["auto_cost_extraction"]:
-                self.data["memories"]["cells"]["w_cost"] = operational_array.cells_w_cost
-                self.data["memories"]["cells"]["r_cost"] = 0  # replaced with logic cost within imc
-                self.data["memories"]["cells"]["area"] = 0  # included within the operational array
-        else:
-            operational_array = self.create_operational_array()
+        operational_array = self.create_operational_array()
+
         mem_graph = MemoryHierarchy(operational_array)
         dataflows = self.create_dataflows()
 
@@ -58,31 +52,54 @@ class CoreFactory:
             core_id=core_id, operational_array=operational_array, memory_hierarchy=mem_graph, dataflows=dataflows
         )
 
-    def create_imc_array(self) -> ImcArray:
-        # Imc settings
-        cells_data: dict = self.data["memories"]["cells"]
-        imc_data: dict[str, Any] = self.data["operational_array"]
-        oa_dims: list[str] = imc_data["dimensions"]
-        dimension_sizes: dict[OADimension, int] = {
-            OADimension(oa_dim): imc_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
-        }
-        imc_array = ImcArray(cells_data, imc_data, dimension_sizes)
-        return imc_array
+    def create_operational_array(self) -> OperationalArrayABC:
+        is_imc = self.data["operational_array"]["is_imc"]
+        return self.create_imc_array() if is_imc else self.create_non_imc_array()
 
-    def create_operational_array(self) -> OperationalArray:
-        mul_data: dict[str, Any] = self.data["operational_array"]
+    def create_non_imc_array(self) -> MultiplierArray:
+        op_array_data: dict[str, Any] = self.data["operational_array"]
+
         multiplier = Multiplier(
-            input_precision=mul_data["input_precision"],
-            energy_cost=mul_data["multiplier_energy"],
-            area=mul_data["multiplier_area"],
+            input_precision=op_array_data["input_precision"],
+            energy_cost=op_array_data["multiplier_energy"],
+            area=op_array_data["multiplier_area"],
         )
-
-        oa_dims: list[str] = mul_data["dimensions"]
+        oa_dims: list[str] = op_array_data["dimensions"]
         dimension_sizes: dict[OADimension, int] = {
-            OADimension(oa_dim): mul_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
+            OADimension(oa_dim): op_array_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
         }
-        multiplier_array = MultiplierArray(multiplier, dimension_sizes)
-        return multiplier_array
+        return MultiplierArray(multiplier, dimension_sizes)
+
+    def create_imc_array(self) -> ImcArray:
+
+        # From operational_array
+        op_array_data: dict[str, Any] = self.data["operational_array"]
+
+        is_analog_imc = op_array_data["imc_type"] == "analog"
+        bit_serial_precision = op_array_data["bit_serial_precision"]
+        input_precision = op_array_data["input_precision"]
+        adc_resolution = op_array_data["adc_resolution"]
+        oa_dims: list[str] = op_array_data["dimensions"]
+        dimension_sizes: dict[OADimension, int] = {
+            OADimension(oa_dim): op_array_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
+        }
+
+        # From IMC cells
+        cells_data: dict[str, Any] = self.data["memories"]["cells"]
+        cells_size = cells_data["size"]
+        cells_area = cells_data["area"]
+        auto_cost_extraction = cells_data["auto_cost_extraction"]
+
+        return ImcArray(
+            is_analog_imc=is_analog_imc,
+            bit_serial_precision=bit_serial_precision,
+            input_precision=input_precision,
+            adc_resolution=adc_resolution,
+            cells_size=cells_size,
+            cells_area=cells_area,
+            dimension_sizes=dimension_sizes,
+            auto_cost_extraction=auto_cost_extraction,
+        )
 
     def create_dataflows(self) -> SpatialMapping | None:
         if "dataflows" not in self.data:
