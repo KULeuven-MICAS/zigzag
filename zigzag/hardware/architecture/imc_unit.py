@@ -9,10 +9,6 @@ from zigzag.mapping.Mapping import Mapping
 from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
 from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 
-if __name__ == "__main__" or __name__ == "imc_unit":
-    # branch when the script is run locally or called by A/DimcArray.py
-    from get_cacti_cost import get_cacti_cost
-
 
 class ImcUnit(OperationalArrayABC):
     """definition of general initialization function for D/AIMC"""
