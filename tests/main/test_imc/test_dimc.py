@@ -13,7 +13,7 @@ workloads = (
 ens_lats_clks_areas = {
     "inputs/workload/alexnet.onnx": (6812722722.515776, 9460061.0, 3.75708, 0.8566212024),
     "inputs/workload/mobilenetv2.onnx": (2857471628.5898623, 20501552.0, 3.75708, 0.8566212024),
-    "inputs/workload/resnet18.onnx": (1828766840.9463186, 120700590.0, 3.2026, 0.785592664),
+    "inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
     "inputs/workload/resnet18.yaml": (4268432908.954752, 5789353.0, 3.75708, 0.8566212024),
 }
 
