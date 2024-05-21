@@ -41,23 +41,32 @@ class ImcArray(ImcUnit):
         self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
 
     def get_adc_cost(self) -> tuple[float, float, float]:
-        """single ADC cost calculation"""
+        """single ADC and analog accumulation cost calculation"""
         # area (mm^2)
-        if self.adc_resolution == 1:
+        if self.adc_resolution == 0:
+            adc_area: float = 0
+        elif self.adc_resolution == 1:
             adc_area: float = 0
         else:  # formula extracted and validated against 3 AIMC papers on 28nm
             k1 = -0.0369
             k2 = 1.206
             adc_area = 10 ** (k1 * self.adc_resolution + k2) * 2**self.adc_resolution * (10**-6)  # unit: mm^2
         # delay (ns)
-        k3 = 0.00653  # ns
-        k4 = 0.640  # ns
-        adc_delay = self.adc_resolution * (k3 * self.bitline_dim_size + k4)  # unit: ns
+        if self.adc_resolution == 0:
+            adc_delay: float = 0
+        else:
+            k3 = 0.00653  # ns
+            k4 = 0.640  # ns
+            adc_delay = self.adc_resolution * (k3 * self.bitline_dim_size + k4)  # unit: ns
         # energy (fJ)
-        k5 = 100  # fF
-        k6 = 0.001  # fF
-        adc_energy = (k5 * self.adc_resolution + k6 * 4**self.adc_resolution) * self.tech_param["vdd"] ** 2  # unit: fJ
-        adc_energy = adc_energy / 1000  # unit: pJ
+        if self.adc_resolution == 0:
+            adc_energy: float = 0
+        else:
+            k5 = 100  # fF
+            k6 = 0.001  # fF
+            # unit: fJ
+            adc_energy = (k5 * self.adc_resolution + k6 * 4**self.adc_resolution) * self.tech_param["vdd"] ** 2
+            adc_energy = adc_energy / 1000  # unit: pJ
         return adc_area, adc_delay, adc_energy
 
     def get_dac_cost(self) -> tuple[float, float, float]:
