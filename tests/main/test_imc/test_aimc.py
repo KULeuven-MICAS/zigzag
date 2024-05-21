@@ -11,10 +11,10 @@ workloads = (
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "inputs/workload/alexnet.onnx": (2557076250.266322, 44012016.0, 6.61184, 0.7892517658006044),
-    "inputs/workload/mobilenetv2.onnx": (802185102.578702, 14939020.0, 6.61184, 0.7892517658006044),
-    "inputs/workload/resnet18.onnx": (2252151728.145326, 62079022.0, 6.61184, 0.7892517658006044),
-    "inputs/workload/resnet18.yaml": (2466090000.2577806, 67309272.0, 6.61184, 0.7892517658006044),
+    "inputs/workload/alexnet.onnx": (6781805890.747441, 9262317.0, 14.07244, 2.3426222152749223),
+    "inputs/workload/mobilenetv2.onnx": (2290876453.4822226, 10949440.0, 14.07244, 2.3426222152749223),
+    "inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
+    "inputs/workload/resnet18.yaml": (4265124724.2396007, 4907619.0, 14.07244, 2.3426222152749223),
 }
 
 
