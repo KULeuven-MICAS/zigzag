@@ -39,3 +39,4 @@ jobs:
         run: |
           pip install pytest
           python -m pytest --typeguard-packages=zigzag tests/main/test_origin/
+          python -m pytest --typeguard-packages=zigzag tests/main/test_imc/
