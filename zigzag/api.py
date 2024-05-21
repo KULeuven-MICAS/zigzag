@@ -149,6 +149,7 @@ def get_hardware_performance_zigzag_imc(
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
         enable_mix_spatial_mapping_generation=True,
+        nb_mappings_generated=3,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as

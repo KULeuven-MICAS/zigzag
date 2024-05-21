@@ -248,8 +248,7 @@ class SpatialMappingGeneratorStage(Stage):
         """
 
         unique_factor_pool: dict[LayerDim, list[int]] = {
-            layer_dim: self.non_trivial_divisors(max_unroll)  # type: ignore
-            for layer_dim, max_unroll in max_unrolling.items()
+            layer_dim: self.non_trivial_divisors(max_unroll) for layer_dim, max_unroll in max_unrolling.items()
         }
 
         # Number of Layer Dimensions combined in new Mapping
@@ -261,8 +260,9 @@ class SpatialMappingGeneratorStage(Stage):
                 # e.g. (2, 4) which corresponds to ("C", "K")
                 for combination in itertools.product(*to_combine):
                     # e.g. (("C", 2), ("K", 4))
-                    mapping_zip = zip(layer_dim_mix, combination)
-                    yield MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
+                    if len(combination) > 1:
+                        mapping_zip = zip(layer_dim_mix, combination)
+                        yield MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
 
     def add_input_pr_spatial_loop(self, spatial_mapping: SpatialMapping) -> SpatialMapping:
         """! This function is used to support diagonal spatial mapping
@@ -510,8 +510,8 @@ class SpatialMappingGeneratorStage(Stage):
 
     @staticmethod
     def non_trivial_divisors(n: int) -> list[int]:
-        """! Return a list of divisors of `n`, excluding 1 and `n` itself"""
-        return list(filter(lambda x: 1 < x < n, divisors(n)))
+        """! Return a list of divisors of `n`, excluding 1"""
+        return list(filter(lambda x: 1 < x <= n, divisors(n)))
 
     @staticmethod
     def identify_layer_operand_representation(layer: LayerNode) -> tuple[LayerOperand | None, LayerOperand | None]:
