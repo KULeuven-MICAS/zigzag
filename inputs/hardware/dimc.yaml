@@ -107,4 +107,4 @@ operational_array:
   input_precision: [8, 8] # unit: bit
   bit_serial_precision: 1 # unit: bit
   dimensions: [D1, D2]
-  sizes: [32, 32]
+  sizes: [128, 128]
