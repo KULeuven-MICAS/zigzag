@@ -96,7 +96,7 @@ class AcceleratorValidator:
                     "nullable": True,
                     "default": None,
                 },
-                "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": None},
+                "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": 0},
                 "bit_serial_precision": {"type": "float", "required": True, "nullable": True, "default": None},
             },
         },
@@ -244,7 +244,7 @@ class AcceleratorValidator:
             self.invalidate("Activation precision is not in the power of 2.")
         if log2(imc_data["input_precision"][1]) % 1 != 0:
             self.invalidate("Weight precision is not in the power of 2.")
-        if imc_data["imc_type"] == "digital" and imc_data["adc_resolution"] is not None:
+        if imc_data["imc_type"] == "digital" and imc_data["adc_resolution"] != 0:
             self.invalidate("Digital IMC core but 'adc_resolution' is defined")
 
     def validate_operational_array_non_imc(self):
@@ -253,7 +253,7 @@ class AcceleratorValidator:
         # All IMC related properties should be None
         if multiplier_data["imc_type"] is not None or multiplier_data["imc_type"] is True:
             self.invalidate("Multiplier are non-IMC but `imc_type` is defined as True")
-        if multiplier_data["adc_resolution"] is not None:
+        if multiplier_data["adc_resolution"] != 0:
             self.invalidate("Multiplier are non-IMC but `adc_resolution` is defined")
         if multiplier_data["bit_serial_precision"] is not None:
             self.invalidate("Multiplier are non-IMC but `bit_serial_precision` is defined")
