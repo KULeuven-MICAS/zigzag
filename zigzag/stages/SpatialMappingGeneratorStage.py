@@ -251,6 +251,11 @@ class SpatialMappingGeneratorStage(Stage):
             layer_dim: self.non_trivial_divisors(max_unroll) for layer_dim, max_unroll in max_unrolling.items()
         }
 
+        # Make sure all layer dims are defined
+        unique_factor_pool.update(
+            {layer_dim: [0] for layer_dim in unrolling_hints if layer_dim not in unique_factor_pool}
+        )
+
         # Number of Layer Dimensions combined in new Mapping
         for combination_len in range(2, len(unrolling_hints) + 1):
             # e.g. ("C", "K") or ("C", "K", "G")
