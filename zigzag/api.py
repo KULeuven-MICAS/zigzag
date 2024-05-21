@@ -78,7 +78,7 @@ def get_hardware_performance_zigzag(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=lpf_limit,  # required by LomaStage
         loma_show_progress_bar=True,
-        enable_weight_diagonal_mapping=False,
+        enable_mix_spatial_mapping_generation=False,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
@@ -148,7 +148,7 @@ def get_hardware_performance_zigzag_imc(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
-        enable_weight_diagonal_mapping=True,
+        enable_mix_spatial_mapping_generation=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
