@@ -131,9 +131,7 @@ def get_hardware_performance_zigzag_imc(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Detect unnecessary memory instances
             WorkloadStage,  # Iterate through the different layers in the workload
-            RemoveUnusedMemoryStage,  # Remove unnecessary memory instances
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -150,6 +148,7 @@ def get_hardware_performance_zigzag_imc(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
+        enable_weight_diagonal_mapping=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
         # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
@@ -160,14 +159,12 @@ def get_hardware_performance_zigzag_imc(
 
     # Launch the MainStage
     cmes = mainstage.run()
+    energy_total: float = cmes[0][0].energy_total
+    latency_total: float = cmes[0][0].latency_total2
+    tclk: float = cmes[0][1][0][0].tclk
+    area: float = cmes[0][1][0][0].area_total
 
-    return (
-        cmes[0][0].energy_total,
-        cmes[0][0].latency_total2,
-        cmes[0][0].tclk,
-        cmes[0][0].area_total,
-        cmes,
-    )
+    return energy_total, latency_total, tclk, area, cmes
 
 
 def get_hardware_performance_zigzag_pe_array_scaling(
