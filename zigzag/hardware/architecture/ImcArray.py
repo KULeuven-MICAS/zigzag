@@ -5,6 +5,7 @@ from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
+from zigzag.utils import json_repr_handler
 
 
 class ImcArray(ImcUnit):
@@ -121,6 +122,7 @@ class ImcArray(ImcUnit):
 
         # area of regular adder trees without place values (type: RCA)
         if self.is_aimc:
+            adder_output_precision_regular = 0
             area_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
@@ -213,6 +215,7 @@ class ImcArray(ImcUnit):
         # delay of regular adder trees without place value (type: RCA)
         # worst path: in-to-sum -> in-to-sum -> ... -> in-to-cout -> cin-to-cout -> ... -> cin-to-cout
         if self.is_aimc:
+            adder_output_precision_regular = 0
             dly_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
@@ -332,6 +335,7 @@ class ImcArray(ImcUnit):
 
         # energy of regular adder trees without place values (type: RCA)
         if self.is_aimc:
+            adder_output_precision_regular = 0
             energy_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
@@ -490,6 +494,7 @@ class ImcArray(ImcUnit):
 
         # energy of regular adder trees without place values (type: RCA)
         if self.is_aimc:
+            adder_output_precision_regular = 0
             energy_adders_regular = 0
         else:
             adder_input_precision_regular = self.weight_precision
@@ -566,3 +571,6 @@ class ImcArray(ImcUnit):
         }
         self.energy = sum([v for v in self.energy_breakdown.values()])
         return self.energy_breakdown
+
+    def __jsonrepr__(self):
+        return json_repr_handler({"operational_unit: ImcArray, dimensions": self.dimension_sizes})
