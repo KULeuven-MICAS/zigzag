@@ -23,6 +23,11 @@ class WorkloadValidator:
         "MaxPool",
         "AveragePool",
         "GlobalAveragePool",
+        # Used for testing
+        "layer_on_core0",
+        "layer_on_core1",
+        "layer_on_core2",
+        "layer_on_core3",
     ]
 
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
@@ -59,8 +64,20 @@ class WorkloadValidator:
                 "I": {"type": "integer", "required": False},
             },
         },
-        "pr_loop_dims": {"type": "list", "schema": {"type": "string"}, "required": False},
-        "pr_loop_sizes": {"type": "list", "schema": {"type": "integer"}, "required": False},
+        "pr_loop_dims": {
+            "type": "list",
+            "schema": {"type": "string"},
+            "required": False,
+            "nullable": True,
+            "default": None,
+        },
+        "pr_loop_sizes": {
+            "type": "list",
+            "schema": {"type": "integer"},
+            "required": False,
+            "nullable": True,
+            "default": None,
+        },
         "padding": {
             "type": "list",
             "schema": {
@@ -71,6 +88,8 @@ class WorkloadValidator:
                 "maxlength": 2,
             },
             "required": False,
+            "nullable": True,
+            "default": None,
         },
     }
 
@@ -111,19 +130,14 @@ class WorkloadValidator:
         """Run extra checks on a single layer"""
 
         # Check PR loop dims
-        if "pr_loop_dims" in layer_data:
-            if "pr_loop_sizes" not in layer_data:
-                self.__invalidate("PR loop dimensions defined, but no corresponding sizes")
-            elif len(layer_data["pr_loop_sizes"]) != len(layer_data["pr_loop_dims"]):
-                self.__invalidate("Number of PR loop dimensions not equal to number of corresponding sizes")
-
-            if "padding" not in layer_data:
-                self.__invalidate("PR loop dimensions defined, but no corresponding padding")
+        if "padding" in layer_data and layer_data["padding"] is not None:
+            if "pr_loop_dims" not in layer_data:
+                self.__invalidate("Padding defined, but no corresponding PR loop dimensions")
             elif len(layer_data["padding"]) != len(layer_data["pr_loop_dims"]):
                 self.__invalidate("Number of PR loop dimensions not equal to number of corresponding paddings")
 
-        if "padding" in layer_data and "pr_loop_dims" not in layer_data:
-            self.__invalidate("Padding defined, but no corresponding PR loop dimensions")
-
-        if "pr_loop_sizes" in layer_data and "pr_loop_dims" not in layer_data:
-            self.__invalidate("PR loop sizes defined, but no corresponding PR loop dimensions")
+        if "pr_loop_sizes" in layer_data and layer_data["pr_loop_sizes"] is not None:
+            if "pr_loop_dims" not in layer_data:
+                self.__invalidate("PR loop sizes defined, but no corresponding PR loop dimensions")
+            elif len(layer_data["pr_loop_sizes"]) != len(layer_data["pr_loop_dims"]):
+                self.__invalidate("Number of PR loop dimensions not equal to number of corresponding sizes")

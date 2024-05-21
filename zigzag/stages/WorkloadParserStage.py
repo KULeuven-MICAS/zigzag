@@ -27,12 +27,12 @@ class WorkloadParserStage(Stage):
             yield cme, extra_info
 
     def parse_workload(self) -> DNNWorkload:
-        workload_data = self.__parse_workload_data()
-        mapping_data = self.__parse_mapping_data()
+        workload_data = self._parse_workload_data()
+        mapping_data = self._parse_mapping_data()
         factory = WorkloadFactory(workload_data, mapping_data)
         return factory.create()
 
-    def __parse_workload_data(self) -> list[dict[str, Any]]:
+    def _parse_workload_data(self) -> list[dict[str, Any]]:
         """! Parse, validate and normalize workload"""
         workload_data = open_yaml(self.workload_yaml_path)
         workload_validator = WorkloadValidator(workload_data)
@@ -42,7 +42,7 @@ class WorkloadParserStage(Stage):
             raise ValueError("Failed to validate user provided workload.")
         return workload_data
 
-    def __parse_mapping_data(self) -> list[dict[str, Any]]:
+    def _parse_mapping_data(self) -> list[dict[str, Any]]:
         return self.parse_mapping_data(self.mapping_yaml_path)
 
     @staticmethod
