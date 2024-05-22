@@ -3,11 +3,12 @@ from typing import Any
 
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.cost_model.CostModelEvaluationForIMC import CostModelEvaluationForIMC
+from zigzag.cost_model.cost_model_imc import CostModelEvaluationForIMC
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.workload.layer_node import LayerNode
+from zigzag.hardware.architecture.ImcArray import ImcArray
 
 import logging
 
@@ -43,8 +44,7 @@ class CostModelStage(Stage):
         core_id = self.layer.core_allocation[0]
         core = self.accelerator.get_core(core_id)
         operational_array = core.operational_array
-        pe_type = getattr(operational_array, "pe_type", None)
-        if pe_type is not None and pe_type == "in_sram_computing":
+        if isinstance(operational_array, ImcArray):
             cme = CostModelEvaluationForIMC(
                 accelerator=self.accelerator,
                 layer=self.layer,

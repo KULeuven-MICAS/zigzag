@@ -4,7 +4,7 @@ import math
 from zigzag.datatypes import OADimension, MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType, PortAllocation
-from zigzag.hardware.architecture.operational_array import OperationalArray
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 
 
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
@@ -35,6 +35,7 @@ class ServedMemDimensions:
         return tuple(vec_single_operand for _ in range(nb_operands))
 
     @property
+    @property
     def nb_dims(self):
         return len(self.data)
 
@@ -64,10 +65,11 @@ class MemoryLevel:
         self,
         memory_instance: MemoryInstance,
         operands: list[MemoryOperand],
+        operands: list[MemoryOperand],
         mem_level_of_operands: dict[MemoryOperand, int],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
-        operational_array: OperationalArray,
+        operational_array: OperationalArrayABC,
         identifier: int,
     ):
         """! Initialize the memory level in the hierarchy with the physical memory instance
@@ -76,8 +78,9 @@ class MemoryLevel:
         """
         self.memory_instance = memory_instance
         self.operands = operands
+        self.operands = operands
         self.mem_level_of_operands = mem_level_of_operands
-        self.oa_dim_sizes = operational_array.oa_dim_sizes
+        self.oa_dim_sizes = operational_array.dimension_sizes
         self.id: int = identifier
         self.served_dimensions = served_dimensions
         self.name = self.memory_instance.name
@@ -121,6 +124,8 @@ class MemoryLevel:
             port_name = "rw_port_" + str(i)
             # we assume the read-write port has the same bw for read and write
             port_bw = self.memory_instance.r_bw
+            # we assume the read-write port has the same bw for read and write
+            port_bw = self.memory_instance.r_bw
             port_bw_min = self.memory_instance.r_bw_min
             port_attr = MemoryPortType.READ_WRITE
             new_port = MemoryPort(port_name, port_bw, port_bw_min, port_attr)
@@ -147,6 +152,10 @@ class MemoryLevel:
         return str(self)
 
     def __update_formatted_string(self):
+        self.formatted_string = (
+            f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands}, "
+            f"served_dimensions={self.served_dimensions})"
+        )
         self.formatted_string = (
             f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands}, "
             f"served_dimensions={self.served_dimensions})"

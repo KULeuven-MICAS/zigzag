@@ -6,9 +6,11 @@ from typing import Any
 from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
 from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.utils import UniqueMessageFilter, json_repr_handler
+from zigzag.utils import UniqueMessageFilter, json_repr_handler
 
 
 logger = logging.getLogger(__name__)
+logger.addFilter(UniqueMessageFilter())
 logger.addFilter(UniqueMessageFilter())
 
 
@@ -17,43 +19,48 @@ class MappingSingleOADim:
 
     def __init__(self, data: dict[LayerDim, UnrollFactor]):
         # float type is used in `SpatialMappingConversionStage`
-        self.data: dict[LayerDim, UnrollFactor] = data
+        self.__data: dict[LayerDim, UnrollFactor] = data
 
     @property
     def utilization(self):
         """! Returns the `hardware utilization`, i.e. the product of all unrolled dimensions"""
-        return math.prod([factor for factor in self.data.values()])
+        return math.prod([factor for factor in self.__data.values()])
 
     @property
     def layer_dims(self) -> set[LayerDim]:
         return set(self.keys())
 
+    @property
+    def unroll_sizes(self) -> list[UnrollFactor]:
+        return list(self.__data.values())
+
     def keys(self):
-        return self.data.keys()
+        return self.__data.keys()
 
     def __getitem__(self, key: LayerDim):
-        return self.data[key]
+        return self.__data[key]
 
     def __delitem__(self, key: LayerDim):
-        del self.data[key]
+        del self.__data[key]
 
     def __contains__(self, key: LayerDim):
-        return self.data.__contains__(key)
+        return self.__data.__contains__(key)
 
     def items(self):
-        return self.data.items()
+        return self.__data.items()
 
     def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
-        self.data[key] = value  # type: ignore
+        self.__data[key] = value  # type: ignore
 
     def __str__(self):
+        return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
         return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
 
     def __repr__(self):
         return str(self)
 
     def __jsonrepr__(self):
-        return json_repr_handler(self.data)
+        return json_repr_handler(self.__data)
 
     def __eq__(self, other: Any) -> bool:
         """! Return true iff the contained LayerDims are the same and all unrollings are the same"""
@@ -65,7 +72,7 @@ class MappingSingleOADim:
         )
 
     def __hash__(self):
-        return hash(frozenset(self.data))
+        return hash(frozenset(self.__data))
 
 
 class SpatialMapping(LayerAttribute):
@@ -168,6 +175,8 @@ class SpatialMapping(LayerAttribute):
                 max_unrolling = max_unrollings[oa_dim][layer_dim]
                 if unrolling > max_unrolling:
                     logger.warning(
+                        "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
+                        "of %i. Reducing unrolling to this value.",
                         "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
                         "of %i. Reducing unrolling to this value.",
                         layer_dim,
@@ -286,6 +295,7 @@ class SpatialMapping(LayerAttribute):
         return copy.deepcopy(self)
 
     def __str__(self):
+        return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
         return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
 
     def __eq__(self, other: Any) -> bool:

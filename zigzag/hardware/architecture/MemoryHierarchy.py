@@ -7,7 +7,7 @@ from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
-from zigzag.hardware.architecture.operational_array import OperationalArray
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import json_repr_handler
 
 
@@ -19,7 +19,7 @@ class MemoryHierarchy(DiGraph):
 
     def __init__(
         self,
-        operational_array: OperationalArray,
+        operational_array: OperationalArrayABC,
         name: str = "Memory Hierarchy",
         **attr: Any,
     ):
@@ -45,6 +45,9 @@ class MemoryHierarchy(DiGraph):
         operands: list[MemoryOperand],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
+        operands: list[MemoryOperand],
+        port_alloc: PortAllocation,
+        served_dimensions: ServedMemDimensions,
     ):
         """! Adds a memory to the memory hierarchy graph.
         NOTE: memory level need to be added from bottom level (e.g., Reg) to top level (e.g., DRAM) for each operand !!!
@@ -55,9 +58,11 @@ class MemoryHierarchy(DiGraph):
         @param memory_instance: The MemoryInstance containing the different memory characteristics.
         @param operands: The memory operands the memory level stores.
         @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
+        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
         """
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
+        for mem_op in operands:
         for mem_op in operands:
             if mem_op not in self.operands:
                 self.nb_levels[mem_op] = 1
@@ -69,6 +74,7 @@ class MemoryHierarchy(DiGraph):
         # Compute which memory level this is for all the operands
         mem_level_of_operands: dict[MemoryOperand, int] = {}
         for mem_op in operands:
+        for mem_op in operands:
             nb_levels_so_far = len([node for node in self.memory_nodes if mem_op in node.operands])
             mem_level_of_operands[mem_op] = nb_levels_so_far
 
@@ -78,7 +84,10 @@ class MemoryHierarchy(DiGraph):
             mem_level_of_operands=mem_level_of_operands,
             port_alloc=port_alloc,
             served_dimensions=served_dimensions,
+            port_alloc=port_alloc,
+            served_dimensions=served_dimensions,
             operational_array=self.operational_array,
+            identifier=self.memory_level_id,
             identifier=self.memory_level_id,
         )
         self.mem_level_list.append(memory_level)
@@ -86,6 +95,7 @@ class MemoryHierarchy(DiGraph):
 
         # Pre-compute appropriate edges
         to_edge_from: set[MemoryLevel] = set()
+        for mem_op in operands:
         for mem_op in operands:
             # Find top level memories of the operands
             for m in self.get_operator_top_level(mem_op)[0]:
@@ -112,9 +122,11 @@ class MemoryHierarchy(DiGraph):
     def get_inner_memories(self) -> list[MemoryLevel]:
         """! Returns the inner-most memory levels for all memory operands."""
         return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
+        return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
 
     def get_outer_memories(self) -> list[MemoryLevel]:
         """! Returns the outer-most memory levels for all memory operands."""
+        return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
         return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
 
     def get_top_memories(self) -> tuple[list[MemoryLevel], int]:
