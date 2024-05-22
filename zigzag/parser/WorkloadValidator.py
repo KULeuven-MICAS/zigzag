@@ -33,7 +33,6 @@ class WorkloadValidator:
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
     LAYER_SCHEMA: dict[str, Any] = {
         "id": {"type": "integer", "required": True},
-        "name": {"type": "string", "nullable": True, "default": None},
         "operator_type": {
             "type": "string",
             "allowed": ALLOWED_OPERATORS,

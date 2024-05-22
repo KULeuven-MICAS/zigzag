@@ -6,6 +6,7 @@ from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.mapping.Mapping import Mapping
 from zigzag.mapping.data_movement import DataDirection, FourWayDataMoving
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
@@ -25,7 +26,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.mem_energy_breakdown: dict[LayerOperand, list[float]]
         self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]]
         self.memory_word_access: dict[LayerOperand, list[FourWayDataMoving]]
-        self.MAC_energy: float
+        self.mac_energy: float
         self.mem_energy: float
         self.energy_total: float
         self.data_loading_cycle: float
@@ -46,7 +47,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result = CumulativeCME()
 
         # Energy
-        result.MAC_energy = self.MAC_energy + other.MAC_energy
+        result.mac_energy = self.mac_energy + other.mac_energy
         result.mem_energy = self.mem_energy + other.mem_energy
         result.energy_total = self.energy_total + other.energy_total
 
@@ -144,7 +145,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result: "CostModelEvaluationABC" = pickle_deepcopy(self)
 
         # Energy
-        result.MAC_energy *= number
+        result.mac_energy *= number
         result.mem_energy *= number
         result.energy_total *= number
 
@@ -198,7 +199,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
                     },
                     "energy": {
                         "energy_total": self.energy_total,
-                        "operational_energy": self.MAC_energy,
+                        "operational_energy": self.mac_energy,
                         "memory_energy": self.mem_energy,
                         "memory_energy_breakdown_per_level": self.mem_energy_breakdown,
                         "memory_energy_breakdown_per_level_per_operand": self.mem_energy_breakdown_further,
@@ -242,7 +243,7 @@ class CumulativeCME(CostModelEvaluationABC):
         self.layer_ids: list[int] = []
         self.core_ids: list[int] = []
 
-        self.MAC_energy: float = 0.0
+        self.mac_energy: float = 0.0
         self.mem_energy: float = 0.0
         self.energy_total: float = 0.0
         self.data_loading_cycle: float = 0.0
@@ -299,6 +300,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
+        self.core_id = layer.core_allocation[0]
         self.core_id = layer.core_allocation[0]
         core = accelerator.get_core(self.core_id)
         self.mem_level_list = core.memory_hierarchy.mem_level_list
@@ -563,14 +565,18 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """! Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing
         energy."""
         # TODO: Interconnection energy
-        self.calc_MAC_energy_cost()
+        self.calc_mac_energy_cost()
         self.calc_memory_energy_cost()
 
-    def calc_MAC_energy_cost(self) -> None:
+    def calc_mac_energy_cost(self) -> None:
         """! Calculate the dynamic MAC energy"""
         core = self.accelerator.get_core(self.core_id)
-        single_MAC_energy = core.operational_array.unit.cost
-        self.MAC_energy = single_MAC_energy * self.layer.total_MAC_count
+        operational_array = core.operational_array
+        assert isinstance(
+            operational_array, OperationalArray
+        ), "This method expects an OperationalArray instance. Otherwise, the method should be overridden in a subclass."
+        single_mac_energy = operational_array.unit.cost
+        self.mac_energy = single_mac_energy * self.layer.total_MAC_count
 
     def calc_memory_energy_cost(self):
         """! Computes the memories reading/writing energy by converting the access patterns in self.mapping to
@@ -628,7 +634,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mem_energy_breakdown: dict[LayerOperand, list[float]] = mem_energy_breakdown
         self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = mem_energy_breakdown_further
         self.mem_energy = energy_total
-        self.energy_total: float = self.mem_energy + self.MAC_energy
+        self.energy_total: float = self.mem_energy + self.mac_energy
         logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
 
     def calc_latency(self) -> None:
@@ -650,8 +656,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         4) Finally, we combine the stall/slack of each memory port to get the final latency.
         """
         self.calc_double_buffer_flag()
-        self.__calc_allowed_and_real_data_transfer_cycle_per_DTL()
-        self.__combine_data_transfer_rate_per_physical_port()
+        self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
+        self.combine_data_transfer_rate_per_physical_port()
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
 
@@ -689,7 +695,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         self.double_buffer_true = double_buffer_true
 
-    def __calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
+    def calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
         """! Construct a 4-way data transfer pattern for each unit mem, calculate
         {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
         # TODO cleanup
@@ -790,7 +796,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.allowed_mem_updat_cycle = allowed_mem_updat_cycle
         self.real_data_trans_cycle = real_data_trans_cycle
 
-    def __combine_data_transfer_rate_per_physical_port(self) -> None:
+    def combine_data_transfer_rate_per_physical_port(self) -> None:
         """! Consider memory sharing and port sharing, combine the data transfer activity
         Step 1: collect port activity per memory instance per physical memory port
         Step 2: calculate SS combine and MUW union parameters per physical memory port
@@ -1032,7 +1038,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.data_offloading_cc_pair_combined = data_offloading_cc_pair_combined
         self.data_offloading_cycle = data_offloading_cycle
 
-    def calc_overall_latency(self, cycles_per_mac: int = 1) -> None:
+    def calc_overall_latency(self, cycles_per_mac: float = 1) -> None:
         """! This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the
         overall latency"""
         # @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
@@ -1069,6 +1075,26 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.MAC_utilization0 = MAC_utilization0
         self.MAC_utilization1 = MAC_utilization1
         self.MAC_utilization2 = MAC_utilization2
+
+    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
+        """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
+        required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
+        requirements if the given memory instance is not included in this CME's memory hierarchy.
+        NOTE: this function is used in Stream
+        """
+        # Check which operands require offchip memory throughout the computation
+        offchip_mem_operands: list[MemoryOperand] = []
+        for op, memory_levels in self.mem_hierarchy_dict.items():
+            last_mem_level = memory_levels[-1]
+            if last_mem_level.memory_instance == memory_instance:
+                offchip_mem_operands.append(op)
+        # Obtain the required instantaneous bandwidth to/from offchip for these operands
+        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        for mem_op in offchip_mem_operands:
+            layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+            inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
+            total_inst_bw += inst_bw_4way
+        return total_inst_bw
 
     def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
         """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth

@@ -1,20 +1,18 @@
-"""
-# TODO this file needs to be reworked
-"""
-
 from typing import Any
 import logging
 
 
-from zigzag.datatypes import LayerOperand
+from zigzag.datatypes import LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
+from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 
 logger = logging.getLogger(__name__)
 
@@ -72,68 +70,31 @@ class RemoveUnusedMemoryStage(Stage):
             yield cme, extra_info
 
     def generate_accelerator_with_removing_unused_memory(self) -> Accelerator:
-        """
-        # Todo cleanup
-        """
         # Remove no-use memory level according to update_mem_list and mem_update_weight
         curr_id: int = self.layer_list[self.layer]
-        output_operand = self.layer.memory_operand_links[self.layer.output_operand]
         core = next(iter(self.accelerator.cores))
         operational_array = core.operational_array
         memory_hierarchy = core.memory_hierarchy
 
-        if len(self.layer.constant_operands) == 1:
-            # act representation in memory
-            act_operand = self.layer.memory_operand_links[
-                [operand for operand in self.layer.input_operands if operand not in self.layer.constant_operands][0]
-            ]
-            const_operand = self.layer.memory_operand_links[
-                self.layer.constant_operands[0]
-            ]  # weight representation in memory
-        elif len(self.layer.constant_operands) == 0:
-            # special case when defining workload manually:
-            # the constant operands list is empty for such as "Adder" layers
-            # for input operand, we will represent all inputs as one input, since only their data size is used for
-            # required mem size calculation.
-            act_operand = self.layer.memory_operand_links[self.layer.input_operands[0]]  # act representation in memory
-            const_operand = self.layer.memory_operand_links[
-                self.layer.input_operands[1]
-            ]  # weight representation in memory
-        else:
-            # special case when defining workload manually:
-            # both I and W are considered as constant operands for the first layer
-            pr_loop_keys = tuple(self.layer.pr_loop.keys())
-            related_loop_dict = {
-                layer_op: self.layer.equation.get_r_layer_dims(layer_op)
-                for layer_op in self.layer.equation.get_contained_operands()
-            }
-            act_operand: LayerOperand | None = None
-            for operand, related_loop in related_loop_dict.items():
-                if pr_loop_keys[0] in related_loop:
-                    act_operand = operand
-            # weight representation in layer
-            assert act_operand is not None
-            weight_operand_temp: list[LayerOperand] = [x for x in self.layer.constant_operands if x != act_operand]
-            assert len(weight_operand_temp) == 1
-            weight_operand: LayerOperand = weight_operand_temp[0]
-            # map from layer representation to hardware memory representation
-            act_operand = self.layer.memory_operand_links[act_operand]
-            # weight representation in memory
-            const_operand = self.layer.memory_operand_links[weight_operand]
+        # derive act_operand/weight_operand_in_hardware
+        (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+            SearchUnusedMemoryStage.get_act_weight_operand_names(layer=self.layer)
+        )
+        output_operand_in_layer = self.layer.output_operand
+        output_operand_in_hardware = self.layer.memory_operand_links[output_operand_in_layer]
 
         # Find target_act/const/output_mem_level
-        for pos, ele in enumerate(self.mem_update_list[curr_id]):
-            if list(ele.keys())[0] == act_operand:
-                target_act_mem_level = self.mem_update_list[curr_id][pos][act_operand]
-            if list(ele.keys())[0] == output_operand:
-                target_output_mem_level = self.mem_update_list[curr_id][pos][output_operand]
-        if self.layer.constant_operands is None or len(self.layer.constant_operands) == 0:
-            # special case when defining workload manually:
-            # the constant operands list is empty for such as "Adder" layers
-            # Here we make a trick: treating the other input as const_operand
-            for pos, ele in enumerate(self.mem_update_list[curr_id]):
-                if list(ele.keys())[0] == act_operand:
-                    target_const_mem_level = self.mem_update_list[curr_id][pos][act_operand]
+        for operand_in_hardware, targeted_mem_lv in self.mem_update_list[f"{curr_id}"].items():
+            if operand_in_hardware == act_operand_in_hardware:
+                target_act_mem_level = targeted_mem_lv
+            if operand_in_hardware == output_operand_in_hardware:
+                target_output_mem_level = targeted_mem_lv
+        is_adder_layer = self.layer.constant_operands is None or len(self.layer.constant_operands) == 0
+        if is_adder_layer:
+            # two inputs for Adder layers are both act
+            for operand_in_hardware, targeted_mem_lv in self.mem_update_list[f"{curr_id}"].items():
+                if operand_in_hardware == act_operand_in_hardware:
+                    target_const_mem_level = targeted_mem_lv
         else:
             target_const_mem_level = self.mem_update_weight
 
@@ -146,40 +107,43 @@ class RemoveUnusedMemoryStage(Stage):
         for curr_mem_level, memory_level in enumerate(memory_hierarchy.mem_level_list):
             memory_instance = memory_level.memory_instance
             operands = tuple(memory_level.operands)
-            port_alloc = memory_level.port_alloc_raw
+            port_alloc: PortAllocation = memory_level.port_alloc_raw
             served_dimensions = memory_level.served_dimensions
 
-            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)  # type: ignore
-            new_operands = []
-            new_port_alloc = []
-            if (act_operand in operands) and curr_mem_level <= target_act_mem_level:
-                new_operands.append(act_operand)
-                index_in_operands = operands.index(act_operand)
-                new_port_alloc.append(port_alloc[index_in_operands])
-            if (const_operand in operands) and curr_mem_level <= target_const_mem_level:
-                new_operands.append(const_operand)
-                index_in_operands = operands.index(const_operand)
-                new_port_alloc.append(port_alloc[index_in_operands])
-            if (output_operand in operands) and curr_mem_level <= target_output_mem_level:
-                new_operands.append(output_operand)
-                index_in_operands = operands.index(output_operand)
-                new_port_alloc.append(port_alloc[index_in_operands])
-            new_operands = tuple(new_operands)
-            new_port_alloc = tuple(new_port_alloc)
+            new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
+            new_operands: list[MemoryOperand] = []
+            new_port_alloc_data: dict[MemoryOperand, dict[DataDirection, str]] = {}
+
+            if (act_operand_in_hardware in operands) and curr_mem_level <= target_act_mem_level:
+                new_operands.append(act_operand_in_hardware)
+                new_port_alloc_data[act_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(act_operand_in_hardware)
+                # TODO I think you need
+            if (weight_operand_in_hardware in operands) and curr_mem_level <= target_const_mem_level:
+                new_operands.append(weight_operand_in_hardware)
+                new_port_alloc_data[weight_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
+                    weight_operand_in_hardware
+                )
+            if (output_operand_in_hardware in operands) and curr_mem_level <= target_output_mem_level:
+                new_operands.append(output_operand_in_hardware)
+                new_port_alloc_data[output_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
+                    output_operand_in_hardware
+                )
+
+            new_port_alloc = PortAllocation(new_port_alloc_data)
             new_served_dimensions: ServedMemDimensions = pickle_deepcopy(served_dimensions)
             if len(new_operands) > 0:
                 new_memory_hierarchy.add_memory(
                     memory_instance=new_memory_instance,
                     operands=new_operands,
                     port_alloc=new_port_alloc,
-                    served_dimensions=new_served_dimensions.to_user_format(),
+                    served_dimensions=new_served_dimensions,
                 )
 
         # Create the new core
         id = core.id
         new_id = id
         new_core = Core(
-            id=new_id,
+            core_id=new_id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )

@@ -446,7 +446,9 @@ class CactiConfig:
                 self.call_cacti(path)
 
 
-def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_hash="a"):
+def get_cacti_cost(
+    cacti_path: str, tech_node: float, mem_type: str, mem_size_in_byte: float, bw: float, hd_hash: str = "a"
+) -> tuple[float, float, float, float]:
     """
     extract time, area, r_energy, w_energy cost from cacti 7.0
     :param cacti_path:          the location of cacti
@@ -487,10 +489,7 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
         msg = f"mem_type can only be dram or sram. Now it is: {mem_type}"
         raise ValueError(msg)
 
-    """
-    due to the growth of the area cost estimation from CACTI exceeds 1x when bw > 32, it will be set to 1x.
-    """
-    # check if bw > 32
+    # due to the growth of the area cost estimation from CACTI exceeds 1x when bw > 32, it will be set to 1x.
     if bw > 32:  # adjust the setting for CACTI
         rows = mem_size_in_byte * 8 / bw
         line_size = int(32 / 8)
@@ -504,15 +503,6 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
 
     file_path = "./self_gen"  # location for input file (cache.cfg) and output file (cache.cfg.out)
     os.makedirs(file_path, exist_ok=True)
-
-    # clear target folder
-    # if system == 'Linux':
-    #     os.system(f'rm -f {file_path}/cache_{hd_hash}.cfg.out')
-    # elif system == 'Windows':
-    #     os.system(f'del {file_path}/cache_{hd_hash}.cfg.out')
-    # else:
-    #     # user-defined command
-    #     breakpoint()
 
     C = CactiConfig()
     C.cacti_auto(
@@ -563,17 +553,6 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
         _logging.critical(f"**KeyError** in result, current result: {result}")
         breakpoint()
 
-    # clear generated files
-    # if system == 'Linux':
-    #     os.system(f'rm {file_path}/cache_{hd_hash}.cfg.out') # remove output file
-    #     os.system(f'rm {file_path}/cache_{hd_hash}.cfg') # remove input file
-    # elif system == 'Windows':
-    #     os.system(f'del {file_path}/cache_{hd_hash}.cfg.out') # remove output file
-    #     os.system(f'del {file_path}/cache_{hd_hash}.cfg') # remove input file
-    # else:
-    #     # user-defined command
-    #     breakpoint()
-
     # change back the working directory
     os.chdir(cwd)
 
@@ -585,19 +564,19 @@ def get_cacti_cost(cacti_path, tech_node, mem_type, mem_size_in_byte, bw, hd_has
     return access_time, area, r_cost, w_cost
 
 
-def get_w_cost_per_weight_from_cacti(cacti_path, tech_param, hd_param, dimensions):
+def get_w_cost_per_weight_from_cacti(cacti_path: str, tech_param: dict[str, float], hd_param, dimensions) -> float:
     # Get w_cost for imc cell group
     # Used in user-provided hardware input file, when it is needed.
     # cacti_path = "zigzag/classes/cacti/cacti_master"
     tech_node = tech_param["tech_node"]
     wl_dim = hd_param["wordline_dimension"]
     bl_dim = hd_param["bitline_dimension"]
-    wl_dim_size = dimensions[wl_dim]
-    bl_dim_size = dimensions[bl_dim]
+    wordline_dim_size = dimensions[wl_dim]
+    bitline_dim_size = dimensions[bl_dim]
     group_depth = hd_param["group_depth"]
     w_pres = hd_param["weight_precision"]
-    cell_array_size = wl_dim_size * bl_dim_size * group_depth * w_pres / 8  # array size. unit: byte
-    array_bw = wl_dim_size * w_pres  # imc array bandwidth. unit: bit
+    cell_array_size = wordline_dim_size * bitline_dim_size * group_depth * w_pres / 8  # array size. unit: byte
+    array_bw = wordline_dim_size * w_pres  # imc array bandwidth. unit: bit
 
     # we will call cacti to get the area (mm^2), access_time (ns), r_cost (nJ/access), w_cost (nJ/access)
     access_time, area, r_cost, w_cost = get_cacti_cost(

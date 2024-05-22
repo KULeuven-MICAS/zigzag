@@ -1,37 +1,35 @@
 import pytest
-import sys
 
-sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_imc
 
 workloads = (
-    "zigzag/inputs/examples/workload/alexnet.onnx",
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx",
-    "zigzag/inputs/examples/workload/resnet18.onnx",
-    "zigzag.inputs.examples.workload.resnet18",
+    "inputs/workload/alexnet.onnx",
+    "inputs/workload/mobilenetv2.onnx",
+    "inputs/workload/resnet18.onnx",
+    "inputs/workload/resnet18.yaml",
 )
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "zigzag/inputs/examples/workload/alexnet.onnx": (2340181787.2719307, 72692592.0, 3.2026, 0.785592664),
-    "zigzag/inputs/examples/workload/mobilenetv2.onnx": (703506891.3687075, 28005964.0, 3.2026, 0.785592664),
-    "zigzag/inputs/examples/workload/resnet18.onnx": (1828766840.9463186, 120700590.0, 3.2026, 0.785592664),
-    "zigzag.inputs.examples.workload.resnet18": (2008581031.8287854, 130747736.0, 3.2026, 0.785592664),
+    "inputs/workload/alexnet.onnx": (6812722722.515776, 9460061.0, 3.75708, 0.8566212024),
+    "inputs/workload/mobilenetv2.onnx": (2884947078.1898627, 20454032.0, 3.75708, 0.8566212024),
+    "inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
+    "inputs/workload/resnet18.yaml": (4268432908.954752, 5789353.0, 3.75708, 0.8566212024),
 }
 
 
 @pytest.fixture
 def mapping():
-    return "zigzag.inputs.examples.mapping.default_imc"
+    return "inputs/mapping/default_imc.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Dimc"
+    return "inputs/hardware/dimc.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload, accelerator, mapping):
+def test_api(workload: str, accelerator: str, mapping: str):
     (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
     (expected_energy, expected_latency, expected_tclk, expected_area) = ens_lats_clks_areas[workload]
     assert energy == pytest.approx(expected_energy)

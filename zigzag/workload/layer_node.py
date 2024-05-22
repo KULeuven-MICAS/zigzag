@@ -1,5 +1,6 @@
 from copy import deepcopy
 from dataclasses import dataclass
+from dataclasses import dataclass
 from math import gcd
 import logging as _logging
 import math

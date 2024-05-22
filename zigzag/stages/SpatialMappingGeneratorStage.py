@@ -71,7 +71,7 @@ class SpatialMappingGeneratorStage(Stage):
         self.layer_dim_sizes = self.layer.layer_dim_sizes
         core_id = layer.core_allocation[0]
         self.core = self.accelerator.get_core(core_id)
-        self.oa_dim_sizes = self.core.operational_array.oa_dim_sizes
+        self.oa_dim_sizes = self.core.operational_array.dimension_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
         self.spatial_mapping_hint: SpatialMappingHint = self.layer.spatial_mapping_hint
@@ -226,10 +226,11 @@ class SpatialMappingGeneratorStage(Stage):
         """
         # Unroll a single LayerDim over this OA Dim
         for layer_dim in unroll_hints:
-            max_factor: UnrollFactor = int(max_unrollings[layer_dim])
-            # Start with largest unrollings
-            for factor in sorted(divisors(max_factor), reverse=True):
-                yield MappingSingleOADim({layer_dim: factor})
+            if layer_dim in max_unrollings.keys():
+                max_factor: UnrollFactor = int(max_unrollings[layer_dim])
+                # Start with largest unrollings
+                for factor in sorted(divisors(max_factor), reverse=True):
+                    yield MappingSingleOADim({layer_dim: factor})
 
         if self.enable_mix_spatial_mapping_generation:
             mixed_mappings = self.generate_mapping_single_oa_dim_mixed(max_unrollings, unroll_hints)
@@ -247,9 +248,13 @@ class SpatialMappingGeneratorStage(Stage):
         """
 
         unique_factor_pool: dict[LayerDim, list[int]] = {
-            layer_dim: self.non_trivial_divisors(max_unroll)  # type: ignore
-            for layer_dim, max_unroll in max_unrolling.items()
+            layer_dim: self.non_trivial_divisors(max_unroll) for layer_dim, max_unroll in max_unrolling.items()
         }
+
+        # Make sure all layer dims are defined
+        unique_factor_pool.update(
+            {layer_dim: [0] for layer_dim in unrolling_hints if layer_dim not in unique_factor_pool}
+        )
 
         # Number of Layer Dimensions combined in new Mapping
         for combination_len in range(2, len(unrolling_hints) + 1):
@@ -260,8 +265,9 @@ class SpatialMappingGeneratorStage(Stage):
                 # e.g. (2, 4) which corresponds to ("C", "K")
                 for combination in itertools.product(*to_combine):
                     # e.g. (("C", 2), ("K", 4))
-                    mapping_zip = zip(layer_dim_mix, combination)
-                    yield MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
+                    if len(combination) > 1:
+                        mapping_zip = zip(layer_dim_mix, combination)
+                        yield MappingSingleOADim({layer_dim: unroll_value for layer_dim, unroll_value in mapping_zip})
 
     def add_input_pr_spatial_loop(self, spatial_mapping: SpatialMapping) -> SpatialMapping:
         """! This function is used to support diagonal spatial mapping
@@ -509,8 +515,8 @@ class SpatialMappingGeneratorStage(Stage):
 
     @staticmethod
     def non_trivial_divisors(n: int) -> list[int]:
-        """! Return a list of divisors of `n`, excluding 1 and `n` itself"""
-        return list(filter(lambda x: 1 < x < n, divisors(n)))
+        """! Return a list of divisors of `n`, excluding 1"""
+        return list(filter(lambda x: 1 < x <= n, divisors(n)))
 
     @staticmethod
     def identify_layer_operand_representation(layer: LayerNode) -> tuple[LayerOperand | None, LayerOperand | None]:

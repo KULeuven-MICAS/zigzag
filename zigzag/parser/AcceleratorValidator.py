@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 from cerberus import Validator
+from math import log2
 
 
 logger = logging.getLogger(__name__)
@@ -66,10 +67,18 @@ class AcceleratorValidator:
                 },
             },
         },
-        "multipliers": {
+        "operational_array": {
             "type": "dict",
             "required": True,
             "schema": {
+                # Shared for regular and IMC
+                "dimensions": {
+                    "type": "list",
+                    "required": True,
+                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
+                },
+                "is_imc": {"type": "boolean", "default": False},
+                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
                 "input_precision": {
                     "type": "list",
                     "required": True,
@@ -77,14 +86,18 @@ class AcceleratorValidator:
                     "minlength": 2,
                     "maxlength": 2,
                 },
-                "multiplier_energy": {"type": "float", "required": True},
-                "multiplier_area": {"type": "float", "required": True},
-                "dimensions": {
-                    "type": "list",
-                    "required": True,
-                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
+                # Non-IMC properties
+                "multiplier_energy": {"type": "float", "required": False},
+                "multiplier_area": {"type": "float", "required": False},
+                # IMC properties
+                "imc_type": {
+                    "type": "string",
+                    "allowed": ["analog", "digital"],
+                    "nullable": True,
+                    "default": None,
                 },
-                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
+                "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": 0},
+                "bit_serial_precision": {"type": "float", "required": True, "nullable": True, "default": None},
             },
         },
         "dataflows": {
@@ -122,19 +135,20 @@ class AcceleratorValidator:
             self.invalidate(f"The following restrictions apply: {errors}")
 
         # Extra validation rules outside of schema
-
-        # Dimension sizes are consistent
-        oa_dims: list[str] = self.data["multipliers"]["dimensions"]
-        if len(oa_dims) != len(self.data["multipliers"]["sizes"]):
-            self.invalidate("Multiplier dimensions and sizes do not match.")
+        self.is_imc = self.data["operational_array"]["is_imc"]
+        self.validate_operational_array()
 
         for mem_name in self.data["memories"]:
-            self.validate_single_memory(mem_name, oa_dims)
+            self.validate_single_memory(mem_name)
+
+        if self.is_imc:
+            self.validate_cells_imc()
 
         return self.is_valid
 
-    def validate_single_memory(self, mem_name: str, expected_oa_dims: list[str]) -> None:
+    def validate_single_memory(self, mem_name: str) -> None:
         mem_data: dict[str, Any] = self.data["memories"][mem_name]
+        expected_oa_dims: list[str] = self.data["operational_array"]["dimensions"]
 
         # Number of port allocations is consistent with memory operands
         nb_operands = len(mem_data["operands"])
@@ -189,9 +203,60 @@ class AcceleratorValidator:
                 if (direction == "th" or direction == "tl") and (port_name.startswith("w_")):
                     self.invalidate(f"Write port given for read direction in {mem_name}")
 
-        # # Contains output operand - This is not required
-        # if AcceleratorValidator.OUTPUT_OPERAND_STR not in mem_data["operands"]:
-        #     self.invalidate(f"{mem_name} does not contain output operand `{AcceleratorValidator.OUTPUT_OPERAND_STR}`")
+    def validate_cells_imc(self):
+        if "cells" not in self.data["memories"]:
+            self.invalidate("IMC architecture has no memory level called `cells`.")
+
+        cells_data = self.data["memories"]["cells"]
+        # Lowest memory level should only serve weight
+        if cells_data["operands"] != ["I2"]:
+            self.invalidate("IMC cells can only serve weights. Set `operands` to `I2`.")
+        # Served dimension should be empty;
+        if cells_data["served_dimensions"] != []:
+            self.invalidate("IMC cells must be fully unrolled. Set `served_dimensions` to `[]`")
+        # Memory size should be a multiply (e.g. 1,2,..) of weight precision.
+        if cells_data["size"] % self.data["operational_array"]["input_precision"][1] != 0:
+            self.invalidate("IMC cells' size must be a multiply of the weight precision")
+
+    def validate_operational_array(self):
+        multiplier_data = self.data["operational_array"]
+
+        # For both IMC and non-IMC:
+        oa_dims: list[str] = multiplier_data["dimensions"]
+        if len(oa_dims) != len(multiplier_data["sizes"]):
+            # TODO Alternatively, you can force the user to not
+            self.invalidate("Core dimensions and sizes do not match.")
+
+        if self.is_imc:
+            self.validate_operational_array_imc()
+        else:
+            self.validate_operational_array_non_imc()
+
+    def validate_operational_array_imc(self):
+        """Assumes that the multiplier type is IMC"""
+        # All previous IMC checks are now part of the schema
+        imc_data = self.data["operational_array"]
+        if imc_data["bit_serial_precision"] > imc_data["input_precision"][0]:
+            self.invalidate("Bit serial input precision for IMC are bigger than activation precision.")
+        if log2(imc_data["bit_serial_precision"]) % 1 != 0:
+            self.invalidate("Bit serial input precision is not in the power of 2.")
+        if log2(imc_data["input_precision"][0]) % 1 != 0:
+            self.invalidate("Activation precision is not in the power of 2.")
+        if log2(imc_data["input_precision"][1]) % 1 != 0:
+            self.invalidate("Weight precision is not in the power of 2.")
+        if imc_data["imc_type"] == "digital" and imc_data["adc_resolution"] != 0:
+            self.invalidate("Digital IMC core but 'adc_resolution' is defined")
+
+    def validate_operational_array_non_imc(self):
+        """Assumes that the multiplier type is not IMC"""
+        multiplier_data = self.data["operational_array"]
+        # All IMC related properties should be None
+        if multiplier_data["imc_type"] is not None or multiplier_data["imc_type"] is True:
+            self.invalidate("Multiplier are non-IMC but `imc_type` is defined as True")
+        if multiplier_data["adc_resolution"] != 0:
+            self.invalidate("Multiplier are non-IMC but `adc_resolution` is defined")
+        if multiplier_data["bit_serial_precision"] is not None:
+            self.invalidate("Multiplier are non-IMC but `bit_serial_precision` is defined")
 
     @property
     def normalized_data(self) -> dict[str, Any]:

@@ -1,6 +1,7 @@
 import math
 import re
 from typing import TypeAlias
+from typing import TypeAlias
 
 
 from zigzag.workload.LayerAttribute import LayerAttribute
@@ -16,6 +17,7 @@ from zigzag.datatypes import (
     UnrollFactorInt,
 )
 
+InputOperandSource: TypeAlias = dict[LayerOperand, int]
 InputOperandSource: TypeAlias = dict[LayerOperand, int]
 
 
@@ -43,7 +45,9 @@ class LayerEquation(LayerAttribute):
         """! Return a list with all LayerDims that are `relevant` for the given LayerOperand"""
         layer_operands = self.get_contained_operands()
         assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
+        assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
         layer_op_idx = layer_operands.index(layer_op)
+        slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         disassembly_start_idx = slice_indices[layer_op_idx] + 1
         disassembly_end_idx = slice_indices[layer_op_idx + 1] - 1
@@ -77,6 +81,9 @@ class LayerDimSizes(LayerAttribute):
 
     def __delitem__(self, key: LayerDim):
         del self.data[key]
+
+    def __add__(self, other: "LayerDimSizes"):
+        return LayerDimSizes(self.data | other.data)
 
     def __add__(self, other: "LayerDimSizes"):
         return LayerDimSizes(self.data | other.data)
@@ -139,8 +146,22 @@ class MemoryOperandLinks(LayerAttribute):
 class LayerDimRelation(LayerAttribute):
     """! For the operand dimension that is not directly a loop dimension, a relation equations between them (operand
     dimension) and the loop dimension is required. e.g. `dim1 = coef2*dim2 + coef3*dim3`
+
+class LayerDimRelation(LayerAttribute):
+    """! For the operand dimension that is not directly a loop dimension, a relation equations between them(operand
+    dimension) and the loop dimension is required. e.g. `dim1 = coef2 * dim2 + coef3 * dim3`
     """
 
+    def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
+        self.dim_1 = dim_1
+        self.dim_2 = dim_2
+        self.dim_3 = dim_3
+        self.coef_2 = coef_2
+        self.coef_3 = coef_3
+        self.data = f"{dim_1} = {coef_2}*{dim_2} + {coef_3}*{dim_3}"
+
+    @staticmethod
+    def extract_pr_loop_info(relations: list["LayerDimRelation"]) -> tuple[PrLoop, LoopList, PrScalingFactors]:
     def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
         self.dim_1 = dim_1
         self.dim_2 = dim_2
@@ -161,8 +182,13 @@ class LayerDimRelation(LayerAttribute):
         for relation in relations:
             key = relation.dim_1
             val = [relation.dim_2, relation.dim_3]
+
+        for relation in relations:
+            key = relation.dim_1
+            val = [relation.dim_2, relation.dim_3]
             pr_loop[key] = val
             pr_loop_list.extend([key] + val)
+            scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
             scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
             pr_scaling_factors[key] = scaling_factors
 
@@ -170,14 +196,19 @@ class LayerDimRelation(LayerAttribute):
 
 
 class LayerTemporalOrdering(LayerAttribute):
-    DEFAULT = []
+    """
+    # TODO is this ever used?
+    """
 
-    def __init__(self, data: list[list[str, int]]):
-        self.data = [(LayerDim(loop[0]), loop[1]) for loop in data]
+    def __init__(self, data: dict[LayerOperand, UnrollFactorInt]):
+        self.data = data
 
     @staticmethod
     def empty():
-        return LayerTemporalOrdering(LayerTemporalOrdering.DEFAULT)
+        return LayerTemporalOrdering({})
+
+    def __delitem__(self, x: LayerOperand):
+        del self.data[x]
 
 
 class LayerPadding(LayerAttribute):
@@ -190,5 +221,7 @@ class LayerPadding(LayerAttribute):
         return self.data[key] if key in self.data else LayerPadding.DEFAULT
 
     @staticmethod
+    def empty():
+        return LayerPadding({})
     def empty():
         return LayerPadding({})
