@@ -25,7 +25,7 @@ def mapping():
 
 @pytest.fixture
 def accelerator():
-    return "inputs/hardware/aimc.yaml"
+    return "inputs/hardware/dimc.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
