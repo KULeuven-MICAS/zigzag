@@ -1,0 +1,29 @@
+name: imc_macros
+
+memories:
+  cells:
+    size: 8
+    r_bw: 8
+    w_bw: 8
+    r_cost: 0
+    w_cost: 0.095
+    area: 0
+    r_port: 0
+    w_port: 0
+    rw_port: 1
+    latency: 0
+    auto_cost_extraction: True  # area, w_cost extraction from cacti
+    operands: [I2]  # weight operand representation
+    ports:
+      - fh: rw_port_1
+        tl: rw_port_1
+    served_dimensions: [] # Fully unrolled over all multipliers
+
+operational_array:
+  is_imc: True  # a must for IMC
+  imc_type: analog  # analog: AIMC; digital: DIMC
+  input_precision: [8, 8] # [activation precision, weight precision] unit: bit
+  bit_serial_precision: 2 # unit: bit
+  adc_resolution: 3 # unit: bit
+  dimensions: [D1, D2]
+  sizes: [32, 32]

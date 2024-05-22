@@ -1,0 +1,125 @@
+name: accelerator2
+
+multipliers:
+  input_precision: [8, 8]
+  multiplier_energy: 1 # pJ
+  multiplier_area: 1 # unit
+  dimensions: [D1, D2]
+  sizes: [32, 32]
+
+memories:
+  rf_1B:
+    size: 8
+    r_bw: 8
+    w_bw: 8
+    r_cost: 0.095  # TODO
+    w_cost: 0.095  # TODO
+    area: 0
+    r_port: 1
+    w_port: 1
+    rw_port: 0
+    latency: 1
+    auto_cost_extraction: False
+    operands: [I2]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+    served_dimensions: [D1] # One per column
+
+  rf_1B:
+    size: 8
+    r_bw: 8
+    w_bw: 8
+    r_cost: 0.095  # TODO
+    w_cost: 0.095  # TODO
+    area: 0
+    r_port: 1
+    w_port: 1
+    rw_port: 0
+    latency: 1
+    auto_cost_extraction: False
+    operands: [I1]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+    served_dimensions: [D2] # One per row
+
+  rf_4B:
+    size: 32
+    r_bw: 32
+    w_bw: 32
+    r_cost: 0.021  # TODO
+    w_cost: 0.021  # TODO
+    area: 0
+    r_port: 2
+    w_port: 2
+    rw_port: 0
+    latency: 1
+    operands: [O]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_2
+        th: r_port_2
+    served_dimensions: []  # One per PE
+
+  sram_16KB_I2:
+    size: 131072
+    r_bw: 128
+    w_bw: 128
+    r_cost: 416.16  # TODO
+    w_cost: 378.4  # TODO
+    area: 0
+    r_port: 1
+    w_port: 1
+    rw_port: 0
+    latency: 1
+    operands: [I2]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+    served_dimensions: [D1, D2]
+
+  sram_64KB_I1_O:
+    size: 524288
+    r_bw: 512
+    w_bw: 512
+    r_cost: 416.16  # TODO
+    w_cost: 378.4  # TODO
+    area: 0
+    r_port: 0
+    w_port: 0
+    rw_port: 2
+    latency: 1
+    operands: [I1, O]
+    ports:
+      - fh: rw_port_1
+        tl: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+        fl: rw_port_2
+        th: rw_port_2
+    served_dimensions: [D1, D2]
+
+  dram:
+    size: 4294967296
+    r_bw: 64
+    w_bw: 64
+    r_cost: 700  # TODO
+    w_cost: 750  # TODO
+    area: 0
+    r_port: 0
+    w_port: 0
+    rw_port: 1
+    latency: 1
+    operands: [I1, I2, O]
+    ports:
+      - fh: rw_port_1
+        tl: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+        fl: rw_port_1
+        th: rw_port_1
+    served_dimensions: [D1, D2]
