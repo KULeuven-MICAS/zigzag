@@ -26,7 +26,6 @@ class WorkloadStage(Stage):
 
     def run(self):
         for layer in self.workload.topological_sort():
-        for layer in self.workload.topological_sort():
             # skip the DummyNodes
             if isinstance(layer, DummyNode):
                 continue
@@ -42,7 +41,6 @@ class WorkloadStage(Stage):
             kwargs["layer"] = layer
             kwargs["accelerator"] = self.accelerator
 
-            logger.info(f"Processing  {layer.name}...")
             logger.info(f"Processing  {layer.name}...")
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
             for cme, extra_info in sub_stage.run():

@@ -144,24 +144,10 @@ class MemoryOperandLinks(LayerAttribute):
 
 
 class LayerDimRelation(LayerAttribute):
-    """! For the operand dimension that is not directly a loop dimension, a relation equations between them (operand
-    dimension) and the loop dimension is required. e.g. `dim1 = coef2*dim2 + coef3*dim3`
-
-class LayerDimRelation(LayerAttribute):
     """! For the operand dimension that is not directly a loop dimension, a relation equations between them(operand
     dimension) and the loop dimension is required. e.g. `dim1 = coef2 * dim2 + coef3 * dim3`
     """
 
-    def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
-        self.dim_1 = dim_1
-        self.dim_2 = dim_2
-        self.dim_3 = dim_3
-        self.coef_2 = coef_2
-        self.coef_3 = coef_3
-        self.data = f"{dim_1} = {coef_2}*{dim_2} + {coef_3}*{dim_3}"
-
-    @staticmethod
-    def extract_pr_loop_info(relations: list["LayerDimRelation"]) -> tuple[PrLoop, LoopList, PrScalingFactors]:
     def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
         self.dim_1 = dim_1
         self.dim_2 = dim_2
@@ -223,5 +209,6 @@ class LayerPadding(LayerAttribute):
     @staticmethod
     def empty():
         return LayerPadding({})
+
     def empty():
         return LayerPadding({})

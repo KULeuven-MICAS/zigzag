@@ -45,9 +45,6 @@ class MemoryHierarchy(DiGraph):
         operands: list[MemoryOperand],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
-        operands: list[MemoryOperand],
-        port_alloc: PortAllocation,
-        served_dimensions: ServedMemDimensions,
     ):
         """! Adds a memory to the memory hierarchy graph.
         NOTE: memory level need to be added from bottom level (e.g., Reg) to top level (e.g., DRAM) for each operand !!!
@@ -63,7 +60,6 @@ class MemoryHierarchy(DiGraph):
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
         for mem_op in operands:
-        for mem_op in operands:
             if mem_op not in self.operands:
                 self.nb_levels[mem_op] = 1
                 self.operands.add(mem_op)
@@ -74,7 +70,6 @@ class MemoryHierarchy(DiGraph):
         # Compute which memory level this is for all the operands
         mem_level_of_operands: dict[MemoryOperand, int] = {}
         for mem_op in operands:
-        for mem_op in operands:
             nb_levels_so_far = len([node for node in self.memory_nodes if mem_op in node.operands])
             mem_level_of_operands[mem_op] = nb_levels_so_far
 
@@ -84,10 +79,7 @@ class MemoryHierarchy(DiGraph):
             mem_level_of_operands=mem_level_of_operands,
             port_alloc=port_alloc,
             served_dimensions=served_dimensions,
-            port_alloc=port_alloc,
-            served_dimensions=served_dimensions,
             operational_array=self.operational_array,
-            identifier=self.memory_level_id,
             identifier=self.memory_level_id,
         )
         self.mem_level_list.append(memory_level)
@@ -95,7 +87,6 @@ class MemoryHierarchy(DiGraph):
 
         # Pre-compute appropriate edges
         to_edge_from: set[MemoryLevel] = set()
-        for mem_op in operands:
         for mem_op in operands:
             # Find top level memories of the operands
             for m in self.get_operator_top_level(mem_op)[0]:

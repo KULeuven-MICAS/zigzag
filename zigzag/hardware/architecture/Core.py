@@ -22,7 +22,6 @@ class Core:
         operational_array: OperationalArrayABC,
         memory_hierarchy: MemoryHierarchy,
         dataflows: SpatialMapping | None = None,
-        dataflows: SpatialMapping | None = None,
     ):
 
         self.id = core_id

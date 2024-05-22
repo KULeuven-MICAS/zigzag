@@ -82,7 +82,6 @@ def bar_plot_cost_model_evaluations_total(
 
 def bar_plot_cost_model_evaluations_breakdown(
     cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
-    cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
 ):
     memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {
         idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))

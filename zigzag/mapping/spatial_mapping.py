@@ -177,8 +177,6 @@ class SpatialMapping(LayerAttribute):
                     logger.warning(
                         "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
                         "of %i. Reducing unrolling to this value.",
-                        "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
-                        "of %i. Reducing unrolling to this value.",
                         layer_dim,
                         unrolling,
                         oa_dim,

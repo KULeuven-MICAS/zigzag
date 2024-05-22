@@ -240,7 +240,7 @@ class MappingFactory:
         """! This attribute lacks support within the MappingValidator. Returns an empty instance in case it is not
         provided (to be compatible with older code) or raises an error if it is present in the user-provided data.
         """
-        if "temporal_ordering" not in self.mapping_data or self.mapping_data["temporal_ordering"] is None:
+        if "temporal_ordering" not in self.mapping_data or not self.mapping_data["temporal_ordering"]:
             return LayerTemporalOrdering.empty()
 
-        raise NotImplementedError()
+        return LayerTemporalOrdering(self.mapping_data["temporal_ordering"])

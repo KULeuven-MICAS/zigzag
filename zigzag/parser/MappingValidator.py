@@ -2,7 +2,6 @@ import logging
 from typing import Any
 
 from zigzag.parser.UpgradedValidator import UpgradedValidator
-from zigzag.parser.WorkloadValidator import WorkloadValidator
 
 
 logger = logging.getLogger(__name__)
@@ -12,7 +11,7 @@ class MappingValidator:
 
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
-        "name": {"type": "string", "required": True, "allowed": WorkloadValidator.ALLOWED_OPERATORS + ["default"]},
+        "name": {"type": "string", "required": True},
         "core_allocation": {"type": "list", "schema": {"type": "integer"}, "default": [0]},
         "core_allocation_is_fixed": {"type": "boolean", "default": False},
         "spatial_mapping": {
@@ -44,6 +43,15 @@ class MappingValidator:
                 "D4": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+$"}, "required": False},
             },
             "required": False,
+        },
+        "temporal_ordering": {
+            "type": "list",
+            "schema": {
+                "type": "list",
+                "items": [{"type": "string"}, {"type": "integer"}],
+                "minlength": 2,
+                "maxlength": 2,
+            },
         },
     }
 
