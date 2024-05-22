@@ -128,7 +128,7 @@ def get_hardware_performance_zigzag_imc(
         [  # Initialize the MainStage as entry point
             workload_parser_stage,  # Parse the ONNX Model into the workload
             AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-            SimpleSaveStage,  # Save the summed CME energy and latency to a json
+            CompleteSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
