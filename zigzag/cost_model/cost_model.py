@@ -301,6 +301,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
         self.core_id = layer.core_allocation[0]
+        self.core_id = layer.core_allocation[0]
         core = accelerator.get_core(self.core_id)
         self.mem_level_list = core.memory_hierarchy.mem_level_list
         self.mem_hierarchy_dict = core.mem_hierarchy_dict
@@ -1074,6 +1075,26 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.MAC_utilization0 = MAC_utilization0
         self.MAC_utilization1 = MAC_utilization1
         self.MAC_utilization2 = MAC_utilization2
+
+    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
+        """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
+        required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
+        requirements if the given memory instance is not included in this CME's memory hierarchy.
+        NOTE: this function is used in Stream
+        """
+        # Check which operands require offchip memory throughout the computation
+        offchip_mem_operands: list[MemoryOperand] = []
+        for op, memory_levels in self.mem_hierarchy_dict.items():
+            last_mem_level = memory_levels[-1]
+            if last_mem_level.memory_instance == memory_instance:
+                offchip_mem_operands.append(op)
+        # Obtain the required instantaneous bandwidth to/from offchip for these operands
+        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        for mem_op in offchip_mem_operands:
+            layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+            inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
+            total_inst_bw += inst_bw_4way
+        return total_inst_bw
 
     def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
         """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth

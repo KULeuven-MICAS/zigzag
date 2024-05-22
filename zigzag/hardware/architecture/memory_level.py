@@ -35,6 +35,7 @@ class ServedMemDimensions:
         return tuple(vec_single_operand for _ in range(nb_operands))
 
     @property
+    @property
     def nb_dims(self):
         return len(self.data)
 
@@ -64,6 +65,7 @@ class MemoryLevel:
         self,
         memory_instance: MemoryInstance,
         operands: list[MemoryOperand],
+        operands: list[MemoryOperand],
         mem_level_of_operands: dict[MemoryOperand, int],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
@@ -75,6 +77,7 @@ class MemoryLevel:
         @param id: an identifier used for reference check.
         """
         self.memory_instance = memory_instance
+        self.operands = operands
         self.operands = operands
         self.mem_level_of_operands = mem_level_of_operands
         self.oa_dim_sizes = operational_array.dimension_sizes
@@ -121,6 +124,8 @@ class MemoryLevel:
             port_name = "rw_port_" + str(i)
             # we assume the read-write port has the same bw for read and write
             port_bw = self.memory_instance.r_bw
+            # we assume the read-write port has the same bw for read and write
+            port_bw = self.memory_instance.r_bw
             port_bw_min = self.memory_instance.r_bw_min
             port_attr = MemoryPortType.READ_WRITE
             new_port = MemoryPort(port_name, port_bw, port_bw_min, port_attr)
@@ -140,13 +145,17 @@ class MemoryLevel:
     @property
     def unroll_count(self) -> int:
         """! Calculate how many times this memory instance is unrolled (duplicated) on the Operational Array"""
-        return math.prod(self.oa_dim_sizes[oa_dim] for oa_dim in self.oa_dim_sizes if oa_dim in self.served_dimensions)
+        return math.prod(self.oa_dim_sizes[oa_dim] for oa_dim in self.oa_dim_sizes if oa_dim not in self.served_dimensions)
 
     def __jsonrepr__(self):
         """! JSON Representation of this class to save it to a json file."""
         return str(self)
 
     def __update_formatted_string(self):
+        self.formatted_string = (
+            f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands}, "
+            f"served_dimensions={self.served_dimensions})"
+        )
         self.formatted_string = (
             f"MemoryLevel(instance={self.memory_instance.name},operands={self.operands}, "
             f"served_dimensions={self.served_dimensions})"

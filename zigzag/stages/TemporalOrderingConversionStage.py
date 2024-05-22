@@ -55,8 +55,8 @@ class TemporalOrderingConversionStage(Stage):
         spatial_mapping = self.spatial_mapping
         layer = self.layer
         layer_dim_sizes = layer.layer_dim_sizes
-        for i, utm in list(enumerate(user_temporal_mapping))[::-1]:
-            if utm[0] not in layer_dim_sizes:
+        for i, utm in list(enumerate(user_temporal_mapping.data))[::-1]:
+            if utm[0] not in layer_dim_sizes.layer_dims:
                 logger.warning(
                     f"Supplied temporal ordering {utm} for layer {layer} thrown out because loop not present in the layer"
                 )

@@ -50,6 +50,8 @@ class MultiplierArray(OperationalArray):
         multiplier: Multiplier,
         dimensions: dict[OADimension, int],
         operand_spatial_sharing: dict[str, set[tuple[int, ...]]] | None = None,
+        dimensions: dict[OADimension, int],
+        operand_spatial_sharing: dict[str, set[tuple[int, ...]]] | None = None,
     ):
         super(MultiplierArray, self).__init__(multiplier, dimensions)
         self.multiplier = self.unit

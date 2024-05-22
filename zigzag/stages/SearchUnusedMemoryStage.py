@@ -130,7 +130,8 @@ class SearchUnusedMemoryStage(Stage):
         self.remove_dummy_nodes_in_workload()
 
         # calculate the allowed lowest mem level per operand per layer
-        layer_list_without_dummy: list[LayerNode] = [layer for layer in self.workload.topological_sort()]  # type: ignore
+        layer_list_without_dummy: list[LayerNode] = [
+            layer for layer in self.workload.topological_sort()]  # type: ignore
         for _, layer in enumerate(layer_list_without_dummy):
             # handler for the first layer
             if layer == layer_list_without_dummy[0]:

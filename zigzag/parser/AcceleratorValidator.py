@@ -215,7 +215,7 @@ class AcceleratorValidator:
         if cells_data["served_dimensions"] != []:
             self.invalidate("IMC cells must be fully unrolled. Set `served_dimensions` to `[]`")
         # Memory size should be a multiply (e.g. 1,2,..) of weight precision.
-        if cells_data["size"]%self.data["operational_array"]["input_precision"][1] != 0:
+        if cells_data["size"] % self.data["operational_array"]["input_precision"][1] != 0:
             self.invalidate("IMC cells' size must be a multiply of the weight precision")
 
     def validate_operational_array(self):

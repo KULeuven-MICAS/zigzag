@@ -110,7 +110,7 @@ Temporal mapping stages
 
 Spatial mapping stages
 ----------------------
-* `SpatialMappingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SpatialMappingConversionStage.py#L11>`_: Pipeline stage that converts the spatial mapping from auser-provided spatial mapping across operational array dimensions to the internal spatial mapping representation used in the cost model.
+* `SpatialMappingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SpatialMappingConversionStage.py#L11>`_: Pipeline stage that converts the spatial mapping from user-provided spatial mapping across operational array dimensions to the internal spatial mapping representation used in the cost model.
 * `SpatialMappingGeneratorStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SpatialMappingGeneratorStage.py#L12>`_:     Pipeline stage that finds spatial mappings given a accelerator, core allocation, interconnection pattern on the allocated core and a layer. The spatial mappings are found using the interconnection pattern present on the core. The inner-most memory level served dimensions is used, as this is how the memories connect to the operational array.
 
 Cost model stages

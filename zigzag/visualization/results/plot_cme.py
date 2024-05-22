@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb
 import numpy as np
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
@@ -80,6 +81,7 @@ def bar_plot_cost_model_evaluations_total(
 
 
 def bar_plot_cost_model_evaluations_breakdown(
+    cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
     cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
 ):
     memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {

@@ -6,9 +6,11 @@ from typing import Any
 from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
 from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.utils import UniqueMessageFilter, json_repr_handler
+from zigzag.utils import UniqueMessageFilter, json_repr_handler
 
 
 logger = logging.getLogger(__name__)
+logger.addFilter(UniqueMessageFilter())
 logger.addFilter(UniqueMessageFilter())
 
 
@@ -51,6 +53,7 @@ class MappingSingleOADim:
         self.__data[key] = value  # type: ignore
 
     def __str__(self):
+        return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
         return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
 
     def __repr__(self):
@@ -174,6 +177,8 @@ class SpatialMapping(LayerAttribute):
                     logger.warning(
                         "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
                         "of %i. Reducing unrolling to this value.",
+                        "User provided spatial unrolling (%s:%i) in Dimension %s exceeded maximally allowed unrolling "
+                        "of %i. Reducing unrolling to this value.",
                         layer_dim,
                         unrolling,
                         oa_dim,
@@ -290,6 +295,7 @@ class SpatialMapping(LayerAttribute):
         return copy.deepcopy(self)
 
     def __str__(self):
+        return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
         return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
 
     def __eq__(self, other: Any) -> bool:
