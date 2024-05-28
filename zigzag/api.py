@@ -172,7 +172,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     workload: str | dict[int, dict[str, Any]] | ModelProto,
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
-    pe_array_scaling,
+    pe_array_scaling: int,
     opt: str = "latency",
     dump_filename_pattern: str = "outputs/{datetime}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",

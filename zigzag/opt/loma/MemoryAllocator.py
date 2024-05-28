@@ -91,8 +91,7 @@ class MemoryAllocator:
         core_id = self.layer.core_allocation[0]
         memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(core_id).memory_hierarchy
         top_levels = {mem_op: memory_hierarchy.get_operand_top_level(mem_op) for mem_op in self.mem_ops}
-        nodes = memory_hierarchy.nodes
-        for node in nodes:
+        for node in memory_hierarchy.topological_sort():
             self.allocate_node(node, top_levels)
 
         # After all the nodes have been allocated, we can create the TemporalMapping
@@ -103,7 +102,8 @@ class MemoryAllocator:
     def allocate_node(self, node: MemoryLevel, top_levels: dict[MemoryOperand, MemoryLevel]):
         """! Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
         @param node: The MemoryLevel to which we will allocate loops.
-        @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
+        @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that
+          mem_op.
         #TODO cleanup
         """
 
@@ -205,7 +205,8 @@ class MemoryAllocator:
         """! Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
         @param loops: The loops we want to calculate the size for.
         @para mem_op: The memory operand we are calculating the size for.
-        @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
+        @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision
+        calculation.
         """
 
         # First we compute the size of all loop dimensions present in this layer given the loops in 'loops'.

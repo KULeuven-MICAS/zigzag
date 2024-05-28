@@ -1,6 +1,5 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-import matplotlib.pyplot as plt
 from networkx import Graph
 
 from zigzag.hardware.architecture.memory_level import MemoryLevel

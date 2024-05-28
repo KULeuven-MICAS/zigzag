@@ -1096,26 +1096,6 @@ class CostModelEvaluation(CostModelEvaluationABC):
             total_inst_bw += inst_bw_4way
         return total_inst_bw
 
-    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
-        """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
-        required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
-        requirements if the given memory instance is not included in this CME's memory hierarchy.
-        NOTE: this function is used in Stream
-        """
-        # Check which operands require offchip memory throughout the computation
-        offchip_mem_operands: list[MemoryOperand] = []
-        for op, memory_levels in self.mem_hierarchy_dict.items():
-            last_mem_level = memory_levels[-1]
-            if last_mem_level.memory_instance == memory_instance:
-                offchip_mem_operands.append(op)
-        # Obtain the required instantaneous bandwidth to/from offchip for these operands
-        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
-        for mem_op in offchip_mem_operands:
-            layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-            inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
-            total_inst_bw += inst_bw_4way
-        return total_inst_bw
-
     def __str__(self):
         return f"CostModelEvaluation({self.layer}, core {self.core_id})"
 

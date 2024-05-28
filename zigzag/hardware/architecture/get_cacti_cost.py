@@ -1,6 +1,5 @@
 import os
 import platform
-from sre_constants import ANY
 from typing import Any
 
 
@@ -528,7 +527,7 @@ def get_cacti_cost(
         msg = f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
         _logging.critical(msg)
         exit()
-    result: dict[Any] = {}
+    result: dict[str, Any] = {}
     raw_result = f.readlines()
     f.close()
     for ii, each_line in enumerate(raw_result):
