@@ -15,7 +15,7 @@ class DefaultNodeParser(ONNXOperatorParser):
         node_obj = DummyNode(
             node_id=self.node_id,
             predecessors=predecessors,
-            node_name=self.node.name,
+            node_name=self.get_node_name(),
             node_type=self.node.op_type.lower(),
         )
 

@@ -59,6 +59,11 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         # assert len(predecessors) <= 2, f"Unexpected number of layer node predecessors: {len(predecessors)}"
         return predecessors
 
+    def get_node_name(self) -> str:
+        if self.node.name != "":
+            return self.node.name
+        return f"Layer{self.node_id}"
+
     def get_layer_node_user_format_gemm(
         self,
         batch_size: int,
@@ -72,7 +77,7 @@ class ONNXOperatorParser(metaclass=ABCMeta):
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
-        data["name"] = f"Layer{self.node_id}"
+        data["name"] = self.get_node_name()
         data["operator_type"] = self.node.op_type
         data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
         data["loop_dims"] = ["B", "C", "K", "D"]
