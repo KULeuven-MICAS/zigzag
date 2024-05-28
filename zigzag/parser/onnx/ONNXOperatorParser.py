@@ -48,3 +48,43 @@ class ONNXOperatorParser(metaclass=ABCMeta):
             return node.input[3]
         else:
             raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
+
+    def get_predecessor_id(self) -> int | None:
+        """Compute node input source"""
+        predecessors: list[int] = []
+        for node_input in self.node.input:
+            for n in self.nodes_outputs:
+                if node_input in self.nodes_outputs[n]:
+                    predecessors.append(n)
+        assert len(predecessors) <= 1, "Only a single layer operand source expected"
+        prev_node_id = None if len(predecessors) == 0 else predecessors.pop()
+        return prev_node_id
+
+    def get_layer_node_user_format_gemm(
+        self,
+        batch_size: int,
+        size_in: int,
+        size_out: int,
+        size_shared: int,
+        prev_node_id: int | None = None,
+    ) -> dict[str, Any]:
+        """! Generate layer data in user input format for MatMul or GEMM ONNX nodes.
+        W[size_out][size_in] * I[batch_size][size_in][size_shared] -> O [batch_size][size_out][size_shared]
+        """
+
+        data: dict[str, Any] = {}
+        data["id"] = self.node_id
+        data["name"] = f"Layer{self.node_id}"
+        data["operator_type"] = self.node.op_type
+        data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
+        data["loop_dims"] = ["B", "C", "K", "D"]
+        data["loop_sizes"] = [batch_size, size_in, size_out, size_shared]
+
+        data["dimension_relations"] = []
+        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
+        # Constant operand
+        data["operand_source"] = {"W": self.node_id}
+        if prev_node_id is not None:
+            data["operand_source"]["I"] = prev_node_id
+
+        return data

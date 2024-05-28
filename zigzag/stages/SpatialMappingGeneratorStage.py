@@ -295,7 +295,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         memory_operand_links: MemoryOperandLinks = self.layer.memory_operand_links
 
-        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one dimension
+        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one
+        # dimension
         act_served_oa_dims_list: list[ServedMemDimensions] = [
             mem_level.served_dimensions
             for mem_level in self.memory_hierarchy.get_inner_memories()
