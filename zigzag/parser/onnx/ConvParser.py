@@ -73,7 +73,7 @@ class ConvParser(ONNXOperatorParser):
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
-        data["name"] = f"Layer{self.node_id}"
+        data["name"] = self.get_node_name()
         data["operator_type"] = self.node.op_type
         # IMPORTANT: If any of the input loops require padding, they should be defined as the rightmost dimensions
         # in the equation.  This is because we construct the dimensionality order and then add the padding to those last
