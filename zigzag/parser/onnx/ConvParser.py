@@ -41,7 +41,6 @@ class ConvParser(ONNXOperatorParser):
         padding: list[int],
         ia_shape: list[int],
         oa_shape: list[int],
-        prev_node_id: int | None = None,
     ) -> dict[str, Any]:
         """! Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a
         given Layer Attribute, the Layer Attribute is not included in the returned dict.
@@ -83,10 +82,12 @@ class ConvParser(ONNXOperatorParser):
             f"iy={strides[1]}*oy+{dilations[1]}*fy",
         ]
         data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
-        # Constant operand
+
+        # Operand sources
+        predecessors = self.get_node_predecessors()
         data["operand_source"] = {"W": self.node_id}
-        if prev_node_id is not None:
-            data["operand_source"]["I"] = prev_node_id
+        if len(predecessors) >= 1:
+            data["operand_source"]["I"] = predecessors[0]
 
         # Add padding information
         data["pr_loop_dims"] = ["IX", "IY"]
@@ -114,7 +115,6 @@ class ConvParser(ONNXOperatorParser):
         # ia_data_type, oa_data_type, w_data_type = self.get_input_output_weight_data_type()
 
         # Create LayerNode
-        prev_node_id = self.get_predecessor_id()
         layer_data = self.get_layer_node_user_format(
             kernel_shape,
             strides,
@@ -123,7 +123,6 @@ class ConvParser(ONNXOperatorParser):
             padding,
             ia_dimension_shape,
             oa_dimension_shape,
-            prev_node_id,
         )
         factory = LayerNodeFactory(layer_data, self.mapping_data)
         layer_node = factory.create()

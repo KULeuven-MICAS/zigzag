@@ -57,13 +57,11 @@ class MatMulParser(ONNXOperatorParser):
                 raise ValueError("Input size of Matmul ONNX node must be either 2 or 3.")
 
         # Create LayerNode
-        prev_node_id = self.get_predecessor_id()
         layer_data = self.get_layer_node_user_format_gemm(
             batch_size=batch_size,
             size_in=size_in,
             size_out=size_out,
             size_shared=size_shared,
-            prev_node_id=prev_node_id,
         )
         factory = LayerNodeFactory(layer_data, self.mapping_data)
         layer_node = factory.create()
