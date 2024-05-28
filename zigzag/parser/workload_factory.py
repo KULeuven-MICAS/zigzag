@@ -51,13 +51,12 @@ class LayerNodeFactory:
         """
         self.node_data = node_data
         self.mapping_data = mapping_data
+        self.layer_id: int = self.node_data["id"]
+        self.node_name: str = self.node_data["name"] if self.node_data["name"] is not None else f"Layer{self.layer_id}"
 
     def create(self) -> LayerNode:
-        layer_id: int = self.node_data["id"]
-        node_name: str = f"Layer{layer_id}"
         node_attr = self.create_node_attr()
-
-        return LayerNode(layer_id=layer_id, node_name=node_name, node_attr=node_attr)
+        return LayerNode(layer_id=self.layer_id, node_name=self.node_name, node_attr=node_attr)
 
     def create_node_attr(self) -> LayerNodeAttributes:
         # From node data
@@ -72,7 +71,7 @@ class LayerNodeFactory:
         pr_layer_dim_sizes = self.create_pr_layer_dim_sizes()
 
         # From mapping data
-        mapping_factory = MappingFactory(layer_type, self.mapping_data)
+        mapping_factory = MappingFactory(self.node_name, layer_type, self.mapping_data)
         spatial_mapping = mapping_factory.create_spatial_mapping()
         spatial_mapping_hint = mapping_factory.create_spatial_mapping_hint()
         core_allocation = mapping_factory.get_core_allocation()
@@ -176,14 +175,22 @@ class LayerNodeFactory:
 
 
 class MappingFactory:
-    """Create mapping-related instances from validated user-provided data"""
+    """Converts validated and normalized user-provided data into mapping-related instances.
+    The mapping for this layer is chosen according to the following priority:
+    1. The name of the layer
+    2. The operation type of the layer (if the layer name is not defined in the mapping)
+    3. The default mapping (if the operation type is not defined in the mapping)
+    """
 
-    def __init__(self, operation_type: str, mapping_data: list[dict[str, Any]]):
+    def __init__(self, layer_name: str, operation_type: str, mapping_data: list[dict[str, Any]]):
         """
+        @param Name of the layer for which the Mapping is being constructed.
         @param operation_type Name of the layer operation for which the Mapping is being constructed.
         @param mapping_data user-given, validated and normalized mapping data for all operation types.
         """
-        if operation_type in map(lambda x: x["name"], mapping_data):
+        if layer_name in map(lambda x: x["name"], mapping_data):
+            self.mapping_data: dict[str, Any] = next(filter(lambda x: x["name"] == layer_name, mapping_data))
+        elif operation_type in map(lambda x: x["name"], mapping_data):
             self.mapping_data: dict[str, Any] = next(filter(lambda x: x["name"] == operation_type, mapping_data))
         else:
             self.mapping_data = next(filter(lambda x: x["name"] == "default", mapping_data))
