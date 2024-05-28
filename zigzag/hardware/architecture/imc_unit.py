@@ -235,7 +235,7 @@ class ImcUnit(OperationalArrayABC):
         # Get the number of time of activating macro
         # Note: it is normalized to a hardware that has only one macro (see equation below)
         # Equation = total MAC number of a layer/spatial mapping on a single macro
-        macro_activation_times = layer.total_MAC_count / float(spatial_mapping_size_in_macro)
+        macro_activation_times = layer.total_mac_count / float(spatial_mapping_size_in_macro)
         return (
             mapped_rows_total_per_macro,
             mapped_rows_for_adder_per_macro,

@@ -128,9 +128,9 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
     try:
         name_idx = attrs_names.index(name)
         attr_type = attrs[name_idx].type
-        if attr_type == AttributeProto.AttributeType.INT:
+        if attr_type == AttributeProto.AttributeType.INT:  # type: ignore
             return int(attrs[name_idx].i)
-        elif attr_type == AttributeProto.AttributeType.INTS:
+        elif attr_type == AttributeProto.AttributeType.INTS:  # type: ignore
             return list(attrs[name_idx].ints)
         else:
             raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")

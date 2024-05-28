@@ -8,7 +8,7 @@ from typing import Any
 
 
 from zigzag.stages.Stage import Stage, StageCallable
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
@@ -30,7 +30,7 @@ class PlotTemporalMappingsStage(Stage):
     def run(self):
         """! Run the compare stage by comparing a new cost model output with the current best found result."""
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
-        cmes: list[CostModelEvaluation] = []
+        cmes: list[CostModelEvaluationABC] = []
         filename = self.plot_filename_pattern
         for cme, extra_info in substage.run():
             assert isinstance(cme, CostModelEvaluation)

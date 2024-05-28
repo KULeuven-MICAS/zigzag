@@ -2,7 +2,7 @@ import re
 import logging
 from typing import Any
 
-from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, OADimension, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, OADimension, UnrollFactor
 from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping, SpatialMappingHint
 from zigzag.parser.WorkloadValidator import WorkloadValidator
 from zigzag.utils import UniqueMessageFilter
@@ -109,7 +109,7 @@ class LayerNodeFactory:
 
     def create_layer_dim_sizes(self) -> LayerDimSizes:
         loop_dims = [LayerDim(x) for x in self.node_data["loop_dims"]]
-        loop_sizes: list[UnrollFactorInt] = self.node_data["loop_sizes"]
+        loop_sizes: list[UnrollFactor] = self.node_data["loop_sizes"]
 
         data = {dim: size for dim, size in zip(loop_dims, loop_sizes)}
         return LayerDimSizes(data)
@@ -170,12 +170,14 @@ class LayerNodeFactory:
             return None
 
         pr_layer_dims: list[LayerDim] = [LayerDim(x) for x in self.node_data["pr_loop_dims"]]
-        pr_sizes: list[int] = self.node_data["pr_loop_sizes"]
+        pr_sizes: list[UnrollFactor] = self.node_data["pr_loop_sizes"]
         size_dict = {layer_dim: size for layer_dim, size in zip(pr_layer_dims, pr_sizes)}
         return LayerDimSizes(size_dict)
 
 
 class MappingFactory:
+    """Create mapping-related instances from validated user-provided data"""
+
     def __init__(self, operation_type: str, mapping_data: list[dict[str, Any]]):
         """
         @param operation_type Name of the layer operation for which the Mapping is being constructed.

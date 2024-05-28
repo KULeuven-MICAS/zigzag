@@ -258,7 +258,7 @@ class MemoryAllocator:
         # TODO: Take into account the operand precision which can change based on the loops picked
         mem_capacity = node.memory_instance.size
 
-        # nb_operations = self.__main_inputs.layer.total_MAC_count
+        # nb_operations = self.__main_inputs.layer.total_mac_count
         # all_accesses = {mem_op: [nb_operations//size for size in all_sizes[mem_op]] for mem_op in mem_ops}
 
         # If for one of the mem_ops this is the top level memory, we have to enforce that all unallocated loops

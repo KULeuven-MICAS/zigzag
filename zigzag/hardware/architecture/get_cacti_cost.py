@@ -1,5 +1,7 @@
 import os
 import platform
+from sre_constants import ANY
+from typing import Any
 
 
 class CactiConfig:
@@ -267,7 +269,7 @@ class CactiConfig:
             "=======USER DEFINE======= \n",
         ]
 
-        self.config_options = {}
+        self.config_options: dict[str, Any] = {}
         """ entire memory size (unit: Byte, range: >= 64)"""
         self.config_options["cache_size"] = {
             "string": "-size (bytes) ",
@@ -375,17 +377,17 @@ class CactiConfig:
 
         return
 
-    def change_default_value(self, name_list, new_value_list):
+    def change_default_value(self, name_list: list[str], new_value_list: list[Any]):
         for idx, name in enumerate(name_list):
             self.config_options[name]["default"] = new_value_list[idx]
 
-    def write_config(self, user_config, path):
+    def write_config(self, user_config: list[Any], path: str):
         f = open(path, "w+")
         f.write("".join(self.baseline_config))
         f.write("".join(user_config))
         f.close()
 
-    def call_cacti(self, path):
+    def call_cacti(self, path: str):
         # os.system('./cacti -infile ./self_gen/cache.cfg')
         # print('##########################################################################################')
         # stream = os.popen('./cacti -infile %s' %path)
@@ -396,7 +398,7 @@ class CactiConfig:
             print(l, end="")
         return output
 
-    def cacti_auto(self, user_input, path):
+    def cacti_auto(self, user_input: list[Any], path: str):
         """
         user_input format can be 1 out of these 3:
         user_input = ['default']
@@ -404,15 +406,15 @@ class CactiConfig:
         user_input = ['sweep', ['IO_bus_width'/'']]
         """
 
-        user_config = []
-        """ use default value for each parameter """
+        user_config: list[Any] = []
+        # use default value for each parameter
         if user_input[0] == "default":
             for itm in self.config_options.keys():
                 user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
             self.write_config(user_config, path)
             self.call_cacti(path)
 
-        """ use user defined value for each user defined parameter """
+        # use user defined value for each user defined parameter
         if user_input[0] == "single":
             for itm in self.config_options.keys():
                 if itm in user_input[1][0]:
@@ -427,7 +429,7 @@ class CactiConfig:
 
         if user_input[0] == "sweep":
             # produce non-sweeping term
-            common_part = []
+            common_part: list[str] = []
             for itm in self.config_options.keys():
                 if itm not in user_input[1]:
                     common_part.append(
@@ -452,12 +454,14 @@ def get_cacti_cost(
     """
     extract time, area, r_energy, w_energy cost from cacti 7.0
     :param cacti_path:          the location of cacti
-    :param tech_node:           technology node (directly supported node by CACTI: 0.022, 0.032, 0.045, 0.065, 0.09, 0.18)
+    :param tech_node:           technology node (directly supported node by CACTI: 0.022, 0.032, 0.045, 0.065, 0.09,
+        0.18)
     :param mem_type:            memory type (sram or dram)
     :param mem_size_in_byte:    memory size (unit: byte)
     :param bw:                  memory IO bitwidth
-    :param hd_hash:             input file suffix when generating CACTI input file (useful and in avoid of file conflict for multi-processing simulation)
-    Attention: for CACTI, the miminum mem_size=64B, minimum_rows=32
+    :param hd_hash:             input file suffix when generating CACTI input file (useful and in avoid of file conflict
+        for multi-processing simulation)
+    Attention: for CACTI, the minimum mem_size=64B, minimum_rows=32
     """
     import logging as _logging
 
@@ -524,7 +528,7 @@ def get_cacti_cost(
         msg = f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
         _logging.critical(msg)
         exit()
-    result = {}
+    result: dict[Any] = {}
     raw_result = f.readlines()
     f.close()
     for ii, each_line in enumerate(raw_result):

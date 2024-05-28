@@ -29,7 +29,7 @@ def accelerator():
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload, accelerator, mapping):
+def test_api(workload: str, accelerator: str, mapping: str):
     (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
     (expected_energy, expected_latency, expected_tclk, expected_area) = ens_lats_clks_areas[workload]
     assert energy == pytest.approx(expected_energy)
