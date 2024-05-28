@@ -47,18 +47,19 @@ class GemmParser(ONNXOperatorParser):
         batch_size = 1 if ia_dimension_shape[0] == 0 else ia_dimension_shape[0]
 
         match len(ia_dimension_shape):
+            # TODO: is it I*W->O or W*I->O?
             case 2:
                 size_in = ia_dimension_shape[1]
                 size_out = oa_dimension_shape[1]
                 # No reduction dimension
                 size_shared = 1
             case 3:
-                # Input: batch_size x size_in x size_shared
-                size_in = ia_dimension_shape[1]
-                size_shared = ia_dimension_shape[2]
-                # Output: batch_size x size_out x size_shared
-                size_out = oa_dimension_shape[1]
-                assert oa_dimension_shape[2] == size_shared
+                # Input: batch_size x size_shared x size_in
+                size_shared = ia_dimension_shape[1]
+                size_in = ia_dimension_shape[2]
+                # Output: batch_size x size_shared x size_out
+                size_out = oa_dimension_shape[2]
+                assert oa_dimension_shape[1] == size_shared
             case _:
                 raise ValueError("Input size of Matmul ONNX node must be either 2 or 3.")
 
