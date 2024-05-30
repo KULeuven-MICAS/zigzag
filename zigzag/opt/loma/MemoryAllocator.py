@@ -1,3 +1,4 @@
+from collections import defaultdict
 import numpy as np
 from math import prod
 
@@ -209,12 +210,9 @@ class MemoryAllocator:
         """
 
         # First we compute the size of all loop dimensions present in this layer given the loops in 'loops'.
-        all_dimensions = self.layer.layer_dims
-        all_dim_sizes: dict[LayerDim, UnrollFactor] = {dim: 1 for dim in all_dimensions}
+        all_dim_sizes: dict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
         for loop in loops:
             all_dim_sizes[loop.layer_dim] *= loop.size
-
-        corresponding_layer_op = self.mem_to_layer_op[mem_op]
 
         layer_op = self.mem_to_layer_op[mem_op]
         tensor_size = self.layer.calc_tensor_size(layer_op, LayerDimSizes(all_dim_sizes))
@@ -225,7 +223,7 @@ class MemoryAllocator:
         # Which in turn means all remaining unallocated loops for this MemoryLevel must not contain any ir loops.
         # Moreover, there might be unallocated spatial loops.
         if mem_op == Constants.OUTPUT_MEM_OP:
-            ir_dims = self.layer.loop_relevancy_info.get_ir_layer_dims(corresponding_layer_op)
+            ir_dims = self.layer.loop_relevancy_info.get_ir_layer_dims(layer_op)
             layer_op = self.mem_to_layer_op[mem_op]
             unallocated_spatial_dims: list[LayerDim] = [
                 dim for dim, _ in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])
