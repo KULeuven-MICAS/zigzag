@@ -103,33 +103,24 @@ class MemoryOperandLinks(LayerAttribute):
 
     def __init__(self, data: dict[LayerOperand, MemoryOperand]):
         self.data = data
+        # Class variables are computed and stored once to improve runtime performance
+        self.layer_operands = list(self.data.keys())
+        self.mem_operands = list(self.data.values())
+        self.__mem_to_layer_op_dict = {self.data[layer_op]: layer_op for layer_op in self.layer_operands}
+        assert len(self.__mem_to_layer_op_dict) == len(self.data), "MemoryOperandLinks contains duplicate MemoryOperand"
 
     def layer_to_mem_op(self, layer_op: LayerOperand) -> MemoryOperand:
-        assert self.contains_layer_op(layer_op)
         return self.data[layer_op]
 
     def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
-        """! Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained
-        within"""
-        assert self.contains_mem_op(mem_op)
-        candidates = {k for k, v in self.data.items() if v == mem_op}
-        assert len(candidates) <= 1, f"MemoryOperandLinks contains duplicate MemoryOperand {mem_op}"
-        assert len(candidates) > 0, f"Memory operand {mem_op} is not present"
-        return candidates.pop()
+        """! Given a MemoryOperand, return the linked LayerOperand"""
+        return self.__mem_to_layer_op_dict[mem_op]
 
     def contains_layer_op(self, layer_op: LayerOperand) -> bool:
         return layer_op in self.layer_operands
 
     def contains_mem_op(self, mem_op: MemoryOperand) -> bool:
         return mem_op in self.mem_operands
-
-    @property
-    def layer_operands(self) -> set[LayerOperand]:
-        return set(self.data.keys())
-
-    @property
-    def mem_operands(self) -> set[MemoryOperand]:
-        return set(self.data.values())
 
     def copy(self):
         return MemoryOperandLinks(self.data.copy())

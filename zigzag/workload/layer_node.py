@@ -195,14 +195,16 @@ class LayerNode(LayerNodeABC):
                 "core_allocation_is_fixed": self.core_allocation_is_fixed,
                 "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
-                # "source_storage_level": self.source_storage_level, # NOTE not used?
             }
         )
 
-    def calc_tensor_size(self, layer_op: LayerOperand, layer_dim_sizes: LayerDimSizes):
+    def calc_tensor_size(self, layer_op: LayerOperand, layer_dim_sizes: LayerDimSizes) -> float:
         """! Calculates the tensor size (nb of elements) for the given operand layer_op with the given loop dimension
         sizes layer_dim_sizes."""
-        return math.prod(self.calc_tensor_dims(layer_op, layer_dim_sizes).values())
+        r_layer_dims = self.loop_relevancy_info.get_r_layer_dims(layer_op)
+        pr_layer_dims = list(self.loop_relevancy_info.get_pr_layer_dims(layer_op).keys())
+        sizes = [self.calc_tensor_dim(dim, layer_dim_sizes) for dim in (r_layer_dims + pr_layer_dims)]
+        return math.prod(sizes)
 
     def calc_tensor_dim(self, dim: LayerDim, layer_dim_sizes: LayerDimSizes):
         if dim in layer_dim_sizes:
@@ -220,10 +222,6 @@ class LayerNode(LayerNodeABC):
             pr_dim_size = min(self.pr_layer_dim_sizes[dim], pr_dim_size)
             return pr_dim_size
         elif dim in self.layer_dim_sizes:
-            # This case is possible when the `layer_dim_sizes` is used to scope which LayerDims should be accounted for
-            # assert (
-            #     self.layer_dim_sizes[dim] == 1
-            # ), "This line should only be reached when the dim has a size of 1 in the layer."
             return 1
         else:
             raise ValueError("Something went wrong in the initialization of the layer, or in the caller function.")

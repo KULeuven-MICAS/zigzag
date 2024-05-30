@@ -870,9 +870,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.SS_comb = max(SS_comb_list)
 
     def calc_data_loading_offloading_latency(self):
-        """! Calculate the initial/final data loading/off-loading cycle by separating out
-        the first-time input operands' / the last-time output operand's data movement
-        on corresponding ports.
+        """! Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands'
+        / the last-time output operand's data movement on corresponding ports.
         """
         # Collect ports' initial data-loading and final data-offloading activities
         data_loading_per_mem_inst: list[dict[str, list[PortBeginOrEndActivity]]] = []
