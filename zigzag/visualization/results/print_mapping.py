@@ -109,6 +109,7 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
         )
         print("".ljust(loop_column_width + 3 * memory_column_width, "="))
 
+    print(f"Loop ordering for {cme.layer.name}")
     # Print Temporal loops header
     operands = list(map(lambda x: x.name, cme.layer.memory_operand_links.layer_operands))
     print_header("Temporal Loops", operands)
@@ -119,6 +120,7 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     print_header("Spatial Loops", operands)
     # Start recursive spatial loops printing
     indent = recursive_print(spatial_loops, loop_str="parfor", offset=indent, indent=False)
+    print()
 
 
 if __name__ == "__main__":

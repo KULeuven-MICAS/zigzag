@@ -64,7 +64,7 @@ mainstage = MainStage(
     accelerator=args.accelerator,  # required by AcceleratorParserStage
     workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
-    dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",  # output file save pattern
+    dump_folder=f"outputs/{experiment_id}",  # output folder
     loma_lpf_limit=6,  # required by LomaStage
     loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
 )

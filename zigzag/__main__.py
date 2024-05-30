@@ -1,3 +1,4 @@
+from datetime import datetime
 from zigzag.stages import *
 import argparse
 
@@ -60,7 +61,7 @@ def main():
         accelerator_path=args.accelerator,  # required by AcceleratorParserStage
         onnx_model_path=args.model,  # required by ONNXModelParserStage
         mapping_path=args.mapping,  # required by ONNXModelParserStage
-        dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
+        dump_folder=f"outputs/{datetime.now()}",  # Output folder
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
     )
