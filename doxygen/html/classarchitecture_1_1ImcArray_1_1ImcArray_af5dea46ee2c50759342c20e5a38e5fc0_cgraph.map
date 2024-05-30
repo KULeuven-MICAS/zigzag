@@ -1,0 +1,9 @@
+<map id="get_tclk" name="get_tclk">
+<area shape="rect" id="node1" title="get clock cycle time of imc macros (worst path: dacs &#45;&gt; mults &#45;&gt; adcs &#45;&gt; adders &#45;&gt; accumulators)" alt="" coords="5,177,80,203"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#abf59988502ae099a822e42c63b8b01ff" title="delay of 1b adder: carry&#45;in to carry&#45;out" alt="" coords="128,5,359,47"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a80099bbf94ed9b4114a745ecad336c02" title="delay of 1b adder: input to carry&#45;out" alt="" coords="132,71,355,112"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#afbb1f109bce2ae66e15b59030c7952dd" title="delay of 1b adder: input to sum&#45;out" alt="" coords="132,136,355,177"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a42628b6f11e97918557c066976572d61" title="delay of 1b multiplier 1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate" alt="" coords="146,201,341,243"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a8b8741a3806ca45074bc9862f3ee326a" title="single ADC and analog accumulation cost calculation" alt="" coords="190,267,297,294"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a696b6041cd56c0c1ce7c583989b7d2f0" title="single DAC cost calculation" alt="" coords="190,318,297,345"/>
+</map>

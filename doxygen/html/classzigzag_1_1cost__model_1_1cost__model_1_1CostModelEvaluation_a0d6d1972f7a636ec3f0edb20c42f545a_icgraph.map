@@ -1,0 +1,6 @@
+<map id="calc_memory_utilization" name="calc_memory_utilization">
+<area shape="rect" id="node1" title="Calculate occupancy for each physical memory based on the mapping." alt="" coords="541,39,724,65"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="351,5,393,32"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="251,56,493,112"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
+</map>

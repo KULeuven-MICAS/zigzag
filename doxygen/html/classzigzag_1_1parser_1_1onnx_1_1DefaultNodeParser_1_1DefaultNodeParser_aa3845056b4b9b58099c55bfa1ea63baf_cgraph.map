@@ -1,0 +1,6 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title="Run the parser." alt="" coords="5,60,48,87"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#a86cbc75d786393a121f8a2ee3aaa26d4" title=" " alt="" coords="96,60,272,87"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="320,5,563,61"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="320,85,563,141"/>
+</map>

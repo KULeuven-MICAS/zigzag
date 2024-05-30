@@ -1,0 +1,5 @@
+<map id="generate_spatial_mapping_single_oa_dim" name="generate_spatial_mapping_single_oa_dim">
+<area shape="rect" id="node1" title="Generate a list of possible mappings for the given OADimension." alt="" coords="5,5,200,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718" title="Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimensions,..." alt="" coords="248,5,439,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="487,13,636,39"/>
+</map>

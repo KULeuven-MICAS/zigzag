@@ -1,0 +1,10 @@
+<map id="generate_layer_node" name="generate_layer_node">
+<area shape="rect" id="node1" title=" " alt="" coords="5,109,164,135"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="559,5,761,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="230,130,473,186"/>
+<area shape="rect" id="node6" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,221,491,263"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="269,64,433,105"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="539,71,781,127"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="539,151,781,207"/>
+<area shape="rect" id="node7" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,232,761,273"/>
+</map>

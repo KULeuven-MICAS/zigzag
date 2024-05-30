@@ -1,0 +1,17 @@
+<map id="get_total_unrolling_of_layer_dim" name="get_total_unrolling_of_layer_dim">
+<area shape="rect" id="node1" title="Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions." alt="" coords="1219,211,1363,252"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a30c8fbeb83ec1de312c166836540d829" title="Verify." alt="" coords="1001,167,1143,194"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a497c3dfc1912efa28b145e17f375b147" title="Return a value that indicates how well this SpatialMapping is expected to perform when used in ZigZag..." alt="" coords="973,218,1171,245"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#adaf16e02b62aa4fbe35ddf9e83e49b82" title="Return True iff 1) the instance&#39;s OA Dimensions have been initialized to the size from the hardware a..." alt="" coords="1036,269,1108,295"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#a0735d480249a52cdfa6f72f238254d9d" title=" " alt="" coords="643,196,925,237"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1MappingValidator_1_1MappingValidator.html#af6f3e6fff647ae3b8de81dd3f746a359" title="Validate the user&#45;provided accelerator data." alt="" coords="345,5,574,47"/>
+<area shape="rect" id="node13" href="$classzigzag_1_1parser_1_1MappingValidator_1_1MappingValidator.html#a0735d480249a52cdfa6f72f238254d9d" title=" " alt="" coords="669,261,899,303"/>
+<area shape="rect" id="node14" href="$classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator.html#aafd1d6478f636a27195fd77637a7084c" title="Return normalized, user&#45;provided data." alt="" coords="657,327,911,368"/>
+<area shape="rect" id="node15" href="$classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator.html#af6f3e6fff647ae3b8de81dd3f746a359" title="Validate the user&#45;provided accelerator data." alt="" coords="667,392,901,433"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#af6f3e6fff647ae3b8de81dd3f746a359" title="Validate the user&#45;provided accelerator data." alt="" coords="324,123,595,164"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#abc3c884b1a8880f72028c7deaa10aa06" title=" " alt="" coords="324,189,595,245"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#ab7e6614536d0b9217d425dbba655b71b" title=" " alt="" coords="5,309,276,365"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#a3d52d23c5d5d37c96d3f567a24f3e40c" title="Assumes that the multiplier type is IMC." alt="" coords="324,269,595,325"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#ad76007bc2c0170b49ce0c1c0a9299651" title="Assumes that the multiplier type is not IMC." alt="" coords="324,349,595,405"/>
+<area shape="rect" id="node12" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#ad7c1348435472a391c60b6847f205b8e" title=" " alt="" coords="324,429,595,485"/>
+</map>

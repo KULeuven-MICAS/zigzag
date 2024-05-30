@@ -1,0 +1,9 @@
+<map id="generate_layer_node_for_conv" name="generate_layer_node_for_conv">
+<area shape="rect" id="node1" title=" " alt="" coords="5,93,164,134"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="251,27,452,69"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="273,93,430,134"/>
+<area shape="rect" id="node6" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,162,491,203"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="539,5,781,61"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="539,85,781,141"/>
+<area shape="rect" id="node7" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,166,761,207"/>
+</map>

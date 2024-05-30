@@ -1,0 +1,12 @@
+<map id="is_valid" name="is_valid">
+<area shape="rect" id="node1" title="Return True iff 1) the instance&#39;s OA Dimensions have been initialized to the size from the hardware a..." alt="" coords="5,93,77,120"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7" title="Return a set containing all the LayerDims contained in the mapping at any OA Dim." alt="" coords="125,5,313,32"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ad242b2417c78baf1fa2e2a40c9874ea0" title="Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions." alt="" coords="147,57,291,98"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#aa557c0a1292ba357db900b8d2f8cd96e" title=" " alt="" coords="190,123,249,149"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9b2e128c771f0438e6a35c4e84095f66" title=" " alt="" coords="181,173,258,200"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9" title="Convert all unrollings (pair of LayerDim and UnrollFactor) at all OADimension to a single list of tup..." alt="" coords="427,33,562,60"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c" title="Return a list with all of the MappingSingleOADims contained in this instance." alt="" coords="676,33,763,60"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a" title=" " alt="" coords="811,33,876,60"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="361,111,628,153"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="469,177,521,204"/>
+</map>

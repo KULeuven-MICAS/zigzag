@@ -1,0 +1,4 @@
+<map id="get_max_unrolling" name="get_max_unrolling">
+<area shape="rect" id="node1" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="5,13,148,39"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09" title="Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure." alt="" coords="196,5,335,47"/>
+</map>

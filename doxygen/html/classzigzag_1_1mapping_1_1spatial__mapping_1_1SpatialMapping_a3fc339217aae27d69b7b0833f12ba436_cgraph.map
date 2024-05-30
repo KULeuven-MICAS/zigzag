@@ -1,0 +1,10 @@
+<map id="delete_layer_dim" name="delete_layer_dim">
+<area shape="rect" id="node1" title=" " alt="" coords="5,39,140,65"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7" title="Return a set containing all the LayerDims contained in the mapping at any OA Dim." alt="" coords="188,9,376,36"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9b2e128c771f0438e6a35c4e84095f66" title=" " alt="" coords="243,64,321,91"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9" title="Convert all unrollings (pair of LayerDim and UnrollFactor) at all OADimension to a single list of tup..." alt="" coords="490,5,625,32"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c" title="Return a list with all of the MappingSingleOADims contained in this instance." alt="" coords="739,5,825,32"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a" title=" " alt="" coords="873,5,939,32"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="424,57,691,98"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="531,123,583,149"/>
+</map>

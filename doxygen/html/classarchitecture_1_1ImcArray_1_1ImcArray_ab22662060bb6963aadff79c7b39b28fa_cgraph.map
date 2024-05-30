@@ -1,0 +1,8 @@
+<map id="get_peak_energy_single_cycle" name="get_peak_energy_single_cycle">
+<area shape="rect" id="node1" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="5,136,185,177"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a827cabcd831645563e9173f0dd6f86e8" title="energy of 1b full adder Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate" alt="" coords="246,5,439,47"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a6ce15e3c640e7b5754fcd351d0bc52c3" title="energy of 1b multiplier 1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate wh..." alt="" coords="233,71,452,112"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a656fbb9294431cc9666fc91fabafec82" title="energy of 1b DFF" alt="" coords="249,136,437,177"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a8b8741a3806ca45074bc9862f3ee326a" title="single ADC and analog accumulation cost calculation" alt="" coords="289,202,396,229"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a696b6041cd56c0c1ce7c583989b7d2f0" title="single DAC cost calculation" alt="" coords="289,253,396,279"/>
+</map>

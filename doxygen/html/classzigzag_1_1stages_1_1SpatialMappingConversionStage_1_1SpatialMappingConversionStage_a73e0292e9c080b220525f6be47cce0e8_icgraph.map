@@ -1,0 +1,7 @@
+<map id="check_if_oa_dim_mapping_is_first_max" name="check_if_oa_dim_mapping_is_first_max">
+<area shape="rect" id="node1" title="For the case when there is layer dimension that is mapped on multiple oa dimensions." alt="" coords="763,5,957,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a18e1ee0a6e9cfb51c4d4d209ee40c349" title=" " alt="" coords="547,5,715,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a8a4d9a41f5e54b12e36a1874f37d524d" title="Convert the SpatialMapping instance in user&#45;defined format (spatial mapping across operational array ..." alt="" coords="341,5,499,47"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="251,13,293,39"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+</map>

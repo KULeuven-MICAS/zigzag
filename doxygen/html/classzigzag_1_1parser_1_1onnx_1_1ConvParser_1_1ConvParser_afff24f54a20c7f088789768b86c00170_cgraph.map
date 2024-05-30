@@ -1,0 +1,10 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title="Run the parser and return the created LayerNode object." alt="" coords="5,100,48,127"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="96,93,255,134"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="341,27,543,69"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="363,93,521,134"/>
+<area shape="rect" id="node7" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="303,162,581,203"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="629,5,872,61"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="629,85,872,141"/>
+<area shape="rect" id="node8" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="650,166,851,207"/>
+</map>

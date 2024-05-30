@@ -1,0 +1,6 @@
+<map id="get_total_unrolling_of_layer_dim" name="get_total_unrolling_of_layer_dim">
+<area shape="rect" id="node1" title="Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions." alt="" coords="5,5,149,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9" title="Convert all unrollings (pair of LayerDim and UnrollFactor) at all OADimension to a single list of tup..." alt="" coords="197,13,332,39"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c" title="Return a list with all of the MappingSingleOADims contained in this instance." alt="" coords="380,13,467,39"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a" title=" " alt="" coords="515,13,580,39"/>
+</map>

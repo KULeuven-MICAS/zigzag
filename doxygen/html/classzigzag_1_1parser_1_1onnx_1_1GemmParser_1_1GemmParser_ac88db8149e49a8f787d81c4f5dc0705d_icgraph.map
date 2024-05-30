@@ -1,0 +1,7 @@
+<map id="infer_input_activation_shape" name="infer_input_activation_shape">
+<area shape="rect" id="node1" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="703,27,867,69"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="496,35,655,61"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="328,5,371,32"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,57,448,98"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,27,203,69"/>
+</map>

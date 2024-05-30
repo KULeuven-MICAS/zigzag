@@ -1,0 +1,7 @@
+<map id="parse_dynamic_onnx_model" name="parse_dynamic_onnx_model">
+<area shape="rect" id="node1" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="5,49,165,90"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a569df09dc4dcf3ca88e8de7e4ba2e64b" title=" " alt="" coords="213,5,373,32"/>
+<area shape="rect" id="node4" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#ac23bed465324e72740dd9df90e7199e2" title=" " alt="" coords="245,56,341,83"/>
+<area shape="rect" id="node5" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a73398870af206b5ed0eb819e4babef61" title=" " alt="" coords="231,107,356,133"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#aae25a24a9696b760b61d38483cdac49f" title=" " alt="" coords="421,5,531,32"/>
+</map>

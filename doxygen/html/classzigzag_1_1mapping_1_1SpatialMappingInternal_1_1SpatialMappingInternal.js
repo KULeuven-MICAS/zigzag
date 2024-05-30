@@ -1,0 +1,25 @@
+var classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal =
+[
+    [ "__init__", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a6aa73cf9ef7413144cf337278d98a633", null ],
+    [ "__jsonrepr__", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
+    [ "__repr__", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9a47563093dfc5ba12274b66e368920c", null ],
+    [ "__str__", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a23e8041ce1015febe4fdace3225714f9", null ],
+    [ "calc_data_serve_scope", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#ae7967c8d4e0d2e36538cd5275fad2a07", null ],
+    [ "calc_mem_bw_boost_factor", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9bc4d10b339b7694f7b1ccabf59e7dc0", null ],
+    [ "calc_unit_count", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a7a8eadc13ab1a1f902862cbd046a8ef8", null ],
+    [ "calc_unroll_size", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#aa7b42d399dada9105b4b245da781fda2", null ],
+    [ "get_unrolling", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9a00af3d1716075df926f235ba756095", null ],
+    [ "get_unrolling_all", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9aa94c4b14872e841a4b8dec1d6908f9", null ],
+    [ "save_spatial_loop_dim_size", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a68d2b832356ad214659aaa168be4fd68", null ],
+    [ "arch_level", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a3761bcd8f0ad87adeee3d484a58dd567", null ],
+    [ "data_serve_scope", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#aebbe7326c30e28c8dad4453b6312bccc", null ],
+    [ "layer_node", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a8c358fbbc89e1cc3019ab7fd0cf7f317", null ],
+    [ "mapping_dict_origin", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a733b66cd9fa7c989f7766d114ed404fd", null ],
+    [ "mem_bw_boost", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a762437e198d850e26d4476bbb0525942", null ],
+    [ "unit_count", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#ad03278c85d7f89240f914bba68191df2", null ],
+    [ "unit_duplicate", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a5b4ac1637fe0c3b014f9e17c8dfe60e0", null ],
+    [ "unit_unique", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#aaad091068e3e2e7ca323cd3c564242d9", null ],
+    [ "unroll_size_ir", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a598da6d8d1b967812f6e867f292c9d25", null ],
+    [ "unroll_size_r", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a95e119fcafad269c55c5f0d9b28a4b5f", null ],
+    [ "unroll_size_total", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#ad5bb6d1957b8922301aee5acd876c6ee", null ]
+];

@@ -1,0 +1,26 @@
+var classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping =
+[
+    [ "__init__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a110079af25e73e9be25e603c82bcca9a", null ],
+    [ "__eq__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af96227fa172ee2434ffb6b967edce50b", null ],
+    [ "__getitem__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#abb380e7d3d5db8715241f6ad5c25544f", null ],
+    [ "__hash__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a3195ea87162f33a34d0079931a8194ca", null ],
+    [ "__setitem__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#aed25676b4e54c42084e7075a3d77f40d", null ],
+    [ "__str__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a23e8041ce1015febe4fdace3225714f9", null ],
+    [ "all_contained_layer_dims", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7", null ],
+    [ "check_and_reduce", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a30c8fbeb83ec1de312c166836540d829", null ],
+    [ "copy", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ae50dc44cc772435688211937c86e51c2", null ],
+    [ "delete_layer_dim", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a3fc339217aae27d69b7b0833f12ba436", null ],
+    [ "flatten_unrollings", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9", null ],
+    [ "get_performance_indicator", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a497c3dfc1912efa28b145e17f375b147", null ],
+    [ "get_total_unrolling_of_layer_dim", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ad242b2417c78baf1fa2e2a40c9874ea0", null ],
+    [ "hw_utilization", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a96e3f6220a6ab1c997e1072eeca43b9b", null ],
+    [ "initialize_oa_dims", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9adbb4e1f4796a49f5c7126f8b8232a2", null ],
+    [ "is_valid", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#adaf16e02b62aa4fbe35ddf9e83e49b82", null ],
+    [ "items", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#aa557c0a1292ba357db900b8d2f8cd96e", null ],
+    [ "keys", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a89d8a00f894393293852f9e16641be32", null ],
+    [ "mappings", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c", null ],
+    [ "oa_dims", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9b2e128c771f0438e6a35c4e84095f66", null ],
+    [ "values", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a", null ],
+    [ "data", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a511ae0b1c13f95e5f08f1a0dd3da3d93", null ],
+    [ "oa_dim_sizes", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ac24312ad89df905598760024de69770c", null ]
+];
