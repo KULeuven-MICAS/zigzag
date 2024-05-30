@@ -20,9 +20,9 @@ class PlotTemporalMappingsStage(Stage):
     def __init__(self, list_of_callables: list[StageCallable], *, plot_filename_pattern: str, **kwargs: Any):
         """
         @param list_of_callables: see Stage
-        @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
+        @param dump_folder: filename string formatting pattern, which can use named field whose values will be
         in kwargs (thus supplied by higher level runnables)
-        @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+        @param kwargs: any kwargs, passed on to substages and can be used in dump_folder
         """
         super().__init__(list_of_callables, **kwargs)
         self.plot_filename_pattern = plot_filename_pattern

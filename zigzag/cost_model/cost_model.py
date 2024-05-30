@@ -256,6 +256,9 @@ class CumulativeCME(CostModelEvaluationABC):
 
         self.accelerator = None
 
+    def __str__(self):
+        return "CumulativeCME"
+
 
 class CostModelEvaluation(CostModelEvaluationABC):
     """! Class that stores inputs and runs them through the zigzag cost model.
