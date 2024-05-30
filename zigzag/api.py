@@ -25,7 +25,7 @@ def get_hardware_performance_zigzag(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
@@ -109,7 +109,7 @@ def get_hardware_performance_zigzag_imc(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     # Initialize the logger
@@ -143,6 +143,7 @@ def get_hardware_performance_zigzag_imc(
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -185,7 +186,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     mapping: str | dict[str, dict[str, Any]],
     pe_array_scaling,
     opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     # Initialize the logger
@@ -220,6 +221,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -258,7 +260,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     # Initialize the logger
@@ -294,6 +296,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
             SearchUnusedMemoryStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
             RemoveUnusedMemoryStage,  # Remove unused memory instance
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -331,7 +334,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     accelerator: str,
     mapping: str | dict[str, dict[str, Any]],
     opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     # Initialize the logger
@@ -367,6 +370,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             SearchUnusedMemoryStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
             RemoveUnusedMemoryStage,  # Remove unused memory instance
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
