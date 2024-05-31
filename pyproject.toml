@@ -30,13 +30,13 @@ dependencies = [
     'tqdm',
     'multiprocessing_on_dill',
     'pyyaml',
-    'tomli',
+    'cerberus',
 ]
 requires-python = ">=3.11"
 
 
 [project.optional-dependencies]
-dev = ["bumpver", "pip-tools", "build", "twine"]
+dev = ["bumpver", "pip-tools", "build", "twine", 'pytest', 'typeguard']
 
 [project.urls]
 Homepage = "https://github.com/ZigZag-Project/zigzag"
