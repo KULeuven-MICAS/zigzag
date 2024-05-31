@@ -141,9 +141,9 @@ class Mapping:
                     break
         # reversely check from current level to the top level whether there is ir loop shows up in the middle,
         # False means final output is present at current level
-        psum_flag_H2L = [any(output_ir_flag[lv:output_arch_level]) for lv in reversed(range(output_arch_level))]
-        psum_flag_L2H = list(reversed(psum_flag_H2L))
-        return psum_flag_L2H[1:] + [False]  # add an extra False on top for later indexing convenience
+        psum_flag_h2l = [any(output_ir_flag[lv:output_arch_level]) for lv in reversed(range(output_arch_level))]
+        psum_flag_l2h = list(reversed(psum_flag_h2l))
+        return psum_flag_l2h[1:] + [False]  # add an extra False on top for later indexing convenience
 
     def gen_data_precision_dict(self):
         """! This function generates a dictionary that collect data precision for each operand at each arch level"""
@@ -252,13 +252,13 @@ class Mapping:
         # current and above levels (caal) ir loop size, only for output operand for calculating psum backflow access
         # count
         output_operand = self.layer_node.output_operand
-        O_ir_loop_size_caal = [
+        output_ir_loop_size_caal = [
             math.prod(ir_loop_size_per_level[output_operand][lv : self.spatial_mapping.arch_level[output_operand]])
             for lv in range(self.spatial_mapping.arch_level[output_operand])
         ]
         # append two extra 1 to the list to facilitate the psum backflow access calculation later
         # We can see it as adding two output memory levels on top with no data reuse.
-        O_ir_loop_size_caal.extend([1, 1])
+        output_ir_loop_size_caal.extend([1, 1])
 
         self.r_loop_size_per_level = r_loop_size_per_level
         self.r_loop_size_per_level2 = r_loop_size_per_level2
@@ -267,7 +267,7 @@ class Mapping:
         self.r_loop_size_cabl2 = r_loop_size_cabl2
         self.ir_loop_size_cabl = ir_loop_size_cabl
         self.ir_loop_size_cabl2 = ir_loop_size_cabl2
-        self.O_ir_loop_size_caal = O_ir_loop_size_caal
+        self.output_ir_loop_size_caal = output_ir_loop_size_caal
 
     def calc_data_size(self):
         """! Based on the r loop size list, calculate the data size held by each architectural level."""
@@ -413,12 +413,12 @@ class Mapping:
             # data access count
             wr_in_by_low = data_access_raw[output_operand][mem_level]
             rd_out_to_low = self.layer_node.operand_size_elem[output_operand] * (
-                self.O_ir_loop_size_caal[mem_level + 1] - 1
+                self.output_ir_loop_size_caal[mem_level + 1] - 1
             )
 
             rd_out_to_high = data_access_raw2[output_operand][mem_level + 1]
             wr_in_by_high = self.layer_node.operand_size_elem[output_operand] * (
-                self.O_ir_loop_size_caal[mem_level + 2] - 1
+                self.output_ir_loop_size_caal[mem_level + 2] - 1
             )
 
             unit_mem_data_movement.set_data_elem_move_count(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
@@ -451,7 +451,8 @@ class Mapping:
             self.unit_mem_data_movement[output_operand][mem_level] = unit_mem_data_movement
 
     def calc_req_mem_bw_and_data_transfer_rate(self):
-        """! This function calculates the average & instant required memory bw and the periodic data transfer pattern."""
+        """! This function calculates the average & instant required memory bw and the periodic data transfer
+        pattern."""
 
         if self.access_same_data_considered_as_no_access:
             # For input operands, add operational array level's 'mac_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level
@@ -477,16 +478,16 @@ class Mapping:
         # e.g. for the DTL of Global Buffer (Weight) talking to spatially unrolled Weight Reg File,
         # each Weight Reg File's required write BW is indicated by "_L",
         # while Global Buffer (Weight)'s required read BW is indicate by "_H"
-        req_mem_bw_L_raw = {
+        req_mem_bw_low_raw = {
             op: [
                 data_each_level_unrolled[op][lv] / cycle_each_level[op][lv]
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
         }
-        req_mem_bw_H_raw = {
+        req_mem_bw_high_raw = {
             op: [
-                req_mem_bw_L_raw[op][lv] * mem_bw_boost_factor[op][lv]
+                req_mem_bw_low_raw[op][lv] * mem_bw_boost_factor[op][lv]
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list
@@ -499,10 +500,10 @@ class Mapping:
         for operand in self.layer_node.input_operands:
             for mem_level in range(self.mem_level[operand]):
                 # average required memory BW
-                rd_out_to_low_bw = req_mem_bw_H_raw[operand][mem_level]
+                rd_out_to_low_bw = req_mem_bw_high_raw[operand][mem_level]
                 wr_in_by_low_bw = 0
                 rd_out_to_high_bw = 0
-                wr_in_by_high_bw = req_mem_bw_L_raw[operand][mem_level + 1]
+                wr_in_by_high_bw = req_mem_bw_low_raw[operand][mem_level + 1]
                 self.unit_mem_data_movement[operand][mem_level].set_req_mem_bw_aver(
                     rd_out_to_low_bw,
                     wr_in_by_low_bw,
@@ -549,8 +550,8 @@ class Mapping:
         # For output operand
         output_operand = self.layer_node.output_operand
         for mem_level in range(self.mem_level[output_operand]):
-            wr_in_by_low_bw = req_mem_bw_H_raw[output_operand][mem_level]
-            rd_out_to_high_bw = req_mem_bw_L_raw[output_operand][mem_level + 1]
+            wr_in_by_low_bw = req_mem_bw_high_raw[output_operand][mem_level]
+            rd_out_to_high_bw = req_mem_bw_low_raw[output_operand][mem_level + 1]
             wr_in_by_low_pd = cycle_each_level[output_operand][mem_level]
             rd_out_to_high_pd = cycle_each_level[output_operand][mem_level + 1]
             wr_in_by_low_pc = self.temporal_mapping.total_cycle // cycle_each_level[output_operand][mem_level]
