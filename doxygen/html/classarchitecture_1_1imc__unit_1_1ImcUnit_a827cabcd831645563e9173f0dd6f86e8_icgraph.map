@@ -1,0 +1,6 @@
+<map id="get_1b_adder_energy" name="get_1b_adder_energy">
+<area shape="rect" id="node1" title="energy of 1b full adder Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate" alt="" coords="567,53,729,80"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab22662060bb6963aadff79c7b39b28fa" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="260,13,519,54"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#ada34cd00da07f1fa40557fb0a3d64ccf" title="get the energy spent on regular RCA adder trees without place values" alt="" coords="299,78,479,119"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a713ecdbc5c243876ea261b55b51a6ea5" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="5,5,212,61"/>
+</map>

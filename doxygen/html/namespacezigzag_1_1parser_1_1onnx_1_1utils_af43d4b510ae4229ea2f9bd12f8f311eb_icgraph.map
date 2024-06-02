@@ -1,0 +1,12 @@
+<map id="get_onnx_tensor_type" name="get_onnx_tensor_type">
+<area shape="rect" id="node1" title=" " alt="" coords="1107,64,1273,91"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a41969c5f5e031c48fb8a91a78073bd28" title="Return the data type of the input, output and weight tensors of this node." alt="" coords="816,12,1059,68"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="852,93,1023,134"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="539,5,763,61"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3b56cc9c9aaa3de3bf07b22253d6f768" title=" " alt="" coords="533,85,768,141"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#ac14d1fbfdd2835e38b26b2b7a1f5b3a9" title=" " alt="" coords="543,165,758,221"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="256,21,480,62"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,93,203,134"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,93,485,134"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="269,165,467,206"/>
+</map>

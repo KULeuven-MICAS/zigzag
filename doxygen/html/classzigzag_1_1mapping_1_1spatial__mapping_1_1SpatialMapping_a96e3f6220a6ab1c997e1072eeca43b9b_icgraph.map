@@ -1,0 +1,4 @@
+<map id="hw_utilization" name="hw_utilization">
+<area shape="rect" id="node1" title="Returns the hardware utilization, i.e." alt="" coords="251,5,364,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a497c3dfc1912efa28b145e17f375b147" title="Return a value that indicates how well this SpatialMapping is expected to perform when used in ZigZag..." alt="" coords="5,5,203,32"/>
+</map>

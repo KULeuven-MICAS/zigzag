@@ -1,0 +1,6 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title=" " alt="" coords="5,35,48,61"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a6c7d55a1e67b644ef53a59bad9e42a61" title="Recreate the Accelerator with PE array dimension scaling in all dimensions." alt="" coords="96,5,305,32"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#a9c3cdc2b10b34debb53d9719fbddc638" title="Scale the user&#45;defined mappings for each layer." alt="" coords="113,57,288,98"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="353,27,492,69"/>
+</map>

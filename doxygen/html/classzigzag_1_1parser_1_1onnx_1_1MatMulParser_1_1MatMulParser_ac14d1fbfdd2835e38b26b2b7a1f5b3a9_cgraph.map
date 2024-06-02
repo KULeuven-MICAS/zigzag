@@ -1,0 +1,8 @@
+<map id="generate_layer_node_for_matmul" name="generate_layer_node_for_matmul">
+<area shape="rect" id="node1" title=" " alt="" coords="5,123,164,165"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a5dd89d29bbd93635aebea0de7f643f30" title="Generate the necessary dictionary items required for the Node creation." alt="" coords="234,5,469,61"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a5dd89d29bbd93635aebea0de7f643f30" title="Generate the necessary dictionary items required for the Node creation." alt="" coords="270,86,433,127"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a1169a4dd218269cd6c0eeffb9acd0870" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="239,152,463,208"/>
+<area shape="rect" id="node5" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,233,491,274"/>
+<area shape="rect" id="node6" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="539,233,740,274"/>
+</map>

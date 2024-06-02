@@ -1,0 +1,9 @@
+<map id="OperandABC" name="OperandABC">
+<area shape="rect" id="node1" title="Abstract Base Class for all dimension&#45; and operand&#45;like classes." alt="" coords="193,80,297,107"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1datatypes_1_1LayerDim.html" title="(for&#45;loop) dimension of a workload layer (e.g." alt="" coords="5,155,91,181"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1datatypes_1_1LayerOperand.html" title="Operand from the layer definition, e.g." alt="" coords="115,155,229,181"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1datatypes_1_1MemoryOperand.html" title="Operand from the memory definition, e.g." alt="" coords="253,155,384,181"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1datatypes_1_1OADimension.html" title="Operational Array Dimension." alt="" coords="409,155,519,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="146,5,235,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="260,5,343,32"/>
+</map>

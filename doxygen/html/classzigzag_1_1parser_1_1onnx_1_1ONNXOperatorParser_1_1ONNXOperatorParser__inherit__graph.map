@@ -1,0 +1,9 @@
+<map id="ONNXOperatorParser" name="ONNXOperatorParser">
+<area shape="rect" id="node1" title="Abstract base class that represents a parser of an onnx operator." alt="" coords="193,80,350,107"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html" title="Parser for ONNX Conv and QLinearConv nodes into LayerNode." alt="" coords="5,155,100,181"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html" title="This class parses an ONNX node into a DummyNode." alt="" coords="125,155,269,181"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html" title="Parses an ONNX Gemm operator into a LayerNode." alt="" coords="293,155,399,181"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html" title="Parses an ONNX MatMul operator into a LayerNode." alt="" coords="424,155,535,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="172,5,261,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="286,5,369,32"/>
+</map>

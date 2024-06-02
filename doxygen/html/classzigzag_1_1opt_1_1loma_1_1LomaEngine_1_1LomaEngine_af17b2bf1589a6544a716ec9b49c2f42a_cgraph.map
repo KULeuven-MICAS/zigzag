@@ -1,0 +1,6 @@
+<map id="ordering_generator" name="ordering_generator">
+<area shape="rect" id="node1" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,31,152,57"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="200,31,511,57"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a2878c24d2f169db7fd9b3a8937b58d0e" title=" " alt="" coords="562,5,806,32"/>
+<area shape="rect" id="node4" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a888ad2558d0e38d8a84c49f0898cfe07" title="Converts our bespoke linked list to a python list." alt="" coords="559,56,809,83"/>
+</map>
