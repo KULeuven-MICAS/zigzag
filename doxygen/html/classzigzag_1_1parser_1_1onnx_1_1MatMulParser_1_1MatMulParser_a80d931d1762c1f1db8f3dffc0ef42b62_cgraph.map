@@ -1,8 +1,0 @@
-<map id="generate_layer_node" name="generate_layer_node">
-<area shape="rect" id="node1" title=" " alt="" coords="5,137,164,164"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="230,85,473,141"/>
-<area shape="rect" id="node5" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,166,491,207"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="539,5,781,61"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="539,85,781,141"/>
-<area shape="rect" id="node6" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,166,761,207"/>
-</map>
