@@ -24,7 +24,6 @@ class SearchUnusedMemoryStage(Stage):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.workload = workload
-        # TODO fix this!
         core_id = accelerator.cores[0].id  # correct only for single-core hardware
         core = accelerator.get_core(core_id)
         # record of all memory levels
@@ -124,7 +123,6 @@ class SearchUnusedMemoryStage(Stage):
     def update_top_mem_level(self):
         """
         Update mem_update_list and mem_update_weight according to the algorithm description at the file beginning.
-        # TODO clean up (way too many lines)
         """
         # remove dummy (non-conv) layers (ReLU, Pooling..) in the layer graph
         self.remove_dummy_nodes_in_workload()
@@ -287,7 +285,7 @@ class SearchUnusedMemoryStage(Stage):
         core = accelerator.cores[0]
         operational_array = core.operational_array
         oa_dim_nb = len(operational_array.dimension_sizes)
-        mem_served_oa_dim_nb = mem.served_dimensions.nb_dims
+        mem_served_oa_dim_nb = len(mem.served_dimensions)
         return mem_served_oa_dim_nb == oa_dim_nb
 
     def update_mem_level_for_loading_data(self):
