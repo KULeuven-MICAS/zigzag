@@ -19,4 +19,4 @@ class LayerNodeABC(metaclass=ABCMeta):
 
     def __jsonrepr__(self):
         """! JSON representation used for saving this object to a json file."""
-        return {"id": self.id}
+        return str(self)

@@ -38,7 +38,7 @@ class TemporalMapping:
 
     def __jsonrepr__(self):
         """! JSON representation of this object to save it to a json file."""
-        return json_repr_handler({"temporal_mapping": self.mapping_dic_stationary})
+        return json_repr_handler(self.mapping_dic_stationary)
 
     def innermost_stationary_loop_merge_down(self):
         """! Iteratively merging down the ir loops which located at the bottom position of each memory level.

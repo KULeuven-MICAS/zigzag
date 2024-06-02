@@ -195,7 +195,6 @@ class LayerNode(LayerNodeABC):
                 "core_allocation_is_fixed": self.core_allocation_is_fixed,
                 "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
-                # "source_storage_level": self.source_storage_level, # NOTE not used?
             }
         )
 
