@@ -23,8 +23,26 @@ In order to upgrade the project version, we use Python packages called bumpver, 
     pip install bumpver
     pip install build
     pip install twine
+    pip install pytest
+    pip install typeguard
+    pip install ruff
 
- First, pull to make sure you have all the remote cahnges. Merge any conflicts with your new changes, and commit. Then, execute the following commands:
+First, pull to make sure you have all the remote changes. Merge any conflicts with your new changes, and commit.
+
+Check linting and typing:
+
+.. code-block:: sh
+ 
+    python -m ruff check --select=E9,F63,F7,F82 --target-version=py37 .
+
+Test whether functionalities have been broken by the changes:
+
+.. code-block:: sh
+
+    python -m pytest --typeguard-packages=zigzag tests/main/test_origin/
+    python -m pytest --typeguard-packages=zigzag tests/main/test_imc/
+
+Finilly, execute the following commands to build and publish the package :
 
 .. code-block:: sh
 
