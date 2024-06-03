@@ -95,7 +95,7 @@ class ONNXModelParser:
         )
 
         # TODO: ensure the graph is complete rather than broken
-        self.graph_visualization(workload)  # for debugging
+        # self.graph_visualization(workload)  # for debugging
         return workload
 
     def graph_visualization(self, workload):

@@ -34,5 +34,6 @@ def accelerator():
 def test_api(workload: str, accelerator: str, mapping: str):
     (energy, latency, _) = get_hardware_performance_zigzag_without_unused_memory(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
+    print(f"'{workload}': ({energy}, {latency}),")
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

@@ -153,13 +153,11 @@ class SpatialMapping(LayerAttribute):
         - that each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
         Reduce the unrollings otherwise.
         @param dict of `LayerDimSizes`. `LayerDimSizes` instance cannot be used due to circular import.
-          # TODO should have size for all legal layerdims
 
         """
         assert self.oa_dim_sizes is not None, "Initialize OA Dimensions first"
 
         # Remove LayerDim if not listed in `layer_dim_sizes`
-        # TODO PR layer dims should also be allowed!
         for layer_dim in self.all_contained_layer_dims:
             if layer_dim not in layer_dim_sizes:
                 logger.warning(

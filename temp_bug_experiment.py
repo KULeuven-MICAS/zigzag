@@ -8,13 +8,14 @@ from zigzag.visualization.graph.memory_hierarchy import visualize_memory_hierarc
 
 
 model = "resnet"
-workload_path = "inputs/workload/resnet18.onnx"
-accelerator_path = "inputs/hardware/aimc.yaml"
-mapping_path = "inputs/mapping/default_imc.yaml"
+workload_path = "inputs/workload/resnet18.yaml"
+accelerator_path = "inputs/hardware/tpu_like.yaml"
+mapping_path = "inputs/mapping/tpu_like.yaml"
+
 pickle_filename = f"outputs/aimc-{model}-saved_list_of_cmes.pickle"
 
 
-energy, latency, cmes = api.get_hardware_performance_zigzag(
+energy, latency, cmes = api.get_hardware_performance_zigzag_without_unused_memory(
     workload=workload_path,
     accelerator=accelerator_path,
     mapping=mapping_path,
