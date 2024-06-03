@@ -3,29 +3,29 @@ import pytest
 from zigzag.api import get_hardware_performance_zigzag_imc
 
 workloads = (
-    "inputs/workload/alexnet.onnx",
-    "inputs/workload/mobilenetv2.onnx",
-    "inputs/workload/resnet18.onnx",
-    "inputs/workload/resnet18.yaml",
+    "zigzag/inputs/workload/alexnet.onnx",
+    "zigzag/inputs/workload/mobilenetv2.onnx",
+    "zigzag/inputs/workload/resnet18.onnx",
+    "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "inputs/workload/alexnet.onnx": (6812722722.515776, 9460061.0, 3.75708, 0.8566212024),
-    "inputs/workload/mobilenetv2.onnx": (2884947078.1898627, 20454032.0, 3.75708, 0.8566212024),
-    "inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
-    "inputs/workload/resnet18.yaml": (4268432908.954752, 5789353.0, 3.75708, 0.8566212024),
+    "zigzag/inputs/workload/alexnet.onnx": (6812722722.515776, 9460061.0, 3.75708, 0.8566212024),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (2884947078.1898627, 20454032.0, 3.75708, 0.8566212024),
+    "zigzag/inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
+    "zigzag/inputs/workload/resnet18.yaml": (4268432908.954752, 5789353.0, 3.75708, 0.8566212024),
 }
 
 
 @pytest.fixture
 def mapping():
-    return "inputs/mapping/default_imc.yaml"
+    return "zigzag/inputs/mapping/default_imc.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "inputs/hardware/dimc.yaml"
+    return "zigzag/inputs/hardware/dimc.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)

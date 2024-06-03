@@ -1,4 +1,0 @@
-*.onnx
-!alexnet.onnx
-!resnet18.onnx
-!mobilenetv2.onnx
