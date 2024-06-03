@@ -48,3 +48,53 @@ class ONNXOperatorParser(metaclass=ABCMeta):
             return node.input[3]
         else:
             raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
+
+    def get_node_predecessors(self) -> list[int]:
+        """Compute node input source"""
+        predecessors: list[int] = []
+        for node_input in self.node.input:
+            for n in self.nodes_outputs:
+                if node_input in self.nodes_outputs[n]:
+                    predecessors.append(n)
+        # assert len(predecessors) <= 2, f"Unexpected number of layer node predecessors: {len(predecessors)}"
+        return predecessors
+
+    def get_layer_node_user_format_gemm(
+        self,
+        batch_size: int,
+        size_in: int,
+        size_out: int,
+        size_shared: int,
+    ) -> dict[str, Any]:
+        """! Generate layer data in user input format for MatMul or GEMM ONNX nodes.
+        W[size_out][size_in] * I[batch_size][size_in][size_shared] -> O [batch_size][size_out][size_shared]
+        """
+
+        data: dict[str, Any] = {}
+        data["id"] = self.node_id
+        data["name"] = f"Layer{self.node_id}"
+        data["operator_type"] = self.node.op_type
+        data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
+        data["loop_dims"] = ["B", "C", "K", "D"]
+        data["loop_sizes"] = [batch_size, size_in, size_out, size_shared]
+
+        data["dimension_relations"] = []
+        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
+
+        # Operand sources
+        predecessors = self.get_node_predecessors()
+        match len(predecessors):
+            case 0:
+                # No source operands -> assume one is constant
+                # TODO should this be 2?
+                data["operand_source"] = {"W": self.node_id}
+            case 1:
+                # One source operand, one constant
+                data["operand_source"] = {"W": self.node_id, "I": predecessors[0]}
+            case 2:
+                # Two source operands, none are constant (W and I can be swapped)
+                data["operand_source"] = {"W": predecessors[0], "I": predecessors[1]}
+            case _:
+                raise ValueError("No more than 2 layer predecessors expected")
+
+        return data

@@ -31,63 +31,39 @@ class MatMulParser(ONNXOperatorParser):
 
     def run(self) -> LayerNode:
         """Run the parser"""
-        layer_node = self.generate_layer_node_for_matmul()
-        return layer_node
+        return self.generate_layer_node()
 
-    def get_layer_node_input_format(
-        self,
-        batch_size: int,
-        size_in: int,
-        size_out: int,
-        prev_node_id: int | None = None,
-    ) -> dict[str, Any]:
-        """! Generate the necessary dictionary items required for the Node creation.
-        # TODO this is identical to the one from `GemmParser`
-        """
-
-        data: dict[str, Any] = {}
-        data["id"] = self.node_id
-        data["name"] = f"Layer{self.node_id}"
-        data["operator_type"] = self.node.op_type
-        data["equation"] = "O[b][k]+=W[k][c]*I[b][c]"
-        data["loop_dims"] = ["B", "C", "K"]
-        data["loop_sizes"] = [batch_size, size_in, size_out]
-
-        data["dimension_relations"] = []
-        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
-        # Constant operand
-        data["operand_source"] = {"W": self.node_id}
-        if prev_node_id is not None:
-            data["operand_source"]["I"] = prev_node_id
-
-        return data
-
-    def generate_layer_node_for_matmul(self):
-
+    def generate_layer_node(self):
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
+        assert len(ia_dimension_shape) == len(oa_dimension_shape), "Input and output size expected to be the same"
+        assert ia_dimension_shape[0] == oa_dimension_shape[0], "Batch size should be the same for input and output"
 
-        # TODO it should be able to deal with tensors
-        # First element is batch size, second is input/output channel
-        assert len(ia_dimension_shape) == len(oa_dimension_shape) == 2
-        # Batch size should be the same for input and output
-        assert ia_dimension_shape[0] == oa_dimension_shape[0]
-        # If the batch size is 0, we discard it by setting it to 1 internally inside ZigZag
-        batch_size = ia_dimension_shape[0]
-        size_b = 1 if batch_size == 0 else batch_size
-        size_c = ia_dimension_shape[1]
-        size_k = oa_dimension_shape[1]
+        batch_size = 1 if ia_dimension_shape[0] == 0 else ia_dimension_shape[0]
 
-        # Compute node input source
-        predecessors: list[int] = []
-        for node_input in self.node.input:
-            for n in self.nodes_outputs:
-                if node_input in self.nodes_outputs[n]:
-                    predecessors.append(n)
-        assert len(predecessors) <= 1, "Only a single layer operand source expected"
-        prev_node_id = None if len(predecessors) == 0 else predecessors.pop()
+        match len(ia_dimension_shape):
+            # TODO: is it I*W->O or W*I->O?
+            case 2:
+                size_in = ia_dimension_shape[1]
+                size_out = oa_dimension_shape[1]
+                # No reduction dimension
+                size_shared = 1
+            case 3:
+                # Input: batch_size x size_shared x size_in
+                size_shared = ia_dimension_shape[1]
+                size_in = ia_dimension_shape[2]
+                # Output: batch_size x size_shared x size_out
+                size_out = oa_dimension_shape[2]
+                assert oa_dimension_shape[1] == size_shared
+            case _:
+                raise ValueError("Input size of Matmul ONNX node must be either 2 or 3.")
 
         # Create LayerNode
-        layer_data = self.get_layer_node_input_format(size_b, size_c, size_k, prev_node_id)
+        layer_data = self.get_layer_node_user_format_gemm(
+            batch_size=batch_size,
+            size_in=size_in,
+            size_out=size_out,
+            size_shared=size_shared,
+        )
         factory = LayerNodeFactory(layer_data, self.mapping_data)
         layer_node = factory.create()
 
