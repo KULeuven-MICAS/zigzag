@@ -170,6 +170,19 @@ class SpatialMappingGeneratorStage(Stage):
         self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
     ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure"""
+
+        def conditional_log(layer_dim: LayerDim, oa_dim: OADimension, value: int, mem_name: str):
+            # Don't log if user has defined an unrolling for a different layer dim
+            do_not_log = oa_dim in self.provided_mapping and layer_dim not in self.provided_mapping[oa_dim]
+            if not do_not_log:
+                logger.warning(
+                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                    layer_dim,
+                    oa_dim,
+                    value,
+                    mem_name,
+            )
+
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
@@ -186,13 +199,13 @@ class SpatialMappingGeneratorStage(Stage):
                         if layer_dim not in irrelevant_dimensions:
                             max_multicast_elements = mem_bandwidth // precision if precision > 0 else unrolling_size
                             if max_multicast_elements < unrolling_size:
-                                logger.warning(
-                                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                                conditional_log(
                                     layer_dim,
                                     oa_dim,
                                     max_multicast_elements,
                                     mem_level.name,
                                 )
+
                                 mapping[oa_dim][layer_dim] = max_multicast_elements
 
         return mapping
