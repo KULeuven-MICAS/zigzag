@@ -29,8 +29,8 @@ def accelerator():
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):
+    (energy, latency, _) = get_hardware_performance_zigzag(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
     print(f"'{workload}': ({energy}, {latency}),")
     assert energy == pytest.approx(expected_energy)

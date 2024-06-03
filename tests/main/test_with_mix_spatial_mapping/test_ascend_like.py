@@ -24,40 +24,17 @@ ens_lats = {
 
 @pytest.fixture
 def mapping():
-    ascend_like_mapping = {
-        "default": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("K", 16),
-                "D2": (("C", 4), ("FX", 3)),
-                "D3": ("OX", 2),
-                "D4": ("OY", 2),
-            },
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-        "Add": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("G", 16),
-                "D2": ("C", 1),
-                "D3": ("OX", 1),
-                "D4": ("OY", 1),
-            },
-            "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
-        },
-    }
-
-    return ascend_like_mapping
+    return "inputs/mapping/ascend_like_mixed.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Ascend_like"
+    return "inputs/hardware/ascend_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):
+    (energy, latency, _) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)

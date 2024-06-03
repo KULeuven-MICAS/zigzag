@@ -22,17 +22,17 @@ ens_lats = {
 
 @pytest.fixture
 def mapping():
-    return "zigzag.inputs.examples.mapping.tpu_like"
+    return "inputs/mapping/tpu_like.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.TPU_like"
+    return "inputs/hardware/tpu_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload, accelerator, mapping):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_without_unused_memory(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):
+    (energy, latency, _) = get_hardware_performance_zigzag_without_unused_memory(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
     assert energy == pytest.approx(expected_energy)
     assert latency == pytest.approx(expected_latency)
