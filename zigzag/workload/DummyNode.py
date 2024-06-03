@@ -20,9 +20,11 @@ class DummyNode(LayerNodeABC):
 
         if len(predecessors) == 0:
             self.input_operand_source: InputOperandSource = {}
-        else:
-            # We assign just one (arbitrary) source here, since we don't really care about the DummyNodes
+        elif len(predecessors) == 1:
             self.input_operand_source = {LayerOperand("I"): predecessors[0]}
+        else:
+            # We currently don't support more than 2 sources so we can also use `I` and `W` for the layer operands
+            self.input_operand_source = {LayerOperand("I"): predecessors[0], LayerOperand("W"): predecessors[1]}
 
         self.type = node_type
         # We assume these nodes are mapped on a core with id -1
