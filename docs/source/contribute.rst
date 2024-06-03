@@ -42,7 +42,7 @@ Test whether functionalities have been broken by the changes:
     python -m pytest --typeguard-packages=zigzag tests/main/test_origin/
     python -m pytest --typeguard-packages=zigzag tests/main/test_imc/
 
-Finilly, execute the following commands to build and publish the package :
+Finally, execute the following commands to build and publish the package :
 
 .. code-block:: sh
 
