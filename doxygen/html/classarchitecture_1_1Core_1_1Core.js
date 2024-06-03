@@ -1,0 +1,25 @@
+var classarchitecture_1_1Core_1_1Core =
+[
+    [ "__init__", "classarchitecture_1_1Core_1_1Core.html#a5f288b4f91dd8b3aa6a206367ca0beca", null ],
+    [ "__eq__", "classarchitecture_1_1Core_1_1Core.html#a4ebc07e33d57e463c0e249dfce215d96", null ],
+    [ "__hash__", "classarchitecture_1_1Core_1_1Core.html#ae27a7920f84bb5c804c9615ef57874e5", null ],
+    [ "__jsonrepr__", "classarchitecture_1_1Core_1_1Core.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
+    [ "__repr__", "classarchitecture_1_1Core_1_1Core.html#aea815b0c6c23fc48a11ee0404b782c7a", null ],
+    [ "__str__", "classarchitecture_1_1Core_1_1Core.html#ae07f7930f92d3591c93e2381cd5be285", null ],
+    [ "get_memory_bw_dict", "classarchitecture_1_1Core_1_1Core.html#a907e46fd23c244a5e10c50d8b6f07a58", null ],
+    [ "get_memory_bw_min_dict", "classarchitecture_1_1Core_1_1Core.html#ae52c3608ce5ae4c6aab0809f90acc300", null ],
+    [ "get_memory_level", "classarchitecture_1_1Core_1_1Core.html#ab899d4139182f7e8f1b3a334a85edb89", null ],
+    [ "get_top_memory_instance", "classarchitecture_1_1Core_1_1Core.html#a45f9ba77e394eb4dca718106890d0127", null ],
+    [ "recalculate_memory_hierarchy_information", "classarchitecture_1_1Core_1_1Core.html#ac4945045b334bd6f01fe0a3ac9bd53d2", null ],
+    [ "dataflows", "classarchitecture_1_1Core_1_1Core.html#aa0b4d699e044760ccc80ad9cd986956f", null ],
+    [ "id", "classarchitecture_1_1Core_1_1Core.html#acf2488b95c97e0378c9bf49de3b50f28", null ],
+    [ "mem_hierarchy_dict", "classarchitecture_1_1Core_1_1Core.html#aa192ec0feee472fb02654eb92fc5d878", null ],
+    [ "mem_r_bw_dict", "classarchitecture_1_1Core_1_1Core.html#a4ca9a7e5cfa10b26d46f47711d5e72e2", null ],
+    [ "mem_r_bw_min_dict", "classarchitecture_1_1Core_1_1Core.html#ae485f08c58f542c4ccf01c34cb184831", null ],
+    [ "mem_sharing_list", "classarchitecture_1_1Core_1_1Core.html#a11ac1508f800047958376085487533c3", null ],
+    [ "mem_size_dict", "classarchitecture_1_1Core_1_1Core.html#a9de9f586c3351a83ff68606239babab3", null ],
+    [ "mem_w_bw_dict", "classarchitecture_1_1Core_1_1Core.html#ae171552e048c6b4a459150e63fc506f8", null ],
+    [ "mem_w_bw_min_dict", "classarchitecture_1_1Core_1_1Core.html#a9d841433eee83ec266c37e5e1d45cbe0", null ],
+    [ "memory_hierarchy", "classarchitecture_1_1Core_1_1Core.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
+    [ "operational_array", "classarchitecture_1_1Core_1_1Core.html#aa551b39d3cb97666fedabc767a91f4a6", null ]
+];

@@ -1,0 +1,8 @@
+<map id="mem_to_layer_op" name="mem_to_layer_op">
+<area shape="rect" id="node1" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="1424,13,1563,39"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="544,5,789,47"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="1131,35,1376,76"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="251,5,496,47"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="837,35,1083,76"/>
+</map>

@@ -1,0 +1,5 @@
+<map id="get_single_cell_array_cost_from_cacti" name="get_single_cell_array_cost_from_cacti">
+<area shape="rect" id="node1" title="get the area, energy cost of a single macro (cell array) using CACTI this function is called when cac..." alt="" coords="480,5,640,47"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#aa10a579ff9076a72afe56f183c7a8213" title="get area of IMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="243,5,432,47"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab948c7a4c22363a3aae688c30beec0e6" title=" " alt="" coords="5,5,195,47"/>
+</map>

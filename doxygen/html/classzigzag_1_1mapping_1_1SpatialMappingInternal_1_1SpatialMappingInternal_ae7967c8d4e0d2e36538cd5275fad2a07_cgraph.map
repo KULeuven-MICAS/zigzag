@@ -1,0 +1,4 @@
+<map id="calc_data_serve_scope" name="calc_data_serve_scope">
+<area shape="rect" id="node1" title="Calculate data serve scope, i.e., for input operands, it means that each data element is broadcast to..." alt="" coords="5,20,177,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="225,5,501,61"/>
+</map>

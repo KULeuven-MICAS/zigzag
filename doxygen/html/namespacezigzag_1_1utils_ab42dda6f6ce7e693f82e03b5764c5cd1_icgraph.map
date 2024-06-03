@@ -1,0 +1,21 @@
+<map id="json_repr_handler" name="json_repr_handler">
+<area shape="rect" id="node1" title="Recursively converts objects into a json representation." alt="" coords="829,508,968,535"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="535,5,778,61"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="535,85,778,141"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1Accelerator_1_1Accelerator.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="566,166,747,207"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1Core_1_1Core.html#a0ab94b5e657e9550a1b27ace112c727d" title=" " alt="" coords="571,231,743,273"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a0ab94b5e657e9550a1b27ace112c727d" title=" " alt="" coords="562,297,751,338"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON Representation of this object to save it to a json file." alt="" coords="545,362,768,403"/>
+<area shape="rect" id="node8" href="$classarchitecture_1_1MemoryInstance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON Representation of this class to save it to a json file." alt="" coords="548,427,765,469"/>
+<area shape="rect" id="node9" href="$classarchitecture_1_1operational__array_1_1OperationalArray.html#a0ab94b5e657e9550a1b27ace112c727d" title=" " alt="" coords="567,493,746,549"/>
+<area shape="rect" id="node10" href="$classarchitecture_1_1operational__unit_1_1OperationalUnit.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON Representation of this class to save it to a json file." alt="" coords="567,573,746,629"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a0ab94b5e657e9550a1b27ace112c727d" title=" " alt="" coords="539,653,775,709"/>
+<area shape="rect" id="node12" href="$classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation of this object to save it to a file." alt="" coords="541,733,772,789"/>
+<area shape="rect" id="node13" href="$classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation of this object to save it to a json file." alt="" coords="532,814,781,855"/>
+<area shape="rect" id="node14" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="547,879,767,921"/>
+<area shape="rect" id="node15" href="$classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html#a7af70b33d567a482b9ee9ae7a03f110b" title=" " alt="" coords="542,945,771,986"/>
+<area shape="rect" id="node16" href="$classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#a1985bc439a548daceeec5f99addce32d" title=" " alt="" coords="544,1011,769,1067"/>
+<area shape="rect" id="node17" href="$classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the complete save stage by running the substage and saving the CostModelEvaluation json represent..." alt="" coords="251,985,484,1026"/>
+<area shape="rect" id="node19" href="$classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the simple save stage by running the substage and saving the CostModelEvaluation simple json repr..." alt="" coords="260,1050,475,1091"/>
+<area shape="rect" id="node18" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,1018,203,1059"/>
+</map>

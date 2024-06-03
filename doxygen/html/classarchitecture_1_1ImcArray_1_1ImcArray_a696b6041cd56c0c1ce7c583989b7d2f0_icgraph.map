@@ -1,0 +1,7 @@
+<map id="get_dac_cost" name="get_dac_cost">
+<area shape="rect" id="node1" title="single DAC cost calculation" alt="" coords="451,42,557,69"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab22662060bb6963aadff79c7b39b28fa" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="223,5,403,47"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#af5dea46ee2c50759342c20e5a38e5fc0" title="get clock cycle time of imc macros (worst path: dacs &#45;&gt; mults &#45;&gt; adcs &#45;&gt; adders &#45;&gt; accumulators)" alt="" coords="275,71,350,98"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a713ecdbc5c243876ea261b55b51a6ea5" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab948c7a4c22363a3aae688c30beec0e6" title=" " alt="" coords="55,71,125,98"/>
+</map>

@@ -1,0 +1,10 @@
+<map id="generate_spatial_mappings" name="generate_spatial_mappings">
+<area shape="rect" id="node1" title="Generator that yields SpatialMappings." alt="" coords="5,78,208,105"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ac2546cbcde1e559a492baa99693f1072" title="This function is used to support diagonal spatial mapping when input/activation is served in the inne..." alt="" coords="257,17,449,43"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b" title="Generate a list of possible mappings for the given OADimension." alt="" coords="256,71,451,112"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="282,139,425,166"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a2c5a776c25a7eaf01b1950817067ee61" title=" " alt="" coords="509,5,679,47"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718" title="Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimensions,..." alt="" coords="499,71,689,112"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="737,78,887,105"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09" title="Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure." alt="" coords="525,136,663,177"/>
+</map>
