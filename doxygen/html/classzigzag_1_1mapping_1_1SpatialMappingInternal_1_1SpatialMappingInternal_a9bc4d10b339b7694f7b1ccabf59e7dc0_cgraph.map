@@ -1,4 +1,0 @@
-<map id="calc_mem_bw_boost_factor" name="calc_mem_bw_boost_factor">
-<area shape="rect" id="node1" title="Calculate memory bandwidth incremental factor between architectural levels." alt="" coords="5,20,208,47"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="256,5,532,61"/>
-</map>

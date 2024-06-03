@@ -1,4 +1,0 @@
-<map id="calc_tensor_dims" name="calc_tensor_dims">
-<area shape="rect" id="node1" title=" " alt="" coords="183,5,317,32"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a00570ca00dd51f559e91b3cec6827862" title="Calculates the tensor size (nb of elements) for the given operand layer_op with the given loop dimens..." alt="" coords="5,5,135,32"/>
-</map>

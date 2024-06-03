@@ -1,6 +1,0 @@
-<map id="__jsonrepr__" name="__jsonrepr__">
-<area shape="rect" id="node1" title="JSON Representation of this object to save it to a json file." alt="" coords="5,71,108,98"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1utils.html#ab42dda6f6ce7e693f82e03b5764c5cd1" title="Recursively converts objects into a json representation." alt="" coords="175,5,335,47"/>
-<area shape="rect" id="node3" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a70e8f3b017dc7752bcfaab0c9c9040a3" title="Wrap DiGraph.topological_sort with correct type annotation." alt="" coords="191,71,318,98"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1workload_1_1Workload_1_1Workload.html#af51193e3157c3b429bacfdc27e47fefa" title=" " alt="" coords="156,123,353,164"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="run" name="run">
-<area shape="rect" id="node1" title="Run the complete save stage by running the substage and saving the CostModelEvaluation json represent..." alt="" coords="5,85,48,112"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#a1985bc439a548daceeec5f99addce32d" title=" " alt="" coords="96,5,321,61"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html#a34d75490dc1e439df89e085b3078472e" title=" " alt="" coords="155,85,262,112"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html#a2b7e8d9916bab0cf38ce93d9cddd8b5c" title=" " alt="" coords="152,136,265,163"/>
-<area shape="rect" id="node3" href="$namespacezigzag_1_1utils.html#ab42dda6f6ce7e693f82e03b5764c5cd1" title="Recursively converts objects into a json representation." alt="" coords="369,13,529,54"/>
-</map>
