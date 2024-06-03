@@ -36,7 +36,7 @@ requires-python = ">=3.11"
 
 
 [project.optional-dependencies]
-dev = ["bumpver", "pip-tools", "build", "twine", 'pytest', 'typeguard']
+dev = ["bumpver", "pip-tools", "build", "twine", 'pytest', 'typeguard', 'ruff']
 
 [project.urls]
 Homepage = "https://github.com/KULeuven-MICAS/zigzag"
