@@ -8,6 +8,7 @@ var dir_b4edeffaf9ba1e8ad9bd9995c1f61b58 =
       [ "MemoryFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory" ]
     ] ],
     [ "AcceleratorValidator.py", "AcceleratorValidator_8py.html", "AcceleratorValidator_8py" ],
+    [ "arguments.py", "arguments_8py.html", "arguments_8py" ],
     [ "MappingValidator.py", "MappingValidator_8py.html", "MappingValidator_8py" ],
     [ "UpgradedValidator.py", "UpgradedValidator_8py.html", [
       [ "UpgradedValidator", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator.html", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator" ]

@@ -1,5 +1,7 @@
 var NAVTREEINDEX1 =
 {
+"classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a23e8041ce1015febe4fdace3225714f9":[2,0,0,6,0,5],
+"classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a2844ef04ac17500f5d0eee4f3311698e":[2,0,0,6,0,2],
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a45163c19b7c87f553c6f1d055d4668cb":[2,0,0,6,0,3],
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,0,6,0,8],
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a810fdc262754b6d21f5acd0e280d4daf":[2,0,0,6,0,4],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a733b66cd9fa7c989f7766d114ed404fd":[2,0,2,2,3,0,14],
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a762437e198d850e26d4476bbb0525942":[2,0,2,2,3,0,15],
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a7a8eadc13ab1a1f902862cbd046a8ef8":[2,0,2,2,3,0,6],
-"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a8c358fbbc89e1cc3019ab7fd0cf7f317":[2,0,2,2,3,0,13],
-"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a95e119fcafad269c55c5f0d9b28a4b5f":[2,0,2,2,3,0,20],
-"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9a00af3d1716075df926f235ba756095":[2,0,2,2,3,0,8]
+"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a8c358fbbc89e1cc3019ab7fd0cf7f317":[2,0,2,2,3,0,13]
 };

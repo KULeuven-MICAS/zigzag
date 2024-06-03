@@ -9,7 +9,6 @@ var parser_2onnx_2utils_8py =
     [ "get_onnx_tensor_type", "parser_2onnx_2utils_8py.html#af43d4b510ae4229ea2f9bd12f8f311eb", null ],
     [ "is_dynamic", "parser_2onnx_2utils_8py.html#ac23bed465324e72740dd9df90e7199e2", null ],
     [ "parse_dynamic_onnx_model", "parser_2onnx_2utils_8py.html#a0bd28035f9bc4d1d49cf4a377ad5a363", null ],
-    [ "parse_mapping_from_path", "parser_2onnx_2utils_8py.html#a9866ef7ac64c94a8a2b0224323a31c58", null ],
     [ "parse_onnx_model_from_path", "parser_2onnx_2utils_8py.html#a35cfc1e6036daf70a3bc413dff5d4252", null ],
     [ "unroll_branches", "parser_2onnx_2utils_8py.html#a73398870af206b5ed0eb819e4babef61", null ],
     [ "BRANCH_ATTRIBUTE", "parser_2onnx_2utils_8py.html#a76ce817b2d8bca19204762925e390e1c", null ],
