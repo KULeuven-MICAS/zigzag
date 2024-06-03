@@ -88,9 +88,10 @@ class ONNXModelParser:
             # Add the node_obj to the ONNXWorkload
             workload.add(node_id, node_obj)
 
-        logger.info(  # pylint: disable=W1203
-            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and "
-            f"{workload.number_of_edges()} edges."  # type: ignore
+        logger.info(
+            "Created ONNXWorkload graph with %i nodes and %i edges.",
+            workload.number_of_nodes(),
+            workload.number_of_edges(),  # type: ignore
         )
 
         # TODO: ensure the graph is complete rather than broken
@@ -101,6 +102,7 @@ class ONNXModelParser:
         # visualize the resulted graph (for debugging)
         import matplotlib.pyplot as plt
         import networkx as nx  # kept for debugging
+
         pos = nx.spring_layout(workload)
         nx.draw(workload, pos, with_labels=True, node_color="lightblue", font_weight="bold")
-        plt.show()
+        plt.savefig("tmp.png")
