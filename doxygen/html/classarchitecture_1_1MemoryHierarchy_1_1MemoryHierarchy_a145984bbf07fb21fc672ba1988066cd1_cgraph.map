@@ -1,0 +1,7 @@
+<map id="add_memory" name="add_memory">
+<area shape="rect" id="node1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,81,113,108"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a0c71897df78582e2900f81bac38f1887" title=" " alt="" coords="198,5,297,32"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a91517d825468edeb11eacd3c65981f8e" title=" " alt="" coords="198,56,297,83"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="161,107,333,133"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#ab390f2fe72333440201b6370714bec0e" title="Wrap DiGraph.nodes() with custom type annotation." alt="" coords="381,132,504,159"/>
+</map>

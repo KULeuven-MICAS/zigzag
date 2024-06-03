@@ -1,0 +1,13 @@
+<map id="__init__" name="__init__">
+<area shape="rect" id="node1" title=" " alt="" coords="5,199,76,225"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#aa10a579ff9076a72afe56f183c7a8213" title="get area of IMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="124,97,203,124"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#af5dea46ee2c50759342c20e5a38e5fc0" title="get clock cycle time of imc macros (worst path: dacs &#45;&gt; mults &#45;&gt; adcs &#45;&gt; adders &#45;&gt; accumulators)" alt="" coords="126,224,201,251"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a9ed0d17991cdae5631cd1479d6dfaed5" title="get the area, energy cost of a single macro (cell array) using CACTI this function is called when cac..." alt="" coords="271,5,461,61"/>
+<area shape="rect" id="node4" href="$namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="529,13,692,54"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#abf59988502ae099a822e42c63b8b01ff" title="delay of 1b adder: carry&#45;in to carry&#45;out" alt="" coords="251,86,481,127"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a80099bbf94ed9b4114a745ecad336c02" title="delay of 1b adder: input to carry&#45;out" alt="" coords="255,151,477,193"/>
+<area shape="rect" id="node8" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#afbb1f109bce2ae66e15b59030c7952dd" title="delay of 1b adder: input to sum&#45;out" alt="" coords="255,217,477,258"/>
+<area shape="rect" id="node9" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a42628b6f11e97918557c066976572d61" title="delay of 1b multiplier 1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate" alt="" coords="269,282,463,323"/>
+<area shape="rect" id="node10" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a8b8741a3806ca45074bc9862f3ee326a" title="single ADC and analog accumulation cost calculation" alt="" coords="313,348,419,375"/>
+<area shape="rect" id="node11" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a696b6041cd56c0c1ce7c583989b7d2f0" title="single DAC cost calculation" alt="" coords="313,399,419,425"/>
+</map>

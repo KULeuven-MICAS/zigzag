@@ -1,0 +1,4 @@
+<map id="replace_pr_loop_in_mapping" name="replace_pr_loop_in_mapping">
+<area shape="rect" id="node1" title="This function replaces all pr loops in a mapping of a single operand with r and ir loops." alt="" coords="189,5,333,47"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1mapping_1_1mapping__assist__funcs.html#a93a85a91d438a1bc260d32aef08a6180" title="This function decouples the pr loops into data size (r loops) and data reuse (ir loops)." alt="" coords="5,13,141,39"/>
+</map>

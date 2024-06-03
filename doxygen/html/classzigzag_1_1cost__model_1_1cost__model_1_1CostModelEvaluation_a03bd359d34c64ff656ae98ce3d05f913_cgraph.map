@@ -1,0 +1,6 @@
+<map id="calc_energy" name="calc_energy">
+<area shape="rect" id="node1" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="5,71,105,97"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9aa49709f7b72af5fb3e9cbe7c28966d" title="Calculate the dynamic MAC energy." alt="" coords="190,5,359,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#abf2cb05e178d75a2319f4bbbcd3ef7db" title="Calculate the dynamic MAC energy Overrides superclass&#39; method." alt="" coords="153,56,396,112"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2ad9aa62ea35824b599e4e3cdf033134" title="Computes the memories reading/writing energy by converting the access patterns in self...." alt="" coords="177,136,373,163"/>
+</map>

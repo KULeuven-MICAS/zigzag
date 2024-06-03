@@ -1,0 +1,6 @@
+<map id="memory_nodes" name="memory_nodes">
+<area shape="rect" id="node1" title="Wrap DiGraph.nodes() with custom type annotation." alt="" coords="381,31,504,57"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a145984bbf07fb21fc672ba1988066cd1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,5,113,32"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="161,31,333,57"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a7065d96596225f81ca0e96d8041297e9" title="Returns the &#39;top&#39;&#45;most MemoryLevels, where &#39;the&#39; level of MemoryLevel is considered to be the largest..." alt="" coords="175,81,319,108"/>
+</map>

@@ -1,0 +1,9 @@
+<map id="get_macro_level_peak_performance" name="get_macro_level_peak_performance">
+<area shape="rect" id="node1" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="5,136,175,177"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab22662060bb6963aadff79c7b39b28fa" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="223,136,403,177"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a827cabcd831645563e9173f0dd6f86e8" title="energy of 1b full adder Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate" alt="" coords="463,5,657,47"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a6ce15e3c640e7b5754fcd351d0bc52c3" title="energy of 1b multiplier 1b mult includes 1 NOR gate, which is assumed as the same cost of ND2 gate wh..." alt="" coords="451,71,669,112"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a656fbb9294431cc9666fc91fabafec82" title="energy of 1b DFF" alt="" coords="466,136,654,177"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a8b8741a3806ca45074bc9862f3ee326a" title="single ADC and analog accumulation cost calculation" alt="" coords="507,202,613,229"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a696b6041cd56c0c1ce7c583989b7d2f0" title="single DAC cost calculation" alt="" coords="507,253,613,279"/>
+</map>
