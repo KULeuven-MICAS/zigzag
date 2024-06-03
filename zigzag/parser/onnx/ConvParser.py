@@ -81,9 +81,7 @@ class ConvParser(ONNXOperatorParser):
         data["equation"] = "O[b][g][k][oy][ox]+=W[g][k][c][fy][fx]*I[b][g][c][iy][ix]"
 
         # Get dimension sizes from input parameters
-        assert (
-            ia_shape[0] == oa_shape[0]
-        ), "Batch size is different for input and output activations."
+        assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
         batch_size = oa_shape[0] if oa_shape[0] > 0 else 1
         size_k = ceil(oa_shape[1] / group_size)
         size_ox = oa_shape[3]
@@ -134,9 +132,7 @@ class ConvParser(ONNXOperatorParser):
         padding: list[int] = get_attribute_ints_with_name("pads", attrs, default=[0, 0, 0, 0])  # type: ignore
 
         # Get the input and output activation shapes
-        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(
-            self.node, self.onnx_model
-        )
+        ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
         # Get the input and output activation and weight data type (precision) # TODO this is not used
         # ia_data_type, oa_data_type, w_data_type = self.get_input_output_weight_data_type()
