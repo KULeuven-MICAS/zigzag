@@ -2,7 +2,7 @@
 Mapping
 =======
 
-The mapping defines how the algorithmic operations are mapped onto the computational hardware resources. The ZigZag framework automates (parts of) this mapping, but some aspects need to be (at the time of writing) user-defined. The mapping input file is required for running ZigZag in combination with the onnx interface. When manually defining your algorithmic layers, the mapping information is encoded within the workload definition (e.g. `inputs/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/workload/resnet18.py>`_).
+The mapping defines how the algorithmic operations are mapped onto the computational hardware resources. The ZigZag framework automates (parts of) this mapping, but some aspects need to be (at the time of writing) user-defined. The mapping input file is required for running ZigZag in combination with the onnx interface. When manually defining your algorithmic layers, the mapping information is encoded within the workload definition (e.g. `inputs/examples/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/workload/resnet18.py>`_).
 
 User-defined mapping constraints
 ================================

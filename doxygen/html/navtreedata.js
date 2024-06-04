@@ -24,37 +24,12 @@
 */
 var NAVTREE =
 [
-  [ "ZigZag - Deep Learning Hardware Design Space Exploration", "index.html", [
-    [ "Cacti7_automation", "md__home_runner_work_zigzag_zigzag_zigzag_cacti_README.html", null ],
-    [ "Package Functions", "namespacemembers.html", [
-      [ "All", "namespacemembers.html", null ],
-      [ "Functions", "namespacemembers_func.html", null ],
-      [ "Variables", "namespacemembers_vars.html", null ]
-    ] ],
-    [ "Classes", "annotated.html", [
-      [ "Class List", "annotated.html", "annotated_dup" ],
-      [ "Class Index", "classes.html", null ],
-      [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
-      [ "Class Members", "functions.html", [
-        [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", "functions_func" ],
-        [ "Variables", "functions_vars.html", "functions_vars" ]
-      ] ]
-    ] ],
-    [ "Files", "files.html", [
-      [ "File List", "files.html", "files_dup" ]
-    ] ]
-  ] ]
+  [ "ZigZag - Deep Learning Hardware Design Space Exploration", "index.html", ]
 ];
 
 var NAVTREEINDEX =
 [
-"AcceleratorParserStage_8py.html",
-"classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a23e8041ce1015febe4fdace3225714f9",
-"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a95e119fcafad269c55c5f0d9b28a4b5f",
-"classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170",
-"classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html#ad22709b2e67308af35f55680d5a026e0",
-"get__cacti__cost_8py.html#ab37b30ec9d4e15756765cf9d33207a9b"
+"index.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

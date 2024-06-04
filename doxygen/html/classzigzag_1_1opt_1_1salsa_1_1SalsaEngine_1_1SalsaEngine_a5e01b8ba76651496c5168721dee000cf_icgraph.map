@@ -1,5 +1,0 @@
-<map id="get_temporal_loops" name="get_temporal_loops">
-<area shape="rect" id="node1" title="Get all loops that have to be temporally scheduled given layer and spatial mapping." alt="" coords="513,13,664,39"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#ad22709b2e67308af35f55680d5a026e0" title="Runs the LomaEngine." alt="" coords="251,5,465,47"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
-</map>

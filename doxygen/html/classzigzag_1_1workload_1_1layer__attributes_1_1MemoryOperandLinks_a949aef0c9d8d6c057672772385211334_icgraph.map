@@ -1,9 +1,0 @@
-<map id="layer_operands" name="layer_operands">
-<area shape="rect" id="node1" title=" " alt="" coords="497,180,620,207"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#ae7967c8d4e0d2e36538cd5275fad2a07" title="Calculate data serve scope, i.e., for input operands, it means that each data element is broadcast to..." alt="" coords="192,5,449,61"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9bc4d10b339b7694f7b1ccabf59e7dc0" title="Calculate memory bandwidth incremental factor between architectural levels." alt="" coords="192,85,449,141"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a7a8eadc13ab1a1f902862cbd046a8ef8" title="Calculate total/unique/duplicate unit count per operand per architecture level." alt="" coords="192,165,449,221"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#aa7b42d399dada9105b4b245da781fda2" title="Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level..." alt="" coords="192,245,449,301"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#adc6d15bf816ebd4e7220de811dd0fcec" title=" " alt="" coords="251,325,391,352"/>
-<area shape="rect" id="node7" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ab203c91c34aeb2addccfb704a6612206" title=" " alt="" coords="5,325,144,352"/>
-</map>

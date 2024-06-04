@@ -75,4 +75,4 @@ The following loop notation has to be used to describe a layer of the workload (
 * **FY**: Kernel rows
 * **FX**: Kernel columns
 
-An example of this manual layer definition can be found at: `inputs/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/workload/resnet18.py>`_. 
+An example of this manual layer definition can be found at: `inputs/examples/workloads/resnet18.py <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/inputs/examples/workload/resnet18.py>`_. 
