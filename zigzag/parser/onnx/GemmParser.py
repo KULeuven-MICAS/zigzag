@@ -29,6 +29,46 @@ class GemmParser(ONNXOperatorParser):
         """! Run the parser"""
         return self.generate_layer_node()
 
+    def get_layer_node_user_format(
+        self,
+        batch_size: int,
+        size_in: int,
+        size_out: int,
+        size_shared: int,
+    ) -> dict[str, Any]:
+        """! Generate layer data in user input format for MatMul or GEMM ONNX nodes.
+        W[size_out][size_in] * I[batch_size][size_in][size_shared] -> O [batch_size][size_out][size_shared]
+        """
+
+        data: dict[str, Any] = {}
+        data["id"] = self.node_id
+        data["name"] = f"Layer{self.node_id}"
+        data["operator_type"] = self.node.op_type
+        data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
+        data["loop_dims"] = ["B", "C", "K", "D"]
+        data["loop_sizes"] = [batch_size, size_in, size_out, size_shared]
+
+        data["dimension_relations"] = []
+        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
+
+        # Operand sources
+        predecessors = self.get_node_predecessors()
+        match len(predecessors):
+            case 0:
+                # No source operands -> assume one is constant
+                # TODO should this be 2?
+                data["operand_source"] = {"W": self.node_id}
+            case 1:
+                # One source operand, one constant
+                data["operand_source"] = {"W": self.node_id, "I": predecessors[0]}
+            case 2:
+                # Two source operands, none are constant (W and I can be swapped)
+                data["operand_source"] = {"W": predecessors[0], "I": predecessors[1]}
+            case _:
+                raise ValueError("No more than 2 layer predecessors expected")
+
+        return data
+
     def generate_layer_node(self):
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
 
@@ -64,7 +104,7 @@ class GemmParser(ONNXOperatorParser):
                 raise ValueError("Input size of Matmul ONNX node must be either 2 or 3.")
 
         # Create LayerNode
-        layer_data = self.get_layer_node_user_format_gemm(
+        layer_data = self.get_layer_node_user_format(
             batch_size=batch_size,
             size_in=size_in,
             size_out=size_out,
