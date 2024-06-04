@@ -46,7 +46,12 @@ class SpatialMappingInternal:
 
     def __jsonrepr__(self):
         """! JSON representation of this object to save it to a file."""
-        return json_repr_handler(self.mapping_dict_origin)
+        return json_repr_handler(
+            {
+                layer_op: [[str(loop_factor_pair) for loop_factor_pair in mem_level] for mem_level in mapping_layer_op]
+                for layer_op, mapping_layer_op in self.mapping_dict_origin.items()
+            }
+        )
 
     def get_unrolling(self, op: LayerOperand, level: int):
         """! Return the unrolled loops for operand 'op' at level 'level'.
