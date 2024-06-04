@@ -304,7 +304,7 @@ class SearchUnusedMemoryStage(Stage):
 
         # Update mem_update_list and mem_update_weight
         layer_list_without_dummy = [layer for layer in self.workload.topological_sort()]
-        for __, layer in enumerate(layer_list_without_dummy):
+        for _, layer in enumerate(layer_list_without_dummy):
             # handler for the first layer
             if layer == layer_list_without_dummy[0]:
                 is_first_layer = True
@@ -317,7 +317,7 @@ class SearchUnusedMemoryStage(Stage):
             else:
                 is_final_layer = False
 
-            (__, __, act_operand_in_hardware, __) = (
+            (_, _, act_operand_in_hardware, _) = (
                 SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
             )
             output_operand_in_layer = layer.output_operand
