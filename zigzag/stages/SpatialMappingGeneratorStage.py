@@ -17,7 +17,7 @@ from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
 from zigzag.workload.layer_node import LayerNode
-from zigzag.utils import UniqueMessageFilter, pickle_deepcopy
+from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
 from zigzag.mapping.spatial_mapping import (
     SpatialMapping,
@@ -25,7 +25,6 @@ from zigzag.mapping.spatial_mapping import (
 )
 
 logger = logging.getLogger(__name__)
-logger.addFilter(UniqueMessageFilter())
 
 
 class SpatialMappingGeneratorStage(Stage):

@@ -38,6 +38,9 @@ class GemmParser(ONNXOperatorParser):
     ) -> dict[str, Any]:
         """! Generate layer data in user input format for MatMul or GEMM ONNX nodes.
         W[size_out][size_in] * I[batch_size][size_in][size_shared] -> O [batch_size][size_out][size_shared]
+        NOTE when weight/activation precision are given as attribute to the ONNX node, both intermediate and final
+        output precision are set to the given activation precision.
+        is set to
         """
 
         data: dict[str, Any] = {}
