@@ -187,6 +187,8 @@ class LayerNode(LayerNodeABC):
         """! JSON representation used for saving this object to a json file."""
         return json_repr_handler(
             {
+                "name": self.name,
+                "type": self.type,
                 "equation": self.equation,
                 "equation_relations": self.dimension_relations,
                 "loop_dimensions": self.layer_dim_sizes,
