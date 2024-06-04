@@ -14,9 +14,9 @@ workloads = (
 # Expected energy and latency for each workload defined above
 ens_lats = {
     "inputs/workload/alexnet.onnx": (5568602396.684999, 8134431),
-    "inputs/workload/mobilenetv2.onnx": (751128562.4699999, 2427487),
-    "inputs/workload/resnet18.onnx": (1784539639.4349997, 3176546),
-    "inputs/workload/resnet18.yaml": (2115122870.395, 3884789),
+    "inputs/workload/mobilenetv2.onnx": (735250234.1699998, 2417321.0),
+    "inputs/workload/resnet18.onnx": (1783299827.71, 3156625.0),
+    "inputs/workload/resnet18.yaml": (2115121959.8699996, 3855157.0),
 }
 
 
