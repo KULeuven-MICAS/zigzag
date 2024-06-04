@@ -47,23 +47,42 @@ class GemmParser(ONNXOperatorParser):
         data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
         data["loop_dims"] = ["B", "C", "K", "D"]
         data["loop_sizes"] = [batch_size, size_in, size_out, size_shared]
-
         data["dimension_relations"] = []
-        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
 
-        # Operand sources
+        # Assign sources and precisions depending on the number of predecessors
         predecessors = self.get_node_predecessors()
+        act_precision = self.get_activation_precision()
+        weight_precision = self.get_weight_precision()
         match len(predecessors):
             case 0:
                 # No source operands -> assume one is constant
                 # TODO should this be 2?
                 data["operand_source"] = {"W": self.node_id}
+                data["operand_precision"] = {
+                    "W": weight_precision,
+                    "I": act_precision,
+                    "O_final": act_precision,
+                    "O": weight_precision + act_precision,
+                }
             case 1:
                 # One source operand, one constant
                 data["operand_source"] = {"W": self.node_id, "I": predecessors[0]}
+                data["operand_precision"] = {
+                    "W": weight_precision,
+                    "I": act_precision,
+                    "O_final": act_precision,
+                    "O": weight_precision + act_precision,
+                }
             case 2:
                 # Two source operands, none are constant (W and I can be swapped)
                 data["operand_source"] = {"W": predecessors[0], "I": predecessors[1]}
+                data["operand_precision"] = {
+                    "W": act_precision,
+                    "I": act_precision,
+                    "O_final": act_precision,
+                    "O": 2 * act_precision,
+                }
+
             case _:
                 raise ValueError("No more than 2 layer predecessors expected")
 
