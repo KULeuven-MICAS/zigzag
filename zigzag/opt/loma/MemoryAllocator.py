@@ -14,15 +14,11 @@ from zigzag.workload.layer_node import LayerNode
 
 
 class MemoryHierarchyTooSmallException(Exception):
-    """! Missing description"""
-
-    pass
+    """Indicates that the layer does not fit entirely within the memory hierarchy for this temporal ordering"""
 
 
 class MemoryTooSmallException(Exception):
-    """! Missing description"""
-
-    pass
+    """Indicates that some memory instance is too small to support this temporal ordering"""
 
 
 class MemoryAllocator:
