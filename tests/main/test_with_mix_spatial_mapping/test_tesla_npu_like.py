@@ -18,7 +18,7 @@ ens_lats = {
     "inputs/workload/alexnet.onnx": (6044768678, 8370470),
     "inputs/workload/mobilenetv2.onnx": (930702060, 1965457),
     "inputs/workload/resnet18.onnx": (1724869681, 3257898),
-    "inputs/workload/resnet18.yaml": (2220861655, 3934616),
+    "inputs/workload/resnet18.yaml": (2094141825.5040002, 3480232.0),
 }
 
 
