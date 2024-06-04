@@ -238,6 +238,7 @@ class SearchUnusedMemoryStage(Stage):
                             if (curr_mem_level < self.mem_update_weight) and mem_serve_all_oa_dims and mem_serve_weight:
                                 self.mem_update_weight = curr_mem_level
         # assert check if there is -1 value in mem_update_list
+        breakpoint()
         for layer_info in self.mem_update_list.values():
             for mem_level_in_info in layer_info.values():
                 assert mem_level_in_info >= 0, f"There are still layers with top mem levels not figured out."
@@ -257,9 +258,9 @@ class SearchUnusedMemoryStage(Stage):
             act_operand_in_hardware: MemoryOperand = layer.memory_operand_links[act_operand_in_layer]
         elif len(layer.constant_operands) == 0:
             # Adder layers
-            weight_operand_in_layer = None
-            weight_operand_in_hardware = None
-            act_operand_in_layer: LayerOperand = layer.input_operands[0]
+            weight_operand_in_layer = layer.input_operands[0]
+            weight_operand_in_hardware = layer.memory_operand_links[weight_operand_in_layer]
+            act_operand_in_layer: LayerOperand = layer.input_operands[1]
             act_operand_in_hardware: MemoryOperand = layer.memory_operand_links[act_operand_in_layer]
         else:
             # len(layer.constant_operands) == 2, both input, activation exist in layer.constant_operands
