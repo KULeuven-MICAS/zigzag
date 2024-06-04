@@ -28,9 +28,8 @@ def get_hardware_performance_zigzag(
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """
-    # TODO the API should be better documented
-    """
+    """! Function of deriving the accelerator cost (both digital and in-memory-computing cores are supported) """
+
     # Initialize the logger
     import logging as _logging
 
@@ -101,6 +100,8 @@ def get_hardware_performance_zigzag_imc(
     dump_filename_pattern: str = "outputs/layer_?.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned)"""
+
     # Initialize the logger
     import logging as _logging
 
@@ -179,6 +180,8 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     dump_filename_pattern: str = "outputs/{datetime}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving accelerator cost where the pe array size need to be scaled"""
+
     # Initialize the logger
     import logging as _logging
 
@@ -252,6 +255,8 @@ def get_hardware_performance_zigzag_without_unused_memory(
     dump_filename_pattern: str = "outputs/{datetime}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible"""
+
     # Initialize the logger
     import logging as _logging
 
@@ -325,6 +330,8 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     dump_filename_pattern: str = "outputs/{datetime}.json",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving accelerator cost when a mixed spatial mapping is required"""
+
     # Initialize the logger
     import logging as _logging
 
