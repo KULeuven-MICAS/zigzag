@@ -1,25 +1,28 @@
 from typing import Any
+import logging
 from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand
-
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.stages.Stage import Stage, StageCallable
-
-import networkx as nx  # kept for debugging
 from zigzag.workload.Workload import Workload
 from zigzag.workload.DummyNode import DummyNode
-
-import logging
-
 from zigzag.workload.layer_node import LayerNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC
+
+import networkx as nx  # kept for debugging
 
 logger = logging.getLogger(__name__)
 
 
 class SearchUnusedMemoryStage(Stage):
+    """! Class for searching lowest allowed memory level per operand per layer"""
     def __init__(
-        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, workload: Workload, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        accelerator: Accelerator,
+        workload: Workload,
+        **kwargs: Any
     ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
@@ -31,7 +34,7 @@ class SearchUnusedMemoryStage(Stage):
         # record of top mem level per layer: dict[layer_idx, mem_level]
         self.mem_update_list: dict[str, dict[MemoryOperand, int]] = {}
         # record of input, output size per layer (unit: bit): dict[layer_idx: [operand: size]]
-        self.each_layer_IO_data_size: dict[str, list[dict[MemoryOperand, int]]] = {}
+        self.each_layer_io_data_size: dict[str, list[dict[MemoryOperand, int]]] = {}
         # record of the weight size of entire workload (unit: bit)
         self.weight_size_entire_workload: int = 0
         # record of executable layer name and index: dict[LayerNode, layer_idx]
@@ -79,7 +82,7 @@ class SearchUnusedMemoryStage(Stage):
                 for operand in layer.input_operands:
                     input_data_size += layer.operand_size_bit[operand]
                 self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
-                self.each_layer_IO_data_size[str(idx)] = [
+                self.each_layer_io_data_size[str(idx)] = [
                     {
                         output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
                         act_operand_in_hardware: input_data_size,
@@ -90,7 +93,7 @@ class SearchUnusedMemoryStage(Stage):
 
             # update info for regular layers
             self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
-            self.each_layer_IO_data_size[str(idx)] = [
+            self.each_layer_io_data_size[str(idx)] = [
                 {
                     act_operand_in_hardware: layer.operand_size_bit[act_operand_in_layer],
                     output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
@@ -170,13 +173,13 @@ class SearchUnusedMemoryStage(Stage):
                 mem_level_record_prev_layer = self.mem_update_list[f"{prev_layer_id}"]
                 assert prev_layer_output_operand_in_hardware in mem_level_record_prev_layer.keys()
                 prev_layer_output_level = mem_level_record_prev_layer[prev_layer_output_operand_in_hardware]
-                self.update_IO_mem_level(curr_id, act_operand_in_hardware, prev_layer_output_level)
+                self.update_io_mem_level(curr_id, act_operand_in_hardware, prev_layer_output_level)
 
             # update input, weight, output mem level for branch starting node and branch final node
             if is_branch_starting_node or is_branch_final_node:
                 if is_first_layer:
-                    self.update_IO_mem_level(curr_id, act_operand_in_hardware, self.top_mem_level_act)
-                self.update_IO_mem_level(curr_id, output_operand_in_hardware, self.top_mem_level_output)
+                    self.update_io_mem_level(curr_id, act_operand_in_hardware, self.top_mem_level_act)
+                self.update_io_mem_level(curr_id, output_operand_in_hardware, self.top_mem_level_output)
             else:
                 for curr_mem_level, mem in reversed(list(enumerate(self.core_mem_level_list))):
                     served_operands = list(mem.mem_level_of_operands.keys())
@@ -213,9 +216,9 @@ class SearchUnusedMemoryStage(Stage):
                         served_operands = [output_operand_in_hardware, act_operand_in_hardware]
 
                     if mem_serve_io_both or mem_serve_weight:
-                        required_IO_data_size = sum(
+                        required_io_data_size = sum(
                             [
-                                self.each_layer_IO_data_size[f"{curr_id}"][0][operand]
+                                self.each_layer_io_data_size[f"{curr_id}"][0][operand]
                                 for operand in served_operands
                                 if operand != weight_operand_in_hardware
                             ]
@@ -223,15 +226,15 @@ class SearchUnusedMemoryStage(Stage):
                         required_weight_size = (
                             self.weight_size_entire_workload if weight_operand_in_hardware in served_operands else 0
                         )
-                        required_total_size = required_IO_data_size + required_weight_size
+                        required_total_size = required_io_data_size + required_weight_size
 
                         if required_total_size <= avail_mem_size:
                             if mem_serve_io_both:
                                 if is_first_layer:
                                     # update input mem level
-                                    self.update_IO_mem_level(curr_id, act_operand_in_hardware, curr_mem_level)
+                                    self.update_io_mem_level(curr_id, act_operand_in_hardware, curr_mem_level)
                                 # update output mem level
-                                self.update_IO_mem_level(curr_id, output_operand_in_hardware, curr_mem_level)
+                                self.update_io_mem_level(curr_id, output_operand_in_hardware, curr_mem_level)
                             # weight mem level must serve all oa dims
                             mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(mem, self.accelerator)
                             # update weight mem level
@@ -246,7 +249,8 @@ class SearchUnusedMemoryStage(Stage):
     def get_act_weight_operand_names(
         layer: LayerNode,
     ) -> tuple[LayerOperand, LayerOperand | None, MemoryOperand, MemoryOperand | None]:
-        # the function is also called within imc cost model
+        """! Function for identifying the layer/hardware name of activation and weight of a layer"""
+        # the function is also called within RemoveUnusedMemoryStage and imc cost model
         if len(layer.constant_operands) == 1:
             # regular layers
             weight_operand_in_layer: LayerOperand | None = layer.constant_operands[0]
@@ -281,7 +285,7 @@ class SearchUnusedMemoryStage(Stage):
         return act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware
 
     def check_if_mem_serve_all_oa_dims(self, mem: MemoryLevel, accelerator: Accelerator):
-        # check if mem serve all hardare dimensions
+        """! Function to check if mem serve all hardare dimensions"""
         core = accelerator.cores[0]
         operational_array = core.operational_array
         oa_dim_nb = len(operational_array.dimension_sizes)
@@ -300,7 +304,7 @@ class SearchUnusedMemoryStage(Stage):
 
         # Update mem_update_list and mem_update_weight
         layer_list_without_dummy = [layer for layer in self.workload.topological_sort()]
-        for id, layer in enumerate(layer_list_without_dummy):
+        for __, layer in enumerate(layer_list_without_dummy):
             # handler for the first layer
             if layer == layer_list_without_dummy[0]:
                 is_first_layer = True
@@ -313,16 +317,16 @@ class SearchUnusedMemoryStage(Stage):
             else:
                 is_final_layer = False
 
-            (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+            (__, __, act_operand_in_hardware, __) = (
                 SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
             )
             output_operand_in_layer = layer.output_operand
             output_operand_in_hardware = layer.memory_operand_links.layer_to_mem_op(output_operand_in_layer)
             curr_id = self.layer_list[layer]
             if is_first_layer:
-                self.update_IO_mem_level(curr_id, act_operand_in_hardware, self.top_mem_level_act)
+                self.update_io_mem_level(curr_id, act_operand_in_hardware, self.top_mem_level_act)
             if is_final_layer:
-                self.update_IO_mem_level(curr_id, output_operand_in_hardware, self.top_mem_level_output)
+                self.update_io_mem_level(curr_id, output_operand_in_hardware, self.top_mem_level_output)
 
     def remove_dummy_nodes_in_workload(self):
         """! Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy
@@ -343,7 +347,7 @@ class SearchUnusedMemoryStage(Stage):
         # plt.show()
         self.workload.remove_nodes_from(dummy_nodes)
 
-    def update_IO_mem_level(self, layer_id: int, operand: MemoryOperand, target_level: int):
+    def update_io_mem_level(self, layer_id: int, operand: MemoryOperand, target_level: int):
         """! Update self.mem_update_list as:
         self.mem_update_list[layer_id][operand] = target_level
         """
