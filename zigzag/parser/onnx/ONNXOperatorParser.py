@@ -2,6 +2,7 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 from onnx import ModelProto, NodeProto
+import onnx
 
 from zigzag.parser.onnx.utils import get_onnx_tensor_type
 from zigzag.workload.LayerNodeABC import LayerNodeABC
@@ -9,6 +10,10 @@ from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 class ONNXOperatorParser(metaclass=ABCMeta):
     """! Abstract base class that represents a parser of an onnx operator. Example: Conv, MatMul, etc."""
+
+    # These attribute names can be added to an ONNX node to change the data precision used in ZigZag
+    CUSTOM_WEIGHT_SIZE_ATTR = "weight_size"
+    CUSTOM_ACT_SIZE_ATTR = "act_size"
 
     def __init__(
         self,
@@ -55,14 +60,37 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         return f"Layer{self.node_id}"
 
     def get_node_predecessors(self) -> list[int]:
-        """Compute node input source"""
+        """Compute node input sources"""
         predecessors: list[int] = []
         for node_input in self.node.input:
             for n in self.nodes_outputs:
                 if node_input in self.nodes_outputs[n]:
                     predecessors.append(n)
-        # assert len(predecessors) <= 2, f"Unexpected number of layer node predecessors: {len(predecessors)}"
         return predecessors
+
+    def get_weight_precision(self):
+        """Return the weight precision for this node.
+        The weight precision of ONNX nodes can be customized by manually adding the attribute `CUSTOM_WEIGHT_SIZE_ATTR`
+        to the node."""
+        for attr in self.node.attribute:
+            if attr.name == ONNXOperatorParser.CUSTOM_WEIGHT_SIZE_ATTR:
+                if attr.type != onnx.AttributeProto.INT:
+                    raise ValueError("Custom weight size attribute must be an integer.")
+                return attr.i
+        # Default
+        return 8
+
+    def get_activation_precision(self):
+        """Return the activation precision for this node.
+        The activation precision of ONNX nodes can be customized by manually adding the attribute
+         `CUSTOM_WEIGHT_SIZE_ATTR` to the node."""
+        for attr in self.node.attribute:
+            if attr.name == ONNXOperatorParser.CUSTOM_ACT_SIZE_ATTR:
+                if attr.type != onnx.AttributeProto.INT:
+                    raise ValueError("Custom activation size attribute must be an integer.")
+                return attr.i
+        # Default
+        return 8
 
     def get_layer_node_user_format_gemm(
         self,
