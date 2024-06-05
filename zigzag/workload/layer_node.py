@@ -169,6 +169,45 @@ class LayerNode(LayerNodeABC):
         self.operand_size_elem: dict[LayerOperand, UnrollFactor] = dict()
         self.extract_layer_info()
 
+    def get_act_layer_op(self) -> LayerOperand:
+        """Return the `I` LayerOperand: either the non-constant operand or one of the input operands if none are
+        constant"""
+        if len(self.constant_operands) == 1:
+            # regular layers
+            weight_layer_op = self.constant_operands[0]
+            act_layer_op = [operand for operand in self.input_operands if operand != weight_layer_op].pop()
+        elif len(self.constant_operands) == 0:
+            # None constant: take the second one
+            act_layer_op = self.input_operands[1]
+        else:
+            pr_loop_key = next(iter(self.pr_loop.keys()))
+            related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
+                layer_op: self.equation.get_r_layer_dims(layer_op)
+                for layer_op in self.equation.get_contained_operands()
+            }
+            act_layer_op = [
+                operand_in_layer
+                for operand_in_layer, related_loop in related_loop_dict.items()
+                if pr_loop_key in related_loop
+            ].pop()
+        return act_layer_op
+
+    def get_weight_layer_op(
+        self,
+    ) -> LayerOperand:
+        """Return the `W` LayerOperand: either the constant operand or one of the input operands if none are
+        constant"""
+        if len(self.constant_operands) == 1:
+            # regular layers
+            weight_layer_op = self.constant_operands[0]
+        elif len(self.constant_operands) == 0:
+            # Adder layers
+            weight_layer_op = self.input_operands[0]
+        else:
+            act_layer_op = self.get_act_layer_op()
+            weight_layer_op = [x for x in self.constant_operands if x != act_layer_op].pop()
+        return weight_layer_op
+
     def build_pr_funcs(self) -> tuple[PrLoop, LoopList, PrScalingFactors]:
         """!
         # TODO requires documentation

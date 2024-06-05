@@ -12,32 +12,13 @@ from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocati
 from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import pickle_deepcopy
 from zigzag.stages.Stage import Stage, StageCallable
-from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 
 logger = logging.getLogger(__name__)
 
 
 class RemoveUnusedMemoryStage(Stage):
-    """! # ########## Description ##########
-    # # This stage must be processed behind WorkloadStage.
-    # # This stage removes unused memory level found by SearchUnusedMemoryStage.
-    # ######### Pseudo-code ##########
-    # # Initialization:
-    # #  target_act_mem_level, target_output_mem_level: get from mem_update_list
-    # #  target_const_mem_level = mem_update_weight
-    # # 1. Modify mem structure:
-    # # for mem in mem_levels(sort_order: from bottom to top):
-    # #   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
-    # #     remove ['I'] in mem.served_operand, mem_port_alloc
-    # #   if ['O'] in mem.served_operand and mem.mem_level > target_output_mem_level:
-    # #     remove ['O'] in mem.served_operand, mem_port_alloc
-    # #   if ['W'] in mem.served_operand and mem.mem_level > target_const_mem_level:
-    # #     remove ['W'] in mem.served_operand, mem_port_alloc
-    # # 2. Remove unused memory
-    # # for mem in mem_levels(sort_order: from top to bottom):
-    # #   if mem.served_operand == empty:
-    # #     do not add the current mem into the modified architecture
-    # TODO requires cleanup
+    """! This stage must be processed behind WorkloadStage. It stage removes unused memory level found by
+    SearchUnusedMemoryStage.
     """
 
     def __init__(
@@ -74,23 +55,23 @@ class RemoveUnusedMemoryStage(Stage):
         operational_array = core.operational_array
         memory_hierarchy = core.memory_hierarchy
 
-        # derive act_operand/weight_operand_in_hardware
-        (_, _, act_operand_in_hardware, weight_operand_in_hardware) = (
-            SearchUnusedMemoryStage.get_act_weight_operand_names(layer=self.layer)
-        )
-        output_operand_in_layer = self.layer.output_operand
-        output_operand_in_hardware = self.layer.memory_operand_links[output_operand_in_layer]
+        act_layer_op = self.layer.get_act_layer_op()
+        weight_layer_op = self.layer.get_weight_layer_op()
+        output_layer_op = self.layer.output_operand
+        act_mem_op = self.layer.memory_operand_links.layer_to_mem_op(act_layer_op)
+        weight_mem_op = self.layer.memory_operand_links.layer_to_mem_op(weight_layer_op)
+        output_mem_op = self.layer.memory_operand_links.layer_to_mem_op(output_layer_op)
 
         # Find target_act/const/output_mem_level
         target_act_mem_level = [
             targeted_mem_lv
             for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
-            if operand_in_hardware == act_operand_in_hardware
+            if operand_in_hardware == act_mem_op
         ].pop()
         target_output_mem_level = [
             targeted_mem_lv
             for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
-            if operand_in_hardware == output_operand_in_hardware
+            if operand_in_hardware == output_mem_op
         ].pop()
 
         if len(self.layer.constant_operands) == 0:
@@ -98,7 +79,7 @@ class RemoveUnusedMemoryStage(Stage):
             target_const_mem_level = [
                 targeted_mem_lv
                 for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
-                if operand_in_hardware == act_operand_in_hardware
+                if operand_in_hardware == act_mem_op
             ].pop()
         else:
             target_const_mem_level = self.mem_update_weight
@@ -119,20 +100,16 @@ class RemoveUnusedMemoryStage(Stage):
             new_operands: list[MemoryOperand] = []
             new_port_alloc_data: dict[MemoryOperand, dict[DataDirection, str]] = {}
 
-            if (act_operand_in_hardware in operands) and curr_mem_level <= target_act_mem_level:
-                new_operands.append(act_operand_in_hardware)
-                new_port_alloc_data[act_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(act_operand_in_hardware)
+            if (act_mem_op in operands) and curr_mem_level <= target_act_mem_level:
+                new_operands.append(act_mem_op)
+                new_port_alloc_data[act_mem_op] = port_alloc.get_alloc_for_mem_op(act_mem_op)
                 # TODO I think you need
-            if (weight_operand_in_hardware in operands) and curr_mem_level <= target_const_mem_level:
-                new_operands.append(weight_operand_in_hardware)
-                new_port_alloc_data[weight_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
-                    weight_operand_in_hardware
-                )
-            if (output_operand_in_hardware in operands) and curr_mem_level <= target_output_mem_level:
-                new_operands.append(output_operand_in_hardware)
-                new_port_alloc_data[output_operand_in_hardware] = port_alloc.get_alloc_for_mem_op(
-                    output_operand_in_hardware
-                )
+            if (weight_mem_op in operands) and curr_mem_level <= target_const_mem_level:
+                new_operands.append(weight_mem_op)
+                new_port_alloc_data[weight_mem_op] = port_alloc.get_alloc_for_mem_op(weight_mem_op)
+            if (output_mem_op in operands) and curr_mem_level <= target_output_mem_level:
+                new_operands.append(output_mem_op)
+                new_port_alloc_data[output_mem_op] = port_alloc.get_alloc_for_mem_op(output_mem_op)
 
             new_port_alloc = PortAllocation(new_port_alloc_data)
             new_served_dimensions: ServedMemDimensions = pickle_deepcopy(served_dimensions)

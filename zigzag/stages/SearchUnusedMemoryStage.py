@@ -1,6 +1,6 @@
 from typing import Any
 import logging
-from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand
+from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.stages.Stage import Stage, StageCallable
@@ -41,12 +41,18 @@ class SearchUnusedMemoryStage(Stage):
 
         # Derive top mem level of input, weight, output
         layer_0 = self.workload_no_dummy.node_list[0]
-        (_, _, act_mem_op, weight_mem_op) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer_0)
+        act_layer_op = layer_0.get_act_layer_op()
+        weight_layer_op = layer_0.get_weight_layer_op()
         output_layer_op = layer_0.output_operand
-        output_mem_op = layer_0.memory_operand_links[output_layer_op]
-        self.top_mem_level_act = self.__get_top_mem_level_for_op(act_mem_op)
-        self.top_mem_level_weight = self.__get_top_mem_level_for_op(weight_mem_op)
-        self.top_mem_level_output = self.__get_top_mem_level_for_op(output_mem_op)
+        self.top_mem_level_act = self.__get_top_mem_level_for_op(
+            layer_0.memory_operand_links.layer_to_mem_op(act_layer_op)
+        )
+        self.top_mem_level_weight = self.__get_top_mem_level_for_op(
+            layer_0.memory_operand_links.layer_to_mem_op(weight_layer_op)
+        )
+        self.top_mem_level_output = self.__get_top_mem_level_for_op(
+            layer_0.memory_operand_links.layer_to_mem_op(output_layer_op)
+        )
 
         # record of the index of the weight memory level
         self.mem_update_weight = self.top_mem_level_weight
@@ -67,12 +73,11 @@ class SearchUnusedMemoryStage(Stage):
 
     def __calc_sizes_per_layer(self) -> None:
         for layer in self.workload_no_dummy.topological_sort():
-            # input, weight operand name in hardware
-            (act_layer_op, weight_layer_op, act_mem_op, _) = SearchUnusedMemoryStage.get_act_weight_operand_names(
-                layer=layer
-            )
+            act_layer_op = layer.get_act_layer_op()
+            weight_layer_op = layer.get_weight_layer_op()
             output_layer_op = layer.output_operand
-            output_mem_op = layer.memory_operand_links[output_layer_op]
+            act_mem_op = layer.memory_operand_links.layer_to_mem_op(act_layer_op)
+            output_mem_op = layer.memory_operand_links.layer_to_mem_op(output_layer_op)
 
             # Initialize
             self.mem_update_list[layer.id] = {act_mem_op: -1, output_mem_op: -1}
@@ -127,10 +132,11 @@ class SearchUnusedMemoryStage(Stage):
             is_first_layer = layer == layer_list_without_dummy[0]
             is_final_layer = layer == layer_list_without_dummy[-1]
 
-            # activation, weight operand name
-            (_, _, act_mem_op, weight_mem_op) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
-            # output operand name
+            act_layer_op = layer.get_act_layer_op()
+            weight_layer_op = layer.get_weight_layer_op()
             output_layer_op = layer.output_operand
+            act_mem_op = layer.memory_operand_links.layer_to_mem_op(act_layer_op)
+            weight_mem_op = layer.memory_operand_links.layer_to_mem_op(weight_layer_op)
             output_mem_op = layer.memory_operand_links.layer_to_mem_op(output_layer_op)
 
             is_branch_starting_node = self.workload_no_dummy.get_out_degree_for_layer(layer) > 1
@@ -165,12 +171,9 @@ class SearchUnusedMemoryStage(Stage):
                     if not is_final_layer:
                         # grab the next layer name, which is a non-Adder layer for sure
                         next_layer = next(self.workload_no_dummy.get_successors_for_layer(layer))
-                        (
-                            _,
-                            _,
-                            next_layer_act_mem_op,
-                            _,
-                        ) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=next_layer)
+                        next_layer_act_layer_op = next_layer.get_act_layer_op()
+                        next_layer_act_mem_op = next_layer.memory_operand_links.layer_to_mem_op(next_layer_act_layer_op)
+
                         mem_serve_act_in_next_layer = next_layer_act_mem_op in served_operands
                     else:
                         # instead check if the mem serves act operand of the current layer
@@ -202,9 +205,7 @@ class SearchUnusedMemoryStage(Stage):
                         if required_total_size <= avail_mem_size:
                             if mem_serve_io_both:
                                 if is_first_layer:
-                                    # update input mem level
                                     self.update_io_mem_level(layer.id, act_mem_op, curr_mem_level)
-                                # update output mem level
                                 self.update_io_mem_level(layer.id, output_mem_op, curr_mem_level)
                             # weight mem level must serve all oa dims
                             mem_serve_all_oa_dims = self.check_if_mem_serve_all_oa_dims(mem, self.accelerator)
@@ -216,41 +217,6 @@ class SearchUnusedMemoryStage(Stage):
         for layer_info in self.mem_update_list.values():
             for mem_level_in_info in layer_info.values():
                 assert mem_level_in_info >= 0, "There are still layers with top mem levels not figured out."
-
-    @staticmethod
-    def get_act_weight_operand_names(
-        layer: LayerNode,
-    ) -> tuple[LayerOperand, LayerOperand, MemoryOperand, MemoryOperand]:
-        """! Function for identifying the layer/hardware name of activation and weight of a layer"""
-        if len(layer.constant_operands) == 1:
-            # regular layers
-            weight_layer_op = layer.constant_operands[0]
-            weight_mem_op = layer.memory_operand_links[weight_layer_op]
-            act_layer_op = [operand for operand in layer.input_operands if operand != weight_layer_op].pop()
-            act_mem_op = layer.memory_operand_links.layer_to_mem_op(act_layer_op)
-        elif len(layer.constant_operands) == 0:
-            # Adder layers
-            weight_layer_op = layer.input_operands[0]
-            weight_mem_op = layer.memory_operand_links[weight_layer_op]
-            act_layer_op = layer.input_operands[1]
-            act_mem_op = layer.memory_operand_links[act_layer_op]
-        else:
-            pr_loop_key = next(iter(layer.pr_loop.keys()))
-            related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
-                layer_op: layer.equation.get_r_layer_dims(layer_op)
-                for layer_op in layer.equation.get_contained_operands()
-            }
-
-            act_layer_op = [
-                operand_in_layer
-                for operand_in_layer, related_loop in related_loop_dict.items()
-                if pr_loop_key in related_loop
-            ].pop()
-
-            act_mem_op = layer.memory_operand_links.layer_to_mem_op(act_layer_op)
-            weight_layer_op = [x for x in layer.constant_operands if x != act_layer_op][0]
-            weight_mem_op = layer.memory_operand_links.layer_to_mem_op(weight_layer_op)
-        return act_layer_op, weight_layer_op, act_mem_op, weight_mem_op
 
     def check_if_mem_serve_all_oa_dims(self, mem: MemoryLevel, accelerator: Accelerator):
         """! Function to check if mem serve all hardware dimensions"""
@@ -275,9 +241,11 @@ class SearchUnusedMemoryStage(Stage):
             is_first_layer = layer == layers_without_dummy[0]
             is_final_layer = layer == layers_without_dummy[-1]
 
-            (_, _, act_mem_op, _) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            act_layer_op = layer.get_act_layer_op()
             output_layer_op = layer.output_operand
+            act_mem_op = layer.memory_operand_links.layer_to_mem_op(act_layer_op)
             output_mem_op = layer.memory_operand_links.layer_to_mem_op(output_layer_op)
+
             if is_first_layer:
                 self.update_io_mem_level(layer.id, act_mem_op, self.top_mem_level_act)
             if is_final_layer:
