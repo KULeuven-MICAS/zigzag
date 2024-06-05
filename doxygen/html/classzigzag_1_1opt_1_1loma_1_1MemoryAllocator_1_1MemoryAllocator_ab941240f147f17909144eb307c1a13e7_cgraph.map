@@ -1,0 +1,6 @@
+<map id="calc_loops_size" name="calc_loops_size">
+<area shape="rect" id="node1" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="5,20,128,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="176,5,453,61"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a63e2b96cd00a3a20235944a9c3f79a7d" title=" " alt="" coords="501,5,800,61"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ac468cd998c4b3e94e02d5da31a401b61" title=" " alt="" coords="848,5,1125,61"/>
+</map>

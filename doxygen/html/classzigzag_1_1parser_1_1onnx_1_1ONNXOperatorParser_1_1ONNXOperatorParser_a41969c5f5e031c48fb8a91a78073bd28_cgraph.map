@@ -1,0 +1,5 @@
+<map id="get_input_output_weight_data_type" name="get_input_output_weight_data_type">
+<area shape="rect" id="node1" title="Return the data type of the input, output and weight tensors of this node." alt="" coords="5,35,188,76"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="236,5,437,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a4ffc200dc5352663e26c64dc86398860" title="Return the name of the weight input of this node depending on its operator type." alt="" coords="267,71,406,98"/>
+</map>

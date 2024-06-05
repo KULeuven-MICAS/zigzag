@@ -1,0 +1,5 @@
+<map id="get_regular_adder_trees_energy" name="get_regular_adder_trees_energy">
+<area shape="rect" id="node1" title="get the energy spent on regular RCA adder trees without place values" alt="" coords="5,27,185,69"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a827cabcd831645563e9173f0dd6f86e8" title="energy of 1b full adder Assume a 1b adder has 3 ND2 gate and 2 XOR2 gate" alt="" coords="233,5,396,32"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a936c8467451a42061c05958d0fecf544" title="energy of 1b full adder when 1 input is 0" alt="" coords="233,57,396,98"/>
+</map>

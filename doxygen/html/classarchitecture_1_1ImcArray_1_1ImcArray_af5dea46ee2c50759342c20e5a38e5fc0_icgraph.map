@@ -1,0 +1,4 @@
+<map id="get_tclk" name="get_tclk">
+<area shape="rect" id="node1" title="get clock cycle time of imc macros (worst path: dacs &#45;&gt; mults &#45;&gt; adcs &#45;&gt; adders &#45;&gt; accumulators)" alt="" coords="124,5,199,32"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab948c7a4c22363a3aae688c30beec0e6" title=" " alt="" coords="5,5,76,32"/>
+</map>

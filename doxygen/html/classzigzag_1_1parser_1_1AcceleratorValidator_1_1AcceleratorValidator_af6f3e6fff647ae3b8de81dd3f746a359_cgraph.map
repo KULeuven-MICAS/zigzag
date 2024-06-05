@@ -1,0 +1,15 @@
+<map id="validate" name="validate">
+<area shape="rect" id="node1" title="Validate the user&#45;provided accelerator data." alt="" coords="5,137,80,164"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html#a0735d480249a52cdfa6f72f238254d9d" title=" " alt="" coords="199,108,286,135"/>
+<area shape="rect" id="node13" href="$classzigzag_1_1parser_1_1MappingValidator_1_1MappingValidator.html#a0735d480249a52cdfa6f72f238254d9d" title=" " alt="" coords="128,159,357,201"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#adaf16e02b62aa4fbe35ddf9e83e49b82" title="Return True iff 1) the instance&#39;s OA Dimensions have been initialized to the size from the hardware a..." alt="" coords="405,130,651,171"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7" title="Return a set containing all the LayerDims contained in the mapping at any OA Dim." alt="" coords="719,5,929,61"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ad242b2417c78baf1fa2e2a40c9874ea0" title="Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions." alt="" coords="716,85,932,141"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#aa557c0a1292ba357db900b8d2f8cd96e" title=" " alt="" coords="708,166,940,207"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9b2e128c771f0438e6a35c4e84095f66" title=" " alt="" coords="699,231,949,273"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9" title="Convert all unrollings (pair of LayerDim and UnrollFactor) at all OADimension to a single list of tup..." alt="" coords="1012,45,1249,101"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c" title="Return a list with all of the MappingSingleOADims contained in this instance." alt="" coords="1312,53,1571,94"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a" title=" " alt="" coords="1619,53,1857,94"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="997,166,1264,207"/>
+<area shape="rect" id="node12" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a89d8a00f894393293852f9e16641be32" title=" " alt="" coords="1018,231,1243,273"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="5,20,48,47"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a64f434fd029f6bfd55580df1a7424b94" title=" " alt="" coords="96,5,375,61"/>
+</map>

@@ -1,0 +1,6 @@
+<map id="add_branch_attribute" name="add_branch_attribute">
+<area shape="rect" id="node1" title=" " alt="" coords="733,13,893,39"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a0bd28035f9bc4d1d49cf4a377ad5a363" title="Modifies the given onnx model if there&#39;s dynamic behavior in terms of an &#39;If&#39; operator." alt="" coords="525,5,685,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser.html#ada2ad33b3a3b364f30e0f5d7d5201d73" title="Iterate through the onnx model and generate the workload consisting of LayerNodes and DummyNodes." alt="" coords="251,5,477,47"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+</map>

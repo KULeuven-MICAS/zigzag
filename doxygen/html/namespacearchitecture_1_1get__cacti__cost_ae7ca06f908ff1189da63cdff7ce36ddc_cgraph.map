@@ -1,0 +1,4 @@
+<map id="get_w_cost_per_weight_from_cacti" name="get_w_cost_per_weight_from_cacti">
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,180,47"/>
+<area shape="rect" id="node2" href="$namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="228,13,343,39"/>
+</map>

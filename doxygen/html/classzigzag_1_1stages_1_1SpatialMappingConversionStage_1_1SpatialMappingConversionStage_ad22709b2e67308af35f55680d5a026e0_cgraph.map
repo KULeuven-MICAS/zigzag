@@ -1,0 +1,8 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title=" " alt="" coords="5,78,48,105"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a8a4d9a41f5e54b12e36a1874f37d524d" title="Convert the SpatialMapping instance in user&#45;defined format (spatial mapping across operational array ..." alt="" coords="96,71,253,112"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a18e1ee0a6e9cfb51c4d4d209ee40c349" title=" " alt="" coords="303,37,471,79"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a863d3a950b6d9eaa1b1f63ed922ea731" title="This function is to convert spatial mapping to mapping_per_mem_lvl, which attaches spatial mapping to..." alt="" coords="301,103,473,144"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a6f6cce41e936ccced94627a56c0f8bf7" title=" " alt="" coords="529,5,709,47"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a73e0292e9c080b220525f6be47cce0e8" title="For the case when there is layer dimension that is mapped on multiple oa dimensions." alt="" coords="521,71,716,112"/>
+</map>

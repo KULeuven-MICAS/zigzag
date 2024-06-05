@@ -1,0 +1,5 @@
+<map id="get_area" name="get_area">
+<area shape="rect" id="node1" title="get area of IMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="5,20,84,47"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1imc__unit_1_1ImcUnit.html#a9ed0d17991cdae5631cd1479d6dfaed5" title="get the area, energy cost of a single macro (cell array) using CACTI this function is called when cac..." alt="" coords="132,5,323,61"/>
+<area shape="rect" id="node3" href="$namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="371,13,533,54"/>
+</map>

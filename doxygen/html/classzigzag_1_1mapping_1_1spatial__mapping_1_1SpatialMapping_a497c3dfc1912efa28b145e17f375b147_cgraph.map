@@ -1,0 +1,9 @@
+<map id="get_performance_indicator" name="get_performance_indicator">
+<area shape="rect" id="node1" title="Return a value that indicates how well this SpatialMapping is expected to perform when used in ZigZag..." alt="" coords="5,64,203,91"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7" title="Return a set containing all the LayerDims contained in the mapping at any OA Dim." alt="" coords="251,5,439,32"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#ad242b2417c78baf1fa2e2a40c9874ea0" title="Return the total unroll factor of a given Layer Dimension, over all Operational Array Dimensions." alt="" coords="273,57,417,98"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a96e3f6220a6ab1c997e1072eeca43b9b" title="Returns the hardware utilization, i.e." alt="" coords="497,121,611,148"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a55f93c4ba82c9f3c6af7f8bdb2fe85d9" title="Convert all unrollings (pair of LayerDim and UnrollFactor) at all OADimension to a single list of tup..." alt="" coords="487,64,621,91"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c" title="Return a list with all of the MappingSingleOADims contained in this instance." alt="" coords="669,65,756,92"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a706ee54da90740b6ebd6cb5ddb324e0a" title=" " alt="" coords="804,92,869,119"/>
+</map>

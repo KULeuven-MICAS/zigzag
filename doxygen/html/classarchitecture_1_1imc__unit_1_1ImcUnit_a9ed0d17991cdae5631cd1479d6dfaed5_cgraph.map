@@ -1,0 +1,4 @@
+<map id="get_single_cell_array_cost_from_cacti" name="get_single_cell_array_cost_from_cacti">
+<area shape="rect" id="node1" title="get the area, energy cost of a single macro (cell array) using CACTI this function is called when cac..." alt="" coords="5,5,165,47"/>
+<area shape="rect" id="node2" href="$namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="213,5,376,47"/>
+</map>

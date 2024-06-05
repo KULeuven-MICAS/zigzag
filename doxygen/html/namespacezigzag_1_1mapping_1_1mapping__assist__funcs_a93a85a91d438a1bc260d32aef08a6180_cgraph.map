@@ -1,0 +1,5 @@
+<map id="decouple_pr_loop" name="decouple_pr_loop">
+<area shape="rect" id="node1" title="This function decouples the pr loops into data size (r loops) and data reuse (ir loops)." alt="" coords="5,13,141,39"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="381,5,520,47"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1mapping_1_1mapping__assist__funcs.html#a98824e40fda888066262630f7fbf9a66" title="This function replaces all pr loops in a mapping of a single operand with r and ir loops." alt="" coords="189,35,333,76"/>
+</map>

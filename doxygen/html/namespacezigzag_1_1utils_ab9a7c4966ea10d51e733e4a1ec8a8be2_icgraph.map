@@ -1,0 +1,9 @@
+<map id="open_yaml" name="open_yaml">
+<area shape="rect" id="node1" title=" " alt="" coords="1209,100,1304,127"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html#a7923fb8ddf774aa5366337b8885bc7e3" title=" " alt="" coords="867,5,1161,61"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html#ae2202c5549d9be3dc510d6732f217425" title="Parse, validate and normalize workload mapping from a given yaml file path." alt="" coords="893,85,1135,141"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04" title=" " alt="" coords="577,85,819,141"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="251,17,529,58"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,54,203,95"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="277,86,503,127"/>
+</map>

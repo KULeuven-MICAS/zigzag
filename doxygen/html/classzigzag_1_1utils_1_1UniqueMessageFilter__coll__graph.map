@@ -1,0 +1,4 @@
+<map id="UniqueMessageFilter" name="UniqueMessageFilter">
+<area shape="rect" id="node1" title="Prevents the logger from filtering duplicate messages." alt="" coords="5,80,164,107"/>
+<area shape="rect" id="node2" title=" " alt="" coords="57,5,112,32"/>
+</map>
