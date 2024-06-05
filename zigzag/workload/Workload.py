@@ -18,8 +18,26 @@ class Workload(DiGraph, metaclass=ABCMeta):
     def add_workload_node(self, node: LayerNodeABC) -> None:
         self.add_node(node)  # type: ignore
 
+    def remove_workload_nodes_from(self, nodes: Iterator[LayerNodeABC]) -> None:
+        self.remove_nodes_from(nodes)  # type: ignore
+
+    def add_workload_edge(self, edge_from: LayerNodeABC, edge_to: LayerNodeABC) -> None:
+        self.add_edge(edge_from, edge_to)  # type: ignore
+
     def add_workload_edges_from(self, edges: Sequence[tuple[LayerNodeABC, LayerNodeABC]]) -> None:
         self.add_edges_from(edges)  # type: ignore
+
+    def get_out_degree_for_layer(self, layer: LayerNodeABC) -> int:
+        return self.out_degree(layer)  # type: ignore
+
+    def get_in_degree_for_layer(self, layer: LayerNodeABC) -> int:
+        return self.in_degree(layer)  # type: ignore
+
+    def get_successors_for_layer(self, layer: LayerNodeABC) -> list[LayerNodeABC]:
+        return self.successors(layer)  # type: ignore
+
+    def get_predecessors_for_layer(self, layer: LayerNodeABC) -> list[LayerNodeABC]:
+        return self.predecessors(layer)  # type: ignore
 
     def get_node_with_id(self, node_id: int) -> LayerNodeABC:
         for node in self.node_iterator:
@@ -29,4 +47,4 @@ class Workload(DiGraph, metaclass=ABCMeta):
 
     @property
     def node_iterator(self) -> Iterator[LayerNodeABC]:
-        return self.nodes()
+        return self.nodes()  # type: ignore

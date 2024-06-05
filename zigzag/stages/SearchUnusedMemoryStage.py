@@ -9,20 +9,14 @@ from zigzag.workload.DummyNode import DummyNode
 from zigzag.workload.layer_node import LayerNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC
 
-import networkx as nx  # kept for debugging
-
 logger = logging.getLogger(__name__)
 
 
 class SearchUnusedMemoryStage(Stage):
     """! Class for searching lowest allowed memory level per operand per layer"""
+
     def __init__(
-        self,
-        list_of_callables: list[StageCallable],
-        *,
-        accelerator: Accelerator,
-        workload: Workload,
-        **kwargs: Any
+        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, workload: Workload, **kwargs: Any
     ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
@@ -41,7 +35,8 @@ class SearchUnusedMemoryStage(Stage):
         self.layer_list: dict[LayerNodeABC, int] = {}
 
         # derive top mem level of input, weight, output
-        layer_0: LayerNode = [layer for layer in self.workload.topological_sort()][0]  # type: ignore
+        # TODO this can be a dummy node
+        layer_0: LayerNode = next(self.workload.topological_sort())
         (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
             SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer_0)
         )
@@ -64,7 +59,8 @@ class SearchUnusedMemoryStage(Stage):
 
         # derive input, output size per layer and weight size of entire workload
         for idx, layer in enumerate(workload.topological_sort()):
-            if isinstance(layer, DummyNode):
+            if not isinstance(layer, LayerNode):
+                # Skip DummyNode
                 continue
 
             # input, weight operand name in hardware
@@ -74,36 +70,35 @@ class SearchUnusedMemoryStage(Stage):
             output_operand_in_layer = layer.output_operand
             output_operand_in_hardware = layer.memory_operand_links[output_operand_in_layer]
 
-            # update info for special layers: "Adder", which does not have weight
+            # Initialize
+            self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
+
+            # All inputs are variable, e.g. Add or MatMul
             if len(layer.constant_operands) == 0:
-                # special case when workload input is from .py rather than .onnx:
-                # the constant operands list is empty for "Adder" layers
-                input_data_size = 0
-                for operand in layer.input_operands:
-                    input_data_size += layer.operand_size_bit[operand]
-                self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
+                input_data_size = sum([layer.operand_size_bit[operand] for operand in layer.input_operands])
                 self.each_layer_io_data_size[str(idx)] = [
                     {
-                        output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
                         act_operand_in_hardware: input_data_size,
+                        output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
                     }
                 ]
                 self.layer_list[layer] = idx
                 continue
 
             # update info for regular layers
-            self.mem_update_list[str(idx)] = {act_operand_in_hardware: -1, output_operand_in_hardware: -1}
             self.each_layer_io_data_size[str(idx)] = [
                 {
                     act_operand_in_hardware: layer.operand_size_bit[act_operand_in_layer],
                     output_operand_in_hardware: layer.operand_size_bit[output_operand_in_layer],
                 }
             ]
+            assert weight_operand_in_layer is not None
             self.weight_size_entire_workload += layer.operand_size_bit[weight_operand_in_layer]
             self.layer_list[layer] = idx
 
     def run(self, workload_data_always_from_top_mem: bool = False):
-        # @param workload_data_always_from_top_mem: input of 1st layer, output of last layer must in the top mem level
+        """@param workload_data_always_from_top_mem: input of 1st layer, output of last layer must in the top mem
+        level"""
 
         # update allowed the lowest mem level per operand per layer
         self.update_top_mem_level()
@@ -131,8 +126,7 @@ class SearchUnusedMemoryStage(Stage):
         self.remove_dummy_nodes_in_workload()
 
         # calculate the allowed lowest mem level per operand per layer
-        layer_list_without_dummy: list[LayerNode] = [
-            layer for layer in self.workload.topological_sort()]  # type: ignore
+        layer_list_without_dummy: list[LayerNode] = list(self.workload.topological_sort())
         for _, layer in enumerate(layer_list_without_dummy):
             # handler for the first layer
             if layer == layer_list_without_dummy[0]:
@@ -156,14 +150,14 @@ class SearchUnusedMemoryStage(Stage):
             output_operand_in_layer: LayerOperand = layer.output_operand
             output_operand_in_hardware: MemoryOperand = layer.memory_operand_links[output_operand_in_layer]
 
-            is_branch_starting_node = True if self.workload.out_degree(layer) > 1 else False
-            is_branch_final_node: bool = (self.workload.out_degree(layer) == 1) and (
-                self.workload.in_degree(list(self.workload.successors(layer))[0]) > 1
+            is_branch_starting_node = self.workload.get_out_degree_for_layer(layer) > 1
+            is_branch_final_node: bool = (self.workload.get_out_degree_for_layer(layer) == 1) and (
+                self.workload.get_out_degree_for_layer(list(self.workload.get_successors_for_layer(layer))[0]) > 1
             )
 
             if not is_first_layer:
                 # propagate output mem level of the previous layer to input mem level of current layer
-                prev_layer: LayerNode = list(self.workload.predecessors(layer))[0]
+                prev_layer: LayerNode = list(self.workload.get_predecessors_for_layer(layer))[0]
                 prev_layer_id = self.layer_list[prev_layer]
                 prev_layer_output_operand_in_layer = prev_layer.output_operand
                 prev_layer_output_operand_in_hardware = prev_layer.memory_operand_links.layer_to_mem_op(
@@ -243,12 +237,12 @@ class SearchUnusedMemoryStage(Stage):
         # assert check if there is -1 value in mem_update_list
         for layer_info in self.mem_update_list.values():
             for mem_level_in_info in layer_info.values():
-                assert mem_level_in_info >= 0, f"There are still layers with top mem levels not figured out."
+                assert mem_level_in_info >= 0, "There are still layers with top mem levels not figured out."
 
     @staticmethod
     def get_act_weight_operand_names(
         layer: LayerNode,
-    ) -> tuple[LayerOperand, LayerOperand | None, MemoryOperand, MemoryOperand | None]:
+    ) -> tuple[LayerOperand, LayerOperand, MemoryOperand, MemoryOperand]:
         """! Function for identifying the layer/hardware name of activation and weight of a layer"""
         # the function is also called within RemoveUnusedMemoryStage and imc cost model
         if len(layer.constant_operands) == 1:
@@ -303,23 +297,21 @@ class SearchUnusedMemoryStage(Stage):
         self.remove_dummy_nodes_in_workload()
 
         # Update mem_update_list and mem_update_weight
-        layer_list_without_dummy = [layer for layer in self.workload.topological_sort()]
-        for _, layer in enumerate(layer_list_without_dummy):
+        layers_without_dummy = self.workload.topological_sort()
+        for layer in layers_without_dummy:
             # handler for the first layer
-            if layer == layer_list_without_dummy[0]:
+            if layer == layers_without_dummy[0]:
                 is_first_layer = True
             else:
                 is_first_layer = False
 
             # handler for the final layer
-            if layer == layer_list_without_dummy[-1]:
+            if layer == layers_without_dummy[-1]:
                 is_final_layer = True
             else:
                 is_final_layer = False
 
-            (_, _, act_operand_in_hardware, _) = (
-                SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
-            )
+            (_, _, act_operand_in_hardware, _) = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
             output_operand_in_layer = layer.output_operand
             output_operand_in_hardware = layer.memory_operand_links.layer_to_mem_op(output_operand_in_layer)
             curr_id = self.layer_list[layer]
@@ -329,23 +321,22 @@ class SearchUnusedMemoryStage(Stage):
                 self.update_io_mem_level(curr_id, output_operand_in_hardware, self.top_mem_level_output)
 
     def remove_dummy_nodes_in_workload(self):
-        """! Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy
-        node to dummy node) Redirect the outgoing edges of dummy nodes to non-dummy nodes
-        Method:
-        for each dummy node, add edges between its predecessor nodes and successor nodes;
-        then remove the dummy node.
+        """! Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy node to dummy node)   # TODO I don't think you can make this assumption
+        Redirect the outgoing edges of dummy nodes to non-dummy nodes Method: for each dummy node, add edges between its
+        predecessor nodes and successor nodes; then remove the dummy node.
         """
-        dummy_nodes = [node for node in self.workload.nodes() if isinstance(node, DummyNode)]
+        dummy_nodes = filter(lambda x: isinstance(x, DummyNode), self.workload.node_iterator)
         for dummy_node in dummy_nodes:
-            for successor_node in list(self.workload.successors(dummy_node)):
-                for predecessor_node in list(self.workload.predecessors(dummy_node)):
-                    self.workload.add_edge(predecessor_node, successor_node)
+            for successor_node in self.workload.get_successors_for_layer(dummy_node):
+                for predecessor_node in self.workload.get_predecessors_for_layer(dummy_node):
+                    self.workload.add_workload_edge(predecessor_node, successor_node)
+
         # visualize the resulted graph
         # import matplotlib.pyplot as plt
         # pos = nx.spring_layout(self.workload)
         # nx.draw(self.workload, pos, with_labels=True, node_color="lightblue", font_weight="bold")
         # plt.show()
-        self.workload.remove_nodes_from(dummy_nodes)
+        self.workload.remove_workload_nodes_from(dummy_nodes)
 
     def update_io_mem_level(self, layer_id: int, operand: MemoryOperand, target_level: int):
         """! Update self.mem_update_list as:
