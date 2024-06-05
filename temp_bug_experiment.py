@@ -8,9 +8,9 @@ from zigzag.visualization.graph.memory_hierarchy import visualize_memory_hierarc
 
 
 model = "resnet"
-workload_path = "inputs/workload/resnet18.yaml"
-accelerator_path = "inputs/hardware/tpu_like.yaml"
-mapping_path = "inputs/mapping/tpu_like.yaml"
+workload_path = "inputs/workload/resnet18.onnx"
+accelerator_path = "inputs/hardware/ascend_like.yaml"
+mapping_path = "inputs/mapping/ascend_like.yaml"
 
 pickle_filename = f"outputs/aimc-{model}-saved_list_of_cmes.pickle"
 

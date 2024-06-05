@@ -36,14 +36,14 @@ class WorkloadABC(DiGraph, Generic[T], metaclass=ABCMeta):
     def get_in_degree_for_layer(self, layer: T) -> int:
         return self.in_degree(layer)  # type: ignore
 
-    def get_successors_for_layer(self, layer: T) -> list[T]:
+    def get_successors_for_layer(self, layer: T) -> Iterator[T]:
         return self.successors(layer)  # type: ignore
 
-    def get_predecessors_for_layer(self, layer: T) -> list[T]:
+    def get_predecessors_for_layer(self, layer: T) -> Iterator[T]:
         return self.predecessors(layer)  # type: ignore
 
     def get_node_with_id(self, node_id: int) -> T:
-        for node in self.node_iterator:
+        for node in self.node_list:
             if node.id == node_id:
                 return node
         raise ValueError(f"Node with id {node_id} not found in workload")
@@ -51,5 +51,5 @@ class WorkloadABC(DiGraph, Generic[T], metaclass=ABCMeta):
     def get_copy_no_dummy(self) -> "WorkloadABC[LayerNode]": ...
 
     @property
-    def node_iterator(self) -> Iterator[T]:
-        return self.nodes()  # type: ignore
+    def node_list(self) -> list[T]:
+        return list(self.nodes())  # type: ignore

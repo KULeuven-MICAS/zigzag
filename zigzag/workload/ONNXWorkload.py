@@ -1,6 +1,8 @@
 from copy import deepcopy
 from typing import Any
 
+import networkx
+
 from zigzag.workload.DummyNode import DummyNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.Workload import WorkloadABC
@@ -19,13 +21,11 @@ class ONNXWorkload(WorkloadABC[LayerNodeABC]):
         super().__init__(**attr)
 
         self.node_id_to_obj: dict[int, LayerNodeABC] = {}
-        self.node_list: list[LayerNodeABC] = []
 
     def add(self, node_id: int, node_obj: LayerNodeABC):
         """! Add a node object to the ONNX workload graph.
         This can be a different object based on if it's an "accelerateable" node or not.
         """
-        self.node_list.append(node_obj)
         self.node_id_to_obj[node_id] = node_obj
 
         self.add_workload_node(node_obj)
@@ -43,19 +43,22 @@ class ONNXWorkload(WorkloadABC[LayerNodeABC]):
         """
         workload_copy = deepcopy(self)
 
-        dummy_nodes = filter(lambda x: isinstance(x, DummyNode), workload_copy.node_iterator)
+        dummy_nodes = [node for node in workload_copy.node_list if isinstance(node, DummyNode)]
         for dummy_node in dummy_nodes:
             for successor_node in workload_copy.get_successors_for_layer(dummy_node):
                 for predecessor_node in workload_copy.get_predecessors_for_layer(dummy_node):
                     workload_copy.add_workload_edge(predecessor_node, successor_node)
 
+        workload_copy.remove_workload_nodes_from(iter(dummy_nodes))
         # visualize the resulted graph
         # import matplotlib.pyplot as plt
-        # pos = nx.spring_layout(workload_copy.workload)
-        # nx.draw(workload_copy.workload, pos, with_labels=True, node_color="lightblue", font_weight="bold")
-        # plt.show()
-        workload_copy.remove_workload_nodes_from(dummy_nodes)
+
+        # pos = networkx.spring_layout(workload_copy)
+        # networkx.draw(workload_copy, pos, with_labels=True, node_color="lightblue", font_weight="bold")
+        # plt.savefig("tmp.png")
 
         # Typecast
         workload_result: WorkloadABC[LayerNode] = workload_copy  # type: ignore
+
+        assert all([isinstance(x, LayerNode) for x in workload_result.node_list])
         return workload_result

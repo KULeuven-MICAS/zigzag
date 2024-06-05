@@ -24,7 +24,7 @@ class RemoveUnusedMemoryStage(Stage):
     # ######### Pseudo-code ##########
     # # Initialization:
     # #  target_act_mem_level, target_output_mem_level: get from mem_update_list
-    # #  target_const_mem_level = mem_udpate_weight
+    # #  target_const_mem_level = mem_update_weight
     # # 1. Modify mem structure:
     # # for mem in mem_levels(sort_order: from bottom to top):
     # #   if ['I'] in mem.served_operand and mem.mem_level > target_act_mem_level:
@@ -46,15 +46,13 @@ class RemoveUnusedMemoryStage(Stage):
         *,
         accelerator: Accelerator,
         layer: LayerNode,
-        mem_update_list,
-        mem_update_weight,
-        layer_list: dict[LayerNode, int],
+        mem_update_list: dict[int, dict[MemoryOperand, int]],
+        mem_update_weight: int,
         **kwargs: Any,
     ):
         super().__init__(list_of_callables, **kwargs)
         self.accelerator = accelerator
         self.layer = layer
-        self.layer_list = layer_list
         self.mem_update_list = mem_update_list
         self.mem_update_weight = mem_update_weight
 
@@ -71,30 +69,37 @@ class RemoveUnusedMemoryStage(Stage):
 
     def generate_accelerator_with_removing_unused_memory(self) -> Accelerator:
         # Remove no-use memory level according to update_mem_list and mem_update_weight
-        curr_id: int = self.layer_list[self.layer]
+        curr_id = self.layer.id
         core = next(iter(self.accelerator.cores))
         operational_array = core.operational_array
         memory_hierarchy = core.memory_hierarchy
 
         # derive act_operand/weight_operand_in_hardware
-        (act_operand_in_layer, weight_operand_in_layer, act_operand_in_hardware, weight_operand_in_hardware) = (
+        (_, _, act_operand_in_hardware, weight_operand_in_hardware) = (
             SearchUnusedMemoryStage.get_act_weight_operand_names(layer=self.layer)
         )
         output_operand_in_layer = self.layer.output_operand
         output_operand_in_hardware = self.layer.memory_operand_links[output_operand_in_layer]
 
         # Find target_act/const/output_mem_level
-        for operand_in_hardware, targeted_mem_lv in self.mem_update_list[f"{curr_id}"].items():
-            if operand_in_hardware == act_operand_in_hardware:
-                target_act_mem_level = targeted_mem_lv
-            if operand_in_hardware == output_operand_in_hardware:
-                target_output_mem_level = targeted_mem_lv
-        is_adder_layer = self.layer.constant_operands is None or len(self.layer.constant_operands) == 0
-        if is_adder_layer:
+        target_act_mem_level = [
+            targeted_mem_lv
+            for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
+            if operand_in_hardware == act_operand_in_hardware
+        ].pop()
+        target_output_mem_level = [
+            targeted_mem_lv
+            for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
+            if operand_in_hardware == output_operand_in_hardware
+        ].pop()
+
+        if len(self.layer.constant_operands) == 0:
             # two inputs for Adder layers are both act
-            for operand_in_hardware, targeted_mem_lv in self.mem_update_list[f"{curr_id}"].items():
-                if operand_in_hardware == act_operand_in_hardware:
-                    target_const_mem_level = targeted_mem_lv
+            target_const_mem_level = [
+                targeted_mem_lv
+                for operand_in_hardware, targeted_mem_lv in self.mem_update_list[curr_id].items()
+                if operand_in_hardware == act_operand_in_hardware
+            ].pop()
         else:
             target_const_mem_level = self.mem_update_weight
 
@@ -140,10 +145,8 @@ class RemoveUnusedMemoryStage(Stage):
                 )
 
         # Create the new core
-        id = core.id
-        new_id = id
         new_core = Core(
-            core_id=new_id,
+            core_id=core.id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )
@@ -157,6 +160,6 @@ class RemoveUnusedMemoryStage(Stage):
             core_set=new_cores,
         )
 
-        logger.info(f"Update mem architecture for layer {self.layer}...")
+        logger.info("Update mem architecture for layer %s...", self.layer)
 
         return new_accelerator
