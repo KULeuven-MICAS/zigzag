@@ -53,19 +53,18 @@ Manual layer definition
 
 It is also possible to manually define your own workload layers. In that case, the ``main.py`` file should be executed instead of ``main_onnx.py``. Moreover, the workload file should be provided as input together with the accelerator, and there is no onnx model loaded.
 
-Each layer definition is represented as a Python dictionary, which should have the following attributes:
-
+Each layer definition is represented as a YAML entry, which should have the following attributes:
+* **id**: The identifier of the layer. This is important to correctly build the NN graph edges.
+* **operator_type**: The type of the layer. This can be linked to a specific mapping in the mapping file.
 * **equation**: The operational equation for this layer. The dimensions should be small letters, whereas the operands are large letters. 'O' should always be used for the output operand; the input operands can be named freely.
 * **dimension_relations**: The relationship between different dimensions present in the equation. This is often used in convolutional layers, where there is a relationship between the spatial input indices and the spatial output indices through the stride and with the filter indices through the dilation rate.
-* **loop_dim_size**: The size of the different dimensions present in the equation. Dimensions defined (i.e. on the left-hand side) in the dimension_relations are not to be provided and are inferred automatically.
-* **operand_precision**: The bit precision of the different operands present in the equation. 'O' should always be used, which represents the partial output precision. 'O_final' represents the final output precision.
-* **operand_source**: The layer id the input operands of this layer come from. This is important to correctly build the NN graph edges.
-* **constant_operands**: The operands of this layer which are constants and do not depend on prior computations, like the weight.
-* **core_allocation**: The core that will execute this layer.
-* **spatial_mapping**: The spatial parallelization strategy used for this layer. If none is provided, the SpatialMappingGeneratorStage should be used within ZigZag's execution pipeline.
-* **memory_operand_links**: The link between the virtual memory operands and the actual algorithmic operands. For more information, read the hardware readme.
+* **loop_dims**: A list of the different dimensions present in the equation. This should not include dimensions defined in the dimension_relations.
+* **loop_sizes**: The size of the different dimensions present in the **loop_dims**.
+* **operand_precision**: The bit precision of the different operands present in the equation. 'O' should always be used and represents the partial output precision. 'O_final' should always be used and represents the final output precision.
+* **operand_source**: The layer id the input operands of this layer originate from. This should be set to the id of the current layer if it doesn't originate from prior layers. This information is used to correctly build the NN graph edges.
 
-The following loop notation has to be used to describe a layer of the workload (see loop notation in `this paper <https://ieeexplore.ieee.org/document/9360462>`_):
+
+The following loop notation is typically used to describe a layer of the workload (see loop notation in `this paper <https://ieeexplore.ieee.org/document/9360462>`_):
 
 * **B**: Batch size
 * **K**: Output channels
