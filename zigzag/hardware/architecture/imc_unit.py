@@ -6,8 +6,6 @@ from zigzag.mapping.spatial_mapping import MappingSingleOADim
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping
 from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
-from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
-
 
 class ImcUnit(OperationalArrayABC):
     """definition of general initialization function for D/AIMC"""
@@ -169,9 +167,8 @@ class ImcUnit(OperationalArrayABC):
         """
 
         # activation/weight representation in layer
-        (layer_act_operand, layer_const_operand, _, _) = SearchUnusedMemoryStage.get_act_weight_operand_names(
-            layer=layer
-        )
+        layer_act_operand = layer.get_act_layer_op()
+        layer_const_operand = layer.get_weight_layer_op()
         assert layer_const_operand is not None
 
         spatial_mapping = copy.deepcopy(layer.spatial_mapping)
@@ -331,7 +328,7 @@ class ImcUnit(OperationalArrayABC):
             # nb_of_precharge_times is normalized to single PE.
 
             # activation/weight representation in layer
-            _, layer_const_operand, _, _ = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            layer_const_operand = layer.get_weight_layer_op()
             assert layer_const_operand is not None
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle
