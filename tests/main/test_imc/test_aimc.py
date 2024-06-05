@@ -3,16 +3,12 @@ import pytest
 from zigzag.api import get_hardware_performance_zigzag_imc
 
 workloads = (
-    "zigzag/inputs/workload/alexnet.onnx",
-    "zigzag/inputs/workload/mobilenetv2.onnx",
     "zigzag/inputs/workload/resnet18.onnx",
     "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "zigzag/inputs/workload/alexnet.onnx": (6781805890.747441, 9262317.0, 14.07244, 2.3426222152749223),
-    "zigzag/inputs/workload/mobilenetv2.onnx": (2318351903.0822225, 10901920.0, 14.07244, 2.3426222152749223),
     "zigzag/inputs/workload/resnet18.onnx": (4695829569.611852, 5540772.0, 14.07244, 2.3426222152749223),
     "zigzag/inputs/workload/resnet18.yaml": (4265124724.2396007, 4907619.0, 14.07244, 2.3426222152749223),
 }

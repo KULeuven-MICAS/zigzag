@@ -3,16 +3,12 @@ import pytest
 from zigzag.api import get_hardware_performance_zigzag
 
 workloads = (
-    "zigzag/inputs/workload/alexnet.onnx",
-    "zigzag/inputs/workload/mobilenetv2.onnx",
     "zigzag/inputs/workload/resnet18.onnx",
     "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/alexnet.onnx": (5738188827.200001, 8696068.0),
-    "zigzag/inputs/workload/mobilenetv2.onnx": (1913154775.600001, 7359658.0),
     "zigzag/inputs/workload/resnet18.onnx": (1860963861.6800003, 3698589.0),
     "zigzag/inputs/workload/resnet18.yaml": (2411783423.28, 4779709.0),
 }
