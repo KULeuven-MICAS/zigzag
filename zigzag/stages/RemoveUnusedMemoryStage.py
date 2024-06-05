@@ -2,7 +2,7 @@ from typing import Any
 import logging
 
 
-from zigzag.datatypes import LayerOperand, MemoryOperand
+from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
