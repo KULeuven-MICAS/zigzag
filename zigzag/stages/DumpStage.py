@@ -3,7 +3,7 @@ from typing import Any
 
 
 from zigzag.stages.Stage import Stage, StageCallable
-from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.cost_model.cost_model import CostModelEvaluationABC
 import os
 
 
@@ -25,7 +25,7 @@ class DumpStage(Stage):
     def run(self):
         """! Run the compare stage by comparing a new cost model output with the current best found result."""
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
-        dump_list: list[tuple[CostModelEvaluation, Any]] = []
+        dump_list: list[tuple[CostModelEvaluationABC, Any]] = []
         filename = self.dump_filename_pattern.format(**self.kwargs)
         for cme, extra_info in substage.run():
             dump_list.append((cme, extra_info))

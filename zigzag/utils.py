@@ -42,20 +42,20 @@ def json_repr_handler(obj: Any, simple: bool = False) -> Any:
         return None
     if isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, bool) or isinstance(obj, str):
         return obj
-    if isinstance(obj, np.int32):
+    if isinstance(obj, np.int32):  # type: ignore
         return int(obj)
     if hasattr(obj, attr):
         return obj.__simplejsonrepr__() if simple else obj.__jsonrepr__()
 
     # Recursive calls
     if isinstance(obj, dict):
-        return {json_repr_handler(k, simple): json_repr_handler(v, simple) for k, v in obj.items()}
+        return {json_repr_handler(k, simple): json_repr_handler(v, simple) for k, v in obj.items()}  # type: ignore
     if isinstance(obj, set):
-        return json_repr_handler(list(obj), simple)
+        return json_repr_handler(list(obj), simple)  # type: ignore
     if isinstance(obj, list):
-        return [json_repr_handler(x, simple) for x in obj]
+        return [json_repr_handler(x, simple) for x in obj]  # type: ignore
     if isinstance(obj, tuple):
-        return tuple(json_repr_handler(x, simple) for x in obj)
+        return tuple(json_repr_handler(x, simple) for x in obj)  # type: ignore
 
     raise TypeError(f"Object of type {type(obj)} is not serializable. Create a {attr} method.")
 
@@ -64,9 +64,10 @@ class UniqueMessageFilter(logging.Filter):
     """! Prevents the logger from filtering duplicate messages"""
 
     def __init__(self):
+        super().__init__()
         self.recorded_messages: set[str] = set()
 
-    def filter(self, record):
+    def filter(self, record: logging.LogRecord):
         message = record.getMessage()
         if message in self.recorded_messages:
             return False  # Skip this message

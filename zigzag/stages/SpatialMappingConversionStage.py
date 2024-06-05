@@ -249,15 +249,15 @@ class SpatialMappingConversionStage(Stage):
         In this case, we decide to only adjust the unrolling size of the first oa dimension with the largest unrolling.
         This function is to check if the given oa_dim has the largest unrolling for the given loop_dim_unrolled."""
 
-        oa_dim_mapping_sizes: list[int] = []
+        oa_dim_mapping_sizes: list[UnrollFactor] = []
         for mapping in user_spatial_mapping.values():
             layer_dim_mapping_size = mapping[loop_dim_unrolled] if loop_dim_unrolled in mapping.layer_dims else 0
             oa_dim_mapping_sizes.append(layer_dim_mapping_size)
         max_mapping_size = max(oa_dim_mapping_sizes)
         assert max_mapping_size > 0, f"Given {oa_dim=} is not present in {user_spatial_mapping=}"
         first_oa_dim_with_max_mapping = next(
-            curr_oa_dim 
-            for curr_oa_dim, mapping in user_spatial_mapping.items() 
+            curr_oa_dim
+            for curr_oa_dim, mapping in user_spatial_mapping.items()
             if loop_dim_unrolled in mapping.layer_dims and mapping[loop_dim_unrolled] == max_mapping_size
         )
         should_be_limited = oa_dim == first_oa_dim_with_max_mapping

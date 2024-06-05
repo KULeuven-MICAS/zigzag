@@ -119,12 +119,13 @@ class PickleSaveStage(Stage):
         self.pickle_filename = pickle_filename
 
     def run(self):
-        """! Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
-        This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is passed as extra_info
+        """! Run the simple save stage by running the substage and saving the CostModelEvaluation simple json
+        representation. This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is
+        passed as extra_info
         """
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         for cme, extra_info in substage.run():
-            all_cmes: list[CostModelEvaluation] = [cme for (cme, _) in extra_info]
+            all_cmes: list[CostModelEvaluationABC] = [cme for (cme, _) in extra_info]
             yield cme, extra_info
 
         # After we have received all the CMEs, save them to the specified output location.

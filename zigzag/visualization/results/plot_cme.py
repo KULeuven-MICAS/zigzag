@@ -1,12 +1,9 @@
 from collections import defaultdict
-from typing import Any
 import matplotlib.pyplot as plt
-from matplotlib.colors import hsv_to_rgb
+from matplotlib.colors import hsv_to_rgb  # type: ignore
 import numpy as np
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import LayerOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import FourWayDataMoving

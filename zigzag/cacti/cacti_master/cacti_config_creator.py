@@ -1,4 +1,5 @@
 import os
+from typing import Any
 
 
 class CactiConfig:
@@ -266,7 +267,7 @@ class CactiConfig:
             "=======USER DEFINE======= \n",
         ]
 
-        self.config_options = {}
+        self.config_options: dict[str, Any] = {}
         self.config_options["cache_size"] = {
             "string": "-size (bytes) ",
             "option": [
@@ -360,17 +361,17 @@ class CactiConfig:
 
         return
 
-    def change_default_value(self, name_list, new_value_list):
+    def change_default_value(self, name_list: list[str], new_value_list: list[Any]):
         for idx, name in enumerate(name_list):
             self.config_options[name]["default"] = new_value_list[idx]
 
-    def write_config(self, user_config, path):
+    def write_config(self, user_config: list[Any], path: str):
         f = open(path, "w+")
         f.write("".join(self.baseline_config))
         f.write("".join(user_config))
         f.close()
 
-    def call_cacti(self, cacti_master_path, self_gen_cfg_path):
+    def call_cacti(self, cacti_master_path: str, self_gen_cfg_path: str):
         # os.system('./cacti -infile ./self_gen/cache.cfg')
 
         print("##########################################################################################")
@@ -390,7 +391,7 @@ class CactiConfig:
         os.chdir(original_cwd)
         return output
 
-    def cacti_auto(self, user_input, cacti_master_path, self_gen_cfg_path):
+    def cacti_auto(self, user_input: list[Any], cacti_master_path: str, self_gen_cfg_path: str):
         """
         user_input format can be 1 out of these 3:
         user_input = ['default']
@@ -398,7 +399,7 @@ class CactiConfig:
         user_input = ['sweep', ['IO_bus_width'/'']]
         """
         print(f"{self_gen_cfg_path=}")
-        user_config = []
+        user_config: list[Any] = []
         if user_input[0] == "default":
             for itm in self.config_options.keys():
                 user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
@@ -419,7 +420,7 @@ class CactiConfig:
 
         if user_input[0] == "sweep":
             # produce non-sweeping term
-            common_part = []
+            common_part: list[str] = []
             for itm in self.config_options.keys():
                 if itm not in user_input[1]:
                     common_part.append(

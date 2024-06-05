@@ -51,7 +51,7 @@ class TemporalMapping:
 
         while not done:
             mapping_st: TemporalMappingDict = {op: [[] for _ in range(self.mem_level[op])] for op in self.operand_list}
-            MAC_level_st: dict[LayerOperand, UnrollFactor] = {op: 1 for op in self.operand_list}
+            mac_level_st: dict[LayerOperand, UnrollFactor] = {op: 1 for op in self.operand_list}
             for operand in self.mem_level.keys():
                 for level, current_level_loops in enumerate(mapping_previous[operand]):
                     if not current_level_loops:
@@ -60,7 +60,7 @@ class TemporalMapping:
                         for loop_type, loop_dim in current_level_loops:
                             if loop_type in self.layer_node.loop_relevancy_info.get_ir_layer_dims(operand):
                                 if level == 0:
-                                    MAC_level_st[operand] *= loop_dim
+                                    mac_level_st[operand] *= loop_dim
                                     mapping_st[operand][level].append((loop_type, loop_dim))
                                     mapping_current[operand][level].remove((loop_type, loop_dim))
                                 else:
@@ -77,7 +77,7 @@ class TemporalMapping:
                 done = True
 
         self.mapping_dic_stationary = mapping_st
-        self.MAC_level_data_stationary_cycle = MAC_level_st
+        self.mac_level_data_stationary_cycle = mac_level_st
 
     def calc_cycle_cabl_level(self):
         """! Calculate the iteration cycles that each memory level covers"""

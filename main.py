@@ -1,4 +1,3 @@
-import argparse
 import logging as _logging
 import re
 
@@ -11,22 +10,9 @@ from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
 from zigzag.stages.LomaStage import LomaStage
+from zigzag.parser.arguments import get_arg_parser
 
-
-# Parse the workload and accelerator arguments
-parser = argparse.ArgumentParser(description="Setup zigzag-v2 inputs")
-parser.add_argument(
-    "--model", metavar="path", required=True, help="module path to workload, e.g. inputs.examples.workloads.resnet18"
-)
-parser.add_argument(
-    "--mapping", metavar="path", required=True, help="path to mapping file, e.g., inputs.examples.mapping.tpu_like"
-)
-parser.add_argument(
-    "--accelerator",
-    metavar="path",
-    required=True,
-    help="module path to the accelerator, e.g. inputs.examples.hardware.TPU_like",
-)
+parser = get_arg_parser()
 args = parser.parse_args()
 
 # Initialize the logger

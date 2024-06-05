@@ -1,4 +1,5 @@
 - id: 0 # conv1 stride 2
+  name: example_name_of_layer0
   operator_type: Conv
   equation: O[b][k][oy][ox]+=W[k][c][fy][fx]*I[b][c][iy][ix]
   dimension_relations: [ix=2*ox+1*fx, iy=2*oy+1*fy]

@@ -1,48 +1,14 @@
-import importlib
 import logging
 from dataclasses import dataclass
 from enum import auto
-from os import path
 from typing import Any, List
 from enum import Enum
-import pickle
 import onnx
 from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto
 
 logger = logging.getLogger(__name__)
 
 BRANCH_ATTRIBUTE = "branch"
-
-
-def parse_mapping_from_path(mapping_path: str | None) -> dict[str, dict[str, Any]]:
-    """! Parse the input accelerator residing in accelerator_path.
-    @param mapping_path
-    """
-    # Sanity check on mapping_path
-    if mapping_path is None:
-        # Update the mapping_path to the default mapping file
-        if path.exists("inputs/examples/mapping/default.py"):
-            mapping_path = "zigzag.inputs.examples.mapping.default"
-        else:
-            raise ValueError("No mapping path/dict provided, and default was not found.")
-    if "/" in mapping_path and mapping_path.split(".")[-1] in [
-        "pickle",
-        "pkl",
-        "mapping",
-    ]:
-        # Load in the pickle mapping file
-        with open(mapping_path, "rb") as fp:
-            mapping = pickle.load(fp)
-    else:
-        global module
-        module = importlib.import_module(mapping_path)
-        mapping = module.mapping
-    if "default" in mapping:
-        default_present = "\u2705"
-    else:
-        default_present = "\u274C"
-    logger.debug(f"Parsed mapping with {len(mapping)} different entries. Default: {default_present}.")
-    return mapping
 
 
 def parse_onnx_model_from_path(onnx_model_path: str) -> ModelProto:
@@ -128,9 +94,9 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
     try:
         name_idx = attrs_names.index(name)
         attr_type = attrs[name_idx].type
-        if attr_type == AttributeProto.AttributeType.INT:
+        if attr_type == AttributeProto.AttributeType.INT:  # type: ignore
             return int(attrs[name_idx].i)
-        elif attr_type == AttributeProto.AttributeType.INTS:
+        elif attr_type == AttributeProto.AttributeType.INTS:  # type: ignore
             return list(attrs[name_idx].ints)
         else:
             raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
