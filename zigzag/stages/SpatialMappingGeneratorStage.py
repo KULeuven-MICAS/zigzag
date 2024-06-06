@@ -22,7 +22,6 @@ from zigzag.workload.layer_attributes import MemoryOperandLinks
 from zigzag.mapping.spatial_mapping import (
     SpatialMapping,
     MappingSingleOADim,
-    SpatialMappingHint,
 )
 
 logger = logging.getLogger(__name__)

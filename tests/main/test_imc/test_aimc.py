@@ -32,7 +32,7 @@ def accelerator():
 def test_api(workload: str, accelerator: str, mapping: str):
     (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
     (expected_energy, expected_latency, expected_tclk, expected_area) = ens_lats_clks_areas[workload]
-    assert energy == pytest.approx(expected_energy)
-    assert latency == pytest.approx(expected_latency)
+    assert energy == pytest.approx(expected_energy)  # type: ignore
+    assert latency == pytest.approx(expected_latency)  # type: ignore
     assert tclk == pytest.approx(expected_tclk)
     assert area == pytest.approx(expected_area)
