@@ -141,7 +141,7 @@ class SearchUnusedMemoryStage(Stage):
 
             is_branch_starting_node = self.workload_no_dummy.get_out_degree_for_layer(layer) > 1
             is_branch_final_node = (self.workload_no_dummy.get_out_degree_for_layer(layer) == 1) and (
-                self.workload_no_dummy.get_out_degree_for_layer(
+                self.workload_no_dummy.get_in_degree_for_layer(
                     next(self.workload_no_dummy.get_successors_for_layer(layer))
                 )
                 > 1
