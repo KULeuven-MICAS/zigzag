@@ -1,9 +1,4 @@
-"""
-# TODO this file needs to be reworked
-"""
-
 import os
-
 from typing import Any
 
 

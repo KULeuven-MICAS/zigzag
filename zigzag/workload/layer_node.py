@@ -1,8 +1,7 @@
 from copy import deepcopy
 from dataclasses import dataclass
-from dataclasses import dataclass
 from math import gcd
-import logging as _logging
+import logging
 import math
 
 
@@ -28,7 +27,7 @@ from zigzag.workload.layer_attributes import (
 )
 from zigzag.utils import json_repr_handler
 
-logger = _logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class LoopRelevancyInfo:
@@ -41,7 +40,7 @@ class LoopRelevancyInfo:
         self.r_dims: dict[LayerOperand, list[LayerDim]] = dict()
         self.ir_dims: dict[LayerOperand, list[LayerDim]] = dict()
         self.pr_dims: dict[LayerOperand, dict[LayerDim, list[LayerDim]]] = dict()
-        self.__orig_pr_loop: PrLoop
+        self.orig_pr_loop: PrLoop
 
     def get_r_layer_dims(self, layer_operand: LayerOperand) -> list[LayerDim]:
         return self.r_dims[layer_operand]
@@ -61,8 +60,8 @@ class LoopRelevancyInfo:
         new.r_dims = deepcopy(self.r_dims)
         new.ir_dims = deepcopy(self.ir_dims)
         for layer_op in self.pr_dims:
-            new.r_dims[layer_op] += [pr_layer_dim.create_r_version() for pr_layer_dim in self.__orig_pr_loop]
-            new.ir_dims[layer_op] += [pr_layer_dim.create_ir_version() for pr_layer_dim in self.__orig_pr_loop]
+            new.r_dims[layer_op] += [pr_layer_dim.create_r_version() for pr_layer_dim in self.orig_pr_loop]
+            new.ir_dims[layer_op] += [pr_layer_dim.create_ir_version() for pr_layer_dim in self.orig_pr_loop]
         return new
 
     @staticmethod
@@ -73,7 +72,7 @@ class LoopRelevancyInfo:
         # TODO requires cleanup and documentation
         """
         self = LoopRelevancyInfo()
-        self.__orig_pr_loop = pr_loop
+        self.orig_pr_loop = pr_loop
 
         dimension_list = layer_dim_sizes.layer_dims
         for layer_op in equation.get_contained_operands():
@@ -99,6 +98,8 @@ class LoopRelevancyInfo:
 
 @dataclass
 class LayerNodeAttributes:
+    """Packs the attributes needed to initialize a LayerNode"""
+
     layer_type: str
     equation: LayerEquation
     layer_dim_sizes: LayerDimSizes
@@ -126,8 +127,6 @@ class LayerNode(LayerNodeABC):
         Equal-to-1 loop dimensions are eliminated.
         @param layer_id: The identifier (key) of the layer, as defined in the workload
         @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
-
-        # TODO clean up this method. Too many lines for a clean init method.
         """
         LayerNodeABC.__init__(self, node_id=layer_id, node_name=node_name)
 

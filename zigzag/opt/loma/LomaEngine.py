@@ -4,7 +4,7 @@ import logging
 from math import factorial
 from typing import Any, Generator
 from tqdm import tqdm
-from sympy.ntheory import factorint
+from sympy.ntheory import factorint  # type: ignore
 
 
 from zigzag.datatypes import LayerDim
@@ -132,7 +132,10 @@ class LomaEngine:
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
         if self.lpf_limit is not None and self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
-                f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs."
+                "Updated layer %s's lpf limit from %i to %i lpfs.",
+                self.layer,
+                self.lpf_limit,
+                min_nb_temporal_loops,
             )
             self.lpf_limit = min_nb_temporal_loops
 
@@ -173,7 +176,7 @@ class LomaEngine:
             temporal_loop_pf_count_sums = {loop_dim: 1}
             lpfs = [(loop_dim, 1)]
 
-        logger.debug(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
+        logger.debug("Generated %i LPFs for layer %s.", len(lpfs), self.layer)
 
         self.temporal_loop_pfs: dict[LayerDim, tuple[int, ...]] = temporal_loop_pfs
         self.temporal_loop_pf_counts = temporal_loop_pf_counts
@@ -193,7 +196,7 @@ class LomaEngine:
             for nb_duplicated_pf in nb_duplicated_pfs:
                 nb_permutations = int(nb_permutations / factorial(nb_duplicated_pf))
         self.nb_permutations = nb_permutations
-        logger.debug(f"Launching {self.nb_permutations:,} temporal loop order permutations.")
+        logger.debug("Launching %s temporal loop order permutations.", f"{self.nb_permutations:,}")
 
     def limit_lpfs(self) -> None:
         """! Function to limit the total number of loop prime factors present in this instance.
@@ -203,7 +206,7 @@ class LomaEngine:
         """
         n_pf = sum(self.temporal_loop_pf_count_sums.values())
         if self.lpf_limit is None or n_pf <= self.lpf_limit:
-            logger.debug(f"No lpf limiting performed for layer {self.layer}")
+            logger.debug("No lpf limiting performed for layer %s", self.layer)
             return
         while n_pf > self.lpf_limit:
             # Find the loop dimension with the most lpfs
@@ -217,7 +220,7 @@ class LomaEngine:
                 new_factor = max_pfs[0] * max_pfs[1]
                 max_counts[0] -= 1
                 max_counts[1] -= 1
-            else:  # multiplicity of smalles pf is > 1
+            else:  # multiplicity of smallest pf is > 1
                 new_factor = max_pfs[0] * max_pfs[0]
                 max_counts[0] -= 2
 
@@ -227,7 +230,7 @@ class LomaEngine:
             else:  # the new factor is not yet present in the factors, insert so list remains sorted
                 new_factor_idx = len([pf for pf in max_pfs if pf < new_factor])
                 max_pfs.insert(new_factor_idx, new_factor)
-                max_counts.insert(new_factor_idx, 1)  # first time this factor occured, count = 1
+                max_counts.insert(new_factor_idx, 1)  # first time this factor occurred, count = 1
 
             # Sanitize max_pfs and max_counts to remove all elements with multiplicity 0
             non_zero_idxs = [idx for idx, count in enumerate(max_counts) if count != 0]
@@ -249,7 +252,7 @@ class LomaEngine:
                 lpfs += list(((layer_dim, pf),) * count)
         self.lpfs = lpfs
 
-        logger.debug(f"Limited layer {self.layer} to {len(self.lpfs)} lpfs.")
+        logger.debug("Limited layer %s to %i lpfs.", self.layer, len(self.lpfs))
         return
 
     def ordering_generator(self) -> Generator[list[tuple[LayerDim, int]], None, None]:

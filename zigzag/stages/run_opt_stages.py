@@ -1,11 +1,10 @@
 from typing import Any, Callable
-
+import logging
+import os
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable
 
-import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,8 @@ class CacheBeforeYieldStage(Stage):
         super().__init__(list_of_callables, **kwargs)
 
     def run(self):
-        """! Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything."""
+        """! Run the cache before yield stage by running the substage and caching everything it yields, then yielding
+        everything."""
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
@@ -62,9 +62,7 @@ class SkipIfDumpExistsStage(Stage):
     def run(self):
         filename = self.dump_folder.format(**self.kwargs)
         if os.path.isfile(filename):
-            print(
-                f"==================================Dump {filename} already existed. Skip! =================================="
-            )
+            print(f"Dump {filename} already existed. Skip!")
             return
         substage = self.list_of_callables[0](
             self.list_of_callables[1:],

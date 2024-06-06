@@ -90,9 +90,9 @@ class Mapping:
         """! Combine spatial and temporal mapping dictionary into combined_mapping_dict by
         inserting spatial loops above temporal loops at each level.
 
-        - combined_mapping_dict_1s1t: corresponding level's smap and tmap are merged together.
+        - combined_mapping_dict_1s1t: corresponding level's spatial mapping and temporal mapping are merged together.
         Each level's data size is the total data size.
-        - combined_mapping_dict_1s2t: each level's smap is merged to level+1's tmap.
+        - combined_mapping_dict_1s2t: each level's spatial mapping is merged to level+1's temporal mapping.
         Each level's data size is the unrolled data size.
         """
 
@@ -339,7 +339,8 @@ class Mapping:
         # data_access_raw doesn't distinguish read and write, doesn't distinguish input operands from output operand
         # data_access_raw: each memory levels' spatial loops and temporal loops are put together
         # (combined_mapping_dict_1s1t)
-        # data_access_raw2: each memory levels' spatial loops are put to memory level + 1s' temporal loops location (combined_mapping_dict_1s2t)
+        # data_access_raw2: each memory levels' spatial loops are put to memory level + 1s' temporal loops location
+        # (combined_mapping_dict_1s2t)
         data_access_raw = {
             op: [
                 round(total_mac_count / self.ir_loop_size_cabl[op][lv])
@@ -373,8 +374,9 @@ class Mapping:
                     >= self.data_bit_per_level[operand][mem_level]
                     // self.spatial_mapping.unit_unique[operand][mem_level + 1]
                 ):
-                    # If we need access the same input data multiple times from the innermost memory level and the data #size is smaller than the memory read bw,
-                    # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long as it is needed).
+                    # If we need access the same input data multiple times from the innermost memory level and the data
+                    ##size is smaller than the memory read bw, take into account only one-time access cost (assume the
+                    # data can stay at the output pins of the memory as long as it is needed).
                     rd_out_to_low = (
                         data_access_raw[operand][mem_level]
                         // self.temporal_mapping.mac_level_data_stationary_cycle[operand]
@@ -455,13 +457,15 @@ class Mapping:
         pattern."""
 
         if self.access_same_data_considered_as_no_access:
-            # For input operands, add operational array level's 'mac_level_data_stationary_cycle' cycle in the below to align with the list length of data_each_level
+            # For input operands, add operational array level's 'mac_level_data_stationary_cycle' cycle in the below to
+            # align with the list length of data_each_level
             cycle_each_level = {
                 op: [self.temporal_mapping.mac_level_data_stationary_cycle[op]]
                 + self.temporal_mapping.cycle_cabl_level[op]
                 for op in self.layer_node.input_operands
             }
-            # For output operands, add operational array level's 1 cycle in the below to align with the list length of data_each_level
+            # For output operands, add operational array level's 1 cycle in the below to align with the list length of
+            # data_each_level
             cycle_each_level[self.layer_node.output_operand] = [1] + self.temporal_mapping.cycle_cabl_level[
                 self.layer_node.output_operand
             ]
