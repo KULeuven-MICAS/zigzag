@@ -54,8 +54,8 @@ class MemoryHierarchy(DiGraph):
         Edges are added from all sink nodes in the graph to this node if the memory operands match
         @param memory_instance: The MemoryInstance containing the different memory characteristics.
         @param operands: The memory operands the memory level stores.
-        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
-        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
+        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served
+            dimensions -> unroll over
         """
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
@@ -113,11 +113,9 @@ class MemoryHierarchy(DiGraph):
     def get_inner_memories(self) -> list[MemoryLevel]:
         """! Returns the inner-most memory levels for all memory operands."""
         return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
-        return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
 
     def get_outer_memories(self) -> list[MemoryLevel]:
         """! Returns the outer-most memory levels for all memory operands."""
-        return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
         return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
 
     def get_top_memories(self) -> tuple[list[MemoryLevel], int]:

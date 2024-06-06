@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 class WorkloadValidator:
     EQUATION_REGEX = r"^O(\[\w+\])+\+?=\w(\[\w+\])+[*+]\w(\[\w+\])+$"
     LAYER_DIM_RELATION_REGEX = r"^(\w+)\s*=\s*(?:(\w+)\s*\*\s*)?(\w+)\s*\+\s*(?:(\w+)\s*\*\s*)?(\w+)$"
-    # TODO add more operators from ONNX
     ALLOWED_OPERATORS: list[str] = [
         "Conv",
         "Pooling",
@@ -23,16 +22,12 @@ class WorkloadValidator:
         "MaxPool",
         "AveragePool",
         "GlobalAveragePool",
-        # Used for testing
-        "layer_on_core0",
-        "layer_on_core1",
-        "layer_on_core2",
-        "layer_on_core3",
     ]
 
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
     LAYER_SCHEMA: dict[str, Any] = {
         "id": {"type": "integer", "required": True},
+        "name": {"type": "string", "nullable": True, "default": None},
         "operator_type": {
             "type": "string",
             "allowed": ALLOWED_OPERATORS,

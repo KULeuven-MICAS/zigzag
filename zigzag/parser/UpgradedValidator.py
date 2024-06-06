@@ -4,7 +4,7 @@ Copyright jdotjdot (https://github.com/pyeve/cerberus/issues/220#issuecomment-20
 
 import copy
 from typing import Any
-from cerberus import Validator
+from cerberus import Validator  # type: ignore
 
 # using Cerberus 0.9.2
 import six
@@ -16,7 +16,7 @@ class UpgradedValidator(Validator):
     setting is_array=True
     """
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args: Any, **kwargs: Any):
         self.is_array: bool = kwargs.get("is_array", False)
         super(UpgradedValidator, self).__init__(*args, **kwargs)
 
@@ -33,7 +33,7 @@ class UpgradedValidator(Validator):
         # top-level.
 
         if self.is_array and not context:  # checking for "context" seems to help with not adding 'rows' to every dict
-            schema = schema or self.schema
+            schema = schema or self.schema  # type: ignore
 
             if "rows" not in schema:
                 if "type" in schema:  # is a list
@@ -41,31 +41,31 @@ class UpgradedValidator(Validator):
                 else:  # is a dict
                     schema = {"rows": {"type": "list", "required": True, "schema": {"type": "dict", "schema": schema}}}
 
-            if "rows" not in document:
+            if "rows" not in document:  # type: ignore
                 document_dict = {"rows": document}
             else:
                 document_dict = document
-        return super(UpgradedValidator, self).validate(document_dict, schema, update, context)
+        return super(UpgradedValidator, self).validate(document_dict, schema, update, context)  # type: ignore
 
     @property
     def errors(self) -> dict[str, Any]:
-        errors = super(UpgradedValidator, self).errors
+        errors = super(UpgradedValidator, self).errors  # type: ignore
         if self.is_array and "rows" in errors:
-            return errors["rows"]
+            return errors["rows"]  # type: ignore
         else:
-            return errors
+            return errors  # type: ignore
 
-    _type_defaults = {
+    _type_defaults: dict[str, Any] = {
         "integer": 0,
         "list": [],
         "dict": {},
         "string": "",
     }
 
-    def get_type_default(self, type_):
+    def get_type_default(self, type_: str):
         return self._type_defaults.get(type_)
 
-    def get_default(self, field_schema):
+    def get_default(self, field_schema: dict[str, Any]):
         if "default" in field_schema:
             return field_schema.get("default")
 
@@ -91,7 +91,7 @@ class UpgradedValidator(Validator):
         # This is a bit lazy and assumes a list of dicts, since that's what
         # this whole subclass was written for
 
-        schema = schema or self.schema
-        schema = schema["rows"]["schema"] if "rows" in schema else schema
+        schema = schema or self.schema  # type: ignore
+        schema = schema["rows"]["schema"] if "rows" in schema else schema  # type: ignore
         assert isinstance(document, (list, tuple, set))
-        return [self.add_defaults_to_doc(doc, schema) for doc in document]
+        return [self.add_defaults_to_doc(doc, schema) for doc in document]  # type: ignore

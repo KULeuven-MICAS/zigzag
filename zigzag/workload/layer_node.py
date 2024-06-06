@@ -270,7 +270,7 @@ class LayerNode(LayerNodeABC):
     def extract_layer_info(self):
         """! This function extract basic information for each layer node."""
 
-        self.total_MAC_count = self.layer_dim_sizes.total_size
+        self.total_mac_count = self.layer_dim_sizes.total_size
 
         # each operand's size (Unit: # of data element)
         for layer_op in self.layer_operands:
@@ -290,7 +290,7 @@ class LayerNode(LayerNodeABC):
         # i.e. each data element can be used to support how many MAC operation.
         operand_data_reuse: dict[LayerOperand, float] = {}
         for operand, size_in_elem in self.operand_size_elem.items():
-            operand_data_reuse[operand] = self.total_MAC_count / size_in_elem
+            operand_data_reuse[operand] = self.total_mac_count / size_in_elem
         self.operand_data_reuse = operand_data_reuse
 
     def get_operand_irrelevant_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:

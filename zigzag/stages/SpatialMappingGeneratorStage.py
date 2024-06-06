@@ -549,7 +549,6 @@ class SpatialMappingGeneratorStage(Stage):
     def modify_innermost_input_mem_size(self, user_spatial_mapping: SpatialMapping) -> Accelerator:
         """!
         # TODO needs cleanup
-        # ! This only works for single core
         """
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
         # to avoid the MemoryTooSmallException in loma stage.

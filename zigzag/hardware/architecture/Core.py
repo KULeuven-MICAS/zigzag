@@ -1,11 +1,9 @@
 from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 
-from zigzag.mapping.spatial_mapping import SpatialMapping
 from zigzag.mapping.spatial_mapping import SpatialMapping
 from zigzag.utils import json_repr_handler
 
@@ -101,13 +99,6 @@ class Core:
                     memory_sharing_list.append(operand_mem_share)
 
         self.mem_sharing_list = memory_sharing_list
-
-    def get_top_memory_instance(self, mem_op: MemoryOperand) -> MemoryInstance:
-        if mem_op not in self.memory_hierarchy.get_operands():
-            raise ValueError(f"Memory operand {mem_op} not in {self}.")
-        mem_level = self.memory_hierarchy.get_operand_top_level(mem_op)
-        mem_instance = mem_level.memory_instance
-        return mem_instance
 
     def get_top_memory_instance(self, mem_op: MemoryOperand) -> MemoryInstance:
         if mem_op not in self.memory_hierarchy.get_operands():

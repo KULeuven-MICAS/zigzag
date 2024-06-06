@@ -35,7 +35,6 @@ class ServedMemDimensions:
         return tuple(vec_single_operand for _ in range(nb_operands))
 
     @property
-    @property
     def nb_dims(self):
         return len(self.data)
 

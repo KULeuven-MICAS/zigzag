@@ -1,10 +1,10 @@
-from math import factorial
 import operator
+import numpy as np
+import logging
+from math import factorial
 from typing import Any, Generator
 from tqdm import tqdm
-import numpy as np
 from sympy.ntheory import factorint
-import logging
 
 
 from zigzag.datatypes import LayerDim
@@ -144,7 +144,8 @@ class LomaEngine:
         """
         # temporal_loop_pfs: a dict that for each temporal loop dimension contains the prime factors
         # temporal_loop_pf_counts: a dict that for each temporal loop dimension contains the prime factor multiplicities
-        # temporal_loop_pf_count_sums: a dict that for each temporal loop dimension contains the total amount of prime factors
+        # temporal_loop_pf_count_sums: a dict that for each temporal loop dimension contains the total amount of prime
+        # factors
 
         temporal_loop_pfs: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_counts: dict[LayerDim, tuple[int, ...]] = {}

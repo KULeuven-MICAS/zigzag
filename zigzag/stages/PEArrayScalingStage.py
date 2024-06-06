@@ -5,7 +5,6 @@
 from math import ceil
 from typing import Any
 
-from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy

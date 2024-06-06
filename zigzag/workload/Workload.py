@@ -29,4 +29,4 @@ class Workload(DiGraph, metaclass=ABCMeta):
 
     @property
     def node_iterator(self) -> Iterator[LayerNodeABC]:
-        return self.nodes()
+        return self.nodes()  # type: ignore

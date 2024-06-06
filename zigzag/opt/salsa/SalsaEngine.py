@@ -35,6 +35,7 @@ import logging
 import random
 
 
+from zigzag.datatypes import LayerDim
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
@@ -176,17 +177,14 @@ class SalsaEngine:
     ## Get the prime factors for all temporal loops in the following format:
     # [('C', 2), ('OY', 2), ('OX', 2), ('K', 7), ...]
     def get_prime_factors(self):
-        temporal_loop_pfs = {}
+        temporal_loop_pfs: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_counts = {}
-        temporal_loop_pf_count_sums = {}
+        temporal_loop_pf_count_sums: dict[LayerDim, int] = {}
         lpfs = []
 
         self.temporal_mapping_lpf = []
 
-        for (
-            tl_dim,
-            tl_size,
-        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
+        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
             factors = factorint(tl_size)
             pfs = []
             counts = []
@@ -199,10 +197,8 @@ class SalsaEngine:
             temporal_loop_pf_counts[tl_dim] = tuple(counts)
             temporal_loop_pf_count_sums[tl_dim] = sum(counts)
 
-        # logger.info(f"Generated {len(lpfs)} LPFs for layer {self.layer}.")
-
         for loop_type in list(temporal_loop_pfs.keys()):
             for i in range(len(temporal_loop_pfs[loop_type])):
                 loop_size = temporal_loop_pfs[loop_type]
-                for number_of_loop in range(temporal_loop_pf_counts[loop_type][i]):
+                for _ in range(temporal_loop_pf_counts[loop_type][i]):
                     self.temporal_mapping_lpf.append((loop_type, loop_size[i]))

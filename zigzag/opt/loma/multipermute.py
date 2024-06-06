@@ -34,13 +34,16 @@
 # of Variables by Prefix Shifts."  Aaron Williams, 2009
 
 
+from typing import Any
+
+
 class ListElement:
 
-    def __init__(self, value, next):
+    def __init__(self, value: Any, next: Any):
         self.value = value
         self.next = next
 
-    def nth(self, n):
+    def nth(self, n: int):
         o = self
         i = 0
         while i < n and o.next is not None:
@@ -49,7 +52,7 @@ class ListElement:
         return o
 
 
-def init(multiset):
+def init(multiset: list[Any]):
     multiset.sort()  # ensures proper non-increasing order
     h = ListElement(multiset[0], None)
     for item in multiset[1:]:
@@ -57,17 +60,17 @@ def init(multiset):
     return h, h.nth(len(multiset) - 2), h.nth(len(multiset) - 1)
 
 
-def visit(h):
+def visit(h: ListElement) -> list[Any]:
     """! Converts our bespoke linked list to a python list."""
     o = h
-    l = []
+    l: list[Any] = []
     while o is not None:
         l.append(o.value)
         o = o.next
     return l
 
 
-def permutations(multiset):
+def permutations(multiset: list[Any]):
     """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
     yield visit(h)

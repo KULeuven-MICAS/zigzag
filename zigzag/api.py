@@ -1,7 +1,7 @@
 from onnx import ModelProto
-import re
 from datetime import datetime
 from typing import Any
+import logging
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -21,20 +21,21 @@ from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
 
 
 def get_hardware_performance_zigzag(
-    workload: str | dict[int, dict[str, Any]] | ModelProto,
+    workload: str | ModelProto,
     accelerator: str,
-    mapping: str | dict[str, dict[str, Any]],
+    mapping: str,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
+    nb_spatial_mappings_generated: int = 3,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
     """
     @param workload Either a filepath to the workload ONNX or yaml file, an ONNX model
     @param accelerator Filepath to accelerator yaml file
     @param mapping Filepath to mapping yaml file
     @param opt Optimization criterion: either `energy`, `latency` or `EDP`
-    @param dump_folder Output folder for file dumps
+    @param dump_filename_pattern Filename pattern for file dumps
     @param pickle_filename Filename of pickle dump
     @lpf_limit
     @nb_spatial_mappings_generated Max nb of spatial mappings that are automatically generated in
@@ -42,11 +43,9 @@ def get_hardware_performance_zigzag(
     """
 
     # Initialize the logger
-    import logging as _logging
-
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    logging_level = logging.INFO
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     match opt:
         case "energy":
@@ -59,7 +58,7 @@ def get_hardware_performance_zigzag(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx"):
+    if isinstance(workload, ModelProto) or (workload.split(".")[-1] == "onnx"):
         workload_parser_stage = ONNXModelParserStage
     else:
         workload_parser_stage = WorkloadParserStage
@@ -89,6 +88,9 @@ def get_hardware_performance_zigzag(
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=lpf_limit,  # required by LomaStage
         loma_show_progress_bar=True,
+        # Max nb of spatial mappings that are automatically generated in SpatialMappingGeneratorStage
+        nb_mappings_generated=nb_spatial_mappings_generated,
+        # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
         enable_mix_spatial_mapping_generation=False,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
@@ -105,19 +107,18 @@ def get_hardware_performance_zigzag(
 
 
 def get_hardware_performance_zigzag_imc(
-    workload: str | dict[int, dict[str, Any]] | ModelProto,
+    workload: str | ModelProto,
     accelerator: str,
-    mapping: str | dict[str, dict[str, Any]],
+    mapping: str,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    # Initialize the logger
-    import logging as _logging
 
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    # Initialize the logger
+    logging_level = logging.INFO
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     match opt:
         case "energy":
@@ -130,7 +131,7 @@ def get_hardware_performance_zigzag_imc(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx"):
+    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
         workload_parser_stage = ONNXModelParserStage
     else:
         workload_parser_stage = WorkloadParserStage
@@ -181,20 +182,19 @@ def get_hardware_performance_zigzag_imc(
 
 
 def get_hardware_performance_zigzag_pe_array_scaling(
-    workload: str | dict[int, dict[str, Any]] | ModelProto,
+    workload: str | ModelProto,
     accelerator: str,
-    mapping: str | dict[str, dict[str, Any]],
-    pe_array_scaling,
+    mapping: str,
+    pe_array_scaling: int,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    # Initialize the logger
-    import logging as _logging
 
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    # Initialize the logger
+    logging_level = logging.INFO
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     match opt:
         case "energy":
@@ -207,7 +207,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx"):
+    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
         workload_parser_stage = ONNXModelParserStage
     else:
         workload_parser_stage = WorkloadParserStage
@@ -256,19 +256,18 @@ def get_hardware_performance_zigzag_pe_array_scaling(
 
 
 def get_hardware_performance_zigzag_without_unused_memory(
-    workload: str | dict[int, dict[str, Any]] | ModelProto,
+    workload: str | ModelProto,
     accelerator: str,
-    mapping: str | dict[str, dict[str, Any]],
+    mapping: str,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    # Initialize the logger
-    import logging as _logging
 
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    # Initialize the logger
+    logging_level = logging.INFO
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     match opt:
         case "energy":
@@ -281,7 +280,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx"):
+    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
         workload_parser_stage = ONNXModelParserStage
     else:
         workload_parser_stage = WorkloadParserStage
@@ -330,19 +329,18 @@ def get_hardware_performance_zigzag_without_unused_memory(
 
 
 def get_hardware_performance_zigzag_with_mix_spatial_mapping(
-    workload: str | dict[int, dict[str, Any]] | ModelProto,
+    workload: str | ModelProto,
     accelerator: str,
-    mapping: str | dict[str, dict[str, Any]],
+    mapping: str,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    # Initialize the logger
-    import logging as _logging
 
-    _logging_level = _logging.INFO
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    # Initialize the logger
+    logging_level = logging.INFO
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     match opt:
         case "energy":
@@ -355,7 +353,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx"):
+    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
         workload_parser_stage = ONNXModelParserStage
     else:
         workload_parser_stage = WorkloadParserStage
@@ -402,27 +400,3 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     cmes = answers
 
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
-
-
-if __name__ == "__main__":
-    workload = "inputs/workload/mobilenetv2.onnx"
-    # workload = 'inputs.examples.workload.resnet18'
-    accelerator = "zigzag.inputs.examples.hardware.TPU_like"
-    mapping = "zigzag.inputs.examples.mapping.tpu_like"
-
-    hw_name = accelerator.split(".")[-1]
-    wl_name = re.split(r"/|\.", workload)[-1]
-    if wl_name == "onnx":
-        wl_name = re.split(r"/|\.", workload)[-2]
-    experiment_id = f"{hw_name}-{wl_name}"
-    pkl_name = f"{experiment_id}-saved_list_of_cmes"
-
-    answer = get_hardware_performance_zigzag_pe_array_scaling(
-        workload,
-        accelerator,
-        mapping,
-        pe_array_scaling=2,
-        opt="EDP",
-        dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",
-        pickle_filename=f"outputs/{pkl_name}.pickle",
-    )
