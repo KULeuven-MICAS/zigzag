@@ -37,7 +37,7 @@ class ONNXWorkload(WorkloadABC[LayerNodeABC]):
             self.add_workload_edges_from(edges)
 
     def get_copy_no_dummy(self) -> WorkloadABC[LayerNode]:
-        """! Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy node to dummy node)   # TODO Can you make this assumption?
+        """! Remove dummy nodes (layers) in the graph
         Redirect the outgoing edges of dummy nodes to non-dummy nodes Method: for each dummy node, add edges between its
         predecessor nodes and successor nodes; then remove the dummy node.
         """
