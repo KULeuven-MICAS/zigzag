@@ -159,10 +159,9 @@ class SpatialMappingGeneratorStage(Stage):
 
         # Sort according to expected performance
         candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
-        # indicators = [x.get_performance_indicator() for x in candidate_mappings]
 
         # Limit the number of mappings generated
-        for i in range(self.nb_mappings_generated):
+        for i in range(min(self.nb_mappings_generated, len(candidate_mappings))):
             candidate = candidate_mappings[i]
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
