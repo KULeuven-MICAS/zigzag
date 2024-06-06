@@ -62,7 +62,6 @@ var hierarchy =
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", [
         [ "AcceleratorParserStage", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html", null ],
         [ "CostModelStage", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html", null ],
-        [ "DumpStage", "classzigzag_1_1stages_1_1DumpStage_1_1DumpStage.html", null ],
         [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", null ],
         [ "ONNXModelParserStage", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", null ],
         [ "PEArrayScalingStage", "classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html", null ],
@@ -73,6 +72,7 @@ var hierarchy =
         [ "SpatialMappingConversionStage", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html", null ],
         [ "SpatialMappingGeneratorStage", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html", null ],
         [ "TemporalOrderingConversionStage", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html", null ],
+        [ "VisualizationStage", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html", null ],
         [ "WorkloadParserStage", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html", null ],
         [ "WorkloadStage", "classzigzag_1_1stages_1_1WorkloadStage_1_1WorkloadStage.html", null ],
         [ "MinimalEDPStage", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage.html", null ],

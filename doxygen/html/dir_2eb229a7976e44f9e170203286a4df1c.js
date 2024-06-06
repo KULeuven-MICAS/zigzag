@@ -3,9 +3,6 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
     [ "__init__.py", "stages_2____init_____8py.html", null ],
     [ "AcceleratorParserStage.py", "AcceleratorParserStage_8py.html", "AcceleratorParserStage_8py" ],
     [ "CostModelStage.py", "CostModelStage_8py.html", "CostModelStage_8py" ],
-    [ "DumpStage.py", "DumpStage_8py.html", [
-      [ "DumpStage", "classzigzag_1_1stages_1_1DumpStage_1_1DumpStage.html", "classzigzag_1_1stages_1_1DumpStage_1_1DumpStage" ]
-    ] ],
     [ "LomaStage.py", "LomaStage_8py.html", [
       [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage" ]
     ] ],
@@ -30,6 +27,7 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
       [ "StageCallable", "classzigzag_1_1stages_1_1Stage_1_1StageCallable.html", "classzigzag_1_1stages_1_1Stage_1_1StageCallable" ]
     ] ],
     [ "TemporalOrderingConversionStage.py", "TemporalOrderingConversionStage_8py.html", "TemporalOrderingConversionStage_8py" ],
+    [ "VisualizationStage.py", "VisualizationStage_8py.html", "VisualizationStage_8py" ],
     [ "WorkloadParserStage.py", "WorkloadParserStage_8py.html", "WorkloadParserStage_8py" ],
     [ "WorkloadStage.py", "WorkloadStage_8py.html", "WorkloadStage_8py" ]
 ];

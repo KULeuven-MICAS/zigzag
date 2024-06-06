@@ -173,9 +173,6 @@ var annotated_dup =
         [ "CostModelStage", "namespacezigzag_1_1stages_1_1CostModelStage.html", [
           [ "CostModelStage", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage" ]
         ] ],
-        [ "DumpStage", "namespacezigzag_1_1stages_1_1DumpStage.html", [
-          [ "DumpStage", "classzigzag_1_1stages_1_1DumpStage_1_1DumpStage.html", "classzigzag_1_1stages_1_1DumpStage_1_1DumpStage" ]
-        ] ],
         [ "LomaStage", "namespacezigzag_1_1stages_1_1LomaStage.html", [
           [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage" ]
         ] ],
@@ -230,6 +227,9 @@ var annotated_dup =
         ] ],
         [ "TemporalOrderingConversionStage", "namespacezigzag_1_1stages_1_1TemporalOrderingConversionStage.html", [
           [ "TemporalOrderingConversionStage", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage" ]
+        ] ],
+        [ "VisualizationStage", "namespacezigzag_1_1stages_1_1VisualizationStage.html", [
+          [ "VisualizationStage", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage" ]
         ] ],
         [ "WorkloadParserStage", "namespacezigzag_1_1stages_1_1WorkloadParserStage.html", [
           [ "WorkloadParserStage", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage" ]
