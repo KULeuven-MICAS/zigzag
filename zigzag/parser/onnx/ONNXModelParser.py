@@ -94,15 +94,4 @@ class ONNXModelParser:
             workload.number_of_edges(),  # type: ignore
         )
 
-        # TODO: ensure the graph is complete rather than broken
-        # self.graph_visualization(workload)  # for debugging
         return workload
-
-    def graph_visualization(self, workload):
-        # visualize the resulted graph (for debugging)
-        import matplotlib.pyplot as plt
-        import networkx as nx  # kept for debugging
-
-        pos = nx.spring_layout(workload)
-        nx.draw(workload, pos, with_labels=True, node_color="lightblue", font_weight="bold")
-        plt.savefig("tmp.png")

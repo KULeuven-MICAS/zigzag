@@ -50,12 +50,6 @@ class ONNXWorkload(WorkloadABC[LayerNodeABC]):
                     workload_copy.add_workload_edge(predecessor_node, successor_node)
 
         workload_copy.remove_workload_nodes_from(iter(dummy_nodes))
-        # visualize the resulted graph
-        # import matplotlib.pyplot as plt
-
-        # pos = networkx.spring_layout(workload_copy)
-        # networkx.draw(workload_copy, pos, with_labels=True, node_color="lightblue", font_weight="bold")
-        # plt.savefig("tmp.png")
 
         # Typecast
         workload_result: WorkloadABC[LayerNode] = workload_copy  # type: ignore

@@ -74,8 +74,10 @@ class SpatialMappingGeneratorStage(Stage):
         self.oa_dim_sizes = self.core.operational_array.dimension_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
-        self.spatial_mapping_hint: SpatialMappingHint = self.layer.spatial_mapping_hint
-        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, set(self.layer.layer_dims))
+        # Spatial mapping hint
+        self.spatial_mapping_hint = self.layer.spatial_mapping_hint
+        self.spatial_mapping_hint.clear_invalid_hits(self.layer.layer_dims)
+        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, self.layer.layer_dims)
 
     def run(self):
         """! Generate SpatialMappings and convert to internal representation"""
@@ -181,7 +183,7 @@ class SpatialMappingGeneratorStage(Stage):
                     oa_dim,
                     value,
                     mem_name,
-            )
+                )
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
