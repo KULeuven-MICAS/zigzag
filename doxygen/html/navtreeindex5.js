@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"get__cacti__cost_8py.html#a3f7228a3941f19f282647a09dd494528":[3,0,0,2,0,4,5],
 "get__cacti__cost_8py.html#a4329d2992f02e00a6e706a5443269afc":[3,0,0,2,0,4,4],
 "get__cacti__cost_8py.html#a6700ef6022c4d3b47bc8853b9e3bbda5":[3,0,0,2,0,4,10],
 "get__cacti__cost_8py.html#a78d8307278252d887b53662040fa6004":[3,0,0,2,0,4,13],
