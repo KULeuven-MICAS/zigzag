@@ -1,6 +1,6 @@
 import logging
 from typing import Any
-from cerberus import Validator
+from cerberus import Validator  # type: ignore
 from math import log2
 
 
@@ -8,6 +8,9 @@ logger = logging.getLogger(__name__)
 
 
 class AcceleratorValidator:
+    """Validates a single Zigzag accelerator from a user-provided yaml file. Checks if the entries of the yaml file
+    are valid and replace unspecified values with defaults."""
+
     OPERAND_REGEX = r"^I[12]$|^O$"
     DIMENSION_REGEX = r"^D\d$"
     PORT_REGEX = r"^[r]?[w]?_port_\d+$"
@@ -116,8 +119,8 @@ class AcceleratorValidator:
     def __init__(self, data: Any):
         """Initialize Validator object, assign schema and store normalize user-given data"""
         self.validator = Validator()
-        self.validator.schema = AcceleratorValidator.SCHEMA
-        self.data: dict[str, Any] = self.validator.normalized(data)
+        self.validator.schema = AcceleratorValidator.SCHEMA  # type: ignore
+        self.data: dict[str, Any] = self.validator.normalized(data)  # type: ignore
         self.is_valid = True
 
     def invalidate(self, extra_msg: str):
@@ -129,8 +132,8 @@ class AcceleratorValidator:
         return true iff valid.
         """
         # Validate according to schema
-        validate_success = self.validator.validate(self.data)
-        errors = self.validator.errors
+        validate_success = self.validator.validate(self.data)  # type: ignore
+        errors = self.validator.errors  # type: ignore
         if not validate_success:
             self.invalidate(f"The following restrictions apply: {errors}")
 

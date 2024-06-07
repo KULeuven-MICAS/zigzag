@@ -7,18 +7,16 @@ from zigzag.api import get_hardware_performance_zigzag_with_mix_spatial_mapping
 # Test case for when an incomplete spatial_mapping is provided and spatial_mapping_hint is also provided.
 
 workloads = (
-    "inputs/workload/alexnet.onnx",
-    "inputs/workload/mobilenetv2.onnx",
-    "inputs/workload/resnet18.onnx",
-    "inputs/workload/resnet18.yaml",
+    "zigzag/inputs/workload/resnet18.onnx",
+    "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "inputs/workload/alexnet.onnx": (5681909132.480001, 8279495.0),
-    "inputs/workload/mobilenetv2.onnx": (909647916.68, 2602479.0),
-    "inputs/workload/resnet18.onnx": (1751779924.0000002, 3234867.0),
-    "inputs/workload/resnet18.yaml": (2259198622.68, 3884859.0),
+    "zigzag/inputs/workload/alexnet.onnx": (5681909132.480001, 8279495.0),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (909647916.68, 2602479.0),
+    "zigzag/inputs/workload/resnet18.onnx": (1751779924.0000002, 3234867.0),
+    "zigzag/inputs/workload/resnet18.yaml": (2259198622.68, 3884859.0),
 }
 
 

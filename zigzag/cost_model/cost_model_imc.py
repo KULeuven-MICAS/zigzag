@@ -110,8 +110,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         super().calc_overall_latency(cycles_per_mac=cycles_per_mac)
 
     def update_tclk(self):
-        """! This function calculate the Tclk for IMC (In-Memory-Computing)
-        """
+        """! This function calculate the Tclk for IMC (In-Memory-Computing)"""
         self.tclk = self.operational_array.tclk
         self.tclk_breakdown = self.operational_array.tclk_breakdown
 
@@ -161,10 +160,10 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
                     },
                     "spatial": {
                         "mac_utilization": {
-                            "ideal": self.MAC_spatial_utilization,
-                            "stalls": self.MAC_utilization0,
-                            "stalls_onloading": self.MAC_utilization1,
-                            "stalls_onloading_offloading": self.MAC_utilization2,
+                            "ideal": self.mac_spatial_utilization,
+                            "stalls": self.mac_utilization0,
+                            "stalls_onloading": self.mac_utilization1,
+                            "stalls_onloading_offloading": self.mac_utilization2,
                         }
                     },
                 },

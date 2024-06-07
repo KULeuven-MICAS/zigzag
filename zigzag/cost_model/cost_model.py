@@ -36,10 +36,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.latency_total0: float
         self.latency_total1: float
         self.latency_total2: float
-        self.MAC_spatial_utilization: float
-        self.MAC_utilization0: float
-        self.MAC_utilization1: float
-        self.MAC_utilization2: float
+        self.mac_spatial_utilization: float
+        self.mac_utilization0: float
+        self.mac_utilization1: float
+        self.mac_utilization2: float
 
         self.accelerator: Accelerator | None
 
@@ -111,10 +111,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result.latency_total2 = self.latency_total2 + other.latency_total2
 
         # MAC utilization
-        result.MAC_spatial_utilization = result.ideal_cycle / result.ideal_temporal_cycle
-        result.MAC_utilization0 = result.ideal_cycle / result.latency_total0
-        result.MAC_utilization1 = result.ideal_cycle / result.latency_total1
-        result.MAC_utilization2 = result.ideal_cycle / result.latency_total2
+        result.mac_spatial_utilization = result.ideal_cycle / result.ideal_temporal_cycle
+        result.mac_utilization0 = result.ideal_cycle / result.latency_total0
+        result.mac_utilization1 = result.ideal_cycle / result.latency_total1
+        result.mac_utilization2 = result.ideal_cycle / result.latency_total2
 
         for cme in (self, other):
             if isinstance(cme, CostModelEvaluation):
@@ -177,10 +177,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         result.latency_total2 *= number
 
         # MAC utilization
-        result.MAC_spatial_utilization = result.ideal_cycle / result.ideal_temporal_cycle
-        result.MAC_utilization0 = result.ideal_cycle / result.latency_total0
-        result.MAC_utilization1 = result.ideal_cycle / result.latency_total1
-        result.MAC_utilization2 = result.ideal_cycle / result.latency_total2
+        result.mac_spatial_utilization = result.ideal_cycle / result.ideal_temporal_cycle
+        result.mac_utilization0 = result.ideal_cycle / result.latency_total0
+        result.mac_utilization1 = result.ideal_cycle / result.latency_total1
+        result.mac_utilization2 = result.ideal_cycle / result.latency_total2
 
         return result
 
@@ -211,10 +211,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
                     },
                     "spatial": {
                         "mac_utilization": {
-                            "ideal": self.MAC_spatial_utilization,
-                            "stalls": self.MAC_utilization0,
-                            "stalls_onloading": self.MAC_utilization1,
-                            "stalls_onloading_offloading": self.MAC_utilization2,
+                            "ideal": self.mac_spatial_utilization,
+                            "stalls": self.mac_utilization0,
+                            "stalls_onloading": self.mac_utilization1,
+                            "stalls_onloading_offloading": self.mac_utilization2,
                         }
                     },
                 },
@@ -255,6 +255,9 @@ class CumulativeCME(CostModelEvaluationABC):
         self.latency_total2: float = 0.0
 
         self.accelerator = None
+
+    def __str__(self):
+        return "CumulativeCME"
 
 
 class CostModelEvaluation(CostModelEvaluationABC):
@@ -576,7 +579,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             operational_array, OperationalArray
         ), "This method expects an OperationalArray instance. Otherwise, the method should be overridden in a subclass."
         single_mac_energy = operational_array.unit.cost
-        self.mac_energy = single_mac_energy * self.layer.total_MAC_count
+        self.mac_energy = single_mac_energy * self.layer.total_mac_count
 
     def calc_memory_energy_cost(self):
         """! Computes the memories reading/writing energy by converting the access patterns in self.mapping to
@@ -1045,56 +1048,36 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = int(
             ceil(
-                self.layer.total_MAC_count / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
+                self.layer.total_mac_count / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
             )
             * cycles_per_mac
         )
 
         # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
         ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle * cycles_per_mac
-        MAC_spatial_utilization = ideal_cycle / ideal_temporal_cycle
+        mac_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 
         # Total latency without the initial data loading and the final data off-loading
         latency_total0 = ideal_temporal_cycle + self.SS_comb
-        MAC_utilization0 = ideal_cycle / latency_total0
+        mac_utilization0 = ideal_cycle / latency_total0
 
         # Total latency with the initial data loading, but without the final data off-loading
         latency_total1 = ideal_temporal_cycle + self.SS_comb + self.data_loading_cycle
-        MAC_utilization1 = ideal_cycle / latency_total1
+        mac_utilization1 = ideal_cycle / latency_total1
 
         # Total latency with both the initial data loading and the final data off-loading
         latency_total2 = ideal_temporal_cycle + self.SS_comb + self.data_loading_cycle + self.data_offloading_cycle
-        MAC_utilization2 = ideal_cycle / latency_total2
+        mac_utilization2 = ideal_cycle / latency_total2
 
         self.ideal_cycle = ideal_cycle
         self.ideal_temporal_cycle = ideal_temporal_cycle
-        self.MAC_spatial_utilization = MAC_spatial_utilization
+        self.mac_spatial_utilization = mac_spatial_utilization
         self.latency_total0 = latency_total0
         self.latency_total1 = latency_total1
         self.latency_total2 = latency_total2
-        self.MAC_utilization0 = MAC_utilization0
-        self.MAC_utilization1 = MAC_utilization1
-        self.MAC_utilization2 = MAC_utilization2
-
-    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
-        """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
-        required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
-        requirements if the given memory instance is not included in this CME's memory hierarchy.
-        NOTE: this function is used in Stream
-        """
-        # Check which operands require offchip memory throughout the computation
-        offchip_mem_operands: list[MemoryOperand] = []
-        for op, memory_levels in self.mem_hierarchy_dict.items():
-            last_mem_level = memory_levels[-1]
-            if last_mem_level.memory_instance == memory_instance:
-                offchip_mem_operands.append(op)
-        # Obtain the required instantaneous bandwidth to/from offchip for these operands
-        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
-        for mem_op in offchip_mem_operands:
-            layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-            inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
-            total_inst_bw += inst_bw_4way
-        return total_inst_bw
+        self.mac_utilization0 = mac_utilization0
+        self.mac_utilization1 = mac_utilization1
+        self.mac_utilization2 = mac_utilization2
 
     def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
         """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth

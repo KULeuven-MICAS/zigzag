@@ -5,18 +5,16 @@ sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_without_unused_memory
 
 workloads = (
-    "inputs/workload/alexnet.onnx",
-    "inputs/workload/mobilenetv2.onnx",
-    "inputs/workload/resnet18.onnx",
-    "inputs/workload/resnet18.yaml",
+    "zigzag/inputs/workload/resnet18.onnx",
+    "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "inputs/workload/alexnet.onnx": (5475639039, 8963572),
-    "inputs/workload/mobilenetv2.onnx": (952681462, 21868059),
-    "inputs/workload/resnet18.onnx": (1659252422, 3998241),
-    "inputs/workload/resnet18.yaml": (1982830218, 4507187),
+    "zigzag/inputs/workload/alexnet.onnx": (5475639039, 8963572),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (952681462, 21868059),
+    "zigzag/inputs/workload/resnet18.onnx": (1659252422, 3998241),
+    "zigzag/inputs/workload/resnet18.yaml": (1982830218, 4507187),
 }
 
 

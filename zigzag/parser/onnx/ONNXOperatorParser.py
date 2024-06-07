@@ -49,6 +49,11 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         else:
             raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
 
+    def get_node_name(self) -> str:
+        if self.node.name != "":
+            return self.node.name
+        return f"Layer{self.node_id}"
+
     def get_node_predecessors(self) -> list[int]:
         """Compute node input source"""
         predecessors: list[int] = []

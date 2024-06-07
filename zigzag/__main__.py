@@ -1,5 +1,5 @@
+from datetime import datetime
 from zigzag.stages import *
-import argparse
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -10,29 +10,11 @@ from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.save_stages import SimpleSaveStage
 from zigzag.stages.LomaStage import LomaStage
+from zigzag.parser.arguments import get_arg_parser
 
 
 def main():
-    # Get the onnx model, the mapping and accelerator arguments
-    parser = argparse.ArgumentParser(description="Setup zigzag inputs")
-    parser.add_argument(
-        "--model",
-        metavar="path",
-        required=True,
-        help="path to onnx model, e.g. inputs/examples/my_onnx_model.onnx",
-    )
-    parser.add_argument(
-        "--mapping",
-        metavar="path",
-        required=True,
-        help="path to mapping file, e.g., inputs.examples.my_mapping",
-    )
-    parser.add_argument(
-        "--accelerator",
-        metavar="path",
-        required=True,
-        help="module path to the accelerator, e.g. inputs.examples.accelerator1",
-    )
+    parser = get_arg_parser()
     args = parser.parse_args()
 
     # Initialize the logger
@@ -60,7 +42,7 @@ def main():
         accelerator_path=args.accelerator,  # required by AcceleratorParserStage
         onnx_model_path=args.model,  # required by ONNXModelParserStage
         mapping_path=args.mapping,  # required by ONNXModelParserStage
-        dump_filename_pattern="outputs/{datetime}.json",  # output file save pattern
+        dump_folder=f"outputs/{datetime.now()}",  # Output folder
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
     )

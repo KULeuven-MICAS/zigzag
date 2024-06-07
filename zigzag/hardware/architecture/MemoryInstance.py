@@ -3,6 +3,7 @@ from zigzag.utils import json_repr_handler
 
 
 class MemoryInstance:
+    """A single instance within the memory hierarchy, without information about connectivity."""
 
     def __init__(
         self,

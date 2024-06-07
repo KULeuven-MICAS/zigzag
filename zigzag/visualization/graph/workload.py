@@ -1,8 +1,9 @@
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx import DiGraph
 
 
-def visualize_dnn_graph(G):
+def visualize_dnn_graph(G: DiGraph):
     pos = {}
     pos_lb = {}
     for i_node, node in enumerate(G.nodes()):

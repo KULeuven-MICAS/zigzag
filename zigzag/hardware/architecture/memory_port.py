@@ -80,7 +80,6 @@ class MemoryPort:
 class PortAllocation:
     """Port allocation for a single memory instance. Stores which ports are available for which memory operands and
     their corresponding direction.
-
     """
 
     def __init__(self, data: dict[MemoryOperand, dict[DataDirection, str]]):
