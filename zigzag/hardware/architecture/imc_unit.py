@@ -7,6 +7,7 @@ from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping
 from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
 
+
 class ImcUnit(OperationalArrayABC):
     """definition of general initialization function for D/AIMC"""
 
@@ -290,7 +291,7 @@ class ImcUnit(OperationalArrayABC):
             layer_dim = bl_dim_unroll_dims[0]
             layer_dim_size = bl_dim_unroll_sizes[1]
             # pr_sm.keys() include FX, FY
-            if layer_dim not in pr_sm.keys():  # e.g. ("C", 2)
+            if layer_dim not in pr_sm:  # e.g. ("C", 2)
                 additional_diag_rows = 0
             else:  # e.g. ("FX", 2)
                 additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
@@ -305,7 +306,7 @@ class ImcUnit(OperationalArrayABC):
             for bl_dim_idx in range(len(bl_dim_unroll_dims)):
                 layer_dim = bl_dim_unroll_dims[bl_dim_idx]
                 layer_dim_size = bl_dim_unroll_sizes[bl_dim_idx]
-                if layer_dim not in pr_sm.keys():
+                if layer_dim not in pr_sm:
                     additional_diag_rows = 0
                 else:
                     additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1

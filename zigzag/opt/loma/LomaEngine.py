@@ -169,7 +169,7 @@ class LomaEngine:
 
         # If there are no temporal LPFs generated, i.e. all loops are unrolled spatially,
         # we manually insert a loop of size 1
-        if lpfs == []:
+        if not lpfs:
             loop_dim = self.layer.layer_dims[0]
             temporal_loop_pfs = {loop_dim: (1,)}
             temporal_loop_pf_counts = {loop_dim: (1,)}

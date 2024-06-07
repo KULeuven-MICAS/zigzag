@@ -411,7 +411,9 @@ class SpatialMappingGeneratorStage(Stage):
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
 
-            ir_layer_dim_to_current_layer_dim = next(filter(lambda x: x != layer_dim, weight_r_loop.keys()))
+            ir_layer_dim_to_current_layer_dim = next(
+                filter(lambda x: x != layer_dim, weight_r_loop.keys())  # pylint: disable=W0640
+            )
 
             existed_pr_mapping_but_ir_to_current_layer_dim = list(
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
@@ -499,7 +501,7 @@ class SpatialMappingGeneratorStage(Stage):
                             # add the other existed pr loop to required_oa_dim_size,
                             # because previously it is not counted in output_served_self.oa_dim_sizes[oa_dim].
                             sole_dim = list(comb_mapping.keys())[0]
-                            the_other_pr_mapping_name = [key for key in weight_r_loop.keys() if key != sole_dim][0]
+                            the_other_pr_mapping_name = [key for key in weight_r_loop if key != sole_dim][0]
                             the_other_pr_mapping_size = list(weight_r_loop[the_other_pr_mapping_name].values())[0]
                             required_oa_dim_size *= the_other_pr_mapping_size
                         if required_oa_dim_size > self.oa_dim_sizes[output_served_oa_dim]:
@@ -637,9 +639,8 @@ class SpatialMappingGeneratorStage(Stage):
                 served_dimensions=new_served_dimensions,
             )
         # Create the new core
-        new_id = self.core.id
         new_core = Core(
-            id=new_id,
+            core_id=self.core.id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )
