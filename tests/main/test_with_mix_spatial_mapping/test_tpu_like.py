@@ -22,12 +22,12 @@ ens_lats = {
 
 @pytest.fixture
 def mapping():
-    return "inputs/mapping/tpu_like_mixed.yaml"
+    return "zigzag/inputs/mapping/tpu_like_mixed.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "inputs/hardware/tpu_like.yaml"
+    return "zigzag/inputs/hardware/tpu_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
