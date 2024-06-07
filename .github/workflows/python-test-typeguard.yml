@@ -1,4 +1,4 @@
-name: Python test
+name: Python test typeguard
 
 # Controls when the workflow will run
 on: [push]
@@ -33,7 +33,11 @@ jobs:
         with:
           src: "./zigzag"
           args: --select E9,F63,F7,F82
-      - name: Test with pytest
+      - name: Test with pytest and typeguard
         run: |
           pip install pytest
-          python -m pytest tests/
+          python -m pytest --typeguard-packages=zigzag tests/main/test_imc/test_dimc.py
+          python -m pytest --typeguard-packages=zigzag tests/main/test_origin/test_meta_prototype_like.py
+          python -m pytest --typeguard-packages=zigzag tests/main/test_with_mix_spatial_mapping/test_edge_tpu_like.py
+          python -m pytest --typeguard-packages=zigzag tests/main/test_without_unused_memory/test_ascend_like.py
+
