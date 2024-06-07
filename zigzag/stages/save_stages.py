@@ -2,7 +2,6 @@ from typing import Any
 import os
 import pickle
 import json
-import yaml
 import logging
 
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
@@ -41,9 +40,7 @@ class CompleteSaveStage(Stage):
             else:
                 raise NotImplementedError
 
-            yaml_filename = json_filename.replace(".json", ".yaml")
             self.save_to_json(cme, filename=json_filename)
-            self.save_to_yaml(json_name=json_filename, yaml_name=yaml_filename)
             logger.info(
                 "Saved %s with energy %s and latency %s to %s",
                 cme,
@@ -57,13 +54,6 @@ class CompleteSaveStage(Stage):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
         with open(filename, "w", encoding="UTF-8") as fp:
             json.dump(obj, fp, default=json_repr_handler, indent=4)
-
-    def save_to_yaml(self, json_name: str, yaml_name: str):
-        os.makedirs(os.path.dirname(yaml_name), exist_ok=True)
-        with open(json_name, "r", encoding="UTF-8") as fp:
-            res = json.load(fp)
-        with open(yaml_name, "w", encoding="UTF-8") as fp:
-            yaml.dump(res, fp, Dumper=yaml.SafeDumper)
 
 
 class SimpleSaveStage(Stage):
