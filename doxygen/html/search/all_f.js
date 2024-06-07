@@ -35,7 +35,7 @@ var searchData=
   ['ordering_631',['ordering',['../classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#aa5d555210685086c19e5d08afca6685b',1,'zigzag.opt.loma.MemoryAllocator.MemoryAllocator.ordering()'],['../classzigzag_1_1opt_1_1salsa_1_1SalsaState_1_1SalsaState.html#aa5d555210685086c19e5d08afca6685b',1,'zigzag.opt.salsa.SalsaState.SalsaState.ordering()']]],
   ['ordering_5fgenerator_632',['ordering_generator',['../classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a',1,'zigzag::opt::loma::LomaEngine::LomaEngine']]],
   ['orig_5fpr_5floop_633',['orig_pr_loop',['../classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a67550aed5f2ae7bc2aa98acb72441003',1,'zigzag::workload::layer_node::LoopRelevancyInfo']]],
-  ['output_634',['Output',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html#a53dd77e01e0e3b0f0f2f26a2498a5442',1,'zigzag::parser::onnx::utils::OnnxTensorCategory']]],
+  ['output_634',['OUTPUT',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html#a3198f9593a6b56e6fc4678a14d413ff1',1,'zigzag::parser::onnx::utils::OnnxTensorCategory']]],
   ['output_5fir_5floop_5fsize_5fcaal_635',['output_ir_loop_size_caal',['../classzigzag_1_1mapping_1_1Mapping_1_1Mapping.html#a575168334b8acb31db40c99bb27e1b30',1,'zigzag::mapping::Mapping::Mapping']]],
   ['output_5flayer_5fop_636',['OUTPUT_LAYER_OP',['../classzigzag_1_1datatypes_1_1Constants.html#a58be78b184da7ef3fdce22ea01acff84',1,'zigzag::datatypes::Constants']]],
   ['output_5fmem_5fop_637',['OUTPUT_MEM_OP',['../classzigzag_1_1datatypes_1_1Constants.html#a47352becbb40036a8dcc091b2b0bfa2d',1,'zigzag::datatypes::Constants']]],

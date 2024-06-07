@@ -1,7 +1,7 @@
 var searchData=
 [
   ['cacti_5fauto_1269',['cacti_auto',['../classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html#a29c6311ceefe093f509bfb753811ab03',1,'architecture::get_cacti_cost::CactiConfig']]],
-  ['calc_5fallowed_5fand_5freal_5fdata_5ftransfer_5fcycle_5fper_5fdtl_1270',['calc_allowed_and_real_data_transfer_cycle_per_DTL',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0de4f307221ee7f4fe653187bad7b237',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
+  ['calc_5fallowed_5fand_5freal_5fdata_5ftransfer_5fcycle_5fper_5fdata_5ftransfer_5flink_1270',['calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#abbdf8bbf346e3c1c8767fc2333d16eac',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
   ['calc_5fcycle_5fcabl_5flevel_1271',['calc_cycle_cabl_level',['../classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#aa76ed2dd341ca270b3849134804ceffd',1,'zigzag::mapping::TemporalMapping::TemporalMapping']]],
   ['calc_5fdata_5faccess_1272',['calc_data_access',['../classzigzag_1_1mapping_1_1Mapping_1_1Mapping.html#a1afa261d59c8f6a083e7eea5c1705c03',1,'zigzag::mapping::Mapping::Mapping']]],
   ['calc_5fdata_5floading_5foffloading_5flatency_1273',['calc_data_loading_offloading_latency',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],

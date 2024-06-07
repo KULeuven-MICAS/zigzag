@@ -31,7 +31,7 @@ var searchData=
   ['all_5fcontained_5flayer_5fdims_48',['all_contained_layer_dims',['../classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#af6253368187377a38089c8a0b03babf7',1,'zigzag::mapping::spatial_mapping::SpatialMapping']]],
   ['allocate_5fnode_49',['allocate_node',['../classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93',1,'zigzag::opt::loma::MemoryAllocator::MemoryAllocator']]],
   ['allowed_5fcycle_50',['allowed_cycle',['../classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a5d44d08971d37ee4721801b29b705daa',1,'zigzag::cost_model::port_activity::PortActivity']]],
-  ['allowed_5fmem_5fupdat_5fcycle_51',['allowed_mem_updat_cycle',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0db3bb67cdf3d4a57ba2a804ebdadc16',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
+  ['allowed_5fmem_5fupdate_5fcycle_51',['allowed_mem_update_cycle',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8f623306502e588c8694deb9a091d332',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
   ['api_2epy_52',['api.py',['../api_8py.html',1,'']]],
   ['arch_5flevel_53',['arch_level',['../classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a3761bcd8f0ad87adeee3d484a58dd567',1,'zigzag::mapping::SpatialMappingInternal::SpatialMappingInternal']]],
   ['architecture_54',['architecture',['../namespacearchitecture.html',1,'']]],
