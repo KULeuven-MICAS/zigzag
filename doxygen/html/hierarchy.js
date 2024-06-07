@@ -101,9 +101,12 @@ var hierarchy =
       ] ],
       [ "LayerNodeABC", "classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html", [
         [ "DummyNode", "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html", null ],
-        [ "LayerNode", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html", null ]
+        [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", null ],
+        [ "LayerNode", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html", [
+          [ "DNNWorkload", "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html", null ]
+        ] ]
       ] ],
-      [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", [
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", [
         [ "DNNWorkload", "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html", null ],
         [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", null ]
       ] ]
@@ -120,6 +123,9 @@ var hierarchy =
     [ "SalsaState", "classzigzag_1_1opt_1_1salsa_1_1SalsaState_1_1SalsaState.html", null ],
     [ "ServedMemDimensions", "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html", null ],
     [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html", null ],
+    [ "T", null, [
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
+    ] ],
     [ "TemporalMapping", "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html", null ],
     [ "WorkloadFactory", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory.html", null ],
     [ "WorkloadValidator", "classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator.html", null ],
@@ -131,14 +137,17 @@ var hierarchy =
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", null ],
       [ "LayerAttribute", "classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html", null ],
       [ "LayerNodeABC", "classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html", null ],
-      [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", null ]
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
     ] ],
     [ "DiGraph", null, [
       [ "MemoryHierarchy", "classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html", null ],
-      [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", null ]
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
     ] ],
     [ "Enum", null, [
       [ "OnnxTensorCategory", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html", null ]
+    ] ],
+    [ "Generic", null, [
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
     ] ],
     [ "ImcUnit", null, [
       [ "ImcArray", "classarchitecture_1_1ImcArray_1_1ImcArray.html", null ]

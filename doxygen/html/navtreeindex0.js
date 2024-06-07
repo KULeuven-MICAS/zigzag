@@ -68,6 +68,7 @@ var NAVTREEINDEX0 =
 "WorkloadValidator_8py.html":[3,0,0,5,8],
 "WorkloadValidator_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,5,8,1],
 "Workload_8py.html":[3,0,0,8,8],
+"Workload_8py.html#adf1f3edb9115acb0a1e04209b7a9937b":[3,0,0,8,8,1],
 "____init_____8py.html":[3,0,0,9],
 "____init_____8py.html#a4ab58d4bcf214e227cb35538617e6add":[3,0,0,9,0],
 "____main_____8py.html":[3,0,0,10],
@@ -248,6 +249,5 @@ var NAVTREEINDEX0 =
 "classarchitecture_1_1memory__level_1_1MemoryLevel.html#ae27a7920f84bb5c804c9615ef57874e5":[2,0,0,6,1,2],
 "classarchitecture_1_1memory__level_1_1MemoryLevel.html#ae83f9276433a7a3515dc1df922390772":[2,0,0,6,1,0],
 "classarchitecture_1_1memory__level_1_1MemoryLevel.html#af96227fa172ee2434ffb6b967edce50b":[2,0,0,6,1,1],
-"classarchitecture_1_1memory__level_1_1MemoryLevel.html#afdbf8f0ce5b23be73b1d0095337ab644":[2,0,0,6,1,17],
-"classarchitecture_1_1memory__level_1_1ServedMemDimensions.html":[2,0,0,6,0]
+"classarchitecture_1_1memory__level_1_1MemoryLevel.html#afdbf8f0ce5b23be73b1d0095337ab644":[2,0,0,6,1,17]
 };

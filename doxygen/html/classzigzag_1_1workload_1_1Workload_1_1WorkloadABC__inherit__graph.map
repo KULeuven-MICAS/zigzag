@@ -1,0 +1,10 @@
+<map id="WorkloadABC" name="WorkloadABC">
+<area shape="rect" id="node1" title="Abstract Base Class for workloads, parameterizable with type T, which must be a (subclass from) Layer..." alt="" coords="165,80,275,107"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="93,155,206,181"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html" title="Represents a workload graph parsed from ONNX." alt="" coords="231,155,353,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,80,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="104,5,176,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="201,5,239,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="263,5,353,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="377,5,460,32"/>
+</map>

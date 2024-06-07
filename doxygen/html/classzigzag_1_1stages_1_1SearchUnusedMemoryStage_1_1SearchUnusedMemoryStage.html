@@ -86,19 +86,21 @@ $(document).ready(function(){initNavTree('classzigzag_1_1stages_1_1SearchUnusedM
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">SearchUnusedMemoryStage Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Class for searching lowest allowed memory level per operand per layer.  
+ <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#details">More...</a></p>
 <div class="dynheader">
 Inheritance diagram for SearchUnusedMemoryStage:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage__inherit__graph.png" border="0" usemap="#aSearchUnusedMemoryStage_inherit__map" alt="Inheritance graph"/></div>
 <map name="aSearchUnusedMemoryStage_inherit__map" id="aSearchUnusedMemoryStage_inherit__map">
-<area shape="rect" title=" " alt="" coords="5,155,212,181"/>
+<area shape="rect" title="Class for searching lowest allowed memory level per operand per layer." alt="" coords="5,155,212,181"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="79,80,138,107"/>
 <area shape="rect" title=" " alt="" coords="9,5,99,32"/>
 <area shape="rect" title=" " alt="" coords="123,5,206,32"/>
@@ -109,7 +111,7 @@ Collaboration diagram for SearchUnusedMemoryStage:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage__coll__graph.png" border="0" usemap="#aSearchUnusedMemoryStage_coll__map" alt="Collaboration graph"/></div>
 <map name="aSearchUnusedMemoryStage_coll__map" id="aSearchUnusedMemoryStage_coll__map">
-<area shape="rect" title=" " alt="" coords="5,155,212,181"/>
+<area shape="rect" title="Class for searching lowest allowed memory level per operand per layer." alt="" coords="5,155,212,181"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="79,80,138,107"/>
 <area shape="rect" title=" " alt="" coords="9,5,99,32"/>
 <area shape="rect" title=" " alt="" coords="123,5,206,32"/>
@@ -118,24 +120,22 @@ Collaboration diagram for SearchUnusedMemoryStage:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e7286f6dbb3a4f169418ee7b0ee8fd4"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9e7286f6dbb3a4f169418ee7b0ee8fd4">__init__</a> (self, list[<a class="el" href="classzigzag_1_1stages_1_1Stage_1_1StageCallable.html">StageCallable</a>] <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#adead1461248fb4611a0e96290f612538">list_of_callables</a>, *Accelerator <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#abad7d445eb555517f300b6de6986a765">accelerator</a>, <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1Workload.html">Workload</a> <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#af5f1d395e50b6a04e0052c6c9125b897">workload</a>, **Any <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#aca174a4ca5cbfb3d1b2873c5e38f50aa">kwargs</a>)</td></tr>
-<tr class="separator:a9e7286f6dbb3a4f169418ee7b0ee8fd4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa5fe7dbc5dc934ae627c6f20ae9218cf"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#aa5fe7dbc5dc934ae627c6f20ae9218cf">__init__</a> (self, list[<a class="el" href="classzigzag_1_1stages_1_1Stage_1_1StageCallable.html">StageCallable</a>] <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#adead1461248fb4611a0e96290f612538">list_of_callables</a>, *Accelerator <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#abad7d445eb555517f300b6de6986a765">accelerator</a>, <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html">WorkloadABC</a>[<a class="el" href="classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html">LayerNodeABC</a>] <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#af5f1d395e50b6a04e0052c6c9125b897">workload</a>, **Any <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#aca174a4ca5cbfb3d1b2873c5e38f50aa">kwargs</a>)</td></tr>
+<tr class="separator:aa5fe7dbc5dc934ae627c6f20ae9218cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:add05e63c03df43862565a389085dab70"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70">run</a> (self, bool workload_data_always_from_top_mem=False)</td></tr>
 <tr class="separator:add05e63c03df43862565a389085dab70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6afa7cc0a23f52fdb2f271d8ff25e311"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311">update_top_mem_level</a> (self)</td></tr>
 <tr class="memdesc:a6afa7cc0a23f52fdb2f271d8ff25e311"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update mem_update_list and mem_update_weight according to the algorithm description at the file beginning.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311">More...</a><br /></td></tr>
 <tr class="separator:a6afa7cc0a23f52fdb2f271d8ff25e311"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6f410e553152d2cb5c8422301b3e1ba5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5">check_if_mem_serve_all_oa_dims</a> (self, MemoryLevel mem, Accelerator <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#abad7d445eb555517f300b6de6986a765">accelerator</a>)</td></tr>
+<tr class="memdesc:a6f410e553152d2cb5c8422301b3e1ba5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function to check if mem serve all hardware dimensions.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5">More...</a><br /></td></tr>
 <tr class="separator:a6f410e553152d2cb5c8422301b3e1ba5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9b8dd3187f937d9ad31d386f73915a0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ac9b8dd3187f937d9ad31d386f73915a0">update_mem_level_for_loading_data</a> (self)</td></tr>
 <tr class="memdesc:ac9b8dd3187f937d9ad31d386f73915a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">[OPTIONAL FUNCTION] This is an optional function.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ac9b8dd3187f937d9ad31d386f73915a0">More...</a><br /></td></tr>
 <tr class="separator:ac9b8dd3187f937d9ad31d386f73915a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acdf8e311449bb3943bc0c768e36d4a0e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e">remove_dummy_nodes_in_workload</a> (self)</td></tr>
-<tr class="memdesc:acdf8e311449bb3943bc0c768e36d4a0e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy node to dummy node) Redirect the outgoing edges of dummy nodes to non-dummy nodes Method: for each dummy node, add edges between its predecessor nodes and successor nodes; then remove the dummy node.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e">More...</a><br /></td></tr>
-<tr class="separator:acdf8e311449bb3943bc0c768e36d4a0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b36dcdc402134f358ed345205a03596"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596">update_IO_mem_level</a> (self, int layer_id, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> operand, int target_level)</td></tr>
-<tr class="memdesc:a9b36dcdc402134f358ed345205a03596"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596">More...</a><br /></td></tr>
-<tr class="separator:a9b36dcdc402134f358ed345205a03596"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a04fb0c046b99ca3a435fd062ea858f3d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d">update_io_mem_level</a> (self, int layer_id, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> operand, int target_level)</td></tr>
+<tr class="memdesc:a04fb0c046b99ca3a435fd062ea858f3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level.  <a href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d">More...</a><br /></td></tr>
+<tr class="separator:a04fb0c046b99ca3a435fd062ea858f3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html">Stage</a></td></tr>
 <tr class="memitem:ac5a3b9f2a5415eccf32e64d48d397738 inherit pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#ac5a3b9f2a5415eccf32e64d48d397738">__init__</a> (self, list[&quot;StageCallable&quot;] list_of_callables, **Any <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#aca174a4ca5cbfb3d1b2873c5e38f50aa">kwargs</a>)</td></tr>
 <tr class="separator:ac5a3b9f2a5415eccf32e64d48d397738 inherit pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -146,17 +146,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ac6481ca6973711826d5f2ca92f7ac633 inherit pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#ac6481ca6973711826d5f2ca92f7ac633">is_leaf</a> (self)</td></tr>
 <tr class="separator:ac6481ca6973711826d5f2ca92f7ac633 inherit pub_methods_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a5d4277c4f887a8ed17a05d7f22338e8f"><td class="memItemLeft" align="right" valign="top">tuple[<a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>|None, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>|None]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a5d4277c4f887a8ed17a05d7f22338e8f">get_act_weight_operand_names</a> (<a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html">LayerNode</a> layer)</td></tr>
-<tr class="separator:a5d4277c4f887a8ed17a05d7f22338e8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:abad7d445eb555517f300b6de6986a765"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#abad7d445eb555517f300b6de6986a765">accelerator</a></td></tr>
 <tr class="separator:abad7d445eb555517f300b6de6986a765"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af5f1d395e50b6a04e0052c6c9125b897"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#af5f1d395e50b6a04e0052c6c9125b897">workload</a></td></tr>
 <tr class="separator:af5f1d395e50b6a04e0052c6c9125b897"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e8630f85a36e7b1c178efc0f7aea0bb"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a3e8630f85a36e7b1c178efc0f7aea0bb">workload_no_dummy</a></td></tr>
+<tr class="separator:a3e8630f85a36e7b1c178efc0f7aea0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acd8295830954e1e4a836eb95e38f6083"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acd8295830954e1e4a836eb95e38f6083">core_mem_level_list</a></td></tr>
 <tr class="separator:acd8295830954e1e4a836eb95e38f6083"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae3aadab43a02d7266fdc55ba039d59b8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ae3aadab43a02d7266fdc55ba039d59b8">top_mem_level_act</a></td></tr>
@@ -173,9 +170,11 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:adead1461248fb4611a0e96290f612538 inherit pub_attribs_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#adead1461248fb4611a0e96290f612538">list_of_callables</a></td></tr>
 <tr class="separator:adead1461248fb4611a0e96290f612538 inherit pub_attribs_classzigzag_1_1stages_1_1Stage_1_1Stage"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
-<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9e7286f6dbb3a4f169418ee7b0ee8fd4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e7286f6dbb3a4f169418ee7b0ee8fd4">&#9670;&nbsp;</a></span>__init__()</h2>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Class for searching lowest allowed memory level per operand per layer. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa5fe7dbc5dc934ae627c6f20ae9218cf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa5fe7dbc5dc934ae627c6f20ae9218cf">&#9670;&nbsp;</a></span>__init__()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -201,14 +200,13 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1workload_1_1Workload_1_1Workload.html">Workload</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html">WorkloadABC</a>[<a class="el" href="classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html">LayerNodeABC</a>]&#160;</td>
           <td class="paramname"><em>workload</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">**Any
-    &#160;</td>
+          <td class="paramtype">**Any&#160;</td>
           <td class="paramname"><em>kwargs</em>&#160;</td>
         </tr>
         <tr>
@@ -253,73 +251,17 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+<p>Function to check if mem serve all hardware dimensions. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6f410e553152d2cb5c8422301b3e1ba5_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6f410e553152d2cb5c8422301b3e1ba5_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6f410e553152d2cb5c8422301b3e1ba5_icgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6f410e553152d2cb5c8422301b3e1ba5_icgraph">
-<area shape="rect" title=" " alt="" coords="564,5,724,47"/>
+<area shape="rect" title="Function to check if mem serve all hardware dimensions." alt="" coords="564,5,724,47"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="341,13,516,39"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70" title=" " alt="" coords="251,13,293,39"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a5d4277c4f887a8ed17a05d7f22338e8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d4277c4f887a8ed17a05d7f22338e8f">&#9670;&nbsp;</a></span>get_act_weight_operand_names()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[<a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> | None, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> | None] get_act_weight_operand_names </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html">LayerNode</a>&#160;</td>
-          <td class="paramname"><em>layer</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="acdf8e311449bb3943bc0c768e36d4a0e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#acdf8e311449bb3943bc0c768e36d4a0e">&#9670;&nbsp;</a></span>remove_dummy_nodes_in_workload()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def remove_dummy_nodes_in_workload </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Remove dummy nodes (layers) in the graph (assume there is no branch from a non-dummy node to dummy node) Redirect the outgoing edges of dummy nodes to non-dummy nodes Method: for each dummy node, add edges between its predecessor nodes and successor nodes; then remove the dummy node. </p>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_acdf8e311449bb3943bc0c768e36d4a0e_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_acdf8e311449bb3943bc0c768e36d4a0e_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_acdf8e311449bb3943bc0c768e36d4a0e_icgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_acdf8e311449bb3943bc0c768e36d4a0e_icgraph">
-<area shape="rect" title="Remove dummy nodes (layers) in the graph (assume there is no branch from a non&#45;dummy node to dummy no..." alt="" coords="564,35,739,76"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ac9b8dd3187f937d9ad31d386f73915a0" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="343,5,515,47"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="341,71,516,98"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70" title=" " alt="" coords="251,42,293,69"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,35,203,76"/>
 </map>
 </div>
 
@@ -350,6 +292,12 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">workload_data_always_from_top_mem</td><td>input of 1st layer, output of last layer must in the top mem level </td></tr>
+  </table>
+  </dd>
+</dl>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
@@ -358,9 +306,8 @@ Here is the call graph for this function:</div>
 <area shape="rect" title=" " alt="" coords="5,42,48,69"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ac9b8dd3187f937d9ad31d386f73915a0" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="97,5,269,47"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="96,71,271,98"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e" title="Remove dummy nodes (layers) in the graph (assume there is no branch from a non&#45;dummy node to dummy no..." alt="" coords="319,64,493,105"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="322,13,490,39"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5" title=" " alt="" coords="326,129,486,171"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="319,13,485,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5" title="Function to check if mem serve all hardware dimensions." alt="" coords="322,64,482,105"/>
 </map>
 </div>
 <div class="dynheader">
@@ -375,14 +322,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a9b36dcdc402134f358ed345205a03596"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9b36dcdc402134f358ed345205a03596">&#9670;&nbsp;</a></span>update_IO_mem_level()</h2>
+<a id="a04fb0c046b99ca3a435fd062ea858f3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a04fb0c046b99ca3a435fd062ea858f3d">&#9670;&nbsp;</a></span>update_io_mem_level()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def update_IO_mem_level </td>
+          <td class="memname">def update_io_mem_level </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -417,9 +364,9 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a9b36dcdc402134f358ed345205a03596_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a9b36dcdc402134f358ed345205a03596_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a9b36dcdc402134f358ed345205a03596_icgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a9b36dcdc402134f358ed345205a03596_icgraph">
-<area shape="rect" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="564,42,732,69"/>
+<div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a04fb0c046b99ca3a435fd062ea858f3d_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a04fb0c046b99ca3a435fd062ea858f3d_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a04fb0c046b99ca3a435fd062ea858f3d_icgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a04fb0c046b99ca3a435fd062ea858f3d_icgraph">
+<area shape="rect" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="564,42,731,69"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#ac9b8dd3187f937d9ad31d386f73915a0" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="343,5,515,47"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6afa7cc0a23f52fdb2f271d8ff25e311" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="341,71,516,98"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70" title=" " alt="" coords="251,42,293,69"/>
@@ -452,9 +399,8 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_ac9b8dd3187f937d9ad31d386f73915a0_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_ac9b8dd3187f937d9ad31d386f73915a0_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_ac9b8dd3187f937d9ad31d386f73915a0_cgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_ac9b8dd3187f937d9ad31d386f73915a0_cgraph">
-<area shape="rect" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="5,35,177,76"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e" title="Remove dummy nodes (layers) in the graph (assume there is no branch from a non&#45;dummy node to dummy no..." alt="" coords="225,5,400,47"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="229,71,397,98"/>
+<area shape="rect" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="5,5,177,47"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="225,13,392,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -487,16 +433,15 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Update mem_update_list and mem_update_weight according to the algorithm description at the file beginning. </p>
-<h1>TODO clean up (way too many lines)</h1>
+<h1>TODO should be split into multiple functions</h1>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6afa7cc0a23f52fdb2f271d8ff25e311_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6afa7cc0a23f52fdb2f271d8ff25e311_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6afa7cc0a23f52fdb2f271d8ff25e311_cgraph" id="aclasszigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage_a6afa7cc0a23f52fdb2f271d8ff25e311_cgraph">
-<area shape="rect" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="5,78,180,105"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5" title=" " alt="" coords="235,5,395,47"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e" title="Remove dummy nodes (layers) in the graph (assume there is no branch from a non&#45;dummy node to dummy no..." alt="" coords="228,71,403,112"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="231,137,399,163"/>
+<area shape="rect" title="Update mem_update_list and mem_update_weight according to the algorithm description at the file begin..." alt="" coords="5,42,180,69"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a6f410e553152d2cb5c8422301b3e1ba5" title="Function to check if mem serve all hardware dimensions." alt="" coords="231,5,391,47"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="228,71,395,98"/>
 </map>
 </div>
 <div class="dynheader">
@@ -605,6 +550,20 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">workload</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3e8630f85a36e7b1c178efc0f7aea0bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3e8630f85a36e7b1c178efc0f7aea0bb">&#9670;&nbsp;</a></span>workload_no_dummy</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">workload_no_dummy</td>
         </tr>
       </table>
 </div><div class="memdoc">
