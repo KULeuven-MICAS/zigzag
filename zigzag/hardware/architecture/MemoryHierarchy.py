@@ -172,7 +172,7 @@ class MemoryHierarchy(DiGraph):
 
     def __jsonrepr__(self):
         """! JSON Representation of this object to save it to a json file."""
-        return json_repr_handler({"memory_levels": list(self.topological_sort())})
+        return json_repr_handler(list(self.topological_sort()))
 
     def __eq__(self, other: object) -> bool:
         return (

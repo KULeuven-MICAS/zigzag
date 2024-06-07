@@ -14,6 +14,7 @@ from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
 from zigzag.stages.LomaStage import LomaStage
+from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
@@ -24,7 +25,7 @@ def get_hardware_performance_zigzag(
     accelerator: str,
     mapping: str,
     opt: str = "latency",
-    dump_filename_pattern: str = f"outputs/{datetime.now()}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
     lpf_limit: int = 6,
     nb_spatial_mappings_generated: int = 3,
@@ -70,6 +71,7 @@ def get_hardware_performance_zigzag(
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -82,7 +84,7 @@ def get_hardware_performance_zigzag(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
-        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=lpf_limit,  # required by LomaStage
         loma_show_progress_bar=True,
@@ -109,7 +111,7 @@ def get_hardware_performance_zigzag_imc(
     accelerator: str,
     mapping: str,
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/layer_?.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
 
@@ -142,6 +144,7 @@ def get_hardware_performance_zigzag_imc(
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -154,7 +157,7 @@ def get_hardware_performance_zigzag_imc(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
-        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
@@ -184,7 +187,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     mapping: str,
     pe_array_scaling: int,
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/{datetime}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
 
@@ -218,6 +221,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
             WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -230,7 +234,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
-        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
@@ -256,7 +260,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
     accelerator: str,
     mapping: str,
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/{datetime}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
 
@@ -291,6 +295,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
             SearchUnusedMemoryStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
             RemoveUnusedMemoryStage,  # Remove unused memory instance
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -303,7 +308,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
-        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,
@@ -328,7 +333,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     accelerator: str,
     mapping: str,
     opt: str = "latency",
-    dump_filename_pattern: str = "outputs/{datetime}.json",
+    dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
 
@@ -363,6 +368,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             SearchUnusedMemoryStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
             RemoveUnusedMemoryStage,  # Remove unused memory instance
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -375,7 +381,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
         accelerator=accelerator,  # required by AcceleratorParserStage
         workload=workload,  # required by workload_parser_stage
         mapping=mapping,  # required by workload_parser_stage
-        dump_filename_pattern=dump_filename_pattern,  # output file save pattern
+        dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
         loma_lpf_limit=6,  # required by LomaStage
         loma_show_progress_bar=True,

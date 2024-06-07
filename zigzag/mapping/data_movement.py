@@ -88,10 +88,18 @@ class FourWayDataMoving:
         )
 
     def __repr__(self):
-        return f"4waydatamoving (rd /\\: {self.rd_out_to_high}, wr V: {self.wr_in_by_high}, rd V: {self.rd_out_to_low}, wr /\\: {self.wr_in_by_low})"
+        return (
+            f"4waydatamoving (rd ^: {self.rd_out_to_high}, wr v: {self.wr_in_by_high}, "
+            f"rd v: {self.rd_out_to_low}, wr ^: {self.wr_in_by_low})"
+        )
 
     def __jsonrepr__(self):
-        return repr(self)
+        return {
+            "rd ^": self.rd_out_to_high,
+            "wr v": self.wr_in_by_high,
+            "rd v": self.rd_out_to_low,
+            "wr ^": self.wr_in_by_low,
+        }
 
 
 class DataMovePattern:

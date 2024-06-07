@@ -77,8 +77,9 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
                     if any(lp_type == loop_type for lp_type in pr_operand_loop_lut[operand][pr_data_dim]):
                         cabl_pr_lp_size[pr_data_dim][loop_type] *= loop_size
 
-                        # compute pr related data dimension size and data dimension reuse at current and below joint levels
-                        # based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled into r and ir loops.
+                        # compute pr related data dimension size and data dimension reuse at current and below joint
+                        # levels based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled
+                        # into r and ir loops.
                         pr_loop_combined_to_r = layer_node.calc_tensor_dim(
                             pr_data_dim, LayerDimSizes(cabl_pr_lp_size[pr_data_dim])
                         )
