@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -102,6 +102,7 @@ Inheritance diagram for LayerNode:</div>
 <div class="center"><img src="classzigzag_1_1workload_1_1layer__node_1_1LayerNode__inherit__graph.png" border="0" usemap="#aLayerNode_inherit__map" alt="Inheritance graph"/></div>
 <map name="aLayerNode_inherit__map" id="aLayerNode_inherit__map">
 <area shape="rect" title="Represents a single layer in a workload." alt="" coords="59,155,151,181"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="48,229,161,256"/>
 <area shape="rect" href="classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html" title="Represents a single layer of a workload in any form." alt="" coords="45,80,164,107"/>
 <area shape="rect" title=" " alt="" coords="5,5,95,32"/>
 <area shape="rect" title=" " alt="" coords="119,5,202,32"/>
@@ -124,6 +125,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a89b3368dd19728de4b8f079a8042e48c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89b3368dd19728de4b8f079a8042e48c">__init__</a> (self, int layer_id, str node_name, <a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNodeAttributes.html">LayerNodeAttributes</a> node_attr)</td></tr>
 <tr class="memdesc:a89b3368dd19728de4b8f079a8042e48c"><td class="mdescLeft">&#160;</td><td class="mdescRight">To construct each layer node, algorithm equation/dimension/indirect relation are parsed.  <a href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89b3368dd19728de4b8f079a8042e48c">More...</a><br /></td></tr>
 <tr class="separator:a89b3368dd19728de4b8f079a8042e48c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0399cf1b160514e14caa9e3248697c3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3">get_act_layer_op</a> (self)</td></tr>
+<tr class="memdesc:ad0399cf1b160514e14caa9e3248697c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the <code>I</code> LayerOperand: either the non-constant operand or one of the input operands if none are constant.  <a href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3">More...</a><br /></td></tr>
+<tr class="separator:ad0399cf1b160514e14caa9e3248697c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89dcae46f7523061cd20da9783fac3e8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89dcae46f7523061cd20da9783fac3e8">get_weight_layer_op</a> (self)</td></tr>
+<tr class="memdesc:a89dcae46f7523061cd20da9783fac3e8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the <code>W</code> LayerOperand: either the constant operand or one of the input operands if none are constant.  <a href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89dcae46f7523061cd20da9783fac3e8">More...</a><br /></td></tr>
+<tr class="separator:a89dcae46f7523061cd20da9783fac3e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa9003f6e013308f95ede5cd35bcc1372"><td class="memItemLeft" align="right" valign="top">tuple[PrLoop, LoopList, PrScalingFactors]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#aa9003f6e013308f95ede5cd35bcc1372">build_pr_funcs</a> (self)</td></tr>
 <tr class="separator:aa9003f6e013308f95ede5cd35bcc1372"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
@@ -643,6 +650,35 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="ad0399cf1b160514e14caa9e3248697c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0399cf1b160514e14caa9e3248697c3">&#9670;&nbsp;</a></span>get_act_layer_op()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"> <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> get_act_layer_op </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the <code>I</code> LayerOperand: either the non-constant operand or one of the input operands if none are constant. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1workload_1_1layer__node_1_1LayerNode_ad0399cf1b160514e14caa9e3248697c3_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_ad0399cf1b160514e14caa9e3248697c3_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_ad0399cf1b160514e14caa9e3248697c3_icgraph" id="aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_ad0399cf1b160514e14caa9e3248697c3_icgraph">
+<area shape="rect" title="Return the I LayerOperand: either the non&#45;constant operand or one of the input operands if none are c..." alt="" coords="211,5,344,32"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89dcae46f7523061cd20da9783fac3e8" title="Return the W LayerOperand: either the constant operand or one of the input operands if none are const..." alt="" coords="5,5,163,32"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="ac7862b7128a792b23f9e814ece9cbf24"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7862b7128a792b23f9e814ece9cbf24">&#9670;&nbsp;</a></span>get_operand_irrelevant_layer_dims()</h2>
 
@@ -670,6 +706,35 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Return the irrelevant dimensions of layer operand 'layer_op'. </p>
+
+</div>
+</div>
+<a id="a89dcae46f7523061cd20da9783fac3e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89dcae46f7523061cd20da9783fac3e8">&#9670;&nbsp;</a></span>get_weight_layer_op()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"> <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> get_weight_layer_op </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Return the <code>W</code> LayerOperand: either the constant operand or one of the input operands if none are constant. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1workload_1_1layer__node_1_1LayerNode_a89dcae46f7523061cd20da9783fac3e8_cgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_a89dcae46f7523061cd20da9783fac3e8_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_a89dcae46f7523061cd20da9783fac3e8_cgraph" id="aclasszigzag_1_1workload_1_1layer__node_1_1LayerNode_a89dcae46f7523061cd20da9783fac3e8_cgraph">
+<area shape="rect" title="Return the W LayerOperand: either the constant operand or one of the input operands if none are const..." alt="" coords="5,5,163,32"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3" title="Return the I LayerOperand: either the non&#45;constant operand or one of the input operands if none are c..." alt="" coords="211,5,344,32"/>
+</map>
+</div>
 
 </div>
 </div>
