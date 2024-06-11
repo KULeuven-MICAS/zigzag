@@ -1,4 +1,5 @@
 <map id="update_mem_level_for_loading_data" name="update_mem_level_for_loading_data">
-<area shape="rect" id="node1" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="5,5,177,47"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a04fb0c046b99ca3a435fd062ea858f3d" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="225,13,392,39"/>
+<area shape="rect" id="node1" title="[OPTIONAL FUNCTION] This is an optional function." alt="" coords="5,35,177,76"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e" title="Remove dummy nodes (layers) in the graph (assume there is no branch from a non&#45;dummy node to dummy no..." alt="" coords="225,5,400,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a9b36dcdc402134f358ed345205a03596" title="Update self.mem_update_list as: self.mem_update_list[layer_id][operand] = target_level." alt="" coords="229,71,397,98"/>
 </map>

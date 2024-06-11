@@ -272,7 +272,7 @@ var annotated_dup =
           [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload" ]
         ] ],
         [ "Workload", "namespacezigzag_1_1workload_1_1Workload.html", [
-          [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC" ]
+          [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", "classzigzag_1_1workload_1_1Workload_1_1Workload" ]
         ] ]
       ] ]
     ] ]

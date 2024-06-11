@@ -18,6 +18,5 @@ var classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGener
     [ "memory_hierarchy", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
     [ "nb_mappings_generated", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a2854e8c56d1aed59c736fba741d48bf3", null ],
     [ "oa_dim_sizes", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ac24312ad89df905598760024de69770c", null ],
-    [ "provided_mapping", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a5f493139cc495c4a7726af99b563a129", null ],
-    [ "spatial_mapping_hint", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aceb8f28897d5ef6339781360474cea93", null ]
+    [ "provided_mapping", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a5f493139cc495c4a7726af99b563a129", null ]
 ];
