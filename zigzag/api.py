@@ -16,8 +16,10 @@ from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, Simple
 from zigzag.stages.LomaStage import LomaStage
 from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
-from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
-from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
+from zigzag.stages.exploit_data_locality_stages import (
+    SearchInterLayerDataLocalityStage,
+    ExploitInterLayerDataLocalityStage,
+)
 
 
 def get_hardware_performance_zigzag(
@@ -144,10 +146,10 @@ def get_hardware_performance_zigzag_imc(
             CompleteSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Search the lowest allowed memory level per operand per layer
+            SearchInterLayerDataLocalityStage,  # Search the lowest allowed memory level per operand per layer
             WorkloadStage,  # Iterate through the different layers in the workload
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            RemoveUnusedMemoryStage,  # Remove unused memories if SearchUnusedMemoryStage is enabled
+            ExploitInterLayerDataLocalityStage,  # Remove unused memories if SearchInterLayerDataLocalityStage is enabled
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -259,7 +261,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
 
 
-def get_hardware_performance_zigzag_without_unused_memory(
+def get_hardware_performance_zigzag_with_exploit_data_locality(
     workload: str | ModelProto,
     accelerator: str,
     mapping: str,
@@ -297,9 +299,9 @@ def get_hardware_performance_zigzag_without_unused_memory(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Search for unused memory instance
+            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
-            RemoveUnusedMemoryStage,  # Remove unused memory instance
+            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
@@ -371,9 +373,9 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Search for unused memory instance
+            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
-            RemoveUnusedMemoryStage,  # Remove unused memory instance
+            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
