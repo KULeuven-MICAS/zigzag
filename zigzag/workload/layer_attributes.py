@@ -178,14 +178,14 @@ class LayerDimRelation(LayerAttribute):
 
 class LayerTemporalOrdering(LayerAttribute):
 
-    def __init__(self, data: dict[LayerOperand, UnrollFactorInt]):
-        self.data = data
+    def __init__(self, data: dict[str, UnrollFactorInt]):
+        self.data = [[LayerDim(loop[0]), loop[1]] for loop in data]
 
     @staticmethod
     def empty():
         return LayerTemporalOrdering({})
 
-    def __delitem__(self, x: LayerOperand):
+    def __delitem__(self, x: LayerDim):
         del self.data[x]
 
 
