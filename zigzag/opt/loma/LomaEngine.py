@@ -113,17 +113,19 @@ class LomaEngine:
         # TODO clean up (and make use of `LayerDimSizes` methods)
         """
         layer_dim_sizes = self.layer.layer_dim_sizes.copy()  # init with all loop sizes
-        for spatial_loop in self.spatial_mapping.spatial_loop_dim_size:
-            (spatial_loop_dim, spatial_loop_size) = spatial_loop
-            # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,
-            # we take the ceil of the division, so there can be one extra temporal iteration.
-            q = int(np.ceil(layer_dim_sizes[spatial_loop_dim] / spatial_loop_size))
-            # q, rem = divmod(layer_dim_sizes[spatial_loop_dim], spatial_loop_size)
-            # assert rem == 0, "Division of dimension size by spatial unrolling size is not an integer"
-            if q == 1:
-                del layer_dim_sizes[spatial_loop_dim]
-            else:
-                layer_dim_sizes[spatial_loop_dim] = q
+        for spatial_loop_dim, spatial_loop_size in self.spatial_mapping.spatial_loop_dim_size:
+            try:
+                # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,
+                # we take the ceil of the division, so there can be one extra temporal iteration.
+                q = int(np.ceil(layer_dim_sizes[spatial_loop_dim] / spatial_loop_size))
+                if q == 1:
+                    del layer_dim_sizes[spatial_loop_dim]
+                else:
+                    layer_dim_sizes[spatial_loop_dim] = q
+            except KeyError:
+                # This might happen when the same LayerDim is defined multiple times in `spatial_loop_dim_size` and
+                # deleted from `layer_dim_sizes`
+                continue
 
         # Remove all dimensions with a temporal loop size of 1
         temporal_loop_dim_size_no_1s = {key: val for key, val in layer_dim_sizes.items() if val > 1}
