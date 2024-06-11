@@ -14,6 +14,6 @@ Framework
 Documentation
 -------------
 
-* Update User guide documentation with more visualisations and tutorials
-* Remake HW table without DF
+* Update User guide documentation with more visualizations and tutorials
+* Remake hardware table without DF
 * Add stages stack combinations for common use cases
