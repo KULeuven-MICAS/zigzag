@@ -3,7 +3,15 @@ import sys
 import argparse
 import re
 
-from zigzag.classes.stages import *
+from zigzag.stages.MainStage import MainStage
+from zigzag.stages.WorkloadParserStage import WorkloadParserStage
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
+from zigzag.stages.save_stages import CompleteSaveStage
+from zigzag.stages.WorkloadStage import WorkloadStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage
+from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
+from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
@@ -13,20 +21,23 @@ parser = argparse.ArgumentParser(description="Setup zigzag inputs")
 parser.add_argument(
     "--model",
     metavar="path",
-    required=True,
-    help="path to onnx model, e.g. inputs/examples/my_onnx_model.onnx",
+    required=False,
+    default="zigzag/inputs/workload/gemm_layer.yaml",
+    help="path to onnx model, e.g. zigzag/inputs/workload/my_model.onnx",
 )
 parser.add_argument(
     "--mapping",
     metavar="path",
-    required=True,
-    help="path to mapping file, e.g., inputs.examples.my_mapping",
+    required=False,
+    default="zigzag/inputs/mapping/gemm.yaml",
+    help="path to mapping file, e.g., zigzag/inputs/mapping/my_mapping.yaml",
 )
 parser.add_argument(
     "--accelerator",
     metavar="path",
-    required=True,
-    help="module path to the accelerator, e.g. inputs.examples.accelerator1",
+    required=False,
+    default="zigzag/inputs/hardware/gemm.yaml",
+    help="module path to the accelerator, e.g. zigzag/inputs/hardware/my_accelerator.yaml",
 )
 args = parser.parse_args()
 
@@ -61,7 +72,7 @@ mainstage = MainStage(
     accelerator=args.accelerator,  # required by AcceleratorParserStage
     workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
-    dump_filename_pattern=f"outputs/{experiment_id}-?.json",  # output file save pattern, ? will be replaced
+    dump_folder=f"outputs/",  # where outputs will be saved to
     loma_lpf_limit=6,  # required by LomaStage
     loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
 )
