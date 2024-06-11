@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -492,7 +492,8 @@ Here is the caller graph for this function:</div>
 <li>that the utilization at each OADimension does not exceed the size of the OADimension</li>
 <li>that each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings Reduce the unrollings otherwise. <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dict</td><td>of <code>LayerDimSizes</code>. <code>LayerDimSizes</code> instance cannot be used due to circular import. </td></tr>
+    <tr><td class="paramname">dict</td><td>of <code>LayerDimSizes</code>. <code>LayerDimSizes</code> instance cannot be used due to circular import. <h1>TODO should be moved to something similar to <code>parse_user_input</code></h1>
+</td></tr>
   </table>
   </dd>
 </dl>

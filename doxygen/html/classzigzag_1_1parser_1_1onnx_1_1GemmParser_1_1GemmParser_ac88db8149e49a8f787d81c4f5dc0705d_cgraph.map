@@ -1,4 +1,0 @@
-<map id="infer_input_activation_shape" name="infer_input_activation_shape">
-<area shape="rect" id="node1" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="5,5,169,47"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="217,5,419,47"/>
-</map>

@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -94,17 +94,19 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 : <a class="el" href="classzigzag_1_1mapping_1_1Mapping_1_1Mapping.html#a463bb5f9be357437ef56f7def57cd2ba">Mapping</a>
 </li>
 <li>generate_accelerator_with_removing_unused_memory()
-: <a class="el" href="classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html#a27726fb3963f0cb40688fc6a1ac636f0">ExploitInterLayerDataLocalityStage</a>
+: <a class="el" href="classzigzag_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage.html#a27726fb3963f0cb40688fc6a1ac636f0">RemoveUnusedMemoryStage</a>
 </li>
 <li>generate_dummy_node()
 : <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#a86cbc75d786393a121f8a2ee3aaa26d4">DefaultNodeParser</a>
 </li>
-<li>generate_layer_node()
-: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62">GemmParser</a>
-, <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62">MatMulParser</a>
-</li>
 <li>generate_layer_node_for_conv()
 : <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1">ConvParser</a>
+</li>
+<li>generate_layer_node_for_gemm()
+: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3b56cc9c9aaa3de3bf07b22253d6f768">GemmParser</a>
+</li>
+<li>generate_layer_node_for_matmul()
+: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#ac14d1fbfdd2835e38b26b2b7a1f5b3a9">MatMulParser</a>
 </li>
 <li>generate_limited_user_spatial_mapping()
 : <a class="el" href="classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#a18e1ee0a6e9cfb51c4d4d209ee40c349">SpatialMappingConversionStage</a>
@@ -157,8 +159,8 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_1b_reg_energy()
 : <a class="el" href="classarchitecture_1_1imc__unit_1_1ImcUnit.html#a656fbb9294431cc9666fc91fabafec82">ImcUnit</a>
 </li>
-<li>get_act_layer_op()
-: <a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3">LayerNode</a>
+<li>get_act_weight_operand_names()
+: <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#a5d4277c4f887a8ed17a05d7f22338e8f">SearchUnusedMemoryStage</a>
 </li>
 <li>get_adc_cost()
 : <a class="el" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#a8b8741a3806ca45074bc9862f3ee326a">ImcArray</a>
@@ -171,11 +173,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_contained_operands()
 : <a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation.html#aa4ff0576e079ee780b3cc066783315a3">LayerEquation</a>
-</li>
-<li>get_copy_no_dummy()
-: <a class="el" href="classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#af7b3c87b2f73f554e58b42179dcac560">DNNWorkload</a>
-, <a class="el" href="classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html#af7b3c87b2f73f554e58b42179dcac560">ONNXWorkload</a>
-, <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#aff7535f739edbc50c327dd3c063f597e">WorkloadABC</a>
 </li>
 <li>get_core()
 : <a class="el" href="classarchitecture_1_1Accelerator_1_1Accelerator.html#a5c6abc2137096ae246363ca3707eabcd">Accelerator</a>
@@ -198,9 +195,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_energy_for_a_layer()
 : <a class="el" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#a17d7bd0f76f3df51cd89e3c526f708a5">ImcArray</a>
 </li>
-<li>get_in_degree_for_layer()
-: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#ad3091ef6d3e205f90efea53a405c0f49">WorkloadABC</a>
-</li>
 <li>get_inner_memories()
 : <a class="el" href="classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a0006442df31e8bb6a5f89c11ccd9cef0">MemoryHierarchy</a>
 </li>
@@ -213,11 +207,10 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_item()
 : <a class="el" href="classcacti__parser_1_1CactiParser.html#adc002943c277137e596c52b6ba230e91">CactiParser</a>
 </li>
-<li>get_layer_node_user_format()
-: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282">ConvParser</a>
-</li>
-<li>get_layer_node_user_format_gemm()
-: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3">ONNXOperatorParser</a>
+<li>get_layer_node_input_format()
+: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a1169a4dd218269cd6c0eeffb9acd0870">ConvParser</a>
+, <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a5dd89d29bbd93635aebea0de7f643f30">GemmParser</a>
+, <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a5dd89d29bbd93635aebea0de7f643f30">MatMulParser</a>
 </li>
 <li>get_macro_level_peak_performance()
 : <a class="el" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#a713ecdbc5c243876ea261b55b51a6ea5">ImcArray</a>
@@ -243,11 +236,8 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 <li>get_node_name()
 : <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4">ONNXOperatorParser</a>
 </li>
-<li>get_node_predecessors()
-: <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626">ONNXOperatorParser</a>
-</li>
 <li>get_node_with_id()
-: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#a9264e80279ae60999d3c9e6d08c3548f">WorkloadABC</a>
+: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1Workload.html#adf900183efdab41bbc9422ce0af8f67f">Workload</a>
 </li>
 <li>get_operand_irrelevant_layer_dims()
 : <a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ac7862b7128a792b23f9e814ece9cbf24">LayerNode</a>
@@ -260,9 +250,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_operator_top_level()
 : <a class="el" href="classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb">MemoryHierarchy</a>
-</li>
-<li>get_out_degree_for_layer()
-: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#ae30091f7341b42fc63cf9584a915cfa6">WorkloadABC</a>
 </li>
 <li>get_outer_memories()
 : <a class="el" href="classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a2b02ca9141845b4493667cc3963c4b30">MemoryHierarchy</a>
@@ -278,9 +265,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_precharge_energy()
 : <a class="el" href="classarchitecture_1_1imc__unit_1_1ImcUnit.html#ade93709b0b86501a63cedf7c20bbb38f">ImcUnit</a>
-</li>
-<li>get_predecessors_for_layer()
-: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#aceed2754f69de03d1eb5c5692c9c0ed6">WorkloadABC</a>
 </li>
 <li>get_prime_factors()
 : <a class="el" href="classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#aeae333df8aa018fd1ebe1e734724da88">LomaEngine</a>
@@ -307,9 +291,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_start()
 : <a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#afa8749a569f6a1c70b7c35337e2a7000">DummyNode</a>
-</li>
-<li>get_successors_for_layer()
-: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#a5150ffe118d981ffebb62f6f9b561fde">WorkloadABC</a>
 </li>
 <li>get_tclk()
 : <a class="el" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#af5dea46ee2c50759342c20e5a38e5fc0">ImcArray</a>
@@ -350,9 +331,6 @@ $(document).ready(function(){initNavTree('functions_func_g.html',''); initResiza
 </li>
 <li>get_unrolling_all()
 : <a class="el" href="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9aa94c4b14872e841a4b8dec1d6908f9">SpatialMappingInternal</a>
-</li>
-<li>get_weight_layer_op()
-: <a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89dcae46f7523061cd20da9783fac3e8">LayerNode</a>
 </li>
 <li>get_weight_name()
 : <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a4ffc200dc5352663e26c64dc86398860">ONNXOperatorParser</a>

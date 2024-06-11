@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -120,13 +120,13 @@ Collaboration diagram for DummyNode:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a8d52aeb25f7625058aacf411f3428e11"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a8d52aeb25f7625058aacf411f3428e11">__init__</a> (self, int node_id, list[int] predecessors, str node_type, str node_name=&quot;&quot;)</td></tr>
-<tr class="memdesc:a8d52aeb25f7625058aacf411f3428e11"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.  <a href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a8d52aeb25f7625058aacf411f3428e11">More...</a><br /></td></tr>
-<tr class="separator:a8d52aeb25f7625058aacf411f3428e11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa23abf4bcbda26f78903fca578effe00"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#aa23abf4bcbda26f78903fca578effe00">__init__</a> (self, int layer_id, int|None predecessor, str node_name=&quot;&quot;, str|None <a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a>=None)</td></tr>
+<tr class="memdesc:aa23abf4bcbda26f78903fca578effe00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.  <a href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#aa23abf4bcbda26f78903fca578effe00">More...</a><br /></td></tr>
+<tr class="separator:aa23abf4bcbda26f78903fca578effe00"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
 <tr class="separator:a23e8041ce1015febe4fdace3225714f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0d9db6bd63b208f666ce4814d1d91fc3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3">set_start</a> (self, int <a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a550769bbd4e7537ff90a656f5b0c23b2">start</a>)</td></tr>
-<tr class="memdesc:a0d9db6bd63b208f666ce4814d1d91fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the start time in cyles of this node.  <a href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3">More...</a><br /></td></tr>
+<tr class="memdesc:a0d9db6bd63b208f666ce4814d1d91fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the start time in ccyles of this node.  <a href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3">More...</a><br /></td></tr>
 <tr class="separator:a0d9db6bd63b208f666ce4814d1d91fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a152d004545d5830c1a6b193cb385f64a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a">set_end</a> (self, int <a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#afb358f48b1646c750fb9da6c6585be2b">end</a>)</td></tr>
 <tr class="memdesc:a152d004545d5830c1a6b193cb385f64a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the end time in cycles of this node.  <a href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a">More...</a><br /></td></tr>
@@ -154,8 +154,6 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a5360195b0688439cb6da5d1ca38a6212"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a5360195b0688439cb6da5d1ca38a6212">input_operand_source</a></td></tr>
-<tr class="separator:a5360195b0688439cb6da5d1ca38a6212"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7aead736a07eaf25623ad7bfa1f0ee2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a7aead736a07eaf25623ad7bfa1f0ee2d">type</a></td></tr>
 <tr class="separator:a7aead736a07eaf25623ad7bfa1f0ee2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0eefc4dfe20e299c997385acdaffb1f6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a0eefc4dfe20e299c997385acdaffb1f6">core_allocation</a></td></tr>
@@ -176,8 +174,8 @@ Public Attributes</h2></td></tr>
 <div class="textblock"><p>A class to represent an ONNX node that is not "accelerateable". </p>
 <p>This node is created to preserve the original ONNX model graph structure, but will be skipped by the underlying engines, treating it as a 0 HW cost node. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a8d52aeb25f7625058aacf411f3428e11"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d52aeb25f7625058aacf411f3428e11">&#9670;&nbsp;</a></span>__init__()</h2>
+<a id="aa23abf4bcbda26f78903fca578effe00"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa23abf4bcbda26f78903fca578effe00">&#9670;&nbsp;</a></span>__init__()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -192,25 +190,25 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>node_id</em>, </td>
+          <td class="paramname"><em>layer_id</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">list[int]&#160;</td>
-          <td class="paramname"><em>predecessors</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>node_type</em>, </td>
+          <td class="paramtype">int | None&#160;</td>
+          <td class="paramname"><em>predecessor</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>node_name</em> = <code>&quot;&quot;</code>&#160;</td>
+          <td class="paramname"><em>node_name</em> = <code>&quot;&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str | None &#160;</td>
+          <td class="paramname"><em>type</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -396,7 +394,7 @@ Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Set the start time in cyles of this node. </p>
+<p>Set the start time in ccyles of this node. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">start</td><td>: start time in cycles </td></tr>
@@ -429,20 +427,6 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">end</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5360195b0688439cb6da5d1ca38a6212"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5360195b0688439cb6da5d1ca38a6212">&#9670;&nbsp;</a></span>input_operand_source</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">input_operand_source</td>
         </tr>
       </table>
 </div><div class="memdoc">

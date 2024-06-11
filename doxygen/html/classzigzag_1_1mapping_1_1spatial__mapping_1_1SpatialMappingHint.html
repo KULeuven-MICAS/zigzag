@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -123,12 +123,8 @@ Collaboration diagram for SpatialMappingHint:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:acd373c06ac529fc1e85093762af80d4d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#acd373c06ac529fc1e85093762af80d4d">__init__</a> (self, dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]] <a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#a511ae0b1c13f95e5f08f1a0dd3da3d93">data</a>)</td></tr>
 <tr class="separator:acd373c06ac529fc1e85093762af80d4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec9bd5fb5054c8a0dd677c40cb7b7f4e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#aec9bd5fb5054c8a0dd677c40cb7b7f4e">clear_invalid_hits</a> (self, list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] valid_layer_dims)</td></tr>
-<tr class="memdesc:aec9bd5fb5054c8a0dd677c40cb7b7f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check the hints at all contained OADimension.  <a href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#aec9bd5fb5054c8a0dd677c40cb7b7f4e">More...</a><br /></td></tr>
-<tr class="separator:aec9bd5fb5054c8a0dd677c40cb7b7f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a66d818d8ec4475b7e0a09aab7879dc80"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#a66d818d8ec4475b7e0a09aab7879dc80">complete_with_defaults</a> (self, dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, int] oa_dim_sizes, list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] layer_dims)</td></tr>
-<tr class="memdesc:a66d818d8ec4475b7e0a09aab7879dc80"><td class="mdescLeft">&#160;</td><td class="mdescRight">For all OADimensions in <code>oa_dim_sizes</code> that are not already in this SpatialMappingHint, fill the hints for that OADimension with all LayerDims from <code>layer_dims</code>.  <a href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#a66d818d8ec4475b7e0a09aab7879dc80">More...</a><br /></td></tr>
-<tr class="separator:a66d818d8ec4475b7e0a09aab7879dc80"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a56fecb114610694691e48055e4f6e6be"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#a56fecb114610694691e48055e4f6e6be">complete_with_defaults</a> (self, dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, int] oa_dim_sizes, set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] layer_dims)</td></tr>
+<tr class="separator:a56fecb114610694691e48055e4f6e6be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a383630150731d8bf2d6a805d689cf692"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html#a383630150731d8bf2d6a805d689cf692">__getitem__</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a> key)</td></tr>
 <tr class="separator:a383630150731d8bf2d6a805d689cf692"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html">LayerAttribute</a></td></tr>
@@ -224,39 +220,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="aec9bd5fb5054c8a0dd677c40cb7b7f4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec9bd5fb5054c8a0dd677c40cb7b7f4e">&#9670;&nbsp;</a></span>clear_invalid_hits()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">def clear_invalid_hits </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td>
-          <td class="paramname"><em>valid_layer_dims</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Check the hints at all contained OADimension. </p>
-<p>If the OADimension doesn't contain a single LayerDim that is also present in the given list <code>valid_layer_dims</code>, remove the OADimension from this instance. </p>
-
-</div>
-</div>
-<a id="a66d818d8ec4475b7e0a09aab7879dc80"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a66d818d8ec4475b7e0a09aab7879dc80">&#9670;&nbsp;</a></span>complete_with_defaults()</h2>
+<a id="a56fecb114610694691e48055e4f6e6be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a56fecb114610694691e48055e4f6e6be">&#9670;&nbsp;</a></span>complete_with_defaults()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -276,7 +241,7 @@ Public Attributes</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td>
+          <td class="paramtype">set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td>
           <td class="paramname"><em>layer_dims</em>&#160;</td>
         </tr>
         <tr>
@@ -286,8 +251,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>For all OADimensions in <code>oa_dim_sizes</code> that are not already in this SpatialMappingHint, fill the hints for that OADimension with all LayerDims from <code>layer_dims</code>. </p>
 
 </div>
 </div>

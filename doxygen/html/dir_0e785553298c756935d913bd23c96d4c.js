@@ -18,5 +18,7 @@ var dir_0e785553298c756935d913bd23c96d4c =
     [ "ONNXWorkload.py", "ONNXWorkload_8py.html", [
       [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload" ]
     ] ],
-    [ "Workload.py", "Workload_8py.html", "Workload_8py" ]
+    [ "Workload.py", "Workload_8py.html", [
+      [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", "classzigzag_1_1workload_1_1Workload_1_1Workload" ]
+    ] ]
 ];

@@ -1,5 +1,5 @@
 <map id="__iter__" name="__iter__">
-<area shape="rect" id="node1" title=" " alt="" coords="5,1669,77,1696"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,1653,77,1680"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="162,177,399,218"/>
 <area shape="rect" id="node8" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="159,245,402,301"/>
 <area shape="rect" id="node10" href="$classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#ad22709b2e67308af35f55680d5a026e0" title="Runs the LomaEngine." alt="" coords="173,486,388,527"/>
@@ -12,16 +12,16 @@
 <area shape="rect" id="node20" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a0b93ba3298b23e01dcc349bd08b63c90" title=" " alt="" coords="159,943,402,985"/>
 <area shape="rect" id="node21" href="$classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="141,1009,420,1050"/>
 <area shape="rect" id="node22" href="$classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cost model stage by calling the internal zigzag cost model with the correct inputs." alt="" coords="168,1074,393,1115"/>
-<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="165,1140,397,1196"/>
-<area shape="rect" id="node24" href="$classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="185,1221,377,1262"/>
-<area shape="rect" id="node25" href="$classzigzag_1_1stages_1_1MainStage_1_1MainStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="187,1286,375,1327"/>
-<area shape="rect" id="node26" href="$classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="159,1351,403,1393"/>
-<area shape="rect" id="node27" href="$classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="169,1417,392,1458"/>
-<area shape="rect" id="node28" href="$classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="143,1483,418,1539"/>
-<area shape="rect" id="node29" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEnergyStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="163,1563,399,1605"/>
-<area shape="rect" id="node30" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalLatencyStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="159,1629,402,1670"/>
-<area shape="rect" id="node31" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="172,1694,389,1735"/>
-<area shape="rect" id="node32" href="$classzigzag_1_1stages_1_1reduce__stages_1_1SumStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="197,1759,364,1801"/>
+<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="185,1139,377,1181"/>
+<area shape="rect" id="node24" href="$classzigzag_1_1stages_1_1MainStage_1_1MainStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="187,1205,375,1246"/>
+<area shape="rect" id="node25" href="$classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="159,1270,403,1311"/>
+<area shape="rect" id="node26" href="$classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="169,1335,392,1377"/>
+<area shape="rect" id="node27" href="$classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="143,1401,418,1457"/>
+<area shape="rect" id="node28" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEnergyStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="163,1482,399,1523"/>
+<area shape="rect" id="node29" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalLatencyStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="159,1547,402,1589"/>
+<area shape="rect" id="node30" href="$classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="172,1613,389,1654"/>
+<area shape="rect" id="node31" href="$classzigzag_1_1stages_1_1reduce__stages_1_1SumStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="197,1678,364,1719"/>
+<area shape="rect" id="node32" href="$classzigzag_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="143,1744,418,1800"/>
 <area shape="rect" id="node33" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the remove extra info stage by running the substage and discarding the extra_info." alt="" coords="155,1825,406,1866"/>
 <area shape="rect" id="node34" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html#ad22709b2e67308af35f55680d5a026e0" title="Run the cache before yield stage by running the substage and caching everything it yields,..." alt="" coords="154,1890,407,1931"/>
 <area shape="rect" id="node35" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="154,1955,407,1997"/>
@@ -38,7 +38,7 @@
 <area shape="rect" id="node46" href="$classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="176,2735,385,2777"/>
 <area shape="rect" id="node47" href="$classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="167,2801,394,2842"/>
 <area shape="rect" id="node48" href="$classzigzag_1_1stages_1_1WorkloadStage_1_1WorkloadStage.html#ad22709b2e67308af35f55680d5a026e0" title=" " alt="" coords="172,2866,389,2907"/>
-<area shape="rect" id="node49" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html#add05e63c03df43862565a389085dab70" title=" " alt="" coords="165,2932,397,2988"/>
+<area shape="rect" id="node49" href="$classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70" title=" " alt="" coords="149,2932,413,2988"/>
 <area shape="rect" id="node50" href="$classzigzag_1_1opt_1_1salsa_1_1SalsaEngine_1_1SalsaEngine.html#abd1e5bae637da295e27991d8c3a806e2" title="Call the necessary methods, start the processes and collect the best temporal mapping found during th..." alt="" coords="173,3013,388,3054"/>
 <area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a03bd359d34c64ff656ae98ce3d05f913" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="484,245,727,301"/>
 <area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8aaf4a383a6d93dc6c79b262c9fb8caa" title="Calculate latency in 4 steps." alt="" coords="484,325,727,381"/>

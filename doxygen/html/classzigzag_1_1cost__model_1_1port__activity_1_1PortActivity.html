@@ -29,7 +29,7 @@
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">ZigZag - Deep Learning Hardware Design Space Exploration
    </div>
-   <div id="projectbrief">This repository presents the novel version of our tried-and-tested HW Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate HW cost estimation.</div>
+   <div id="projectbrief">This repository presents the novel version of our tried-and-tested hardware Architecture-Mapping Design Space Exploration (DSE) Framework for Deep Learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their acceleration cost on specialized accelerators through a fast and accurate hardware cost estimation.</div>
   </td>
  </tr>
  </tbody>
@@ -118,12 +118,12 @@ Public Attributes</h2></td></tr>
 <tr class="memitem:acbb1e6a9dc32021e5cf5e716a2aad128"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#acbb1e6a9dc32021e5cf5e716a2aad128">period_count</a></td></tr>
 <tr class="memdesc:acbb1e6a9dc32021e5cf5e716a2aad128"><td class="mdescLeft">&#160;</td><td class="mdescRight">The total number of period across the whole NN layer computation.  <a href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#acbb1e6a9dc32021e5cf5e716a2aad128">More...</a><br /></td></tr>
 <tr class="separator:acbb1e6a9dc32021e5cf5e716a2aad128"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a002a6d998bb636f5159be4af1aca0966"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a002a6d998bb636f5159be4af1aca0966">stall_or_slack_per_period</a></td></tr>
-<tr class="separator:a002a6d998bb636f5159be4af1aca0966"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac4378b1559092eeeeead66bbd6fba69f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#ac4378b1559092eeeeead66bbd6fba69f">stall_or_slack</a></td></tr>
-<tr class="separator:ac4378b1559092eeeeead66bbd6fba69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab00c50a2b00b2bcdb49ea8db4a5621ae"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#ab00c50a2b00b2bcdb49ea8db4a5621ae">mem_updating_window</a></td></tr>
-<tr class="separator:ab00c50a2b00b2bcdb49ea8db4a5621ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11b967f10447ba078d8ae74b6969e5bf"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a11b967f10447ba078d8ae74b6969e5bf">SS_per_period</a></td></tr>
+<tr class="separator:a11b967f10447ba078d8ae74b6969e5bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a439ef9d85b8a6d437cb960ce2022e86a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a439ef9d85b8a6d437cb960ce2022e86a">SS</a></td></tr>
+<tr class="separator:a439ef9d85b8a6d437cb960ce2022e86a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2d2143f40715517eb200320ba662b6c1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a2d2143f40715517eb200320ba662b6c1">MUW</a></td></tr>
+<tr class="separator:a2d2143f40715517eb200320ba662b6c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link). </p>
@@ -270,14 +270,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ab00c50a2b00b2bcdb49ea8db4a5621ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab00c50a2b00b2bcdb49ea8db4a5621ae">&#9670;&nbsp;</a></span>mem_updating_window</h2>
+<a id="a2d2143f40715517eb200320ba662b6c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2143f40715517eb200320ba662b6c1">&#9670;&nbsp;</a></span>MUW</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">mem_updating_window</td>
+          <td class="memname">MUW</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -328,28 +328,28 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="ac4378b1559092eeeeead66bbd6fba69f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac4378b1559092eeeeead66bbd6fba69f">&#9670;&nbsp;</a></span>stall_or_slack</h2>
+<a id="a439ef9d85b8a6d437cb960ce2022e86a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a439ef9d85b8a6d437cb960ce2022e86a">&#9670;&nbsp;</a></span>SS</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">stall_or_slack</td>
+          <td class="memname">SS</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a002a6d998bb636f5159be4af1aca0966"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a002a6d998bb636f5159be4af1aca0966">&#9670;&nbsp;</a></span>stall_or_slack_per_period</h2>
+<a id="a11b967f10447ba078d8ae74b6969e5bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11b967f10447ba078d8ae74b6969e5bf">&#9670;&nbsp;</a></span>SS_per_period</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">stall_or_slack_per_period</td>
+          <td class="memname">SS_per_period</td>
         </tr>
       </table>
 </div><div class="memdoc">

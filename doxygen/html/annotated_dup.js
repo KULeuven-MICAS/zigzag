@@ -173,10 +173,6 @@ var annotated_dup =
         [ "CostModelStage", "namespacezigzag_1_1stages_1_1CostModelStage.html", [
           [ "CostModelStage", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage" ]
         ] ],
-        [ "exploit_data_locality_stages", "namespacezigzag_1_1stages_1_1exploit__data__locality__stages.html", [
-          [ "SearchInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage" ],
-          [ "ExploitInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage" ]
-        ] ],
         [ "LomaStage", "namespacezigzag_1_1stages_1_1LomaStage.html", [
           [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage" ]
         ] ],
@@ -198,6 +194,9 @@ var annotated_dup =
           [ "MinimalEDPStage", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage" ],
           [ "SumStage", "classzigzag_1_1stages_1_1reduce__stages_1_1SumStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1SumStage" ]
         ] ],
+        [ "RemoveUnusedMemoryStage", "namespacezigzag_1_1stages_1_1RemoveUnusedMemoryStage.html", [
+          [ "RemoveUnusedMemoryStage", "classzigzag_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage.html", "classzigzag_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage" ]
+        ] ],
         [ "run_opt_stages", "namespacezigzag_1_1stages_1_1run__opt__stages.html", [
           [ "RemoveExtraInfoStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html", "classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage" ],
           [ "CacheBeforeYieldStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html", "classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage" ],
@@ -212,6 +211,9 @@ var annotated_dup =
           [ "CompleteSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage" ],
           [ "SimpleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage" ],
           [ "PickleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage" ]
+        ] ],
+        [ "SearchUnusedMemoryStage", "namespacezigzag_1_1stages_1_1SearchUnusedMemoryStage.html", [
+          [ "SearchUnusedMemoryStage", "classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html", "classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage" ]
         ] ],
         [ "SpatialMappingConversionStage", "namespacezigzag_1_1stages_1_1SpatialMappingConversionStage.html", [
           [ "SpatialMappingConversionStage", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage" ]
@@ -270,7 +272,7 @@ var annotated_dup =
           [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload" ]
         ] ],
         [ "Workload", "namespacezigzag_1_1workload_1_1Workload.html", [
-          [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC" ]
+          [ "Workload", "classzigzag_1_1workload_1_1Workload_1_1Workload.html", "classzigzag_1_1workload_1_1Workload_1_1Workload" ]
         ] ]
       ] ]
     ] ]

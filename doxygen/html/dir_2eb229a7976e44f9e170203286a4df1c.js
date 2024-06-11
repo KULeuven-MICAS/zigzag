@@ -3,7 +3,6 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
     [ "__init__.py", "stages_2____init_____8py.html", null ],
     [ "AcceleratorParserStage.py", "AcceleratorParserStage_8py.html", "AcceleratorParserStage_8py" ],
     [ "CostModelStage.py", "CostModelStage_8py.html", "CostModelStage_8py" ],
-    [ "exploit_data_locality_stages.py", "exploit__data__locality__stages_8py.html", "exploit__data__locality__stages_8py" ],
     [ "LomaStage.py", "LomaStage_8py.html", [
       [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage" ]
     ] ],
@@ -16,9 +15,11 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
       [ "PlotTemporalMappingsStage", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
     ] ],
     [ "reduce_stages.py", "reduce__stages_8py.html", "reduce__stages_8py" ],
+    [ "RemoveUnusedMemoryStage.py", "RemoveUnusedMemoryStage_8py.html", "RemoveUnusedMemoryStage_8py" ],
     [ "run_opt_stages.py", "run__opt__stages_8py.html", "run__opt__stages_8py" ],
     [ "SalsaStage.py", "SalsaStage_8py.html", "SalsaStage_8py" ],
     [ "save_stages.py", "save__stages_8py.html", "save__stages_8py" ],
+    [ "SearchUnusedMemoryStage.py", "SearchUnusedMemoryStage_8py.html", "SearchUnusedMemoryStage_8py" ],
     [ "SpatialMappingConversionStage.py", "SpatialMappingConversionStage_8py.html", "SpatialMappingConversionStage_8py" ],
     [ "SpatialMappingGeneratorStage.py", "SpatialMappingGeneratorStage_8py.html", "SpatialMappingGeneratorStage_8py" ],
     [ "Stage.py", "Stage_8py.html", [
