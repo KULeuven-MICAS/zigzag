@@ -39,5 +39,5 @@ jobs:
           python -m pytest --typeguard-packages=zigzag tests/main/test_imc/test_dimc.py
           python -m pytest --typeguard-packages=zigzag tests/main/test_origin/test_meta_prototype_like.py
           python -m pytest --typeguard-packages=zigzag tests/main/test_with_mix_spatial_mapping/test_edge_tpu_like.py
-          python -m pytest --typeguard-packages=zigzag tests/main/test_without_unused_memory/test_ascend_like.py
+          python -m pytest --typeguard-packages=zigzag tests/main/test_with_exploit_data_locality/test_ascend_like.py
 
