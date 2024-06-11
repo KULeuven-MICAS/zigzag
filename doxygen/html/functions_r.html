@@ -142,8 +142,8 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 <li>recalculate_memory_hierarchy_information()
 : <a class="el" href="classarchitecture_1_1Core_1_1Core.html#ac4945045b334bd6f01fe0a3ac9bd53d2">Core</a>
 </li>
-<li>remove_dummy_nodes_in_workload()
-: <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#acdf8e311449bb3943bc0c768e36d4a0e">SearchUnusedMemoryStage</a>
+<li>remove_workload_nodes_from()
+: <a class="el" href="classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#ab55ff3f27da17c73797d9351f96bff31">WorkloadABC</a>
 </li>
 <li>req_mem_bw_aver
 : <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a4f69354cae88513c476abf59e9b3d6f2">DataMovePattern</a>
@@ -165,6 +165,8 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a0b93ba3298b23e01dcc349bd08b63c90">ONNXOperatorParser</a>
 , <a class="el" href="classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html#ad22709b2e67308af35f55680d5a026e0">AcceleratorParserStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html#ad22709b2e67308af35f55680d5a026e0">CostModelStage</a>
+, <a class="el" href="classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html#ad22709b2e67308af35f55680d5a026e0">ExploitInterLayerDataLocalityStage</a>
+, <a class="el" href="classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html#add05e63c03df43862565a389085dab70">SearchInterLayerDataLocalityStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html#ad22709b2e67308af35f55680d5a026e0">LomaStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1MainStage_1_1MainStage.html#ad22709b2e67308af35f55680d5a026e0">MainStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html#ad22709b2e67308af35f55680d5a026e0">ONNXModelParserStage</a>
@@ -174,7 +176,6 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEnergyStage.html#ad22709b2e67308af35f55680d5a026e0">MinimalEnergyStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1reduce__stages_1_1MinimalLatencyStage.html#ad22709b2e67308af35f55680d5a026e0">MinimalLatencyStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1reduce__stages_1_1SumStage.html#ad22709b2e67308af35f55680d5a026e0">SumStage</a>
-, <a class="el" href="classzigzag_1_1stages_1_1RemoveUnusedMemoryStage_1_1RemoveUnusedMemoryStage.html#ad22709b2e67308af35f55680d5a026e0">RemoveUnusedMemoryStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html#ad22709b2e67308af35f55680d5a026e0">CacheBeforeYieldStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html#ad22709b2e67308af35f55680d5a026e0">MultiProcessingGatherStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html#ad22709b2e67308af35f55680d5a026e0">MultiProcessingSpawnStage</a>
@@ -184,7 +185,6 @@ $(document).ready(function(){initNavTree('functions_r.html',''); initResizable()
 , <a class="el" href="classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html#ad22709b2e67308af35f55680d5a026e0">CompleteSaveStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage.html#ad22709b2e67308af35f55680d5a026e0">PickleSaveStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#ad22709b2e67308af35f55680d5a026e0">SimpleSaveStage</a>
-, <a class="el" href="classzigzag_1_1stages_1_1SearchUnusedMemoryStage_1_1SearchUnusedMemoryStage.html#add05e63c03df43862565a389085dab70">SearchUnusedMemoryStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html#ad22709b2e67308af35f55680d5a026e0">SpatialMappingConversionStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0">SpatialMappingGeneratorStage</a>
 , <a class="el" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a68f3126d7b443b3d37827521d9886ecd">Stage</a>

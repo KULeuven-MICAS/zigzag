@@ -1,0 +1,4 @@
+<map id="get_weight_layer_op" name="get_weight_layer_op">
+<area shape="rect" id="node1" title="Return the W LayerOperand: either the constant operand or one of the input operands if none are const..." alt="" coords="5,5,163,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3" title="Return the I LayerOperand: either the non&#45;constant operand or one of the input operands if none are c..." alt="" coords="211,5,344,32"/>
+</map>

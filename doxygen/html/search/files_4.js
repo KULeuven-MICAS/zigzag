@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['gemmparser_2epy_1165',['GemmParser.py',['../GemmParser_8py.html',1,'']]],
-  ['get_5fcacti_5fcost_2epy_1166',['get_cacti_cost.py',['../get__cacti__cost_8py.html',1,'']]]
+  ['exploit_5fdata_5flocality_5fstages_2epy_1173',['exploit_data_locality_stages.py',['../exploit__data__locality__stages_8py.html',1,'']]]
 ];

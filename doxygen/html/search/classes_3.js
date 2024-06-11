@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['fourwaydatamoving_965',['FourWayDataMoving',['../classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html',1,'zigzag::mapping::data_movement']]]
+  ['exploitinterlayerdatalocalitystage_974',['ExploitInterLayerDataLocalityStage',['../classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html',1,'zigzag::stages::exploit_data_locality_stages']]]
 ];
