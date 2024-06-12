@@ -1,8 +1,7 @@
 import logging
 from dataclasses import dataclass
-from enum import auto
+from enum import auto, Enum
 from typing import Any, List
-from enum import Enum
 import onnx
 from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto
 
@@ -51,7 +50,7 @@ def unroll_branches(graph: GraphProto) -> GraphProto:
             g0_source = g0.node[0]
             input_name = g0_source.input[0]
             value_info = next(i for i in graph.value_info if i.name == input_name)
-            # Add value info to originalg graph output if it's not present
+            # Add value info to original graph output if it's not present
             if input_name not in [vi.name for vi in graph.output]:
                 graph.output.extend([value_info])
             # Add value info to subgraph input if it's not present
@@ -100,35 +99,37 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
             return list(attrs[name_idx].ints)
         else:
             raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
-    except ValueError:
+    except ValueError as exc:
         if default is not None:
             return default
         else:
-            raise ValueError(f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}.")
+            raise ValueError(
+                f"attrs has no attribute called {name} and no default was given. Names = {attrs_names}."
+            ) from exc
 
 
 class OnnxTensorCategory(Enum):
 
-    Input = auto()
-    Output = auto()
-    Hidden = auto()
-    Constant = auto()
+    INPUT = auto()
+    OUTPUT = auto()
+    HIDDEN = auto()
+    CONSTANT = auto()
 
     @property
     def is_output(self):
-        return self == OnnxTensorCategory.Output
+        return self == OnnxTensorCategory.OUTPUT
 
     @property
     def is_input(self):
-        return self == OnnxTensorCategory.Input
+        return self == OnnxTensorCategory.INPUT
 
     @property
     def is_hidden(self):
-        return self == OnnxTensorCategory.Hidden
+        return self == OnnxTensorCategory.HIDDEN
 
     @property
     def is_constant(self):
-        return self == OnnxTensorCategory.Constant
+        return self == OnnxTensorCategory.CONSTANT
 
 
 @dataclass
@@ -149,20 +150,20 @@ class OnnxTensorType:
 def get_onnx_tensor_type(name: str, model: ModelProto):
     for input in model.graph.input:
         if input.name == name:
-            return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.Input)
+            return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.INPUT)
 
     for output in model.graph.output:
         if output.name == name:
-            return OnnxTensorType.from_tensor_type(output.type.tensor_type, OnnxTensorCategory.Output)
+            return OnnxTensorType.from_tensor_type(output.type.tensor_type, OnnxTensorCategory.OUTPUT)
 
     for value_info in model.graph.value_info:
         if value_info.name == name:
-            return OnnxTensorType.from_tensor_type(value_info.type.tensor_type, OnnxTensorCategory.Hidden)
+            return OnnxTensorType.from_tensor_type(value_info.type.tensor_type, OnnxTensorCategory.HIDDEN)
 
     for init in model.graph.initializer:
         if init.name == name:
             # initializers are represented a bit differently from other tensors
-            return OnnxTensorType(list(init.dims), init.data_type, OnnxTensorCategory.Constant)
+            return OnnxTensorType(list(init.dims), init.data_type, OnnxTensorCategory.CONSTANT)
 
     raise KeyError(
         f""

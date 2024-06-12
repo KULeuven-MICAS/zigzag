@@ -16,8 +16,10 @@ from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, Simple
 from zigzag.stages.LomaStage import LomaStage
 from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
-from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
-from zigzag.stages.RemoveUnusedMemoryStage import RemoveUnusedMemoryStage
+from zigzag.stages.exploit_data_locality_stages import (
+    SearchInterLayerDataLocalityStage,
+    ExploitInterLayerDataLocalityStage,
+)
 
 
 def get_hardware_performance_zigzag(
@@ -30,7 +32,7 @@ def get_hardware_performance_zigzag(
     lpf_limit: int = 6,
     nb_spatial_mappings_generated: int = 3,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """
+    """! Function of deriving the accelerator cost (both digital and in-memory-computing cores are supported)
     @param workload Either a filepath to the workload ONNX or yaml file, an ONNX model
     @param accelerator Filepath to accelerator yaml file
     @param mapping Filepath to mapping yaml file
@@ -114,6 +116,7 @@ def get_hardware_performance_zigzag_imc(
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned)"""
 
     # Initialize the logger
     logging_level = logging.INFO
@@ -143,8 +146,10 @@ def get_hardware_performance_zigzag_imc(
             CompleteSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
+            SearchInterLayerDataLocalityStage,  # Search the lowest allowed memory level per operand per layer
             WorkloadStage,  # Iterate through the different layers in the workload
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
+            ExploitInterLayerDataLocalityStage,  # Remove unused memories if SearchInterLayerDataLocalityStage is enabled
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
@@ -190,6 +195,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving accelerator cost where the pe array size need to be scaled"""
 
     # Initialize the logger
     logging_level = logging.INFO
@@ -255,7 +261,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
     return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
 
 
-def get_hardware_performance_zigzag_without_unused_memory(
+def get_hardware_performance_zigzag_with_exploit_data_locality(
     workload: str | ModelProto,
     accelerator: str,
     mapping: str,
@@ -263,6 +269,7 @@ def get_hardware_performance_zigzag_without_unused_memory(
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible"""
 
     # Initialize the logger
     logging_level = logging.INFO
@@ -292,9 +299,9 @@ def get_hardware_performance_zigzag_without_unused_memory(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Search for unused memory instance
+            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
-            RemoveUnusedMemoryStage,  # Remove unused memory instance
+            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
@@ -336,6 +343,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str = "outputs/list_of_cmes.pickle",
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """! Function of deriving accelerator cost when a mixed spatial mapping is required"""
 
     # Initialize the logger
     logging_level = logging.INFO
@@ -365,9 +373,9 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             SimpleSaveStage,  # Save the summed CME energy and latency to a json
             PickleSaveStage,  # Save all received CMEs in a list to a pickle file
             SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchUnusedMemoryStage,  # Search for unused memory instance
+            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
             WorkloadStage,  # Iterate through the different layers in the workload
-            RemoveUnusedMemoryStage,  # Remove unused memory instance
+            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one

@@ -13,47 +13,27 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/resnet18.onnx": (1679218425.5100002, 3713386),
-    "zigzag/inputs/workload/resnet18.yaml": (2290766279.31, 4442443),
+    "zigzag/inputs/workload/alexnet.onnx": (5664863934, 8479644),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (920740293, 3814440),
+    "zigzag/inputs/workload/resnet18.onnx": (1680938520, 3697986),
+    "zigzag/inputs/workload/resnet18.yaml": (2286320480, 4418088),
 }
 
 
 @pytest.fixture
 def mapping():
-    ascend_like_mapping = {
-        "default": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("K", 16),
-                "D2": (("C", 4), ("FX", 3)),
-                "D3": ("OX", 2),
-                "D4": ("OY", 2),
-            },
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-        "Add": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("G", 16),
-                "D2": ("C", 1),
-                "D3": ("OX", 1),
-                "D4": ("OY", 1),
-            },
-            "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
-        },
-    }
-
-    return ascend_like_mapping
+    return "zigzag/inputs/mapping/ascend_like_mixed.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Ascend_like"
+    return "zigzag/inputs/hardware/ascend_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload: str, accelerator: str, mapping: str):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
+    (energy, latency, _) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
-    assert energy == pytest.approx(expected_energy)
-    assert latency == pytest.approx(expected_latency)
+    print(f"'{workload}': ({energy}, {latency}),")
+    assert energy == pytest.approx(expected_energy)  # type: ignore
+    assert latency == pytest.approx(expected_latency)  # type: ignore

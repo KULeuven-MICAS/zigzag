@@ -13,63 +13,27 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/resnet18.onnx": (1763135800.67, 5001291),
-    "zigzag/inputs/workload/resnet18.yaml": (2090252961.0700002, 5858437),
+    "zigzag/inputs/workload/alexnet.onnx": (6159980160, 8337351),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (742114179, 2421959),
+    "zigzag/inputs/workload/resnet18.onnx": (1735517944, 4055269),
+    "zigzag/inputs/workload/resnet18.yaml": (2029477205, 4738407),
 }
 
 
 @pytest.fixture
 def mapping():
-    edge_tpu_like_mapping = {
-        "default": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("K", 8),
-                "D2": (("C", 2), ("FX", 2), ("FY", 2)),
-                "D3": (("OX", 2), ("OY", 2)),
-                "D4": (("OX", 2), ("OY", 2)),
-            },
-            # spatial_mapping_hint will not work if the mapping on every dimension is provided in spatial_mapping
-            "spatial_mapping_hint": {
-                "D1": ["K"],
-                "D2": ["C", "FX", "FY"],
-                "D3": ["OX", "OY"],
-                "D4": ["OX", "OY"],
-            },
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-        "Add": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("G", 8),
-                "D2": ("C", 1),
-                "D3": ("OX", 1),
-                "D4": ("OY", 1),
-            },
-            "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
-        },
-        "Pooling": {
-            "core_allocation": 1,
-            "spatial_mapping": {
-                "D1": ("G", 8),
-                "D2": ("C", 1),
-                "D3": ("OX", 1),
-                "D4": ("OY", 1),
-            },
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-    }
-    return edge_tpu_like_mapping
+    return "zigzag/inputs/mapping/edge_tpu_like_mixed.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Edge_TPU_like"
+    return "zigzag/inputs/hardware/edge_tpu_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload: str, accelerator: str, mapping: str):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
+    (energy, latency, _) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
-    assert energy == pytest.approx(expected_energy)
-    assert latency == pytest.approx(expected_latency)
+    print(f"'{workload}': ({energy}, {latency}),")
+    assert energy == pytest.approx(expected_energy)  # type: ignore
+    assert latency == pytest.approx(expected_latency)  # type: ignore

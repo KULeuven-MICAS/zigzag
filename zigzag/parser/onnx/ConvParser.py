@@ -32,31 +32,7 @@ class ConvParser(ONNXOperatorParser):
         """! Run the parser and return the created LayerNode object"""
         return self.generate_layer_node_for_conv()
 
-    # def get_weight_name(self, node: NodeProto):
-    #     """! Return the name of the weight input of this node depending on its operator type
-    #     @param node (NodeProto): The node
-    #     """
-    #     op_type = node.op_type  # 'Conv', 'QLinearConv', ...
-    #     if op_type == "Conv":
-    #         return node.input[1]
-    #     elif op_type == "QLinearConv":
-    #         return node.input[3]
-    #     else:
-    #         raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
-
-    # def get_input_output_weight_data_type(self):
-    #     """! Return the data type of the input, output and weight tensors of this node."""
-    #     input_name = self.node.input[0]
-    #     output_name = self.node.output[0]
-    #     weight_name = self.get_weight_name(self.node)
-
-    #     input_elem_type = get_onnx_tensor_type(input_name, self.onnx_model).elem_type
-    #     output_elem_type = get_onnx_tensor_type(output_name, self.onnx_model).elem_type
-    #     weight_elem_type = get_onnx_tensor_type(weight_name, self.onnx_model).elem_type
-
-    #     return input_elem_type, output_elem_type, weight_elem_type
-
-    def get_layer_node_input_format(
+    def get_layer_node_user_format(
         self,
         kernel_shape: list[int],
         strides: list[int],
@@ -65,7 +41,6 @@ class ConvParser(ONNXOperatorParser):
         padding: list[int],
         ia_shape: list[int],
         oa_shape: list[int],
-        prev_node_id: int | None = None,
     ) -> dict[str, Any]:
         """! Generate the necessary dictionary items required for the LayerNode creation. If there is no data for a
         given Layer Attribute, the Layer Attribute is not included in the returned dict.
@@ -107,10 +82,12 @@ class ConvParser(ONNXOperatorParser):
             f"iy={strides[1]}*oy+{dilations[1]}*fy",
         ]
         data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
-        # Constant operand
+
+        # Operand sources
+        predecessors = self.get_node_predecessors()
         data["operand_source"] = {"W": self.node_id}
-        if prev_node_id is not None:
-            data["operand_source"]["I"] = prev_node_id
+        if len(predecessors) >= 1:
+            data["operand_source"]["I"] = predecessors[0]
 
         # Add padding information
         data["pr_loop_dims"] = ["IX", "IY"]
@@ -137,17 +114,8 @@ class ConvParser(ONNXOperatorParser):
         # Get the input and output activation and weight data type (precision) # TODO this is not used
         # ia_data_type, oa_data_type, w_data_type = self.get_input_output_weight_data_type()
 
-        # Compute node input source
-        predecessors: list[int] = []
-        for node_input in self.node.input:
-            for n in self.nodes_outputs:
-                if node_input in self.nodes_outputs[n]:
-                    predecessors.append(n)
-        assert len(predecessors) <= 1, "Only a single layer operand source expected"
-        prev_node_id = None if len(predecessors) == 0 else predecessors.pop()
-
         # Create LayerNode
-        layer_data = self.get_layer_node_input_format(
+        layer_data = self.get_layer_node_user_format(
             kernel_shape,
             strides,
             dilations,
@@ -155,7 +123,6 @@ class ConvParser(ONNXOperatorParser):
             padding,
             ia_dimension_shape,
             oa_dimension_shape,
-            prev_node_id,
         )
         factory = LayerNodeFactory(layer_data, self.mapping_data)
         layer_node = factory.create()
