@@ -1,6 +1,7 @@
 from datetime import datetime
 import pickle
 from zigzag import api
+from zigzag.visualization.results.print_mapping import print_mapping
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
@@ -28,3 +29,4 @@ with open(pickle_filename, "rb") as fp:
 
 
 bar_plot_cost_model_evaluations_breakdown(cmes, save_path="outputs/plot_breakdown.png")
+print_mapping(cmes[0])

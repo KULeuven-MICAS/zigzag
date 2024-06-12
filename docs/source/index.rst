@@ -6,9 +6,9 @@
 Welcome to ZigZag's documentation!
 ==================================
 
-ZigZag is a hardware architecture (HW)-mapping design space exploration (DSE) framework for deep learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their HW acceleration cost on specialized accelerators through a fast and accurate analytical HW cost estimation model.
+ZigZag is a hardware architecture (hardware)-mapping design space exploration (DSE) framework for deep learning (DL) accelerators. ZigZag bridges the gap between algorithmic DL decisions and their hardware acceleration cost on specialized accelerators through a fast and accurate analytical hardware cost estimation model.
 
-A crucial part in this is mapping the algorithmic computations onto the computational HW resources and memories. In the framework, multiple engines are provided that automatically find optimal mapping points in this search space.
+A crucial part in this is mapping the algorithmic computations onto the computational hardware resources and memories. In the framework, multiple engines are provided that automatically find optimal mapping points in this search space.
 
 
 .. toctree::
