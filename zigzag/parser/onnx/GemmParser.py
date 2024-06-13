@@ -45,7 +45,7 @@ class GemmParser(ONNXOperatorParser):
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
-        data["name"] = f"Layer{self.node_id}"
+        data["name"] = self.node.name
         data["operator_type"] = self.node.op_type
         data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
         data["loop_dims"] = ["B", "C", "K", "D"]
