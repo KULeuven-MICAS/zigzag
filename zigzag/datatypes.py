@@ -9,13 +9,20 @@ class OperandABC(metaclass=ABCMeta):
     """! Abstract Base Class for all dimension- and operand-like classes"""
 
     def __init__(self, name: str):
-        self.name = name
+        self.__name = name
+        self.__hash = hash(name) ^ hash(type(self))
+
+    @property
+    def name(self):
+        """Protect the class variable from reassignment (as this would invalidate the stored hash value)"""
+        return self.__name
 
     def __eq__(self, other: Any):
-        return isinstance(other, type(self)) and self.name == other.name
+        return self.__hash == hash(other)
 
     def __hash__(self):
-        return hash(self.name)
+        # Optimize performance by statically storing the hash
+        return self.__hash
 
     def __str__(self):
         return self.name
@@ -57,21 +64,19 @@ class LayerDim(OperandABC):
     """! (for-loop) dimension of a workload layer (e.g. `K`, `C`)"""
 
     def __init__(self, name: str):
-        assert name.isalpha(), "LayerDim name contains special characters or numbers"
+        # assert name.isalpha(), "LayerDim name contains special characters or numbers"
         super().__init__(name.upper())
 
     def create_r_version(self) -> "LayerDim":
         """! Create a new LayerDim instance with is tagged `relevant` and can be distinguished from non-tagged
         LayerDims"""
-        new_instance = LayerDim(self.name)
-        new_instance.name = self.name + "_r"
+        new_instance = LayerDim(self.name + "_r")
         return new_instance
 
     def create_ir_version(self) -> "LayerDim":
         """! Create a new LayerDim instance with is tagged `irrelevant` and can be distinguished from non-tagged
         LayerDims"""
-        new_instance = LayerDim(self.name)
-        new_instance.name = self.name + "_ir"
+        new_instance = LayerDim(self.name + "_ir")
         return new_instance
 
 
@@ -81,12 +86,6 @@ class OADimension(OperandABC):
     def __init__(self, name: str):
         assert bool(re.match(AcceleratorValidator.DIMENSION_REGEX, name)), f"OADimension {name} does not resemble `D1`"
         super().__init__(name)
-
-    def __eq__(self, other: Any):
-        return isinstance(other, OADimension) and other.name == self.name
-
-    def __hash__(self):
-        return hash(self.name)
 
 
 class Constants:
