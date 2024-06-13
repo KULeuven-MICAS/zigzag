@@ -151,6 +151,7 @@ class MemoryFactory:
             latency=self.data["latency"],
             min_r_granularity=self.data["min_r_granularity"],
             min_w_granularity=self.data["min_w_granularity"],
+            auto_cost_extraction=self.data["auto_cost_extraction"],
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:

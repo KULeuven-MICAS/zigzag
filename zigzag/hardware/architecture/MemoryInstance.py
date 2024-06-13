@@ -44,10 +44,9 @@ class MemoryInstance:
         @param double_buffering_support (bool): Support for double buffering on this memory instance.
         """
         if auto_cost_extraction:
-            # Size must be a multiple of 8 when using CACTI
-            assert size % 8 == 0, "Memory size must be a multiple of 8 when automatically extracting costs using CACTI."
             cacti_parser = CactiParser()
             r_cost, w_cost, area = cacti_parser.get_item(
+                mem_name=name,
                 mem_type=mem_type,
                 size=size,
                 r_bw=r_bw,
