@@ -1,7 +1,5 @@
 import pytest
-import sys
 
-sys.path.append("../zigzag")
 from zigzag.api import get_hardware_performance_zigzag_with_mix_spatial_mapping
 
 # Test case for when spatial_mapping is provided, while spatial_mapping_hint is not provided.
