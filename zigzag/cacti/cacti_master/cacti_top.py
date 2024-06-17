@@ -2,7 +2,7 @@ import yaml
 import os
 import argparse
 
-from zigzag.cacti.cacti_master.cacti_config_creator import CactiConfig
+from zigzag.classes.cacti.cacti_master.cacti_config_creator import CactiConfig
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mem_type")
