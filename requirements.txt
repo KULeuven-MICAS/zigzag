@@ -10,3 +10,4 @@ pytest
 typeguard
 cerberus
 ruff
+seaborn

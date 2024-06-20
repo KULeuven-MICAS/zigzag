@@ -2,6 +2,7 @@ from collections import defaultdict
 import matplotlib.pyplot as plt
 from matplotlib.colors import hsv_to_rgb  # type: ignore
 import numpy as np
+import seaborn
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_level import MemoryLevel
@@ -80,8 +81,11 @@ def bar_plot_cost_model_evaluations_total(
 def bar_plot_cost_model_evaluations_breakdown(
     cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
 ):
+
+    cmes_to_plot: list[CostModelEvaluation] = [cme for cme in cmes if isinstance(cme, CostModelEvaluation)]
+
     memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {
-        idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
+        idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes_to_plot))
     }
     mac_costs: defaultdict[int, float] = defaultdict(lambda: 0.0)
     memory_instances: dict[str, MemoryLevel] = {}
@@ -93,14 +97,11 @@ def bar_plot_cost_model_evaluations_breakdown(
             "Data loading": 0,
             "Data off-loading": 0,
         }
-        for idx in range(len(cmes))
+        for idx in range(len(cmes_to_plot))
     }
-    la_tot: dict[int, float] = {idx: 0 for idx in range(len(cmes))}
+    la_tot: dict[int, float] = {idx: 0 for idx in range(len(cmes_to_plot))}
 
-    for idx, cme in enumerate(cmes):
-        if isinstance(cme, CumulativeCME):
-            continue
-        assert isinstance(cme, CostModelEvaluation)
+    for idx, cme in enumerate(cmes_to_plot):
 
         mem_hierarchy = cme.accelerator.get_core(cme.layer.core_allocation[0]).memory_hierarchy
         mac_costs[idx] = cme.mac_energy
@@ -134,11 +135,11 @@ def bar_plot_cost_model_evaluations_breakdown(
     # Energy part
 
     fig, (ax1, ax2) = plt.subplots(nrows=2, figsize=(10, 8))
-    hues = np.linspace(0, 1, len(all_ops) + 1)[:-1]
+    colors = seaborn.color_palette("pastel", len(all_ops))
     hatches = ["////", "\\\\\\\\", "xxxx", "++++"]
     x = 0
     xticks = {}
-    for idx, cme in enumerate(cmes):
+    for idx, cme in enumerate(cmes_to_plot):
         total_energy = 0
         startx_of_layer = x
         # mac
@@ -159,7 +160,7 @@ def bar_plot_cost_model_evaluations_breakdown(
                         [height],
                         width=1,
                         bottom=[bottom],
-                        facecolor=hsv_to_rgb((hues[op_i], 1, 1)),
+                        facecolor=colors[op_i],
                         hatch=hatches[dir_idx],
                     )
 
@@ -172,15 +173,15 @@ def bar_plot_cost_model_evaluations_breakdown(
         ax1.text(
             x * 0.5 + startx_of_layer * 0.5,
             1.05 * highest_bar,
-            "tot:{:,d}".format(int(total_energy)),
+            f"tot:{total_energy:.2e}",
             horizontalalignment="center",
             verticalalignment="bottom",
             weight="bold",
         )
         x += len(all_mems) / 4
 
-    for op, h in zip(all_ops, hues):
-        ax1.bar(0, 0, width=1, facecolor=hsv_to_rgb((h, 1, 1)), label=op)
+    for op, color in zip(all_ops, colors):
+        ax1.bar(0, 0, width=1, facecolor=color, label=op)
 
     for idx, direction in enumerate(DataDirection):
         ax1.bar(
@@ -193,7 +194,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             label=str(direction),
         )
 
-    ax1.legend(loc="upper left")
+    ax1.legend(loc="upper left", ncol=1)
     ax1.set_xticks(list(xticks.keys()), list(xticks.values()), rotation=xtick_rotation)
     ax1.set_ylim(0, 1.1 * ax1.get_ylim()[1])
 
@@ -207,7 +208,8 @@ def bar_plot_cost_model_evaluations_breakdown(
         for ky, val in design_point.items():
             y2[ky].append(val)
 
-    hues = np.linspace(0, 1, len(y2) + 1)[:-1]
+    colors = seaborn.color_palette("muted", len(y2) + 1)
+    colors = colors[2:] + colors[:2]  # Green color is at idx 3 in this palette, we want it for idea computation
 
     for idx, (ky, va) in enumerate(y2.items()):
         if idx == 0:
@@ -215,7 +217,7 @@ def bar_plot_cost_model_evaluations_breakdown(
                 np.array(x2),
                 va,
                 width=0.4,
-                color=hsv_to_rgb((hues[idx], 1, 1)),
+                color=colors[idx],
                 label=ky,
             )
             li_pre = va
@@ -224,7 +226,7 @@ def bar_plot_cost_model_evaluations_breakdown(
                 np.array(x2),
                 va,
                 width=0.4,
-                color=hsv_to_rgb((hues[idx], 1, 1)),
+                color=colors[idx],
                 label=ky,
                 bottom=li_pre,
             )
@@ -234,13 +236,14 @@ def bar_plot_cost_model_evaluations_breakdown(
         ax2.text(
             x,
             la_tot[x] * 1.05,
-            "tot:{:,d}".format(int(la_tot[x])),
+            f"tot:{la_tot[x]:.2e}",
             horizontalalignment="center",
             verticalalignment="bottom",
             weight="bold",
         )
     ax2.legend()
-    ax2.set_xticks(x2, x2, rotation=xtick_rotation)
+    xtick_labels = [f"{cme.layer.id}: {cme.layer.name.split('/')[-1]}" for cme in cmes_to_plot]
+    ax2.set_xticks(x2, xtick_labels, rotation=0)
     ax2.set_ylim(0, 1.1 * ax2.get_ylim()[1])
     ax2.set_xlabel("Layers", fontsize=15)
     ax2.set_ylabel("Latency (cycle)", fontsize=15)
