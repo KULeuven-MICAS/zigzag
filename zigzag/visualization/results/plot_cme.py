@@ -25,6 +25,15 @@ plt.rc("legend", fontsize=SMALL_SIZE)  # legend fontsize
 plt.rc("figure", titlesize=MEDIUM_SIZE)  # fontsize of the figure title
 
 
+def shorten_onnx_layer_name(name: str):
+    """Names generated in the ONNX format are quite long (e.g. `layer1/layer1.0/conv2/Conv). This function extracts
+    the most informative part"""
+    try:
+        return name.split("/")[-2]
+    except IndexError:
+        return name
+
+
 def bar_plot_cost_model_evaluations_total(
     cmes: list[CostModelEvaluation],
     labels: list[str],
@@ -242,7 +251,8 @@ def bar_plot_cost_model_evaluations_breakdown(
             weight="bold",
         )
     ax2.legend()
-    xtick_labels = [f"{cme.layer.id}: {cme.layer.name.split('/')[-1]}" for cme in cmes_to_plot]
+
+    xtick_labels = [f"{cme.layer.id}: {shorten_onnx_layer_name(cme.layer.name)}" for cme in cmes_to_plot]
     ax2.set_xticks(x2, xtick_labels, rotation=0)
     ax2.set_ylim(0, 1.1 * ax2.get_ylim()[1])
     ax2.set_xlabel("Layers", fontsize=15)
