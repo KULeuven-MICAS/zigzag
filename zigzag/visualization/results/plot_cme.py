@@ -194,7 +194,7 @@ def bar_plot_cost_model_evaluations_breakdown(
             label=str(direction),
         )
 
-    ax1.legend(loc="upper left", ncol=1)
+    ax1.legend(ncol=1)
     ax1.set_xticks(list(xticks.keys()), list(xticks.values()), rotation=xtick_rotation)
     ax1.set_ylim(0, 1.1 * ax1.get_ylim()[1])
 
