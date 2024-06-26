@@ -14,6 +14,7 @@ class ONNXOperatorParser(metaclass=ABCMeta):
     # These attribute names can be added to an ONNX node to change the data precision used in ZigZag
     CUSTOM_WEIGHT_SIZE_ATTR = "weight_size"
     CUSTOM_ACT_SIZE_ATTR = "act_size"
+    CUSTOM_OUTPUT_SIZE_ATTR = "output_size"
 
     def __init__(
         self,
@@ -86,3 +87,15 @@ class ONNXOperatorParser(metaclass=ABCMeta):
                 return attr.i
         # Default
         return 8
+
+    def get_intermediate_output_precision(self):
+        """Return the intermediate output precision for this node.
+        The intermediate output precision of ONNX nodes can be customized by manually adding the attribute
+         `CUSTOM_OUTPUT_SIZE_ATTR` to the node."""
+        for attr in self.node.attribute:
+            if attr.name == ONNXOperatorParser.CUSTOM_OUTPUT_SIZE_ATTR:
+                if attr.type != onnx.AttributeProto.INT:
+                    raise ValueError("Custom activation size attribute must be an integer.")
+                return attr.i
+        # Default
+        return 2 * self.get_activation_precision()

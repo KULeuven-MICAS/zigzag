@@ -56,6 +56,7 @@ class GemmParser(ONNXOperatorParser):
         predecessors = self.get_node_predecessors()
         act_precision = self.get_activation_precision()
         weight_precision = self.get_weight_precision()
+        intermediate_output_precision = self.get_intermediate_output_precision()
         match len(predecessors):
             case 0:
                 # No source operands -> assume one is constant
@@ -65,7 +66,7 @@ class GemmParser(ONNXOperatorParser):
                     "W": weight_precision,
                     "I": act_precision,
                     "O_final": act_precision,
-                    "O": 2 * act_precision,
+                    "O": intermediate_output_precision,
                 }
             case 1:
                 # One source operand, one constant
