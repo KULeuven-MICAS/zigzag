@@ -75,7 +75,7 @@ class GemmParser(ONNXOperatorParser):
                     "W": weight_precision,
                     "I": act_precision,
                     "O_final": act_precision,
-                    "O": 2 * act_precision,
+                    "O": intermediate_output_precision,
                 }
             case 2:
                 # Two source operands, none are constant (W and I can be swapped)
@@ -84,7 +84,7 @@ class GemmParser(ONNXOperatorParser):
                     "W": act_precision,
                     "I": act_precision,
                     "O_final": act_precision,
-                    "O": 2 * act_precision,
+                    "O": intermediate_output_precision,
                 }
 
             case _:
