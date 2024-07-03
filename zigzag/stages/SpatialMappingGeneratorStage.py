@@ -22,7 +22,6 @@ from zigzag.workload.layer_attributes import MemoryOperandLinks
 from zigzag.mapping.spatial_mapping import (
     SpatialMapping,
     MappingSingleOADim,
-    SpatialMappingHint,
 )
 
 logger = logging.getLogger(__name__)
@@ -74,8 +73,10 @@ class SpatialMappingGeneratorStage(Stage):
         self.oa_dim_sizes = self.core.operational_array.dimension_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
-        self.spatial_mapping_hint: SpatialMappingHint = self.layer.spatial_mapping_hint
-        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, set(self.layer.layer_dims))
+        # Spatial mapping hint
+        self.spatial_mapping_hint = self.layer.spatial_mapping_hint
+        self.spatial_mapping_hint.clear_invalid_hits(self.layer.layer_dims)
+        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, self.layer.layer_dims)
 
     def run(self):
         """! Generate SpatialMappings and convert to internal representation"""
@@ -157,10 +158,9 @@ class SpatialMappingGeneratorStage(Stage):
 
         # Sort according to expected performance
         candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
-        # indicators = [x.get_performance_indicator() for x in candidate_mappings]
 
         # Limit the number of mappings generated
-        for i in range(self.nb_mappings_generated):
+        for i in range(min(self.nb_mappings_generated, len(candidate_mappings))):
             candidate = candidate_mappings[i]
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
@@ -170,6 +170,19 @@ class SpatialMappingGeneratorStage(Stage):
         self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
     ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure"""
+
+        def conditional_log(layer_dim: LayerDim, oa_dim: OADimension, value: int, mem_name: str):
+            # Don't log if user has defined an unrolling for a different layer dim
+            do_not_log = oa_dim in self.provided_mapping and layer_dim not in self.provided_mapping[oa_dim]
+            if not do_not_log:
+                logger.warning(
+                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                    layer_dim,
+                    oa_dim,
+                    value,
+                    mem_name,
+                )
+
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
@@ -186,8 +199,13 @@ class SpatialMappingGeneratorStage(Stage):
                         if layer_dim not in irrelevant_dimensions:
                             max_multicast_elements = mem_bandwidth // precision if precision > 0 else unrolling_size
                             if max_multicast_elements < unrolling_size:
-                                logger.warning(f"Maximal spatial unrolling of {layer_dim} limited to
-                                               {max_multicast_elements} due to bandwidth {mem_bandwidth} of {mem_level.name}.")
+                                conditional_log(
+                                    layer_dim,
+                                    oa_dim,
+                                    max_multicast_elements,
+                                    mem_level.name,
+                                )
+
                                 mapping[oa_dim][layer_dim] = max_multicast_elements
 
         return mapping
@@ -358,7 +376,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         memory_operand_links: MemoryOperandLinks = self.layer.memory_operand_links
 
-        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one dimension
+        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one
+        # dimension
         act_served_oa_dims_list: list[ServedMemDimensions] = [
             mem_level.served_dimensions
             for mem_level in self.memory_hierarchy.get_inner_memories()
@@ -460,7 +479,9 @@ class SpatialMappingGeneratorStage(Stage):
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
 
-            ir_layer_dim_to_current_layer_dim = next(filter(lambda x: x != layer_dim, weight_r_loop.keys()))
+            ir_layer_dim_to_current_layer_dim = next(
+                filter(lambda x: x != layer_dim, weight_r_loop.keys())  # pylint: disable=W0640
+            )
 
             existed_pr_mapping_but_ir_to_current_layer_dim = list(
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
@@ -548,7 +569,7 @@ class SpatialMappingGeneratorStage(Stage):
                             # add the other existed pr loop to required_oa_dim_size,
                             # because previously it is not counted in output_served_self.oa_dim_sizes[oa_dim].
                             sole_dim = list(comb_mapping.keys())[0]
-                            the_other_pr_mapping_name = [key for key in weight_r_loop.keys() if key != sole_dim][0]
+                            the_other_pr_mapping_name = [key for key in weight_r_loop if key != sole_dim][0]
                             the_other_pr_mapping_size = list(weight_r_loop[the_other_pr_mapping_name].values())[0]
                             required_oa_dim_size *= the_other_pr_mapping_size
                         if required_oa_dim_size > self.oa_dim_sizes[output_served_oa_dim]:
@@ -686,9 +707,8 @@ class SpatialMappingGeneratorStage(Stage):
                 served_dimensions=new_served_dimensions,
             )
         # Create the new core
-        new_id = self.core.id
         new_core = Core(
-            id=new_id,
+            core_id=self.core.id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )

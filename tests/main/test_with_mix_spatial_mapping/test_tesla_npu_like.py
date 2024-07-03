@@ -13,43 +13,27 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/resnet18.onnx": (1724869681, 3257898),
-    "zigzag/inputs/workload/resnet18.yaml": (2220861655, 3934616),
+    "zigzag/inputs/workload/alexnet.onnx": (6006136982.778, 8290892.0),
+    "zigzag/inputs/workload/mobilenetv2.onnx": (947736166.5380002, 1857838.0),
+    "zigzag/inputs/workload/resnet18.onnx": (1604556365.552, 2828301.0),
+    "zigzag/inputs/workload/resnet18.yaml": (2094141825.5040002, 3480232.0),
 }
 
 
 @pytest.fixture
 def mapping():
-    tesla_npu_like_mapping = {
-        "default": {
-            "core_allocation": 1,
-            # "spatial_mapping": {"D1": ("K", 32), "D2": ("OX", 8), "D3": ("OY", 4)},
-            "spatial_mapping_hint": {"D1": ["K"], "D2": ["OX", "OY"]},
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-        "Add": {
-            "core_allocation": 1,
-            "spatial_mapping": {"D1": ("G", 32), "D2": ("OX", 1), "D3": ("OY", 1)},
-            "memory_operand_links": {"O": "O", "X": "I2", "Y": "I1"},
-        },
-        "Pooling": {
-            "core_allocation": 1,
-            "spatial_mapping": {"D1": ("G", 32), "D2": ("OX", 1), "D3": ("OY", 1)},
-            "memory_operand_links": {"O": "O", "W": "I2", "I": "I1"},
-        },
-    }
-
-    return tesla_npu_like_mapping
+    return "zigzag/inputs/mapping/tesla_npu_like_mixed.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "zigzag.inputs.examples.hardware.Tesla_NPU_like"
+    return "zigzag/inputs/hardware/tesla_npu_like.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload: str, accelerator: str, mapping: str):
-    (energy, latency, cmes) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
+def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
+    (energy, latency, _) = get_hardware_performance_zigzag_with_mix_spatial_mapping(workload, accelerator, mapping)
     (expected_energy, expected_latency) = ens_lats[workload]
-    assert energy == pytest.approx(expected_energy)
-    assert latency == pytest.approx(expected_latency)
+    print(f"'{workload}': ({energy}, {latency}),")
+    assert energy == pytest.approx(expected_energy)  # type: ignore
+    assert latency == pytest.approx(expected_latency)  # type: ignore

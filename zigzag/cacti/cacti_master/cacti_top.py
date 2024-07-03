@@ -91,7 +91,7 @@ C.cacti_auto(
 )
 
 result = {}
-with open("%s/cache.cfg.out" % self_gen_path, "r") as fp:
+with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
     raw_result = fp.readlines()
     for ii, each_line in enumerate(raw_result):
         if ii == 0:
@@ -151,6 +151,6 @@ for i in range(len(result[" Capacity (bytes)"])):
             "technology": technology,
         }
     }
-    with open(mem_pool_path, "a+") as fp:
+    with open(mem_pool_path, "a+", encoding="UTF-8") as fp:
         yaml.dump(new_result, fp)
         fp.write("\n")

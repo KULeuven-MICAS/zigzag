@@ -6,7 +6,6 @@ from zigzag.mapping.spatial_mapping import MappingSingleOADim
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping
 from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
-from zigzag.stages.SearchUnusedMemoryStage import SearchUnusedMemoryStage
 
 
 class ImcUnit(OperationalArrayABC):
@@ -169,9 +168,8 @@ class ImcUnit(OperationalArrayABC):
         """
 
         # activation/weight representation in layer
-        (layer_act_operand, layer_const_operand, _, _) = SearchUnusedMemoryStage.get_act_weight_operand_names(
-            layer=layer
-        )
+        layer_act_operand = layer.get_act_layer_op()
+        layer_const_operand = layer.get_weight_layer_op()
         assert layer_const_operand is not None
 
         spatial_mapping = copy.deepcopy(layer.spatial_mapping)
@@ -293,7 +291,7 @@ class ImcUnit(OperationalArrayABC):
             layer_dim = bl_dim_unroll_dims[0]
             layer_dim_size = bl_dim_unroll_sizes[1]
             # pr_sm.keys() include FX, FY
-            if layer_dim not in pr_sm.keys():  # e.g. ("C", 2)
+            if layer_dim not in pr_sm:  # e.g. ("C", 2)
                 additional_diag_rows = 0
             else:  # e.g. ("FX", 2)
                 additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
@@ -308,7 +306,7 @@ class ImcUnit(OperationalArrayABC):
             for bl_dim_idx in range(len(bl_dim_unroll_dims)):
                 layer_dim = bl_dim_unroll_dims[bl_dim_idx]
                 layer_dim_size = bl_dim_unroll_sizes[bl_dim_idx]
-                if layer_dim not in pr_sm.keys():
+                if layer_dim not in pr_sm:
                     additional_diag_rows = 0
                 else:
                     additional_diag_rows = list(pr_sm[layer_dim].values())[0] - 1
@@ -331,7 +329,7 @@ class ImcUnit(OperationalArrayABC):
             # nb_of_precharge_times is normalized to single PE.
 
             # activation/weight representation in layer
-            _, layer_const_operand, _, _ = SearchUnusedMemoryStage.get_act_weight_operand_names(layer=layer)
+            layer_const_operand = layer.get_weight_layer_op()
             assert layer_const_operand is not None
             # Get the precharge interval between two precharge operations
             precharge_interval = 1  # 1: precharge every cycle

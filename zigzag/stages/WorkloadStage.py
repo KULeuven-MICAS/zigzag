@@ -4,7 +4,8 @@ from typing import Any
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.stages.Stage import Stage, StageCallable
-from zigzag.workload.Workload import Workload
+from zigzag.workload.LayerNodeABC import LayerNodeABC
+from zigzag.workload.Workload import WorkloadABC
 from zigzag.workload.DummyNode import DummyNode
 from zigzag.hardware.architecture.ImcArray import ImcArray
 
@@ -15,7 +16,12 @@ class WorkloadStage(Stage):
     """! Class that iterates through the nodes in a given workload graph."""
 
     def __init__(
-        self, list_of_callables: list[StageCallable], *, workload: Workload, accelerator: Accelerator, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        workload: WorkloadABC[LayerNodeABC],
+        accelerator: Accelerator,
+        **kwargs: Any,
     ):
         """
         Initialization of self.workload.

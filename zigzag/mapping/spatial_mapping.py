@@ -150,7 +150,7 @@ class SpatialMapping(LayerAttribute):
         - that each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
         Reduce the unrollings otherwise.
         @param dict of `LayerDimSizes`. `LayerDimSizes` instance cannot be used due to circular import.
-        # TODO should be moved to something similar to `parse_user_input`
+
         """
         assert self.oa_dim_sizes is not None, "Initialize OA Dimensions first"
 
@@ -315,9 +315,30 @@ class SpatialMappingHint(LayerAttribute):
     def __init__(self, data: dict[OADimension, set[LayerDim]]):
         self.data = data
 
-    def complete_with_defaults(self, oa_dim_sizes: dict[OADimension, int], layer_dims: set[LayerDim]):
+    def clear_invalid_hits(self, valid_layer_dims: list[LayerDim]):
+        """Check the hints at all contained OADimension. If the OADimension doesn't contain a single LayerDim that is
+        also present in the given list `valid_layer_dims`, remove the OADimension from this instance."""
+        invalid_oa_dims: list[OADimension] = []
+        for oa_dim, hints in self.data.items():
+            if not any([layer_dim in valid_layer_dims for layer_dim in hints]):
+                logger.warning(
+                    "Spatial mapping hint %s at OADimension %s doesn't contain a single layer dimension that is "
+                    "in part of this layer: %s. Removing spatial mapping hints at %s.",
+                    self,
+                    oa_dim,
+                    valid_layer_dims,
+                    oa_dim,
+                )
+                invalid_oa_dims.append(oa_dim)
+
+        for oa_dim in invalid_oa_dims:
+            del self.data[oa_dim]
+
+    def complete_with_defaults(self, oa_dim_sizes: dict[OADimension, int], layer_dims: list[LayerDim]):
+        """For all OADimensions in `oa_dim_sizes` that are not already in this SpatialMappingHint, fill the hints for
+        that OADimension with all LayerDims from `layer_dims`."""
         for oa_dim in filter(lambda x: x not in self, oa_dim_sizes):
-            self.data[oa_dim] = layer_dims
+            self.data[oa_dim] = set(layer_dims)
 
     def __getitem__(self, key: OADimension):
         return self.data[key]

@@ -1,5 +1,6 @@
 import os
-import platform
+import logging
+
 from typing import Any
 
 
@@ -144,9 +145,11 @@ class CactiConfig:
             "\n",
             "\n",
             "\n",
-            "#### Default CONFIGURATION values for baseline external IO parameters to DRAM. More details can be found in the CACTI-IO technical report (), especially Chapters 2 and 3.\n",
+            "#### Default CONFIGURATION values for baseline external IO parameters to DRAM. More details can be found "
+            "in the CACTI-IO technical report (), especially Chapters 2 and 3.\n",
             "\n",
-            "# Memory Type (D3=DDR3, D4=DDR4, L=LPDDR2, W=WideIO, S=Serial). Additional memory types can be defined by the user in extio_technology.cc, along with their technology and configuration parameters.\n",
+            "# Memory Type (D3=DDR3, D4=DDR4, L=LPDDR2, W=WideIO, S=Serial). Additional memory types can be defined by "
+            "the user in extio_technology.cc, along with their technology and configuration parameters.\n",
             "\n",
             '-dram_type "DDR3"\n',
             '//-dram_type "DDR4"\n',
@@ -161,7 +164,8 @@ class CactiConfig:
             '//-io state "IDLE"\n',
             '//-io state "SLEEP"\n',
             "\n",
-            "#Address bus timing. To alleviate the timing on the command and address bus due to high loading (shared across all memories on the channel), the interface allows for multi-cycle timing options. \n",
+            "#Address bus timing. To alleviate the timing on the command and address bus due to high loading (shared "
+            "across all memories on the channel), the interface allows for multi-cycle timing options. \n",
             "\n",
             "//-addr_timing 0.5 //DDR\n",
             "-addr_timing 1.0 //SDR (half of DQ rate)\n",
@@ -174,39 +178,50 @@ class CactiConfig:
             "\n",
             "# IO frequency (MHz) (frequency of the external memory interface).\n",
             "\n",
-            "-bus_freq 800 MHz //As of current memory standards (2013), valid range 0 to 1.5 GHz for DDR3, 0 to 533 MHz for LPDDR2, 0 - 800 MHz for WideIO and 0 - 3 GHz for Low-swing differential. However this can change, and the user is free to define valid ranges based on new memory types or extending beyond existing standards for existing dram types.\n",
+            "-bus_freq 800 MHz //As of current memory standards (2013), valid range 0 to 1.5 GHz for DDR3, 0 to 533 "
+            "MHz for LPDDR2, 0 - 800 MHz for WideIO and 0 - 3 GHz for Low-swing differential. However this can change, "
+            "and the user is free to define valid ranges based on new memory types or extending beyond existing "
+            "standards for existing dram types.\n",
             "\n",
             "# Duty Cycle (fraction of time in the Memory State defined above)\n",
             "\n",
             "-duty_cycle 1.0 //Valid range 0 to 1.0\n",
             "\n",
-            "# Activity factor for Data (0->1 transitions) per cycle (for DDR, need to account for the higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
+            "# Activity factor for Data (0->1 transitions) per cycle (for DDR, need to account for the higher activity "
+            "in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
             " \n",
             "-activity_dq 1.0 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR\n",
             "\n",
-            "# Activity factor for Control/Address (0->1 transitions) per cycle (for DDR, need to account for the higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
+            "# Activity factor for Control/Address (0->1 transitions) per cycle (for DDR, need to account for the "
+            "higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
             "\n",
-            "-activity_ca 0.5 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR, 0 to 0.25 for 2T, and 0 to 0.17 for 3T\n",
+            "-activity_ca 0.5 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR, 0 to 0.25 for 2T, and 0 to 0.17 for "
+            "3T\n",
             "\n",
             "# Number of DQ pins \n",
             "\n",
             "-num_dq 72 //Number of DQ pins. Includes ECC pins.\n",
             "\n",
-            "# Number of DQS pins. DQS is a data strobe that is sent along with a small number of data-lanes so the source synchronous timing is local to these DQ bits. Typically, 1 DQS per byte (8 DQ bits) is used. The DQS is also typucally differential, just like the CLK pin. \n",
+            "# Number of DQS pins. DQS is a data strobe that is sent along with a small number of data-lanes so the "
+            "source synchronous timing is local to these DQ bits. Typically, 1 DQS per byte (8 DQ bits) is used. The "
+            "DQS is also typucally differential, just like the CLK pin. \n",
             "\n",
-            "-num_dqs 18 //2 x differential pairs. Include ECC pins as well. Valid range 0 to 18. For x4 memories, could have 36 DQS pins.\n",
+            "-num_dqs 18 //2 x differential pairs. Include ECC pins as well. Valid range 0 to 18. For x4 memories, "
+            "could have 36 DQS pins.\n",
             "\n",
             "# Number of CA pins \n",
             "\n",
             "-num_ca 25 //Valid range 0 to 35 pins.\n",
             "\n",
-            "# Number of CLK pins. CLK is typically a differential pair. In some cases additional CLK pairs may be used to limit the loading on the CLK pin. \n",
+            "# Number of CLK pins. CLK is typically a differential pair. In some cases additional CLK pairs may be "
+            "used to limit the loading on the CLK pin. \n",
             "\n",
             "-num_clk  2 //2 x differential pair. Valid values: 0/2/4.\n",
             "\n",
             "# Number of Physical Ranks\n",
             "\n",
-            "-num_mem_dq 2 //Number of ranks (loads on DQ and DQS) per buffer/register. If multiple LRDIMMs or buffer chips exist, the analysis for capacity and power is reported per buffer/register. \n",
+            "-num_mem_dq 2 //Number of ranks (loads on DQ and DQS) per buffer/register. If multiple LRDIMMs or buffer "
+            "chips exist, the analysis for capacity and power is reported per buffer/register. \n",
             "\n",
             "# Width of the Memory Data Bus\n",
             "\n",
@@ -381,16 +396,15 @@ class CactiConfig:
             self.config_options[name]["default"] = new_value_list[idx]
 
     def write_config(self, user_config: list[Any], path: str):
-        f = open(path, "w+")
-        f.write("".join(self.baseline_config))
-        f.write("".join(user_config))
-        f.close()
+        with open(path, "w+", encoding="UTF-8") as f:
+            f.write("".join(self.baseline_config))
+            f.write("".join(user_config))
 
     def call_cacti(self, path: str):
         # os.system('./cacti -infile ./self_gen/cache.cfg')
         # print('##########################################################################################')
         # stream = os.popen('./cacti -infile %s' %path)
-        stream = os.popen("./cacti -infile %s &> /dev/null" % path)
+        stream = os.popen(f"./cacti -infile {path} &> /dev/null")
         # stream = os.popen('./cacti -infile %s' %path)
         output = stream.readlines()
         for l in output:
@@ -408,32 +422,28 @@ class CactiConfig:
         user_config: list[Any] = []
         # use default value for each parameter
         if user_input[0] == "default":
-            for itm in self.config_options.keys():
-                user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
+            for value in self.config_options.values():
+                user_config.append(value["string"] + str(value["default"]) + "\n")
             self.write_config(user_config, path)
             self.call_cacti(path)
 
         # use user defined value for each user defined parameter
         if user_input[0] == "single":
-            for itm in self.config_options.keys():
-                if itm in user_input[1][0]:
-                    ii = user_input[1][0].index(itm)
-                    user_config.append(self.config_options[itm]["string"] + str(user_input[1][1][ii]) + "\n")
+            for item, value in self.config_options.items():
+                if item in user_input[1][0]:
+                    ii = user_input[1][0].index(item)
+                    user_config.append(value["string"] + str(user_input[1][1][ii]) + "\n")
                 else:
-                    user_config.append(
-                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
-                    )
+                    user_config.append(value["string"] + str(value["default"]) + "\n")
             self.write_config(user_config, path)
             self.call_cacti(path)
 
         if user_input[0] == "sweep":
             # produce non-sweeping term
             common_part: list[str] = []
-            for itm in self.config_options.keys():
-                if itm not in user_input[1]:
-                    common_part.append(
-                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
-                    )
+            for item, value in self.config_options.values():
+                if item not in user_input[1]:
+                    common_part.append(value["string"] + str(value["default"]) + "\n")
 
             for itm in user_input[1]:
                 for va in self.config_options[itm]["option"]:
@@ -462,14 +472,10 @@ def get_cacti_cost(
         for multi-processing simulation)
     Attention: for CACTI, the minimum mem_size=64B, minimum_rows=32
     """
-    import logging as _logging
 
-    _logging_level = _logging.CRITICAL
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
-
-    # get current system (linux or windows)
-    system = platform.system()  # "Linux" or "Windows"
+    logging_level = logging.CRITICAL
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     # get the current working directory
     cwd = os.getcwd()
@@ -496,12 +502,12 @@ def get_cacti_cost(
     if bw > 32:  # adjust the setting for CACTI
         rows = mem_size_in_byte * 8 / bw
         line_size = int(32 / 8)
-        IO_bus_width = 32
+        io_bus_width = 32
         mem_size_in_byte_adjust = rows * 32 / 8
     else:  # normal case
         rows = mem_size_in_byte * 8 / bw
         line_size = int(bw / 8)  # how many bytes on a row
-        IO_bus_width = bw
+        io_bus_width = bw
         mem_size_in_byte_adjust = mem_size_in_byte
 
     file_path = "./self_gen"  # location for input file (cache.cfg) and output file (cache.cfg.out)
@@ -513,19 +519,19 @@ def get_cacti_cost(
             "single",
             [
                 ["technology", "cache_size", "line_size", "IO_bus_width", "mem_type"],
-                [tech, mem_size_in_byte_adjust, line_size, IO_bus_width, mem],
+                [tech, mem_size_in_byte_adjust, line_size, io_bus_width, mem],
             ],
         ],
         f"{file_path}/cache_{hd_hash}.cfg",
     )
     # read out result
     try:
-        f = open(f"{file_path}/cache_{hd_hash}.cfg.out", "r")
+        f = open(f"{file_path}/cache_{hd_hash}.cfg.out", "r", encoding="UTF-8")
     except:
         msg = f"CACTI failed. [current setting] rows: {rows}, bw: {bw}, mem size (byte): {mem_size_in_byte}"
-        _logging.critical(msg)
+        logging.critical(msg)
         msg = f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
-        _logging.critical(msg)
+        logging.critical(msg)
         exit()
     result: dict[str, Any] = {}
     raw_result = f.readlines()
@@ -553,8 +559,7 @@ def get_cacti_cost(
             r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
             w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
     except KeyError:
-        _logging.critical(f"**KeyError** in result, current result: {result}")
-        breakpoint()
+        logging.critical("**KeyError** in result, current result: %s", result)
 
     # change back the working directory
     os.chdir(cwd)
@@ -582,7 +587,7 @@ def get_w_cost_per_weight_from_cacti(cacti_path: str, tech_param: dict[str, floa
     array_bw = wordline_dim_size * w_pres  # imc array bandwidth. unit: bit
 
     # we will call cacti to get the area (mm^2), access_time (ns), r_cost (nJ/access), w_cost (nJ/access)
-    access_time, area, r_cost, w_cost = get_cacti_cost(
+    _, _, _, w_cost = get_cacti_cost(
         cacti_path=cacti_path,
         tech_node=tech_node,
         mem_type="sram",
@@ -607,6 +612,7 @@ if __name__ == "__main__":
             bw=bw,
         )
         print(
-            f"access time (ns): {access_time}, area (mm2): {area}, r_cost (pJ)/bit: {r_cost*1000/bw}, w_cost (pJ)/bit: {w_cost*1000/bw}"
+            f"access time (ns): {access_time}, area (mm2): {area}, r_cost (pJ)/bit: {r_cost*1000/bw}, w_cost (pJ)/bit: "
+            f"{w_cost*1000/bw}"
         )
     exit()

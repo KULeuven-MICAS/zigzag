@@ -363,7 +363,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             if mem_target in mem_share_grp:
                 return mem_share_grp
 
-    def __calc_MUW_union(self, port_duty_list: list[PortActivity]) -> int | float:
+    def __calc_mem_updating_window_union(self, port_duty_list: list[PortActivity]) -> int | float:
         """!  This function calculates the union length of all the share-port MUW (memory updating window).
         The following encoding has to be used:
         - 'P' for single period length
@@ -638,7 +638,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = mem_energy_breakdown_further
         self.mem_energy = energy_total
         self.energy_total: float = self.mem_energy + self.mac_energy
-        logger.debug(f"Ran {self}. Total energy = {self.energy_total}")
+        logger.debug("Ran %s. Total energy = %f", self, self.energy_total)
 
     def calc_latency(self) -> None:
         """!  Calculate latency in 4 steps
@@ -659,7 +659,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         4) Finally, we combine the stall/slack of each memory port to get the final latency.
         """
         self.calc_double_buffer_flag()
-        self.calc_allowed_and_real_data_transfer_cycle_per_DTL()
+        self.calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link()
         self.combine_data_transfer_rate_per_physical_port()
         self.calc_data_loading_offloading_latency()
         self.calc_overall_latency()
@@ -698,20 +698,17 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         self.double_buffer_true = double_buffer_true
 
-    def calc_allowed_and_real_data_transfer_cycle_per_DTL(self):
+    def calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link(self):
         """! Construct a 4-way data transfer pattern for each unit mem, calculate
         {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
         # TODO cleanup
         """
-        allowed_mem_updat_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
+        allowed_mem_update_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
         real_data_trans_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
-        # stall (+) or slack (-) cycle within each period per virtual data transfer link (DTL)
-        DTL_SS_cycle = {}
 
         for layer_op in self.layer.layer_operands:
-            allowed_mem_updat_cycle[layer_op] = []
+            allowed_mem_update_cycle[layer_op] = []
             real_data_trans_cycle[layer_op] = []
-            DTL_SS_cycle[layer_op] = []
             mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)
             for mem_lv in range(self.mapping_int.mem_level[layer_op]):
                 #  wr_in_by_low & rd_out_to_low
@@ -753,7 +750,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     rd_out_to_high_allowed,
                     wr_in_by_high_allowed,
                 )
-                allowed_mem_updat_cycle[layer_op].append(updating_window)
+                allowed_mem_update_cycle[layer_op].append(updating_window)
 
                 # wr_in_by_low
                 data_precision = self.mapping_int.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_low
@@ -796,7 +793,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 )
                 real_data_trans_cycle[layer_op].append(real_data_trans)
 
-        self.allowed_mem_updat_cycle = allowed_mem_updat_cycle
+        self.allowed_mem_update_cycle = allowed_mem_update_cycle
         self.real_data_trans_cycle = real_data_trans_cycle
 
     def combine_data_transfer_rate_per_physical_port(self) -> None:
@@ -824,7 +821,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                             mem_lv
                         ].data_trans_period.get_single_dir_data(mov_dir)
                         real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
-                        allowed_cycle = self.allowed_mem_updat_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+                        allowed_cycle = self.allowed_mem_update_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
                         port_activity = PortActivity(
                             real_cycle,
                             allowed_cycle,
@@ -839,38 +836,45 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.port_activity_collect = port_activity_collect
 
         # Step 2: calculate SS combine and MUW union parameters per physical memory port
-        SS_comb_collect: list[dict[str, int | float]] = [
+        stall_slack_comb_collect: list[dict[str, int | float]] = [
             {port: 0 for port in mem_ports} for mem_ports in port_activity_collect
         ]
-        SS_comb_list: list[int | float] = [0]
+        stall_slack_comb_list: list[int | float] = [0]
         # intermediate parameters saved for debugging purpose
-        MUW_union_collect: list[dict[str, int | float]] = [{} for _ in port_activity_collect]
+        mem_updating_window_union_collect: list[dict[str, int | float]] = [{} for _ in port_activity_collect]
 
         for idx, mem_ports in enumerate(port_activity_collect):
             for port_name, port_activity in mem_ports.items():
                 if len(port_activity) == 1:
-                    MUW_union_collect[idx][port_name] = port_activity[0].allowed_cycle
-                    SS_comb_collect[idx][port_name] = port_activity[0].SS
-                    SS_comb_list.append(port_activity[0].SS)
+                    mem_updating_window_union_collect[idx][port_name] = port_activity[0].allowed_cycle
+                    stall_slack_comb_collect[idx][port_name] = port_activity[0].stall_or_slack
+                    stall_slack_comb_list.append(port_activity[0].stall_or_slack)
                 elif len(port_activity) != 0:
-                    MUW_union_collect[idx][port_name] = self.__calc_MUW_union(port_activity)
-                    SS_positive_sum = 0
-                    SS_negative_sum = 0
-                    MUW_sum = 0
+                    mem_updating_window_union_collect[idx][port_name] = self.__calc_mem_updating_window_union(
+                        port_activity
+                    )
+                    stall_slack_positive_sum = 0
+                    stall_slack_negative_sum = 0
+                    mem_updating_window_sum = 0
                     for port_d in port_activity:
-                        if port_d.SS > 0:
-                            SS_positive_sum += port_d.SS
+                        if port_d.stall_or_slack > 0:
+                            stall_slack_positive_sum += port_d.stall_or_slack
                         else:
-                            SS_negative_sum += port_d.SS
-                        MUW_sum += port_d.MUW
-                    SS_comb = SS_positive_sum + max(0, SS_negative_sum + MUW_sum - MUW_union_collect[idx][port_name])
-                    SS_comb_collect[idx][port_name] = SS_comb
-                    SS_comb_list.append(SS_comb)
+                            stall_slack_negative_sum += port_d.stall_or_slack
+                        mem_updating_window_sum += port_d.mem_updating_window
+                    stall_slack_comb = stall_slack_positive_sum + max(
+                        0,
+                        stall_slack_negative_sum
+                        + mem_updating_window_sum
+                        - mem_updating_window_union_collect[idx][port_name],
+                    )
+                    stall_slack_comb_collect[idx][port_name] = stall_slack_comb
+                    stall_slack_comb_list.append(stall_slack_comb)
 
-        self.MUW_union_collect = MUW_union_collect
-        self.SS_comb_collect = SS_comb_collect
+        self.mem_updating_window_union_collect = mem_updating_window_union_collect
+        self.stall_slack_comb_collect = stall_slack_comb_collect
         # Assuming all the memory ports can work in parallel
-        self.SS_comb = max(SS_comb_list)
+        self.stall_slack_comb = max(stall_slack_comb_list)
 
     def calc_data_loading_offloading_latency(self):
         """! Calculate the initial/final data loading/off-loading cycle by separating out
@@ -989,7 +993,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.RD_OUT_TO_LOW)
                 ]
                 completely_shared = elem1[1] and elem2[1]
-                completely_separate = not (elem1[1]) and not (elem2[1])
+                completely_separate = not elem1[1] and not elem2[1]
                 longest_loading_cc = max(elem1[0], elem2[0])
                 # for the ports that serve the same data movement purpose, take the longest data loading cycle
                 data_loading_cc_pair_combined = longest_loading_cc
@@ -1043,8 +1047,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
     def calc_overall_latency(self, cycles_per_mac: float = 1) -> None:
         """! This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the
-        overall latency"""
-        # @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
+        overall latency
+        @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)"""
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = int(
             ceil(
@@ -1058,15 +1062,17 @@ class CostModelEvaluation(CostModelEvaluationABC):
         mac_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 
         # Total latency without the initial data loading and the final data off-loading
-        latency_total0 = ideal_temporal_cycle + self.SS_comb
+        latency_total0 = ideal_temporal_cycle + self.stall_slack_comb
         mac_utilization0 = ideal_cycle / latency_total0
 
         # Total latency with the initial data loading, but without the final data off-loading
-        latency_total1 = ideal_temporal_cycle + self.SS_comb + self.data_loading_cycle
+        latency_total1 = ideal_temporal_cycle + self.stall_slack_comb + self.data_loading_cycle
         mac_utilization1 = ideal_cycle / latency_total1
 
         # Total latency with both the initial data loading and the final data off-loading
-        latency_total2 = ideal_temporal_cycle + self.SS_comb + self.data_loading_cycle + self.data_offloading_cycle
+        latency_total2 = (
+            ideal_temporal_cycle + self.stall_slack_comb + self.data_loading_cycle + self.data_offloading_cycle
+        )
         mac_utilization2 = ideal_cycle / latency_total2
 
         self.ideal_cycle = ideal_cycle
