@@ -43,7 +43,11 @@ def get_mem_energy_single_op(cme: CostModelEvaluation, op: LayerOperand, mem_lev
     return cme.mem_energy_breakdown_further[op][mem_level]
 
 
-def get_energy_array(cmes: list[CostModelEvaluation], all_ops: list[LayerOperand], all_mems: list[MemoryInstance]):
+def get_energy_array(
+    cmes: list[CostModelEvaluation],
+    all_ops: list[LayerOperand],
+    all_mems: list[MemoryInstance],
+):
     """Convert the given list of cmes to a numpy array with the energy per layer, memory level, operand and data
     direction. Output shape: (cmes, all_mems, all_ops, data_directions)"""
 
@@ -94,7 +98,6 @@ def get_latency_array(cmes: list[CostModelEvaluation]):
 
 
 def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC], save_path: str):
-
     # Input-specific
     cmes_to_plot: list[CostModelEvaluation] = [cme for cme in cmes if isinstance(cme, CostModelEvaluation)]
     mem_hierarchy = cmes_to_plot[0].accelerator.get_core(cmes_to_plot[0].layer.core_allocation[0]).memory_hierarchy
@@ -107,11 +110,22 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
     bars_energy = ["MAC"] + [mem.name for mem in all_mems]
     sections_energy = [op.name for op in all_ops]
     subsections_energy = [str(dir) for dir in DataDirection]
-    sections_latency = ["Ideal computation", "Spatial stall", "Temporal stall", "Data loading", "Data off-loading"]
+    sections_latency = [
+        "Ideal computation",
+        "Spatial stall",
+        "Temporal stall",
+        "Data loading",
+        "Data off-loading",
+    ]
 
     # Gather data
     energy_data = get_energy_array(cmes_to_plot, all_ops, all_mems)
-    assert energy_data.shape == (len(groups), len(bars_energy), len(sections_energy), len(subsections_energy))
+    assert energy_data.shape == (
+        len(groups),
+        len(bars_energy),
+        len(sections_energy),
+        len(subsections_energy),
+    )
     latency_data = get_latency_array(cmes_to_plot)
     assert latency_data.shape == (len(groups), len(sections_latency))
 
@@ -168,7 +182,15 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
 
     # Labels for hatches with white background
     for idx, direction in enumerate(DataDirection):
-        ax1.bar([0], [0], width=1, bottom=0, facecolor=(1, 1, 1), hatch=hatches[idx], label=str(direction))
+        ax1.bar(
+            [0],
+            [0],
+            width=1,
+            bottom=0,
+            facecolor=(1, 1, 1),
+            hatch=hatches[idx],
+            label=str(direction),
+        )
 
     # Plot latency
     bottom = np.zeros(len(groups))

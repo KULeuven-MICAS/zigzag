@@ -42,7 +42,6 @@ class CactiParser:
 
         if memory_pool is not None:
             for instance in memory_pool:
-
                 io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 ex_rd_port = int(memory_pool[instance]["ex_rd_port"])
                 ex_wr_port = int(memory_pool[instance]["ex_wr_port"])
@@ -133,7 +132,12 @@ class CactiParser:
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
-        logger.info("Extracting memory costs with CACTI for %s with size = %i and r_bw = %i.", mem_name, size, r_bw)
+        logger.info(
+            "Extracting memory costs with CACTI for %s with size = %i and r_bw = %i.",
+            mem_name,
+            size,
+            r_bw,
+        )
 
         if mem_type == "rf":
             new_mem_type = "sram"
@@ -181,7 +185,6 @@ class CactiParser:
 
         if memory_pool is not None:
             for instance in memory_pool:
-
                 io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 area = memory_pool[instance]["area"]
                 bank_count = int(memory_pool[instance]["bank_count"])

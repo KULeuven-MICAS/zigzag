@@ -5,7 +5,14 @@ import copy
 from typing import Any, Generator
 from sympy import divisors, primefactors  # type: ignore
 
-from zigzag.datatypes import MemoryOperand, OADimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
+from zigzag.datatypes import (
+    MemoryOperand,
+    OADimension,
+    LayerDim,
+    LayerOperand,
+    UnrollFactorInt,
+    UnrollFactor,
+)
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.Core import Core
@@ -138,7 +145,9 @@ class SpatialMappingGeneratorStage(Stage):
         # For each OADimension to fill, create a generator of MappingSingleOADim candidates
         mappings_per_oa_dim: list[Generator[MappingSingleOADim, None, None]] = [
             self.generate_spatial_mapping_single_oa_dim(
-                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], self.oa_dim_sizes[oa_dim]
+                self.spatial_mapping_hint[oa_dim],
+                max_unrollings[oa_dim],
+                self.oa_dim_sizes[oa_dim],
             )
             for oa_dim in oa_dims_to_fill
         ]
@@ -156,7 +165,11 @@ class SpatialMappingGeneratorStage(Stage):
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
 
         # Sort according to expected performance
-        candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
+        candidate_mappings = sorted(
+            candidate_mappings,
+            key=lambda x: x.get_performance_indicator(),
+            reverse=True,
+        )
 
         # Limit the number of mappings generated
         for i in range(min(self.nb_mappings_generated, len(candidate_mappings))):
@@ -534,7 +547,9 @@ class SpatialMappingGeneratorStage(Stage):
         return list(filter(lambda x: 1 < x <= n, divisors(n)))
 
     @staticmethod
-    def identify_layer_operand_representation(layer: LayerNode) -> tuple[LayerOperand | None, LayerOperand | None]:
+    def identify_layer_operand_representation(
+        layer: LayerNode,
+    ) -> tuple[LayerOperand | None, LayerOperand | None]:
         """
         # TODO requires documentation
         """
@@ -620,7 +635,12 @@ class SpatialMappingGeneratorStage(Stage):
                 prev_size = memory_instance.size
                 new_size = memory_instance.size * mem_scaling_factor
                 memory_instance.update_size(new_size)
-                logger.info("Updated %s size from %i to %i", memory_instance, prev_size, new_size)
+                logger.info(
+                    "Updated %s size from %i to %i",
+                    memory_instance,
+                    prev_size,
+                    new_size,
+                )
             operands = tuple(memory_level.operands)
             port_alloc = memory_level.port_alloc_raw
             served_dimensions_vec = memory_level.served_dimensions_vec

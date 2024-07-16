@@ -217,14 +217,15 @@ class ImcUnit(OperationalArrayABC):
                 mapped_rows_for_adder_per_macro = mapped_rows_total_per_macro
             else:
                 spatial_mapping_on_wordline_dim: MappingSingleOADim = spatial_mapping[wl_dim]
-                mapped_rows_total_per_macro, mapped_rows_for_adder_per_macro = (
-                    ImcUnit.calculate_mapped_rows_when_diagonal_mapping_found(
-                        layer,
-                        layer_const_operand,
-                        layer_act_operand,
-                        spatial_mapping_on_wordline_dim,
-                        spatial_mapping_on_bitline_dim,
-                    )
+                (
+                    mapped_rows_total_per_macro,
+                    mapped_rows_for_adder_per_macro,
+                ) = ImcUnit.calculate_mapped_rows_when_diagonal_mapping_found(
+                    layer,
+                    layer_const_operand,
+                    layer_act_operand,
+                    spatial_mapping_on_wordline_dim,
+                    spatial_mapping_on_bitline_dim,
                 )
         else:  # there is no sm loop on bl_dim
             mapped_rows_total_per_macro = 1

@@ -29,88 +29,81 @@
  *
  ***************************************************************************/
 
-
-
 #ifndef __UCA_H__
 #define __UCA_H__
 
 #include "area.h"
 #include "bank.h"
-#include "component.h"
-#include "parameter.h"
-#include "htree2.h"
-#include "memorybus.h"
 #include "basic_circuit.h"
 #include "cacti_interface.h"
+#include "component.h"
+#include "htree2.h"
+#include "memorybus.h"
+#include "parameter.h"
 
+class UCA : public Component {
+public:
+  UCA(const DynamicParameter &dyn_p);
+  ~UCA();
+  double compute_delays(double inrisetime); // returns outrisetime
+  void compute_power_energy();
 
+  DynamicParameter dp;
+  Bank bank;
 
-class UCA : public Component
-{
-  public:
-    UCA(const DynamicParameter & dyn_p);
-    ~UCA();
-    double compute_delays(double inrisetime);  // returns outrisetime
-    void   compute_power_energy();
+  Htree2 *htree_in_add;
+  Htree2 *htree_in_data;
+  Htree2 *htree_out_data;
+  Htree2 *htree_in_search;
+  Htree2 *htree_out_search;
 
-    DynamicParameter dp;
-    Bank   bank;
+  Memorybus *membus_RAS;
+  Memorybus *membus_CAS;
+  Memorybus *membus_data;
 
-    Htree2   * htree_in_add;
-    Htree2   * htree_in_data;
-    Htree2   * htree_out_data;
-    Htree2   * htree_in_search;
-    Htree2   * htree_out_search;
+  powerDef power_routing_to_bank;
 
-    Memorybus * membus_RAS;
-    Memorybus * membus_CAS;
-    Memorybus * membus_data;
+  uint32_t nbanks;
 
-    powerDef power_routing_to_bank;
+  int num_addr_b_bank;
+  int num_di_b_bank;
+  int num_do_b_bank;
+  int num_si_b_bank;
+  int num_so_b_bank;
+  int RWP, ERP, EWP, SCHP;
+  double area_all_dataramcells;
+  double total_area_per_die;
 
-    uint32_t nbanks;
+  double dyn_read_energy_from_closed_page;
+  double dyn_read_energy_from_open_page;
+  double dyn_read_energy_remaining_words_in_burst;
 
-    int   num_addr_b_bank;
-    int   num_di_b_bank;
-    int   num_do_b_bank;
-    int   num_si_b_bank;
-    int   num_so_b_bank;
-    int   RWP, ERP, EWP,SCHP;
-    double area_all_dataramcells;
-    double total_area_per_die;
+  double refresh_power; // only for DRAM
+  double activate_energy;
+  double read_energy;
+  double write_energy;
+  double precharge_energy;
+  double leak_power_subbank_closed_page;
+  double leak_power_subbank_open_page;
+  double leak_power_request_and_reply_networks;
 
-    double dyn_read_energy_from_closed_page;
-    double dyn_read_energy_from_open_page;
-    double dyn_read_energy_remaining_words_in_burst;
+  double delay_array_to_sa_mux_lev_1_decoder;
+  double delay_array_to_sa_mux_lev_2_decoder;
+  double delay_before_subarray_output_driver;
+  double delay_from_subarray_out_drv_to_out;
+  double access_time;
+  double precharge_delay;
+  double multisubbank_interleave_cycle_time;
 
-    double refresh_power;  // only for DRAM
-    double activate_energy;
-    double read_energy;
-    double write_energy;
-    double precharge_energy;
-    double leak_power_subbank_closed_page;
-    double leak_power_subbank_open_page;
-    double leak_power_request_and_reply_networks;
+  double t_RAS, t_CAS, t_RCD, t_RC, t_RP, t_RRD;
+  double activate_power, read_power, write_power;
 
-    double delay_array_to_sa_mux_lev_1_decoder;
-    double delay_array_to_sa_mux_lev_2_decoder;
-    double delay_before_subarray_output_driver;
-    double delay_from_subarray_out_drv_to_out;
-    double access_time;
-    double precharge_delay;
-    double multisubbank_interleave_cycle_time;
-
-    double t_RAS, t_CAS, t_RCD, t_RC, t_RP, t_RRD;
-    double activate_power, read_power, write_power;
-
-	double delay_TSV_tot, area_TSV_tot, dyn_pow_TSV_tot, dyn_pow_TSV_per_access;
-	unsigned int num_TSV_tot;
-	unsigned int comm_bits, row_add_bits, col_add_bits, data_bits;
-	double area_lwl_drv, area_row_predec_dec, area_col_predec_dec,
-	area_subarray, area_bus, area_address_bus, area_data_bus, area_data_drv, area_IOSA, area_sense_amp,
-	area_per_bank;
-
+  double delay_TSV_tot, area_TSV_tot, dyn_pow_TSV_tot, dyn_pow_TSV_per_access;
+  unsigned int num_TSV_tot;
+  unsigned int comm_bits, row_add_bits, col_add_bits, data_bits;
+  double area_lwl_drv, area_row_predec_dec, area_col_predec_dec, area_subarray,
+      area_bus, area_address_bus, area_data_bus, area_data_drv, area_IOSA,
+      area_sense_amp, area_per_bank;
 };
 
 #endif
-

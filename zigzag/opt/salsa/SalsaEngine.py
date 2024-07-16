@@ -125,7 +125,6 @@ class SalsaEngine:
         )
 
         for it in range(self.iteration_number):
-
             temperature = self.start_temperature * (0.995**it)
 
             # Get the index of the loop to swap
@@ -184,7 +183,10 @@ class SalsaEngine:
 
         self.temporal_mapping_lpf = []
 
-        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
+        for (
+            tl_dim,
+            tl_size,
+        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
             factors = factorint(tl_size)
             pfs = []
             counts = []

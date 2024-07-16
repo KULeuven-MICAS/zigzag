@@ -116,7 +116,10 @@ class LomaEngine:
         # TODO clean up (and make use of `LayerDimSizes` methods)
         """
         layer_dim_sizes = self.layer.layer_dim_sizes.copy()  # init with all loop sizes
-        for spatial_loop_dim, spatial_loop_size in self.spatial_mapping.spatial_loop_dim_size:
+        for (
+            spatial_loop_dim,
+            spatial_loop_size,
+        ) in self.spatial_mapping.spatial_loop_dim_size:
             try:
                 # Allow greedy mapping. If the spatial unrolling is not a multiple of the layer dimension size,
                 # we take the ceil of the division, so there can be one extra temporal iteration.
@@ -159,7 +162,10 @@ class LomaEngine:
         temporal_loop_pf_counts: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_count_sums: dict[LayerDim, int] = {}
         lpfs = []
-        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
+        for (
+            tl_dim,
+            tl_size,
+        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
             factors: dict[int, int] = factorint(tl_size)
             pfs = []
             counts = []
@@ -201,7 +207,10 @@ class LomaEngine:
             for nb_duplicated_pf in nb_duplicated_pfs:
                 nb_permutations = int(nb_permutations / factorial(nb_duplicated_pf))
         self.nb_permutations = nb_permutations
-        logger.debug("Launching %s temporal loop order permutations.", f"{self.nb_permutations:,}")
+        logger.debug(
+            "Launching %s temporal loop order permutations.",
+            f"{self.nb_permutations:,}",
+        )
 
     def limit_lpfs(self) -> None:
         """! Function to limit the total number of loop prime factors present in this instance.

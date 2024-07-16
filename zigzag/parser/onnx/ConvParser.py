@@ -100,7 +100,6 @@ class ConvParser(ONNXOperatorParser):
         return data
 
     def generate_layer_node_for_conv(self):
-
         attrs = self.node.attribute
         kernel_shape: list[int] = get_attribute_ints_with_name("kernel_shape", attrs, default=None)  # type: ignore
         strides: list[int] = get_attribute_ints_with_name("strides", attrs, default=[1, 1])  # type: ignore

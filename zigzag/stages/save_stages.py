@@ -4,7 +4,11 @@ import pickle
 import json
 import logging
 
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
+from zigzag.cost_model.cost_model import (
+    CostModelEvaluation,
+    CostModelEvaluationABC,
+    CumulativeCME,
+)
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.utils import json_repr_handler
 
@@ -110,7 +114,13 @@ class SimpleSaveStage(Stage):
 class PickleSaveStage(Stage):
     """! Class that dumps all received CMEs into a list and saves that list to a pickle file."""
 
-    def __init__(self, list_of_callables: list[StageCallable], *, pickle_filename: str, **kwargs: Any):
+    def __init__(
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        pickle_filename: str,
+        **kwargs: Any,
+    ):
         """
         @param list_of_callables: see Stage
         @param pickle_filename: output pickle filename

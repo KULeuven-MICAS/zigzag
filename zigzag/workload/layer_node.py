@@ -66,7 +66,10 @@ class LoopRelevancyInfo:
 
     @staticmethod
     def extract_relevancy_info(
-        equation: LayerEquation, layer_dim_sizes: LayerDimSizes, pr_loop: PrLoop, pr_loop_list: LoopList
+        equation: LayerEquation,
+        layer_dim_sizes: LayerDimSizes,
+        pr_loop: PrLoop,
+        pr_loop_list: LoopList,
     ) -> "LoopRelevancyInfo":
         """!
         # TODO requires cleanup and documentation
@@ -212,7 +215,11 @@ class LayerNode(LayerNodeABC):
         # TODO requires documentation
         """
         if len(self.dimension_relations) > 0:
-            pr_loop, pr_loop_list, pr_scaling_factors = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
+            (
+                pr_loop,
+                pr_loop_list,
+                pr_scaling_factors,
+            ) = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 

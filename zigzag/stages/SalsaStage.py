@@ -85,7 +85,6 @@ class SalsaStage(Stage):
 
     ## Set up and start salsa engine, then collect and return the best cost model evaluation
     def run(self):
-
         logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
 
         self.engine = SalsaEngine(
