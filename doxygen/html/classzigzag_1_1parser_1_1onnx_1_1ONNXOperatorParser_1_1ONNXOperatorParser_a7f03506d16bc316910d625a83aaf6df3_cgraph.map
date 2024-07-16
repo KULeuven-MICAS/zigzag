@@ -1,4 +1,0 @@
-<map id="get_layer_node_user_format_gemm" name="get_layer_node_user_format_gemm">
-<area shape="rect" id="node1" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="5,5,163,47"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="211,13,385,39"/>
-</map>

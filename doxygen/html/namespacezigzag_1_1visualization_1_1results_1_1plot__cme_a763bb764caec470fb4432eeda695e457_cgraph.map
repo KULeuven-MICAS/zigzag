@@ -1,0 +1,5 @@
+<map id="bar_plot_cost_model_evaluations_breakdown" name="bar_plot_cost_model_evaluations_breakdown">
+<area shape="rect" id="node1" title=" " alt="" coords="5,23,189,65"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a224fa62723511d36c3f9d409b008e0d4" title="Convert the given list of cmes to a numpy array with the energy per layer, memory level,..." alt="" coords="239,5,375,32"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a8694f4e26688d01de907ef8d462fe7be" title=" " alt="" coords="237,56,376,83"/>
+</map>

@@ -1,8 +1,0 @@
-<map id="get_layer_node_user_format_gemm" name="get_layer_node_user_format_gemm">
-<area shape="rect" id="node1" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="828,43,985,84"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,5,780,47"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="549,71,764,127"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,9,485,51"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="269,75,467,116"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,43,203,84"/>
-</map>

@@ -1,14 +1,14 @@
 var searchData=
 [
-  ['oadimension_1022',['OADimension',['../classzigzag_1_1datatypes_1_1OADimension.html',1,'zigzag::datatypes']]],
-  ['onnxmodelparser_1023',['ONNXModelParser',['../classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser.html',1,'zigzag::parser::onnx::ONNXModelParser']]],
-  ['onnxmodelparserstage_1024',['ONNXModelParserStage',['../classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html',1,'zigzag::stages::ONNXModelParserStage']]],
-  ['onnxoperatorparser_1025',['ONNXOperatorParser',['../classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html',1,'zigzag::parser::onnx::ONNXOperatorParser']]],
-  ['onnxtensorcategory_1026',['OnnxTensorCategory',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html',1,'zigzag::parser::onnx::utils']]],
-  ['onnxtensortype_1027',['OnnxTensorType',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html',1,'zigzag::parser::onnx::utils']]],
-  ['onnxworkload_1028',['ONNXWorkload',['../classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html',1,'zigzag::workload::ONNXWorkload']]],
-  ['operandabc_1029',['OperandABC',['../classzigzag_1_1datatypes_1_1OperandABC.html',1,'zigzag::datatypes']]],
-  ['operationalarray_1030',['OperationalArray',['../classarchitecture_1_1operational__array_1_1OperationalArray.html',1,'architecture::operational_array']]],
-  ['operationalarrayabc_1031',['OperationalArrayABC',['../classarchitecture_1_1operational__array_1_1OperationalArrayABC.html',1,'architecture::operational_array']]],
-  ['operationalunit_1032',['OperationalUnit',['../classarchitecture_1_1operational__unit_1_1OperationalUnit.html',1,'architecture::operational_unit']]]
+  ['oadimension_1031',['OADimension',['../classzigzag_1_1datatypes_1_1OADimension.html',1,'zigzag::datatypes']]],
+  ['onnxmodelparser_1032',['ONNXModelParser',['../classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser.html',1,'zigzag::parser::onnx::ONNXModelParser']]],
+  ['onnxmodelparserstage_1033',['ONNXModelParserStage',['../classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html',1,'zigzag::stages::ONNXModelParserStage']]],
+  ['onnxoperatorparser_1034',['ONNXOperatorParser',['../classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html',1,'zigzag::parser::onnx::ONNXOperatorParser']]],
+  ['onnxtensorcategory_1035',['OnnxTensorCategory',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html',1,'zigzag::parser::onnx::utils']]],
+  ['onnxtensortype_1036',['OnnxTensorType',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html',1,'zigzag::parser::onnx::utils']]],
+  ['onnxworkload_1037',['ONNXWorkload',['../classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html',1,'zigzag::workload::ONNXWorkload']]],
+  ['operandabc_1038',['OperandABC',['../classzigzag_1_1datatypes_1_1OperandABC.html',1,'zigzag::datatypes']]],
+  ['operationalarray_1039',['OperationalArray',['../classarchitecture_1_1operational__array_1_1OperationalArray.html',1,'architecture::operational_array']]],
+  ['operationalarrayabc_1040',['OperationalArrayABC',['../classarchitecture_1_1operational__array_1_1OperationalArrayABC.html',1,'architecture::operational_array']]],
+  ['operationalunit_1041',['OperationalUnit',['../classarchitecture_1_1operational__unit_1_1OperationalUnit.html',1,'architecture::operational_unit']]]
 ];
