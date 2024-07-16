@@ -11,7 +11,7 @@ def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))
         return copy
-    except:
+    except:  # noqa: E722
         return deepcopy(to_copy)
 
 
