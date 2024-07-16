@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 import logging
 from math import ceil
+from typing import Any
 import numpy as np
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
@@ -378,7 +379,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # TODO clean up
         """
 
-        input_dict: dict[str, dict[str, int | float]] = {}
+        input_dict: dict[str, dict[str, int]] = {}
         # As long as one of the port duty can make use of the whole computation time, the MUW union is
         # set to the whole computation time
         for port_duty in port_duty_list:
@@ -386,9 +387,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 return port_duty.period * port_duty.period_count
             key = str(port_duty.served_op_lv_dir)
             input_dict[key] = {
-                "P": port_duty.period,
-                "A": port_duty.allowed_cycle,
-                "PC": port_duty.period_count,
+                "P": int(port_duty.period),
+                "A": int(port_duty.allowed_cycle),
+                "PC": int(port_duty.period_count),
             }
 
         max_period = 0
@@ -398,10 +399,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 max_period = values["P"]
                 max_period_operand = op
 
-        indicators: np.ndarray = np.zeros((len(input_dict), max_period), dtype=np.int8)
+        indicators: np.ndarray[Any, Any] = np.zeros((len(input_dict), max_period))
         for i, op in enumerate(input_dict):
             # reshape to period of this operand
-            indicators_reshape: np.ndarray = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
+            indicators_reshape: np.ndarray[Any, Any] = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
             # fill in first few time units as used
             indicators_reshape[i, :, : input_dict[op]["A"]] = 1
 
