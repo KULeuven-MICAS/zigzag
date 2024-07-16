@@ -125,31 +125,59 @@ class DataMovePattern:
     ):
         self.data_elem_move_count = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
-    def set_data_precision(self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int):
+    def set_data_precision(
+        self,
+        rd_out_to_low: int,
+        wr_in_by_low: int,
+        rd_out_to_high: int,
+        wr_in_by_high: int,
+    ):
         self.data_precision = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def set_req_mem_bw_aver(
-        self, rd_out_to_low: float, wr_in_by_low: float, rd_out_to_high: float, wr_in_by_high: float
+        self,
+        rd_out_to_low: float,
+        wr_in_by_low: float,
+        rd_out_to_high: float,
+        wr_in_by_high: float,
     ):
         self.req_mem_bw_aver = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def set_req_mem_bw_inst(
-        self, rd_out_to_low: float, wr_in_by_low: float, rd_out_to_high: float, wr_in_by_high: float
+        self,
+        rd_out_to_low: float,
+        wr_in_by_low: float,
+        rd_out_to_high: float,
+        wr_in_by_high: float,
     ):
         self.req_mem_bw_inst = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
-    def set_data_trans_period(self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int):
+    def set_data_trans_period(
+        self,
+        rd_out_to_low: int,
+        wr_in_by_low: int,
+        rd_out_to_high: int,
+        wr_in_by_high: int,
+    ):
         # data_trans_period: every how many cycle, the memory link need to be activated for a certain duration
         self.data_trans_period = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def set_data_trans_period_count(
-        self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int
+        self,
+        rd_out_to_low: int,
+        wr_in_by_low: int,
+        rd_out_to_high: int,
+        wr_in_by_high: int,
     ):
         # data_trans_period_count: to finish all the for-loop computation, how many such ideal_period is required
         self.data_trans_period_count = FourWayDataMoving(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
 
     def set_data_trans_amount_per_period(
-        self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int
+        self,
+        rd_out_to_low: int,
+        wr_in_by_low: int,
+        rd_out_to_high: int,
+        wr_in_by_high: int,
     ):
         # data_trans_amount_per_period: data amount that being transferred for each single period
         self.data_trans_amount_per_period = FourWayDataMoving(
@@ -157,7 +185,11 @@ class DataMovePattern:
         )
 
     def set_inst_data_trans_window(
-        self, rd_out_to_low: int, wr_in_by_low: int, rd_out_to_high: int, wr_in_by_high: int
+        self,
+        rd_out_to_low: int,
+        wr_in_by_low: int,
+        rd_out_to_high: int,
+        wr_in_by_high: int,
     ):
         # inst_data_trans_window: the allowed memory updating window, assuming the served memory level
         # is non-double buffered (thus need to avoid the data overwriting issue

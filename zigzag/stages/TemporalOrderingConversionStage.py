@@ -19,7 +19,6 @@ logger = logging.getLogger(__name__)
 
 
 class TemporalOrderingConversionStage(Stage):
-
     def __init__(
         self,
         list_of_callables: list[StageCallable],
@@ -58,7 +57,9 @@ class TemporalOrderingConversionStage(Stage):
         for i, utm in list(enumerate(user_temporal_mapping.data))[::-1]:
             if utm[0] not in layer_dim_sizes.layer_dims:
                 logger.warning(
-                    f"Supplied temporal ordering {utm} for layer {layer} thrown out because loop not present in the layer"
+                    "Supplied temporal ordering %s for layer %s thrown out " "because loop not present in the layer",
+                    utm,
+                    layer,
                 )
                 del user_temporal_mapping[i]
 

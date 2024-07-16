@@ -9,4 +9,4 @@ pyyaml
 pytest
 typeguard
 cerberus
-ruff
+pre-commit

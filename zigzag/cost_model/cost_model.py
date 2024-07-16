@@ -223,7 +223,9 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
                     "layer": (
                         self.layer
                         if isinstance(self, CostModelEvaluation)
-                        else self.layer_ids if isinstance(self, CumulativeCME) else None
+                        else self.layer_ids
+                        if isinstance(self, CumulativeCME)
+                        else None
                     ),
                     "spatial_mapping": (self.spatial_mapping_int if isinstance(self, CostModelEvaluation) else None),
                     "temporal_mapping": (self.temporal_mapping if isinstance(self, CostModelEvaluation) else None),
@@ -1048,7 +1050,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
     def calc_overall_latency(self, cycles_per_mac: float = 1) -> None:
         """! This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the
         overall latency
-        @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)"""
+        @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
+        """
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = int(
             ceil(

@@ -3,7 +3,6 @@ from typing import Any
 
 
 class CactiConfig:
-
     def __init__(self):
         # content = f.readlines()
         self.baseline_config = [

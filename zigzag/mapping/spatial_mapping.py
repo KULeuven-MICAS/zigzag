@@ -116,7 +116,6 @@ class SpatialMapping(LayerAttribute):
         assert all(given_oa_dim in self for given_oa_dim in self.oa_dim_sizes), "SpatialMapping misses OADimension"
 
         for oa_dim in self.oa_dims:
-
             for layer_dim, unrolling in self[oa_dim].items():
                 # 4)
                 if layer_dim not in max_unrollings[oa_dim]:
@@ -317,7 +316,8 @@ class SpatialMappingHint(LayerAttribute):
 
     def clear_invalid_hits(self, valid_layer_dims: list[LayerDim]):
         """Check the hints at all contained OADimension. If the OADimension doesn't contain a single LayerDim that is
-        also present in the given list `valid_layer_dims`, remove the OADimension from this instance."""
+        also present in the given list `valid_layer_dims`, remove the OADimension from this instance.
+        """
         invalid_oa_dims: list[OADimension] = []
         for oa_dim, hints in self.data.items():
             if not any([layer_dim in valid_layer_dims for layer_dim in hints]):

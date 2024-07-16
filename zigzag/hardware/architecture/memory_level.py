@@ -3,7 +3,11 @@ import math
 
 from zigzag.datatypes import OADimension, MemoryOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType, PortAllocation
+from zigzag.hardware.architecture.memory_port import (
+    MemoryPort,
+    MemoryPortType,
+    PortAllocation,
+)
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 
 
@@ -59,7 +63,6 @@ class ServedMemDimensions:
 
 
 class MemoryLevel:
-
     def __init__(
         self,
         memory_instance: MemoryInstance,

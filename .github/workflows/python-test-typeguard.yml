@@ -1,38 +1,20 @@
 name: Python test typeguard
-
-# Controls when the workflow will run
 on: [push]
 
 jobs:
-  build:
-
+  test-typeguard:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: ["3.11",]
-
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python '3.11'
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+          python-version: '3.11'
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           # install the current zigzag-dse
           pip install .[dev]
-      # - name: Lint with ruff
-      #   run: |
-      #     # stop the build if there are Python syntax errors or undefined names
-      #     ruff --format=github --select=E9,F63,F7,F82 --target-version=py37 .
-      - name: Lint with ruff
-        uses: chartboost/ruff-action@v1
-        with:
-          src: "./zigzag"
-          args: --select E9,F63,F7,F82
       - name: Test with pytest and typeguard
         run: |
           pip install pytest
