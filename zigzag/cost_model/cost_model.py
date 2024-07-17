@@ -9,7 +9,7 @@ from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.mapping.Mapping import Mapping
-from zigzag.mapping.data_movement import DataDirection, FourWayDataMoving
+from zigzag.mapping.data_movement import AccessEnergy, DataDirection, MemoryAccesses
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.workload.layer_node import LayerNode
@@ -25,8 +25,8 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
     def __init__(self) -> None:
         # Attributes that all subclasses should define
         self.mem_energy_breakdown: dict[LayerOperand, list[float]]
-        self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]]
-        self.memory_word_access: dict[LayerOperand, list[FourWayDataMoving]]
+        self.mem_energy_breakdown_further: dict[LayerOperand, list[AccessEnergy]]
+        self.memory_word_access: dict[LayerOperand, list[MemoryAccesses]]
         self.mac_energy: float
         self.mem_energy: float
         self.energy_total: float
@@ -67,7 +67,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         for layer_op, breakdown_this in self.mem_energy_breakdown_further.items():
             if layer_op in other.mem_energy_breakdown_further.keys():
                 breakdown_other = other.mem_energy_breakdown_further[layer_op]
-                list_temp2: list[FourWayDataMoving] = []
+                list_temp2: list[AccessEnergy] = []
                 breakdown_len = min(len(breakdown_this), len(breakdown_other))
                 for i in range(breakdown_len):
                     list_temp2.append(breakdown_this[i] + breakdown_other[i])
@@ -90,7 +90,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
             if layer_op in other.memory_word_access.keys():
                 accesses_other = other.memory_word_access[layer_op]
                 length = min(len(accesses_this), len(accesses_other))
-                list_temp3: list[FourWayDataMoving] = []
+                list_temp3: list[MemoryAccesses] = []
                 for i in range(length):
                     list_temp3.append(accesses_this[i] + accesses_other[i])
                 list_temp3 += accesses_this[length:]
@@ -142,7 +142,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
 
         return result
 
-    def __mul__(self, number: float):
+    def __mul__(self, number: int):
         result: "CostModelEvaluationABC" = pickle_deepcopy(self)
 
         # Energy
@@ -240,8 +240,8 @@ class CumulativeCME(CostModelEvaluationABC):
 
     def __init__(self):
         self.mem_energy_breakdown: dict[LayerOperand, list[float]] = dict()
-        self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = dict()
-        self.memory_word_access: dict[LayerOperand, list[FourWayDataMoving]] = dict()
+        self.mem_energy_breakdown_further: dict[LayerOperand, list[AccessEnergy]] = dict()
+        self.memory_word_access: dict[LayerOperand, list[MemoryAccesses]] = dict()
 
         self.layer_ids: list[int] = []
         self.core_ids: list[int] = []
@@ -366,7 +366,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             if mem_target in mem_share_grp:
                 return mem_share_grp
 
-    def __calc_mem_updating_window_union(self, port_duty_list: list[PortActivity]) -> int | float:
+    def __calc_mem_updating_window_union(self, port_duty_list: list[PortActivity]) -> int:
         """!  This function calculates the union length of all the share-port MUW (memory updating window).
         The following encoding has to be used:
         - 'P' for single period length
@@ -406,13 +406,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             # fill in first few time units as used
             indicators_reshape[i, :, : input_dict[op]["A"]] = 1
 
-        union = max_period - (~indicators.any(0)).sum(dtype=np.uint64)
-
-        # take sum across operands => how many operand need memory for every time unit
-        # Subtract 1 => number of stalls
-        # Clip by 0 (-1 is not -1 stall)
-        # Sum across time units (only remaining axis)
-        # stall = (indicators.sum(0, dtype=np.int8) - 1).clip(min=0).sum()
+        union = max_period - int((~indicators.any(axis=0)).sum())
 
         # Multiply with number of periods of largest period (as it was normalized to largest period)
         return union * input_dict[max_period_operand]["PC"]
@@ -421,11 +415,11 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """! Calculate occupancy for each physical memory based on the mapping."""
         # mem_utili_individual: the memory utilization of each operand individually.
         # mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
-        mem_utili_individual: dict[LayerOperand, list[float]] = {}
-        effective_mem_utili_individual: dict[LayerOperand, list[float]] = {}
+        mem_utilization_individual: dict[LayerOperand, list[float]] = {}
+        effective_mem_utilization_individual: dict[LayerOperand, list[float]] = {}
         for layer_op in self.layer.layer_operands:
-            mem_utili_individual[layer_op] = []
-            effective_mem_utili_individual[layer_op] = []
+            mem_utilization_individual[layer_op] = []
+            effective_mem_utilization_individual[layer_op] = []
             for mem_lv in range(self.active_mem_level[layer_op]):
                 mem_utilization = (
                     self.mapping.data_bit_per_level_unrolled[layer_op][mem_lv + 1]
@@ -436,17 +430,19 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     f"{mem_utilization}, which is larger than 1 "
                     f"(memory level starts from 0)"
                 )
-                mem_utili_individual[layer_op].append(mem_utilization)
+                mem_utilization_individual[layer_op].append(mem_utilization)
 
                 # if we do not count copied data in parallel memories as effective, what is the utilization then? =>
                 effective_mem_utilization = (
                     self.mapping.effective_data_bit[layer_op][mem_lv + 1]
                     / self.mem_size_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
                 )
-                effective_mem_utili_individual[layer_op].append(effective_mem_utilization)
+                effective_mem_utilization_individual[layer_op].append(effective_mem_utilization)
 
-        mem_utili_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(mem_utili_individual)
-        effective_mem_utili_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(effective_mem_utili_individual)
+        mem_utili_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(mem_utilization_individual)
+        effective_mem_utilization_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(
+            effective_mem_utilization_individual
+        )
         for mem_share_dict in self.mem_sharing_list:
             mem_utilization = 0
             effective_mem_utilization = 0
@@ -454,8 +450,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 # mem to layer op might not contain this mem op (e.g. pooling layer)
                 if self.memory_operand_links.contains_mem_op(mem_op):
                     layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                    mem_utilization += mem_utili_individual[layer_op][mem_lv]
-                    effective_mem_utilization += effective_mem_utili_individual[layer_op][mem_lv]
+                    mem_utilization += mem_utilization_individual[layer_op][mem_lv]
+                    effective_mem_utilization += effective_mem_utilization_individual[layer_op][mem_lv]
             assert mem_utilization <= 1, (
                 f"Memory shared by {mem_share_dict} (memory operand, memory level) has shared utilization of "
                 f"{mem_utilization}, which is > 1 "
@@ -465,17 +461,17 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 if self.memory_operand_links.contains_mem_op(mem_op):
                     layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
                     mem_utili_shared[layer_op][mem_lv] = mem_utilization
-                    effective_mem_utili_shared[layer_op][mem_lv] = effective_mem_utilization
+                    effective_mem_utilization_shared[layer_op][mem_lv] = effective_mem_utilization
 
-        self.mem_utili_individual = mem_utili_individual
+        self.mem_utili_individual = mem_utilization_individual
         self.mem_utili_shared = mem_utili_shared
-        self.effective_mem_utili_individual = effective_mem_utili_individual
-        self.effective_mem_utili_shared = effective_mem_utili_shared
+        self.effective_mem_utili_individual = effective_mem_utilization_individual
+        self.effective_mem_utili_shared = effective_mem_utilization_shared
 
     def calc_memory_word_access(self) -> None:
         """! Calculates the memory word access based on unit memory's data element move count and the physical
         memory bw."""
-        memory_word_access: dict[LayerOperand, list[FourWayDataMoving]] = {}
+        memory_word_access: dict[LayerOperand, list[MemoryAccesses]] = {}
         for layer_op in self.layer.layer_operands:
             memory_word_access[layer_op] = []
             for mem_lv in range(self.mapping.mem_level[layer_op]):
@@ -560,9 +556,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     )
 
                 # All
-                memory_word_access_single = FourWayDataMoving(
-                    rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
-                )
+                memory_word_access_single = MemoryAccesses(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
                 memory_word_access[layer_op].append(memory_word_access_single)
 
         self.memory_word_access = memory_word_access
@@ -596,7 +590,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         mem_hierarchy = core.memory_hierarchy
 
         mem_energy_breakdown: dict[LayerOperand, list[float]] = {}
-        mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = {}
+        mem_energy_breakdown_further: dict[LayerOperand, list[AccessEnergy]] = {}
         energy_total = 0
 
         # Retrieve the memory levels in the hierarchy for this memory operand
@@ -605,29 +599,21 @@ class CostModelEvaluation(CostModelEvaluationABC):
             memory_levels = mem_hierarchy.get_memory_levels(mem_op=mem_op)
 
             breakdown: list[float] = []  # Stores the energy breakdown of a single layer operand (W, I, ...)
-            breakdown_further: list[FourWayDataMoving] = []
+            breakdown_further: list[AccessEnergy] = []
             for access_count, memory_level in zip(mem_access_list_per_op, memory_levels):
                 energy_cost_per_read_out = memory_level.read_energy
                 energy_cost_per_write_in = memory_level.write_energy
-                read_out_energy_to_above: float = access_count.get_total_read_outs_to_above(
-                    scaling=energy_cost_per_read_out
-                )
-                write_in_energy_from_above: float = access_count.get_total_write_ins_from_above(
-                    scaling=energy_cost_per_write_in
-                )
-                read_out_energy_to_below: float = access_count.get_total_read_outs_to_below(
-                    scaling=energy_cost_per_read_out
-                )
-                write_in_energy_from_below: float = access_count.get_total_write_ins_from_below(
-                    scaling=energy_cost_per_write_in
-                )
+                read_out_energy_to_above = access_count.get_total_read_outs_to_above() * energy_cost_per_read_out
+                write_in_energy_from_above = access_count.get_total_write_ins_from_above() * energy_cost_per_write_in
+                read_out_energy_to_below = access_count.get_total_read_outs_to_below() * energy_cost_per_read_out
+                write_in_energy_from_below = access_count.get_total_write_ins_from_below() * energy_cost_per_write_in
                 total_read_out_energy = read_out_energy_to_above + read_out_energy_to_below
                 total_write_in_energy = write_in_energy_from_above + write_in_energy_from_below
                 total_energy_cost_memory = total_read_out_energy + total_write_in_energy
                 # Here the breakdown only saves the total energy cost per memory level
                 breakdown.append(total_energy_cost_memory)
                 breakdown_further.append(
-                    FourWayDataMoving(
+                    AccessEnergy(
                         read_out_energy_to_below,
                         write_in_energy_from_below,
                         read_out_energy_to_above,
@@ -637,8 +623,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 energy_total += total_energy_cost_memory
             mem_energy_breakdown[layer_op] = breakdown
             mem_energy_breakdown_further[layer_op] = breakdown_further
-        self.mem_energy_breakdown: dict[LayerOperand, list[float]] = mem_energy_breakdown
-        self.mem_energy_breakdown_further: dict[LayerOperand, list[FourWayDataMoving]] = mem_energy_breakdown_further
+        self.mem_energy_breakdown = mem_energy_breakdown
+        self.mem_energy_breakdown_further = mem_energy_breakdown_further
         self.mem_energy = energy_total
         self.energy_total: float = self.mem_energy + self.mac_energy
         logger.debug("Ran %s. Total energy = %f", self, self.energy_total)
@@ -706,8 +692,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         {allowed_mem_updating_cycle, real_data_trans_cycle, DTL_SS_cycle} per period
         # TODO cleanup
         """
-        allowed_mem_update_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
-        real_data_trans_cycle: dict[LayerOperand, list[FourWayDataMoving]] = dict()
+        allowed_mem_update_cycle: dict[LayerOperand, list[MemoryAccesses]] = {}
+        real_data_trans_cycle: dict[LayerOperand, list[MemoryAccesses]] = {}
 
         for layer_op in self.layer.layer_operands:
             allowed_mem_update_cycle[layer_op] = []
@@ -747,7 +733,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     ].inst_data_trans_window.rd_out_to_high
 
                 # All
-                updating_window = FourWayDataMoving(
+                updating_window = MemoryAccesses(
                     rd_out_to_low_allowed,
                     wr_in_by_low_allowed,
                     rd_out_to_high_allowed,
@@ -788,7 +774,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 wr_in_by_high_real = ceil(data_trans_amount * data_precision / mem_bw)
 
                 # All
-                real_data_trans = FourWayDataMoving(
+                real_data_trans = MemoryAccesses(
                     rd_out_to_low_real,
                     wr_in_by_low_real,
                     rd_out_to_high_real,
@@ -1089,7 +1075,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mac_utilization1 = mac_utilization1
         self.mac_utilization2 = mac_utilization2
 
-    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> FourWayDataMoving:
+    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> MemoryAccesses:
         """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
         required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
         requirements if the given memory instance is not included in this CME's memory hierarchy.
@@ -1102,7 +1088,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             if last_mem_level.memory_instance == memory_instance:
                 offchip_mem_operands.append(op)
         # Obtain the required instantaneous bandwidth to/from offchip for these operands
-        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        total_inst_bw = MemoryAccesses(0, 0, 0, 0)
         for mem_op in offchip_mem_operands:
             layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
             inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst

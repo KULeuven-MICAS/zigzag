@@ -129,13 +129,3 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     # Start recursive spatial loops printing
     indent = recursive_print(spatial_loops, loop_str="parfor", offset=indent, indent=False)
     print()
-
-
-if __name__ == "__main__":
-    # Example usage
-    import pickle
-
-    with open("zigzag/visualization/list_of_cmes.pickle", "rb") as fp:
-        cmes = pickle.load(fp)
-    cme = cmes[0]
-    print_mapping(cme)
