@@ -1,10 +1,7 @@
 var dir_d86cbffe911410f172dc41a7c44b656a =
 [
     [ "__init__.py", "mapping_2____init_____8py.html", null ],
-    [ "data_movement.py", "data__movement_8py.html", [
-      [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving" ],
-      [ "DataMovePattern", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern" ]
-    ] ],
+    [ "data_movement.py", "data__movement_8py.html", "data__movement_8py" ],
     [ "Mapping.py", "Mapping_8py.html", [
       [ "Mapping", "classzigzag_1_1mapping_1_1Mapping_1_1Mapping.html", "classzigzag_1_1mapping_1_1Mapping_1_1Mapping" ]
     ] ],
