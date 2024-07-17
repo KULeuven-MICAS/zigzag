@@ -7,10 +7,10 @@ class PortActivity:
 
     def __init__(
         self,
-        real_cycle: int | float,
-        allowed_cycle: int | float,
-        period: int | float,
-        period_count: int | float,
+        real_cycle: int,
+        allowed_cycle: int,
+        period: int,
+        period_count: int,
         layer_op: LayerOperand,
         mem_lv: int,
         mov_dir: DataDirection,

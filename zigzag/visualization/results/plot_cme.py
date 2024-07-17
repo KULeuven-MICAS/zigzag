@@ -7,7 +7,7 @@ from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluatio
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import DataDirection
-from zigzag.mapping.data_movement import FourWayDataMoving
+from zigzag.mapping.data_movement import AccessEnergy
 
 
 # MPL FONT SIZES
@@ -52,8 +52,8 @@ def get_energy_array(
     direction. Output shape: (cmes, all_mems, all_ops, data_directions)"""
 
     mem_hierarchy = cmes[0].accelerator.get_core(cmes[0].layer.core_allocation[0]).memory_hierarchy
-    access_energy: dict[int, defaultdict[LayerOperand, defaultdict[MemoryInstance, FourWayDataMoving]]] = {
-        idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
+    access_energy: dict[int, defaultdict[LayerOperand, defaultdict[MemoryInstance, AccessEnergy]]] = {
+        idx: defaultdict(lambda: defaultdict(lambda: AccessEnergy(0, 0, 0, 0))) for idx in range(len(cmes))
     }
 
     for cme_idx, cme in enumerate(cmes):
@@ -148,7 +148,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
         for j, section in enumerate(sections_energy):
             for k, _ in enumerate(subsections_energy):
                 heights = energy_data[:, i, j, k]
-                ax1.bar(
+                ax1.bar(  # type: ignore
                     positions,
                     heights,
                     BAR_WIDTH,
@@ -164,7 +164,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
     bar_max_vals = np.max(np.sum(energy_data, axis=(2, 3)), axis=1)
     total_energy_per_layer = np.sum(energy_data, axis=(1, 2, 3))
     for i, _ in enumerate(groups):
-        ax1.text(
+        ax1.text(  # type: ignore
             indices_midpoints[i],
             1.05 * bar_max_vals[i],
             f"tot:{total_energy_per_layer[i]:.2e}",
@@ -178,11 +178,11 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
         indices[i] + j * (BAR_WIDTH + BAR_SPACING) for i in range(len(groups)) for j in range(len(bars_energy))
     ]
     xtick_labels = len(groups) * bars_energy
-    ax1.set_xticks(xticks_positions, xtick_labels, rotation=90)
+    ax1.set_xticks(xticks_positions, xtick_labels, rotation=90)  # type: ignore
 
     # Labels for hatches with white background
     for idx, direction in enumerate(DataDirection):
-        ax1.bar(
+        ax1.bar(  # type: ignore
             [0],
             [0],
             width=1,
@@ -196,7 +196,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
     bottom = np.zeros(len(groups))
     for j, section in enumerate(sections_latency):
         heights = latency_data[:, j]
-        ax2.bar(
+        ax2.bar(  # type: ignore
             indices_midpoints,
             heights,
             0.8 * len(bars_energy) * BAR_WIDTH,
@@ -210,7 +210,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
     # Total latency value above bar
     total_latency_per_layer = np.sum(latency_data, axis=1)
     for i in range(len(groups)):
-        ax2.text(
+        ax2.text(  # type: ignore
             indices_midpoints[i],
             total_latency_per_layer[i] * 1.05,
             f"tot:{total_latency_per_layer[i]:.2e}",
@@ -220,15 +220,14 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
         )
 
     # Finish details
-    ax1.legend(ncol=1)
-    ax1.set_ylim(0, 1.1 * ax1.get_ylim()[1])
-    ax1.set_ylabel("Energy (pJ)", fontsize=15)
-
-    ax2.legend(ncol=1)
-    ax2.set_xticks(indices_midpoints, groups, rotation=0)
-    ax2.set_ylim(0, 1.1 * ax2.get_ylim()[1])
-    ax2.set_xlabel("Layers", fontsize=15)
-    ax2.set_ylabel("Latency (cycle)", fontsize=15)
+    ax1.legend(ncol=1)  # type: ignore
+    ax1.set_ylim(0, 1.1 * ax1.get_ylim()[1])  # type: ignore
+    ax1.set_ylabel("Energy (pJ)", fontsize=15)  # type: ignore
+    ax2.legend(ncol=1)  # type: ignore
+    ax2.set_xticks(indices_midpoints, groups, rotation=0)  # type: ignore
+    ax2.set_ylim(0, 1.1 * ax2.get_ylim()[1])  # type: ignore
+    ax2.set_xlabel("Layers", fontsize=15)  # type: ignore
+    ax2.set_ylabel("Latency (cycle)", fontsize=15)  # type: ignore
 
     fig.tight_layout()
     plt.savefig(save_path)  # type: ignore
