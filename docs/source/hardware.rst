@@ -1,12 +1,12 @@
 Hardware Architecture
 =====================
 
-In this section, we introduce the general concept of how HW accelerators are modeled within ZigZag and the different well-known accelerators we provide as examples. We start from the smallest building block defined in ZigZag and work our way up towards an accelerator.
+In this section, we introduce the general concept of how hardware accelerators are modeled within ZigZag and the different well-known accelerators we provide as examples. We start from the smallest building block defined in ZigZag and work our way up towards an accelerator.
 
 Operational Unit
 ----------------
 
-Accelerating inference of a NN requires the execution of multiplications and summations (accumulations) across multiple intermediate data (activations) using trained parameters (weights). The operational unit, typically a Multiplier, executes the multiplication of two data elements, typically an activation and a weight. 
+Accelerating inference of a neural network requires the execution of multiplications and summations (accumulations) across multiple intermediate data (activations) using trained parameters (weights). The operational unit, typically a Multiplier, executes the multiplication of two data elements, typically an activation and a weight. 
 
 .. image:: images/hardware-architecture/operational-unit.jpg
   :width: 400
@@ -15,13 +15,13 @@ The operational unit object has the following attributes:
 
 * **input_precision**: List of input operand (data) precision in the number of bits for each input operand (typically there are two input operands for a Multiplier).
 * **output_precision**: The bit precision of the operation's output (e.g., for a multiplier, the output_precision is auto-set to be the sum of two input operands' precision).
-* **energy_cost**: Energy of executing a single operation (e.g., a multiplication).
-* **area**: The HW area overhead of a single operational unit (e.g., a multiplier).
+* **energy**: Energy of executing a single operation (e.g., a multiplication).
+* **area**: The hardware area overhead of a single operational unit (e.g., a multiplier).
 
 Operational Array
 -----------------
 
-Inferencing a NN typically requires millions of operations, and an accelerator typically includes an array of operational units that can execute these operations in parallel. This can significantly speed up the computations, as well as increase energy efficiency which is covered later.
+Inferencing a neural network typically requires millions of operations, and an accelerator typically includes an array of operational units that can execute these operations in parallel. This can significantly speed up the computations, as well as increase energy efficiency which is covered later.
 
 The array can have one or multiple dimensions, each with a size. The importance of these dimensions is explained in the introduction of the memory hierarchy.
 
@@ -31,7 +31,7 @@ The array can have one or multiple dimensions, each with a size. The importance 
 The operational array object has the following attributes:
 
 * **operational_unit**: The operational unit from which the array is built.
-* **dimensions**: The dimensions of the array. This should be defined as a Python dictionary, with the keys being the identifier of each dimension of the array (typically 'D1', 'D2', ...) and the values being the size of this dimension (i.e. the size of the array along that dimension).
+* **dimensions**: The dimensions of the array. The dimensions must be defined as 'D1', 'D2', ... and the values being the size of the corresponding dimension (i.e. the size of the array along that dimension).
 
 
 Memory Instance
@@ -47,30 +47,30 @@ The memory instance object has the following attributes:
 * **name**: A name for the instance.
 * **size**: The memory size in bits.
 * **r_bw/w_bw**: A read or write bandwidth in the number of bits per cycle.
-* **r_cost/w_cost**: A read or write energy cost.
+* **r_cost/w_cost**: A read or write energy cost (for all bits in a single cycle).
 * **area**: Area overhead of the instance.
 * **r_port/w_port/rw_port**: The number of read/write/read-write ports the instance has available.
 * **latency**: The latency of memory access in the number of cycles, i.e., after requiring read/write a memory address, how many cycles the memory takes to provide/receive this corresponding data. (For now, this attribute is not actively used. We assume that it is 1 to model the data prefetching behavior thanks to the deterministic dataflow.)
 
 (optional)
 
-* **min_r_granularity/min_w_granularity**: The minimal memory read/write granularity (in bit) the memory supports. This attribute is used to better model the memory that supports half-word access or quarter-word access patterns. For example, if a memory's read bandwidth (wordlength) is 256 bit/cycle, its read energy (r_cost) is 100, and its min_r_granularity is 128 bits (i.e., assume this memory allow half-word read), read 128 bits from it (we approximatlly assume that) will only take 50 energy. If min_r_granularity is not defined (or is defined as 256 bits), read 128 bits from it will take 100 energy.
+* **min_r_granularity/min_w_granularity**: The minimal memory read/write granularity (in bit) the memory supports. This attribute is used to better model the memory that supports half-word access or quarter-word access patterns. For example, if a memory's read bandwidth (wordlength) is 256 bit/cycle, its read energy (r_cost) is 100, and its min_r_granularity is 128 bits (i.e., assume this memory allow half-word read), read 128 bits from it (we assume that) will only take 50 units of energy. If min_r_granularity is not defined (or is defined as 256 bits), read 128 bits from it will consume 100 units of energy.
 
 Memory Hierarchy
 ----------------
 
-Besides knowing what the specs of each memory instance are, the memory hierarchy encodes information with respect to the interconnection of each memory to the operational array, and to other memory instances. 
-This interconnection is achieved through multiple calls to the `add_memory()`, where the first call(s) adds the first level of memories, which connects to the operational array, and later calls connect the higher level of memories to the lower levels'. This builds a hierarchy of memories.
+Besides knowing what the specs of each memory instance are, the memory hierarchy encodes information with respect to the interconnection of each memory to the operational array, and to other memory instances. The hierarchy is automatically constructed based on the order in which the instances are defined. The lowest-level instances must be defined first.
 
 To know if the memory should connect to the operational array or another lower memory level, it needs to know which data will be stored within the memories. To decouple the algorithmic side from the hardware side, this is achieved through the concept of 'memory operands' (as opposed to 'algorithmic operands which are typically the Input/Output activations and weights W). You can think of the memory operands as virtual operands, which will later be linked to the actual algorithmic operands in the mapping file through the `memory_operand_links` attribute.
 
 Similarly to how the operational unit can be unrolled (forming an operational array), the memories can also be unrolled, where each memory accompanies either a single operational unit or all the operational units in one or more dimensions of the operational array. This is encoded through the `served_dimensions` attribute, which specifies if a single memory instance of this memory level serves all operational units in that dimension. This should be a set of one-hot-encoded tuples.
 
-For example, assuming an operational array has 2 dimensions: {D1:3, D2:4}. There are four common `served_dimensions` settings for a memory level:
-1. "None" or {(0, 0)}: the memory does not serve any array dimensions, meaning the memory is unrolled with each operational unit, i.e., there are, in total 12 such memory instances.
-2. {(1, 0)}: the memory serves array dimension D1, meaning the memory is unrolled with D2, and each memory instance serves all 3 operational units along D1, i.e., there are, in total 4 such memory instances.
-3. {(0, 1)}: the memory serves array dimension D2, meaning the memory is unrolled with D1, and each memory instance serves all 4 operational units along D2, i.e., there are, in total 3 such memory instances.
-4. "All" or {(1, 0), (0, 1)}: the memory serves all array dimensions, both D1 and D2, meaning the memory is not unrolled with each operational unit but serves all of them, i.e., there are, in total 1 such memory instance.
+For example, assuming an operational array has 2 dimensions: ``{D1: 3, D2: 4}``. There are four common `served_dimensions` settings for a memory level:
+
+1. ``[]`` (empty): the memory does not serve any array dimensions, meaning the memory is unrolled with each operational unit, i.e., there are, in total 12 such memory instances.
+2. ``[D1]``: the memory serves array dimension D1, meaning the memory is unrolled with D2, and each memory instance serves all 3 operational units along D1, i.e., there are, in total 4 such memory instances.
+3. ``[D2]``: the memory serves array dimension D2, meaning the memory is unrolled with D1, and each memory instance serves all 4 operational units along D2, i.e., there are, in total 3 such memory instances.
+4. ``[D1, D2]``: the memory serves all array dimensions, both D1 and D2, meaning the memory is not unrolled with each operational unit but serves all of them, i.e., there are, in total 1 such memory instance.
 
 Lastly, the different read/write/read-write ports a memory instance has, are assigned to the different data movements possible in the hierarchy. There are four types of data movements in a memory in the hierarchy: from high (*fh*), to high (*th*), from low (*fl*), to low (*tl*).
 
@@ -79,48 +79,27 @@ Lastly, the different read/write/read-write ports a memory instance has, are ass
 - **fl**: from low, meaning the data is provided by the lower level of memory to be **written** to the current level of memory
 - **tl**: to low, meaning the data is **read** out from the current level of memory to go to the lower level of memory
 
-At the time of writing, these can be manually linked to one of the read/write/read-write ports through the following syntax: `{port_type}_port_{port_number}`, *port_type* being *r*, *w* or *rw* and *port_number* equal to the port number, starting from 1, which allows allocating multiple ports of the same type. Alternatively, these are automatically generated as a default if not provided to the `add_memory()` call.
+At the time of writing, these can be manually linked to one of the read/write/read-write ports through the following syntax: ``{port_type}_port_{port_number}``, *port_type* being *r*, *w* or *rw* and *port_number* equal to the port number, starting from 1, which allows allocating multiple ports of the same type. Alternatively, these are automatically generated as a default if not provided in the definition.
 
 Internally, the MemoryHierarchy object extends the `NetworkX DiGraph <https://networkx.org/documentation/stable/reference/classes/digraph.html>`_ object, so its methods are available. 
 
 .. image:: images/hardware-architecture/memory-hierarchy.jpg
   :width: 800
 
-The memory hierarchy object includes:
-
-* **operational_array**: The operational array to which this memory hierarchy will connect. This is required to correctly infer the interconnection through the operational array's dimensions. Through the `add_memory()` calls it adds a new MemoryLevel to the graph. This requires for each call a:
-
-* **memory_instance**: A MemoryInstance object you are adding to the hierarchy.
-* **operands**: The virtual memory operands this MemoryLevel stores.
-* **port_alloc**: The directionality of the memory instance's different ports, as described above.
-* **served_dimensions**: The different dimensions that this memory level will serve, as described above.
-
 
 Core
 ----
 
-The operational array and the memory hierarchy together form a core of the accelerator.
+The operational array and the memory hierarchy together form a core of the accelerator. In ZigZag, all accelerators are single core. The concept of the core layer is preserved to be compatible with Stream. 
 
 .. image:: images/hardware-architecture/core.jpg
   :width: 400
 
-The core object includes:
-
-* **id**: The id of this core.
-* **operational_array**: The operational array of this core.
-* **memory_hierarchy**: The memory hierarchy of this core.
-
-
-HW Accelerator Model
+hardware Accelerator Model
 --------------------
 
-Multiple cores are combined together into the HW Accelerator, which is the main object modeling the HW behavior.
+The core is wrapped in the hardware Accelerator, which is the main object modeling the hardware behavior.
 
-The accelerator object includes:
-
-* **name**: A user-defined name for this accelerator.
-* **core_set**: The set of cores comprised within the accelerator.
-* **global_buffer**: A memory instance shared across cores. This is currently un-used.
 
 Modelled examples
 -----------------
