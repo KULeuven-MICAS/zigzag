@@ -17,9 +17,10 @@ from zigzag.datatypes import (
     UnrollFactorInt,
 )
 
-InputOperandSource: TypeAlias = dict[LayerOperand, int]
 
 logger = logging.getLogger(__name__)
+
+InputOperandSource: TypeAlias = dict[LayerOperand, int]
 
 
 class LayerEquation(LayerAttribute):

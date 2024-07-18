@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class LomaStage(Stage):  # TODO -> TemporalMappingGeneratorStage
-    """! Class that iterates through the different temporal mappings generated through
-    the loop order based memory allocation (loma) engine
+    """! Class that iterates through the different temporal mappings generated through the loop order based memory
+    allocation (loma) engine
     """
 
     def __init__(
@@ -65,8 +65,9 @@ class LomaStage(Stage):  # TODO -> TemporalMappingGeneratorStage
             return
         else:
             logger.warning(
-                "Provided temporal mapping %s for layer %s is incomplete. It does the mandatory loops %s. "
-                "Generating temporal mapping from scratch.",
+                "Provided temporal mapping %s for layer %s is incomplete. It does the mandatory loops %s. Make sure "
+                "the given spatial and temporal mapping cover the full workload. Generating temporal mapping from "
+                "scratch.",
                 provided_ordering,
                 self.layer.name,
                 all_temporal_loops,
