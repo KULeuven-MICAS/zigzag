@@ -194,6 +194,9 @@ class LayerTemporalOrdering(LayerAttribute):
     def empty():
         return LayerTemporalOrdering([])
 
+    def is_empty(self):
+        return len(self.data) == 0
+
     def is_complete(self, temporal_loop_sizes: dict[LayerDim, UnrollFactor]):
         """Return wether this temporal ordering matches the given, mandatory loop sizes"""
         all_loops: defaultdict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)

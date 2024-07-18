@@ -11,9 +11,9 @@ from zigzag.stages.Stage import Stage, StageCallable
 logger = logging.getLogger(__name__)
 
 
-class LomaStage(Stage):  # TODO -> TemporalMappingGeneratorStage
+class TemporalMappingGeneratorStage(Stage):
     """! Class that iterates through the different temporal mappings generated through the loop order based memory
-    allocation (loma) engine
+    allocation (loma) engine or defined by the user as mapping input.
     """
 
     def __init__(
@@ -26,7 +26,6 @@ class LomaStage(Stage):  # TODO -> TemporalMappingGeneratorStage
         **kwargs: Any,
     ):
         """
-        Initialize the LomaStage by setting the accelerator, layer, and spatial mapping.
         @param list_of_callables (List[Callable]): List of substages to call with each generated temporal mapping.
         """
         super().__init__(list_of_callables, **kwargs)
@@ -64,14 +63,16 @@ class LomaStage(Stage):  # TODO -> TemporalMappingGeneratorStage
             yield temporal_mapping
             return
         else:
-            logger.warning(
-                "Provided temporal mapping %s for layer %s is incomplete. It does the mandatory loops %s. Make sure "
-                "the given spatial and temporal mapping cover the full workload. Generating temporal mapping from "
-                "scratch.",
-                provided_ordering,
-                self.layer.name,
-                all_temporal_loops,
-            )
+            # Only log if user has provided some incomplete mapping
+            if not provided_ordering.is_empty():
+                logger.warning(
+                    "Provided temporal mapping %s for layer %s is incomplete. It does the mandatory loops %s. Make "
+                    "sure the given spatial and temporal mapping cover the full workload. Generating temporal mapping "
+                    "from scratch.",
+                    provided_ordering,
+                    self.layer.name,
+                    all_temporal_loops,
+                )
 
             # Generate from scratch
             for mapping in engine.run():
