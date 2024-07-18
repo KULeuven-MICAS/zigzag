@@ -33,3 +33,21 @@
     O: O
     W: I2
     I: I1
+
+- name: example_name_of_layer0
+  core_allocation: [1]
+  spatial_mapping:
+    D1:
+      - C, 32
+    D2:
+      - K, 32
+  temporal_ordering:
+    - [OX, 112] # Innermost loop
+    - [OY, 112]
+    - [FX, 7]
+    - [FY, 7]
+    - [K, 2] # Outermost loop
+  memory_operand_links:
+    O: O
+    W: I2
+    I: I1

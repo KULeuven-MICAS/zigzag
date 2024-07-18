@@ -7,10 +7,10 @@ from tqdm import tqdm
 from sympy.ntheory import factorint  # type: ignore
 
 
-from zigzag.datatypes import LayerDim
+from zigzag.datatypes import LayerDim, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
+from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.opt.loma.multipermute import permutations
 from zigzag.opt.loma.MemoryAllocator import (
     MemoryHierarchyTooSmallException,
@@ -69,16 +69,17 @@ class LomaEngine:
         # TODO: thus adapt the memory hierarchy.
         # TODO: The fact that there is a global buffer above the cores requires attention.
         core_id = layer.core_allocation[0]
-        self.memory_hierarchy: MemoryHierarchy = accelerator.get_core(core_id).memory_hierarchy
+        self.memory_hierarchy = accelerator.get_core(core_id).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
 
-    def run(self):
+    def run(self) -> Generator[TemporalMapping, None, None]:
         """! Runs the LomaEngine
         @return Generator that yields all temporal mappings
         """
         # TODO: add the criterion(s) as inputs to this function.
-        self.get_temporal_loops()  # get all the temporal loops
+        self.temporal_loop_dim_size = self.get_temporal_loops()  # get all the temporal loops to be scheduled
+        self.update_min_lpf_factor(self.temporal_loop_dim_size)
         self.get_prime_factors()  # convert these to LPFs (loop prime factors)
 
         pbar = tqdm(total=self.nb_permutations) if self.show_progress_bar else None
@@ -108,7 +109,7 @@ class LomaEngine:
                 f"compatible with the architecture."
             )
 
-    def get_temporal_loops(self) -> None:
+    def get_temporal_loops(self):
         """! Get all loops that have to be temporally scheduled given layer and spatial mapping.
         # TODO clean up (and make use of `LayerDimSizes` methods)
         """
@@ -129,9 +130,10 @@ class LomaEngine:
 
         # Remove all dimensions with a temporal loop size of 1
         temporal_loop_dim_size_no_1s = {key: val for key, val in layer_dim_sizes.items() if val > 1}
+        return temporal_loop_dim_size_no_1s
 
-        self.temporal_loop_dim_size = temporal_loop_dim_size_no_1s
-        min_nb_temporal_loops = len(self.temporal_loop_dim_size)
+    def update_min_lpf_factor(self, loop_sizes: dict[LayerDim, UnrollFactor]):
+        min_nb_temporal_loops = len(loop_sizes)
         if self.lpf_limit is not None and self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
                 "Updated layer %s's lpf limit from %i to %i lpfs.",

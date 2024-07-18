@@ -4,7 +4,6 @@ from math import prod
 
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, MemoryOperand, UnrollFactor, UnrollFactorInt
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping, TemporalMappingDict
@@ -16,13 +15,9 @@ from zigzag.workload.layer_node import LayerNode
 class MemoryHierarchyTooSmallException(Exception):
     """! Missing description"""
 
-    pass
-
 
 class MemoryTooSmallException(Exception):
     """! Missing description"""
-
-    pass
 
 
 class MemoryAllocator:
@@ -89,7 +84,7 @@ class MemoryAllocator:
 
         # self.nodes contains the different memory nodes in bottom-up fashion
         core_id = self.layer.core_allocation[0]
-        memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(core_id).memory_hierarchy
+        memory_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
         top_levels = {mem_op: memory_hierarchy.get_operand_top_level(mem_op) for mem_op in self.mem_ops}
         for node in memory_hierarchy.topological_sort():
             self.allocate_node(node, top_levels)
@@ -112,8 +107,6 @@ class MemoryAllocator:
         # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem
         # op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
-        # Does this node support double buffering # TODO this is not used
-        db_support = node.memory_instance.double_buffering_support
         # Get the capacity of this memory node (in bits)
         mem_capacity = node.memory_instance.size
 

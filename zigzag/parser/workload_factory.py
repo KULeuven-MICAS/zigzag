@@ -78,6 +78,7 @@ class LayerNodeFactory:
         core_allocation_is_fixed = mapping_factory.get_core_allocation_is_fixed()
         memory_operand_links = mapping_factory.create_memory_operand_links()
         temporal_ordering = mapping_factory.create_temporal_ordering()
+        temporal_ordering.remove_invalid_layer_dims(layer_dim_sizes, self.node_name)
 
         return LayerNodeAttributes(
             layer_type=layer_type,
