@@ -74,8 +74,6 @@ var annotated_dup =
       [ "mapping", "namespacezigzag_1_1mapping.html", [
         [ "data_movement", "namespacezigzag_1_1mapping_1_1data__movement.html", [
           [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving" ],
-          [ "MemoryAccesses", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses" ],
-          [ "AccessEnergy", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy" ],
           [ "DataMovePattern", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern" ]
         ] ],
         [ "Mapping", "namespacezigzag_1_1mapping_1_1Mapping.html", [

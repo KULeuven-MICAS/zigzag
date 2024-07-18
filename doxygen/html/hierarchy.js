@@ -18,12 +18,7 @@ var hierarchy =
     [ "Filter", null, [
       [ "UniqueMessageFilter", "classzigzag_1_1utils_1_1UniqueMessageFilter.html", null ]
     ] ],
-    [ "float", null, [
-      [ "AccessEnergy", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html", null ]
-    ] ],
-    [ "int", null, [
-      [ "MemoryAccesses", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html", null ]
-    ] ],
+    [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
     [ "LayerNodeAttributes", "classzigzag_1_1workload_1_1layer__node_1_1LayerNodeAttributes.html", null ],
     [ "LayerNodeFactory", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html", null ],
     [ "ListElement", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html", null ],
@@ -58,16 +53,11 @@ var hierarchy =
         [ "MemoryOperand", "classzigzag_1_1datatypes_1_1MemoryOperand.html", null ],
         [ "OADimension", "classzigzag_1_1datatypes_1_1OADimension.html", null ]
       ] ],
-      [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", [
-        [ "AccessEnergy", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html", null ],
-        [ "MemoryAccesses", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html", null ]
-      ] ],
       [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html", [
         [ "ConvParser", "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html", null ],
         [ "DefaultNodeParser", "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html", null ],
-        [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", [
-          [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
-        ] ]
+        [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", null ],
+        [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
       ] ],
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", [
         [ "AcceleratorParserStage", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html", null ],
@@ -134,7 +124,6 @@ var hierarchy =
     [ "ServedMemDimensions", "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html", null ],
     [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html", null ],
     [ "T", null, [
-      [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
       [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
     ] ],
     [ "TemporalMapping", "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html", null ],
@@ -144,7 +133,6 @@ var hierarchy =
       [ "OperationalArrayABC", "classarchitecture_1_1operational__array_1_1OperationalArrayABC.html", null ],
       [ "CostModelEvaluationABC", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html", null ],
       [ "OperandABC", "classzigzag_1_1datatypes_1_1OperandABC.html", null ],
-      [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
       [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html", null ],
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", null ],
       [ "LayerAttribute", "classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html", null ],
@@ -159,7 +147,6 @@ var hierarchy =
       [ "OnnxTensorCategory", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html", null ]
     ] ],
     [ "Generic", null, [
-      [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
       [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", null ]
     ] ],
     [ "ImcUnit", null, [
