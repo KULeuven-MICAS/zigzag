@@ -16,9 +16,7 @@ var classarchitecture_1_1ImcArray_1_1ImcArray =
     [ "cells_w_cost", "classarchitecture_1_1ImcArray_1_1ImcArray.html#ac4a23d9d241cc14e8eeb7de341837b50", null ],
     [ "energy", "classarchitecture_1_1ImcArray_1_1ImcArray.html#ac002779c383d2cc783e881f94449de66", null ],
     [ "energy_breakdown", "classarchitecture_1_1ImcArray_1_1ImcArray.html#a45b7754eda9dfa40200aa73c4b156cd3", null ],
-    [ "mapped_group_depth", "classarchitecture_1_1ImcArray_1_1ImcArray.html#a5398c58b7ba8e7a647a3f881370da124", null ],
     [ "mapped_rows_total_per_macro", "classarchitecture_1_1ImcArray_1_1ImcArray.html#a2de39f7f3b1bfc4f2e942d3a707f0be0", null ],
     [ "tclk", "classarchitecture_1_1ImcArray_1_1ImcArray.html#ae07399aa2d7b65055d0bb2afc16d3647", null ],
-    [ "tclk_breakdown", "classarchitecture_1_1ImcArray_1_1ImcArray.html#aecaf7a5564c93d9111025fab2628bd5b", null ],
-    [ "topsmm2_peak", "classarchitecture_1_1ImcArray_1_1ImcArray.html#aba91d1d3478ebb9c988c50a216a39dbe", null ]
+    [ "tclk_breakdown", "classarchitecture_1_1ImcArray_1_1ImcArray.html#aecaf7a5564c93d9111025fab2628bd5b", null ]
 ];

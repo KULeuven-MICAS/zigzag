@@ -1,4 +1,5 @@
 <map id="get_peak_energy_single_cycle" name="get_peak_energy_single_cycle">
-<area shape="rect" id="node1" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="223,5,403,47"/>
-<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a713ecdbc5c243876ea261b55b51a6ea5" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="5,5,175,47"/>
+<area shape="rect" id="node1" title="macro&#45;level one&#45;cycle energy of imc arrays (fully utilization, no weight updating) (components: cells..." alt="" coords="341,5,521,47"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#a713ecdbc5c243876ea261b55b51a6ea5" title="macro&#45;level peak performance of imc arrays (fully utilization, no weight updating)" alt="" coords="124,5,293,47"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1ImcArray_1_1ImcArray.html#ab948c7a4c22363a3aae688c30beec0e6" title=" " alt="" coords="5,13,76,39"/>
 </map>

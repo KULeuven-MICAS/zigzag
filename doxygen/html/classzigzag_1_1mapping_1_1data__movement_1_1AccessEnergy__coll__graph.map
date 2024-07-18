@@ -1,0 +1,9 @@
+<map id="AccessEnergy" name="AccessEnergy">
+<area shape="rect" id="node1" title="Represents the memory access energy in four directions." alt="" coords="173,155,285,181"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html" title="The standard four&#45;way data moving attribute of a memory interface." alt="" coords="87,80,244,107"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,77,32"/>
+<area shape="rect" id="node4" title=" " alt="" coords="102,5,141,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="165,5,254,32"/>
+<area shape="rect" id="node6" title=" " alt="" coords="279,5,361,32"/>
+<area shape="rect" id="node7" title=" " alt="" coords="268,80,319,107"/>
+</map>
