@@ -8,7 +8,11 @@ from zigzag.stages.WorkloadStage import WorkloadStage
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage, SumStage
-from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.save_stages import (
+    CompleteSaveStage,
+    PickleSaveStage,
+    SimpleSaveStage,
+)
 from zigzag.stages.LomaStage import LomaStage
 from zigzag.parser.arguments import get_arg_parser
 

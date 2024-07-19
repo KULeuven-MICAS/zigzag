@@ -1,6 +1,7 @@
 from typing import Any, Callable
 import logging
 import os
+import multiprocessing
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable
@@ -71,9 +72,6 @@ class SkipIfDumpExistsStage(Stage):
         )
         for cme, extra in substage.run():
             yield cme, extra
-
-
-import multiprocessing
 
 
 threadpool = None

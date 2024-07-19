@@ -42,7 +42,6 @@ class CactiParser:
 
         if memory_pool is not None:
             for instance in memory_pool:
-
                 io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 ex_rd_port = int(memory_pool[instance]["ex_rd_port"])
                 ex_wr_port = int(memory_pool[instance]["ex_wr_port"])
@@ -173,7 +172,6 @@ class CactiParser:
 
         if memory_pool is not None:
             for instance in memory_pool:
-
                 io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 area = memory_pool[instance]["area"]
                 bank_count = int(memory_pool[instance]["bank_count"])
@@ -196,7 +194,6 @@ class CactiParser:
                     and (tech == technology)
                     and (bank_count == bank)
                 ):
-
                     return (
                         read_cost,
                         write_cost,

@@ -40,7 +40,6 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
     per_pr_data_reuse: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = dict()
 
     for operand in pr_operand_list:
-
         # initialize current and below level pr loop size
         cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactor]] = {
             pr_data_dim: {pr_loop_dim: 1 for pr_loop_dim in pr_operand_loop_lut[operand][pr_data_dim]}

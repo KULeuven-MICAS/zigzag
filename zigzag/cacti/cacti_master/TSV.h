@@ -35,62 +35,62 @@
 #include "basic_circuit.h"
 #include "component.h"
 #include "parameter.h"
-//#include "assert.h"
+// #include "assert.h"
 #include "cacti_interface.h"
 #include "const.h"
-//#include "area.h"
+// #include "area.h"
 #include <cmath>
 #include <iostream>
 #include <list>
 
+class TSV : public Component {
+public:
+  TSV(enum TSV_type tsv_type,
+      /*TechnologyParameter::*/ DeviceType *dt =
+          &(g_tp.peri_global)); // Should change peri_global to TSV in
+                                // technology.cc
+  // TSV():len(20),rad(2.5),pitch(50){}
+  ~TSV();
 
-class TSV : public Component
-{
-  public:
-	TSV(enum TSV_type tsv_type,
-        /*TechnologyParameter::*/DeviceType * dt = &(g_tp.peri_global));//Should change peri_global to TSV in technology.cc
-	//TSV():len(20),rad(2.5),pitch(50){}
-    ~TSV();
+  double res;        // TSV resistance
+  double cap;        // TSV capacitance
+  double C_load_TSV; // The intrinsic load plus the load TSV is driving, needs
+                     // changes?
+  double min_area;
 
-    double res;//TSV resistance
-    double cap;//TSV capacitance
-    double C_load_TSV;//The intrinsic load plus the load TSV is driving, needs changes?
-    double min_area;
+  // int num_IO;//number of I/O
+  int num_gates;
+  int num_gates_min; // Necessary?
+  double w_TSV_n[MAX_NUMBER_GATES_STAGE];
+  double w_TSV_p[MAX_NUMBER_GATES_STAGE];
 
-    //int num_IO;//number of I/O
-    int num_gates;
-    int num_gates_min;//Necessary?
-	double w_TSV_n[MAX_NUMBER_GATES_STAGE];
-	double w_TSV_p[MAX_NUMBER_GATES_STAGE];
+  // double delay_TSV_path;//Delay of TSV path including the parasitics
 
-	//double delay_TSV_path;//Delay of TSV path including the parasitics
+  double is_dram; // two external arguments, defaulted to be false in
+                  // constructor
+  double is_wl_tr;
 
-	double is_dram;//two external arguments, defaulted to be false in constructor
-	double is_wl_tr;
+  void compute_buffer_stage();
+  void compute_area();
+  void compute_delay();
+  void print_TSV();
 
-	void compute_buffer_stage();
-	void compute_area();
-	void compute_delay();
-    void print_TSV();
+  Area TSV_metal_area;
+  Area Buffer_area;
 
-    Area TSV_metal_area;
-    Area Buffer_area;
+  /*//Herigated from Component
+  double delay;
+  Area area;
+  powerDef power, rt_power;
+  double delay;
+  double cycle_time;
 
-    /*//Herigated from Component
-    double delay;
-    Area area;
-    powerDef power, rt_power;
-    double delay;
-    double cycle_time;
+  int logical_effort();*/
 
-    int logical_effort();*/
-
-  private:
-    double min_w_pmos;
-    /*TechnologyParameter::*/DeviceType * deviceType;
-    unsigned int tsv_type;
-
+private:
+  double min_w_pmos;
+  /*TechnologyParameter::*/ DeviceType *deviceType;
+  unsigned int tsv_type;
 };
-
 
 #endif /* TSV_H_ */

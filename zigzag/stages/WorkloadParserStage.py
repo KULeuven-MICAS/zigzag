@@ -15,7 +15,14 @@ logger = logging.getLogger(__name__)
 class WorkloadParserStage(Stage):
     """! Parses a user-provided workload from a yaml file."""
 
-    def __init__(self, list_of_callables: list[StageCallable], *, workload: str, mapping: str, **kwargs: Any):
+    def __init__(
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        workload: str,
+        mapping: str,
+        **kwargs: Any,
+    ):
         assert mapping.endswith(".yaml"), "Mapping is not a yaml file path"
         assert workload.endswith(".yaml"), "Workload is not a yaml file path"
         super().__init__(list_of_callables, **kwargs)

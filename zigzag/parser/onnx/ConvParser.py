@@ -100,7 +100,6 @@ class ConvParser(ONNXOperatorParser):
         return data
 
     def generate_layer_node_for_conv(self):
-
         attrs = self.node.attribute
         kernel_shape: list[int] = get_attribute_ints_with_name("kernel_shape", attrs, default=None)  # type: ignore
         strides: list[int] = get_attribute_ints_with_name("strides", attrs, default=[1, 1])  # type: ignore
@@ -110,9 +109,6 @@ class ConvParser(ONNXOperatorParser):
 
         # Get the input and output activation shapes
         ia_dimension_shape, oa_dimension_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
-
-        # Get the input and output activation and weight data type (precision) # TODO this is not used
-        # ia_data_type, oa_data_type, w_data_type = self.get_input_output_weight_data_type()
 
         # Create LayerNode
         layer_data = self.get_layer_node_user_format(

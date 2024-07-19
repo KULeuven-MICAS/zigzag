@@ -3,7 +3,15 @@ from dataclasses import dataclass
 from enum import auto, Enum
 from typing import Any, List
 import onnx
-from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto
+from onnx import (
+    AttributeProto,
+    helper,
+    compose,
+    ModelProto,
+    GraphProto,
+    NodeProto,
+    TypeProto,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +117,6 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
 
 
 class OnnxTensorCategory(Enum):
-
     INPUT = auto()
     OUTPUT = auto()
     HIDDEN = auto()
@@ -134,7 +141,6 @@ class OnnxTensorCategory(Enum):
 
 @dataclass
 class OnnxTensorType:
-
     shape: List[int]
     elem_type: int
     category: OnnxTensorCategory

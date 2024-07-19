@@ -34,7 +34,6 @@ class OperationalUnit:
 
 
 class Multiplier(OperationalUnit):
-
     def __init__(self, input_precision: list[int], energy_cost: float, area: float):
         """
         @param input_precision: The bit precision of the multiplication inputs.

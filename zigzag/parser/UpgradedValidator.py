@@ -27,7 +27,6 @@ class UpgradedValidator(Validator):
         update: bool = False,
         context: Any | None = None,
     ) -> bool:
-
         # This gets confusing because this method seems to be called internally for validation as well
         # and we don't want to add "rows" to sub-schemas as well, only the
         # top-level.
@@ -39,7 +38,13 @@ class UpgradedValidator(Validator):
                 if "type" in schema:  # is a list
                     schema = {"rows": {"type": "list", "required": True, "schema": schema}}
                 else:  # is a dict
-                    schema = {"rows": {"type": "list", "required": True, "schema": {"type": "dict", "schema": schema}}}
+                    schema = {
+                        "rows": {
+                            "type": "list",
+                            "required": True,
+                            "schema": {"type": "dict", "schema": schema},
+                        }
+                    }
 
             if "rows" not in document:  # type: ignore
                 document_dict = {"rows": document}

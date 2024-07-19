@@ -1,4 +1,8 @@
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
+from zigzag.cost_model.cost_model import (
+    CostModelEvaluation,
+    CostModelEvaluationABC,
+    CumulativeCME,
+)
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
 from zigzag.utils import pickle_deepcopy
 
@@ -39,7 +43,7 @@ def get_temporal_spatial_loops(
         mem_names_tuple = tuple(mem_names)
         temporal_loops.append((tl[0], (0, tl[1]), mem_names_tuple))
     temporal_loops.reverse()
-    sls = [l for level in cme.spatial_mapping_dict_int[Constants.OUTPUT_LAYER_OP] for l in level]
+    sls = [x for level in cme.spatial_mapping_dict_int[Constants.OUTPUT_LAYER_OP] for x in level]
     spatial_loops: list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]] = [
         (sl[0], (0, sl[1]), ("", "", "")) for sl in sls
     ]
@@ -63,12 +67,16 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     # Extract the temporal loops, spatial loops, and memories from the cme
     temporal_loops, spatial_loops, memories = get_temporal_spatial_loops(cme)
     loop_column_width = (
-        max([len(l[0].name) for l in temporal_loops]) + 14 + offsets * (len(temporal_loops) + len(spatial_loops)) + 5
+        max([len(x[0].name) for x in temporal_loops]) + 14 + offsets * (len(temporal_loops) + len(spatial_loops)) + 5
     )
     memory_column_width = max([len(i) for i in memories]) + 5
 
     def print_single_loop(
-        loop_var: LayerDim, loop_range: tuple[int, UnrollFactor], memory: tuple[str, ...], loop_str: str, indent: int
+        loop_var: LayerDim,
+        loop_range: tuple[int, UnrollFactor],
+        memory: tuple[str, ...],
+        loop_str: str,
+        indent: int,
     ):
         """
         Prints a single loop with its memory assignment at the given indentation level.
@@ -121,13 +129,3 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     # Start recursive spatial loops printing
     indent = recursive_print(spatial_loops, loop_str="parfor", offset=indent, indent=False)
     print()
-
-
-if __name__ == "__main__":
-    # Example usage
-    import pickle
-
-    with open("zigzag/visualization/list_of_cmes.pickle", "rb") as fp:
-        cmes = pickle.load(fp)
-    cme = cmes[0]
-    print_mapping(cme)

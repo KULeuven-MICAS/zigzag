@@ -10,9 +10,10 @@ Contributing guidelines
 When contributing to the framework, please consider the following guidelines:
 
 * Use Google's `Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_
-* Use the ``.github/workflows/.pylintrc`` as linter configuration
 * Use Google docstrings to document your classes, functions, methods, .... Examples can be found throughout the code and `here <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`_
 * Update the documentation accordingly
+* Use the ``.github/workflows/.pylintrc`` as linter configuration
+* Use ``pre-commit`` with the configuration from ``.pre-commit-config.yaml`` to check and format your code. 
 
 Upgrading the project version (for ZigZag developers)
 =====================================================
@@ -26,7 +27,7 @@ In order to upgrade the project version, we use Python packages called bumpver, 
     pip install twine
     pip install pytest
     pip install typeguard
-    pip install ruff
+    pip install pre-commit
 
 First, pull to make sure you have all the remote changes. Merge any conflicts with your new changes, and commit.
 

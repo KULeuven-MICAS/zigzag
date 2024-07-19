@@ -1,7 +1,6 @@
 from copy import deepcopy
 from typing import Any
 
-import networkx
 
 from zigzag.workload.DummyNode import DummyNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC

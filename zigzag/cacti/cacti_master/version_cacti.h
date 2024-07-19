@@ -32,9 +32,9 @@
 #ifndef VERSION_H_
 #define VERSION_H_
 
-#define VER_MAJOR_CACTI		7	/* 3dd */
-#define VER_MINOR_CACTI		0
-#define VER_COMMENT_CACTI	"3DD Prerelease"
-#define VER_UPDATE_CACTI	"Aug, 2012"
+#define VER_MAJOR_CACTI 7 /* 3dd */
+#define VER_MINOR_CACTI 0
+#define VER_COMMENT_CACTI "3DD Prerelease"
+#define VER_UPDATE_CACTI "Aug, 2012"
 
 #endif /* VERSION_H_ */

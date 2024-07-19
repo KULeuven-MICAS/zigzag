@@ -7,10 +7,10 @@ class PortActivity:
 
     def __init__(
         self,
-        real_cycle: int | float,
-        allowed_cycle: int | float,
-        period: int | float,
-        period_count: int | float,
+        real_cycle: int,
+        allowed_cycle: int,
+        period: int,
+        period_count: int,
         layer_op: LayerOperand,
         mem_lv: int,
         mov_dir: DataDirection,
@@ -32,7 +32,11 @@ class PortActivity:
         self.period = period
         ## The total number of period across the whole NN layer computation.
         self.period_count = period_count
-        self.served_op_lv_dir: tuple[LayerOperand, int, DataDirection] = (layer_op, mem_lv, mov_dir)
+        self.served_op_lv_dir: tuple[LayerOperand, int, DataDirection] = (
+            layer_op,
+            mem_lv,
+            mov_dir,
+        )
         """ stalling (+) or slacking (-) cycle in one period """
         self.stall_or_slack_per_period = real_cycle - allowed_cycle
         """ stalling (+) or slacking (-) cycle in total computation """
