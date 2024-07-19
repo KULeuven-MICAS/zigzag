@@ -5,7 +5,10 @@ import numpy as np
 
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal, SpatialMappingPerMemLvl
+from zigzag.mapping.SpatialMappingInternal import (
+    SpatialMappingInternal,
+    SpatialMappingPerMemLvl,
+)
 from zigzag.mapping.spatial_mapping import (
     LayerDim,
     MappingSingleOADim,
@@ -26,7 +29,12 @@ class SpatialMappingConversionStage(Stage):
     """
 
     def __init__(
-        self, list_of_callables: list[StageCallable], *, accelerator: Accelerator, layer: LayerNode, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        accelerator: Accelerator,
+        layer: LayerNode,
+        **kwargs: Any,
     ):
         """
         Initialize the accelerator and layer attributes.
@@ -240,13 +248,17 @@ class SpatialMappingConversionStage(Stage):
         return mapping_per_mem_lvl
 
     def check_if_oa_dim_mapping_is_first_max(
-        self, oa_dim: OADimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
+        self,
+        oa_dim: OADimension,
+        loop_dim_unrolled: LayerDim,
+        user_spatial_mapping: SpatialMapping,
     ):
         """! For the case when there is layer dimension that is mapped on multiple oa dimensions.
         We need to decide on which oa dimension to adjust the unrolling
         if the total unrolling size is not a multiple of the layer dimension size.
         In this case, we decide to only adjust the unrolling size of the first oa dimension with the largest unrolling.
-        This function is to check if the given oa_dim has the largest unrolling for the given loop_dim_unrolled."""
+        This function is to check if the given oa_dim has the largest unrolling for the given loop_dim_unrolled.
+        """
 
         oa_dim_mapping_sizes: list[UnrollFactor] = []
         for mapping in user_spatial_mapping.values():
@@ -263,7 +275,10 @@ class SpatialMappingConversionStage(Stage):
         return should_be_limited
 
     def calc_unrolled_loop_size_on_early_oa_dims(
-        self, oa_dim: OADimension, loop_dim_unrolled: LayerDim, user_spatial_mapping: SpatialMapping
+        self,
+        oa_dim: OADimension,
+        loop_dim_unrolled: LayerDim,
+        user_spatial_mapping: SpatialMapping,
     ) -> UnrollFactor:
         # calculate the unrolled loop size for the specific layer dim on oa dims earlier than current oa dim
         loop_unrolled_size_already = 1

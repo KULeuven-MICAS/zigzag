@@ -3,7 +3,15 @@ from dataclasses import dataclass
 from enum import auto, Enum
 from typing import Any, List
 import onnx
-from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto
+from onnx import (
+    AttributeProto,
+    helper,
+    compose,
+    ModelProto,
+    GraphProto,
+    NodeProto,
+    TypeProto,
+)
 
 logger = logging.getLogger(__name__)
 

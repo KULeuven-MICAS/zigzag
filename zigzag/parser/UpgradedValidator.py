@@ -38,7 +38,13 @@ class UpgradedValidator(Validator):
                 if "type" in schema:  # is a list
                     schema = {"rows": {"type": "list", "required": True, "schema": schema}}
                 else:  # is a dict
-                    schema = {"rows": {"type": "list", "required": True, "schema": {"type": "dict", "schema": schema}}}
+                    schema = {
+                        "rows": {
+                            "type": "list",
+                            "required": True,
+                            "schema": {"type": "dict", "schema": schema},
+                        }
+                    }
 
             if "rows" not in document:  # type: ignore
                 document_dict = {"rows": document}

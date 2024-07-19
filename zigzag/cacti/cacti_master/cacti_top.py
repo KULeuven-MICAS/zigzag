@@ -1,8 +1,11 @@
 import yaml
 import os
 import argparse
+import sys
 
-from zigzag.cacti.cacti_master.cacti_config_creator import CactiConfig
+# To make this file runnable
+sys.path.append(os.getcwd())
+from zigzag.cacti.cacti_master.cacti_config_creator import CactiConfig  # pylint: disable=C0413 # noqa: E402
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mem_type")
@@ -102,7 +105,7 @@ with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
                     result[attribute_list[jj]].append(float(each_value))
-                except:
+                except:  # noqa E722
                     pass
 
 

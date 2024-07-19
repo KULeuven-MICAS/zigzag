@@ -29,17 +29,14 @@
  *
  ***************************************************************************/
 
-
 #ifndef __IO_H__
 #define __IO_H__
 
-
-#include "const.h"
 #include "cacti_interface.h"
+#include "const.h"
 
-
-void output_data_csv(const uca_org_t & fin_res, string fn="out.csv");
-void output_UCA(uca_org_t * fin_res);
-void output_data_csv_3dd(const uca_org_t & fin_res);
+void output_data_csv(const uca_org_t &fin_res, string fn = "out.csv");
+void output_UCA(uca_org_t *fin_res);
+void output_data_csv_3dd(const uca_org_t &fin_res);
 
 #endif

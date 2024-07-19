@@ -377,9 +377,9 @@ class Mapping:
                     # If we need access the same input data multiple times from the innermost memory level and the data
                     ##size is smaller than the memory read bw, take into account only one-time access cost (assume the
                     # data can stay at the output pins of the memory as long as it is needed).
-                    rd_out_to_low = (
+                    rd_out_to_low = int(
                         data_access_raw[operand][mem_level]
-                        // self.temporal_mapping.mac_level_data_stationary_cycle[operand]
+                        / self.temporal_mapping.mac_level_data_stationary_cycle[operand]
                     )
                 else:
                     rd_out_to_low = data_access_raw[operand][mem_level]
@@ -414,13 +414,13 @@ class Mapping:
 
             # data access count
             wr_in_by_low = data_access_raw[output_operand][mem_level]
-            rd_out_to_low = self.layer_node.operand_size_elem[output_operand] * (
-                self.output_ir_loop_size_caal[mem_level + 1] - 1
+            rd_out_to_low = int(
+                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level + 1] - 1)
             )
 
             rd_out_to_high = data_access_raw2[output_operand][mem_level + 1]
-            wr_in_by_high = self.layer_node.operand_size_elem[output_operand] * (
-                self.output_ir_loop_size_caal[mem_level + 2] - 1
+            wr_in_by_high = int(
+                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level + 2] - 1)
             )
 
             unit_mem_data_movement.set_data_elem_move_count(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
@@ -504,10 +504,10 @@ class Mapping:
         for operand in self.layer_node.input_operands:
             for mem_level in range(self.mem_level[operand]):
                 # average required memory BW
-                rd_out_to_low_bw = req_mem_bw_high_raw[operand][mem_level]
+                rd_out_to_low_bw = int(req_mem_bw_high_raw[operand][mem_level])
                 wr_in_by_low_bw = 0
                 rd_out_to_high_bw = 0
-                wr_in_by_high_bw = req_mem_bw_low_raw[operand][mem_level + 1]
+                wr_in_by_high_bw = int(req_mem_bw_low_raw[operand][mem_level + 1])
                 self.unit_mem_data_movement[operand][mem_level].set_req_mem_bw_aver(
                     rd_out_to_low_bw,
                     wr_in_by_low_bw,
@@ -515,10 +515,10 @@ class Mapping:
                     wr_in_by_high_bw,
                 )
                 # data transfer period
-                rd_out_to_low_pd = cycle_each_level[operand][mem_level]
+                rd_out_to_low_pd = int(cycle_each_level[operand][mem_level])
                 wr_in_by_low_pd = 0
                 rd_out_to_high_pd = 0
-                wr_in_by_high_pd = cycle_each_level[operand][mem_level + 1]
+                wr_in_by_high_pd = int(cycle_each_level[operand][mem_level + 1])
                 self.unit_mem_data_movement[operand][mem_level].set_data_trans_period(
                     rd_out_to_low_pd,
                     wr_in_by_low_pd,
@@ -526,10 +526,10 @@ class Mapping:
                     wr_in_by_high_pd,
                 )
                 # data transfer period count
-                rd_out_to_low_pc = self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level]
+                rd_out_to_low_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level])
                 wr_in_by_low_pc = 0
                 rd_out_to_high_pc = 0
-                wr_in_by_high_pc = self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level + 1]
+                wr_in_by_high_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level + 1])
                 self.unit_mem_data_movement[operand][mem_level].set_data_trans_period_count(
                     rd_out_to_low_pc,
                     wr_in_by_low_pc,
@@ -554,13 +554,15 @@ class Mapping:
         # For output operand
         output_operand = self.layer_node.output_operand
         for mem_level in range(self.mem_level[output_operand]):
-            wr_in_by_low_bw = req_mem_bw_high_raw[output_operand][mem_level]
-            rd_out_to_high_bw = req_mem_bw_low_raw[output_operand][mem_level + 1]
-            wr_in_by_low_pd = cycle_each_level[output_operand][mem_level]
-            rd_out_to_high_pd = cycle_each_level[output_operand][mem_level + 1]
-            wr_in_by_low_pc = self.temporal_mapping.total_cycle // cycle_each_level[output_operand][mem_level]
-            rd_out_to_high_pc = self.temporal_mapping.total_cycle // cycle_each_level[output_operand][mem_level + 1]
-            wr_in_by_low_da = (
+            wr_in_by_low_bw = int(req_mem_bw_high_raw[output_operand][mem_level])
+            rd_out_to_high_bw = int(req_mem_bw_low_raw[output_operand][mem_level + 1])
+            wr_in_by_low_pd = int(cycle_each_level[output_operand][mem_level])
+            rd_out_to_high_pd = int(cycle_each_level[output_operand][mem_level + 1])
+            wr_in_by_low_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[output_operand][mem_level])
+            rd_out_to_high_pc = int(
+                self.temporal_mapping.total_cycle // cycle_each_level[output_operand][mem_level + 1]
+            )
+            wr_in_by_low_da = int(
                 data_each_level_unrolled[output_operand][mem_level] * mem_bw_boost_factor[output_operand][mem_level]
             )
             rd_out_to_high_da = data_each_level_unrolled[output_operand][mem_level + 1]
@@ -610,10 +612,10 @@ class Mapping:
             for level, data_movement_item in enumerate(self.unit_mem_data_movement[operand]):
                 req_mem_bw_aver = data_movement_item.req_mem_bw_aver
                 # calculate "instant required memory BW" based on "average required memory BW"
-                rd_out_to_low_bw = req_mem_bw_aver.rd_out_to_low * top_ir_loop_size[operand][level]
-                wr_in_by_low_bw = req_mem_bw_aver.wr_in_by_low * top_ir_loop_size[operand][level]
-                rd_out_to_high_bw = req_mem_bw_aver.rd_out_to_high * top_ir_loop_size[operand][level + 1]
-                wr_in_by_high_bw = req_mem_bw_aver.wr_in_by_high * top_ir_loop_size[operand][level + 1]
+                rd_out_to_low_bw = int(req_mem_bw_aver.rd_out_to_low * top_ir_loop_size[operand][level])
+                wr_in_by_low_bw = int(req_mem_bw_aver.wr_in_by_low * top_ir_loop_size[operand][level])
+                rd_out_to_high_bw = int(req_mem_bw_aver.rd_out_to_high * top_ir_loop_size[operand][level + 1])
+                wr_in_by_high_bw = int(req_mem_bw_aver.wr_in_by_high * top_ir_loop_size[operand][level + 1])
                 data_movement_item.set_req_mem_bw_inst(
                     rd_out_to_low_bw,
                     wr_in_by_low_bw,
@@ -623,10 +625,10 @@ class Mapping:
 
                 data_trans_period = data_movement_item.data_trans_period
                 # calculate "instant data transferring window", assuming non-double buffered memory
-                rd_out_to_low_wd: int = data_trans_period.rd_out_to_low // top_ir_loop_size[operand][level]
-                wr_in_by_low_wd: int = data_trans_period.wr_in_by_low // top_ir_loop_size[operand][level]
-                rd_out_to_high_wd: int = data_trans_period.rd_out_to_high // top_ir_loop_size[operand][level + 1]
-                wr_in_by_high_wd: int = data_trans_period.wr_in_by_high // top_ir_loop_size[operand][level + 1]
+                rd_out_to_low_wd = int(data_trans_period.rd_out_to_low / top_ir_loop_size[operand][level])
+                wr_in_by_low_wd = int(data_trans_period.wr_in_by_low / top_ir_loop_size[operand][level])
+                rd_out_to_high_wd = int(data_trans_period.rd_out_to_high / top_ir_loop_size[operand][level + 1])
+                wr_in_by_high_wd = int(data_trans_period.wr_in_by_high / top_ir_loop_size[operand][level + 1])
                 data_movement_item.set_inst_data_trans_window(
                     rd_out_to_low_wd,
                     wr_in_by_low_wd,

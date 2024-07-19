@@ -2,8 +2,18 @@ import re
 import logging
 from typing import Any
 
-from zigzag.datatypes import LayerDim, LayerOperand, MemoryOperand, OADimension, UnrollFactor
-from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping, SpatialMappingHint
+from zigzag.datatypes import (
+    LayerDim,
+    LayerOperand,
+    MemoryOperand,
+    OADimension,
+    UnrollFactor,
+)
+from zigzag.mapping.spatial_mapping import (
+    MappingSingleOADim,
+    SpatialMapping,
+    SpatialMappingHint,
+)
 from zigzag.parser.WorkloadValidator import WorkloadValidator
 from zigzag.utils import UniqueMessageFilter
 from zigzag.workload.DNNWorkload import DNNWorkload
@@ -195,7 +205,10 @@ class MappingFactory:
             self.mapping_data: dict[str, Any] = next(filter(lambda x: x["name"] == operation_type, mapping_data))
         else:
             self.mapping_data = next(filter(lambda x: x["name"] == "default", mapping_data))
-            logger.warning("Operator %s not defined in mapping. Using default mapping instead.", operation_type)
+            logger.warning(
+                "Operator %s not defined in mapping. Using default mapping instead.",
+                operation_type,
+            )
 
     def get_core_allocation(self) -> list[int]:
         return self.mapping_data["core_allocation"]

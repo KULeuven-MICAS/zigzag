@@ -147,7 +147,14 @@ class LayerDimRelation(LayerAttribute):
     dimension) and the loop dimension is required. e.g. `dim1 = coef2 * dim2 + coef3 * dim3`
     """
 
-    def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
+    def __init__(
+        self,
+        dim_1: LayerDim,
+        dim_2: LayerDim,
+        dim_3: LayerDim,
+        coef_2: int,
+        coef_3: int,
+    ):
         self.dim_1 = dim_1
         self.dim_2 = dim_2
         self.dim_3 = dim_3
@@ -156,7 +163,9 @@ class LayerDimRelation(LayerAttribute):
         self.data = f"{dim_1} = {coef_2}*{dim_2} + {coef_3}*{dim_3}"
 
     @staticmethod
-    def extract_pr_loop_info(relations: list["LayerDimRelation"]) -> tuple[PrLoop, LoopList, PrScalingFactors]:
+    def extract_pr_loop_info(
+        relations: list["LayerDimRelation"],
+    ) -> tuple[PrLoop, LoopList, PrScalingFactors]:
         """!
         # TODO requires cleanup and documentation
         """
@@ -173,8 +182,14 @@ class LayerDimRelation(LayerAttribute):
             val = [relation.dim_2, relation.dim_3]
             pr_loop[key] = val
             pr_loop_list.extend([key] + val)
-            scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
-            scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
+            scaling_factors = {
+                relation.dim_2: relation.coef_2,
+                relation.dim_3: relation.coef_3,
+            }
+            scaling_factors = {
+                relation.dim_2: relation.coef_2,
+                relation.dim_3: relation.coef_3,
+            }
             pr_scaling_factors[key] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors

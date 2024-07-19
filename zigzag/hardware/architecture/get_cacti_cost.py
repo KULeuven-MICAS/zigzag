@@ -406,8 +406,8 @@ class CactiConfig:
         stream = os.popen(f"./cacti -infile {path} &> /dev/null")
         # stream = os.popen('./cacti -infile %s' %path)
         output = stream.readlines()
-        for l in output:
-            print(l, end="")
+        for x in output:
+            print(x, end="")
         return output
 
     def cacti_auto(self, user_input: list[Any], path: str):
@@ -457,7 +457,12 @@ class CactiConfig:
 
 
 def get_cacti_cost(
-    cacti_path: str, tech_node: float, mem_type: str, mem_size_in_byte: float, bw: float, hd_hash: str = "a"
+    cacti_path: str,
+    tech_node: float,
+    mem_type: str,
+    mem_size_in_byte: float,
+    bw: float,
+    hd_hash: str = "a",
 ) -> tuple[float, float, float, float]:
     """
     extract time, area, r_energy, w_energy cost from cacti 7.0
@@ -526,7 +531,7 @@ def get_cacti_cost(
     # read out result
     try:
         f = open(f"{file_path}/cache_{hd_hash}.cfg.out", "r", encoding="UTF-8")
-    except:
+    except:  # noqa: E722
         msg = f"CACTI failed. [current setting] rows: {rows}, bw: {bw}, mem size (byte): {mem_size_in_byte}"
         logging.critical(msg)
         msg = "[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
@@ -544,7 +549,7 @@ def get_cacti_cost(
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
                     result[attribute_list[jj]].append(float(each_value))
-                except:
+                except:  # noqa: E722
                     pass
     # get required cost
     try:

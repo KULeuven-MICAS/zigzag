@@ -6,7 +6,8 @@ from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluatio
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.memory_port import DataDirection
-from zigzag.mapping.data_movement import FourWayDataMoving
+from zigzag.mapping.data_movement import AccessEnergy
+
 
 # MPL FONT SIZES
 SMALLEST_SIZE = 10
@@ -80,8 +81,8 @@ def bar_plot_cost_model_evaluations_total(
 def bar_plot_cost_model_evaluations_breakdown(
     cmes: list[CostModelEvaluationABC], save_path: str, xtick_rotation: int = 90
 ):
-    memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, FourWayDataMoving]]] = {
-        idx: defaultdict(lambda: defaultdict(lambda: FourWayDataMoving(0, 0, 0, 0))) for idx in range(len(cmes))
+    memory_word_access_summed: dict[int, defaultdict[LayerOperand, defaultdict[str, AccessEnergy]]] = {
+        idx: defaultdict(lambda: defaultdict(lambda: AccessEnergy(0, 0, 0, 0))) for idx in range(len(cmes))
     }
     mac_costs: defaultdict[int, float] = defaultdict(lambda: 0.0)
     memory_instances: dict[str, MemoryLevel] = {}
@@ -183,7 +184,7 @@ def bar_plot_cost_model_evaluations_breakdown(
         ax1.bar(0, 0, width=1, facecolor=hsv_to_rgb((h, 1, 1)), label=op)
 
     for idx, direction in enumerate(DataDirection):
-        ax1.bar(
+        ax1.bar(  # type: ignore
             [0],
             [0],
             width=1,

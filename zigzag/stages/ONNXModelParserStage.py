@@ -10,7 +10,14 @@ logger = logging.getLogger(__name__)
 
 
 class ONNXModelParserStage(Stage):
-    def __init__(self, list_of_callables: list[StageCallable], *, workload: str, mapping: str, **kwargs: Any):
+    def __init__(
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        workload: str,
+        mapping: str,
+        **kwargs: Any,
+    ):
         super().__init__(list_of_callables, **kwargs)
         self.onnx_model_parser = ONNXModelParser(workload, mapping)
 

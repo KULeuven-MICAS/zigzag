@@ -2,7 +2,10 @@ from math import prod
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
 from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl, decouple_pr_loop
+from zigzag.mapping.mapping_assist_funcs import (
+    SpatialMappingPerMemLvl,
+    decouple_pr_loop,
+)
 from zigzag.utils import json_repr_handler
 
 
@@ -172,7 +175,8 @@ class SpatialMappingInternal:
     def save_spatial_loop_dim_size(self) -> None:
         """! Save the loops that were unrolled spatially in a list without any arch level information for easy access in
         loma. We take one of the input operands and go through the spatial mapping dict for that operand.
-        Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels."""
+        Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels.
+        """
 
         op = self.layer_node.input_operands[0]
         self.spatial_loop_dim_size: list[tuple[LayerDim, UnrollFactor]] = [

@@ -62,11 +62,11 @@ def init(multiset: list[Any]):
 def visit(h: ListElement) -> list[Any]:
     """! Converts our bespoke linked list to a python list."""
     o = h
-    l: list[Any] = []
+    this_list: list[Any] = []
     while o is not None:
-        l.append(o.value)
+        this_list.append(o.value)
         o = o.next
-    return l
+    return this_list
 
 
 def permutations(multiset: list[Any]):

@@ -149,7 +149,7 @@ def get_hardware_performance_zigzag_imc(
             SearchInterLayerDataLocalityStage,  # Search the lowest allowed memory level per operand per layer
             WorkloadStage,  # Iterate through the different layers in the workload
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            ExploitInterLayerDataLocalityStage,  # Remove unused memories if SearchInterLayerDataLocalityStage is enabled
+            ExploitInterLayerDataLocalityStage,  # Remove unused memories
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
