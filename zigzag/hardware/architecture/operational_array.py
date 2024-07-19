@@ -44,7 +44,6 @@ class OperationalArray(OperationalArrayABC):
 
 
 class MultiplierArray(OperationalArray):
-
     def __init__(
         self,
         multiplier: Multiplier,

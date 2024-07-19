@@ -10,7 +10,6 @@ class SpatialMappingInternal:
     """! Class that collect all the info related to spatial mapping."""
 
     def __init__(self, spatial_mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNode"):
-
         self.mapping_dict_origin = spatial_mapping_dict
         self.mapping_dict_reform: SpatialMappingPerMemLvl = decouple_pr_loop(spatial_mapping_dict, layer_node)
         self.layer_node = layer_node

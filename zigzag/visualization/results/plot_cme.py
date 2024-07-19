@@ -49,8 +49,8 @@ def bar_plot_cost_model_evaluations_total(
     color_energy = colormap.colors[0]  # type: ignore
     color_latency = colormap.colors[1]  # type: ignore
 
-    h1 = rects1 = ax1.bar(x - width / 2, energies, width, label="Energy", color=color_energy)
-    h2 = rects2 = ax2.bar(x + width / 2, latencies, width, label="Latency", color=color_latency)
+    rects1 = ax1.bar(x - width / 2, energies, width, label="Energy", color=color_energy)
+    rects2 = ax2.bar(x + width / 2, latencies, width, label="Latency", color=color_latency)
 
     # Add some text for labels, title and custom x-axis tick labels, etc.
     ax1.set_ylabel("Energy [pJ]", fontsize=15)

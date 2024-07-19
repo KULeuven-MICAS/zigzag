@@ -8,7 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 class MappingValidator:
-
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True},

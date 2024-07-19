@@ -43,7 +43,6 @@ class SpatialMappingConversionStage(Stage):
         self.oa_dim_sizes: dict[OADimension, int] = self.user_spatial_mapping.oa_dim_sizes
 
     def run(self):
-
         spatial_mapping, spatial_mapping_int = self.convert_user_spatial_mapping(self.user_spatial_mapping)
 
         kwargs = self.kwargs.copy()

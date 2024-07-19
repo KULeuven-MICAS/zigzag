@@ -109,7 +109,6 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
 
 
 class OnnxTensorCategory(Enum):
-
     INPUT = auto()
     OUTPUT = auto()
     HIDDEN = auto()
@@ -134,7 +133,6 @@ class OnnxTensorCategory(Enum):
 
 @dataclass
 class OnnxTensorType:
-
     shape: List[int]
     elem_type: int
     category: OnnxTensorCategory

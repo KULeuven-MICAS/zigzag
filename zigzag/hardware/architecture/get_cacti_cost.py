@@ -5,7 +5,6 @@ from typing import Any
 
 
 class CactiConfig:
-
     def __init__(self):
         # content = f.readlines()
         self.baseline_config = [
@@ -530,7 +529,7 @@ def get_cacti_cost(
     except:
         msg = f"CACTI failed. [current setting] rows: {rows}, bw: {bw}, mem size (byte): {mem_size_in_byte}"
         logging.critical(msg)
-        msg = f"[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
+        msg = "[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
         logging.critical(msg)
         exit()
     result: dict[str, Any] = {}

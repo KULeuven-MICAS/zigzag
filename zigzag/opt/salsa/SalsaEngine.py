@@ -125,7 +125,6 @@ class SalsaEngine:
         )
 
         for it in range(self.iteration_number):
-
             temperature = self.start_temperature * (0.995**it)
 
             # Get the index of the loop to swap

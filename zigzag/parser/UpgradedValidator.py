@@ -27,7 +27,6 @@ class UpgradedValidator(Validator):
         update: bool = False,
         context: Any | None = None,
     ) -> bool:
-
         # This gets confusing because this method seems to be called internally for validation as well
         # and we don't want to add "rows" to sub-schemas as well, only the
         # top-level.

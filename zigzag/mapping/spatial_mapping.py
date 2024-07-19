@@ -116,7 +116,6 @@ class SpatialMapping(LayerAttribute):
         assert all(given_oa_dim in self for given_oa_dim in self.oa_dim_sizes), "SpatialMapping misses OADimension"
 
         for oa_dim in self.oa_dims:
-
             for layer_dim, unrolling in self[oa_dim].items():
                 # 4)
                 if layer_dim not in max_unrollings[oa_dim]:

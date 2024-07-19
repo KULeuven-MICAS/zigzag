@@ -38,7 +38,6 @@ from typing import Any
 
 
 class ListElement:
-
     def __init__(self, value: Any, next: Any):
         self.value = value
         self.next = next

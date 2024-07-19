@@ -59,7 +59,6 @@ class ServedMemDimensions:
 
 
 class MemoryLevel:
-
     def __init__(
         self,
         memory_instance: MemoryInstance,

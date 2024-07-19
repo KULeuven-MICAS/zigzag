@@ -71,7 +71,6 @@ class CoreFactory:
         return MultiplierArray(multiplier, dimension_sizes)
 
     def create_imc_array(self) -> ImcArray:
-
         # From operational_array
         op_array_data: dict[str, Any] = self.data["operational_array"]
 
