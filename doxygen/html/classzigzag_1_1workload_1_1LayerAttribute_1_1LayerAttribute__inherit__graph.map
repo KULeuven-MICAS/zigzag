@@ -7,7 +7,7 @@
 <area shape="rect" id="node8" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation.html" title="&quot;! core computation equation, e.g." alt="" coords="335,208,450,235"/>
 <area shape="rect" id="node9" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerOperandPrecision.html" title="Contains the bit precision of each layer operand." alt="" coords="307,259,479,285"/>
 <area shape="rect" id="node10" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerPadding.html" title=" " alt="" coords="338,309,447,336"/>
-<area shape="rect" id="node11" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerTemporalOrdering.html" title=" " alt="" coords="305,360,480,387"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerTemporalOrdering.html" title="Represents a user&#45;defined temporal ordering." alt="" coords="305,360,480,387"/>
 <area shape="rect" id="node12" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html" title="Links LayerOperand to MemoryOperand." alt="" coords="310,411,475,437"/>
 <area shape="rect" id="node2" title=" " alt="" coords="5,183,95,209"/>
 <area shape="rect" id="node3" title=" " alt="" coords="9,233,91,260"/>
