@@ -1,4 +1,6 @@
 <map id="run" name="run">
-<area shape="rect" id="node1" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="5,20,48,47"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a64f434fd029f6bfd55580df1a7424b94" title=" " alt="" coords="96,5,375,61"/>
+<area shape="rect" id="node1" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="5,46,48,73"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a763bb764caec470fb4432eeda695e457" title=" " alt="" coords="96,31,375,87"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a224fa62723511d36c3f9d409b008e0d4" title="Convert the given list of cmes to a numpy array with the energy per layer, memory level,..." alt="" coords="423,5,651,47"/>
+<area shape="rect" id="node4" href="$namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a8694f4e26688d01de907ef8d462fe7be" title=" " alt="" coords="423,71,651,112"/>
 </map>

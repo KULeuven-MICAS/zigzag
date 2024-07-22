@@ -24,7 +24,8 @@ Stages within ZigZag are used to modularly and easily adapt the functionality of
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            LomaStage,  # Generate multiple temporal mappings (TM)
+
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=args.accelerator,  # required by AcceleratorParserStage
@@ -57,6 +58,7 @@ This corresponds to the following hierarchy:
 The main entry point
 --------------------
 
+You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
 You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
 
 The sequential call of stages
