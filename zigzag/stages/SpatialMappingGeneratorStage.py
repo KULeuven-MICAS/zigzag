@@ -237,6 +237,7 @@ class SpatialMappingGeneratorStage(Stage):
                     factors[max_index] -= 1
                     product = math.prod(factors)
                 return factors
+
             # Extract the unrolling factors for the limited dimensions
             unrolling_factors = []
             for dim in limited_dims:
@@ -277,15 +278,16 @@ class SpatialMappingGeneratorStage(Stage):
                         if layer_dim not in irrelevant_dimensions:
                             non_irrelevant_dimensions.add(layer_dim)
                             total_unrolling_size *= unrolling_size
-                max_stored_elements = mem_capacity // precision if precision > 0 else float('inf')
+                max_stored_elements = mem_capacity // precision if precision > 0 else float("inf")
                 # Limit the total unrolling across the OA Dims to the capacity of the memory
                 if max_stored_elements < total_unrolling_size:
                     logger.warning(
-                        f"Maximal spatial unrolling for {layer_dim} limited to
-                        {max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."
+                        f"""Maximal spatial unrolling for {layer_dim} limited to
+                        {max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."""
                     )
                     limited_mapping = limit_loop_unrolling(
-                        non_irrelevant_unrolling_per_oa_dim, non_irrelevant_dimensions, max_stored_elements)
+                        non_irrelevant_unrolling_per_oa_dim, non_irrelevant_dimensions, max_stored_elements
+                    )
                     for oa_dim, unrollings in limited_mapping.items():
                         mapping[oa_dim].update(unrollings)
         return mapping
