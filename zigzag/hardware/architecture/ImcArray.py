@@ -38,7 +38,11 @@ class ImcArray(ImcUnit):
         )
         self.get_area()
         self.get_tclk()
-        self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
+        (
+            self.tops_peak,
+            self.topsw_peak,
+            self.topsmm2_peak,
+        ) = self.get_macro_level_peak_performance()
 
     def get_adc_cost(self) -> tuple[float, float, float]:
         """single ADC and analog accumulation cost calculation"""
@@ -445,9 +449,10 @@ class ImcArray(ImcUnit):
         self.mapped_rows_total_per_macro = mapped_rows_total_per_macro
 
         # energy of local bitline precharging during weight stationary in cells
-        energy_local_bl_precharging, self.mapped_group_depth = self.get_precharge_energy(
-            self.tech_param, layer, mapping
-        )
+        (
+            energy_local_bl_precharging,
+            self.mapped_group_depth,
+        ) = self.get_precharge_energy(self.tech_param, layer, mapping)
 
         # energy of DACs
         if self.is_aimc:

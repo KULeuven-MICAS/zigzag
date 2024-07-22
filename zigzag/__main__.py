@@ -1,5 +1,4 @@
 from datetime import datetime
-from zigzag.stages import *
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage

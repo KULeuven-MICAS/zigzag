@@ -1,23 +1,21 @@
 #ifndef _extio_H_
 #define _extio_H_
-#include "parameter.h"
 #include "component.h"
 #include "extio_technology.h"
+#include "parameter.h"
 
-class Extio : public Component
-{
-public: 
-  
-  Extio(IOTechParam *); 
-    	
-	void extio_area(); 
-	void extio_eye(); 
-	void extio_power_dynamic(); 
-	void extio_power_phy(); 
-	void extio_power_term(); 
+class Extio : public Component {
+public:
+  Extio(IOTechParam *);
+
+  void extio_area();
+  void extio_eye();
+  void extio_power_dynamic();
+  void extio_power_phy();
+  void extio_power_term();
 
 private:
-  IOTechParam *io_param;  
+  IOTechParam *io_param;
 
   double io_area;
 
@@ -34,13 +32,10 @@ private:
 
   double io_power_dynamic;
 
-  double power_dq_write, power_dqs_write, power_ca_write,
-         power_dq_read, power_dqs_read, power_ca_read, 
-         power_clk;
+  double power_dq_write, power_dqs_write, power_ca_write, power_dq_read,
+      power_dqs_read, power_ca_read, power_clk;
 
   double io_tmargin, io_vmargin;
- 
-}; 
- 
- 
-#endif  // _extio_H_ 
+};
+
+#endif // _extio_H_

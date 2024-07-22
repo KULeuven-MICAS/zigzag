@@ -23,7 +23,8 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         self.onnx_model = onnx_model
 
     @abstractmethod
-    def run(self) -> LayerNodeABC: ...
+    def run(self) -> LayerNodeABC:
+        ...
 
     def get_input_output_weight_data_type(self):
         """! Return the data type of the input, output and weight tensors of this node."""

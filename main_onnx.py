@@ -1,4 +1,5 @@
 import re
+import logging as _logging
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -15,7 +16,6 @@ parser = get_arg_parser()
 args = parser.parse_args()
 
 # Initialize the logger
-import logging as _logging
 
 _logging_level = _logging.INFO
 _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"

@@ -11,8 +11,17 @@ from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorSt
 from zigzag.stages.WorkloadStage import WorkloadStage
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
-from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.reduce_stages import (
+    MinimalEDPStage,
+    MinimalEnergyStage,
+    MinimalLatencyStage,
+    SumStage,
+)
+from zigzag.stages.save_stages import (
+    CompleteSaveStage,
+    PickleSaveStage,
+    SimpleSaveStage,
+)
 from zigzag.stages.LomaStage import LomaStage
 from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
@@ -149,7 +158,7 @@ def get_hardware_performance_zigzag_imc(
             SearchInterLayerDataLocalityStage,  # Search the lowest allowed memory level per operand per layer
             WorkloadStage,  # Iterate through the different layers in the workload
             VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            ExploitInterLayerDataLocalityStage,  # Remove unused memories if SearchInterLayerDataLocalityStage is enabled
+            ExploitInterLayerDataLocalityStage,  # Remove unused memories
             CompleteSaveStage,  # Save each processed layer to a json
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)

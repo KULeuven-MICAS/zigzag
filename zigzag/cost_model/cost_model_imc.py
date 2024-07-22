@@ -88,7 +88,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
         here we start with calculating the required (or allowed) memory updating window by comparing the effective
         data size with the physical memory size at each level. If the effective data size is smaller than 50%
-        of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer effect);
+        of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer
+        effect);
         otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
 
         2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,

@@ -38,7 +38,6 @@ class LomaStage(Stage):
         )
 
         for temporal_mapping in engine.run():
-
             kwargs = self.kwargs.copy()
             kwargs["accelerator"] = self.accelerator
             kwargs["layer"] = self.layer

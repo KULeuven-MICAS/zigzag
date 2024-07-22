@@ -8,19 +8,38 @@ logger = logging.getLogger(__name__)
 
 
 class MappingValidator:
-
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True},
-        "core_allocation": {"type": "list", "schema": {"type": "integer"}, "default": [0]},
+        "core_allocation": {
+            "type": "list",
+            "schema": {"type": "integer"},
+            "default": [0],
+        },
         "core_allocation_is_fixed": {"type": "boolean", "default": False},
         "spatial_mapping": {
             "type": "dict",
             "schema": {
-                "D1": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D2": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D3": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D4": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+                "D1": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
+                "D2": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
+                "D3": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
+                "D4": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
             },
             "required": False,
             "nullable": True,
@@ -37,10 +56,26 @@ class MappingValidator:
         "spatial_mapping_hint": {
             "type": "dict",
             "schema": {
-                "D1": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+$"}, "required": False},
-                "D2": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+$"}, "required": False},
-                "D3": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+$"}, "required": False},
-                "D4": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+$"}, "required": False},
+                "D1": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "required": False,
+                },
+                "D2": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "required": False,
+                },
+                "D3": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "required": False,
+                },
+                "D4": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "required": False,
+                },
             },
             "required": False,
         },

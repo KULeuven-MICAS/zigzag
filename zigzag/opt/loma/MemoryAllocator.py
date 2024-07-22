@@ -2,7 +2,14 @@ import numpy as np
 from math import prod
 
 
-from zigzag.datatypes import Constants, LayerDim, LayerOperand, MemoryOperand, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import (
+    Constants,
+    LayerDim,
+    LayerOperand,
+    MemoryOperand,
+    UnrollFactor,
+    UnrollFactorInt,
+)
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_level import MemoryLevel
@@ -113,7 +120,6 @@ class MemoryAllocator:
         # op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
         # Does this node support double buffering # TODO this is not used
-        db_support = node.memory_instance.double_buffering_support
         # Get the capacity of this memory node (in bits)
         mem_capacity = node.memory_instance.size
 
@@ -194,13 +200,17 @@ class MemoryAllocator:
             else:
                 if i == 0:  # This means we can't even store the already allocated loops
                     raise MemoryTooSmallException(
-                        f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} mem_capacity={mem_capacity}"
+                        f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} "
+                        f"mem_capacity={mem_capacity}"
                     )
                 break  # Stop as soon as we have added a loop that overflows the memory
         return sizes
 
     def calc_loops_size(
-        self, loops: list[Loop], mem_op: MemoryOperand, all_unallocated_loops: list[Loop]
+        self,
+        loops: list[Loop],
+        mem_op: MemoryOperand,
+        all_unallocated_loops: list[Loop],
     ) -> UnrollFactor:
         """! Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
         @param loops: The loops we want to calculate the size for.
