@@ -1,4 +1,0 @@
-<map id="run" name="run">
-<area shape="rect" id="node1" title="Run this stage by converting the user&#45;defined temporal loop ordering to the memory&#45;level based tempor..." alt="" coords="5,13,48,39"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html#a9b72d48b9d06c3248ab9fe49b405e539" title=" " alt="" coords="96,5,268,47"/>
-</map>

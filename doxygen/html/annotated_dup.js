@@ -179,9 +179,6 @@ var annotated_dup =
           [ "SearchInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage" ],
           [ "ExploitInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage" ]
         ] ],
-        [ "LomaStage", "namespacezigzag_1_1stages_1_1LomaStage.html", [
-          [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage" ]
-        ] ],
         [ "MainStage", "namespacezigzag_1_1stages_1_1MainStage.html", [
           [ "MainStage", "classzigzag_1_1stages_1_1MainStage_1_1MainStage.html", "classzigzag_1_1stages_1_1MainStage_1_1MainStage" ]
         ] ],
@@ -225,8 +222,8 @@ var annotated_dup =
           [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", "classzigzag_1_1stages_1_1Stage_1_1Stage" ],
           [ "StageCallable", "classzigzag_1_1stages_1_1Stage_1_1StageCallable.html", "classzigzag_1_1stages_1_1Stage_1_1StageCallable" ]
         ] ],
-        [ "TemporalOrderingConversionStage", "namespacezigzag_1_1stages_1_1TemporalOrderingConversionStage.html", [
-          [ "TemporalOrderingConversionStage", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage" ]
+        [ "temporal_mapping_generator_stage", "namespacezigzag_1_1stages_1_1temporal__mapping__generator__stage.html", [
+          [ "TemporalMappingGeneratorStage", "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html", "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage" ]
         ] ],
         [ "VisualizationStage", "namespacezigzag_1_1stages_1_1VisualizationStage.html", [
           [ "VisualizationStage", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage" ]

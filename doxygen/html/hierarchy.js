@@ -71,14 +71,12 @@ var hierarchy =
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", [
         [ "AcceleratorParserStage", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html", null ],
         [ "CostModelStage", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html", null ],
-        [ "LomaStage", "classzigzag_1_1stages_1_1LomaStage_1_1LomaStage.html", null ],
         [ "ONNXModelParserStage", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", null ],
         [ "PEArrayScalingStage", "classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html", null ],
         [ "PlotTemporalMappingsStage", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", null ],
         [ "SalsaStage", "classzigzag_1_1stages_1_1SalsaStage_1_1SalsaStage.html", null ],
         [ "SpatialMappingConversionStage", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html", null ],
         [ "SpatialMappingGeneratorStage", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html", null ],
-        [ "TemporalOrderingConversionStage", "classzigzag_1_1stages_1_1TemporalOrderingConversionStage_1_1TemporalOrderingConversionStage.html", null ],
         [ "VisualizationStage", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html", null ],
         [ "WorkloadParserStage", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html", null ],
         [ "WorkloadStage", "classzigzag_1_1stages_1_1WorkloadStage_1_1WorkloadStage.html", null ],
@@ -95,7 +93,8 @@ var hierarchy =
         [ "SkipIfDumpExistsStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html", null ],
         [ "CompleteSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html", null ],
         [ "PickleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage.html", null ],
-        [ "SimpleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html", null ]
+        [ "SimpleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html", null ],
+        [ "TemporalMappingGeneratorStage", "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html", null ]
       ] ],
       [ "LayerAttribute", "classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html", [
         [ "SpatialMapping", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html", null ],
