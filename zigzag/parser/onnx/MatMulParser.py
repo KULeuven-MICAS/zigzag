@@ -19,7 +19,6 @@ class MatMulParser(GemmParser):
         batch_size = 1 if ia_dimension_shape[0] == 0 else ia_dimension_shape[0]
 
         match len(ia_dimension_shape):
-            # TODO: is it I*W->O or W*I->O?
             case 2:
                 size_in = ia_dimension_shape[1]
                 size_out = oa_dimension_shape[1]

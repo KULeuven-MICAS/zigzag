@@ -3,6 +3,7 @@ from datetime import datetime
 from typing import Any
 import logging
 
+# from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
@@ -11,18 +12,9 @@ from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorSt
 from zigzag.stages.WorkloadStage import WorkloadStage
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.reduce_stages import (
-    MinimalEDPStage,
-    MinimalEnergyStage,
-    MinimalLatencyStage,
-    SumStage,
-)
-from zigzag.stages.save_stages import (
-    CompleteSaveStage,
-    PickleSaveStage,
-    SimpleSaveStage,
-)
-from zigzag.stages.LomaStage import LomaStage
+from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
+from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
 from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.exploit_data_locality_stages import (
@@ -87,9 +79,8 @@ def get_hardware_performance_zigzag(
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal
-            # mapping (TM)
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -97,7 +88,7 @@ def get_hardware_performance_zigzag(
         mapping=mapping,  # required by workload_parser_stage
         dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=lpf_limit,  # required by LomaStage
+        loma_lpf_limit=lpf_limit,  # required by TemporalMappingGeneratorStage
         loma_show_progress_bar=True,
         # Max nb of spatial mappings that are automatically generated in SpatialMappingGeneratorStage
         nb_mappings_generated=nb_spatial_mappings_generated,
@@ -163,9 +154,8 @@ def get_hardware_performance_zigzag_imc(
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal
-            # mapping (TM)
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -173,7 +163,7 @@ def get_hardware_performance_zigzag_imc(
         mapping=mapping,  # required by workload_parser_stage
         dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by LomaStage
+        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
         loma_show_progress_bar=True,
         enable_mix_spatial_mapping_generation=True,
         nb_mappings_generated=3,
@@ -241,9 +231,8 @@ def get_hardware_performance_zigzag_pe_array_scaling(
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal
-            # mapping (TM)
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -251,7 +240,7 @@ def get_hardware_performance_zigzag_pe_array_scaling(
         mapping=mapping,  # required by workload_parser_stage
         dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by LomaStage
+        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
         loma_show_progress_bar=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
@@ -316,9 +305,8 @@ def get_hardware_performance_zigzag_with_exploit_data_locality(
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal
-            # mapping (TM)
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -326,7 +314,7 @@ def get_hardware_performance_zigzag_with_exploit_data_locality(
         mapping=mapping,  # required by workload_parser_stage
         dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by LomaStage
+        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
         loma_show_progress_bar=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,
@@ -390,9 +378,8 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Based on the fixed temporal mapping order, generate one temporal
-            # mapping (TM)
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
+            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -400,7 +387,7 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
         mapping=mapping,  # required by workload_parser_stage
         dump_folder=dump_folder,  # output file save pattern
         pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by LomaStage
+        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
         loma_show_progress_bar=True,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
         # smaller than the memory read bw,

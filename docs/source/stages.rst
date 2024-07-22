@@ -59,6 +59,7 @@ The main entry point
 --------------------
 
 You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
+You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
 
 The sequential call of stages
 -----------------------------
@@ -67,7 +68,7 @@ After the ``MainStage`` initialization, the remaining stages are called in an se
 
 The ``ONNXModelParserStage`` parses the ONNX model into the workload and the ``AcceleratorParserStage`` parses the accelerator based on the hardware architecture description. After this, the ``SimpleSaveStage`` is called, which will save the results of the design space exploration in a file in a later step. Further description about this step can be found in `back-passing-label`_.
 
-The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``LomaStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for hardware cost evaluation. 
+The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``TemporalMappingGeneratorStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for HW cost evaluation. 
 
 The back passing of results
 ---------------------------
@@ -123,7 +124,7 @@ Save and dump stages
 
 Temporal mapping stages
 -----------------------
-* `LomaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/LomaStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
+* `TemporalMappingGeneratorStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalMappingGeneratorStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
 * `SalsaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SalsaStage.py#L47>`_: Class that return the best temporal mapping found by the Simulated Annealing Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 * `TemporalOrderingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalOrderingConversionStage.py#L10>`_: Run this stage by converting the user-defined temporal loop ordering to the memory-level based temporal mapping representation.
 

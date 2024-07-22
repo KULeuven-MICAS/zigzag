@@ -222,6 +222,75 @@ class SpatialMappingGeneratorStage(Stage):
 
         return mapping
 
+    def limit_unrolling_to_mem_capacity(
+        self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
+    ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
+        """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
+
+        def limit_loop_unrolling(loop_dict, limited_dims, max_unrolling):
+            def adjust_unrolling_factors(factors, max_unrolling):
+                product = math.prod(factors)
+                while product > max_unrolling:
+                    max_factor = max(factors)
+                    max_index = factors.index(max_factor)
+                    factors[max_index] -= 1
+                    product = math.prod(factors)
+                return factors
+
+            # Extract the unrolling factors for the limited dimensions
+            unrolling_factors = []
+            for dim in limited_dims:
+                for key in loop_dict:
+                    value_dict = loop_dict[key]
+                    if dim in value_dict:
+                        unrolling_factors.append(value_dict[dim])
+            # Adjust the unrolling factors
+            adjusted_factors = adjust_unrolling_factors(unrolling_factors.copy(), max_unrolling)
+            # Create a mapping from the original to adjusted factors
+            factor_map = {old: new for old, new in zip(unrolling_factors, adjusted_factors)}
+            # Apply the adjusted factors back to the loop_dict
+            adjusted_loop_dict = {}
+            for key in loop_dict:
+                value_dict = loop_dict[key]
+                adjusted_value_dict = {
+                    loop_dim: factor_map[factor] if loop_dim in limited_dims else factor
+                    for loop_dim, factor in value_dict.items()
+                }
+                adjusted_loop_dict[key] = adjusted_value_dict
+            return adjusted_loop_dict
+
+        for mem_level in self.memory_hierarchy.get_inner_memories():
+            for mem_op in mem_level.operands:
+                layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+                # Either write BW (to write outputs away) or read BW (to read inputs)
+                mem_capacity = mem_level.memory_instance.size
+                # Bit precision of layer operand
+                precision = self.layer.operand_precision[layer_op]
+                irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
+                total_unrolling_size = 1
+                non_irrelevant_unrolling_per_oa_dim = {}
+                non_irrelevant_dimensions = set()
+                for oa_dim in mem_level.served_dimensions:
+                    non_irrelevant_unrolling_per_oa_dim[oa_dim] = mapping[oa_dim]
+                    # Iterate over all possible LayerDims and rescale max unroll factor
+                    for layer_dim, unrolling_size in mapping[oa_dim].items():
+                        if layer_dim not in irrelevant_dimensions:
+                            non_irrelevant_dimensions.add(layer_dim)
+                            total_unrolling_size *= unrolling_size
+                max_stored_elements = mem_capacity // precision if precision > 0 else float("inf")
+                # Limit the total unrolling across the OA Dims to the capacity of the memory
+                if max_stored_elements < total_unrolling_size:
+                    logger.warning(
+                        f"""Maximal spatial unrolling for {layer_dim} limited to
+                        {max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."""
+                    )
+                    limited_mapping = limit_loop_unrolling(
+                        non_irrelevant_unrolling_per_oa_dim, non_irrelevant_dimensions, max_stored_elements
+                    )
+                    for oa_dim, unrollings in limited_mapping.items():
+                        mapping[oa_dim].update(unrollings)
+        return mapping
+
     def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Generate a SpatialMapping that contains the maximal unroll factor for every Operational
         Array OADimension and every Layer Dimensions. Note that this is NOT a valid mapping as each
@@ -237,6 +306,7 @@ class SpatialMappingGeneratorStage(Stage):
         }
 
         max_unrolling = self.limit_unrolling_to_mem_bandwidth(max_unrolling)
+        max_unrolling = self.limit_unrolling_to_mem_capacity(max_unrolling)
         return max_unrolling
 
     def generate_spatial_mapping_single_oa_dim(

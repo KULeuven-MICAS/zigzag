@@ -1,7 +1,8 @@
+from collections import defaultdict
 import math
 import re
+import logging
 from typing import TypeAlias
-
 
 from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.datatypes import (
@@ -15,6 +16,9 @@ from zigzag.datatypes import (
     UnrollFactor,
     UnrollFactorInt,
 )
+
+
+logger = logging.getLogger(__name__)
 
 InputOperandSource: TypeAlias = dict[LayerOperand, int]
 
@@ -192,15 +196,46 @@ class LayerDimRelation(LayerAttribute):
 
 
 class LayerTemporalOrdering(LayerAttribute):
-    def __init__(self, data: dict[str, UnrollFactorInt]):
-        self.data = [[LayerDim(loop[0]), loop[1]] for loop in data]
+    """Represents a user-defined temporal ordering"""
+
+    def __init__(self, data: list[list[str | UnrollFactorInt]]):
+        """data will look like:
+        [['K', 12],
+         ['C',  3]]
+        """
+        self.data = [(LayerDim(str(loop[0])), int(loop[1])) for loop in data]
 
     @staticmethod
     def empty():
-        return LayerTemporalOrdering({})
+        return LayerTemporalOrdering([])
 
-    def __delitem__(self, x: LayerDim):
-        del self.data[x]
+    def is_empty(self):
+        return len(self.data) == 0
+
+    def is_complete(self, temporal_loop_sizes: dict[LayerDim, UnrollFactor]):
+        """Return wether this temporal ordering matches the given, mandatory loop sizes"""
+        all_loops: defaultdict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
+        for layer_dim, factor in self.data:
+            all_loops[layer_dim] *= factor
+
+        for layer_dim in all_loops:
+            if all_loops[layer_dim] == 1:
+                del all_loops[layer_dim]
+
+        return all_loops == temporal_loop_sizes
+
+    def remove_invalid_layer_dims(self, layer_dim_sizes: LayerDimSizes, layer_name: str = ""):
+        for i, mapping in list(enumerate(self.data))[::-1]:
+            if mapping[0] not in layer_dim_sizes.layer_dims:
+                logger.warning(
+                    "Supplied temporal ordering %s%s thrown out because layer dimension is not present in " "the layer",
+                    mapping,
+                    "" if layer_name == "" else f" for layer {layer_name}",
+                )
+                del self.data[i]
+
+    def to_legacy_format(self):
+        return self.data
 
 
 class LayerPadding(LayerAttribute):

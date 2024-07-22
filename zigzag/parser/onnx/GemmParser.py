@@ -23,7 +23,6 @@ class GemmParser(ONNXOperatorParser):
     ) -> None:
         super().__init__(node_id, node, nodes_outputs, onnx_model)
         self.mapping_data = mapping_data
-        self.onnx_model = onnx_model
 
     def run(self) -> LayerNode:
         """! Run the parser"""
