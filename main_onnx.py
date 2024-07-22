@@ -9,7 +9,7 @@ from zigzag.stages.WorkloadStage import WorkloadStage
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.save_stages import SimpleSaveStage
-from zigzag.stages.LomaStage import LomaStage
+from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
 from zigzag.parser.arguments import get_arg_parser
 
 parser = get_arg_parser()
@@ -39,14 +39,14 @@ mainstage = MainStage(
         WorkloadStage,  # Iterates through the different layers in the workload
         SpatialMappingGeneratorStage,  # Generates multiple spatial mappings (SM)
         MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
-        LomaStage,  # Generates multiple temporal mappings (TM)
+        TemporalMappingGeneratorStage,  # Generates multiple temporal mappings (TM)
         CostModelStage,  # Evaluates generated SM and TM through cost model
     ],
     accelerator=args.accelerator,  # required by AcceleratorParserStage
     workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
     dump_folder=f"outputs/{experiment_id}",  # output folder
-    loma_lpf_limit=6,  # required by LomaStage
+    loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
     loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
 )
 

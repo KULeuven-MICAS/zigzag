@@ -7,10 +7,10 @@ from zigzag.visualization.results.plot_cme import (
 )
 
 model = "resnet"
-workload_path = "zigzag/inputs/workload/resnet18.onnx"
-accelerator_path = "zigzag/inputs/hardware/aimc.yaml"
-mapping_path = "zigzag/inputs/mapping/default_imc.yaml"
-pickle_filename = f"outputs/aimc-{model}-saved_list_of_cmes.pickle"
+workload_path = "zigzag/inputs/workload/resnet18.yaml"  # or "zigzag/inputs/workload/resnet18.onnx"
+accelerator_path = "zigzag/inputs/hardware/tpu_like.yaml"
+mapping_path = "zigzag/inputs/mapping/tpu_like.yaml"
+pickle_filename = f"outputs/{model}-saved_list_of_cmes.pickle"
 
 
 energy, latency, cmes = api.get_hardware_performance_zigzag(

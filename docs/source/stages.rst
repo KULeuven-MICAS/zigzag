@@ -24,8 +24,7 @@ Stages within ZigZag are used to modularly and easily adapt the functionality of
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            LomaStage,  # Generate multiple temporal mappings (TM)
-
+            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=args.accelerator,  # required by AcceleratorParserStage
@@ -67,7 +66,7 @@ After the ``MainStage`` initialization, the remaining stages are called in an se
 
 The ``ONNXModelParserStage`` parses the ONNX model into the workload and the ``AcceleratorParserStage`` parses the accelerator based on the hardware architecture description. After this, the ``SimpleSaveStage`` is called, which will save the results of the design space exploration in a file in a later step. Further description about this step can be found in `back-passing-label`_.
 
-The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``LomaStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for hardware cost evaluation. 
+The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``TemporalMappingGeneratorStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for HW cost evaluation. 
 
 The back passing of results
 ---------------------------
@@ -123,7 +122,7 @@ Save and dump stages
 
 Temporal mapping stages
 -----------------------
-* `LomaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/LomaStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
+* `TemporalMappingGeneratorStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalMappingGeneratorStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
 * `SalsaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SalsaStage.py#L47>`_: Class that return the best temporal mapping found by the Simulated Annealing Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 * `TemporalOrderingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalOrderingConversionStage.py#L10>`_: Run this stage by converting the user-defined temporal loop ordering to the memory-level based temporal mapping representation.
 
