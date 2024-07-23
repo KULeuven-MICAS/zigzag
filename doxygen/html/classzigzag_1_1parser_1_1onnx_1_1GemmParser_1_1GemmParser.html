@@ -101,7 +101,6 @@ Inheritance diagram for GemmParser:</div>
 <div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser__inherit__graph.png" border="0" usemap="#aGemmParser_inherit__map" alt="Inheritance graph"/></div>
 <map name="aGemmParser_inherit__map" id="aGemmParser_inherit__map">
 <area shape="rect" title="Parses an ONNX Gemm operator into a LayerNode." alt="" coords="51,155,158,181"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html" title="Parses an ONNX MatMul operator into a LayerNode." alt="" coords="49,229,160,256"/>
 <area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html" title="Abstract base class that represents a parser of an onnx operator." alt="" coords="26,80,183,107"/>
 <area shape="rect" title=" " alt="" coords="5,5,95,32"/>
 <area shape="rect" title=" " alt="" coords="119,5,202,32"/>
@@ -121,14 +120,11 @@ Collaboration diagram for GemmParser:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4470190038beee58c6f158f71750d235"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a4470190038beee58c6f158f71750d235">__init__</a> (self, int <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a018cb6fe637d3a25a67e794d620808ec">node_id</a>, NodeProto <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ae0682e96cacac1e6c208357a99dbd6d0">node</a>, dict[int, Any] <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a520ae6b76229044ba736c8221af5bd0b">nodes_outputs</a>, list[dict[str, Any]] <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3f954a739989f453e42fa97cb171c657">mapping_data</a>, ModelProto <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a11ca96dc836ddb84fb694554c9e06bf6">onnx_model</a>)</td></tr>
+<tr class="memitem:a4470190038beee58c6f158f71750d235"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a4470190038beee58c6f158f71750d235">__init__</a> (self, int <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a018cb6fe637d3a25a67e794d620808ec">node_id</a>, NodeProto <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ae0682e96cacac1e6c208357a99dbd6d0">node</a>, dict[int, Any] <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a520ae6b76229044ba736c8221af5bd0b">nodes_outputs</a>, list[dict[str, Any]] <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3f954a739989f453e42fa97cb171c657">mapping_data</a>, ModelProto <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a11ca96dc836ddb84fb694554c9e06bf6">onnx_model</a>)</td></tr>
 <tr class="separator:a4470190038beee58c6f158f71750d235"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afff24f54a20c7f088789768b86c00170"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html">LayerNode</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170">run</a> (self)</td></tr>
 <tr class="memdesc:afff24f54a20c7f088789768b86c00170"><td class="mdescLeft">&#160;</td><td class="mdescRight">Run the parser.  <a href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170">More...</a><br /></td></tr>
 <tr class="separator:afff24f54a20c7f088789768b86c00170"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a30c4e3d43c707088a12716d7c16d5d05"><td class="memItemLeft" align="right" valign="top">dict[str, Any]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a30c4e3d43c707088a12716d7c16d5d05">get_layer_node_user_format</a> (self, int batch_size, int size_in, int size_out, int size_shared)</td></tr>
-<tr class="memdesc:a30c4e3d43c707088a12716d7c16d5d05"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate layer data in user input format for MatMul or GEMM ONNX nodes.  <a href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a30c4e3d43c707088a12716d7c16d5d05">More...</a><br /></td></tr>
-<tr class="separator:a30c4e3d43c707088a12716d7c16d5d05"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80d931d1762c1f1db8f3dffc0ef42b62"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62">generate_layer_node</a> (self)</td></tr>
 <tr class="separator:a80d931d1762c1f1db8f3dffc0ef42b62"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac88db8149e49a8f787d81c4f5dc0705d"><td class="memItemLeft" align="right" valign="top">list[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d">infer_input_activation_shape</a> (self, list[int] oa_dimension_shape)</td></tr>
@@ -143,23 +139,21 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4ffc200dc5352663e26c64dc86398860 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a4ffc200dc5352663e26c64dc86398860">get_weight_name</a> (self, NodeProto <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ae0682e96cacac1e6c208357a99dbd6d0">node</a>)</td></tr>
 <tr class="memdesc:a4ffc200dc5352663e26c64dc86398860 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the name of the weight input of this node depending on its operator type.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a4ffc200dc5352663e26c64dc86398860">More...</a><br /></td></tr>
 <tr class="separator:a4ffc200dc5352663e26c64dc86398860 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad847d291212cad6cf96318f9b20353a4 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">str&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4">get_node_name</a> (self)</td></tr>
+<tr class="separator:ad847d291212cad6cf96318f9b20353a4 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a29abb9ea8ccef05203cf5e7b3c3c0626 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">list[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626">get_node_predecessors</a> (self)</td></tr>
-<tr class="memdesc:a29abb9ea8ccef05203cf5e7b3c3c0626 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute node input sources.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626">More...</a><br /></td></tr>
+<tr class="memdesc:a29abb9ea8ccef05203cf5e7b3c3c0626 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute node input source.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626">More...</a><br /></td></tr>
 <tr class="separator:a29abb9ea8ccef05203cf5e7b3c3c0626 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a0bce792b3642443a412af901506173 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173">get_weight_precision</a> (self)</td></tr>
-<tr class="memdesc:a2a0bce792b3642443a412af901506173 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the weight precision for this node.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173">More...</a><br /></td></tr>
-<tr class="separator:a2a0bce792b3642443a412af901506173 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8d6e5e080d24ac227bd133f3eea7000 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000">get_activation_precision</a> (self)</td></tr>
-<tr class="memdesc:aa8d6e5e080d24ac227bd133f3eea7000 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the activation precision for this node.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000">More...</a><br /></td></tr>
-<tr class="separator:aa8d6e5e080d24ac227bd133f3eea7000 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb4cffad0ef7498a2c0a0831a2d82ddd inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd">get_intermediate_output_precision</a> (self)</td></tr>
-<tr class="memdesc:adb4cffad0ef7498a2c0a0831a2d82ddd inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the intermediate output precision for this node.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd">More...</a><br /></td></tr>
-<tr class="separator:adb4cffad0ef7498a2c0a0831a2d82ddd inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7f03506d16bc316910d625a83aaf6df3 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">dict[str, Any]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3">get_layer_node_user_format_gemm</a> (self, int batch_size, int size_in, int size_out, int size_shared)</td></tr>
+<tr class="memdesc:a7f03506d16bc316910d625a83aaf6df3 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate layer data in user input format for MatMul or GEMM ONNX nodes.  <a href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3">More...</a><br /></td></tr>
+<tr class="separator:a7f03506d16bc316910d625a83aaf6df3 inherit pub_methods_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a3f954a739989f453e42fa97cb171c657"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3f954a739989f453e42fa97cb171c657">mapping_data</a></td></tr>
 <tr class="separator:a3f954a739989f453e42fa97cb171c657"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11ca96dc836ddb84fb694554c9e06bf6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a11ca96dc836ddb84fb694554c9e06bf6">onnx_model</a></td></tr>
+<tr class="separator:a11ca96dc836ddb84fb694554c9e06bf6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html">ONNXOperatorParser</a></td></tr>
 <tr class="memitem:a018cb6fe637d3a25a67e794d620808ec inherit pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a018cb6fe637d3a25a67e794d620808ec">node_id</a></td></tr>
 <tr class="separator:a018cb6fe637d3a25a67e794d620808ec inherit pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -169,16 +163,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a520ae6b76229044ba736c8221af5bd0b inherit pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11ca96dc836ddb84fb694554c9e06bf6 inherit pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a11ca96dc836ddb84fb694554c9e06bf6">onnx_model</a></td></tr>
 <tr class="separator:a11ca96dc836ddb84fb694554c9e06bf6 inherit pub_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
-Additional Inherited Members</h2></td></tr>
-<tr class="inherit_header pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td colspan="2" onclick="javascript:toggleInherit('pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser')"><img src="closed.png" alt="-"/>&#160;Static Public Attributes inherited from <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html">ONNXOperatorParser</a></td></tr>
-<tr class="memitem:a57cf47d9bcd02144fe17e89e46659693 inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a57cf47d9bcd02144fe17e89e46659693">CUSTOM_WEIGHT_SIZE_ATTR</a> = &quot;weight_size&quot;</td></tr>
-<tr class="separator:a57cf47d9bcd02144fe17e89e46659693 inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a51e26be764eb5fdea0bd16a6a392eeeb inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a51e26be764eb5fdea0bd16a6a392eeeb">CUSTOM_ACT_SIZE_ATTR</a> = &quot;act_size&quot;</td></tr>
-<tr class="separator:a51e26be764eb5fdea0bd16a6a392eeeb inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aac986e674a85325baa0f61abc6a167d0 inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memItemLeft" align="right" valign="top">string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aac986e674a85325baa0f61abc6a167d0">CUSTOM_OUTPUT_SIZE_ATTR</a> = &quot;output_size&quot;</td></tr>
-<tr class="separator:aac986e674a85325baa0f61abc6a167d0 inherit pub_static_attribs_classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Parses an ONNX Gemm operator into a LayerNode. </p>
@@ -251,24 +235,18 @@ Additional Inherited Members</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-<p>Reimplemented in <a class="el" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62">MatMulParser</a>.</p>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_cgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_cgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_cgraph">
-<area shape="rect" title=" " alt="" coords="5,207,164,234"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="559,5,761,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a30c4e3d43c707088a12716d7c16d5d05" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="273,200,430,241"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="239,267,463,323"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,351,491,392"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="269,95,433,136"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="829,90,1072,146"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="539,122,781,178"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="539,282,781,338"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="539,202,781,258"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,363,761,404"/>
+<area shape="rect" title=" " alt="" coords="5,84,164,111"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="559,10,761,52"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="230,106,473,162"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,186,491,228"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="269,40,433,81"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="539,106,781,162"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,186,761,228"/>
 </map>
 </div>
 <div class="dynheader">
@@ -276,84 +254,10 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_icgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_icgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a80d931d1762c1f1db8f3dffc0ef42b62_icgraph">
-<area shape="rect" title=" " alt="" coords="341,13,500,39"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,13,293,39"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="a30c4e3d43c707088a12716d7c16d5d05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a30c4e3d43c707088a12716d7c16d5d05">&#9670;&nbsp;</a></span>get_layer_node_user_format()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> dict[str, Any] get_layer_node_user_format </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>batch_size</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>size_in</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>size_out</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>size_shared</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Generate layer data in user input format for MatMul or GEMM ONNX nodes. </p>
-<p>W[size_out][size_in] * I[batch_size][size_in][size_shared] -&gt; O [batch_size][size_out][size_shared] NOTE when weight/activation precision are given as attribute to the ONNX node, both intermediate and final output precision are set to the given activation precision. is set to </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_cgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_cgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_cgraph">
-<area shape="rect" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="5,86,163,127"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="501,7,744,63"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="211,39,453,95"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="211,119,453,175"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="211,199,453,255"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_icgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_icgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_a30c4e3d43c707088a12716d7c16d5d05_icgraph">
-<area shape="rect" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="795,63,952,105"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="555,5,714,32"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title="Overrides method from GemmParser" alt="" coords="527,56,742,112"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="523,136,747,192"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="341,71,384,97"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,103,203,145"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="251,133,475,174"/>
+<area shape="rect" title=" " alt="" coords="496,35,655,61"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="328,5,371,32"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,57,448,98"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,27,203,69"/>
 </map>
 </div>
 
@@ -401,10 +305,11 @@ Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_ac88db8149e49a8f787d81c4f5dc0705d_icgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_ac88db8149e49a8f787d81c4f5dc0705d_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_ac88db8149e49a8f787d81c4f5dc0705d_icgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_ac88db8149e49a8f787d81c4f5dc0705d_icgraph">
-<area shape="rect" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="548,5,712,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="341,13,500,39"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,13,293,39"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+<area shape="rect" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="703,27,867,69"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="496,35,655,61"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="328,5,371,32"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,57,448,98"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,27,203,69"/>
 </map>
 </div>
 
@@ -434,19 +339,15 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_afff24f54a20c7f088789768b86c00170_cgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_afff24f54a20c7f088789768b86c00170_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_afff24f54a20c7f088789768b86c00170_cgraph" id="aclasszigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser_afff24f54a20c7f088789768b86c00170_cgraph">
-<area shape="rect" title="Run the parser." alt="" coords="5,245,48,271"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="124,210,283,237"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title="Overrides method from GemmParser" alt="" coords="96,262,311,318"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="706,5,907,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a30c4e3d43c707088a12716d7c16d5d05" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="419,200,577,241"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="386,266,610,322"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="359,347,637,388"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="416,95,580,136"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="976,170,1219,226"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="685,202,928,258"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="685,282,928,338"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="685,71,928,127"/>
-<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="706,363,907,404"/>
+<area shape="rect" title="Run the parser." alt="" coords="5,119,48,146"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="124,86,283,112"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="96,136,311,192"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="706,8,907,49"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a7f03506d16bc316910d625a83aaf6df3" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="377,103,619,159"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="359,184,637,225"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="416,37,580,78"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="685,103,928,159"/>
+<area shape="rect" href="namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="706,184,907,225"/>
 </map>
 </div>
 <div class="dynheader">
@@ -470,6 +371,20 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">mapping_data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a11ca96dc836ddb84fb694554c9e06bf6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11ca96dc836ddb84fb694554c9e06bf6">&#9670;&nbsp;</a></span>onnx_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">onnx_model</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -1,5 +1,8 @@
 var NAVTREEINDEX4 =
 {
+"classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#a3d8d91667eef95483bfb83b1f5947364":[2,0,2,5,10,1,3],
+"classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#abab504413e85c79174a5ef6e02cad92e":[2,0,2,5,10,1,0],
+"classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,2,5,10,1,1],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html":[2,0,2,5,14,0],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a1818dd727f53ab87876e8da1ce8d3fa8":[2,0,2,5,14,0,0],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a1a81b4276ed57e54580bef8cb37bb2e5":[2,0,2,5,14,0,5],
@@ -187,8 +190,8 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,3],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,3,2],
 "files.html":[3,0],
-"functions.html":[2,3,0,0],
 "functions.html":[2,3,0],
+"functions.html":[2,3,0,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
@@ -246,8 +249,5 @@ var NAVTREEINDEX4 =
 "functions_vars_l.html":[2,3,2,9],
 "functions_vars_m.html":[2,3,2,10],
 "functions_vars_n.html":[2,3,2,11],
-"functions_vars_o.html":[2,3,2,12],
-"functions_vars_p.html":[2,3,2,13],
-"functions_vars_q.html":[2,3,2,14],
-"functions_vars_r.html":[2,3,2,15]
+"functions_vars_o.html":[2,3,2,12]
 };

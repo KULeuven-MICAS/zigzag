@@ -1,0 +1,7 @@
+<map id="get_node_name" name="get_node_name">
+<area shape="rect" id="node1" title=" " alt="" coords="1067,20,1193,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="795,5,1019,61"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="523,5,747,61"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="251,13,475,54"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,13,203,54"/>
+</map>

@@ -65,9 +65,8 @@ var hierarchy =
       [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html", [
         [ "ConvParser", "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html", null ],
         [ "DefaultNodeParser", "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html", null ],
-        [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", [
-          [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
-        ] ]
+        [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", null ],
+        [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
       ] ],
       [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", [
         [ "AcceleratorParserStage", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html", null ],

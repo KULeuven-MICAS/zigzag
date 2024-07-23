@@ -1,4 +1,0 @@
-<map id="get_intermediate_output_precision" name="get_intermediate_output_precision">
-<area shape="rect" id="node1" title="Return the intermediate output precision for this node." alt="" coords="5,5,188,47"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="236,13,417,39"/>
-</map>

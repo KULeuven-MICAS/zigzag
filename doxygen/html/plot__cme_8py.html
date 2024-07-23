@@ -100,18 +100,11 @@ Namespaces</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a930e8bc0b1ea42467701e306df864c4f"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a930e8bc0b1ea42467701e306df864c4f">shorten_onnx_layer_name</a> (str name)</td></tr>
-<tr class="memdesc:a930e8bc0b1ea42467701e306df864c4f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Names generated in the ONNX format are quite long (e.g.  <a href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a930e8bc0b1ea42467701e306df864c4f">More...</a><br /></td></tr>
-<tr class="separator:a930e8bc0b1ea42467701e306df864c4f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc01f67be60ccbbd90f675650ffe2556"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#afc01f67be60ccbbd90f675650ffe2556">get_mem_energy_single_op</a> (CostModelEvaluation cme, LayerOperand op, int mem_level)</td></tr>
-<tr class="separator:afc01f67be60ccbbd90f675650ffe2556"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a224fa62723511d36c3f9d409b008e0d4"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a224fa62723511d36c3f9d409b008e0d4">get_energy_array</a> (list[CostModelEvaluation] cmes, list[LayerOperand] all_ops, list[MemoryInstance] all_mems)</td></tr>
-<tr class="memdesc:a224fa62723511d36c3f9d409b008e0d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the given list of cmes to a numpy array with the energy per layer, memory level, operand and data direction.  <a href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a224fa62723511d36c3f9d409b008e0d4">More...</a><br /></td></tr>
-<tr class="separator:a224fa62723511d36c3f9d409b008e0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8694f4e26688d01de907ef8d462fe7be"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a8694f4e26688d01de907ef8d462fe7be">get_latency_array</a> (list[CostModelEvaluation] cmes)</td></tr>
-<tr class="separator:a8694f4e26688d01de907ef8d462fe7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a763bb764caec470fb4432eeda695e457"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a763bb764caec470fb4432eeda695e457">bar_plot_cost_model_evaluations_breakdown</a> (list[CostModelEvaluationABC] cmes, str save_path)</td></tr>
-<tr class="separator:a763bb764caec470fb4432eeda695e457"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1c128a6931e7d2a282f7c71e7e3f5ecc"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a1c128a6931e7d2a282f7c71e7e3f5ecc">bar_plot_cost_model_evaluations_total</a> (list[CostModelEvaluation] cmes, list[str] labels, str save_path=&quot;plot.png&quot;)</td></tr>
+<tr class="memdesc:a1c128a6931e7d2a282f7c71e7e3f5ecc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Plot total energy and latency of each cost model evaluation in a bar chart.  <a href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a1c128a6931e7d2a282f7c71e7e3f5ecc">More...</a><br /></td></tr>
+<tr class="separator:a1c128a6931e7d2a282f7c71e7e3f5ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64f434fd029f6bfd55580df1a7424b94"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a64f434fd029f6bfd55580df1a7424b94">bar_plot_cost_model_evaluations_breakdown</a> (list[CostModelEvaluationABC] cmes, str save_path, int xtick_rotation=90)</td></tr>
+<tr class="separator:a64f434fd029f6bfd55580df1a7424b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -135,12 +128,8 @@ Variables</h2></td></tr>
 <tr class="separator:a347302a78a6b296fd94dfdb56a6bad4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a250a5d2f03fc812bbbbe6311276875f5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a250a5d2f03fc812bbbbe6311276875f5">fontsize</a></td></tr>
 <tr class="separator:a250a5d2f03fc812bbbbe6311276875f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9116defcf640a12d0856bc9dc1df7f7a"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a9116defcf640a12d0856bc9dc1df7f7a">BAR_WIDTH</a> = 1</td></tr>
-<tr class="separator:a9116defcf640a12d0856bc9dc1df7f7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a683cec7d6fffd6a994ab80756251fad3"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a683cec7d6fffd6a994ab80756251fad3">BAR_SPACING</a> = 0</td></tr>
-<tr class="separator:a683cec7d6fffd6a994ab80756251fad3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf17385f3d25e45640fdfb826f0a8b73"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#aaf17385f3d25e45640fdfb826f0a8b73">GROUP_SPACING</a> = 1</td></tr>
-<tr class="separator:aaf17385f3d25e45640fdfb826f0a8b73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acf5fea4c28f155d03da283f91b67b473"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#acf5fea4c28f155d03da283f91b67b473">list_of_cme</a> = pickle.load(handle)</td></tr>
+<tr class="separator:acf5fea4c28f155d03da283f91b67b473"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 </div><!-- contents -->
 </div><!-- doc-content -->
