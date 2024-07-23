@@ -140,6 +140,7 @@ class SpatialMappingGeneratorStage(Stage):
         # Full Spatial Mapping is already defined by user
         if len(oa_dims_to_fill) == 0:
             assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data)
+            mapping_template = self.limit_unrolling_to_mem_capacity(mapping_template)
             yield mapping_template
             return
 
@@ -177,6 +178,7 @@ class SpatialMappingGeneratorStage(Stage):
             candidate = candidate_mappings[i]
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
+            candidate = self.limit_unrolling_to_mem_capacity(candidate)
             yield candidate
 
     def limit_unrolling_to_mem_bandwidth(
@@ -307,7 +309,6 @@ class SpatialMappingGeneratorStage(Stage):
         }
 
         max_unrolling = self.limit_unrolling_to_mem_bandwidth(max_unrolling)
-        max_unrolling = self.limit_unrolling_to_mem_capacity(max_unrolling)
         return max_unrolling
 
     def generate_spatial_mapping_single_oa_dim(
