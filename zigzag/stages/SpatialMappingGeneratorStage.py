@@ -225,9 +225,7 @@ class SpatialMappingGeneratorStage(Stage):
 
         return mapping
 
-    def limit_unrolling_to_mem_capacity(
-        self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
-    ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
+    def limit_unrolling_to_mem_capacity(self, mapping: SpatialMapping) -> SpatialMapping:
         """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
 
         def limit_loop_unrolling(loop_dict, limited_dims, max_unrolling):
