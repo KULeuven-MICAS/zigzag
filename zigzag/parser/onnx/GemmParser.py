@@ -39,53 +39,42 @@ class GemmParser(ONNXOperatorParser):
         W[size_out][size_in] * I[batch_size][size_in][size_shared] -> O [batch_size][size_out][size_shared]
         NOTE when weight/activation precision are given as attribute to the ONNX node, both intermediate and final
         output precision are set to the given activation precision.
-        is set to
         """
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
         data["name"] = self.node.name
         data["operator_type"] = self.node.op_type
-        data["equation"] = "O[b][k][d]+=W[k][c]*I[b][c][d]"
         data["loop_dims"] = ["B", "C", "K", "D"]
         data["loop_sizes"] = [batch_size, size_in, size_out, size_shared]
         data["dimension_relations"] = []
 
-        # Assign sources and precisions depending on the number of predecessors
         predecessors = self.get_node_predecessors()
         act_precision = self.get_activation_precision()
         weight_precision = self.get_weight_precision()
         intermediate_output_precision = self.get_intermediate_output_precision()
+
+        # If there are 2 input nodes, `weights` represents a variable input
+        weights_are_constant = len(predecessors) < 2
+
+        data["equation"] = f"O[b][k][d]+=W{'' if weights_are_constant else '[b]'}[k][c]*I[b][c][d]"
+        data["operand_precision"] = {
+            "W": weight_precision if weights_are_constant else act_precision,
+            "I": act_precision,
+            "O_final": act_precision,
+            "O": intermediate_output_precision,
+        }
+
         match len(predecessors):
             case 0:
                 # No source operands -> assume one is constant
-                # TODO should this be 2?
                 data["operand_source"] = {"W": self.node_id}
-                data["operand_precision"] = {
-                    "W": weight_precision,
-                    "I": act_precision,
-                    "O_final": act_precision,
-                    "O": intermediate_output_precision,
-                }
             case 1:
                 # One source operand, one constant
                 data["operand_source"] = {"W": self.node_id, "I": predecessors[0]}
-                data["operand_precision"] = {
-                    "W": weight_precision,
-                    "I": act_precision,
-                    "O_final": act_precision,
-                    "O": intermediate_output_precision,
-                }
             case 2:
                 # Two source operands, none are constant (W and I can be swapped)
                 data["operand_source"] = {"W": predecessors[0], "I": predecessors[1]}
-                data["operand_precision"] = {
-                    "W": act_precision,
-                    "I": act_precision,
-                    "O_final": act_precision,
-                    "O": intermediate_output_precision,
-                }
-
             case _:
                 raise ValueError("No more than 2 layer predecessors expected")
 
