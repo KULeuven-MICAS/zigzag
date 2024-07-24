@@ -1,5 +1,4 @@
 <map id="get_layer_node_user_format" name="get_layer_node_user_format">
-<area shape="rect" id="node1" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="5,53,163,94"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="211,5,453,61"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="211,85,453,141"/>
+<area shape="rect" id="node1" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="5,13,163,54"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="211,5,453,61"/>
 </map>

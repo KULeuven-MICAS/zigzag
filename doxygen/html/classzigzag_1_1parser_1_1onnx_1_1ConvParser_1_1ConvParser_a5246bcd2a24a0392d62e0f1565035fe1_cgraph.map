@@ -1,9 +1,12 @@
 <map id="generate_layer_node_for_conv" name="generate_layer_node_for_conv">
-<area shape="rect" id="node1" title=" " alt="" coords="5,93,164,134"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Retrieves the attrs[name_idx].ints from attrs." alt="" coords="251,27,452,69"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="273,93,430,134"/>
-<area shape="rect" id="node6" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,162,491,203"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ad847d291212cad6cf96318f9b20353a4" title=" " alt="" coords="539,5,781,61"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input source." alt="" coords="539,85,781,141"/>
-<area shape="rect" id="node7" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,166,761,207"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,186,164,227"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Return the value of an attribute of given name from the given attributes If name does not exist in at..." alt="" coords="251,73,452,114"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a30c4e3d43c707088a12716d7c16d5d05" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="234,139,469,195"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="273,222,430,263"/>
+<area shape="rect" id="node9" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35bc51bfcc8cd53fb3d5d47a162db29e" title=" " alt="" coords="212,291,491,333"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="829,24,1072,80"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="539,56,781,112"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="539,216,781,272"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="539,136,781,192"/>
+<area shape="rect" id="node10" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af43d4b510ae4229ea2f9bd12f8f311eb" title=" " alt="" coords="559,297,761,338"/>
 </map>

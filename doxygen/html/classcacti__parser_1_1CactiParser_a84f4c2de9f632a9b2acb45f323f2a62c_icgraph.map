@@ -1,4 +1,4 @@
 <map id="create_item" name="create_item">
 <area shape="rect" id="node1" title="This function simulates a new item by calling CACTI7 based on the provided parameters." alt="" coords="133,5,233,32"/>
-<area shape="rect" id="node2" href="$classcacti__parser_1_1CactiParser.html#adc002943c277137e596c52b6ba230e91" title="This functions checks first if the memory with the provided parameters was already simulated once." alt="" coords="5,5,85,32"/>
+<area shape="rect" id="node2" href="$classcacti__parser_1_1CactiParser.html#a5233f328f6589f3059980aef02e7953f" title="This functions checks first if the memory with the provided parameters was already simulated once." alt="" coords="5,5,85,32"/>
 </map>
