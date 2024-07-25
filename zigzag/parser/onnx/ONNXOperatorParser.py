@@ -2,9 +2,8 @@ from abc import ABCMeta, abstractmethod
 from typing import Any
 
 from onnx import ModelProto, NodeProto
-import onnx
 
-from zigzag.parser.onnx.utils import get_onnx_tensor_type
+from zigzag.parser.onnx.utils import get_attribute_ints_with_name, get_onnx_tensor_type
 from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 
@@ -69,34 +68,34 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         """Return the weight precision for this node.
         The weight precision of ONNX nodes can be customized by manually adding the attribute `CUSTOM_WEIGHT_SIZE_ATTR`
         to the node."""
-        for attr in self.node.attribute:
-            if attr.name == ONNXOperatorParser.CUSTOM_WEIGHT_SIZE_ATTR:
-                if attr.type != onnx.AttributeProto.INT:
-                    raise ValueError("Custom weight size attribute must be an integer.")
-                return attr.i
-        # Default
-        return 8
+        default = 8
+        try:
+            return get_attribute_ints_with_name(
+                name=ONNXOperatorParser.CUSTOM_WEIGHT_SIZE_ATTR, attrs=self.node.attribute, default=default
+            )
+        except NotImplementedError as exc:
+            raise ValueError("Custom weight size attribute must be an integer.") from exc
 
     def get_activation_precision(self):
         """Return the activation precision for this node.
         The activation precision of ONNX nodes can be customized by manually adding the attribute
          `CUSTOM_WEIGHT_SIZE_ATTR` to the node."""
-        for attr in self.node.attribute:
-            if attr.name == ONNXOperatorParser.CUSTOM_ACT_SIZE_ATTR:
-                if attr.type != onnx.AttributeProto.INT:
-                    raise ValueError("Custom activation size attribute must be an integer.")
-                return attr.i
-        # Default
-        return 8
+        default = 8
+        try:
+            return get_attribute_ints_with_name(
+                name=ONNXOperatorParser.CUSTOM_ACT_SIZE_ATTR, attrs=self.node.attribute, default=default
+            )
+        except NotImplementedError as exc:
+            raise ValueError("Custom activation size attribute must be an integer.") from exc
 
     def get_intermediate_output_precision(self):
         """Return the intermediate output precision for this node.
         The intermediate output precision of ONNX nodes can be customized by manually adding the attribute
          `CUSTOM_OUTPUT_SIZE_ATTR` to the node."""
-        for attr in self.node.attribute:
-            if attr.name == ONNXOperatorParser.CUSTOM_OUTPUT_SIZE_ATTR:
-                if attr.type != onnx.AttributeProto.INT:
-                    raise ValueError("Custom activation size attribute must be an integer.")
-                return attr.i
-        # Default
-        return 2 * self.get_activation_precision()
+        default = 2 * self.get_activation_precision()
+        try:
+            return get_attribute_ints_with_name(
+                name=ONNXOperatorParser.CUSTOM_OUTPUT_SIZE_ATTR, attrs=self.node.attribute, default=default
+            )
+        except NotImplementedError as exc:
+            raise ValueError("Custom intermediate output size attribute must be an integer.") from exc
