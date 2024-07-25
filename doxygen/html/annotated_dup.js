@@ -143,7 +143,7 @@ var annotated_dup =
             [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser" ]
           ] ],
           [ "MatMulParser", "namespacezigzag_1_1parser_1_1onnx_1_1MatMulParser.html", [
-            [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser" ]
+            [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
           ] ],
           [ "ONNXModelParser", "namespacezigzag_1_1parser_1_1onnx_1_1ONNXModelParser.html", [
             [ "ONNXModelParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser.html", "classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser" ]

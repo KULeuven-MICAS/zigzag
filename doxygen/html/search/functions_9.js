@@ -1,7 +1,7 @@
 var searchData=
 [
   ['identify_5flayer_5foperand_5frepresentation_1475',['identify_layer_operand_representation',['../classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a2c5a776c25a7eaf01b1950817067ee61',1,'zigzag::stages::SpatialMappingGeneratorStage::SpatialMappingGeneratorStage']]],
-  ['infer_5finput_5factivation_5fshape_1476',['infer_input_activation_shape',['../classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d',1,'zigzag::parser::onnx::GemmParser::GemmParser']]],
+  ['infer_5finput_5factivation_5fshape_1476',['infer_input_activation_shape',['../classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac965bc4f14353d22b2ded9fedd74a6da',1,'zigzag::parser::onnx::GemmParser::GemmParser']]],
   ['info_5flist_1477',['info_list',['../classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#af8856fd1159c6efefaddca8e667ea220',1,'zigzag::mapping::data_movement::FourWayDataMoving']]],
   ['init_1478',['init',['../namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a2878c24d2f169db7fd9b3a8937b58d0e',1,'zigzag::opt::loma::multipermute']]],
   ['initialize_5foa_5fdims_1479',['initialize_oa_dims',['../classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a9adbb4e1f4796a49f5c7126f8b8232a2',1,'zigzag::mapping::spatial_mapping::SpatialMapping']]],

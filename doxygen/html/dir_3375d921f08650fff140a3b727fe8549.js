@@ -10,7 +10,9 @@ var dir_3375d921f08650fff140a3b727fe8549 =
     [ "GemmParser.py", "GemmParser_8py.html", [
       [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser" ]
     ] ],
-    [ "MatMulParser.py", "MatMulParser_8py.html", "MatMulParser_8py" ],
+    [ "MatMulParser.py", "MatMulParser_8py.html", [
+      [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
+    ] ],
     [ "ONNXModelParser.py", "ONNXModelParser_8py.html", "ONNXModelParser_8py" ],
     [ "ONNXOperatorParser.py", "ONNXOperatorParser_8py.html", [
       [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser" ]

@@ -1,0 +1,4 @@
+<map id="get_activation_precision" name="get_activation_precision">
+<area shape="rect" id="node1" title="Return the activation precision for this node." alt="" coords="5,13,187,39"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Return the value of an attribute of given name from the given attributes If name does not exist in at..." alt="" coords="235,5,436,47"/>
+</map>

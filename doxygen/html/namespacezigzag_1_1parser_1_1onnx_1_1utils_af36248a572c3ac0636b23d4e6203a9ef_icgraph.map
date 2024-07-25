@@ -1,9 +1,13 @@
 <map id="get_attribute_ints_with_name" name="get_attribute_ints_with_name">
-<area shape="rect" id="node1" title="Return the value of an attribute of given name from the given attributes If name does not exist in at..." alt="" coords="1173,30,1311,71"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,30,780,71"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="865,96,1089,152"/>
-<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac88db8149e49a8f787d81c4f5dc0705d" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="828,30,1125,71"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,31,485,73"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,66,203,107"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="256,98,480,139"/>
+<area shape="rect" id="node1" title="Return the value of an attribute of given name from the given attributes If name does not exist in at..." alt="" coords="1755,131,1892,172"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,214,780,255"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="545,118,769,174"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="1464,90,1707,146"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="1173,25,1416,81"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="1173,156,1416,212"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac965bc4f14353d22b2ded9fedd74a6da" title="In case the input activations are empty (which can happen if there is a shape operator in the path): ..." alt="" coords="828,287,1125,328"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,210,485,251"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,178,203,219"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="256,143,480,184"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ae4c54b95d45152ce3954d65e05c446c0" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="859,118,1094,174"/>
 </map>

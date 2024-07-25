@@ -1,6 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#adca1ff50ad6a39c3165fc2399d5e850d":[2,0,0,6,0,0],
 "classarchitecture_1_1memory__port_1_1DataDirection.html":[2,0,0,7,1],
 "classarchitecture_1_1memory__port_1_1MemoryPort.html":[2,0,0,7,2],
 "classarchitecture_1_1memory__port_1_1MemoryPort.html#a03797021fcbbfd6ff4c26b4fb7c4afbf":[2,0,0,7,2,8],
@@ -249,5 +248,6 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a95e119fcafad269c55c5f0d9b28a4b5f":[2,0,2,2,3,0,20],
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9a00af3d1716075df926f235ba756095":[2,0,2,2,3,0,8],
 "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9a47563093dfc5ba12274b66e368920c":[2,0,2,2,3,0,2],
-"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9aa94c4b14872e841a4b8dec1d6908f9":[2,0,2,2,3,0,9]
+"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9aa94c4b14872e841a4b8dec1d6908f9":[2,0,2,2,3,0,9],
+"classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9bc4d10b339b7694f7b1ccabf59e7dc0":[2,0,2,2,3,0,5]
 };
