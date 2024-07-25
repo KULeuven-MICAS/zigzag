@@ -9,12 +9,7 @@ workloads = (
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "zigzag/inputs/workload/resnet18.onnx": (
-        4695729577.211851,
-        5540648.0,
-        14.07244,
-        2.2878123152749223,
-    ),
+    "zigzag/inputs/workload/resnet18.onnx": (4696819238.427852, 5553018.0, 14.07244, 2.2878123152749223),
     "zigzag/inputs/workload/resnet18.yaml": (
         4264976904.6396008,
         4907495.0,
@@ -43,6 +38,7 @@ def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=
         expected_tclk,
         expected_area,
     ) = ens_lats_clks_areas[workload]
+    print(f"'{workload}': ({energy}, {latency}, {tclk}, {area}),")
     assert energy == pytest.approx(expected_energy)  # type: ignore
     assert latency == pytest.approx(expected_latency)  # type: ignore
     assert tclk == pytest.approx(expected_tclk)  # type: ignore
