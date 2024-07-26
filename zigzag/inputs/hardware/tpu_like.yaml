@@ -12,7 +12,6 @@ memories:
     w_port: 1
     rw_port: 0
     latency: 1
-    auto_cost_extraction: False
     operands: [I2]
     ports:
       - fh: w_port_1

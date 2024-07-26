@@ -16,7 +16,7 @@ class DummyNode(LayerNodeABC):
         @param predecessor (list): list of ids of this node's predecessor nodes
         @param node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
         """
-        super().__init__(node_id, node_name)
+        LayerNodeABC.__init__(self, node_id, node_name)
 
         if len(predecessors) == 0:
             self.input_operand_source: InputOperandSource = {}

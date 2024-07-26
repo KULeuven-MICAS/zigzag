@@ -28,5 +28,5 @@ with open(pickle_filename, "rb") as fp:
     cmes = pickle.load(fp)
 
 
-bar_plot_cost_model_evaluations_breakdown(cmes, save_path="outputs/plot_breakdown.png")
+bar_plot_cost_model_evaluations_breakdown(cmes[0:5], save_path="outputs/plot_breakdown.png")
 print_mapping(cmes[0])

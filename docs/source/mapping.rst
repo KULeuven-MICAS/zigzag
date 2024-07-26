@@ -13,6 +13,10 @@ The mapping file should contain following aspects for every ONNX node that will 
 * **core_allocation**: The accelerator core id onto which this ONNX node is mapped (the id provided when creating the core in the hardware description file). Since ZigZag only supports single-core architectures, the core allocation must be set to 1.
 * **spatial_mapping**: The spatial parallelization strategy to execute the node with (this can be automated through the ``SpatialMappingGeneratorStage``).
 * **memory_operand_links**: The memory operand links, which link the memory operands (defined in the memory hierarchy of the core) to the layer operands (which are generated in the ONNXModelParserStage and are typically 'O', 'I', 'W' for a convolutional layer). This extra memory mapping is added to allow flexible memory allocation schemes. If left empty, a default value will be used instead.
+
+* **core_allocation**: The accelerator core id onto which this ONNX node is mapped (the id provided when creating the core in the hardware description file). Since ZigZag only supports single-core architectures, the core allocation must be set to 1.
+* **spatial_mapping**: The spatial parallelization strategy to execute the node with (this can be automated through the ``SpatialMappingGeneratorStage``).
+* **memory_operand_links**: The memory operand links, which link the memory operands (defined in the memory hierarchy of the core) to the layer operands (which are generated in the ONNXModelParserStage and are typically 'O', 'I', 'W' for a convolutional layer). This extra memory mapping is added to allow flexible memory allocation schemes. If left empty, a default value will be used instead.
 * **temporal_ordering**: The order in which the loop-based workload is scheduled on the accelerator. The given temporal ordering must be strictly complete. If the user-defined (or generated) spatial mapping together with the temporal ordering do not define the full workload for some layer, the temporal ordering is rejected altogether.
 
 An example mapping is given below. The name of the mapping must correspond to an operation type (e.g. 'MatMul') or the exact name of a layer.

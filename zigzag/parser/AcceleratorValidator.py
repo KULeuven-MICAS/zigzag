@@ -228,6 +228,21 @@ class AcceleratorValidator:
         mem_data: dict[str, Any] = self.data["memories"][mem_name]
         expected_oa_dims: list[str] = self.data["operational_array"]["dimensions"]
 
+        # Auto-cost extraction using CACTI
+        if mem_data["auto_cost_extraction"]:
+            if mem_data["size"] % 8 != 0:
+                self.invalidate(
+                    f"Memory size of {mem_name} must be a multiple of 8 when automatically extracting "
+                    f"costs using CACTI."
+                )
+        else:
+            if mem_data["r_cost"] is None:
+                self.invalidate(f"`r_cost` of {mem_name} is missing, and is not automatically extracted using CACTI.")
+            if mem_data["w_cost"] is None:
+                self.invalidate(f"`w_cost` of {mem_name} is missing, and is not automatically extracted using CACTI.")
+            if mem_data["area"] is None:
+                self.invalidate(f"`area` of {mem_name} is missing, and is not automatically extracted using CACTI.")
+
         # Number of port allocations is consistent with memory operands
         nb_operands = len(mem_data["operands"])
         nb_ports = len(mem_data["ports"])

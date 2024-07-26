@@ -3,15 +3,7 @@ from dataclasses import dataclass
 from enum import auto, Enum
 from typing import Any, List
 import onnx
-from onnx import (
-    AttributeProto,
-    helper,
-    compose,
-    ModelProto,
-    GraphProto,
-    NodeProto,
-    TypeProto,
-)
+from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto, numpy_helper
 
 logger = logging.getLogger(__name__)
 
@@ -90,9 +82,7 @@ def parse_dynamic_onnx_model(model: ModelProto) -> ModelProto:
 
 
 def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int | None = None) -> list[int] | int:
-    """! Retrieves the attrs[name_idx].ints from attrs.
-    If attrs[name_idx] is of type INTS, attrs[name_idx].ints is returned.
-    If attrs[name_idx] is of type INT, attrs[name_idx].i is returned.
+    """! Return the value of an attribute of given name from the given attributes
     If name does not exist in attrs, the default provided by the caller is used.
     If the caller doesn't supply a default, an error is thrown.
 
@@ -100,11 +90,14 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
     attrs_names = [attr.name for attr in attrs]
     try:
         name_idx = attrs_names.index(name)
-        attr_type = attrs[name_idx].type
+        value = attrs[name_idx]
+        attr_type = value.type
         if attr_type == AttributeProto.AttributeType.INT:  # type: ignore
-            return int(attrs[name_idx].i)
+            return int(value.i)
         elif attr_type == AttributeProto.AttributeType.INTS:  # type: ignore
-            return list(attrs[name_idx].ints)
+            return list(value.ints)
+        elif attr_type == AttributeProto.AttributeType.TENSOR:  # type: ignore
+            return list(numpy_helper.to_array(value.t).tolist())  # type: ignore
         else:
             raise NotImplementedError(f"Attribute extraction of type {attr_type} not supported.")
     except ValueError as exc:
@@ -117,6 +110,8 @@ def get_attribute_ints_with_name(name: str, attrs: Any, default: list[int] | int
 
 
 class OnnxTensorCategory(Enum):
+    """Internal representation of ONNX tensor category"""
+
     INPUT = auto()
     OUTPUT = auto()
     HIDDEN = auto()
@@ -154,9 +149,9 @@ class OnnxTensorType:
 
 
 def get_onnx_tensor_type(name: str, model: ModelProto):
-    for input in model.graph.input:
-        if input.name == name:
-            return OnnxTensorType.from_tensor_type(input.type.tensor_type, OnnxTensorCategory.INPUT)
+    for input_value in model.graph.input:
+        if input_value.name == name:
+            return OnnxTensorType.from_tensor_type(input_value.type.tensor_type, OnnxTensorCategory.INPUT)
 
     for output in model.graph.output:
         if output.name == name:
