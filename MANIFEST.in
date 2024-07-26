@@ -1,2 +1,2 @@
 include zigzag/inputs/workload/*.onnx
-recursive-include zigzag/classes/cacti *
+recursive-include zigzag/cacti *

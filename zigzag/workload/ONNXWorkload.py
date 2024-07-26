@@ -8,10 +8,6 @@ from zigzag.workload.Workload import WorkloadABC
 from zigzag.workload.layer_node import LayerNode
 
 
-# class ONNXWorkloadNoDummy(WorkloadABC[LayerNode]):
-#     """Represents a workload graph parsed from ONNX, but without DummyNodes"""
-
-
 class ONNXWorkload(WorkloadABC[LayerNodeABC]):
     """Represents a workload graph parsed from ONNX"""
 

@@ -1,7 +1,7 @@
 import yaml
 import os
-import argparse
 import sys
+import argparse
 
 # To make this file runnable
 sys.path.append(os.getcwd())
@@ -59,9 +59,10 @@ ex_rd_port = args.ex_rd_port
 ex_wr_port = args.ex_wr_port
 rd_wr_port = args.rd_wr_port
 bank_count = args.bank_count
-
 technology = args.technology
 
+# Default to the read bandwidth of the memory
+block_size = IO_bus_width
 
 C.cacti_auto(
     [
@@ -76,6 +77,7 @@ C.cacti_auto(
                 "rd_wr_port",
                 "bank_count",
                 "technology",
+                "line_size",
             ],
             [
                 mem_type,
@@ -86,6 +88,7 @@ C.cacti_auto(
                 rd_wr_port,
                 bank_count,
                 technology,
+                block_size,  # in bytes
             ],
         ],
     ],

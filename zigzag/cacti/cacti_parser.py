@@ -83,7 +83,6 @@ class CactiParser:
 
         p = subprocess.call(
             [
-                "PYTHONPATH=$(pwd)",
                 "python",
                 cacti_top_path,
                 "--mem_type",
@@ -104,7 +103,7 @@ class CactiParser:
                 str(mem_pool_path),
                 "--technology",
                 str(technology),
-            ]
+            ],
         )
 
         if p != 0:
@@ -112,6 +111,8 @@ class CactiParser:
 
     def get_item(
         self,
+        *,
+        mem_name: str,
         mem_type: str,
         size: int,
         r_bw: int,
@@ -131,14 +132,26 @@ class CactiParser:
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
-        logger.info("/Extracting memory costs with CACTI for size = %i and r_bw = %i.", size, r_bw)
+        logger.info(
+            "Extracting memory costs with CACTI for %s with size = %i and r_bw = %i.",
+            mem_name,
+            size,
+            r_bw,
+        )
 
         if mem_type == "rf":
             new_mem_type = "sram"
             new_size = int(size * 128)
             new_r_bw = int(r_bw)
             logger.warning(
-                "Type %s -> %s. Size %i -> %i. BW %i -> %i.", mem_type, new_mem_type, size, new_size, r_bw, new_r_bw
+                "%s: Type %s -> %s. Size %i -> %i. BW %i -> %i.",
+                mem_name,
+                mem_type,
+                new_mem_type,
+                size,
+                new_size,
+                r_bw,
+                new_r_bw,
             )
             mem_type = new_mem_type
             size = new_size
@@ -194,11 +207,14 @@ class CactiParser:
                     and (tech == technology)
                     and (bank_count == bank)
                 ):
-                    return (
+                    logger.info(
+                        "Extracted memory costs with CACTI for %s: r_cost = %f, w_cost = %f, area = %f.",
+                        mem_name,
                         read_cost,
                         write_cost,
                         area,
                     )
+                    return read_cost, write_cost, area
 
         # should be never reached
         raise ModuleNotFoundError(

@@ -23,7 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class NoValidLoopOrderingFoundException(Exception):
-    pass
+    """Indicates that not a single valid temporal loop was found"""
 
 
 class LomaEngine:
@@ -94,7 +94,8 @@ class LomaEngine:
             except MemoryHierarchyTooSmallException:
                 pass
             except MemoryTooSmallException:
-                pass  # Skip the ordering that crashed due to ordering (+su) not fitting in memory
+                # Skip the ordering that crashed due to ordering (or spatial unrolling) not fitting in memory
+                pass
             if pbar is not None:
                 pbar.update(1)
 
@@ -102,10 +103,13 @@ class LomaEngine:
             pbar.close()
 
         if not yielded:
-            # TODO this warning is unclear: an invalid spatial mapping is not necessarily its cause
             raise NoValidLoopOrderingFoundException(
-                f"No valid loop ordering was found for layer {self.layer}. Please make sure the spatial mapping is "
-                f"compatible with the architecture."
+                f"No valid loop ordering was found for layer {self.layer}. Please make sure the data layout is "
+                f"compatible with the architecture. Common causes of this error are: \n"
+                f"- The spatial mapping is incompatible with the operational array dimensions\n"
+                f"- The layer does not fit within the full memory hierarchy\n"
+                f"- A single operand does not fit within the lowest memory level\n"
+                f"- One of the layer dimensions cannot be split up in appropriate divisors\n"
             )
 
     def get_temporal_loops(self):

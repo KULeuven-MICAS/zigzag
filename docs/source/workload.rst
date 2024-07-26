@@ -21,6 +21,18 @@ The following operators are supported by ZigZag and will automatically be parsed
 
 All other operators will be parsed into a ``DummyNode`` object that is assumed to not be accelerateable, incurring zero hardware costs. If you have an onnx operator you would like to see supported, feel free to `open an issue <https://github.com/ZigZag-Project/zigzag/issues/new>`_ or manually add it yourself in the `ONNXModelParserStage <https://github.com/ZigZag-Project/zigzag/blob/8bce029a4284b720d8957357db74d629bd894dc6/classes/stages/ONNXModelParserStage.py#L314>`_ taking into account the :ref:`contributing guidelines`.
 
+Controlling the quantization
+----------------------------
+
+To change the operand precision used in ZigZag, ONNX layers can be extended with a custom attribute to define the number of bits for weights, activations (in- and output) and intermediate output activations. The attribute name must correspondingly match ``weight_size``, ``act_size`` or ``output_size``. Attributes can be added as follows:
+
+.. code:: python
+    onnx_model = onnx.load(path)
+    for node in onnx_model.graph.node:
+        attr = onnx.helper.make_attribute("weight_size", 4) # 4bit weight quantization
+        node.attribute.extend([attr])
+
+
 Saving your onnx model with external data
 -----------------------------------------
 

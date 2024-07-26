@@ -72,5 +72,5 @@ The energy and latency breakdown of a list of ``CostModelEvaluation`` objects ca
 
 This will produce a bar chart, for example:
 
-.. image:: images/visualization/breakdown.jpg
+.. image:: images/visualization/breakdown.png
   :width: 900

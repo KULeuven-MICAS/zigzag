@@ -9,7 +9,7 @@ workloads = (
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/resnet18.onnx": (1860963861.6800003, 3698589.0),
+    "zigzag/inputs/workload/resnet18.onnx": (1860725512.0800002, 3734111.0),
     "zigzag/inputs/workload/resnet18.yaml": (2411783423.28, 4779709.0),
 }
 

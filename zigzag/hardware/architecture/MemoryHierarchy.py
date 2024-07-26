@@ -125,7 +125,6 @@ class MemoryHierarchy(DiGraph):
         """
         level_to_mems: defaultdict[int, list[MemoryLevel]] = defaultdict(lambda: [])
         for node in self.memory_nodes:
-            node: MemoryLevel
             level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys())
         return level_to_mems[top_level], top_level
@@ -133,13 +132,11 @@ class MemoryHierarchy(DiGraph):
     def get_operator_top_level(self, operand: MemoryOperand) -> tuple[list[MemoryLevel], int]:
         """! Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
         instance on this level that have the operand assigned to it.
-        'The' level of a MemoryLevel is considered to be the largest
-        level it has across its assigned operands.
+        'The' level of a MemoryLevel is considered to be the largest level it has across its assigned operands.
         """
         level_to_mems: dict[int, list[MemoryLevel]] = defaultdict(lambda: [])
         for node in self.memory_nodes:
-            node: MemoryLevel
-            if operand in node.operands[:]:
+            if operand in node.operands:
                 level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys()) if level_to_mems else -1
         return level_to_mems[top_level], top_level

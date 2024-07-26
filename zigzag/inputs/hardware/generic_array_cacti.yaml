@@ -1,0 +1,107 @@
+name: generic_array
+
+# `Cloud accelerator` from FLAT (https://dl.acm.org/doi/pdf/10.1145/3575693.3575747) and used in FuseMax (https://openreview.net/forum?id=HKwsTuKEpo)
+
+# 940 MHz
+# 256x256 systolic array
+# 32 MB @ 8 TB/s on-chip buffer
+# DRAM @ 400 GB/s
+
+memories:
+  rf_I:
+    size: 1024
+    r_bw: 16
+    w_bw: 16
+    auto_cost_extraction: true
+    r_port: 1
+    w_port: 1
+    rw_port: 0
+    latency: 1
+    operands: [I1]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+    served_dimensions: []
+
+  rf_W: # For MatMul, this will store activations
+    size: 1024
+    r_bw: 16
+    w_bw: 16
+    auto_cost_extraction: true
+    r_port: 1
+    w_port: 1
+    rw_port: 0
+    latency: 1
+    operands: [I2]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+    served_dimensions: []
+
+  rf_O:
+    size: 1024
+    r_bw: 32
+    w_bw: 32
+    auto_cost_extraction: true
+    r_port: 2
+    w_port: 2
+    rw_port: 0
+    latency: 1
+    operands: [O]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_2
+        th: r_port_2
+    served_dimensions: []
+
+  sram_32MB: # From FLAT paper: 8 Tbit/s on-chip BW
+    size: 268_435_456
+    r_bw: 16384 #65_536 #2048
+    w_bw: 16384 #65_536 #2048
+    auto_cost_extraction: true
+    r_port: 2 # 1
+    w_port: 2 # 1
+    rw_port: 0
+    latency: 1
+    # min_r_granularity: 64 # Does this make sense?
+    # min_w_granularity: 64
+    operands: [I1, I2, O]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+      - fh: w_port_2
+        tl: r_port_2
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_1
+        th: r_port_1
+    served_dimensions: [D1, D2]
+
+  dram: # 400 GB/s
+    size: 10000000000
+    r_bw: 2048 # 64
+    w_bw: 2048 # 64
+    auto_cost_extraction: true
+    r_port: 0
+    w_port: 0
+    rw_port: 1
+    latency: 10
+    operands: [I1, I2, O]
+    ports:
+      - fh: rw_port_1
+        tl: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+        fl: rw_port_1
+        th: rw_port_1
+    served_dimensions: [D1, D2]
+
+operational_array:
+  input_precision: [16, 16]
+  multiplier_energy: 0.04 # pJ
+  multiplier_area: 1 # unit
+  dimensions: [D1, D2]
+  sizes: [256, 256]
