@@ -1,5 +1,6 @@
 from abc import ABCMeta
 from typing import Generic, TypeVar
+
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
 

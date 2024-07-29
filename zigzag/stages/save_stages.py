@@ -1,8 +1,8 @@
-from typing import Any
-import os
-import pickle
 import json
 import logging
+import os
+import pickle
+from typing import Any
 
 from zigzag.cost_model.cost_model import (
     CostModelEvaluation,

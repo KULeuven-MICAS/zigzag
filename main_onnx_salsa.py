@@ -26,19 +26,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
-import re
 import logging
+import re
 
+from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.SalsaStage import SalsaStage
+from zigzag.stages.save_stages import SimpleSaveStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.reduce_stages import MinimalLatencyStage
-from zigzag.stages.save_stages import SimpleSaveStage
-from zigzag.parser.arguments import get_arg_parser
 
 parser = get_arg_parser()
 args = parser.parse_args()

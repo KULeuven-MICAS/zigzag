@@ -1,12 +1,13 @@
 import logging
+from typing import Any, Generator
+
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
-from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
 from zigzag.opt.loma.LomaEngine import LomaEngine
-from zigzag.workload.layer_node import LayerNode
-from typing import Any, Generator
+from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
 from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 

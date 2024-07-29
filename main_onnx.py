@@ -1,16 +1,16 @@
-import re
 import logging
+import re
 
+from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
-from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.save_stages import SimpleSaveStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
-from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.WorkloadStage import WorkloadStage
 
 parser = get_arg_parser()
 args = parser.parse_args()

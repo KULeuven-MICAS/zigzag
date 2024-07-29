@@ -27,20 +27,20 @@
   limitations under the License.
 """
 
-from copy import deepcopy
-from multiprocessing_on_dill import Queue  # type: ignore
-from typing import Any
-from sympy.ntheory import factorint  # type: ignore
-import numpy as np
 import logging
 import random
+from copy import deepcopy
+from typing import Any
 
+import numpy as np
+from multiprocessing_on_dill import Queue  # type: ignore
+from sympy.ntheory import factorint  # type: ignore
 
 from zigzag.datatypes import LayerDim
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.salsa.SalsaState import SalsaState
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 

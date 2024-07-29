@@ -1,10 +1,8 @@
+import logging
 from typing import Any
-
 
 from zigzag.parser.onnx.ONNXModelParser import ONNXModelParser
 from zigzag.stages.Stage import Stage, StageCallable
-
-import logging
 
 logger = logging.getLogger(__name__)
 

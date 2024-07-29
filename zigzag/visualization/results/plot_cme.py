@@ -1,14 +1,14 @@
 from collections import defaultdict
+
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
 
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
 from zigzag.datatypes import ArrayType, LayerOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import DataDirection
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.mapping.data_movement import AccessEnergy
-
 
 # MPL FONT SIZES
 SMALLEST_SIZE = 10

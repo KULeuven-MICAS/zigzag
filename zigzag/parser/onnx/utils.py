@@ -1,9 +1,10 @@
 import logging
 from dataclasses import dataclass
-from enum import auto, Enum
+from enum import Enum, auto
 from typing import Any, List
+
 import onnx
-from onnx import AttributeProto, helper, compose, ModelProto, GraphProto, NodeProto, TypeProto, numpy_helper
+from onnx import AttributeProto, GraphProto, ModelProto, NodeProto, TypeProto, compose, helper, numpy_helper
 
 logger = logging.getLogger(__name__)
 

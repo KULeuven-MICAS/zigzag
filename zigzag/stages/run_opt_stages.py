@@ -1,11 +1,10 @@
-from typing import Any, Callable
 import logging
-import os
 import multiprocessing
+import os
+from typing import Any, Callable
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,25 +1,27 @@
-from onnx import ModelProto
+import logging
 from datetime import datetime
 from typing import Any
-import logging
+
+from onnx import ModelProto
+
+from zigzag.cost_model.cost_model import CostModelEvaluationABC
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 
 # from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
 from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.exploit_data_locality_stages import (
+    ExploitInterLayerDataLocalityStage,
+    SearchInterLayerDataLocalityStage,
+)
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
-from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.WorkloadParserStage import WorkloadParserStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
 from zigzag.stages.VisualizationStage import VisualizationStage
-from zigzag.cost_model.cost_model import CostModelEvaluationABC
-from zigzag.stages.exploit_data_locality_stages import (
-    SearchInterLayerDataLocalityStage,
-    ExploitInterLayerDataLocalityStage,
-)
+from zigzag.stages.WorkloadParserStage import WorkloadParserStage
+from zigzag.stages.WorkloadStage import WorkloadStage
 
 
 def get_hardware_performance_zigzag(

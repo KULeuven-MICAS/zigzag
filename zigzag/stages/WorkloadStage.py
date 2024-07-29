@@ -1,13 +1,12 @@
 import logging
 from typing import Any
 
-
 from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.workload.layer_node import LayerNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.Workload import WorkloadABC
-from zigzag.hardware.architecture.ImcArray import ImcArray
-from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 

@@ -1,20 +1,18 @@
+import logging
 from typing import Any
+
 from onnx import ModelProto
 
+from zigzag.parser.onnx.ConvParser import ConvParser
 from zigzag.parser.onnx.DefaultNodeParser import DefaultNodeParser
 from zigzag.parser.onnx.GemmParser import GemmParser
 from zigzag.parser.onnx.MatMulParser import MatMulParser
-from zigzag.parser.onnx.ConvParser import ConvParser
 from zigzag.parser.onnx.utils import (
-    parse_onnx_model_from_path,
     parse_dynamic_onnx_model,
+    parse_onnx_model_from_path,
 )
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.workload.ONNXWorkload import ONNXWorkload
-
-
-import logging
-
 
 logger = logging.getLogger(__name__)
 

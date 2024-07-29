@@ -3,10 +3,9 @@ import logging
 import math
 from typing import Any
 
-from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
-from zigzag.workload.LayerAttribute import LayerAttribute
+from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
 from zigzag.utils import UniqueMessageFilter, json_repr_handler
-
+from zigzag.workload.LayerAttribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())

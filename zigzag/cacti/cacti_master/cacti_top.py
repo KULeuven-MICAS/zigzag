@@ -1,8 +1,9 @@
-from typing import Any
-import yaml
+import argparse
 import os
 import sys
-import argparse
+from typing import Any
+
+import yaml
 
 # To make this file runnable
 sys.path.append(os.getcwd())

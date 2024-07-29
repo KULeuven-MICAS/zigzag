@@ -1,7 +1,8 @@
-from abc import ABCMeta
 import re
-import numpy as np
+from abc import ABCMeta
 from typing import Any, TypeAlias
+
+import numpy as np
 
 from zigzag.parser.AcceleratorValidator import AcceleratorValidator
 

@@ -2,18 +2,17 @@ import logging
 import math
 from typing import Any
 
-
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.SpatialMappingInternal import (
-    SpatialMappingInternal,
-    SpatialMappingPerMemLvl,
-)
 from zigzag.mapping.spatial_mapping import (
     LayerDim,
     MappingSingleOADim,
     SpatialMapping,
     UnrollFactor,
+)
+from zigzag.mapping.SpatialMappingInternal import (
+    SpatialMappingInternal,
+    SpatialMappingPerMemLvl,
 )
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_attributes import LayerDimSizes

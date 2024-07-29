@@ -1,10 +1,11 @@
-import networkx as nx
 from abc import ABCMeta
 from typing import Any, Generic, Iterator, Sequence, TypeVar
+
+import networkx as nx
 from networkx import DiGraph
 
-from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.layer_node import LayerNode
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 T = TypeVar("T", bound=LayerNodeABC)
 

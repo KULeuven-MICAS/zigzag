@@ -2,9 +2,7 @@ import logging
 from typing import Any
 
 # from cerberus import Validator
-
 from zigzag.parser.UpgradedValidator import UpgradedValidator
-
 
 logger = logging.getLogger(__name__)
 

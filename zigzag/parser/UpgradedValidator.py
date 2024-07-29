@@ -4,10 +4,10 @@ Copyright jdotjdot (https://github.com/pyeve/cerberus/issues/220#issuecomment-20
 
 import copy
 from typing import Any
-from cerberus import Validator  # type: ignore
 
 # using Cerberus 0.9.2
 import six
+from cerberus import Validator  # type: ignore
 
 
 class UpgradedValidator(Validator):

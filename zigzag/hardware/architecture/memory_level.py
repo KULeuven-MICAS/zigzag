@@ -1,15 +1,14 @@
-from typing import Any, TypeAlias
 import math
+from typing import Any, TypeAlias
 
-from zigzag.datatypes import OADimension, MemoryOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.datatypes import MemoryOperand, OADimension
 from zigzag.hardware.architecture.memory_port import (
     MemoryPort,
     MemoryPortType,
     PortAllocation,
 )
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
-
 
 ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 

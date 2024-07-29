@@ -1,16 +1,16 @@
-from datetime import datetime
 import logging
+from datetime import datetime
 
+from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
-from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.save_stages import SimpleSaveStage
+from zigzag.stages.SpatialMappingConversionStage import SpatialMappingConversionStage
 from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
-from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.WorkloadStage import WorkloadStage
 
 
 def main():

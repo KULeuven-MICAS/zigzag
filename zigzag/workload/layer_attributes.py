@@ -1,22 +1,21 @@
-from collections import defaultdict
+import logging
 import math
 import re
-import logging
+from collections import defaultdict
 from typing import TypeAlias
 
-from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.datatypes import (
     Constants,
-    LayerOperand,
     LayerDim,
-    MemoryOperand,
+    LayerOperand,
     LoopList,
+    MemoryOperand,
     PrLoop,
     PrScalingFactors,
     UnrollFactor,
     UnrollFactorInt,
 )
-
+from zigzag.workload.LayerAttribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
 

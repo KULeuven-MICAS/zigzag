@@ -25,19 +25,17 @@
 #   limitations under the License.
 #
 
-import multiprocessing_on_dill as multiprocessing  # type: ignore
 import logging
+from typing import Any
 
+import multiprocessing_on_dill as multiprocessing  # type: ignore
 
 from zigzag.cost_model.cost_model import CostModelEvaluation
-
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.salsa.SalsaEngine import SalsaEngine
-from typing import Any
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
-
 
 logger = logging.getLogger(__name__)
 

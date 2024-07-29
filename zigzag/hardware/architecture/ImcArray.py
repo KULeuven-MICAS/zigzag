@@ -1,11 +1,11 @@
-import math
 import logging
+import math
 
-from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.Mapping import Mapping
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
+from zigzag.mapping.Mapping import Mapping
 from zigzag.utils import json_repr_handler
+from zigzag.workload.layer_node import LayerNode
 
 
 class ImcArray(ImcUnit):

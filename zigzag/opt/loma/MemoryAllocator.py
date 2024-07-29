@@ -1,6 +1,6 @@
-import numpy as np
 from math import prod
 
+import numpy as np
 
 from zigzag.datatypes import (
     Constants,

@@ -1,35 +1,36 @@
-import logging
-import itertools
-import math
 import copy
+import itertools
+import logging
+import math
 from typing import Any, Generator
+
 from sympy import divisors, primefactors  # type: ignore
 
 from zigzag.datatypes import (
-    MemoryOperand,
-    OADimension,
     LayerDim,
     LayerOperand,
-    UnrollFactorInt,
+    MemoryOperand,
+    OADimension,
     UnrollFactor,
+    UnrollFactorInt,
 )
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_level import ServedMemDimensions
-from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.Core import Core
+from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
-from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.mapping.spatial_mapping import (
+    MappingSingleOADim,
+    SpatialMapping,
+)
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
-from zigzag.workload.layer_node import LayerNode
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
-from zigzag.mapping.spatial_mapping import (
-    SpatialMapping,
-    MappingSingleOADim,
-)
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 

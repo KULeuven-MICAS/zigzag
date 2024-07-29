@@ -1,5 +1,5 @@
-from enum import StrEnum
 import re
+from enum import StrEnum
 from typing import Any, TypeAlias
 
 from zigzag.datatypes import MemoryOperand

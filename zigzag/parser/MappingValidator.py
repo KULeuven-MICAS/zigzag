@@ -3,7 +3,6 @@ from typing import Any
 
 from zigzag.parser.UpgradedValidator import UpgradedValidator
 
-
 logger = logging.getLogger(__name__)
 
 
