@@ -72,8 +72,10 @@ line-length = 120
 
 [tool.pyright]
 include = ["zigzag"]
-typeCheckingMode = "strict"
+typeCheckingMode="strict"
 pythonVersion = "3.11"
+stubPath = "./stubs/stubs"
+useLibraryCodeForTypes = true
 reportInvalidTypeForm = "none"
 reportMissingModuleSource = "none"
 reportMissingImports = "none"

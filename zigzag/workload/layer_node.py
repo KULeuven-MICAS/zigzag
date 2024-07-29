@@ -322,7 +322,7 @@ class LayerNode(LayerNodeABC):
                 self.operand_size_elem[layer_op] *= self.calc_tensor_dims(layer_op, self.layer_dim_sizes)[pr_layer_dim]
 
         # each operand's size (Unit: bit)
-        operand_size_bit: dict[LayerOperand, int] = {}
+        operand_size_bit: dict[LayerOperand, UnrollFactor] = {}
         for layer_op, size_in_elem in self.operand_size_elem.items():
             operand_size_bit[layer_op] = size_in_elem * self.operand_precision[layer_op]
         self.operand_size_bit = operand_size_bit
