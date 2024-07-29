@@ -68,10 +68,9 @@ var NAVTREEINDEX0 =
 "annotated.html":[2,0],
 "api_8py.html":[3,0,0,11],
 "api_8py.html#a136a6f3c440a46c31a9c602842e8bc6c":[3,0,0,11,0],
-"api_8py.html#a1c9b91fcad3f7faa6004b408fa497f4e":[3,0,0,11,2],
 "api_8py.html#a6abdc57a231cae04a264cba063a90e0c":[3,0,0,11,1],
-"api_8py.html#aa8a8ba60c00f927bdea9000297c602ff":[3,0,0,11,3],
-"api_8py.html#aaf83ff932aeb7d1dc77cc802a4fe5194":[3,0,0,11,4],
+"api_8py.html#aa8a8ba60c00f927bdea9000297c602ff":[3,0,0,11,2],
+"api_8py.html#aaf83ff932aeb7d1dc77cc802a4fe5194":[3,0,0,11,3],
 "arguments_8py.html":[3,0,0,5,4],
 "arguments_8py.html#afb776418962f44c1896a1f73105c241f":[3,0,0,5,4,0],
 "cacti__parser_8py.html":[3,0,0,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX0 =
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#aa94efac7f8f595554fbf741d1aeaf66c":[2,0,0,6,0,7],
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#ab365ff4fd08d679a3737cc879988ad62":[2,0,0,6,0,1],
 "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#adca1ff50ad6a39c3165fc2399d5e850d":[2,0,0,6,0,0],
-"classarchitecture_1_1memory__port_1_1DataDirection.html":[2,0,0,7,1]
+"classarchitecture_1_1memory__port_1_1DataDirection.html":[2,0,0,7,1],
+"classarchitecture_1_1memory__port_1_1MemoryPort.html":[2,0,0,7,2]
 };

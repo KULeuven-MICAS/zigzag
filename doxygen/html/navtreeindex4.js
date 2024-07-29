@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae67a422836fd5f530bb392b7889836f9":[2,0,2,6,0,1],
 "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html":[2,0,2,7,0,0],
 "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,2,7,0,0,0],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "functions_vars_u.html":[2,3,2,18],
 "functions_vars_v.html":[2,3,2,19],
 "functions_vars_w.html":[2,3,2,20],
-"functions_w.html":[2,3,0,22]
+"functions_w.html":[2,3,0,22],
+"get__cacti__cost_8py.html":[3,0,0,2,0,4]
 };

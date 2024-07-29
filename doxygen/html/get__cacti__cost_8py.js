@@ -2,7 +2,7 @@ var get__cacti__cost_8py =
 [
     [ "CactiConfig", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig" ],
     [ "get_cacti_cost", "get__cacti__cost_8py.html#aec2fa46bcba0f621cf9f3ee4f572b498", null ],
-    [ "get_w_cost_per_weight_from_cacti", "get__cacti__cost_8py.html#ae7ca06f908ff1189da63cdff7ce36ddc", null ],
+    [ "get_w_cost_per_weight_from_cacti", "get__cacti__cost_8py.html#aa1ff5066f9ac1d6daab64e85ff953f9e", null ],
     [ "access_time", "get__cacti__cost_8py.html#aa9f498903f46ec5ca4a3071f344b60b7", null ],
     [ "area", "get__cacti__cost_8py.html#a4329d2992f02e00a6e706a5443269afc", null ],
     [ "bw", "get__cacti__cost_8py.html#a3f7228a3941f19f282647a09dd494528", null ],

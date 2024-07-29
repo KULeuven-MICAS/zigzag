@@ -103,8 +103,8 @@ Functions</h2></td></tr>
 <tr class="memitem:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498">get_cacti_cost</a> (str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#abe023ee5efa19390ad3500722cc9c0bd">tech_node</a>, str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ad756268621f03e4812b68792b291fff5">mem_type</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ab37b30ec9d4e15756765cf9d33207a9b">mem_size_in_byte</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3f7228a3941f19f282647a09dd494528">bw</a>, str hd_hash=&quot;a&quot;)</td></tr>
 <tr class="memdesc:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="mdescLeft">&#160;</td><td class="mdescRight">extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :param tech_node: technology node (directly supported node by CACTI: 0.022, 0.032, 0.045, 0.065, 0.09, 0.18) :param mem_type: memory type (sram or dram) :param mem_size_in_byte: memory size (unit: byte) :param bw: memory IO bitwidth :param hd_hash: input file suffix when generating CACTI input file (useful and in avoid of file conflict for multi-processing simulation) Attention: for CACTI, the minimum mem_size=64B, minimum_rows=32  <a href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498">More...</a><br /></td></tr>
 <tr class="separator:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae7ca06f908ff1189da63cdff7ce36ddc"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ae7ca06f908ff1189da63cdff7ce36ddc">get_w_cost_per_weight_from_cacti</a> (str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a>, dict[str, float] tech_param, hd_param, dimensions)</td></tr>
-<tr class="separator:ae7ca06f908ff1189da63cdff7ce36ddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa1ff5066f9ac1d6daab64e85ff953f9e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aa1ff5066f9ac1d6daab64e85ff953f9e">get_w_cost_per_weight_from_cacti</a> (str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a>, dict[str, float] tech_param, dict[str, Any] hd_param, dict[str, Any] dimensions)</td></tr>
+<tr class="separator:aa1ff5066f9ac1d6daab64e85ff953f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -190,7 +190,7 @@ Here is the caller graph for this function:</div>
 <map name="anamespacearchitecture_1_1get__cacti__cost_aec2fa46bcba0f621cf9f3ee4f572b498_icgraph" id="anamespacearchitecture_1_1get__cacti__cost_aec2fa46bcba0f621cf9f3ee4f572b498_icgraph">
 <area shape="rect" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="719,57,833,84"/>
 <area shape="rect" href="classarchitecture_1_1imc__unit_1_1ImcUnit.html#a9ed0d17991cdae5631cd1479d6dfaed5" title="get the area, energy cost of a single macro (cell array) using CACTI this function is called when cac..." alt="" coords="480,5,671,61"/>
-<area shape="rect" href="namespacearchitecture_1_1get__cacti__cost.html#ae7ca06f908ff1189da63cdff7ce36ddc" title=" " alt="" coords="488,86,663,127"/>
+<area shape="rect" href="namespacearchitecture_1_1get__cacti__cost.html#aa1ff5066f9ac1d6daab64e85ff953f9e" title=" " alt="" coords="488,86,663,127"/>
 <area shape="rect" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#aa10a579ff9076a72afe56f183c7a8213" title="get area of IMC macros (cells, mults, adders, adders_pv, accumulators." alt="" coords="243,13,432,54"/>
 <area shape="rect" href="classarchitecture_1_1ImcArray_1_1ImcArray.html#ab948c7a4c22363a3aae688c30beec0e6" title=" " alt="" coords="5,13,195,54"/>
 </map>
@@ -198,8 +198,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ae7ca06f908ff1189da63cdff7ce36ddc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae7ca06f908ff1189da63cdff7ce36ddc">&#9670;&nbsp;</a></span>get_w_cost_per_weight_from_cacti()</h2>
+<a id="aa1ff5066f9ac1d6daab64e85ff953f9e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa1ff5066f9ac1d6daab64e85ff953f9e">&#9670;&nbsp;</a></span>get_w_cost_per_weight_from_cacti()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -219,13 +219,14 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">&#160;</td>
+          <td class="paramtype">dict[str, Any]&#160;</td>
           <td class="paramname"><em>hd_param</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">&#160;</td>
+          <td class="paramtype">dict[str, Any]
+&#160;</td>
           <td class="paramname"><em>dimensions</em>&#160;</td>
         </tr>
         <tr>
@@ -238,8 +239,8 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="namespacearchitecture_1_1get__cacti__cost_ae7ca06f908ff1189da63cdff7ce36ddc_cgraph.png" border="0" usemap="#anamespacearchitecture_1_1get__cacti__cost_ae7ca06f908ff1189da63cdff7ce36ddc_cgraph" alt=""/></div>
-<map name="anamespacearchitecture_1_1get__cacti__cost_ae7ca06f908ff1189da63cdff7ce36ddc_cgraph" id="anamespacearchitecture_1_1get__cacti__cost_ae7ca06f908ff1189da63cdff7ce36ddc_cgraph">
+<div class="center"><img src="namespacearchitecture_1_1get__cacti__cost_aa1ff5066f9ac1d6daab64e85ff953f9e_cgraph.png" border="0" usemap="#anamespacearchitecture_1_1get__cacti__cost_aa1ff5066f9ac1d6daab64e85ff953f9e_cgraph" alt=""/></div>
+<map name="anamespacearchitecture_1_1get__cacti__cost_aa1ff5066f9ac1d6daab64e85ff953f9e_cgraph" id="anamespacearchitecture_1_1get__cacti__cost_aa1ff5066f9ac1d6daab64e85ff953f9e_cgraph">
 <area shape="rect" title=" " alt="" coords="5,5,180,47"/>
 <area shape="rect" href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="228,13,343,39"/>
 </map>

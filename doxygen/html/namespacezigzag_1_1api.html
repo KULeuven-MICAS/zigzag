@@ -99,9 +99,6 @@ Functions</h2></td></tr>
 <tr class="memitem:a6abdc57a231cae04a264cba063a90e0c"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a6abdc57a231cae04a264cba063a90e0c">get_hardware_performance_zigzag_imc</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
 <tr class="memdesc:a6abdc57a231cae04a264cba063a90e0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned)  <a href="namespacezigzag_1_1api.html#a6abdc57a231cae04a264cba063a90e0c">More...</a><br /></td></tr>
 <tr class="separator:a6abdc57a231cae04a264cba063a90e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c9b91fcad3f7faa6004b408fa497f4e"><td class="memItemLeft" align="right" valign="top">tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a1c9b91fcad3f7faa6004b408fa497f4e">get_hardware_performance_zigzag_pe_array_scaling</a> (str|ModelProto workload, str accelerator, str mapping, int pe_array_scaling, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
-<tr class="memdesc:a1c9b91fcad3f7faa6004b408fa497f4e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving accelerator cost where the pe array size need to be scaled.  <a href="namespacezigzag_1_1api.html#a1c9b91fcad3f7faa6004b408fa497f4e">More...</a><br /></td></tr>
-<tr class="separator:a1c9b91fcad3f7faa6004b408fa497f4e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa8a8ba60c00f927bdea9000297c602ff"><td class="memItemLeft" align="right" valign="top">tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#aa8a8ba60c00f927bdea9000297c602ff">get_hardware_performance_zigzag_with_exploit_data_locality</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
 <tr class="memdesc:aa8a8ba60c00f927bdea9000297c602ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible.  <a href="namespacezigzag_1_1api.html#aa8a8ba60c00f927bdea9000297c602ff">More...</a><br /></td></tr>
 <tr class="separator:aa8a8ba60c00f927bdea9000297c602ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -238,66 +235,6 @@ Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned) </p>
-
-</div>
-</div>
-<a id="a1c9b91fcad3f7faa6004b408fa497f4e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1c9b91fcad3f7faa6004b408fa497f4e">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag_pe_array_scaling()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]] zigzag.api.get_hardware_performance_zigzag_pe_array_scaling </td>
-          <td>(</td>
-          <td class="paramtype">str | ModelProto&#160;</td>
-          <td class="paramname"><em>workload</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>accelerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>mapping</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>pe_array_scaling</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>dump_folder</em> = <code>f&quot;outputs/{datetime.now()}&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>pickle_filename</em> = <code>&quot;outputs/list_of_cmes.pickle&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Function of deriving accelerator cost where the pe array size need to be scaled. </p>
 
 </div>
 </div>
