@@ -109,7 +109,7 @@ with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
                     result[attribute_list[jj]].append(float(each_value))  # type: ignore
-                except:  # noqa E722
+                except IndexError:
                     pass
 
 
@@ -143,7 +143,7 @@ for i in range(len(result[" Capacity (bytes)"])):
     )
 
     new_result = {
-        "%s"
+        "%s"  # pylint: disable=C0209
         % mem_name: {
             "size_byte": int(size_byte),
             "size_bit": int(size_byte * 8),

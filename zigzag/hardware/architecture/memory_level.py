@@ -63,6 +63,9 @@ class ServedMemDimensions:
 
 
 class MemoryLevel:
+    """Represents a single memory in the memory hierarchy, consisting of a memory instance and connectivity
+    information"""
+
     def __init__(
         self,
         memory_instance: MemoryInstance,

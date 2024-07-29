@@ -5,7 +5,7 @@ from typing import Any
 
 
 class CactiConfig:
-    """"""
+    """Configuration for Cacti"""
 
     def __init__(self):
         # content = f.readlines()
@@ -519,8 +519,8 @@ def get_cacti_cost(
     file_path = "./self_gen"  # location for input file (cache.cfg) and output file (cache.cfg.out)
     os.makedirs(file_path, exist_ok=True)
 
-    C = CactiConfig()
-    C.cacti_auto(
+    config = CactiConfig()
+    config.cacti_auto(
         [
             "single",
             [
@@ -551,7 +551,7 @@ def get_cacti_cost(
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
                     result[attribute_list[jj]].append(float(each_value))  # type: ignore
-                except:  # noqa: E722
+                except IndexError:
                     pass
     # get required cost
     access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns

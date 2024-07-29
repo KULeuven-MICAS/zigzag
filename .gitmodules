@@ -1,3 +1,0 @@
-[submodule "stubs"]
-	path = stubs
-	url = git@github.com:microsoft/python-type-stubs

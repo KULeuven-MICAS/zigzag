@@ -24,6 +24,8 @@ PortAllocUserFormat: TypeAlias = tuple[dict[str, str], ...]
 
 
 class MemoryPort:
+    """Single port of a MemoryInstance"""
+
     port_id_counter = 0
 
     def __init__(

@@ -109,4 +109,4 @@ UnrollFactorInt: TypeAlias = int
 PrLoop: TypeAlias = dict[LayerDim, list[LayerDim]]
 LoopList: TypeAlias = list[LayerDim]
 PrScalingFactors: TypeAlias = dict[LayerDim, dict[LayerDim, int]]
-ArrayType = np.ndarray[Any, Any]
+ArrayType = np.ndarray[Any, Any]  # pylint: disable=E1136
