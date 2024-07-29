@@ -729,16 +729,12 @@ class SpatialMappingGeneratorStage(Stage):
                     prev_size,
                     new_size,
                 )
-            operands = tuple(memory_level.operands)
-            port_alloc = memory_level.port_alloc_raw
-            served_dimensions_vec = memory_level.served_dimensions_vec
-            assert len(served_dimensions_vec) >= 1
-            served_dimensions = served_dimensions_vec[0]
 
             new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
-            new_operands: list[MemoryOperand] = pickle_deepcopy(operands)
-            new_port_alloc: PortAllocation = pickle_deepcopy(port_alloc)
-            new_served_dimensions = pickle_deepcopy(served_dimensions)
+            new_operands: list[MemoryOperand] = pickle_deepcopy(memory_level.operands)
+            new_port_alloc: PortAllocation = pickle_deepcopy(memory_level.port_alloc_raw)
+            new_served_dimensions = pickle_deepcopy(memory_level.served_dimensions)
+
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,
                 operands=new_operands,
