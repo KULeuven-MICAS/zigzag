@@ -290,8 +290,8 @@ class SpatialMappingGeneratorStage(Stage):
                 # Limit the total unrolling across the OA Dims to the capacity of the memory
                 if max_stored_elements < total_unrolling_size:
                     logger.warning(
-                        f"""Maximal spatial unrolling for {layer_dim} limited to
-                        {max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."""
+                        f"Maximal spatial unrolling for {layer_dim} (precision={precision}) limited to "
+                        f"{max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."
                     )
                     limited_mapping = self.limit_loop_unrolling(
                         non_irrelevant_unrolling_per_oa_dim, non_irrelevant_dimensions, max_stored_elements
