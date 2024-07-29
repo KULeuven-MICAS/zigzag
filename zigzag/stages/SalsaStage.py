@@ -25,7 +25,7 @@
 #   limitations under the License.
 #
 
-import multiprocessing_on_dill as multiprocessing
+import multiprocessing_on_dill as multiprocessing  # type: ignore
 import logging
 
 
@@ -100,24 +100,26 @@ class SalsaStage(Stage):
         else:
             self.number_of_core = multiprocessing.cpu_count()  # type: ignore
 
+        assert isinstance(self.number_of_core, int)  # type: ignore
+
         # Create processes
         for core_id in range(0, self.number_of_core):
             p = multiprocessing.Process(target=self.engine.run, args=(self.cme_queue,))  # type: ignore
-            self.worker_list.append(p)
+            self.worker_list.append(p)  # type: ignore
 
         # Start the processes
         for core_id in range(0, self.number_of_core):
             logger.debug(f"Starting SALSA Process #{core_id}.")
-            self.worker_list[core_id].start()
+            self.worker_list[core_id].start()  # type: ignore
 
         # For every core we gather the ouput
         for core_id in range(0, self.number_of_core):
-            cme = self.cme_queue.get()
-            self.compare_stage(cme)
+            cme = self.cme_queue.get()  # type: ignore
+            self.compare_stage(cme)  # type: ignore
 
         # Then join them to make sure they all end before continuing the execution
         for core_id in range(0, self.number_of_core):
-            self.worker_list[core_id].join()
+            self.worker_list[core_id].join()  # type: ignore
 
         assert self.best_cme is not None
         kwargs = self.kwargs.copy()

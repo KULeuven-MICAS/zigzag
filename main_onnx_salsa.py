@@ -27,7 +27,7 @@ limitations under the License.
 """
 
 import re
-import logging as _logging
+import logging as logging
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
@@ -45,9 +45,9 @@ args = parser.parse_args()
 
 # Initialize the logger
 
-_logging_level = _logging.INFO
-_logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-_logging.basicConfig(level=_logging_level, format=_logging_format)
+logging_level = logging.INFO
+logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+logging.basicConfig(level=logging_level, format=logging_format)
 
 hw_name = args.accelerator.split(".")[-1]
 wl_name = re.split(r"/|\.", args.model)[-1]

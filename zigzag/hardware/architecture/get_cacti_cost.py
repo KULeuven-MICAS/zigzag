@@ -573,7 +573,9 @@ def get_cacti_cost(
     return access_time, area, r_cost, w_cost
 
 
-def get_w_cost_per_weight_from_cacti(cacti_path: str, tech_param: dict[str, float], hd_param, dimensions) -> float:
+def get_w_cost_per_weight_from_cacti(
+    cacti_path: str, tech_param: dict[str, float], hd_param: dict[str, Any], dimensions: dict[str, Any]
+) -> float:
     # Get w_cost for imc cell group
     # Used in user-provided hardware input file, when it is needed.
     # cacti_path = "zigzag/classes/cacti/cacti_master"

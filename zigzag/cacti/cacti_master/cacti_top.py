@@ -1,3 +1,4 @@
+from typing import Any
 import yaml
 import os
 import sys
@@ -30,7 +31,7 @@ if not os.path.isdir(self_gen_path):
     os.mkdir(self_gen_path)
 
 os.system(f"rm -rf {self_gen_path}/*")
-C = CactiConfig()
+config = CactiConfig()
 
 # Function 1: set default value
 # C.change_default_value(['technology'], [0.090])
@@ -64,7 +65,7 @@ technology = args.technology
 # Default to the read bandwidth of the memory
 block_size = IO_bus_width
 
-C.cacti_auto(
+config.cacti_auto(
     [
         "single",
         [
@@ -96,7 +97,7 @@ C.cacti_auto(
     f"{self_gen_path}/cache.cfg",
 )
 
-result = {}
+result: dict[str, Any] = {}
 with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
     raw_result = fp.readlines()
     for ii, each_line in enumerate(raw_result):

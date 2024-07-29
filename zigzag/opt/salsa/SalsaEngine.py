@@ -30,7 +30,7 @@
 from copy import deepcopy
 from multiprocessing_on_dill import Queue  # type: ignore
 from typing import Any
-from sympy.ntheory import factorint
+from sympy.ntheory import factorint  # type: ignore
 import numpy as np
 import logging
 import random

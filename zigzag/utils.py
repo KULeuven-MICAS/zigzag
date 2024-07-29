@@ -43,7 +43,7 @@ def json_repr_handler(obj: Any, simple: bool = False) -> Any:
     if isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, bool) or isinstance(obj, str):
         return obj
     if isinstance(obj, np.int32):  # type: ignore
-        return int(obj)
+        return int(obj)  # type: ignore
     if hasattr(obj, attr):
         return obj.__simplejsonrepr__() if simple else obj.__jsonrepr__()
 

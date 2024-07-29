@@ -17,12 +17,12 @@ def main():
     args = parser.parse_args()
 
     # Initialize the logger
-    import logging as _logging
+    import logging as logging
 
-    _logging_level = _logging.INFO
-    # _logging_format = '%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
-    _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    _logging.basicConfig(level=_logging_level, format=_logging_format)
+    logging_level = logging.INFO
+    # logging_format = '%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s'
+    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+    logging.basicConfig(level=logging_level, format=logging_format)
 
     # Initialize the MainStage which will start execution.
     # The first argument of this init is the list of stages that will be executed in sequence.

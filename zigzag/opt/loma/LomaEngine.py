@@ -164,11 +164,8 @@ class LomaEngine:
         temporal_loop_pf_counts: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_count_sums: dict[LayerDim, int] = {}
         lpfs = []
-        for (
-            tl_dim,
-            tl_size,
-        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
-            factors: dict[int, int] = factorint(tl_size)
+        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
+            factors: dict[int, int] = factorint(tl_size)  # type: ignore
             pfs = []
             counts = []
             for pf, multiplicity in factors.items():

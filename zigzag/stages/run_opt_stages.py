@@ -98,7 +98,7 @@ def terminate_threadpool():
     threadpool = None
 
 
-def raise_exception(e):
+def raise_exception(e: Exception):
     terminate_threadpool()
     raise e
 
@@ -143,7 +143,7 @@ class MultiProcessingSpawnStage(Stage):
     def run(self):  # type: ignore
         self.sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         get_threadpool(self.nb_multiprocessing_threads).apply_async(
-            self._to_run, callback=self.callback, error_callback=raise_exception
+            self._to_run, callback=self.callback, error_callback=raise_exception  # type: ignore
         )
         yield None, None
 
