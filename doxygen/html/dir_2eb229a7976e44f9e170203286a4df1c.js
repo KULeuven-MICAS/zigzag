@@ -8,7 +8,6 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
       [ "MainStage", "classzigzag_1_1stages_1_1MainStage_1_1MainStage.html", "classzigzag_1_1stages_1_1MainStage_1_1MainStage" ]
     ] ],
     [ "ONNXModelParserStage.py", "ONNXModelParserStage_8py.html", "ONNXModelParserStage_8py" ],
-    [ "PEArrayScalingStage.py", "PEArrayScalingStage_8py.html", null ],
     [ "PlotTemporalMappingsStage.py", "PlotTemporalMappingsStage_8py.html", [
       [ "PlotTemporalMappingsStage", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
     ] ],

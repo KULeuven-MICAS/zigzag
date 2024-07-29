@@ -100,9 +100,6 @@ $(document).ready(function(){initNavTree('classarchitecture_1_1memory__level_1_1
 Public Member Functions</h2></td></tr>
 <tr class="memitem:adca1ff50ad6a39c3165fc2399d5e850d"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#adca1ff50ad6a39c3165fc2399d5e850d">__init__</a> (self, set[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>] <a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a511ae0b1c13f95e5f08f1a0dd3da3d93">data</a>)</td></tr>
 <tr class="separator:adca1ff50ad6a39c3165fc2399d5e850d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa94efac7f8f595554fbf741d1aeaf66c"><td class="memItemLeft" align="right" valign="top">tuple[set[tuple[int,...]],...]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#aa94efac7f8f595554fbf741d1aeaf66c">to_vec_format</a> (self, int nb_oa_dims, int nb_operands)</td></tr>
-<tr class="memdesc:aa94efac7f8f595554fbf741d1aeaf66c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Convert the instance to the one-hot encoded <code>vector</code> format used in legacy code, e.g.  <a href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#aa94efac7f8f595554fbf741d1aeaf66c">More...</a><br /></td></tr>
-<tr class="separator:aa94efac7f8f595554fbf741d1aeaf66c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1db19c7ab25f8e6e33ecacc475707ff9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a1db19c7ab25f8e6e33ecacc475707ff9">nb_dims</a> (self)</td></tr>
 <tr class="separator:a1db19c7ab25f8e6e33ecacc475707ff9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2844ef04ac17500f5d0eee4f3311698e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html#a2844ef04ac17500f5d0eee4f3311698e">__eq__</a> (self, Any other)</td></tr>
@@ -278,43 +275,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa94efac7f8f595554fbf741d1aeaf66c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa94efac7f8f595554fbf741d1aeaf66c">&#9670;&nbsp;</a></span>to_vec_format()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[set[tuple[int, ...]], ...] to_vec_format </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nb_oa_dims</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">int&#160;</td>
-          <td class="paramname"><em>nb_operands</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Convert the instance to the one-hot encoded <code>vector</code> format used in legacy code, e.g. </p>
-<p>({(1,0), (1,1)}, {(1,0), (1,1)}, {(1,0), (1,1)}) - identical copy for each memory operand </p><h1>TODO replace the legacy code parts with the new representation</h1>
 
 </div>
 </div>

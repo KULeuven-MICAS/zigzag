@@ -1,8 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170":[2,0,2,4,3,0,0,3],
-"classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html":[2,0,2,4,3,1,0],
-"classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#a86cbc75d786393a121f8a2ee3aaa26d4":[2,0,2,4,3,1,0,0],
 "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#aa3845056b4b9b58099c55bfa1ea63baf":[2,0,2,4,3,1,0,1],
 "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html":[2,0,2,4,3,2,0],
 "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a3f954a739989f453e42fa97cb171c657":[2,0,2,4,3,2,0,5],
@@ -249,5 +246,8 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#abad7d445eb555517f300b6de6986a765":[2,0,2,5,13,0,3],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,2,5,13,0,2],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html":[2,0,2,6,0],
-"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0]
+"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0],
+"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae67a422836fd5f530bb392b7889836f9":[2,0,2,6,0,1],
+"classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html":[2,0,2,7,0,0],
+"classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,2,7,0,0,0]
 };

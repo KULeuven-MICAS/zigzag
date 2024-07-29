@@ -17,7 +17,10 @@ var dir_d52934d047cd7858e503be898722847b =
     [ "ImcArray.py", "ImcArray_8py.html", [
       [ "ImcArray", "classarchitecture_1_1ImcArray_1_1ImcArray.html", "classarchitecture_1_1ImcArray_1_1ImcArray" ]
     ] ],
-    [ "memory_level.py", "memory__level_8py.html", "memory__level_8py" ],
+    [ "memory_level.py", "memory__level_8py.html", [
+      [ "ServedMemDimensions", "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html", "classarchitecture_1_1memory__level_1_1ServedMemDimensions" ],
+      [ "MemoryLevel", "classarchitecture_1_1memory__level_1_1MemoryLevel.html", "classarchitecture_1_1memory__level_1_1MemoryLevel" ]
+    ] ],
     [ "memory_port.py", "memory__port_8py.html", [
       [ "MemoryPortType", "classarchitecture_1_1memory__port_1_1MemoryPortType.html", null ],
       [ "DataDirection", "classarchitecture_1_1memory__port_1_1DataDirection.html", null ],

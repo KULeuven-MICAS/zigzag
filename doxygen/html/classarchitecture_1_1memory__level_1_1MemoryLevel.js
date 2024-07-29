@@ -18,7 +18,6 @@ var classarchitecture_1_1memory__level_1_1MemoryLevel =
     [ "read_bw", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a42fbf66e525f375c0a10566aa42b1856", null ],
     [ "read_energy", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a238befec77ec294abe9464aea3d974b4", null ],
     [ "served_dimensions", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#afdbf8f0ce5b23be73b1d0095337ab644", null ],
-    [ "served_dimensions_vec", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a762a47c982a2e2f38eea7127ddb2ad76", null ],
     [ "write_bw", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#ad11c1a436ffc9fa83d78ebb2a56cb8f0", null ],
     [ "write_energy", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a4e61caab029b3a9052e23c165f9e136e", null ]
 ];
