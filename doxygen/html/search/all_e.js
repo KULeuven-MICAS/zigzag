@@ -7,7 +7,7 @@ var searchData=
   ['nb_5fmultiprocessing_5fthreads_596',['nb_multiprocessing_threads',['../classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html#aeb080945a0602ed784b0435a41762e1f',1,'zigzag::stages::run_opt_stages::MultiProcessingSpawnStage']]],
   ['nb_5fof_5fbanks_597',['nb_of_banks',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#a4aa23675b3ceead4d280ec73b59426e1',1,'architecture::imc_unit::ImcUnit']]],
   ['nb_5fpermutations_598',['nb_permutations',['../classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a13fd2782632f407962c85eb6e6ae6a10',1,'zigzag::opt::loma::LomaEngine::LomaEngine']]],
-  ['next_5fvalue_599',['next_value',['../classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html#a6e7129bcd12a020d5f22e29e4194b267',1,'zigzag::opt::loma::multipermute::ListElement']]],
+  ['next_5felem_599',['next_elem',['../classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html#afc451f1b80e5068224fbba9ced3e0245',1,'zigzag::opt::loma::multipermute::ListElement']]],
   ['node_600',['node',['../classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#ae0682e96cacac1e6c208357a99dbd6d0',1,'zigzag::parser::onnx::ONNXOperatorParser::ONNXOperatorParser']]],
   ['node_5fdata_601',['node_data',['../classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html#aab338877ff277ff1273f0c56033cd978',1,'zigzag::parser::workload_factory::LayerNodeFactory']]],
   ['node_5fid_602',['node_id',['../classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a018cb6fe637d3a25a67e794d620808ec',1,'zigzag::parser::onnx::ONNXOperatorParser::ONNXOperatorParser']]],
