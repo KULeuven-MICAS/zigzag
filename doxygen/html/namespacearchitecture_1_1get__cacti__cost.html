@@ -86,8 +86,7 @@ $(document).ready(function(){initNavTree('namespacearchitecture_1_1get__cacti__c
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#func-members">Functions</a> &#124;
-<a href="#var-members">Variables</a>  </div>
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle">
 <div class="title">architecture.get_cacti_cost Namespace Reference</div>  </div>
 </div><!--header-->
@@ -100,36 +99,11 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498">get_cacti_cost</a> (str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#abe023ee5efa19390ad3500722cc9c0bd">tech_node</a>, str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ad756268621f03e4812b68792b291fff5">mem_type</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ab37b30ec9d4e15756765cf9d33207a9b">mem_size_in_byte</a>, float <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3f7228a3941f19f282647a09dd494528">bw</a>, str hd_hash=&quot;a&quot;)</td></tr>
+<tr class="memitem:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498">get_cacti_cost</a> (str cacti_path, float tech_node, str mem_type, float mem_size_in_byte, float bw, str hd_hash=&quot;a&quot;)</td></tr>
 <tr class="memdesc:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="mdescLeft">&#160;</td><td class="mdescRight">extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :param tech_node: technology node (directly supported node by CACTI: 0.022, 0.032, 0.045, 0.065, 0.09, 0.18) :param mem_type: memory type (sram or dram) :param mem_size_in_byte: memory size (unit: byte) :param bw: memory IO bitwidth :param hd_hash: input file suffix when generating CACTI input file (useful and in avoid of file conflict for multi-processing simulation) Attention: for CACTI, the minimum mem_size=64B, minimum_rows=32  <a href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498">More...</a><br /></td></tr>
 <tr class="separator:aec2fa46bcba0f621cf9f3ee4f572b498"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1ff5066f9ac1d6daab64e85ff953f9e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aa1ff5066f9ac1d6daab64e85ff953f9e">get_w_cost_per_weight_from_cacti</a> (str <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a>, dict[str, float] tech_param, dict[str, Any] hd_param, dict[str, Any] dimensions)</td></tr>
+<tr class="memitem:aa1ff5066f9ac1d6daab64e85ff953f9e"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aa1ff5066f9ac1d6daab64e85ff953f9e">get_w_cost_per_weight_from_cacti</a> (str cacti_path, dict[str, float] tech_param, dict[str, Any] hd_param, dict[str, Any] dimensions)</td></tr>
 <tr class="separator:aa1ff5066f9ac1d6daab64e85ff953f9e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
-Variables</h2></td></tr>
-<tr class="memitem:a3d8063d0a3ccf384111867914f6e88d6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3d8063d0a3ccf384111867914f6e88d6">mem_size</a> = 32 * 32 / 8</td></tr>
-<tr class="separator:a3d8063d0a3ccf384111867914f6e88d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a061459acc9e078fa4699e0e349887215"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a061459acc9e078fa4699e0e349887215">rows</a> = <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3d8063d0a3ccf384111867914f6e88d6">mem_size</a> * 8 / <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3f7228a3941f19f282647a09dd494528">bw</a></td></tr>
-<tr class="separator:a061459acc9e078fa4699e0e349887215"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa9f498903f46ec5ca4a3071f344b60b7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#aa9f498903f46ec5ca4a3071f344b60b7">access_time</a></td></tr>
-<tr class="separator:aa9f498903f46ec5ca4a3071f344b60b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4329d2992f02e00a6e706a5443269afc"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a4329d2992f02e00a6e706a5443269afc">area</a></td></tr>
-<tr class="separator:a4329d2992f02e00a6e706a5443269afc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6700ef6022c4d3b47bc8853b9e3bbda5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a6700ef6022c4d3b47bc8853b9e3bbda5">r_cost</a></td></tr>
-<tr class="separator:a6700ef6022c4d3b47bc8853b9e3bbda5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78d8307278252d887b53662040fa6004"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a78d8307278252d887b53662040fa6004">w_cost</a></td></tr>
-<tr class="separator:a78d8307278252d887b53662040fa6004"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1d66d9e86d0234453c443b909b5b5987"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a1d66d9e86d0234453c443b909b5b5987">cacti_path</a></td></tr>
-<tr class="separator:a1d66d9e86d0234453c443b909b5b5987"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abe023ee5efa19390ad3500722cc9c0bd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#abe023ee5efa19390ad3500722cc9c0bd">tech_node</a></td></tr>
-<tr class="separator:abe023ee5efa19390ad3500722cc9c0bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad756268621f03e4812b68792b291fff5"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ad756268621f03e4812b68792b291fff5">mem_type</a></td></tr>
-<tr class="separator:ad756268621f03e4812b68792b291fff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab37b30ec9d4e15756765cf9d33207a9b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#ab37b30ec9d4e15756765cf9d33207a9b">mem_size_in_byte</a></td></tr>
-<tr class="separator:ab37b30ec9d4e15756765cf9d33207a9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3f7228a3941f19f282647a09dd494528"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3f7228a3941f19f282647a09dd494528">bw</a></td></tr>
-<tr class="separator:a3f7228a3941f19f282647a09dd494528"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="aec2fa46bcba0f621cf9f3ee4f572b498"></a>
@@ -245,161 +219,6 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="namespacearchitecture_1_1get__cacti__cost.html#aec2fa46bcba0f621cf9f3ee4f572b498" title="extract time, area, r_energy, w_energy cost from cacti 7.0 :param cacti_path: the location of cacti :..." alt="" coords="228,13,343,39"/>
 </map>
 </div>
-
-</div>
-</div>
-<h2 class="groupheader">Variable Documentation</h2>
-<a id="aa9f498903f46ec5ca4a3071f344b60b7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9f498903f46ec5ca4a3071f344b60b7">&#9670;&nbsp;</a></span>access_time</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">access_time</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a4329d2992f02e00a6e706a5443269afc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4329d2992f02e00a6e706a5443269afc">&#9670;&nbsp;</a></span>area</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">area</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3f7228a3941f19f282647a09dd494528"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f7228a3941f19f282647a09dd494528">&#9670;&nbsp;</a></span>bw</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bw</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1d66d9e86d0234453c443b909b5b5987"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1d66d9e86d0234453c443b909b5b5987">&#9670;&nbsp;</a></span>cacti_path</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">cacti_path</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a3d8063d0a3ccf384111867914f6e88d6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d8063d0a3ccf384111867914f6e88d6">&#9670;&nbsp;</a></span>mem_size</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int mem_size = 32 * 32 / 8</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ab37b30ec9d4e15756765cf9d33207a9b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab37b30ec9d4e15756765cf9d33207a9b">&#9670;&nbsp;</a></span>mem_size_in_byte</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">mem_size_in_byte</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ad756268621f03e4812b68792b291fff5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad756268621f03e4812b68792b291fff5">&#9670;&nbsp;</a></span>mem_type</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">mem_type</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a6700ef6022c4d3b47bc8853b9e3bbda5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6700ef6022c4d3b47bc8853b9e3bbda5">&#9670;&nbsp;</a></span>r_cost</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">r_cost</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a061459acc9e078fa4699e0e349887215"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a061459acc9e078fa4699e0e349887215">&#9670;&nbsp;</a></span>rows</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">int rows = <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3d8063d0a3ccf384111867914f6e88d6">mem_size</a> * 8 / <a class="el" href="namespacearchitecture_1_1get__cacti__cost.html#a3f7228a3941f19f282647a09dd494528">bw</a></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="abe023ee5efa19390ad3500722cc9c0bd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abe023ee5efa19390ad3500722cc9c0bd">&#9670;&nbsp;</a></span>tech_node</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">tech_node</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a78d8307278252d887b53662040fa6004"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78d8307278252d887b53662040fa6004">&#9670;&nbsp;</a></span>w_cost</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">w_cost</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
 
 </div>
 </div>
