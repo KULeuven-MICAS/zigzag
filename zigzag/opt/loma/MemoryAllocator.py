@@ -187,7 +187,7 @@ class MemoryAllocator:
             size = self.calc_loops_size(loops, mem_op, unallocated_loops)
             # double size allocated if the node uses double buffering
             if db_support:
-                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:
+                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:  # type: ignore
                     size *= 2
             if size <= mem_capacity:
                 sizes.append(size)

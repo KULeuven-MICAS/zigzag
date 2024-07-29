@@ -107,7 +107,7 @@ with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
         else:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
-                    result[attribute_list[jj]].append(float(each_value))
+                    result[attribute_list[jj]].append(float(each_value))  # type: ignore
                 except:  # noqa E722
                     pass
 

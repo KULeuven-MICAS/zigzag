@@ -548,22 +548,19 @@ def get_cacti_cost(
         else:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
-                    result[attribute_list[jj]].append(float(each_value))
+                    result[attribute_list[jj]].append(float(each_value))  # type: ignore
                 except:  # noqa: E722
                     pass
     # get required cost
-    try:
-        access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns
-        if bw > 32:
-            area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32  # unit: mm2
-            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1]) * bw / 32  # unit: nJ
-            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1]) * bw / 32  # unit: nJ
-        else:
-            area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2  # unit: mm2
-            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
-            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
-    except KeyError:
-        logging.critical("**KeyError** in result, current result: %s", result)
+    access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns
+    if bw > 32:
+        area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32  # unit: mm2
+        r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1]) * bw / 32  # unit: nJ
+        w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1]) * bw / 32  # unit: nJ
+    else:
+        area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2  # unit: mm2
+        r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
+        w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
 
     # change back the working directory
     os.chdir(cwd)

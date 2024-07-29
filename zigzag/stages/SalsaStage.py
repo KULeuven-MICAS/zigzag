@@ -29,7 +29,7 @@ import multiprocessing_on_dill as multiprocessing
 import logging
 
 
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
+from zigzag.cost_model.cost_model import CostModelEvaluation
 
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
@@ -67,14 +67,14 @@ class SalsaStage(Stage):
             spatial_mapping,
         )
         self.engine = None
-        self.best_cme: CostModelEvaluationABC | None = None
+        self.best_cme: CostModelEvaluation | None = None
 
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.number_of_core_allocated = kwargs.get("salsa_number_of_core", 1)
 
         # Multiprocessing parameters
         self.worker_list = []
-        self.cme_queue = multiprocessing.Queue()
+        self.cme_queue = multiprocessing.Queue()  # type: ignore
 
         if self.opt_criterion_name == "energy":
             self.compare_stage = self.compare_cme_energy
@@ -95,14 +95,14 @@ class SalsaStage(Stage):
         )
 
         # Get the number of core the user wants to allocate
-        if self.number_of_core_allocated <= multiprocessing.cpu_count():
+        if self.number_of_core_allocated <= multiprocessing.cpu_count():  # type: ignore
             self.number_of_core: int = self.number_of_core_allocated
         else:
-            self.number_of_core = multiprocessing.cpu_count()
+            self.number_of_core = multiprocessing.cpu_count()  # type: ignore
 
         # Create processes
         for core_id in range(0, self.number_of_core):
-            p = multiprocessing.Process(target=self.engine.run, args=(self.cme_queue,))
+            p = multiprocessing.Process(target=self.engine.run, args=(self.cme_queue,))  # type: ignore
             self.worker_list.append(p)
 
         # Start the processes
@@ -119,6 +119,7 @@ class SalsaStage(Stage):
         for core_id in range(0, self.number_of_core):
             self.worker_list[core_id].join()
 
+        assert self.best_cme is not None
         kwargs = self.kwargs.copy()
         kwargs["accelerator"] = self.accelerator
         kwargs["layer"] = self.layer

@@ -140,7 +140,7 @@ class MultiProcessingSpawnStage(Stage):
     def _to_run(self):
         return list(self.sub_stage.run())
 
-    def run(self):
+    def run(self):  # type: ignore
         self.sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         get_threadpool(self.nb_multiprocessing_threads).apply_async(
             self._to_run, callback=self.callback, error_callback=raise_exception

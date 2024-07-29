@@ -1,5 +1,6 @@
 from abc import ABCMeta
 import re
+import numpy as np
 from typing import Any, TypeAlias
 
 from zigzag.parser.AcceleratorValidator import AcceleratorValidator
@@ -108,3 +109,4 @@ UnrollFactorInt: TypeAlias = int
 PrLoop: TypeAlias = dict[LayerDim, list[LayerDim]]
 LoopList: TypeAlias = list[LayerDim]
 PrScalingFactors: TypeAlias = dict[LayerDim, dict[LayerDim, int]]
+ArrayType = np.ndarray[Any, Any]

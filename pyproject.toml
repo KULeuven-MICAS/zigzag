@@ -71,4 +71,10 @@ line-length = 120
 line-length = 120
 
 [tool.pyright]
+include = ["zigzag"]
 typeCheckingMode = "strict"
+pythonVersion = "3.11"
+reportInvalidTypeForm = "none"
+reportMissingModuleSource = "none"
+reportMissingImports = "none"
+reportAttributeAccessIssue ="none" # False positives for some packages

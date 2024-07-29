@@ -143,10 +143,14 @@ class PickleSaveStage(Stage):
         dirname = os.path.dirname(self.pickle_filename)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        with open(self.pickle_filename, "wb") as handle:
-            pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        logger.info(
-            "Saved pickled list of %i CMEs to %s.",
-            len(all_cmes),
-            self.pickle_filename,
-        )
+
+        try:
+            with open(self.pickle_filename, "wb") as handle:
+                pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)  # type: ignore
+            logger.info(
+                "Saved pickled list of %i CMEs to %s.",
+                len(all_cmes),  # type: ignore
+                self.pickle_filename,
+            )
+        except NameError:
+            logger.warning("No CMEs found to save in PickleSaveStage")

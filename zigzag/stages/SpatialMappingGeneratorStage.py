@@ -18,7 +18,7 @@ from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.hardware.architecture.memory_port import PortAllocUserFormat
+from zigzag.hardware.architecture.memory_port import PortAllocation
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
@@ -224,40 +224,43 @@ class SpatialMappingGeneratorStage(Stage):
 
         return mapping
 
-    def limit_unrolling_to_mem_capacity(self, mapping: SpatialMapping) -> SpatialMapping:
-        """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
+    def adjust_unrolling_factors(self, factors: list[UnrollFactor], max_unrolling: UnrollFactor):
+        product = math.prod(factors)
+        while product > max_unrolling:
+            max_factor = max(factors)
+            max_index = factors.index(max_factor)
+            factors[max_index] -= 1
+            product = math.prod(factors)
+        return factors
 
-        def limit_loop_unrolling(loop_dict, limited_dims, max_unrolling):
-            def adjust_unrolling_factors(factors, max_unrolling):
-                product = math.prod(factors)
-                while product > max_unrolling:
-                    max_factor = max(factors)
-                    max_index = factors.index(max_factor)
-                    factors[max_index] -= 1
-                    product = math.prod(factors)
-                return factors
-
-            # Extract the unrolling factors for the limited dimensions
-            unrolling_factors = []
-            for dim in limited_dims:
-                for key in loop_dict:
-                    value_dict = loop_dict[key]
-                    if dim in value_dict:
-                        unrolling_factors.append(value_dict[dim])
-            # Adjust the unrolling factors
-            adjusted_factors = adjust_unrolling_factors(unrolling_factors.copy(), max_unrolling)
-            # Create a mapping from the original to adjusted factors
-            factor_map = {old: new for old, new in zip(unrolling_factors, adjusted_factors)}
-            # Apply the adjusted factors back to the loop_dict
-            adjusted_loop_dict = {}
+    def limit_loop_unrolling(
+        self, loop_dict: dict[OADimension, MappingSingleOADim], limited_dims: set[LayerDim], max_unrolling: int | float
+    ):
+        # Extract the unrolling factors for the limited dimensions
+        unrolling_factors: list[UnrollFactor] = []
+        for dim in limited_dims:
             for key in loop_dict:
                 value_dict = loop_dict[key]
-                adjusted_value_dict = {
-                    loop_dim: factor_map[factor] if loop_dim in limited_dims else factor
-                    for loop_dim, factor in value_dict.items()
-                }
-                adjusted_loop_dict[key] = adjusted_value_dict
-            return adjusted_loop_dict
+                if dim in value_dict:
+                    unrolling_factors.append(value_dict[dim])
+
+        # Adjust the unrolling factors
+        adjusted_factors = self.adjust_unrolling_factors(unrolling_factors.copy(), max_unrolling)
+        # Create a mapping from the original to adjusted factors
+        factor_map = {old: new for old, new in zip(unrolling_factors, adjusted_factors)}
+        # Apply the adjusted factors back to the loop_dict
+        adjusted_loop_dict: dict[OADimension, dict[LayerDim, UnrollFactor]] = {}
+        for oa_dim in loop_dict:
+            value_dict = loop_dict[oa_dim]
+            adjusted_value_dict = {
+                loop_dim: factor_map[factor] if loop_dim in limited_dims else factor
+                for loop_dim, factor in value_dict.items()
+            }
+            adjusted_loop_dict[oa_dim] = adjusted_value_dict
+        return adjusted_loop_dict
+
+    def limit_unrolling_to_mem_capacity(self, mapping: SpatialMapping) -> SpatialMapping:
+        """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
@@ -267,28 +270,34 @@ class SpatialMappingGeneratorStage(Stage):
                 # Bit precision of layer operand
                 precision = self.layer.operand_precision[layer_op]
                 irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
+
+                # Initialize
                 total_unrolling_size = 1
-                non_irrelevant_unrolling_per_oa_dim = {}
-                non_irrelevant_dimensions = set()
+                non_irrelevant_unrolling_per_oa_dim: dict[OADimension, MappingSingleOADim] = {}
+                non_irrelevant_dimensions: set[LayerDim] = set()
+
+                # Iterate over all possible LayerDims and rescale max unroll factor
                 for oa_dim in mem_level.served_dimensions:
                     non_irrelevant_unrolling_per_oa_dim[oa_dim] = mapping[oa_dim]
-                    # Iterate over all possible LayerDims and rescale max unroll factor
                     for layer_dim, unrolling_size in mapping[oa_dim].items():
                         if layer_dim not in irrelevant_dimensions:
                             non_irrelevant_dimensions.add(layer_dim)
                             total_unrolling_size *= unrolling_size
+
                 max_stored_elements = mem_capacity // precision if precision > 0 else float("inf")
+
                 # Limit the total unrolling across the OA Dims to the capacity of the memory
                 if max_stored_elements < total_unrolling_size:
                     logger.warning(
                         f"""Maximal spatial unrolling for {layer_dim} limited to
                         {max_stored_elements} due to capacity {mem_capacity} of {mem_level.name}."""
                     )
-                    limited_mapping = limit_loop_unrolling(
+                    limited_mapping = self.limit_loop_unrolling(
                         non_irrelevant_unrolling_per_oa_dim, non_irrelevant_dimensions, max_stored_elements
                     )
                     for oa_dim, unrollings in limited_mapping.items():
                         mapping[oa_dim].update(unrollings)
+
         return mapping
 
     def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
@@ -672,10 +681,10 @@ class SpatialMappingGeneratorStage(Stage):
 
         # check if act is not served in the innermost memories, or it is uti-casting for act.
         # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:
+        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:  # type: ignore
             return self.accelerator
 
-        act_served_oa_dim: OADimension = next(iter(act_served_oa_dims))
+        act_served_oa_dim = next(iter(act_served_oa_dims))  # type: ignore
         # get the mem scaling f#actor if OX, OY exist
         mem_scaling_factor: int = 1
         if act_served_oa_dim not in user_spatial_mapping:  # there is no sm loop
@@ -699,7 +708,7 @@ class SpatialMappingGeneratorStage(Stage):
         # Add memories to the new memory hierarchy with the correct attributes
         for memory_level in self.memory_hierarchy.mem_level_list:
             memory_instance = memory_level.memory_instance
-            if memory_level == act_innermost_mem_level:
+            if memory_level == act_innermost_mem_level:  # type: ignore
                 # scale here. For others, keep them unchanged.
                 prev_size = memory_instance.size
                 new_size = memory_instance.size * mem_scaling_factor
@@ -717,8 +726,8 @@ class SpatialMappingGeneratorStage(Stage):
             served_dimensions = served_dimensions_vec[0]
 
             new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
-            new_operands: tuple[MemoryOperand, ...] = pickle_deepcopy(operands)
-            new_port_alloc: PortAllocUserFormat = pickle_deepcopy(port_alloc)
+            new_operands: list[MemoryOperand] = pickle_deepcopy(operands)
+            new_port_alloc: PortAllocation = pickle_deepcopy(port_alloc)
             new_served_dimensions = pickle_deepcopy(served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,

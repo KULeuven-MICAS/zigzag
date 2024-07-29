@@ -94,6 +94,9 @@ class LayerOperandPrecision(LayerAttribute):
     def __init__(self, data: dict[LayerOperand, int]):
         self.data = data
 
+    def __getitem__(self, layer_op: LayerOperand):
+        return self.data[layer_op]
+
     @property
     def final_output_precision(self) -> int:
         """! Return the precision of either the final output (if defined by user) or the intermediate output"""

@@ -81,8 +81,8 @@ class TemporalMapping:
             else:
                 done = True
 
-        self.mapping_dic_stationary = mapping_st
-        self.mac_level_data_stationary_cycle = mac_level_st
+        self.mapping_dic_stationary = mapping_st  # type: ignore
+        self.mac_level_data_stationary_cycle = mac_level_st  # type: ignore
 
     def calc_cycle_cabl_level(self):
         """! Calculate the iteration cycles that each memory level covers"""
