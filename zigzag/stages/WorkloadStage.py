@@ -50,7 +50,7 @@ class WorkloadStage(Stage):
             kwargs["layer"] = layer
             kwargs["accelerator"] = self.accelerator
 
-            logger.info(f"Processing  {layer.name}...")
+            logger.info("Processing  %s...", layer.name)
             sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **kwargs)
             for cme, extra_info in sub_stage.run():
                 yield cme, (layer, extra_info)

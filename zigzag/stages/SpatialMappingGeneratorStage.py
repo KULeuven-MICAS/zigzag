@@ -673,18 +673,27 @@ class SpatialMappingGeneratorStage(Stage):
         # get name of OX, OY (weight ir layer dims)
         weight_ir_layer_dims: list[LayerDim] = self.layer.loop_relevancy_info.get_ir_layer_dims(const_operand)
         # get the oa_dim name served by input innermost memory level
-        for memory_level in innermost_levels:
-            mem_ops = memory_level.operands
-            if self.layer.memory_operand_links.layer_to_mem_op(act_operand) in mem_ops:
-                act_innermost_mem_level = memory_level
-                act_served_oa_dims: ServedMemDimensions = memory_level.served_dimensions
 
-        # check if act is not served in the innermost memories, or it is uti-casting for act.
-        # keep the spatial loop as it was if act is not served.
-        if "act_served_oa_dim" not in locals() or len(act_served_oa_dims) != 1:  # type: ignore
+        try:
+            act_served_oa_dims = next(
+                memory_level.served_dimensions
+                for memory_level in innermost_levels
+                if self.layer.memory_operand_links.layer_to_mem_op(act_operand) in memory_level.operands
+            )
+            act_innermost_mem_level = next(
+                memory_level
+                for memory_level in innermost_levels
+                if self.layer.memory_operand_links.layer_to_mem_op(act_operand) in memory_level.operands
+            )
+        except StopIteration:
+            # check if act is not served in the innermost memories, or it is uti-casting for act.
+            # keep the spatial loop as it was if act is not served.
             return self.accelerator
 
-        act_served_oa_dim = next(iter(act_served_oa_dims))  # type: ignore
+        if len(act_served_oa_dims) != 1:
+            return self.accelerator
+
+        act_served_oa_dim = next(iter(act_served_oa_dims))
         # get the mem scaling f#actor if OX, OY exist
         mem_scaling_factor: int = 1
         if act_served_oa_dim not in user_spatial_mapping:  # there is no sm loop

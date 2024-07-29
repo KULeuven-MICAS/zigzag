@@ -1,5 +1,5 @@
 import math
-import logging as logging
+import logging
 
 from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.Mapping import Mapping

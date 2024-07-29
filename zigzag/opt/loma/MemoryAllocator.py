@@ -147,7 +147,7 @@ class MemoryAllocator:
             mem_level_op = self.mem_level[layer_op]
             spatial_loops = self.spatial_mapping.get_unrolling(op=layer_op, level=mem_level_op)
             for loop_dim, loop_size in spatial_loops:
-                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, type="spatial")
+                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, loop_type="spatial")
                 self.allocated[mem_op].append(spatial_loop)
 
             # Check if this node (i.e. MemoryLevel) is the highest level of memory hierarchy.

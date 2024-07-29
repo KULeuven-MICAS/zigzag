@@ -11,7 +11,7 @@ def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))
         return copy
-    except:  # noqa: E722
+    except:  # noqa: E722 # pylint: disable=W0702
         return deepcopy(to_copy)
 
 

@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class ONNXModelParserStage(Stage):
+    """Stage to parse ONNX model to internal representation"""
+
     def __init__(
         self,
         list_of_callables: list[StageCallable],

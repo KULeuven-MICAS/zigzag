@@ -10,6 +10,8 @@ logger = logging.getLogger(__name__)
 
 
 class WorkloadValidator:
+    """Class to validate user-defined workloads from yaml files according to the given schema and rules"""
+
     EQUATION_REGEX = r"^O(\[\w+\])+\+?=\w(\[\w+\])+[*+]\w(\[\w+\])+$"
     LAYER_DIM_RELATION_REGEX = r"^(\w+)\s*=\s*(?:(\w+)\s*\*\s*)?(\w+)\s*\+\s*(?:(\w+)\s*\*\s*)?(\w+)$"
     ALLOWED_OPERATORS: list[str] = [

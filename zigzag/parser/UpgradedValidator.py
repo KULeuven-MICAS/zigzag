@@ -20,7 +20,7 @@ class UpgradedValidator(Validator):
         self.is_array: bool = kwargs.get("is_array", False)
         super(UpgradedValidator, self).__init__(*args, **kwargs)
 
-    def validate(
+    def validate(  # pylint: disable=W0237
         self,
         document: list[dict[str, Any]],
         schema: dict[str, Any] | None = None,
@@ -46,10 +46,10 @@ class UpgradedValidator(Validator):
                         }
                     }
 
-            if "rows" not in document:  # type: ignore
-                document_dict = {"rows": document}
-            else:
-                document_dict = document
+        if "rows" not in document:  # type: ignore
+            document_dict = {"rows": document}
+        else:
+            document_dict = document
         return super(UpgradedValidator, self).validate(document_dict, schema, update, context)  # type: ignore
 
     @property

@@ -170,7 +170,10 @@ class SalsaEngine:
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
         if self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
-                f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs."
+                "Updated layer %s's lpf limit from %i to %i lpfs.",
+                self.layer,
+                self.lpf_limit,
+                min_nb_temporal_loops,
             )
             self.lpf_limit = min_nb_temporal_loops
 

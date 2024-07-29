@@ -38,15 +38,15 @@ from typing import Any
 
 
 class ListElement:
-    def __init__(self, value: Any, next: Any):
+    def __init__(self, value: Any, next_value: Any):
         self.value = value
-        self.next = next
+        self.next_value = next_value
 
     def nth(self, n: int):
         o = self
         i = 0
-        while i < n and o.next is not None:
-            o = o.next
+        while i < n and o.next_value is not None:
+            o = o.next_value
             i += 1
         return o
 

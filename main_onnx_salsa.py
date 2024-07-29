@@ -27,7 +27,7 @@ limitations under the License.
 """
 
 import re
-import logging as logging
+import logging
 
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage

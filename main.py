@@ -1,4 +1,4 @@
-import logging as logging
+import logging
 import re
 
 from zigzag.stages.CostModelStage import CostModelStage

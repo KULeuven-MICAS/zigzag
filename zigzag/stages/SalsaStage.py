@@ -81,11 +81,11 @@ class SalsaStage(Stage):
         elif self.opt_criterion_name == "latency":
             self.compare_stage = self.compare_cme_latency
         else:
-            raise Exception("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
+            raise ValueError("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
 
     ## Set up and start salsa engine, then collect and return the best cost model evaluation
     def run(self):
-        logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
+        logger.info("Running SALSA Temporal Mapping Optimizer with %i core(s).", self.number_of_core_allocated)
 
         self.engine = SalsaEngine(
             accelerator=self.accelerator,
@@ -109,7 +109,7 @@ class SalsaStage(Stage):
 
         # Start the processes
         for core_id in range(0, self.number_of_core):
-            logger.debug(f"Starting SALSA Process #{core_id}.")
+            logger.debug("Starting SALSA Process #%i.", core_id)
             self.worker_list[core_id].start()  # type: ignore
 
         # For every core we gather the ouput
