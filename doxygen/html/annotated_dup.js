@@ -4,6 +4,9 @@ var annotated_dup =
       [ "Accelerator", "namespacearchitecture_1_1Accelerator.html", [
         [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", "classarchitecture_1_1Accelerator_1_1Accelerator" ]
       ] ],
+      [ "Adder", "namespacearchitecture_1_1Adder.html", [
+        [ "Adder", "classarchitecture_1_1Adder_1_1Adder.html", "classarchitecture_1_1Adder_1_1Adder" ]
+      ] ],
       [ "Core", "namespacearchitecture_1_1Core.html", [
         [ "Core", "classarchitecture_1_1Core_1_1Core.html", "classarchitecture_1_1Core_1_1Core" ]
       ] ],
@@ -181,9 +184,6 @@ var annotated_dup =
         ] ],
         [ "ONNXModelParserStage", "namespacezigzag_1_1stages_1_1ONNXModelParserStage.html", [
           [ "ONNXModelParserStage", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage" ]
-        ] ],
-        [ "PEArrayScalingStage", "namespacezigzag_1_1stages_1_1PEArrayScalingStage.html", [
-          [ "PEArrayScalingStage", "classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage.html", "classzigzag_1_1stages_1_1PEArrayScalingStage_1_1PEArrayScalingStage" ]
         ] ],
         [ "PlotTemporalMappingsStage", "namespacezigzag_1_1stages_1_1PlotTemporalMappingsStage.html", [
           [ "PlotTemporalMappingsStage", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]

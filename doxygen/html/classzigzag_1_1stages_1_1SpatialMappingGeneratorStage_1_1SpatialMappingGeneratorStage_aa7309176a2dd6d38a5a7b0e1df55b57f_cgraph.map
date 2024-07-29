@@ -1,0 +1,5 @@
+<map id="limit_unrolling_to_mem_capacity" name="limit_unrolling_to_mem_capacity">
+<area shape="rect" id="node1" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="5,5,141,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3" title=" " alt="" coords="189,13,340,39"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4" title=" " alt="" coords="388,13,567,39"/>
+</map>

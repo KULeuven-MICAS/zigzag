@@ -12,13 +12,6 @@ var dir_6f4b1df6774a1970fcfe6e3bc2bded6a =
     [ "__init__.py", "____init_____8py.html", "____init_____8py" ],
     [ "__main__.py", "____main_____8py.html", "____main_____8py" ],
     [ "api.py", "api_8py.html", "api_8py" ],
-    [ "datatypes.py", "datatypes_8py.html", [
-      [ "OperandABC", "classzigzag_1_1datatypes_1_1OperandABC.html", "classzigzag_1_1datatypes_1_1OperandABC" ],
-      [ "LayerOperand", "classzigzag_1_1datatypes_1_1LayerOperand.html", "classzigzag_1_1datatypes_1_1LayerOperand" ],
-      [ "MemoryOperand", "classzigzag_1_1datatypes_1_1MemoryOperand.html", "classzigzag_1_1datatypes_1_1MemoryOperand" ],
-      [ "LayerDim", "classzigzag_1_1datatypes_1_1LayerDim.html", "classzigzag_1_1datatypes_1_1LayerDim" ],
-      [ "OADimension", "classzigzag_1_1datatypes_1_1OADimension.html", "classzigzag_1_1datatypes_1_1OADimension" ],
-      [ "Constants", "classzigzag_1_1datatypes_1_1Constants.html", null ]
-    ] ],
+    [ "datatypes.py", "datatypes_8py.html", "datatypes_8py" ],
     [ "utils.py", "utils_8py.html", "utils_8py" ]
 ];

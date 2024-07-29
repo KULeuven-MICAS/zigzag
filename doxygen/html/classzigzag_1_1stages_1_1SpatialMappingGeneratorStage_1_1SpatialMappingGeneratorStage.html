@@ -132,6 +132,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1e8c9bb99bbbcf4dccf4cd714a3b5e09"><td class="memItemLeft" align="right" valign="top">dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, dict[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>, UnrollFactorInt]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09">limit_unrolling_to_mem_bandwidth</a> (self, dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, dict[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>, UnrollFactorInt]] mapping)</td></tr>
 <tr class="memdesc:a1e8c9bb99bbbcf4dccf4cd714a3b5e09"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure.  <a href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09">More...</a><br /></td></tr>
 <tr class="separator:a1e8c9bb99bbbcf4dccf4cd714a3b5e09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a96c7ede9fb87dee3ef898beee3001de4"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4">adjust_unrolling_factors</a> (self, list[UnrollFactor] factors, UnrollFactor max_unrolling)</td></tr>
+<tr class="separator:a96c7ede9fb87dee3ef898beee3001de4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad708417bbd8d33bcdc311861487754f3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3">limit_loop_unrolling</a> (self, dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, <a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html">MappingSingleOADim</a>] loop_dict, set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] limited_dims, int|float max_unrolling)</td></tr>
+<tr class="separator:ad708417bbd8d33bcdc311861487754f3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa7309176a2dd6d38a5a7b0e1df55b57f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html">SpatialMapping</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f">limit_unrolling_to_mem_capacity</a> (self, <a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html">SpatialMapping</a> mapping)</td></tr>
 <tr class="memdesc:aa7309176a2dd6d38a5a7b0e1df55b57f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Scale the given unroll factors such that they do not exceed the capacity of the memory structure.  <a href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f">More...</a><br /></td></tr>
 <tr class="separator:aa7309176a2dd6d38a5a7b0e1df55b57f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -327,6 +331,53 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a96c7ede9fb87dee3ef898beee3001de4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a96c7ede9fb87dee3ef898beee3001de4">&#9670;&nbsp;</a></span>adjust_unrolling_factors()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def adjust_unrolling_factors </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">list[UnrollFactor]&#160;</td>
+          <td class="paramname"><em>factors</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">UnrollFactor&#160;</td>
+          <td class="paramname"><em>max_unrolling</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a96c7ede9fb87dee3ef898beee3001de4_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a96c7ede9fb87dee3ef898beee3001de4_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a96c7ede9fb87dee3ef898beee3001de4_icgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a96c7ede9fb87dee3ef898beee3001de4_icgraph">
+<area shape="rect" title=" " alt="" coords="975,13,1153,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3" title=" " alt="" coords="776,13,927,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="592,5,728,47"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683" title="Generator that yields SpatialMappings." alt="" coords="341,13,544,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0" title="Generate SpatialMappings and convert to internal representation." alt="" coords="251,13,293,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a627acb50e937742c87f3623486213718"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a627acb50e937742c87f3623486213718">&#9670;&nbsp;</a></span>generate_mapping_single_oa_dim_mixed()</h2>
 
@@ -471,15 +522,17 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a8deb34b3d63c7b7a78262d3466550683_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a8deb34b3d63c7b7a78262d3466550683_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a8deb34b3d63c7b7a78262d3466550683_cgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_a8deb34b3d63c7b7a78262d3466550683_cgraph">
-<area shape="rect" title="Generator that yields SpatialMappings." alt="" coords="5,107,208,134"/>
+<area shape="rect" title="Generator that yields SpatialMappings." alt="" coords="5,110,208,137"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ac2546cbcde1e559a492baa99693f1072" title="This function is used to support diagonal spatial mapping when input/activation is served in the inne..." alt="" coords="257,17,449,43"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b" title="Generate a list of possible mappings for the given OADimension." alt="" coords="256,71,451,112"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="282,137,425,163"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="285,188,421,229"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b" title="Generate a list of possible mappings for the given OADimension." alt="" coords="256,72,451,113"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="282,139,425,166"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="285,192,421,233"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a2c5a776c25a7eaf01b1950817067ee61" title=" " alt="" coords="509,5,679,47"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718" title="Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimensions,..." alt="" coords="499,71,689,112"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="737,78,887,105"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="752,78,901,105"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09" title="Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure." alt="" coords="525,136,663,177"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3" title=" " alt="" coords="519,202,669,229"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4" title=" " alt="" coords="737,202,916,229"/>
 </map>
 </div>
 <div class="dynheader">
@@ -575,6 +628,68 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="ad708417bbd8d33bcdc311861487754f3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad708417bbd8d33bcdc311861487754f3">&#9670;&nbsp;</a></span>limit_loop_unrolling()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def limit_loop_unrolling </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">dict[<a class="el" href="classzigzag_1_1datatypes_1_1OADimension.html">OADimension</a>, <a class="el" href="classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html">MappingSingleOADim</a>]&#160;</td>
+          <td class="paramname"><em>loop_dict</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td>
+          <td class="paramname"><em>limited_dims</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int | float
+    &#160;</td>
+          <td class="paramname"><em>max_unrolling</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_cgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_cgraph">
+<area shape="rect" title=" " alt="" coords="5,5,156,32"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4" title=" " alt="" coords="204,5,383,32"/>
+</map>
+</div>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_icgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_icgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad708417bbd8d33bcdc311861487754f3_icgraph">
+<area shape="rect" title=" " alt="" coords="776,13,927,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="592,5,728,47"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683" title="Generator that yields SpatialMappings." alt="" coords="341,13,544,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0" title="Generate SpatialMappings and convert to internal representation." alt="" coords="251,13,293,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="a1e8c9bb99bbbcf4dccf4cd714a3b5e09"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1e8c9bb99bbbcf4dccf4cd714a3b5e09">&#9670;&nbsp;</a></span>limit_unrolling_to_mem_bandwidth()</h2>
 
@@ -645,6 +760,16 @@ Here is the caller graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Scale the given unroll factors such that they do not exceed the capacity of the memory structure. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_aa7309176a2dd6d38a5a7b0e1df55b57f_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_aa7309176a2dd6d38a5a7b0e1df55b57f_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_aa7309176a2dd6d38a5a7b0e1df55b57f_cgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_aa7309176a2dd6d38a5a7b0e1df55b57f_cgraph">
+<area shape="rect" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="5,5,141,47"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3" title=" " alt="" coords="189,13,340,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4" title=" " alt="" coords="388,13,567,39"/>
+</map>
+</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
@@ -772,18 +897,20 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad22709b2e67308af35f55680d5a026e0_cgraph.png" border="0" usemap="#aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad22709b2e67308af35f55680d5a026e0_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad22709b2e67308af35f55680d5a026e0_cgraph" id="aclasszigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage_ad22709b2e67308af35f55680d5a026e0_cgraph">
-<area shape="rect" title="Generate SpatialMappings and convert to internal representation." alt="" coords="5,198,48,225"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683" title="Generator that yields SpatialMappings." alt="" coords="96,137,299,163"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd" title=" " alt="" coords="107,220,287,261"/>
+<area shape="rect" title="Generate SpatialMappings and convert to internal representation." alt="" coords="5,202,48,229"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683" title="Generator that yields SpatialMappings." alt="" coords="96,141,299,167"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd" title=" " alt="" coords="107,224,287,265"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ac2546cbcde1e559a492baa99693f1072" title="This function is used to support diagonal spatial mapping when input/activation is served in the inne..." alt="" coords="348,15,540,42"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b" title="Generate a list of possible mappings for the given OADimension." alt="" coords="347,71,541,112"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="373,137,515,163"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="376,188,512,229"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b" title="Generate a list of possible mappings for the given OADimension." alt="" coords="347,72,541,113"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51" title="Generate a SpatialMapping that contains the maximal unroll factor for every Operational Array OADimen..." alt="" coords="373,141,515,167"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f" title="Scale the given unroll factors such that they do not exceed the capacity of the memory structure." alt="" coords="376,192,512,233"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a2c5a776c25a7eaf01b1950817067ee61" title=" " alt="" coords="599,5,770,47"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718" title="Given an iterator of MappingSingleOADim where each item only contains a single Layer Dimensions,..." alt="" coords="589,71,780,112"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="828,78,977,105"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472" title="Return a list of divisors of n, excluding 1." alt="" coords="843,78,992,105"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09" title="Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure." alt="" coords="615,136,754,177"/>
-<area shape="rect" href="namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="375,253,513,295"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3" title=" " alt="" coords="609,202,760,229"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4" title=" " alt="" coords="828,202,1007,229"/>
+<area shape="rect" href="namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="375,257,513,299"/>
 </map>
 </div>
 <div class="dynheader">

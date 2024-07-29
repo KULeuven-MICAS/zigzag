@@ -2,10 +2,12 @@ var classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGener
 [
     [ "__init__", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea5fa5a994f7d21385e9d7b5f61c6c50", null ],
     [ "add_input_pr_spatial_loop", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ac2546cbcde1e559a492baa99693f1072", null ],
+    [ "adjust_unrolling_factors", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a96c7ede9fb87dee3ef898beee3001de4", null ],
     [ "generate_mapping_single_oa_dim_mixed", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718", null ],
     [ "generate_spatial_mapping_single_oa_dim", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aea608c1014a087c8b41d0215d069df3b", null ],
     [ "generate_spatial_mappings", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683", null ],
     [ "get_max_unrolling", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad8f5816ead1349fdecc134035a707a51", null ],
+    [ "limit_loop_unrolling", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#ad708417bbd8d33bcdc311861487754f3", null ],
     [ "limit_unrolling_to_mem_bandwidth", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a1e8c9bb99bbbcf4dccf4cd714a3b5e09", null ],
     [ "limit_unrolling_to_mem_capacity", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#aa7309176a2dd6d38a5a7b0e1df55b57f", null ],
     [ "modify_innermost_input_mem_size", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd", null ],
