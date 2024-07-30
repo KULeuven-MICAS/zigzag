@@ -1,33 +1,34 @@
-import logging
-import itertools
-import math
 import copy
+import itertools
+import logging
+import math
 from typing import Any, Generator
+
 from sympy import divisors, primefactors  # type: ignore
 
 from zigzag.datatypes import (
-    OADimension,
     LayerDim,
     LayerOperand,
-    UnrollFactorInt,
+    OADimension,
     UnrollFactor,
+    UnrollFactorInt,
 )
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_level import ServedMemDimensions
-from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.Core import Core
+from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.mapping.spatial_mapping import (
+    MappingSingleOADim,
+    SpatialMapping,
+)
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
-from zigzag.workload.layer_node import LayerNode
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
-from zigzag.mapping.spatial_mapping import (
-    SpatialMapping,
-    MappingSingleOADim,
-)
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -225,7 +226,9 @@ class SpatialMappingGeneratorStage(Stage):
     def limit_unrolling_to_mem_capacity(self, mapping: SpatialMapping) -> SpatialMapping:
         """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
 
-        def limit_loop_unrolling(spatial_mapping: SpatialMapping, dims_to_limit: set[LayerDim], max_unrolling: float) -> SpatialMapping:
+        def limit_loop_unrolling(
+            spatial_mapping: SpatialMapping, dims_to_limit: set[LayerDim], max_unrolling: float
+        ) -> SpatialMapping:
             def adjust_unrolling_factors(factors: list[UnrollFactor], max_unrolling: float) -> list[UnrollFactor]:
                 product = math.prod(factors)
                 while product > max_unrolling:
@@ -254,7 +257,8 @@ class SpatialMappingGeneratorStage(Stage):
                     {
                         loop_dim: factor_map[factor] if loop_dim in dims_to_limit else factor
                         for loop_dim, factor in loop_unrollings.items()
-                    })
+                    }
+                )
                 limited_spatial_mapping[oa_dim] = limited_mapping_single_oa_dim
             return limited_spatial_mapping
 
