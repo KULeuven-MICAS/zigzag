@@ -1,6 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"hierarchy.html":[2,2],
 "imc__unit_8py.html":[3,0,0,2,0,5],
 "index.html":[],
 "layer__attributes_8py.html":[3,0,0,8,3],

@@ -14,5 +14,6 @@ var classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim =
     [ "keys", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a89d8a00f894393293852f9e16641be32", null ],
     [ "layer_dims", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a31bb05a16eea55406e0a924884ce05ae", null ],
     [ "unroll_sizes", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#aa15109d151fe5539b54bfccc4876ba28", null ],
+    [ "update", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a019c4f912c17af0d99d422ea1d52079b", null ],
     [ "utilization", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#abad7588ab2c0d103e6d95ec018f937b9", null ]
 ];
