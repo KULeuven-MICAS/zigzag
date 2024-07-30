@@ -77,7 +77,7 @@ class FourWayDataMoving(Generic[T], metaclass=ABCMeta):
         )
 
     def _mul_with_type(self, other: T, return_type: type):
-        return return_type(self)(
+        return return_type(
             self.rd_out_to_low * other,
             self.wr_in_by_low * other,
             self.rd_out_to_high * other,
