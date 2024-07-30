@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html":[2,0,2,4,3,1,0],
 "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#a86cbc75d786393a121f8a2ee3aaa26d4":[2,0,2,4,3,1,0,0],
 "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html#aa3845056b4b9b58099c55bfa1ea63baf":[2,0,2,4,3,1,0,1],
 "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html":[2,0,2,4,3,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae67a422836fd5f530bb392b7889836f9":[2,0,2,6,0,1],
 "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html":[2,0,2,7,0,0],
-"classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,2,7,0,0,0],
-"classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a87354906e06d575c139daa3aa942d459":[2,0,2,7,0,0,2]
+"classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,2,7,0,0,0]
 };

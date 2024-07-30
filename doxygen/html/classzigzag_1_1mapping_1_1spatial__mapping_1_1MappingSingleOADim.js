@@ -10,6 +10,7 @@ var classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim =
     [ "__repr__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "__setitem__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a96a401f71592a863c2cd68694931f39f", null ],
     [ "__str__", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a23e8041ce1015febe4fdace3225714f9", null ],
+    [ "get_data", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#aba0f0a919409c592a6af770d407d9ce1", null ],
     [ "items", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#aa557c0a1292ba357db900b8d2f8cd96e", null ],
     [ "keys", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a89d8a00f894393293852f9e16641be32", null ],
     [ "layer_dims", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a31bb05a16eea55406e0a924884ce05ae", null ],
