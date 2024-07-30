@@ -46,6 +46,9 @@ class MappingSingleOADim:
     def items(self):
         return self.__data.items()
 
+    def update(self, other: "MappingSingleOADim"):
+        self.__data.update(other.__data)
+
     def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
         self.__data[key] = value  # type: ignore
 
