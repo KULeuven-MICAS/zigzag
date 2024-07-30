@@ -34,6 +34,9 @@ class MappingSingleOADim:
     def keys(self):
         return self.__data.keys()
 
+    def get_data(self):
+        return self.__data
+
     def __getitem__(self, key: LayerDim):
         return self.__data[key]
 
@@ -47,7 +50,7 @@ class MappingSingleOADim:
         return self.__data.items()
 
     def update(self, other: "MappingSingleOADim"):
-        self.__data.update(other.__data)
+        self.__data.update(other.get_data())
 
     def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
         self.__data[key] = value  # type: ignore
