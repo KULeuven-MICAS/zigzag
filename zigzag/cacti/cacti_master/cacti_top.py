@@ -1,7 +1,9 @@
-import yaml
+import argparse
 import os
 import sys
-import argparse
+from typing import Any
+
+import yaml
 
 # To make this file runnable
 sys.path.append(os.getcwd())
@@ -30,7 +32,7 @@ if not os.path.isdir(self_gen_path):
     os.mkdir(self_gen_path)
 
 os.system(f"rm -rf {self_gen_path}/*")
-C = CactiConfig()
+config = CactiConfig()
 
 # Function 1: set default value
 # C.change_default_value(['technology'], [0.090])
@@ -64,7 +66,7 @@ technology = args.technology
 # Default to the read bandwidth of the memory
 block_size = IO_bus_width
 
-C.cacti_auto(
+config.cacti_auto(
     [
         "single",
         [
@@ -96,7 +98,7 @@ C.cacti_auto(
     f"{self_gen_path}/cache.cfg",
 )
 
-result = {}
+result: dict[str, Any] = {}
 with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
     raw_result = fp.readlines()
     for ii, each_line in enumerate(raw_result):
@@ -107,8 +109,8 @@ with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
         else:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
-                    result[attribute_list[jj]].append(float(each_value))
-                except:  # noqa E722
+                    result[attribute_list[jj]].append(float(each_value))  # type: ignore
+                except IndexError:
                     pass
 
 
@@ -142,7 +144,7 @@ for i in range(len(result[" Capacity (bytes)"])):
     )
 
     new_result = {
-        "%s"
+        "%s"  # pylint: disable=C0209
         % mem_name: {
             "size_byte": int(size_byte),
             "size_bit": int(size_byte * 8),

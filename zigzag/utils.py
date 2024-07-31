@@ -11,7 +11,7 @@ def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))
         return copy
-    except:  # noqa: E722
+    except:  # noqa: E722 # pylint: disable=W0702
         return deepcopy(to_copy)
 
 
@@ -43,7 +43,7 @@ def json_repr_handler(obj: Any, simple: bool = False) -> Any:
     if isinstance(obj, int) or isinstance(obj, float) or isinstance(obj, bool) or isinstance(obj, str):
         return obj
     if isinstance(obj, np.int32):  # type: ignore
-        return int(obj)
+        return int(obj)  # type: ignore
     if hasattr(obj, attr):
         return obj.__simplejsonrepr__() if simple else obj.__jsonrepr__()
 

@@ -8,7 +8,16 @@ repos:
     hooks:
       - id: ruff
         types_or: [python, pyi]
-        args: [--fix, --exit-non-zero-on-fix, --line-length, "120"]
+        args:
+          [
+            check,
+            --select,
+            I,
+            --fix,
+            --exit-non-zero-on-fix,
+            --line-length,
+            "120",
+          ]
   - repo: https://github.com/psf/black
     rev: 23.3.0
     hooks:

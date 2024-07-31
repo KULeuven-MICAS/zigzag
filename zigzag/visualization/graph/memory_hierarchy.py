@@ -1,16 +1,16 @@
 import matplotlib.pyplot as plt
 import networkx as nx
-from networkx import Graph
+from networkx import DiGraph
 
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 
 
-def visualize_memory_hierarchy_graph(G: Graph, save_path: str = ""):
+def visualize_memory_hierarchy_graph(graph: DiGraph, save_path: str = ""):
     """
     Visualizes a memory hierarchy graph.
     """
 
-    generations = list(nx.topological_generations(G))
+    generations = list(nx.topological_generations(graph))  # type: ignore
     max_nodes_gen = max((len(generation) for generation in generations))
     pos = {}
     node_list = []
@@ -30,20 +30,20 @@ def visualize_memory_hierarchy_graph(G: Graph, save_path: str = ""):
             node_size_list.append(node_size)
             node_label_dict[node] = f"{node.name}\n{node.operands}\nx{node.unroll_count}"
 
-    nx.draw(
-        G,
+    nx.draw(  # type: ignore
+        graph,
         pos=pos,
         node_shape="s",
         nodelist=node_list,
         node_size=node_size_list,
         labels=node_label_dict,
     )
-    plt.title(G.name)
+    plt.title(graph.name)  # type: ignore
     if save_path == "":
-        plt.show()
+        plt.show()  # type: ignore
     else:
-        plt.savefig(save_path)
-    plt.close()
+        plt.savefig(save_path)  # type: ignore
+    plt.close()  # type: ignore
 
 
 if __name__ == "__main__":

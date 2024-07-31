@@ -1,13 +1,12 @@
+import logging
 from typing import Any
 
 from zigzag.parser.MappingValidator import MappingValidator
-from zigzag.parser.WorkloadValidator import WorkloadValidator
 from zigzag.parser.workload_factory import WorkloadFactory
+from zigzag.parser.WorkloadValidator import WorkloadValidator
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.utils import open_yaml
 from zigzag.workload.DNNWorkload import DNNWorkload
-
-import logging
 
 logger = logging.getLogger(__name__)
 

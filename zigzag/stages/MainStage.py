@@ -1,4 +1,5 @@
 from typing import Any
+
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import StageCallable
 

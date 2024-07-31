@@ -1,10 +1,11 @@
-from datetime import datetime
 import pickle
+from datetime import datetime
+
 from zigzag import api
-from zigzag.visualization.results.print_mapping import print_mapping
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
+from zigzag.visualization.results.print_mapping import print_mapping
 
 model = "resnet"
 workload_path = "zigzag/inputs/workload/resnet18.yaml"  # or "zigzag/inputs/workload/resnet18.onnx"

@@ -1,10 +1,11 @@
 import logging
+
+from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.utils import json_repr_handler
-from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)

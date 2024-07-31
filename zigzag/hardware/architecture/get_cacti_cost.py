@@ -1,10 +1,11 @@
-import os
 import logging
-
+import os
 from typing import Any
 
 
 class CactiConfig:
+    """Configuration for Cacti"""
+
     def __init__(self):
         # content = f.readlines()
         self.baseline_config = [
@@ -517,8 +518,8 @@ def get_cacti_cost(
     file_path = "./self_gen"  # location for input file (cache.cfg) and output file (cache.cfg.out)
     os.makedirs(file_path, exist_ok=True)
 
-    C = CactiConfig()
-    C.cacti_auto(
+    config = CactiConfig()
+    config.cacti_auto(
         [
             "single",
             [
@@ -531,7 +532,7 @@ def get_cacti_cost(
     # read out result
     try:
         f = open(f"{file_path}/cache_{hd_hash}.cfg.out", "r", encoding="UTF-8")
-    except:  # noqa: E722
+    except:  # noqa: E722 # pylint: disable=W0702
         msg = f"CACTI failed. [current setting] rows: {rows}, bw: {bw}, mem size (byte): {mem_size_in_byte}"
         logging.critical(msg)
         msg = "[CACTI minimal requirement] rows: >= 32, bw: >= 8, mem size (byte): >=64"
@@ -548,22 +549,19 @@ def get_cacti_cost(
         else:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
-                    result[attribute_list[jj]].append(float(each_value))
-                except:  # noqa: E722
+                    result[attribute_list[jj]].append(float(each_value))  # type: ignore
+                except IndexError:
                     pass
     # get required cost
-    try:
-        access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns
-        if bw > 32:
-            area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32  # unit: mm2
-            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1]) * bw / 32  # unit: nJ
-            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1]) * bw / 32  # unit: nJ
-        else:
-            area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2  # unit: mm2
-            r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
-            w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
-    except KeyError:
-        logging.critical("**KeyError** in result, current result: %s", result)
+    access_time = scaling_factor * float(result[" Access time (ns)"][-1])  # unit: ns
+    if bw > 32:
+        area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2 * bw / 32  # unit: mm2
+        r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1]) * bw / 32  # unit: nJ
+        w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1]) * bw / 32  # unit: nJ
+    else:
+        area = scaling_factor * float(result[" Area (mm2)"][-1]) * 2  # unit: mm2
+        r_cost = scaling_factor * float(result[" Dynamic read energy (nJ)"][-1])  # unit: nJ
+        w_cost = scaling_factor * float(result[" Dynamic write energy (nJ)"][-1])  # unit: nJ
 
     # change back the working directory
     os.chdir(cwd)
@@ -576,7 +574,9 @@ def get_cacti_cost(
     return access_time, area, r_cost, w_cost
 
 
-def get_w_cost_per_weight_from_cacti(cacti_path: str, tech_param: dict[str, float], hd_param, dimensions) -> float:
+def get_w_cost_per_weight_from_cacti(
+    cacti_path: str, tech_param: dict[str, float], hd_param: dict[str, Any], dimensions: dict[str, Any]
+) -> float:
     # Get w_cost for imc cell group
     # Used in user-provided hardware input file, when it is needed.
     # cacti_path = "zigzag/classes/cacti/cacti_master"
@@ -601,22 +601,3 @@ def get_w_cost_per_weight_from_cacti(cacti_path: str, tech_param: dict[str, floa
     w_cost_per_weight_writing = w_cost * w_pres / array_bw  # pJ/weight
     w_cost_per_weight_writing = round(w_cost_per_weight_writing, 3)  # keep 3 valid digits
     return w_cost_per_weight_writing  # unit: pJ/weight
-
-
-if __name__ == "__main__":
-    # an example for use (28nm, mem size: 32rows * 32 cols, bw: 32 bit)
-    for bw in [32]:
-        mem_size = 32 * 32 / 8  # byte
-        rows = mem_size * 8 / bw
-        access_time, area, r_cost, w_cost = get_cacti_cost(
-            cacti_path="../../cacti/cacti_master",
-            tech_node=0.028,
-            mem_type="sram",
-            mem_size_in_byte=mem_size,
-            bw=bw,
-        )
-        print(
-            f"access time (ns): {access_time}, area (mm2): {area}, r_cost (pJ)/bit: {r_cost*1000/bw}, w_cost (pJ)/bit: "
-            f"{w_cost*1000/bw}"
-        )
-    exit()

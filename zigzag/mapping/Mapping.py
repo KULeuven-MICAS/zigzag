@@ -1,13 +1,14 @@
 import math
+
+import zigzag.mapping.mapping_assist_funcs as mapping_assist_funcs
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
+from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import DataMovePattern
-from zigzag.workload.layer_node import LayerNode
+from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping, TemporalMappingDict
-from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl
-import zigzag.mapping.mapping_assist_funcs as mapping_assist_funcs
+from zigzag.workload.layer_node import LayerNode
 
 
 class Mapping:

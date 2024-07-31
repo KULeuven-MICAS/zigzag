@@ -1,11 +1,10 @@
-from typing import Any, Callable
 import logging
-import os
 import multiprocessing
+import os
+from typing import Any, Callable
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable
-
 
 logger = logging.getLogger(__name__)
 
@@ -98,7 +97,7 @@ def terminate_threadpool():
     threadpool = None
 
 
-def raise_exception(e):
+def raise_exception(e: Exception):
     terminate_threadpool()
     raise e
 
@@ -140,10 +139,10 @@ class MultiProcessingSpawnStage(Stage):
     def _to_run(self):
         return list(self.sub_stage.run())
 
-    def run(self):
+    def run(self):  # type: ignore
         self.sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         get_threadpool(self.nb_multiprocessing_threads).apply_async(
-            self._to_run, callback=self.callback, error_callback=raise_exception
+            self._to_run, callback=self.callback, error_callback=raise_exception  # type: ignore
         )
         yield None, None
 
@@ -171,12 +170,12 @@ class MultiProcessingGatherStage(Stage):
         count_to_get = 0
         for _ in sub_stage.run():
             count_to_get += 1
-        logger.info(f"Multiprocessing results to get: {count_to_get}")
+        logger.info("Multiprocessing results to get: %i", count_to_get)
         count = 0
         while count < count_to_get:
             for ans in self.queue.get(block=True):
                 yield ans
             count += 1
             if count % (count_to_get // 10) == 0:
-                logger.info(f"Multiprocessing results received: {count} of {count_to_get}")
+                logger.info("Multiprocessing results received: %i of %i", count, count_to_get)
         close_threadpool()

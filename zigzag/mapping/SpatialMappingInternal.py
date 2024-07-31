@@ -1,12 +1,12 @@
 from math import prod
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
-from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.mapping_assist_funcs import (
     SpatialMappingPerMemLvl,
     decouple_pr_loop,
 )
 from zigzag.utils import json_repr_handler
+from zigzag.workload.layer_node import LayerNode
 
 
 class SpatialMappingInternal:

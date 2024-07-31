@@ -1,5 +1,6 @@
 from abc import ABCMeta
 from typing import Generic, TypeVar
+
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
 
@@ -75,8 +76,8 @@ class FourWayDataMoving(Generic[T], metaclass=ABCMeta):
             self.wr_in_by_high + other.wr_in_by_high,
         )
 
-    def __mul__(self, other: T):
-        return type(self)(
+    def _mul_with_type(self, other: T, return_type: type):
+        return return_type(
             self.rd_out_to_low * other,
             self.wr_in_by_low * other,
             self.rd_out_to_high * other,
@@ -104,12 +105,18 @@ class MemoryAccesses(FourWayDataMoving[int]):
     def __add__(self, other: "MemoryAccesses"):
         return self._add_with_type(other, type(self))
 
+    def __mul__(self, other: int):
+        return self._mul_with_type(other, type(self))
+
 
 class AccessEnergy(FourWayDataMoving[float]):
     """Represents the memory access energy in four directions"""
 
     def __add__(self, other: "AccessEnergy"):
         return self._add_with_type(other, type(self))
+
+    def __mul__(self, other: float):
+        return self._mul_with_type(other, type(self))
 
 
 class DataMovePattern:

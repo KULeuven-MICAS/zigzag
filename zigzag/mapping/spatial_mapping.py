@@ -3,10 +3,9 @@ import logging
 import math
 from typing import Any
 
-from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
-from zigzag.workload.LayerAttribute import LayerAttribute
+from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
 from zigzag.utils import UniqueMessageFilter, json_repr_handler
-
+from zigzag.workload.LayerAttribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())
@@ -35,6 +34,9 @@ class MappingSingleOADim:
     def keys(self):
         return self.__data.keys()
 
+    def get_data(self):
+        return self.__data
+
     def __getitem__(self, key: LayerDim):
         return self.__data[key]
 
@@ -46,6 +48,9 @@ class MappingSingleOADim:
 
     def items(self):
         return self.__data.items()
+
+    def update(self, other: "MappingSingleOADim"):
+        self.__data.update(other.get_data())
 
     def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
         self.__data[key] = value  # type: ignore
