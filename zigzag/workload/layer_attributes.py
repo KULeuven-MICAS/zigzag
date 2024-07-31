@@ -122,6 +122,9 @@ class MemoryOperandLinks(LayerAttribute):
         """! Given a MemoryOperand, return the linked LayerOperand"""
         return self.__mem_to_layer_op_dict[mem_op]
 
+    def layer_and_mem_ops(self):
+        return self.data.items()
+
     def contains_layer_op(self, layer_op: LayerOperand) -> bool:
         return layer_op in self.layer_operands
 
@@ -167,23 +170,14 @@ class LayerDimRelation(LayerAttribute):
         pr_scaling_factors: PrScalingFactors = {}
 
         for relation in relations:
-            key = relation.dim_1
-            val = [relation.dim_2, relation.dim_3]
+            pr_loop[relation.dim_1] = (relation.dim_2, relation.dim_3)
+            pr_loop_list.extend([relation.dim_1, relation.dim_2, relation.dim_3])
+            scaling_factors = (
+                (relation.dim_2, relation.coef_2),
+                (relation.dim_3, relation.coef_3),
+            )
 
-        for relation in relations:
-            key = relation.dim_1
-            val = [relation.dim_2, relation.dim_3]
-            pr_loop[key] = val
-            pr_loop_list.extend([key] + val)
-            scaling_factors = {
-                relation.dim_2: relation.coef_2,
-                relation.dim_3: relation.coef_3,
-            }
-            scaling_factors = {
-                relation.dim_2: relation.coef_2,
-                relation.dim_3: relation.coef_3,
-            }
-            pr_scaling_factors[key] = scaling_factors
+            pr_scaling_factors[relation.dim_1] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 

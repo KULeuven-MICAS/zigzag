@@ -1,8 +1,7 @@
 import logging
-import math
 from copy import deepcopy
 from dataclasses import dataclass
-from math import gcd
+from math import gcd, prod
 
 from zigzag.datatypes import (
     LayerDim,
@@ -38,7 +37,7 @@ class LoopRelevancyInfo:
     def __init__(self):
         self.r_dims: dict[LayerOperand, list[LayerDim]] = dict()
         self.ir_dims: dict[LayerOperand, list[LayerDim]] = dict()
-        self.pr_dims: dict[LayerOperand, dict[LayerDim, list[LayerDim]]] = dict()
+        self.pr_dims: dict[LayerOperand, PrLoop] = dict()
         self.orig_pr_loop: PrLoop
 
     def get_r_layer_dims(self, layer_operand: LayerOperand) -> list[LayerDim]:
@@ -47,8 +46,11 @@ class LoopRelevancyInfo:
     def get_ir_layer_dims(self, layer_operand: LayerOperand) -> list[LayerDim]:
         return self.ir_dims[layer_operand]
 
-    def get_pr_layer_dims(self, layer_operand: LayerOperand) -> dict[LayerDim, list[LayerDim]]:
+    def get_pr_layer_dims(self, layer_operand: LayerOperand) -> PrLoop:
         return self.pr_dims[layer_operand]
+
+    def get_r_or_pr_layer_dims(self, layer_operand: LayerOperand) -> list[LayerDim]:
+        return self.r_dims[layer_operand] + list(self.pr_dims[layer_operand].keys())
 
     def create_pr_decoupled_relevancy_info(self) -> "LoopRelevancyInfo":
         """! remove the pr loop dict, and put the pr-related data dimension (e.g. IX and IY)
@@ -214,15 +216,9 @@ class LayerNode(LayerNodeABC):
         # TODO requires documentation
         """
         if len(self.dimension_relations) > 0:
-            (
-                pr_loop,
-                pr_loop_list,
-                pr_scaling_factors,
-            ) = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
-        else:
-            pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
+            return LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
 
-        return pr_loop, pr_loop_list, pr_scaling_factors
+        return {}, [], {}
 
     def __str__(self):
         return self.name
@@ -247,22 +243,18 @@ class LayerNode(LayerNodeABC):
     def calc_tensor_size(self, layer_op: LayerOperand, layer_dim_sizes: LayerDimSizes) -> float:
         """! Calculates the tensor size (nb of elements) for the given operand layer_op with the given loop dimension
         sizes layer_dim_sizes."""
-        r_layer_dims = self.loop_relevancy_info.get_r_layer_dims(layer_op)
-        pr_layer_dims = list(self.loop_relevancy_info.get_pr_layer_dims(layer_op).keys())
-        sizes = [self.calc_tensor_dim(dim, layer_dim_sizes) for dim in (r_layer_dims + pr_layer_dims)]
-        return math.prod(sizes)
+        all_dims = self.loop_relevancy_info.get_r_or_pr_layer_dims(layer_op)
+        return prod(self.calc_tensor_dim(dim, layer_dim_sizes) for dim in all_dims)
 
     def calc_tensor_dim(self, dim: LayerDim, layer_dim_sizes: LayerDimSizes):
         if dim in layer_dim_sizes:
             return layer_dim_sizes[dim]
         elif dim in self.pr_loop:
-            related_dimension_sizes = [layer_dim_sizes[dimension] for dimension in self.pr_loop[dim]]
-            scaling_factors = list(self.pr_scaling_factors[dim].values())
-            assert (
-                len(related_dimension_sizes) == len(scaling_factors) == 2
-            ), "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
-            args = (int(val) for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
-            pr_dim_size = self.calc_pr_dimension_size(*args)
+            related_dimension_sizes = tuple(self.layer_dim_sizes[related_dim] for related_dim in self.pr_loop[dim])
+            scaling_factors = tuple(t[1] for t in self.pr_scaling_factors[dim])
+            pr_dim_size = self.calc_pr_dimension_size(
+                sa=scaling_factors[0], a=related_dimension_sizes[0], sb=scaling_factors[1], b=related_dimension_sizes[1]
+            )
             # Clip this to the largest possible size for this partially relevant dimension (computed at initialization
             # based on padding)
             pr_dim_size = min(self.pr_layer_dim_sizes[dim], pr_dim_size)
@@ -276,26 +268,19 @@ class LayerNode(LayerNodeABC):
         """!
         # TODO requires documentation
         """
-        out: dict[LayerDim, UnrollFactor] = dict()
-        r_layer_dims = self.loop_relevancy_info.get_r_layer_dims(layer_op)
-        pr_layer_dims = list(self.loop_relevancy_info.get_pr_layer_dims(layer_op).keys())
-        for dim in r_layer_dims + pr_layer_dims:
-            out[dim] = self.calc_tensor_dim(dim, layer_dim_sizes)
-        return out
+        all_dims = self.loop_relevancy_info.get_r_or_pr_layer_dims(layer_op)
+        return {dim: self.calc_tensor_dim(dim, layer_dim_sizes) for dim in all_dims}
 
     def calc_pr_dimension_size_total(self, dim: LayerDim) -> int:
         """! Compute the total pr dimension size of this node, taking padding into account.
         @param dim (str): The partially relevant dimension, e.g. 'IX'.
         @return int: The total partially relevant dimension size
         """
-        related_dimension_sizes = [self.layer_dim_sizes[related_dim] for related_dim in self.pr_loop[dim]]
-        # assumes this dict is ordered
-        scaling_factors: list[int] = list(self.pr_scaling_factors[dim].values())
-        assert (
-            len(related_dimension_sizes) == len(scaling_factors) == 2
-        ), "Shouldn't happen if partial relevancy checks in extract_pr_loop_info() are done correctly."
-        args = (val for pair in zip(scaling_factors, related_dimension_sizes) for val in pair)
-        total_pr_dim_size = self.calc_pr_dimension_size(*args)
+        related_dimension_sizes = tuple(self.layer_dim_sizes[related_dim] for related_dim in self.pr_loop[dim])
+        scaling_factors = tuple(t[1] for t in self.pr_scaling_factors[dim])
+        total_pr_dim_size = self.calc_pr_dimension_size(
+            sa=scaling_factors[0], a=related_dimension_sizes[0], sb=scaling_factors[1], b=related_dimension_sizes[1]
+        )
         # Partially relevant loop dimensions can also have padding, so get the padding for this pr dimension and
         # subtract
         padding = LayerPadding.DEFAULT if dim not in self.padding else self.padding[dim]
@@ -308,7 +293,8 @@ class LayerNode(LayerNodeABC):
         a in range(0,A,1) and b in range(0,B,1) according to the equation c = sa * a + sb * b.
         sa and sb thus represent the scaling of a, resp. b.
         """
-        return int(a * b - max(0, b - (sa / gcd(sa, sb))) * (a - (sb / gcd(sa, sb))))
+        gcd_value = gcd(sa, sb)
+        return a * b - max(0, b - (sa // gcd_value)) * (a - (sb // gcd_value))
 
     def extract_layer_info(self):
         """! This function extract basic information for each layer node."""
@@ -326,7 +312,7 @@ class LayerNode(LayerNodeABC):
         # each operand's size (Unit: bit)
         operand_size_bit: dict[LayerOperand, int] = {}
         for layer_op, size_in_elem in self.operand_size_elem.items():
-            operand_size_bit[layer_op] = size_in_elem * self.operand_precision[layer_op]
+            operand_size_bit[layer_op] = int(size_in_elem * self.operand_precision[layer_op])
         self.operand_size_bit = operand_size_bit
 
         # each operand's total data reuse factor, which is total MAC Op/total operand size (in element),

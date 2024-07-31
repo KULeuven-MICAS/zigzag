@@ -106,7 +106,8 @@ class Constants:
 UnrollFactor: TypeAlias = int | float
 UnrollFactorInt: TypeAlias = int
 
-PrLoop: TypeAlias = dict[LayerDim, list[LayerDim]]
+PrLoop: TypeAlias = dict[LayerDim, tuple[LayerDim, LayerDim]]
 LoopList: TypeAlias = list[LayerDim]
-PrScalingFactors: TypeAlias = dict[LayerDim, dict[LayerDim, int]]
+# There can only be two factors
+PrScalingFactors: TypeAlias = dict[LayerDim, tuple[tuple[LayerDim, int], tuple[LayerDim, int]]]
 ArrayType = np.ndarray[Any, Any]  # pylint: disable=E1136
