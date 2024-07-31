@@ -2,9 +2,10 @@ import pickle
 from datetime import datetime
 
 from zigzag import api
-from zigzag.visualization.results.plot_cme import (
-    bar_plot_cost_model_evaluations_breakdown,
-)
+
+# from zigzag.visualization.results.plot_cme import (
+#     bar_plot_cost_model_evaluations_breakdown,
+# )
 from zigzag.visualization.results.print_mapping import print_mapping
 
 model = "resnet"
@@ -29,5 +30,5 @@ with open(pickle_filename, "rb") as fp:
     cmes = pickle.load(fp)
 
 
-bar_plot_cost_model_evaluations_breakdown(cmes[0:5], save_path="outputs/plot_breakdown.png")
-print_mapping(cmes[0])
+# bar_plot_cost_model_evaluations_breakdown(cmes[0:5], save_path="outputs/plot_breakdown.png")
+# print_mapping(cmes[0])

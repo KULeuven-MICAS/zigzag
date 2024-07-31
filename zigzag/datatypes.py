@@ -19,27 +19,27 @@ class OperandABC(metaclass=ABCMeta):
         """Protect the class variable from reassignment (as this would invalidate the stored hash value)"""
         return self.__name
 
-    def __eq__(self, other: Any):
-        return self.__hash == hash(other)
+    def __eq__(self, other: "OperandABC"):  # type: ignore
+        return self.__hash == other.__hash
 
     def __hash__(self):
-        # Optimize performance by statically storing the hash
+        """Optimize performance by statically storing the hash"""
         return self.__hash
 
     def __str__(self):
-        return self.name
+        return self.__name
 
     def __repr__(self):
         return str(self)
 
     def __lt__(self, other: "OperandABC"):
-        return self.name < other.name
+        return self.__name < other.__name
 
     def __ge__(self, other: "OperandABC"):
-        return self.name >= other.name
+        return self.__name >= other.__name
 
     def __jsonrepr__(self):
-        return self.name
+        return self.__name
 
 
 class LayerOperand(OperandABC):
