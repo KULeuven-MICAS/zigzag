@@ -20,7 +20,7 @@ class OperandABC(metaclass=ABCMeta):
         return self.__name
 
     def __eq__(self, other: "OperandABC"):  # type: ignore
-        return self.__hash == other.__hash
+        return self.__hash == other.__hash  # pylint: disable=W0212
 
     def __hash__(self):
         """Optimize performance by statically storing the hash"""
@@ -33,10 +33,10 @@ class OperandABC(metaclass=ABCMeta):
         return str(self)
 
     def __lt__(self, other: "OperandABC"):
-        return self.__name < other.__name
+        return self.__name < other.__name  # pylint: disable=W0212
 
     def __ge__(self, other: "OperandABC"):
-        return self.__name >= other.__name
+        return self.__name >= other.__name  # pylint: disable=W0212
 
     def __jsonrepr__(self):
         return self.__name
