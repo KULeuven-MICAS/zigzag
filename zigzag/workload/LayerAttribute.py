@@ -1,5 +1,6 @@
 from abc import ABCMeta, abstractmethod
 from typing import Any, Iterator
+
 from zigzag.utils import json_repr_handler
 
 

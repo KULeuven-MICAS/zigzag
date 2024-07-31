@@ -38,15 +38,15 @@ from typing import Any
 
 
 class ListElement:
-    def __init__(self, value: Any, next: Any):
+    def __init__(self, value: Any, next_elem: Any):
         self.value = value
-        self.next = next
+        self.next_elem = next_elem
 
     def nth(self, n: int):
         o = self
         i = 0
-        while i < n and o.next is not None:
-            o = o.next
+        while i < n and o.next_elem is not None:
+            o = o.next_elem
             i += 1
         return o
 
@@ -65,7 +65,7 @@ def visit(h: ListElement) -> list[Any]:
     this_list: list[Any] = []
     while o is not None:
         this_list.append(o.value)
-        o = o.next
+        o = o.next_elem
     return this_list
 
 
@@ -73,16 +73,16 @@ def permutations(multiset: list[Any]):
     """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
     yield visit(h)
-    while j.next is not None or j.value < h.value:
-        if j.next is not None and i.value >= j.next.value:
+    while j.next_elem is not None or j.value < h.value:
+        if j.next_elem is not None and i.value >= j.next_elem.value:
             s = j
         else:
             s = i
-        t = s.next
-        s.next = t.next
-        t.next = h
+        t = s.next_elem
+        s.next_elem = t.next_elem
+        t.next_elem = h
         if t.value < h.value:
             i = t
-        j = i.next
+        j = i.next_elem
         h = t
         yield visit(h)

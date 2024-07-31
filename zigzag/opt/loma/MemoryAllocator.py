@@ -1,6 +1,6 @@
-import numpy as np
 from math import prod
 
+import numpy as np
 
 from zigzag.datatypes import (
     Constants,
@@ -147,7 +147,7 @@ class MemoryAllocator:
             mem_level_op = self.mem_level[layer_op]
             spatial_loops = self.spatial_mapping.get_unrolling(op=layer_op, level=mem_level_op)
             for loop_dim, loop_size in spatial_loops:
-                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, type="spatial")
+                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, loop_type="spatial")
                 self.allocated[mem_op].append(spatial_loop)
 
             # Check if this node (i.e. MemoryLevel) is the highest level of memory hierarchy.
@@ -187,7 +187,7 @@ class MemoryAllocator:
             size = self.calc_loops_size(loops, mem_op, unallocated_loops)
             # double size allocated if the node uses double buffering
             if db_support:
-                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:
+                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:  # type: ignore
                     size *= 2
             if size <= mem_capacity:
                 sizes.append(size)

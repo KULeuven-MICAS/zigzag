@@ -1,16 +1,14 @@
+import logging
 from typing import Any
 
-
-from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.cost_model.cost_model_imc import CostModelEvaluationForIMC
 from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
-from zigzag.hardware.architecture.ImcArray import ImcArray
-
-import logging
 
 logger = logging.getLogger(__name__)
 

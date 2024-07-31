@@ -1,11 +1,11 @@
+import logging
 import math
-import logging as _logging
 
-from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.Mapping import Mapping
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
+from zigzag.mapping.Mapping import Mapping
 from zigzag.utils import json_repr_handler
+from zigzag.workload.layer_node import LayerNode
 
 
 class ImcArray(ImcUnit):
@@ -430,7 +430,7 @@ class ImcArray(ImcUnit):
         topsw_peak = nb_of_macs_per_cycle * 2 / peak_energy_per_cycle
         topsmm2_peak = tops_peak / imc_area
 
-        logger = _logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
         imc_type_info = f"Current macro-level peak performance ({'analog' if self.is_aimc else 'digital'} imc):"
         peak_performance_info = f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}"
         logger.info(imc_type_info)

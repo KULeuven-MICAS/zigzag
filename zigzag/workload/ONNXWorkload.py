@@ -1,11 +1,10 @@
 from copy import deepcopy
 from typing import Any
 
-
 from zigzag.workload.DummyNode import DummyNode
+from zigzag.workload.layer_node import LayerNode
 from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.Workload import WorkloadABC
-from zigzag.workload.layer_node import LayerNode
 
 
 class ONNXWorkload(WorkloadABC[LayerNodeABC]):

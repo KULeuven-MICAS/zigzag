@@ -27,14 +27,14 @@
 #
 
 from copy import deepcopy
-from zigzag.datatypes import LayerDim, UnrollFactorInt
-from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
-from zigzag.cost_model.cost_model import CostModelEvaluation
 
+from zigzag.cost_model.cost_model import CostModelEvaluation
+from zigzag.datatypes import LayerDim, UnrollFactorInt
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
+from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
+from zigzag.workload.layer_node import LayerNode
 
 
 class SalsaState:

@@ -1,9 +1,8 @@
 import os
 from typing import Any
 
-
-from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
+from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )

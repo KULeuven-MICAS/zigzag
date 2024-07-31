@@ -1,6 +1,6 @@
+import logging
 from contextlib import redirect_stdout
 from typing import Any
-import logging
 
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.stages.Stage import Stage, StageCallable

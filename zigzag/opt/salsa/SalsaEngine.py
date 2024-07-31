@@ -1,45 +1,46 @@
-#   =====================================================================
-#   Title:        engine.py
-#   Description: This file contains the engine class that handles the
-#   optimization of temporal mapping of SALSA.
-#
-#   Date:        02.01.2023
-#
-#   =====================================================================
-#
-#   Copyright (C) 2020 ETH Zurich and University of Bologna.
-#
-#   Author: Victor Jung, ETH Zurich
-#
-#   SPDX-License-Identifier: Apache-2.0
-#
-#   Licensed under the Apache License, Version 2.0 (the License); you may
-#   not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#   www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an AS IS BASIS, WITHOUT
-#   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
+"""
+=====================================================================
+  Title:        engine.py
+  Description: This file contains the engine class that handles the
+  optimization of temporal mapping of SALSA.
 
-from copy import deepcopy
-from multiprocessing_on_dill import Queue
-from typing import Any
-from sympy.ntheory import factorint
-import numpy as np
+  Date:        02.01.2023
+
+  =====================================================================
+
+  Copyright (C) 2020 ETH Zurich and University of Bologna.
+
+  Author: Victor Jung, ETH Zurich
+
+  SPDX-License-Identifier: Apache-2.0
+
+  Licensed under the Apache License, Version 2.0 (the License); you may
+  not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an AS IS BASIS, WITHOUT
+  WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+"""
+
 import logging
 import random
+from copy import deepcopy
+from typing import Any
 
+import numpy as np
+from multiprocessing_on_dill import Queue  # type: ignore
+from sympy.ntheory import factorint  # type: ignore
 
 from zigzag.datatypes import LayerDim
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.workload.layer_node import LayerNode
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.salsa.SalsaState import SalsaState
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -169,7 +170,10 @@ class SalsaEngine:
         min_nb_temporal_loops = len(self.temporal_loop_dim_size)
         if self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
-                f"Updated layer {self.layer}'s lpf limit from {self.lpf_limit} to {min_nb_temporal_loops} lpfs."
+                "Updated layer %s's lpf limit from %i to %i lpfs.",
+                self.layer,
+                self.lpf_limit,
+                min_nb_temporal_loops,
             )
             self.lpf_limit = min_nb_temporal_loops
 

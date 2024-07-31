@@ -1,14 +1,14 @@
 from collections import defaultdict
+
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
 
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
-from zigzag.datatypes import LayerOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.datatypes import ArrayType, LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.mapping.data_movement import AccessEnergy
-
 
 # MPL FONT SIZES
 SMALLEST_SIZE = 10
@@ -161,8 +161,8 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
                 bottom += heights
 
     # Total energy per layer
-    bar_max_vals = np.max(np.sum(energy_data, axis=(2, 3)), axis=1)
-    total_energy_per_layer = np.sum(energy_data, axis=(1, 2, 3))
+    bar_max_vals: ArrayType = np.max(np.sum(energy_data, axis=(2, 3)), axis=1)
+    total_energy_per_layer: ArrayType = np.sum(energy_data, axis=(1, 2, 3))
     for i, _ in enumerate(groups):
         ax1.text(  # type: ignore
             indices_midpoints[i],
@@ -208,7 +208,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
         bottom += heights
 
     # Total latency value above bar
-    total_latency_per_layer = np.sum(latency_data, axis=1)
+    total_latency_per_layer: ArrayType = np.sum(latency_data, axis=1)
     for i in range(len(groups)):
         ax2.text(  # type: ignore
             indices_midpoints[i],

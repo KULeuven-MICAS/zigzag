@@ -1,8 +1,8 @@
 import logging
 from typing import Any
 
-from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation, CumulativeCME
+from zigzag.stages.Stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
 

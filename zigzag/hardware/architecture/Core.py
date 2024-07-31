@@ -1,9 +1,8 @@
 from zigzag.datatypes import MemoryOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
-from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.mapping.spatial_mapping import SpatialMapping
 from zigzag.utils import json_repr_handler
 

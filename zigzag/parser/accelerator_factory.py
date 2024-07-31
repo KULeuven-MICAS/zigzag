@@ -1,4 +1,5 @@
 from typing import Any
+
 from zigzag.datatypes import (
     Constants,
     LayerDim,
@@ -9,10 +10,10 @@ from zigzag.datatypes import (
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.ImcArray import ImcArray
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import (
     MultiplierArray,
     OperationalArrayABC,

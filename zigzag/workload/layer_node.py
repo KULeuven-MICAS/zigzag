@@ -1,9 +1,8 @@
+import logging
+import math
 from copy import deepcopy
 from dataclasses import dataclass
 from math import gcd
-import logging
-import math
-
 
 from zigzag.datatypes import (
     LayerDim,
@@ -14,7 +13,7 @@ from zigzag.datatypes import (
     UnrollFactor,
 )
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
-from zigzag.workload.LayerNodeABC import LayerNodeABC
+from zigzag.utils import json_repr_handler
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
     LayerDimRelation,
@@ -22,10 +21,10 @@ from zigzag.workload.layer_attributes import (
     LayerEquation,
     LayerOperandPrecision,
     LayerPadding,
-    MemoryOperandLinks,
     LayerTemporalOrdering,
+    MemoryOperandLinks,
 )
-from zigzag.utils import json_repr_handler
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 logger = logging.getLogger(__name__)
 

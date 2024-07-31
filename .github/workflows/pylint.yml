@@ -1,9 +1,9 @@
-name: Pylint
+name: Lint with Pylint
 
 on: [push]
 
 jobs:
-  build:
+  lint:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -20,4 +20,4 @@ jobs:
         pip install pylint
     - name: Analysing the code with pylint
       run: |
-        pylint $(git ls-files '*.py') --rcfile=./.github/workflows/.pylintrc
+        pylint zigzag --rcfile=./.github/.pylintrc

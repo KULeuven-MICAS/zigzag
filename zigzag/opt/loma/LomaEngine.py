@@ -1,22 +1,22 @@
-import operator
-import numpy as np
 import logging
+import operator
 from math import factorial
 from typing import Any, Generator
-from tqdm import tqdm
-from sympy.ntheory import factorint  # type: ignore
 
+import numpy as np
+from sympy.ntheory import factorint  # type: ignore
+from tqdm import tqdm
 
 from zigzag.datatypes import LayerDim, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
-from zigzag.opt.loma.multipermute import permutations
 from zigzag.opt.loma.MemoryAllocator import (
+    MemoryAllocator,
     MemoryHierarchyTooSmallException,
     MemoryTooSmallException,
-    MemoryAllocator,
 )
+from zigzag.opt.loma.multipermute import permutations
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
@@ -164,11 +164,8 @@ class LomaEngine:
         temporal_loop_pf_counts: dict[LayerDim, tuple[int, ...]] = {}
         temporal_loop_pf_count_sums: dict[LayerDim, int] = {}
         lpfs = []
-        for (
-            tl_dim,
-            tl_size,
-        ) in self.temporal_loop_dim_size.items():  # tl = temporal loop
-            factors: dict[int, int] = factorint(tl_size)
+        for tl_dim, tl_size in self.temporal_loop_dim_size.items():  # tl = temporal loop
+            factors: dict[int, int] = factorint(tl_size)  # type: ignore
             pfs = []
             counts = []
             for pf, multiplicity in factors.items():

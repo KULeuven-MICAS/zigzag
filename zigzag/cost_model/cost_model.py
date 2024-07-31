@@ -1,19 +1,20 @@
-from abc import ABCMeta, abstractmethod
 import logging
+from abc import ABCMeta, abstractmethod
 from math import ceil
-from typing import Any
+
 import numpy as np
+
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
-from zigzag.datatypes import Constants, LayerOperand, MemoryOperand
+from zigzag.datatypes import ArrayType, Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArray
-from zigzag.mapping.Mapping import Mapping
 from zigzag.mapping.data_movement import AccessEnergy, DataDirection, MemoryAccesses
+from zigzag.mapping.Mapping import Mapping
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
-from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import json_repr_handler, pickle_deepcopy
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
 
@@ -399,10 +400,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 max_period = values["P"]
                 max_period_operand = op
 
-        indicators: np.ndarray[Any, Any] = np.zeros((len(input_dict), max_period))
+        indicators: ArrayType = np.zeros((len(input_dict), max_period))
         for i, op in enumerate(input_dict):
             # reshape to period of this operand
-            indicators_reshape: np.ndarray[Any, Any] = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
+            indicators_reshape: ArrayType = indicators.reshape((len(input_dict), -1, input_dict[op]["P"]))
             # fill in first few time units as used
             indicators_reshape[i, :, : input_dict[op]["A"]] = 1
 

@@ -1,6 +1,6 @@
 from zigzag.datatypes import LayerOperand
-from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.layer_attributes import InputOperandSource
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 
 class DummyNode(LayerNodeABC):

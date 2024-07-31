@@ -1,5 +1,5 @@
-from enum import StrEnum
 import re
+from enum import StrEnum
 from typing import Any, TypeAlias
 
 from zigzag.datatypes import MemoryOperand
@@ -24,6 +24,8 @@ PortAllocUserFormat: TypeAlias = tuple[dict[str, str], ...]
 
 
 class MemoryPort:
+    """Single port of a MemoryInstance"""
+
     port_id_counter = 0
 
     def __init__(

@@ -1,7 +1,8 @@
 from copy import deepcopy
-from zigzag.workload.Workload import WorkloadABC
-from zigzag.workload.layer_node import LayerNode
 from typing import Any
+
+from zigzag.workload.layer_node import LayerNode
+from zigzag.workload.Workload import WorkloadABC
 
 
 class DNNWorkload(WorkloadABC[LayerNode]):

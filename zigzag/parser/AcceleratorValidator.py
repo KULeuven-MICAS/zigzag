@@ -1,8 +1,8 @@
 import logging
-from typing import Any
-from cerberus import Validator  # type: ignore
 from math import log2
+from typing import Any
 
+from cerberus import Validator  # type: ignore
 
 logger = logging.getLogger(__name__)
 

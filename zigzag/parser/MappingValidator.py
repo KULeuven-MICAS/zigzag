@@ -3,11 +3,12 @@ from typing import Any
 
 from zigzag.parser.UpgradedValidator import UpgradedValidator
 
-
 logger = logging.getLogger(__name__)
 
 
 class MappingValidator:
+    """Class to validate user-given mappings from yaml file"""
+
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True},

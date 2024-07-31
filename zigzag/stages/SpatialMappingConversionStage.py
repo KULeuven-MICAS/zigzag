@@ -1,19 +1,18 @@
 import logging
+import math
 from typing import Any
-
-import numpy as np
 
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.mapping.SpatialMappingInternal import (
-    SpatialMappingInternal,
-    SpatialMappingPerMemLvl,
-)
 from zigzag.mapping.spatial_mapping import (
     LayerDim,
     MappingSingleOADim,
     SpatialMapping,
     UnrollFactor,
+)
+from zigzag.mapping.SpatialMappingInternal import (
+    SpatialMappingInternal,
+    SpatialMappingPerMemLvl,
 )
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_attributes import LayerDimSizes
@@ -180,7 +179,7 @@ class SpatialMappingConversionStage(Stage):
                 loop_dim_unrolled=layer_dim,
                 user_spatial_mapping=limited_user_spatial_mapping,
             )
-            temporal_remainder = int(np.ceil(layer_dim_size / (unroll_factor * loop_size_unrolled_on_early_oa_dims)))
+            temporal_remainder = int(math.ceil(layer_dim_size / (unroll_factor * loop_size_unrolled_on_early_oa_dims)))
             unroll_factor_remainder = layer_dim_size / temporal_remainder / loop_size_unrolled_on_early_oa_dims
             unroll_factor_new: int | float = (
                 unroll_factor_remainder if allow_decimal_sm_loop_size else int(unroll_factor_remainder)
