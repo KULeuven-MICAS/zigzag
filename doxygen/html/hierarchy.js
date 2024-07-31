@@ -3,6 +3,7 @@ var hierarchy =
     [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", null ],
     [ "AcceleratorFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory.html", null ],
     [ "AcceleratorValidator", "classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html", null ],
+    [ "Adder", "classarchitecture_1_1Adder_1_1Adder.html", null ],
     [ "CactiConfig", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html", null ],
     [ "CactiParser", "classcacti__parser_1_1CactiParser.html", null ],
     [ "Constants", "classzigzag_1_1datatypes_1_1Constants.html", null ],

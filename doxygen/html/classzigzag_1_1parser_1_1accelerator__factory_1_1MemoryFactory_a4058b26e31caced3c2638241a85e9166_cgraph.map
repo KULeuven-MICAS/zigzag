@@ -1,7 +1,8 @@
 <map id="add_memory_to_graph" name="add_memory_to_graph">
-<area shape="rect" id="node1" title="Create a new MemoryInstance and add it to the given MemoryHierarchy." alt="" coords="5,56,177,83"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3c82b469fd0758b532bdee818625e897" title=" " alt="" coords="251,5,437,32"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a40f074953ef1d320cbbfb4b32d8226fd" title="The order of the port allocations matches the order of the MemoryOperands." alt="" coords="261,56,427,83"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a29ad27fbd4091fe111575f2a581649a3" title=" " alt="" coords="225,107,463,133"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a9a91e7e510072dc29a497d1e7907e0f9" title=" " alt="" coords="511,56,711,83"/>
+<area shape="rect" id="node1" title="Create a new MemoryInstance and add it to the given MemoryHierarchy." alt="" coords="5,70,177,97"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3c82b469fd0758b532bdee818625e897" title=" " alt="" coords="251,15,437,42"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a40f074953ef1d320cbbfb4b32d8226fd" title="The order of the port allocations matches the order of the MemoryOperands." alt="" coords="261,70,427,97"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a29ad27fbd4091fe111575f2a581649a3" title=" " alt="" coords="225,121,463,147"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02" title="Protect the class variable from reassignment (as this would invalidate the stored hash value)" alt="" coords="515,5,707,47"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a9a91e7e510072dc29a497d1e7907e0f9" title=" " alt="" coords="511,71,711,98"/>
 </map>

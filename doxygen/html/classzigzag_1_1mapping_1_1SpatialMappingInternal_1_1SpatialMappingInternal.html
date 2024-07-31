@@ -276,15 +276,6 @@ Here is the call graph for this function:</div>
 <p>Calculate data serve scope, i.e., for input operands, it means that each data element is broadcast to how many unit at below level; for output operand, it means that how many unit add/collect their output values to one result, and push it to above level. </p>
 <p>NOTE: data_serve_scope doesn't include MAC level, thus is one level less than other spatial mapping attributes.</p>
 <p>data_serve_scope is calculated by dividing unit_duplicate at current level by unit_count at one level above. </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_ae7967c8d4e0d2e36538cd5275fad2a07_cgraph.png" border="0" usemap="#aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_ae7967c8d4e0d2e36538cd5275fad2a07_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_ae7967c8d4e0d2e36538cd5275fad2a07_cgraph" id="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_ae7967c8d4e0d2e36538cd5275fad2a07_cgraph">
-<area shape="rect" title="Calculate data serve scope, i.e., for input operands, it means that each data element is broadcast to..." alt="" coords="5,20,177,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="225,5,501,61"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -308,16 +299,7 @@ Here is the call graph for this function:</div>
 <pre class="fragment">   NOTE: mem_bw_boost doesn't include MAC level, thus is one level less than other spatial mapping attributes.
 
    mem_bw_boost can calculated by either dividing unit_unique at current level by unit_count at one level above.
-</pre> <div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a9bc4d10b339b7694f7b1ccabf59e7dc0_cgraph.png" border="0" usemap="#aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a9bc4d10b339b7694f7b1ccabf59e7dc0_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a9bc4d10b339b7694f7b1ccabf59e7dc0_cgraph" id="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a9bc4d10b339b7694f7b1ccabf59e7dc0_cgraph">
-<area shape="rect" title="Calculate memory bandwidth incremental factor between architectural levels." alt="" coords="5,20,208,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="256,5,532,61"/>
-</map>
-</div>
-
+</pre> 
 </div>
 </div>
 <a id="a7a8eadc13ab1a1f902862cbd046a8ef8"></a>
@@ -337,15 +319,6 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Calculate total/unique/duplicate unit count per operand per architecture level. </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a7a8eadc13ab1a1f902862cbd046a8ef8_cgraph.png" border="0" usemap="#aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a7a8eadc13ab1a1f902862cbd046a8ef8_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a7a8eadc13ab1a1f902862cbd046a8ef8_cgraph" id="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_a7a8eadc13ab1a1f902862cbd046a8ef8_cgraph">
-<area shape="rect" title="Calculate total/unique/duplicate unit count per operand per architecture level." alt="" coords="5,20,128,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="176,5,452,61"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -366,15 +339,6 @@ Here is the call graph for this function:</div>
 </div><div class="memdoc">
 
 <p>Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level. </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_aa7b42d399dada9105b4b245da781fda2_cgraph.png" border="0" usemap="#aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_aa7b42d399dada9105b4b245da781fda2_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_aa7b42d399dada9105b4b245da781fda2_cgraph" id="aclasszigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal_aa7b42d399dada9105b4b245da781fda2_cgraph">
-<area shape="rect" title="Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level..." alt="" coords="5,20,131,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="179,5,455,61"/>
-</map>
-</div>
 
 </div>
 </div>

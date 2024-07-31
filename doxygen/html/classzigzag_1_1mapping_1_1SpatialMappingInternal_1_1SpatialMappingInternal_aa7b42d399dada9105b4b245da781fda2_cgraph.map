@@ -1,4 +1,0 @@
-<map id="calc_unroll_size" name="calc_unroll_size">
-<area shape="rect" id="node1" title="Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level..." alt="" coords="5,20,131,47"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="179,5,455,61"/>
-</map>

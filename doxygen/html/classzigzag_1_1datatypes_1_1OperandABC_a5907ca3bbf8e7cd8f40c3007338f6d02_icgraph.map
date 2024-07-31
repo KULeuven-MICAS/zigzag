@@ -1,0 +1,16 @@
+<map id="name" name="name">
+<area shape="rect" id="node1" title="Protect the class variable from reassignment (as this would invalidate the stored hash value)" alt="" coords="551,377,609,403"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html#a9e362926a85ac44abc040492eb005b6a" title="Initialize the memory hierarchy graph." alt="" coords="269,5,491,47"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1Accelerator_1_1Accelerator.html#a03bf896da156db25e3e118a95fd77452" title=" " alt="" coords="289,71,471,112"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1Accelerator_1_1Accelerator.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="289,136,471,177"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a0ab94b5e657e9550a1b27ace112c727d" title="JSON representation used for saving this object to a json file." alt="" coords="270,201,490,243"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1memory__port_1_1MemoryPort.html#a9a47563093dfc5ba12274b66e368920c" title=" " alt="" coords="281,267,479,308"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1memory__port_1_1MemoryPort.html#a23e8041ce1015febe4fdace3225714f9" title=" " alt="" coords="286,332,474,373"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a23e8041ce1015febe4fdace3225714f9" title=" " alt="" coords="269,398,491,454"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23e8041ce1015febe4fdace3225714f9" title=" " alt="" coords="288,479,472,520"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html#ae07f7930f92d3591c93e2381cd5be285" title=" " alt="" coords="279,544,481,585"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1datatypes_1_1LayerDim.html#afbfa00e0a1e13ee22f7fb64e77aff69d" title="Create a new LayerDim instance with is tagged irrelevant and can be distinguished from non&#45;tagged Lay..." alt="" coords="257,609,503,651"/>
+<area shape="rect" id="node12" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3c82b469fd0758b532bdee818625e897" title=" " alt="" coords="269,675,491,731"/>
+<area shape="rect" id="node14" href="$classzigzag_1_1datatypes_1_1LayerDim.html#a0108b548f7ca751a3bc9b74c8c17124e" title="Create a new LayerDim instance with is tagged relevant and can be distinguished from non&#45;tagged Layer..." alt="" coords="257,756,503,797"/>
+<area shape="rect" id="node13" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a4058b26e31caced3c2638241a85e9166" title="Create a new MemoryInstance and add it to the given MemoryHierarchy." alt="" coords="5,675,209,731"/>
+</map>

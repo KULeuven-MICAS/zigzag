@@ -7,7 +7,7 @@ var classzigzag_1_1workload_1_1layer__node_1_1LayerNode =
     [ "calc_pr_dimension_size_total", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ac48e86edc6d3313bb95aa7f1ee3dd399", null ],
     [ "calc_tensor_dim", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a0dc0be7da2a6cfbfbc02247b90d622e5", null ],
     [ "calc_tensor_dims", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a272bd4ec4c1bf0fa00cefb2dc7de46db", null ],
-    [ "calc_tensor_size", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a00570ca00dd51f559e91b3cec6827862", null ],
+    [ "calc_tensor_size", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a402b9f9fa470419fcda8774138b4833d", null ],
     [ "extract_layer_info", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a971853921d3f04d3990a962215f3a163", null ],
     [ "extract_node_attr", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a19aaaeba0364048770de0bcb52477845", null ],
     [ "get_act_layer_op", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3", null ],

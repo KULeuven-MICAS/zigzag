@@ -125,16 +125,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab203c91c34aeb2addccfb704a6612206"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ab203c91c34aeb2addccfb704a6612206">layer_to_mem_op</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_op)</td></tr>
 <tr class="separator:ab203c91c34aeb2addccfb704a6612206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9082272095f32f465458aed4d10998b3"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3">mem_to_layer_op</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> mem_op)</td></tr>
-<tr class="memdesc:a9082272095f32f465458aed4d10998b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained within.  <a href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3">More...</a><br /></td></tr>
+<tr class="memdesc:a9082272095f32f465458aed4d10998b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a MemoryOperand, return the linked LayerOperand.  <a href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3">More...</a><br /></td></tr>
 <tr class="separator:a9082272095f32f465458aed4d10998b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc6d15bf816ebd4e7220de811dd0fcec"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#adc6d15bf816ebd4e7220de811dd0fcec">contains_layer_op</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_op)</td></tr>
 <tr class="separator:adc6d15bf816ebd4e7220de811dd0fcec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a63e2b96cd00a3a20235944a9c3f79a7d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a63e2b96cd00a3a20235944a9c3f79a7d">contains_mem_op</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> mem_op)</td></tr>
 <tr class="separator:a63e2b96cd00a3a20235944a9c3f79a7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a949aef0c9d8d6c057672772385211334"><td class="memItemLeft" align="right" valign="top">set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334">layer_operands</a> (self)</td></tr>
-<tr class="separator:a949aef0c9d8d6c057672772385211334"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac468cd998c4b3e94e02d5da31a401b61"><td class="memItemLeft" align="right" valign="top">set[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ac468cd998c4b3e94e02d5da31a401b61">mem_operands</a> (self)</td></tr>
-<tr class="separator:ac468cd998c4b3e94e02d5da31a401b61"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aebf6261b742ae694c16790726a8c77c5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#aebf6261b742ae694c16790726a8c77c5">copy</a> (self)</td></tr>
 <tr class="separator:aebf6261b742ae694c16790726a8c77c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
@@ -161,6 +157,10 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a511ae0b1c13f95e5f08f1a0dd3da3d93"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a511ae0b1c13f95e5f08f1a0dd3da3d93">data</a></td></tr>
 <tr class="separator:a511ae0b1c13f95e5f08f1a0dd3da3d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a672e9d0afedb50d5e4e77ad26176e802"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a672e9d0afedb50d5e4e77ad26176e802">layer_operands</a></td></tr>
+<tr class="separator:a672e9d0afedb50d5e4e77ad26176e802"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2278ba261fc9d6180989d5bd27523695"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a2278ba261fc9d6180989d5bd27523695">mem_operands</a></td></tr>
+<tr class="separator:a2278ba261fc9d6180989d5bd27523695"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_attribs_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute"><td colspan="2" onclick="javascript:toggleInherit('pub_attribs_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute')"><img src="closed.png" alt="-"/>&#160;Public Attributes inherited from <a class="el" href="classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html">LayerAttribute</a></td></tr>
 <tr class="memitem:a511ae0b1c13f95e5f08f1a0dd3da3d93 inherit pub_attribs_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html#a511ae0b1c13f95e5f08f1a0dd3da3d93">data</a></td></tr>
 <tr class="separator:a511ae0b1c13f95e5f08f1a0dd3da3d93 inherit pub_attribs_classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,24 +242,6 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_cgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_cgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,145,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="193,5,316,32"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_icgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_adc6d15bf816ebd4e7220de811dd0fcec_icgraph">
-<area shape="rect" title=" " alt="" coords="192,5,332,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ab203c91c34aeb2addccfb704a6612206" title=" " alt="" coords="5,5,144,32"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -288,29 +270,6 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_cgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_cgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,147,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ac468cd998c4b3e94e02d5da31a401b61" title=" " alt="" coords="195,5,317,32"/>
-</map>
-</div>
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_icgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a63e2b96cd00a3a20235944a9c3f79a7d_icgraph">
-<area shape="rect" title=" " alt="" coords="1611,13,1752,39"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="1424,13,1563,39"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="544,5,789,47"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="1131,35,1376,76"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="251,5,496,47"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="837,35,1083,76"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -329,38 +288,6 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-
-</div>
-</div>
-<a id="a949aef0c9d8d6c057672772385211334"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a949aef0c9d8d6c057672772385211334">&#9670;&nbsp;</a></span>layer_operands()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> set[<a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>] layer_operands </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a949aef0c9d8d6c057672772385211334_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a949aef0c9d8d6c057672772385211334_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a949aef0c9d8d6c057672772385211334_icgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a949aef0c9d8d6c057672772385211334_icgraph">
-<area shape="rect" title=" " alt="" coords="497,180,620,207"/>
-<area shape="rect" href="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#ae7967c8d4e0d2e36538cd5275fad2a07" title="Calculate data serve scope, i.e., for input operands, it means that each data element is broadcast to..." alt="" coords="192,5,449,61"/>
-<area shape="rect" href="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a9bc4d10b339b7694f7b1ccabf59e7dc0" title="Calculate memory bandwidth incremental factor between architectural levels." alt="" coords="192,85,449,141"/>
-<area shape="rect" href="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#a7a8eadc13ab1a1f902862cbd046a8ef8" title="Calculate total/unique/duplicate unit count per operand per architecture level." alt="" coords="192,165,449,221"/>
-<area shape="rect" href="classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html#aa7b42d399dada9105b4b245da781fda2" title="Calculate unrolled loop size for different loop types (r/ir/total) per operand per architecture level..." alt="" coords="192,245,449,301"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#adc6d15bf816ebd4e7220de811dd0fcec" title=" " alt="" coords="251,325,391,352"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ab203c91c34aeb2addccfb704a6612206" title=" " alt="" coords="5,325,144,352"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -389,49 +316,6 @@ Here is the caller graph for this function:</div>
         </tr>
       </table>
 </div><div class="memdoc">
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ab203c91c34aeb2addccfb704a6612206_cgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ab203c91c34aeb2addccfb704a6612206_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ab203c91c34aeb2addccfb704a6612206_cgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ab203c91c34aeb2addccfb704a6612206_cgraph">
-<area shape="rect" title=" " alt="" coords="5,5,144,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#adc6d15bf816ebd4e7220de811dd0fcec" title=" " alt="" coords="192,5,332,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a949aef0c9d8d6c057672772385211334" title=" " alt="" coords="380,5,503,32"/>
-</map>
-</div>
-
-</div>
-</div>
-<a id="ac468cd998c4b3e94e02d5da31a401b61"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac468cd998c4b3e94e02d5da31a401b61">&#9670;&nbsp;</a></span>mem_operands()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> set[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>] mem_operands </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<div class="dynheader">
-Here is the caller graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ac468cd998c4b3e94e02d5da31a401b61_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ac468cd998c4b3e94e02d5da31a401b61_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ac468cd998c4b3e94e02d5da31a401b61_icgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_ac468cd998c4b3e94e02d5da31a401b61_icgraph">
-<area shape="rect" title=" " alt="" coords="1800,13,1923,39"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a63e2b96cd00a3a20235944a9c3f79a7d" title=" " alt="" coords="1611,13,1752,39"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="1424,13,1563,39"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="544,5,789,47"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="1131,35,1376,76"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="251,5,496,47"/>
-<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="837,35,1083,76"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -461,23 +345,13 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained within. </p>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_cgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_cgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_cgraph">
-<area shape="rect" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="5,5,144,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a63e2b96cd00a3a20235944a9c3f79a7d" title=" " alt="" coords="192,5,333,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#ac468cd998c4b3e94e02d5da31a401b61" title=" " alt="" coords="381,5,504,32"/>
-</map>
-</div>
+<p>Given a MemoryOperand, return the linked LayerOperand. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_icgraph.png" border="0" usemap="#aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_icgraph" id="aclasszigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks_a9082272095f32f465458aed4d10998b3_icgraph">
-<area shape="rect" title="Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained w..." alt="" coords="1424,13,1563,39"/>
+<area shape="rect" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="1424,13,1563,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="544,5,789,47"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="1131,35,1376,76"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="251,5,496,47"/>
@@ -497,6 +371,34 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">data</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a672e9d0afedb50d5e4e77ad26176e802"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a672e9d0afedb50d5e4e77ad26176e802">&#9670;&nbsp;</a></span>layer_operands</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">layer_operands</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2278ba261fc9d6180989d5bd27523695"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2278ba261fc9d6180989d5bd27523695">&#9670;&nbsp;</a></span>mem_operands</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mem_operands</td>
         </tr>
       </table>
 </div><div class="memdoc">
