@@ -105,8 +105,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a1bad715ea98e91219a909cb93e823cc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab9bb18eddd16b8d50a2c70120c142eee"><td class="memItemLeft" align="right" valign="top">list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#ab9bb18eddd16b8d50a2c70120c142eee">get_ir_layer_dims</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_operand)</td></tr>
 <tr class="separator:ab9bb18eddd16b8d50a2c70120c142eee"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28c30580c71d39677cc726d1a51a8279"><td class="memItemLeft" align="right" valign="top">dict[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>, list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a28c30580c71d39677cc726d1a51a8279">get_pr_layer_dims</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_operand)</td></tr>
-<tr class="separator:a28c30580c71d39677cc726d1a51a8279"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a188e62341e23665e044eda18f45b3fa1"><td class="memItemLeft" align="right" valign="top">PrLoop&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a188e62341e23665e044eda18f45b3fa1">get_pr_layer_dims</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_operand)</td></tr>
+<tr class="separator:a188e62341e23665e044eda18f45b3fa1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3d8496e4c81b770fe236f818973f2280"><td class="memItemLeft" align="right" valign="top">list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a3d8496e4c81b770fe236f818973f2280">get_r_or_pr_layer_dims</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_operand)</td></tr>
+<tr class="separator:a3d8496e4c81b770fe236f818973f2280"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e411868ad4f25c77220a38ffea2df13"><td class="memItemLeft" align="right" valign="top">&quot;LoopRelevancyInfo&quot;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a5e411868ad4f25c77220a38ffea2df13">create_pr_decoupled_relevancy_info</a> (self)</td></tr>
 <tr class="memdesc:a5e411868ad4f25c77220a38ffea2df13"><td class="mdescLeft">&#160;</td><td class="mdescRight">remove the pr loop dict, and put the pr-related data dimension (e.g.  <a href="classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a5e411868ad4f25c77220a38ffea2df13">More...</a><br /></td></tr>
 <tr class="separator:a5e411868ad4f25c77220a38ffea2df13"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -242,14 +244,14 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a28c30580c71d39677cc726d1a51a8279"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a28c30580c71d39677cc726d1a51a8279">&#9670;&nbsp;</a></span>get_pr_layer_dims()</h2>
+<a id="a188e62341e23665e044eda18f45b3fa1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a188e62341e23665e044eda18f45b3fa1">&#9670;&nbsp;</a></span>get_pr_layer_dims()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"> dict[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>, list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>]] get_pr_layer_dims </td>
+          <td class="memname"> PrLoop get_pr_layer_dims </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -278,6 +280,34 @@ Public Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname"> list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] get_r_layer_dims </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td>
+          <td class="paramname"><em>layer_operand</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3d8496e4c81b770fe236f818973f2280"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d8496e4c81b770fe236f818973f2280">&#9670;&nbsp;</a></span>get_r_or_pr_layer_dims()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"> list[<a class="el" href="classzigzag_1_1datatypes_1_1LayerDim.html">LayerDim</a>] get_r_or_pr_layer_dims </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>

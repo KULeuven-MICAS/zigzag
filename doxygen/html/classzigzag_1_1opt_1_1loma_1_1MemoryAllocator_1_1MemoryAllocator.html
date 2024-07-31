@@ -106,13 +106,16 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a592ec75b08e20f7e130c1d072beefd93"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93">allocate_node</a> (self, MemoryLevel node, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, MemoryLevel] top_levels)</td></tr>
 <tr class="memdesc:a592ec75b08e20f7e130c1d072beefd93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Allocate a single memory node with the best loops that remain in the unallocated loop ordering.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93">More...</a><br /></td></tr>
 <tr class="separator:a592ec75b08e20f7e130c1d072beefd93"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd37d5e95f14a794bbf8e95519d46c32"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32">get_precision</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> mem_op, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_op, list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>] unallocated_loops)</td></tr>
+<tr class="memdesc:afd37d5e95f14a794bbf8e95519d46c32"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the precision at which this tensor will have to be stored in the MemoryLevel node.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32">More...</a><br /></td></tr>
+<tr class="separator:afd37d5e95f14a794bbf8e95519d46c32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6d27f4148cb11765aeb8e2b8a19bf192"><td class="memItemLeft" align="right" valign="top">list[UnrollFactor]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192">calc_size_slices</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> mem_op, int mem_capacity, bool db_support=False)</td></tr>
 <tr class="memdesc:a6d27f4148cb11765aeb8e2b8a19bf192"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the required memory size to store different slices of the unallocated loops, with 'mem_capacity' as an upper bound.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192">More...</a><br /></td></tr>
 <tr class="separator:a6d27f4148cb11765aeb8e2b8a19bf192"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab941240f147f17909144eb307c1a13e7"><td class="memItemLeft" align="right" valign="top">UnrollFactor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7">calc_loops_size</a> (self, list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>] loops, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> mem_op, list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>] all_unallocated_loops)</td></tr>
-<tr class="memdesc:ab941240f147f17909144eb307c1a13e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the 'mem_op' tensor size required for all the loops in 'loops'.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7">More...</a><br /></td></tr>
-<tr class="separator:ab941240f147f17909144eb307c1a13e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab960942130c32a204109eca73c4ecff3"><td class="memItemLeft" align="right" valign="top">list[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3">find_best_loop_combination</a> (self, list[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>] mem_ops, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, list[UnrollFactor]] all_sizes, MemoryLevel node, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, MemoryLevel] top_levels)</td></tr>
+<tr class="memitem:ae5d0801754d5b9152109c0b51e10f33a"><td class="memItemLeft" align="right" valign="top">UnrollFactor&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a">calc_loops_size</a> (self, list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>] loops, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> layer_op, int precision)</td></tr>
+<tr class="memdesc:ae5d0801754d5b9152109c0b51e10f33a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the 'mem_op' tensor size required for all the loops in 'loops'.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a">More...</a><br /></td></tr>
+<tr class="separator:ae5d0801754d5b9152109c0b51e10f33a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab960942130c32a204109eca73c4ecff3"><td class="memItemLeft" align="right" valign="top">list[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3">find_best_loop_combination</a> (self, list[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>] <a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a832f0e50c118d77125984b80e9a359d0">mem_ops</a>, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, list[UnrollFactor]] all_sizes, MemoryLevel node, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, MemoryLevel] top_levels)</td></tr>
 <tr class="memdesc:ab960942130c32a204109eca73c4ecff3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Find the best combination of loops from different mem_ops.  <a href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3">More...</a><br /></td></tr>
 <tr class="separator:ab960942130c32a204109eca73c4ecff3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -126,6 +129,16 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a1a81b4276ed57e54580bef8cb37bb2e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa5d555210685086c19e5d08afca6685b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#aa5d555210685086c19e5d08afca6685b">ordering</a></td></tr>
 <tr class="separator:aa5d555210685086c19e5d08afca6685b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1f5d3d98224b5e620e5f950b29cd70a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a1f5d3d98224b5e620e5f950b29cd70a4">layer_and_mem_ops</a></td></tr>
+<tr class="separator:a1f5d3d98224b5e620e5f950b29cd70a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a051aeadc21ea77f0af1cb4792346c712"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a051aeadc21ea77f0af1cb4792346c712">layer_ops</a></td></tr>
+<tr class="separator:a051aeadc21ea77f0af1cb4792346c712"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a832f0e50c118d77125984b80e9a359d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a832f0e50c118d77125984b80e9a359d0">mem_ops</a></td></tr>
+<tr class="separator:a832f0e50c118d77125984b80e9a359d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac55846a98c15e15b409bab7cca1c9bea"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ac55846a98c15e15b409bab7cca1c9bea">mem_to_layer_op</a></td></tr>
+<tr class="separator:ac55846a98c15e15b409bab7cca1c9bea"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af6539887881b31af8198a3a2cab02961"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#af6539887881b31af8198a3a2cab02961">unallocated</a></td></tr>
+<tr class="separator:af6539887881b31af8198a3a2cab02961"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab068d8b6aefa6400c2351d73385b6bc1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab068d8b6aefa6400c2351d73385b6bc1">mem_level</a></td></tr>
 <tr class="separator:ab068d8b6aefa6400c2351d73385b6bc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -224,11 +237,12 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a592ec75b08e20f7e130c1d072beefd93_cgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a592ec75b08e20f7e130c1d072beefd93_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a592ec75b08e20f7e130c1d072beefd93_cgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a592ec75b08e20f7e130c1d072beefd93_cgraph">
-<area shape="rect" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="5,56,119,83"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="206,5,331,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="589,16,867,72"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="167,107,371,133"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="419,5,541,32"/>
+<area shape="rect" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="5,117,119,144"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="206,63,331,89"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="419,107,696,163"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="167,168,371,195"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="496,5,619,32"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="503,56,612,83"/>
 </map>
 </div>
 <div class="dynheader">
@@ -244,8 +258,8 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ab941240f147f17909144eb307c1a13e7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab941240f147f17909144eb307c1a13e7">&#9670;&nbsp;</a></span>calc_loops_size()</h2>
+<a id="ae5d0801754d5b9152109c0b51e10f33a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae5d0801754d5b9152109c0b51e10f33a">&#9670;&nbsp;</a></span>calc_loops_size()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -265,14 +279,14 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td>
-          <td class="paramname"><em>mem_op</em>, </td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td>
+          <td class="paramname"><em>layer_op</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>]&#160;</td>
-          <td class="paramname"><em>all_unallocated_loops</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>precision</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -285,25 +299,16 @@ Here is the caller graph for this function:</div>
 <p>Calculate the 'mem_op' tensor size required for all the loops in 'loops'. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">loops</td><td>The loops we want to calculate the size for. @para mem_op: The memory operand we are calculating the size for. </td></tr>
-    <tr><td class="paramname">all_unallocated_loops</td><td>All unallocated loops for this MemoryLevel node. Needed for output precision calculation. </td></tr>
+    <tr><td class="paramname">loops</td><td>The loops we want to calculate the size for. @para layer_op: The layer operand we are calculating the size for. </td></tr>
+    <tr><td class="paramname">precision</td><td>number of bits for this layer operand. </td></tr>
   </table>
   </dd>
 </dl>
 <div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_cgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_cgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_cgraph">
-<area shape="rect" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="5,20,128,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="176,5,453,61"/>
-</map>
-</div>
-<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_icgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_icgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ab941240f147f17909144eb307c1a13e7_icgraph">
+<div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ae5d0801754d5b9152109c0b51e10f33a_icgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ae5d0801754d5b9152109c0b51e10f33a_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ae5d0801754d5b9152109c0b51e10f33a_icgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ae5d0801754d5b9152109c0b51e10f33a_icgraph">
 <area shape="rect" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="676,13,799,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="503,13,628,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="341,13,455,39"/>
@@ -365,9 +370,10 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a6d27f4148cb11765aeb8e2b8a19bf192_cgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a6d27f4148cb11765aeb8e2b8a19bf192_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a6d27f4148cb11765aeb8e2b8a19bf192_cgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_a6d27f4148cb11765aeb8e2b8a19bf192_cgraph">
-<area shape="rect" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="5,20,131,47"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="179,20,301,47"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="349,5,627,61"/>
+<area shape="rect" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="5,56,131,83"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="256,5,379,32"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="263,56,372,83"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="179,107,456,163"/>
 </map>
 </div>
 <div class="dynheader">
@@ -444,6 +450,61 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="afd37d5e95f14a794bbf8e95519d46c32"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd37d5e95f14a794bbf8e95519d46c32">&#9670;&nbsp;</a></span>get_precision()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def get_precision </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td>
+          <td class="paramname"><em>mem_op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a>&#160;</td>
+          <td class="paramname"><em>layer_op</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html">Loop</a>]&#160;</td>
+          <td class="paramname"><em>unallocated_loops</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Get the precision at which this tensor will have to be stored in the MemoryLevel node. </p>
+<p>For output it can be either the partial sum precision, or the final sum precision. This depends on if all the irrelevant loops were allocated in a previous MemoryLevel. Which in turn means all remaining unallocated loops for this MemoryLevel must not contain any ir loops. Moreover, there might be unallocated spatial loops. </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_afd37d5e95f14a794bbf8e95519d46c32_icgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_afd37d5e95f14a794bbf8e95519d46c32_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_afd37d5e95f14a794bbf8e95519d46c32_icgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_afd37d5e95f14a794bbf8e95519d46c32_icgraph">
+<area shape="rect" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="676,13,785,39"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="503,13,628,39"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="341,13,455,39"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="251,13,293,39"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,203,47"/>
+</map>
+</div>
+
+</div>
+</div>
 <a id="ad22709b2e67308af35f55680d5a026e0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad22709b2e67308af35f55680d5a026e0">&#9670;&nbsp;</a></span>run()</h2>
 
@@ -467,12 +528,13 @@ Here is the call graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph.png" border="0" usemap="#aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph" id="aclasszigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator_ad22709b2e67308af35f55680d5a026e0_cgraph">
-<area shape="rect" title="Run the memory allocation process." alt="" coords="5,56,48,83"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="96,56,209,83"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="297,5,422,32"/>
-<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="680,16,957,72"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="257,107,461,133"/>
-<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab941240f147f17909144eb307c1a13e7" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="509,5,632,32"/>
+<area shape="rect" title="Run the memory allocation process." alt="" coords="5,117,48,144"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="96,117,209,144"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="297,63,422,89"/>
+<area shape="rect" href="classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="509,107,787,163"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="257,168,461,195"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="587,5,709,32"/>
+<area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="593,56,703,83"/>
 </map>
 </div>
 <div class="dynheader">
@@ -516,6 +578,34 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
+<a id="a1f5d3d98224b5e620e5f950b29cd70a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f5d3d98224b5e620e5f950b29cd70a4">&#9670;&nbsp;</a></span>layer_and_mem_ops</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">layer_and_mem_ops</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a051aeadc21ea77f0af1cb4792346c712"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a051aeadc21ea77f0af1cb4792346c712">&#9670;&nbsp;</a></span>layer_ops</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">layer_ops</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab068d8b6aefa6400c2351d73385b6bc1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab068d8b6aefa6400c2351d73385b6bc1">&#9670;&nbsp;</a></span>mem_level</h2>
 
@@ -524,6 +614,34 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">mem_level</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a832f0e50c118d77125984b80e9a359d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a832f0e50c118d77125984b80e9a359d0">&#9670;&nbsp;</a></span>mem_ops</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mem_ops</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac55846a98c15e15b409bab7cca1c9bea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac55846a98c15e15b409bab7cca1c9bea">&#9670;&nbsp;</a></span>mem_to_layer_op</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">mem_to_layer_op</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -552,6 +670,20 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">spatial_mapping</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6539887881b31af8198a3a2cab02961"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6539887881b31af8198a3a2cab02961">&#9670;&nbsp;</a></span>unallocated</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">unallocated</td>
         </tr>
       </table>
 </div><div class="memdoc">
