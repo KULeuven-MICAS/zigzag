@@ -9,3 +9,5 @@ pyyaml
 pytest
 typeguard
 cerberus
+seaborn
+pre-commit

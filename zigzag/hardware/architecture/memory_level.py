@@ -1,13 +1,14 @@
-from typing import Any, TypeAlias
 import math
+from typing import Any
 
-from zigzag.datatypes import OADimension, MemoryOperand
+from zigzag.datatypes import MemoryOperand, OADimension
+from zigzag.hardware.architecture.memory_port import (
+    MemoryPort,
+    MemoryPortType,
+    PortAllocation,
+)
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType, PortAllocation
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
-
-
-ServedMemDimsUserFormat: TypeAlias = tuple[str, ...]
 
 
 class ServedMemDimensions:
@@ -18,23 +19,6 @@ class ServedMemDimensions:
         assert all([isinstance(x, OADimension) for x in data])
         self.data = data
 
-    def to_vec_format(self, nb_oa_dims: int, nb_operands: int) -> tuple[set[tuple[int, ...]], ...]:
-        """! Convert the instance to the one-hot encoded `vector` format used in legacy code,
-        e.g. ({(1,0), (1,1)}, {(1,0), (1,1)}, {(1,0), (1,1)}) - identical copy for each memory operand
-        # TODO replace the legacy code parts with the new representation
-        """
-        default = [0] * nb_oa_dims
-        vec_single_operand: set[tuple[int, ...]] = set()
-        if len(self.data) == 0:
-            vec_single_operand = {tuple(default)}
-        for idx, _ in enumerate(sorted(list(self.data))):
-            encoding = default.copy()
-            encoding[idx] = 1
-            vec_single_operand.add(tuple(encoding))
-
-        return tuple(vec_single_operand for _ in range(nb_operands))
-
-    @property
     @property
     def nb_dims(self):
         return len(self.data)
@@ -60,6 +44,8 @@ class ServedMemDimensions:
 
 
 class MemoryLevel:
+    """Represents a single memory in the memory hierarchy, consisting of a memory instance and connectivity
+    information"""
 
     def __init__(
         self,
@@ -83,9 +69,6 @@ class MemoryLevel:
         self.id: int = identifier
         self.served_dimensions = served_dimensions
         self.name = self.memory_instance.name
-
-        # To be compatible with legacy code
-        self.served_dimensions_vec = served_dimensions.to_vec_format(len(self.oa_dim_sizes), len(self.operands))
 
         # for each operand that current memory level holds, allocate physical memory ports to its 4 potential data
         # movement

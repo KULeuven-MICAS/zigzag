@@ -1,9 +1,9 @@
-from typing import TypeAlias
 import math
+from typing import TypeAlias
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
-from zigzag.workload.layer_node import LayerNode
 from zigzag.utils import json_repr_handler, pickle_deepcopy
+from zigzag.workload.layer_node import LayerNode
 
 TemporalMappingDict: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]]
 
@@ -38,7 +38,12 @@ class TemporalMapping:
 
     def __jsonrepr__(self):
         """! JSON representation of this object to save it to a json file."""
-        return json_repr_handler({"temporal_mapping": self.mapping_dic_stationary})
+        return json_repr_handler(
+            {
+                layer_op: [[str(loop_factor_pair) for loop_factor_pair in mem_level] for mem_level in mapping_layer_op]
+                for layer_op, mapping_layer_op in self.mapping_dic_stationary.items()
+            }
+        )
 
     def innermost_stationary_loop_merge_down(self):
         """! Iteratively merging down the ir loops which located at the bottom position of each memory level.
@@ -51,7 +56,7 @@ class TemporalMapping:
 
         while not done:
             mapping_st: TemporalMappingDict = {op: [[] for _ in range(self.mem_level[op])] for op in self.operand_list}
-            MAC_level_st: dict[LayerOperand, UnrollFactor] = {op: 1 for op in self.operand_list}
+            mac_level_st: dict[LayerOperand, UnrollFactor] = {op: 1 for op in self.operand_list}
             for operand in self.mem_level.keys():
                 for level, current_level_loops in enumerate(mapping_previous[operand]):
                     if not current_level_loops:
@@ -60,7 +65,7 @@ class TemporalMapping:
                         for loop_type, loop_dim in current_level_loops:
                             if loop_type in self.layer_node.loop_relevancy_info.get_ir_layer_dims(operand):
                                 if level == 0:
-                                    MAC_level_st[operand] *= loop_dim
+                                    mac_level_st[operand] *= loop_dim
                                     mapping_st[operand][level].append((loop_type, loop_dim))
                                     mapping_current[operand][level].remove((loop_type, loop_dim))
                                 else:
@@ -76,8 +81,8 @@ class TemporalMapping:
             else:
                 done = True
 
-        self.mapping_dic_stationary = mapping_st
-        self.MAC_level_data_stationary_cycle = MAC_level_st
+        self.mapping_dic_stationary = mapping_st  # type: ignore
+        self.mac_level_data_stationary_cycle = mac_level_st  # type: ignore
 
     def calc_cycle_cabl_level(self):
         """! Calculate the iteration cycles that each memory level covers"""

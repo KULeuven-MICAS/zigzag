@@ -1,10 +1,8 @@
 import logging
-
 from typing import Any
 
-
-from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.cost_model.cost_model import CostModelEvaluation, CumulativeCME
+from zigzag.stages.Stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +13,11 @@ class MinimalEnergyStage(Stage):
     """
 
     def __init__(
-        self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        reduce_minimal_keep_others: bool = False,
+        **kwargs: Any,
     ):
         """
         Initialize the compare stage.
@@ -54,7 +56,11 @@ class MinimalLatencyStage(Stage):
     """
 
     def __init__(
-        self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        reduce_minimal_keep_others: bool = False,
+        **kwargs: Any,
     ):
         """
         Initialize the compare stage.
@@ -90,7 +96,11 @@ class MinimalEDPStage(Stage):
     """
 
     def __init__(
-        self, list_of_callables: list[StageCallable], *, reduce_minimal_keep_others: bool = False, **kwargs: Any
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        reduce_minimal_keep_others: bool = False,
+        **kwargs: Any,
     ) -> None:
         """
         Initialize the compare stage.

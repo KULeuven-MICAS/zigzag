@@ -1,20 +1,18 @@
+import logging
 from typing import Any
+
 from onnx import ModelProto
 
+from zigzag.parser.onnx.ConvParser import ConvParser
 from zigzag.parser.onnx.DefaultNodeParser import DefaultNodeParser
 from zigzag.parser.onnx.GemmParser import GemmParser
 from zigzag.parser.onnx.MatMulParser import MatMulParser
-from zigzag.parser.onnx.ConvParser import ConvParser
 from zigzag.parser.onnx.utils import (
-    parse_onnx_model_from_path,
     parse_dynamic_onnx_model,
+    parse_onnx_model_from_path,
 )
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
 from zigzag.workload.ONNXWorkload import ONNXWorkload
-
-
-import logging
-
 
 logger = logging.getLogger(__name__)
 
@@ -88,9 +86,10 @@ class ONNXModelParser:
             # Add the node_obj to the ONNXWorkload
             workload.add(node_id, node_obj)
 
-        logger.info(  # pylint: disable=W1203
-            f"Created ONNXWorkload graph with {workload.number_of_nodes()} nodes and "
-            f"{workload.number_of_edges()} edges."  # type: ignore
+        logger.info(
+            "Created ONNXWorkload graph with %i nodes and %i edges.",
+            workload.number_of_nodes(),
+            workload.number_of_edges(),  # type: ignore
         )
 
         return workload

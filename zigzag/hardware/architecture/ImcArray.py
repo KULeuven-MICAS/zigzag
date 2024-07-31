@@ -1,11 +1,11 @@
+import logging
 import math
-import logging as _logging
 
-from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.Mapping import Mapping
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
+from zigzag.mapping.Mapping import Mapping
 from zigzag.utils import json_repr_handler
+from zigzag.workload.layer_node import LayerNode
 
 
 class ImcArray(ImcUnit):
@@ -38,7 +38,11 @@ class ImcArray(ImcUnit):
         )
         self.get_area()
         self.get_tclk()
-        self.tops_peak, self.topsw_peak, self.topsmm2_peak = self.get_macro_level_peak_performance()
+        (
+            self.tops_peak,
+            self.topsw_peak,
+            self.topsmm2_peak,
+        ) = self.get_macro_level_peak_performance()
 
     def get_adc_cost(self) -> tuple[float, float, float]:
         """single ADC and analog accumulation cost calculation"""
@@ -426,7 +430,7 @@ class ImcArray(ImcUnit):
         topsw_peak = nb_of_macs_per_cycle * 2 / peak_energy_per_cycle
         topsmm2_peak = tops_peak / imc_area
 
-        logger = _logging.getLogger(__name__)
+        logger = logging.getLogger(__name__)
         imc_type_info = f"Current macro-level peak performance ({'analog' if self.is_aimc else 'digital'} imc):"
         peak_performance_info = f"TOP/s: {tops_peak}, TOP/s/W: {topsw_peak}, TOP/s/mm^2: {topsmm2_peak}"
         logger.info(imc_type_info)
@@ -445,9 +449,10 @@ class ImcArray(ImcUnit):
         self.mapped_rows_total_per_macro = mapped_rows_total_per_macro
 
         # energy of local bitline precharging during weight stationary in cells
-        energy_local_bl_precharging, self.mapped_group_depth = self.get_precharge_energy(
-            self.tech_param, layer, mapping
-        )
+        (
+            energy_local_bl_precharging,
+            self.mapped_group_depth,
+        ) = self.get_precharge_energy(self.tech_param, layer, mapping)
 
         # energy of DACs
         if self.is_aimc:

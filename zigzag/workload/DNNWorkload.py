@@ -1,9 +1,13 @@
-from zigzag.workload.Workload import Workload
-from zigzag.workload.layer_node import LayerNode
+from copy import deepcopy
 from typing import Any
 
+from zigzag.workload.layer_node import LayerNode
+from zigzag.workload.Workload import WorkloadABC
 
-class DNNWorkload(Workload):
+
+class DNNWorkload(WorkloadABC[LayerNode]):
+    """Extends the ABC for workloads. For user-defined workloads (from yaml), the DummyNodes are not saved so this class
+    only holds (non-dummy) LayerNodes"""
 
     def __init__(self, nodes: list[LayerNode], **attr: Any):
         """!
@@ -27,3 +31,7 @@ class DNNWorkload(Workload):
                 edges.append((parent_layer, layer_node))
 
             self.add_workload_edges_from(edges)
+
+    def get_copy_no_dummy(self) -> WorkloadABC[LayerNode]:
+        """Return a copy. DNNWorkloads don't contain DummyNodes in the first place."""
+        return deepcopy(self)

@@ -34,22 +34,24 @@
 # of Variables by Prefix Shifts."  Aaron Williams, 2009
 
 
+from typing import Any
+
+
 class ListElement:
-
-    def __init__(self, value, next):
+    def __init__(self, value: Any, next_elem: Any):
         self.value = value
-        self.next = next
+        self.next_elem = next_elem
 
-    def nth(self, n):
+    def nth(self, n: int):
         o = self
         i = 0
-        while i < n and o.next is not None:
-            o = o.next
+        while i < n and o.next_elem is not None:
+            o = o.next_elem
             i += 1
         return o
 
 
-def init(multiset):
+def init(multiset: list[Any]):
     multiset.sort()  # ensures proper non-increasing order
     h = ListElement(multiset[0], None)
     for item in multiset[1:]:
@@ -57,30 +59,30 @@ def init(multiset):
     return h, h.nth(len(multiset) - 2), h.nth(len(multiset) - 1)
 
 
-def visit(h):
+def visit(h: ListElement) -> list[Any]:
     """! Converts our bespoke linked list to a python list."""
     o = h
-    l = []
+    this_list: list[Any] = []
     while o is not None:
-        l.append(o.value)
-        o = o.next
-    return l
+        this_list.append(o.value)
+        o = o.next_elem
+    return this_list
 
 
-def permutations(multiset):
+def permutations(multiset: list[Any]):
     """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
     yield visit(h)
-    while j.next is not None or j.value < h.value:
-        if j.next is not None and i.value >= j.next.value:
+    while j.next_elem is not None or j.value < h.value:
+        if j.next_elem is not None and i.value >= j.next_elem.value:
             s = j
         else:
             s = i
-        t = s.next
-        s.next = t.next
-        t.next = h
+        t = s.next_elem
+        s.next_elem = t.next_elem
+        t.next_elem = h
         if t.value < h.value:
             i = t
-        j = i.next
+        j = i.next_elem
         h = t
         yield visit(h)

@@ -11,25 +11,44 @@ Stages within ZigZag are used to modularly and easily adapt the functionality of
 
 .. code-block:: python
 
-    mainstage = MainStage([  # Initializes the MainStage as entry point
-        ONNXModelParserStage,  # Parses the ONNX Model into the workload
-        AcceleratorParserStage,  # Parses the accelerator
-        SimpleSaveStage,  # Saves all received CMEs information to a json
-        WorkloadStage,  # Iterates through the different layers in the workload
-        SpatialMappingGeneratorStage,  # Generates multiple spatial mappings (SM)
-        MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
-        LomaStage,  # Generates multiple temporal mappings (TM)
-        CostModelStage  # Evaluates generated SM and TM through cost model
-    ],
-        accelerator_path=args.accelerator,  # required by AcceleratorParserStage
-        onnx_model_path=args.model,  # required by ONNXModelParserStage
-        mapping_path=args.mapping,  # required by ONNXModelParserStage
-        filename_pattern="outputs/{datetime}.json",  # output file save pattern
-        loma_lpf_limit=6,  # required by LomaStage
-        loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
+    mainstage = MainStage(
+        [  # Initialize the MainStage as entry point
+            workload_parser_stage,  # Parse the ONNX Model into the workload
+            AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
+            SimpleSaveStage,  # Save the summed CME energy and latency to a json
+            PickleSaveStage,  # Save all received CMEs in a list to a pickle file
+            SumStage,  # Sum up the received best CME across all layers of the workload
+            WorkloadStage,  # Iterate through the different layers in the workload
+            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
+            CompleteSaveStage,  # Save each processed layer to a json
+            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
+            SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
+            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
+            LomaStage,  # Generate multiple temporal mappings (TM)
 
-    # Run the mainstage
-    mainstage.run()
+            CostModelStage,  # Evaluate generated SM and TM through cost model
+        ],
+        accelerator=args.accelerator,  # required by AcceleratorParserStage
+        workload=args.workload,  # required by workload_parser_stage
+        mapping=args.mapping,  # required by workload_parser_stage
+        dump_folder=args.dump_folder,  # output file save pattern
+        pickle_filename=args.pickle_filename,  # filename for pickled list of cmes
+        loma_lpf_limit=args.lpf_limit,  # required by LomaStage
+        loma_show_progress_bar=True,
+        # Max nb of spatial mappings that are automatically generated in SpatialMappingGeneratorStage
+        nb_mappings_generated=nb_spatial_mappings_generated,
+        # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
+        enable_mix_spatial_mapping_generation=False,
+        # If we need access the same input data multiple times from the innermost memory level and the data size is
+        # smaller than the memory read bw,
+        # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
+        # long as it is needed).
+        # By default, if the parameter is not defined, it will be set as False internally.
+        access_same_data_considered_as_no_access=True,
+    )
+
+    # Launch the MainStage
+    cmes = mainstage.run()
 
 This corresponds to the following hierarchy:
 
@@ -39,7 +58,8 @@ This corresponds to the following hierarchy:
 The main entry point
 --------------------
 
-You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator_path``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
+You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
+You can think of stages similar to those in a pipelined system. The ``MainStage`` provides an entry point for the framework to start execution from. All stages save the provided first argument as the sequence of remaining stages, of which the first one will be called when running said stage. In our example, the ``MainStage`` will automatically call the ``ONNXModelParserStage`` with the remaining stages ``[AcceleratorParserStage, SimpleSaveStage, ...]`` as its first argument. Besides the sequence of stages, the remaining arguments (e.g. ``accelerator``, ``onnx_model_path``, ...) of the ``MainStage`` initialization are arguments required by one or more of the later stages.
 
 The sequential call of stages
 -----------------------------
@@ -48,14 +68,14 @@ After the ``MainStage`` initialization, the remaining stages are called in an se
 
 The ``ONNXModelParserStage`` parses the ONNX model into the workload and the ``AcceleratorParserStage`` parses the accelerator based on the hardware architecture description. After this, the ``SimpleSaveStage`` is called, which will save the results of the design space exploration in a file in a later step. Further description about this step can be found in `back-passing-label`_.
 
-The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``LomaStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for HW cost evaluation. 
+The ``WorkloadStage`` iterates through each layer in the parsed workload, and for each layer it finds spatial mappings (SM) in the ``SpatialMappingGeneratorStage``. The temporal mapping generator stage below (``TemporalMappingGeneratorStage``) generates multiple temporal mappings (TM), and each SM + TM combination is fed to the cost model for HW cost evaluation. 
 
 The back passing of results
 ---------------------------
 
 .. _back-passing-label:
 
-So far, we have only discussed the sequential calling of stages from first to last. The reverse also holds true: when the ``CostModelStage`` finishes processing a SM + TM conbimation, it yields a CostModelEvaluation (CME) object back up the chain of stages. Some stages will simply pass this CME further up the chain, while others manipulate what is passed back up the chain. The ``MinimalLatencyStage`` for example, receives all the CMEs from the multiple cost model invocations for different TMs, but only passes the CME with the lowest latency back up the chain across all TMs. As such, the ``SimpleSaveStage`` only receives the CME with the lowest latency, which it will save to a file with the ``filename_pattern`` pattern.
+So far, we have only discussed the sequential calling of stages from first to last. The reverse also holds true: when the ``CostModelStage`` finishes processing a SM + TM conbimation, it yields a CostModelEvaluation (CME) object back up the chain of stages. Some stages will simply pass this CME further up the chain, while others manipulate what is passed back up the chain. The ``MinimalLatencyStage`` for example, receives all the CMEs from the multiple cost model invocations for different TMs, but only passes the CME with the lowest latency back up the chain across all TMs. As such, the ``SimpleSaveStage`` only receives the CME with the lowest latency, which it will save to a file in the ``dump_folder`` folder.
 
 Implemented stages
 ==================
@@ -104,7 +124,7 @@ Save and dump stages
 
 Temporal mapping stages
 -----------------------
-* `LomaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/LomaStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
+* `TemporalMappingGeneratorStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalMappingGeneratorStage.py#L10>`_: Class that iterates through the different temporal mappings generated through the loop order based memory allocation (loma) engine
 * `SalsaStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/SalsaStage.py#L47>`_: Class that return the best temporal mapping found by the Simulated Annealing Loop-ordering Scheduler for Accelerators (SALSA) for a single layer.
 * `TemporalOrderingConversionStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/TemporalOrderingConversionStage.py#L10>`_: Run this stage by converting the user-defined temporal loop ordering to the memory-level based temporal mapping representation.
 
@@ -115,12 +135,12 @@ Spatial mapping stages
 
 Cost model stages
 -----------------
-* `CostModelStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/CostModelStage.py#L15>`_: Pipeline stage that calls a cost model to evaluate a (temporal and spatial) mapping on a HW config.
+* `CostModelStage <https://github.com/KULeuven-MICAS/zigzag/tree/master/zigzag/classes/stages/CostModelStage.py#L15>`_: Pipeline stage that calls a cost model to evaluate a (temporal and spatial) mapping on a hardware config.
 
 Hardware modification stages
 -----------------
-* `SearchUnusedMemoryStage <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/SearchUnusedMemoryStage.py#L74>`_: Class that iterates through the memory instances and return the lowest allowed memory level for each operand for the usage of the next layer. The class must be placed before the WorkloadStage. The parameter `workload_data_always_from_top_mem <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/SearchUnusedMemoryStage.py#L164>`_ is False by default, which means the initial input and final output of the entire workload can be from a memory level lower than the highest memory level. You can set it to True if the initial input data and final output of the entire workload must travel from/to the highest memory level.
-* `RemoveUnusedMemoryStage <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/RemoveUnusedMemoryStage.py#L34>`_: Class that remove the unused memory instances according to the result of SearchUnusedMemoryStage. Each memory instance with a level higher than the level returned from SearchUnusedMemoryStage will be considered as an unused memory and will be removed. This stage must be placed after the WorkloadStage.
+* `SearchInterLayerDataLocalityStage <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/SearchInterLayerDataLocalityStage.py#L74>`_: Class that iterates through the memory instances and return the lowest allowed memory level for each operand for the usage of the next layer. The class must be placed before the WorkloadStage. The parameter `workload_data_always_from_top_mem <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/SearchInterLayerDataLocalityStage.py#L164>`_ is False by default, which means the initial input and final output of the entire workload can be from a memory level lower than the highest memory level. You can set it to True if the initial input data and final output of the entire workload must travel from/to the highest memory level.
+* `ExploitInterLayerDataLocalityStage <https://github.com/KULeuven-MICAS/zigzag/blob/master/zigzag/classes/stages/ExploitInterLayerDataLocalityStage.py#L34>`_: Class that remove the unused memory instances according to the result of SearchInterLayerDataLocalityStage. Each memory instance with a level higher than the level returned from SearchInterLayerDataLocalityStage will be considered as an unused memory and will be removed. This stage must be placed after the WorkloadStage.
 
 Creating your custom stage
 ==========================

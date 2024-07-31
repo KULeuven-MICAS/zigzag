@@ -1,8 +1,13 @@
-import yaml
-import os
 import argparse
+import os
+import sys
+from typing import Any
 
-from zigzag.cacti.cacti_master.cacti_config_creator import CactiConfig
+import yaml
+
+# To make this file runnable
+sys.path.append(os.getcwd())
+from zigzag.cacti.cacti_master.cacti_config_creator import CactiConfig  # pylint: disable=C0413 # noqa: E402
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--mem_type")
@@ -27,7 +32,7 @@ if not os.path.isdir(self_gen_path):
     os.mkdir(self_gen_path)
 
 os.system(f"rm -rf {self_gen_path}/*")
-C = CactiConfig()
+config = CactiConfig()
 
 # Function 1: set default value
 # C.change_default_value(['technology'], [0.090])
@@ -56,11 +61,12 @@ ex_rd_port = args.ex_rd_port
 ex_wr_port = args.ex_wr_port
 rd_wr_port = args.rd_wr_port
 bank_count = args.bank_count
-
 technology = args.technology
 
+# Default to the read bandwidth of the memory
+block_size = IO_bus_width
 
-C.cacti_auto(
+config.cacti_auto(
     [
         "single",
         [
@@ -73,6 +79,7 @@ C.cacti_auto(
                 "rd_wr_port",
                 "bank_count",
                 "technology",
+                "line_size",
             ],
             [
                 mem_type,
@@ -83,6 +90,7 @@ C.cacti_auto(
                 rd_wr_port,
                 bank_count,
                 technology,
+                block_size,  # in bytes
             ],
         ],
     ],
@@ -90,8 +98,8 @@ C.cacti_auto(
     f"{self_gen_path}/cache.cfg",
 )
 
-result = {}
-with open("%s/cache.cfg.out" % self_gen_path, "r") as fp:
+result: dict[str, Any] = {}
+with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
     raw_result = fp.readlines()
     for ii, each_line in enumerate(raw_result):
         if ii == 0:
@@ -101,8 +109,8 @@ with open("%s/cache.cfg.out" % self_gen_path, "r") as fp:
         else:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
-                    result[attribute_list[jj]].append(float(each_value))
-                except:
+                    result[attribute_list[jj]].append(float(each_value))  # type: ignore
+                except IndexError:
                     pass
 
 
@@ -136,7 +144,7 @@ for i in range(len(result[" Capacity (bytes)"])):
     )
 
     new_result = {
-        "%s"
+        "%s"  # pylint: disable=C0209
         % mem_name: {
             "size_byte": int(size_byte),
             "size_bit": int(size_byte * 8),
@@ -151,6 +159,6 @@ for i in range(len(result[" Capacity (bytes)"])):
             "technology": technology,
         }
     }
-    with open(mem_pool_path, "a+") as fp:
+    with open(mem_pool_path, "a+", encoding="UTF-8") as fp:
         yaml.dump(new_result, fp)
         fp.write("\n")

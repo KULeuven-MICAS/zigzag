@@ -1,13 +1,23 @@
 from typing import Any
-from zigzag.datatypes import Constants, LayerDim, MemoryOperand, OADimension, UnrollFactor
+
+from zigzag.datatypes import (
+    Constants,
+    LayerDim,
+    MemoryOperand,
+    OADimension,
+    UnrollFactor,
+)
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.hardware.architecture.Core import Core
 from zigzag.hardware.architecture.ImcArray import ImcArray
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
-from zigzag.hardware.architecture.operational_array import MultiplierArray, OperationalArrayABC
+from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.hardware.architecture.operational_array import (
+    MultiplierArray,
+    OperationalArrayABC,
+)
 from zigzag.hardware.architecture.operational_unit import Multiplier
 from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping
 
@@ -49,7 +59,10 @@ class CoreFactory:
             memory_factory.add_memory_to_graph(mem_graph)
 
         return Core(
-            core_id=core_id, operational_array=operational_array, memory_hierarchy=mem_graph, dataflows=dataflows
+            core_id=core_id,
+            operational_array=operational_array,
+            memory_hierarchy=mem_graph,
+            dataflows=dataflows,
         )
 
     def create_operational_array(self) -> OperationalArrayABC:
@@ -71,7 +84,6 @@ class CoreFactory:
         return MultiplierArray(multiplier, dimension_sizes)
 
     def create_imc_array(self) -> ImcArray:
-
         # From operational_array
         op_array_data: dict[str, Any] = self.data["operational_array"]
 
@@ -151,6 +163,7 @@ class MemoryFactory:
             latency=self.data["latency"],
             min_r_granularity=self.data["min_r_granularity"],
             min_w_granularity=self.data["min_w_granularity"],
+            auto_cost_extraction=self.data["auto_cost_extraction"],
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:

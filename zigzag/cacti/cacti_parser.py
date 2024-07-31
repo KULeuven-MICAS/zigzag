@@ -1,9 +1,9 @@
-from typing import Any
-import yaml
+import logging
 import os
 import subprocess
+from typing import Any
 
-import logging
+import yaml
 
 logger = logging.getLogger(__name__)
 
@@ -42,8 +42,7 @@ class CactiParser:
 
         if memory_pool is not None:
             for instance in memory_pool:
-
-                IO_bus_width = int(memory_pool[instance]["IO_bus_width"])
+                io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 ex_rd_port = int(memory_pool[instance]["ex_rd_port"])
                 ex_wr_port = int(memory_pool[instance]["ex_wr_port"])
                 rd_wr_port = int(memory_pool[instance]["rd_wr_port"])
@@ -53,7 +52,7 @@ class CactiParser:
 
                 if (
                     (size == cache_size)
-                    and (IO_bus_width == r_bw)
+                    and (io_bus_width == r_bw)
                     and (r_port == ex_rd_port)
                     and (w_port == ex_wr_port)
                     and (rw_port == rd_wr_port)
@@ -84,7 +83,6 @@ class CactiParser:
 
         p = subprocess.call(
             [
-                "PYTHONPATH=$(pwd)",
                 "python",
                 cacti_top_path,
                 "--mem_type",
@@ -105,7 +103,7 @@ class CactiParser:
                 str(mem_pool_path),
                 "--technology",
                 str(technology),
-            ]
+            ],
         )
 
         if p != 0:
@@ -113,6 +111,8 @@ class CactiParser:
 
     def get_item(
         self,
+        *,
+        mem_name: str,
         mem_type: str,
         size: int,
         r_bw: int,
@@ -132,13 +132,27 @@ class CactiParser:
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
-        logger.info(f"Extracting memory costs with CACTI for size = {size} and r_bw = {r_bw}.")
+        logger.info(
+            "Extracting memory costs with CACTI for %s with size = %i and r_bw = %i.",
+            mem_name,
+            size,
+            r_bw,
+        )
 
         if mem_type == "rf":
             new_mem_type = "sram"
             new_size = int(size * 128)
             new_r_bw = int(r_bw)
-            logger.warning(f"Type {mem_type} -> {new_mem_type}. Size {size} -> {new_size}. BW {r_bw} -> {new_r_bw}.")
+            logger.warning(
+                "%s: Type %s -> %s. Size %i -> %i. BW %i -> %i.",
+                mem_name,
+                mem_type,
+                new_mem_type,
+                size,
+                new_size,
+                r_bw,
+                new_r_bw,
+            )
             mem_type = new_mem_type
             size = new_size
             r_bw = new_r_bw
@@ -166,13 +180,12 @@ class CactiParser:
                 cacti_top_path,
             )
 
-        with open(mem_pool_path, "r") as fp:
+        with open(mem_pool_path, "r", encoding="UTF-8") as fp:
             memory_pool: None | dict[str, dict[str, Any]] = yaml.full_load(fp)
 
         if memory_pool is not None:
             for instance in memory_pool:
-
-                IO_bus_width = int(memory_pool[instance]["IO_bus_width"])
+                io_bus_width = int(memory_pool[instance]["IO_bus_width"])
                 area = memory_pool[instance]["area"]
                 bank_count = int(memory_pool[instance]["bank_count"])
                 read_cost = memory_pool[instance]["cost"]["read_word"] * 1000
@@ -187,19 +200,21 @@ class CactiParser:
                 if (
                     (mem_type == memory_type)
                     and (size == cache_size)
-                    and (IO_bus_width == r_bw)
+                    and (io_bus_width == r_bw)
                     and (r_port == ex_rd_port)
                     and (w_port == ex_wr_port)
                     and (rw_port == rd_wr_port)
                     and (tech == technology)
                     and (bank_count == bank)
                 ):
-                    # print("Memory instance found in Cacti memory pool!", cache_size, IO_bus_width, ex_rd_port, ex_wr_port, rd_wr_port, bank_count, read_cost, write_cost)
-                    return (
+                    logger.info(
+                        "Extracted memory costs with CACTI for %s: r_cost = %f, w_cost = %f, area = %f.",
+                        mem_name,
                         read_cost,
                         write_cost,
                         area,
                     )
+                    return read_cost, write_cost, area
 
         # should be never reached
         raise ModuleNotFoundError(

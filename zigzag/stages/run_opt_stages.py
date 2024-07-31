@@ -1,11 +1,10 @@
+import logging
+import multiprocessing
+import os
 from typing import Any, Callable
-
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.Stage import Stage, StageCallable
-
-import logging
-import os
 
 logger = logging.getLogger(__name__)
 
@@ -40,7 +39,8 @@ class CacheBeforeYieldStage(Stage):
         super().__init__(list_of_callables, **kwargs)
 
     def run(self):
-        """! Run the cache before yield stage by running the substage and caching everything it yields, then yielding everything."""
+        """! Run the cache before yield stage by running the substage and caching everything it yields, then yielding
+        everything."""
         sub_list_of_callables = self.list_of_callables[1:]
         substage = self.list_of_callables[0](sub_list_of_callables, **self.kwargs)
 
@@ -54,28 +54,23 @@ class CacheBeforeYieldStage(Stage):
 class SkipIfDumpExistsStage(Stage):
     """! Check if the output file is already generated, skip the run if so."""
 
-    def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
+    def __init__(self, list_of_callables: list[StageCallable], *, dump_folder: str, **kwargs: Any):
         """"""
         super().__init__(list_of_callables, **kwargs)
-        self.dump_filename_pattern = dump_filename_pattern
+        self.dump_folder = dump_folder
 
     def run(self):
-        filename = self.dump_filename_pattern.format(**self.kwargs)
+        filename = self.dump_folder.format(**self.kwargs)
         if os.path.isfile(filename):
-            print(
-                f"==================================Dump {filename} already existed. Skip! =================================="
-            )
+            print(f"Dump {filename} already existed. Skip!")
             return
         substage = self.list_of_callables[0](
             self.list_of_callables[1:],
-            dump_filename_pattern=self.dump_filename_pattern,
+            dump_folder=self.dump_folder,
             **self.kwargs,
         )
         for cme, extra in substage.run():
             yield cme, extra
-
-
-import multiprocessing
 
 
 threadpool = None
@@ -102,7 +97,7 @@ def terminate_threadpool():
     threadpool = None
 
 
-def raise_exception(e):
+def raise_exception(e: Exception):
     terminate_threadpool()
     raise e
 
@@ -144,10 +139,10 @@ class MultiProcessingSpawnStage(Stage):
     def _to_run(self):
         return list(self.sub_stage.run())
 
-    def run(self):
+    def run(self):  # type: ignore
         self.sub_stage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         get_threadpool(self.nb_multiprocessing_threads).apply_async(
-            self._to_run, callback=self.callback, error_callback=raise_exception
+            self._to_run, callback=self.callback, error_callback=raise_exception  # type: ignore
         )
         yield None, None
 
@@ -175,12 +170,12 @@ class MultiProcessingGatherStage(Stage):
         count_to_get = 0
         for _ in sub_stage.run():
             count_to_get += 1
-        logger.info(f"Multiprocessing results to get: {count_to_get}")
+        logger.info("Multiprocessing results to get: %i", count_to_get)
         count = 0
         while count < count_to_get:
             for ans in self.queue.get(block=True):
                 yield ans
             count += 1
             if count % (count_to_get // 10) == 0:
-                logger.info(f"Multiprocessing results received: {count} of {count_to_get}")
+                logger.info("Multiprocessing results received: %i of %i", count, count_to_get)
         close_threadpool()

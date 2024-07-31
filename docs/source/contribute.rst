@@ -12,6 +12,8 @@ When contributing to the framework, please consider the following guidelines:
 * Use Google's `Python Style Guide <https://google.github.io/styleguide/pyguide.html>`_
 * Use Google docstrings to document your classes, functions, methods, .... Examples can be found throughout the code and `here <https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_google.html>`_
 * Update the documentation accordingly
+* Use the ``.github/.pylintrc`` as linter configuration
+* Use ``pre-commit`` with the configuration from ``.pre-commit-config.yaml`` to check and format your code. 
 
 Upgrading the project version (for ZigZag developers)
 =====================================================
@@ -23,8 +25,25 @@ In order to upgrade the project version, we use Python packages called bumpver, 
     pip install bumpver
     pip install build
     pip install twine
+    pip install pytest
+    pip install typeguard
+    pip install pre-commit
 
- First, pull to make sure you have all the remote cahnges. Merge any conflicts with your new changes, and commit. Then, execute the following commands:
+First, pull to make sure you have all the remote changes. Merge any conflicts with your new changes, and commit.
+
+Check linting and typing:
+
+.. code-block:: sh
+ 
+    python -m ruff check --select=E9,F63,F7,F82 --target-version=py37 .
+
+Test whether functionalities have been broken by the changes:
+
+.. code-block:: sh
+
+    python -m pytest --typeguard-packages=zigzag tests/main/
+
+Finally, execute the following commands to build and publish the package :
 
 .. code-block:: sh
 

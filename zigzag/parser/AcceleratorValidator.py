@@ -1,13 +1,16 @@
 import logging
-from typing import Any
-from cerberus import Validator
 from math import log2
+from typing import Any
 
+from cerberus import Validator  # type: ignore
 
 logger = logging.getLogger(__name__)
 
 
 class AcceleratorValidator:
+    """Validates a single Zigzag accelerator from a user-provided yaml file. Checks if the entries of the yaml file
+    are valid and replace unspecified values with defaults."""
+
     OPERAND_REGEX = r"^I[12]$|^O$"
     DIMENSION_REGEX = r"^D\d$"
     PORT_REGEX = r"^[r]?[w]?_port_\d+$"
@@ -30,16 +33,45 @@ class AcceleratorValidator:
                     "size": {"type": "integer", "required": True},
                     "r_bw": {"type": "integer", "required": True},
                     "w_bw": {"type": "integer", "required": True},
-                    "r_cost": {"type": "float", "required": True},
-                    "w_cost": {"type": "float", "required": True},
-                    "area": {"type": "float", "required": True},
+                    "r_cost": {
+                        "type": "float",
+                        "required": False,
+                        "nullable": True,
+                        "default": None,
+                    },
+                    "w_cost": {
+                        "type": "float",
+                        "required": False,
+                        "nullable": True,
+                        "default": None,
+                    },
+                    "area": {
+                        "type": "float",
+                        "required": False,
+                        "nullable": True,
+                        "default": None,
+                    },
                     "r_port": {"type": "integer", "required": True},
                     "w_port": {"type": "integer", "required": True},
                     "rw_port": {"type": "integer", "required": True},
                     "latency": {"type": "integer", "required": True},
-                    "min_r_granularity": {"type": "integer", "required": False, "nullable": True, "default": None},
-                    "min_w_granularity": {"type": "integer", "required": False, "nullable": True, "default": None},
-                    "mem_type": {"type": "string", "required": False, "default": "sram"},
+                    "min_r_granularity": {
+                        "type": "integer",
+                        "required": False,
+                        "nullable": True,
+                        "default": None,
+                    },
+                    "min_w_granularity": {
+                        "type": "integer",
+                        "required": False,
+                        "nullable": True,
+                        "default": None,
+                    },
+                    "mem_type": {
+                        "type": "string",
+                        "required": False,
+                        "default": "sram",
+                    },
                     "auto_cost_extraction": {"type": "boolean", "default": False},
                     "operands": {
                         "type": "list",
@@ -52,10 +84,26 @@ class AcceleratorValidator:
                         "schema": {
                             "type": "dict",
                             "schema": {
-                                "fh": {"type": "string", "required": False, "regex": PORT_REGEX},
-                                "tl": {"type": "string", "required": False, "regex": PORT_REGEX},
-                                "fl": {"type": "string", "required": False, "regex": PORT_REGEX},
-                                "th": {"type": "string", "required": False, "regex": PORT_REGEX},
+                                "fh": {
+                                    "type": "string",
+                                    "required": False,
+                                    "regex": PORT_REGEX,
+                                },
+                                "tl": {
+                                    "type": "string",
+                                    "required": False,
+                                    "regex": PORT_REGEX,
+                                },
+                                "fl": {
+                                    "type": "string",
+                                    "required": False,
+                                    "regex": PORT_REGEX,
+                                },
+                                "th": {
+                                    "type": "string",
+                                    "required": False,
+                                    "regex": PORT_REGEX,
+                                },
                             },
                         },
                     },
@@ -78,7 +126,11 @@ class AcceleratorValidator:
                     "schema": {"type": "string", "regex": DIMENSION_REGEX},
                 },
                 "is_imc": {"type": "boolean", "default": False},
-                "sizes": {"type": "list", "required": True, "schema": {"type": "integer", "min": 0}},
+                "sizes": {
+                    "type": "list",
+                    "required": True,
+                    "schema": {"type": "integer", "min": 0},
+                },
                 "input_precision": {
                     "type": "list",
                     "required": True,
@@ -96,17 +148,43 @@ class AcceleratorValidator:
                     "nullable": True,
                     "default": None,
                 },
-                "adc_resolution": {"type": "float", "required": False, "nullable": True, "default": 0},
-                "bit_serial_precision": {"type": "float", "required": True, "nullable": True, "default": None},
+                "adc_resolution": {
+                    "type": "float",
+                    "required": False,
+                    "nullable": True,
+                    "default": 0,
+                },
+                "bit_serial_precision": {
+                    "type": "float",
+                    "required": True,
+                    "nullable": True,
+                    "default": None,
+                },
             },
         },
         "dataflows": {
             "type": "dict",
             "schema": {
-                "D1": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D2": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D3": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
-                "D4": {"type": "list", "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"}, "required": False},
+                "D1": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": True,
+                },
+                "D2": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
+                "D3": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
+                "D4": {
+                    "type": "list",
+                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "required": False,
+                },
             },
             "required": False,
             "nullable": False,
@@ -116,8 +194,8 @@ class AcceleratorValidator:
     def __init__(self, data: Any):
         """Initialize Validator object, assign schema and store normalize user-given data"""
         self.validator = Validator()
-        self.validator.schema = AcceleratorValidator.SCHEMA
-        self.data: dict[str, Any] = self.validator.normalized(data)
+        self.validator.schema = AcceleratorValidator.SCHEMA  # type: ignore
+        self.data: dict[str, Any] = self.validator.normalized(data)  # type: ignore
         self.is_valid = True
 
     def invalidate(self, extra_msg: str):
@@ -129,8 +207,8 @@ class AcceleratorValidator:
         return true iff valid.
         """
         # Validate according to schema
-        validate_success = self.validator.validate(self.data)
-        errors = self.validator.errors
+        validate_success = self.validator.validate(self.data)  # type: ignore
+        errors = self.validator.errors  # type: ignore
         if not validate_success:
             self.invalidate(f"The following restrictions apply: {errors}")
 
@@ -149,6 +227,21 @@ class AcceleratorValidator:
     def validate_single_memory(self, mem_name: str) -> None:
         mem_data: dict[str, Any] = self.data["memories"][mem_name]
         expected_oa_dims: list[str] = self.data["operational_array"]["dimensions"]
+
+        # Auto-cost extraction using CACTI
+        if mem_data["auto_cost_extraction"]:
+            if mem_data["size"] % 8 != 0:
+                self.invalidate(
+                    f"Memory size of {mem_name} must be a multiple of 8 when automatically extracting "
+                    f"costs using CACTI."
+                )
+        else:
+            if mem_data["r_cost"] is None:
+                self.invalidate(f"`r_cost` of {mem_name} is missing, and is not automatically extracted using CACTI.")
+            if mem_data["w_cost"] is None:
+                self.invalidate(f"`w_cost` of {mem_name} is missing, and is not automatically extracted using CACTI.")
+            if mem_data["area"] is None:
+                self.invalidate(f"`area` of {mem_name} is missing, and is not automatically extracted using CACTI.")
 
         # Number of port allocations is consistent with memory operands
         nb_operands = len(mem_data["operands"])

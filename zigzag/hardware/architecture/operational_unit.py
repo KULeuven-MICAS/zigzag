@@ -27,14 +27,13 @@ class OperationalUnit:
         """! JSON Representation of this class to save it to a json file."""
         return json_repr_handler(self.__dict__)
 
-    def __eq__(self, __o: object) -> bool:
-        if not isinstance(__o, OperationalUnit):
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, OperationalUnit):
             return False
-        return self.precision == __o.precision and self.cost == __o.cost and self.area == __o.area
+        return self.precision == other.precision and self.cost == other.cost and self.area == other.area
 
 
 class Multiplier(OperationalUnit):
-
     def __init__(self, input_precision: list[int], energy_cost: float, area: float):
         """
         @param input_precision: The bit precision of the multiplication inputs.

@@ -2,50 +2,57 @@
 Visualization
 =============
 
-The generated ``CostModelEvaluation`` object(s) (from e.g. the API call) can be visualized in multiple ways.
+The generated ``CostModelEvaluation`` object(s) (from e.g. the API call) can be visualized in multiple ways. The visualizations described here are automatically generated when running the ``example.py`` script.
 
 Temporal mapping
 ================
 
-The temporal mapping can be visualized by a function which prints it to the terminal.
-The code block demonstrates how to use it:
+The temporal mapping can be visualized by a function that prints it to the terminal.
+The code block demonstrates how to use it (copied from ``example.py``):
 
 .. code:: python
 
     from zigzag.utils import pickle_load
     from zigzag.visualization.results.print_mapping import print_mapping
-    cmes = pickle_load("zigzag/visualization/list_of_cmes.pickle")
-    cme = cmes[0]
-    print_mapping(cme)
+
+    pickle_filename = f"outputs/list_of_cmes.pickle"
+    with open(pickle_filename, "rb") as fp:
+        cmes = pickle.load(fp)
+
+    print_mapping(cmes[0])
+
+
 
 The function will show the loops of the temporal mapping and for each operand shows at which memory level it resides.
 For example:
 
 ::
 
-    ********* Temporal Mapping - CostModelEvaluation(layer=LayerNode_0, core=1) *********
-    O (O): [[('FX', 11), ('FY', 11)], [('OY', 7), ('OY', 2), ('OX', 14), ('K', 12)], []]
-    W (I2): [[], [('FX', 11), ('FY', 11), ('OY', 7), ('OY', 2), ('OX', 14)], [('K', 12)]]
-    I (I1): [[('FX', 11), ('FY', 11), ('OY', 7), ('OY', 2), ('OX', 14), ('K', 12)], []] 
-                                                                                        
-    -------------------------------------------------------------------------------------
-    Temporal Loops                  O                  W                  I             
-    -------------------------------------------------------------------------------------
-    for K in [0:12)                 sram_2MB           dram               sram_2MB      
-    -------------------------------------------------------------------------------------
-    for OX in [0:14)               sram_2MB           sram_32KB          sram_2MB      
-    -------------------------------------------------------------------------------------
-    for OY in [0:2)               sram_2MB           sram_32KB          sram_2MB      
-    -------------------------------------------------------------------------------------
-        for OY in [0:7)              sram_2MB           sram_32KB          sram_2MB      
-    -------------------------------------------------------------------------------------
-        for FY in [0:11)            rf_2B              sram_32KB          sram_2MB      
-    -------------------------------------------------------------------------------------
-        for FX in [0:11)           rf_2B              sram_32KB          sram_2MB      
-    -------------------------------------------------------------------------------------
+    Loop ordering for /conv1/Conv
+    ==================================================================================
+    Temporal Loops                       I              W              O              
+    ==================================================================================
+    for OX in [0, 16):                   dram           dram           dram           
+    ----------------------------------------------------------------------------------
+    for OX in [0, 7):                  sram_256KB     dram           dram           
+    ----------------------------------------------------------------------------------
+        for FY in [0, 7):                sram_256KB     dram           sram_256KB     
+    ----------------------------------------------------------------------------------
+        for C in [0, 3):               sram_256KB     dram           sram_256KB     
+    ----------------------------------------------------------------------------------
+            for OY in [0, 16):           sram_256KB     cells          sram_256KB     
+    ----------------------------------------------------------------------------------
+            for OY in [0, 7):          sram_256KB     cells          sram_256KB     
+    ----------------------------------------------------------------------------------
+    ==================================================================================
+    Spatial Loops                                                                     
+    ==================================================================================
+                parfor K in [0, 64):                                                  
+    ----------------------------------------------------------------------------------
+                parfor FX in [0, 7):                                                  
+    ----------------------------------------------------------------------------------
 
 The top loop is the outer-most for loop, where as the bottom loop is the inner-most. Going from bottom to top, loops are allocated to the innermost memories of the memory hierarchy for each operand.
-The names of the memories match the names of the ``MemoryInstance`` object used to create the memory level using the ``add_memory()`` call in the ``MemoryHierarchy``.
 
 Energy and latency breakdown
 ============================
@@ -57,10 +64,13 @@ The energy and latency breakdown of a list of ``CostModelEvaluation`` objects ca
     from zigzag.utils import pickle_load
     from zigzag.visualization.results.plot_cme import bar_plot_cost_model_evaluations_breakdown
 
-    cmes = pickle_load("zigzag/visualization/list_of_cmes.pickle")
-    bar_plot_cost_model_evaluations_breakdown(cmes, "outputs/breakdown.jpg")
+    pickle_filename = f"outputs/list_of_cmes.pickle"
+    with open(pickle_filename, "rb") as fp:
+        cmes = pickle.load(fp)
+
+    bar_plot_cost_model_evaluations_breakdown(cmes, save_path="outputs/plot_breakdown.png")
 
 This will produce a bar chart, for example:
 
-.. image:: images/visualization/breakdown.jpg
+.. image:: images/visualization/breakdown.png
   :width: 900

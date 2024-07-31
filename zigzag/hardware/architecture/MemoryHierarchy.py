@@ -1,12 +1,13 @@
 from collections import defaultdict
 from typing import Any, Iterator
+
 import networkx as nx
 from networkx import DiGraph
 
 from zigzag.datatypes import MemoryOperand
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import json_repr_handler
 
@@ -54,8 +55,8 @@ class MemoryHierarchy(DiGraph):
         Edges are added from all sink nodes in the graph to this node if the memory operands match
         @param memory_instance: The MemoryInstance containing the different memory characteristics.
         @param operands: The memory operands the memory level stores.
-        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
-        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served dimensions -> unroll over every Operational Array unit
+        @param served_dimensions: The operational array dimensions this memory level serves. Default: no served
+            dimensions -> unroll over
         """
 
         # Add the memory operands to the self.operands set attribute that stores all memory operands.
@@ -113,11 +114,9 @@ class MemoryHierarchy(DiGraph):
     def get_inner_memories(self) -> list[MemoryLevel]:
         """! Returns the inner-most memory levels for all memory operands."""
         return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
-        return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
 
     def get_outer_memories(self) -> list[MemoryLevel]:
         """! Returns the outer-most memory levels for all memory operands."""
-        return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
         return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
 
     def get_top_memories(self) -> tuple[list[MemoryLevel], int]:
@@ -127,7 +126,6 @@ class MemoryHierarchy(DiGraph):
         """
         level_to_mems: defaultdict[int, list[MemoryLevel]] = defaultdict(lambda: [])
         for node in self.memory_nodes:
-            node: MemoryLevel
             level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys())
         return level_to_mems[top_level], top_level
@@ -135,13 +133,11 @@ class MemoryHierarchy(DiGraph):
     def get_operator_top_level(self, operand: MemoryOperand) -> tuple[list[MemoryLevel], int]:
         """! Finds the highest level of memories that have the given operand assigned to it, and returns the MemoryLevel
         instance on this level that have the operand assigned to it.
-        'The' level of a MemoryLevel is considered to be the largest
-        level it has across its assigned operands.
+        'The' level of a MemoryLevel is considered to be the largest level it has across its assigned operands.
         """
         level_to_mems: dict[int, list[MemoryLevel]] = defaultdict(lambda: [])
         for node in self.memory_nodes:
-            node: MemoryLevel
-            if operand in node.operands[:]:
+            if operand in node.operands:
                 level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys()) if level_to_mems else -1
         return level_to_mems[top_level], top_level
@@ -174,7 +170,7 @@ class MemoryHierarchy(DiGraph):
 
     def __jsonrepr__(self):
         """! JSON Representation of this object to save it to a json file."""
-        return json_repr_handler({"memory_levels": list(self.topological_sort())})
+        return json_repr_handler(list(self.topological_sort()))
 
     def __eq__(self, other: object) -> bool:
         return (

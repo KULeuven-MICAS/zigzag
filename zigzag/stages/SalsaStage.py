@@ -25,19 +25,17 @@
 #   limitations under the License.
 #
 
-import multiprocessing_on_dill as multiprocessing
 import logging
+from typing import Any
 
+import multiprocessing_on_dill as multiprocessing  # type: ignore
 
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
-
+from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.opt.salsa.SalsaEngine import SalsaEngine
-from typing import Any
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
-
 
 logger = logging.getLogger(__name__)
 
@@ -67,26 +65,25 @@ class SalsaStage(Stage):
             spatial_mapping,
         )
         self.engine = None
-        self.best_cme: CostModelEvaluationABC | None = None
+        self.best_cme: CostModelEvaluation | None = None
 
         self.opt_criterion_name = kwargs.get("salsa_opt_criterion", "energy")
         self.number_of_core_allocated = kwargs.get("salsa_number_of_core", 1)
 
         # Multiprocessing parameters
         self.worker_list = []
-        self.cme_queue = multiprocessing.Queue()
+        self.cme_queue = multiprocessing.Queue()  # type: ignore
 
         if self.opt_criterion_name == "energy":
             self.compare_stage = self.compare_cme_energy
         elif self.opt_criterion_name == "latency":
             self.compare_stage = self.compare_cme_latency
         else:
-            raise Exception("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
+            raise ValueError("Invalid optimization criterion for SALSA. Must be either 'energy' or 'latency'.")
 
     ## Set up and start salsa engine, then collect and return the best cost model evaluation
     def run(self):
-
-        logger.info(f"Running SALSA Temporal Mapping Optimizer with {self.number_of_core_allocated} core(s).")
+        logger.info("Running SALSA Temporal Mapping Optimizer with %i core(s).", self.number_of_core_allocated)
 
         self.engine = SalsaEngine(
             accelerator=self.accelerator,
@@ -96,30 +93,33 @@ class SalsaStage(Stage):
         )
 
         # Get the number of core the user wants to allocate
-        if self.number_of_core_allocated <= multiprocessing.cpu_count():
+        if self.number_of_core_allocated <= multiprocessing.cpu_count():  # type: ignore
             self.number_of_core: int = self.number_of_core_allocated
         else:
-            self.number_of_core = multiprocessing.cpu_count()
+            self.number_of_core = multiprocessing.cpu_count()  # type: ignore
+
+        assert isinstance(self.number_of_core, int)  # type: ignore
 
         # Create processes
         for core_id in range(0, self.number_of_core):
-            p = multiprocessing.Process(target=self.engine.run, args=(self.cme_queue,))
-            self.worker_list.append(p)
+            p = multiprocessing.Process(target=self.engine.run, args=(self.cme_queue,))  # type: ignore
+            self.worker_list.append(p)  # type: ignore
 
         # Start the processes
         for core_id in range(0, self.number_of_core):
-            logger.debug(f"Starting SALSA Process #{core_id}.")
-            self.worker_list[core_id].start()
+            logger.debug("Starting SALSA Process #%i.", core_id)
+            self.worker_list[core_id].start()  # type: ignore
 
         # For every core we gather the ouput
         for core_id in range(0, self.number_of_core):
-            cme = self.cme_queue.get()
-            self.compare_stage(cme)
+            cme = self.cme_queue.get()  # type: ignore
+            self.compare_stage(cme)  # type: ignore
 
         # Then join them to make sure they all end before continuing the execution
         for core_id in range(0, self.number_of_core):
-            self.worker_list[core_id].join()
+            self.worker_list[core_id].join()  # type: ignore
 
+        assert self.best_cme is not None
         kwargs = self.kwargs.copy()
         kwargs["accelerator"] = self.accelerator
         kwargs["layer"] = self.layer

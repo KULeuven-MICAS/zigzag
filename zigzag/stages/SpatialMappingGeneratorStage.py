@@ -1,32 +1,36 @@
-import logging
-import itertools
-import math
 import copy
+import itertools
+import logging
+import math
 from typing import Any, Generator
+
 from sympy import divisors, primefactors  # type: ignore
 
-from zigzag.datatypes import MemoryOperand, OADimension, LayerDim, LayerOperand, UnrollFactorInt, UnrollFactor
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
-from zigzag.hardware.architecture.memory_level import ServedMemDimensions
-from zigzag.hardware.architecture.Core import Core
+from zigzag.datatypes import (
+    LayerDim,
+    LayerOperand,
+    OADimension,
+    UnrollFactor,
+    UnrollFactorInt,
+)
 from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.Core import Core
+from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.hardware.architecture.memory_port import PortAllocUserFormat
-from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
+from zigzag.mapping.spatial_mapping import (
+    MappingSingleOADim,
+    SpatialMapping,
+)
 from zigzag.stages.SpatialMappingConversionStage import (
     SpatialMappingConversionStage,
 )
-from zigzag.workload.layer_node import LayerNode
-from zigzag.utils import UniqueMessageFilter, pickle_deepcopy
+from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
-from zigzag.mapping.spatial_mapping import (
-    SpatialMapping,
-    MappingSingleOADim,
-    SpatialMappingHint,
-)
+from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
-logger.addFilter(UniqueMessageFilter())
 
 
 class SpatialMappingGeneratorStage(Stage):
@@ -74,8 +78,10 @@ class SpatialMappingGeneratorStage(Stage):
         self.oa_dim_sizes = self.core.operational_array.dimension_sizes
         self.memory_hierarchy = self.core.memory_hierarchy
 
-        self.spatial_mapping_hint: SpatialMappingHint = self.layer.spatial_mapping_hint
-        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, set(self.layer.layer_dims))
+        # Spatial mapping hint
+        self.spatial_mapping_hint = self.layer.spatial_mapping_hint
+        self.spatial_mapping_hint.clear_invalid_hits(self.layer.layer_dims)
+        self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, self.layer.layer_dims)
 
     def run(self):
         """! Generate SpatialMappings and convert to internal representation"""
@@ -132,13 +138,16 @@ class SpatialMappingGeneratorStage(Stage):
         # Full Spatial Mapping is already defined by user
         if len(oa_dims_to_fill) == 0:
             assert mapping_template.is_valid(max_unrollings, self.layer_dim_sizes.data)
+            mapping_template = self.limit_unrolling_to_mem_capacity(mapping_template)
             yield mapping_template
             return
 
         # For each OADimension to fill, create a generator of MappingSingleOADim candidates
         mappings_per_oa_dim: list[Generator[MappingSingleOADim, None, None]] = [
             self.generate_spatial_mapping_single_oa_dim(
-                self.spatial_mapping_hint[oa_dim], max_unrollings[oa_dim], self.oa_dim_sizes[oa_dim]
+                self.spatial_mapping_hint[oa_dim],
+                max_unrollings[oa_dim],
+                self.oa_dim_sizes[oa_dim],
             )
             for oa_dim in oa_dims_to_fill
         ]
@@ -156,20 +165,37 @@ class SpatialMappingGeneratorStage(Stage):
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
 
         # Sort according to expected performance
-        candidate_mappings = sorted(candidate_mappings, key=lambda x: x.get_performance_indicator(), reverse=True)
-        # indicators = [x.get_performance_indicator() for x in candidate_mappings]
+        candidate_mappings = sorted(
+            candidate_mappings,
+            key=lambda x: x.get_performance_indicator(),
+            reverse=True,
+        )
 
         # Limit the number of mappings generated
-        for i in range(self.nb_mappings_generated):
+        for i in range(min(self.nb_mappings_generated, len(candidate_mappings))):
             candidate = candidate_mappings[i]
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
+            candidate = self.limit_unrolling_to_mem_capacity(candidate)
             yield candidate
 
     def limit_unrolling_to_mem_bandwidth(
         self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
     ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
         """! Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure"""
+
+        def conditional_log(layer_dim: LayerDim, oa_dim: OADimension, value: int, mem_name: str):
+            # Don't log if user has defined an unrolling for a different layer dim
+            do_not_log = oa_dim in self.provided_mapping and layer_dim not in self.provided_mapping[oa_dim]
+            if not do_not_log:
+                logger.warning(
+                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                    layer_dim,
+                    oa_dim,
+                    value,
+                    mem_name,
+                )
+
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
@@ -186,15 +212,88 @@ class SpatialMappingGeneratorStage(Stage):
                         if layer_dim not in irrelevant_dimensions:
                             max_multicast_elements = mem_bandwidth // precision if precision > 0 else unrolling_size
                             if max_multicast_elements < unrolling_size:
-                                logger.warning(
-                                    "Maximal spatial unrolling of %s at %s limited to %i due to bandwidth of %s",
+                                conditional_log(
                                     layer_dim,
                                     oa_dim,
                                     max_multicast_elements,
                                     mem_level.name,
                                 )
+
                                 mapping[oa_dim][layer_dim] = max_multicast_elements
 
+        return mapping
+
+    def limit_unrolling_to_mem_capacity(self, mapping: SpatialMapping) -> SpatialMapping:
+        """! Scale the given unroll factors such that they do not exceed the capacity of the memory structure"""
+
+        def limit_loop_unrolling(
+            spatial_mapping: SpatialMapping, dims_to_limit: set[LayerDim], max_unrolling: float
+        ) -> SpatialMapping:
+            def adjust_unrolling_factors(factors: list[UnrollFactor], max_unrolling: float) -> list[UnrollFactor]:
+                product = math.prod(factors)
+                while product > max_unrolling:
+                    max_factor = max(factors)
+                    max_index = factors.index(max_factor)
+                    factors[max_index] -= 1
+                    product = math.prod(factors)
+                return factors
+
+            # Extract the unrolling factors for the limited dimensions
+            unrolling_factors: list[UnrollFactor] = []
+            for dim in dims_to_limit:
+                for oa_dim in spatial_mapping:
+                    loop_unrollings = spatial_mapping[oa_dim]
+                    if dim in loop_unrollings:
+                        unrolling_factors.append(loop_unrollings[dim])
+            # Adjust the unrolling factors
+            adjusted_factors = adjust_unrolling_factors(unrolling_factors.copy(), max_unrolling)
+            # Create a mapping from the original to adjusted factors
+            factor_map = {old: new for old, new in zip(unrolling_factors, adjusted_factors)}
+            # Apply the adjusted factors back to the loop_dict
+            limited_spatial_mapping = SpatialMapping({})
+            for oa_dim in spatial_mapping:
+                loop_unrollings = spatial_mapping[oa_dim]
+                limited_mapping_single_oa_dim = MappingSingleOADim(
+                    {
+                        loop_dim: factor_map[factor] if loop_dim in dims_to_limit else factor
+                        for loop_dim, factor in loop_unrollings.items()
+                    }
+                )
+                limited_spatial_mapping[oa_dim] = limited_mapping_single_oa_dim
+            return limited_spatial_mapping
+
+        for mem_level in self.memory_hierarchy.get_inner_memories():
+            for mem_op in mem_level.operands:
+                layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+                # Either write BW (to write outputs away) or read BW (to read inputs)
+                mem_capacity = mem_level.memory_instance.size
+                # Bit precision of layer operand
+                precision = self.layer.operand_precision[layer_op]
+                irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
+                total_unrolling_size = 1
+                relevant_oa_dims_spatial_mapping = SpatialMapping({})
+                non_irrelevant_dimensions: set[LayerDim] = set()
+                for oa_dim in mem_level.served_dimensions:
+                    relevant_oa_dims_spatial_mapping[oa_dim] = mapping[oa_dim]
+                    # Iterate over all possible LayerDims and rescale max unroll factor
+                    for layer_dim, unrolling_size in mapping[oa_dim].items():
+                        if layer_dim not in irrelevant_dimensions:
+                            non_irrelevant_dimensions.add(layer_dim)
+                            total_unrolling_size *= unrolling_size
+                max_stored_elements = mem_capacity / precision if precision > 0 else float("inf")
+                # Limit the total unrolling across the OA Dims to the capacity of the memory
+                if max_stored_elements < total_unrolling_size:
+                    logger.warning(
+                        "Maximal spatial unrolling limited to %i due to capacity %i of %s.",
+                        max_stored_elements,
+                        mem_capacity,
+                        mem_level.name,
+                    )
+                    limited_mapping = limit_loop_unrolling(
+                        relevant_oa_dims_spatial_mapping, non_irrelevant_dimensions, max_stored_elements
+                    )
+                    for oa_dim, unrollings in limited_mapping.items():
+                        mapping[oa_dim].update(unrollings)
         return mapping
 
     def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
@@ -295,7 +394,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         memory_operand_links: MemoryOperandLinks = self.layer.memory_operand_links
 
-        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one dimension
+        # OA Dims that serve activations/output at innermost memory level. The memory level may only multicast on one
+        # dimension
         act_served_oa_dims_list: list[ServedMemDimensions] = [
             mem_level.served_dimensions
             for mem_level in self.memory_hierarchy.get_inner_memories()
@@ -397,7 +497,9 @@ class SpatialMappingGeneratorStage(Stage):
             # (2) check on output_served_oa_dim
             existed_pr_mapping = list(weight_r_loop[layer_dim].values())[0]
 
-            ir_layer_dim_to_current_layer_dim = next(filter(lambda x: x != layer_dim, weight_r_loop.keys()))
+            ir_layer_dim_to_current_layer_dim = next(
+                filter(lambda x: x != layer_dim, weight_r_loop.keys())  # pylint: disable=W0640
+            )
 
             existed_pr_mapping_but_ir_to_current_layer_dim = list(
                 weight_r_loop[ir_layer_dim_to_current_layer_dim].values()
@@ -485,7 +587,7 @@ class SpatialMappingGeneratorStage(Stage):
                             # add the other existed pr loop to required_oa_dim_size,
                             # because previously it is not counted in output_served_self.oa_dim_sizes[oa_dim].
                             sole_dim = list(comb_mapping.keys())[0]
-                            the_other_pr_mapping_name = [key for key in weight_r_loop.keys() if key != sole_dim][0]
+                            the_other_pr_mapping_name = [key for key in weight_r_loop if key != sole_dim][0]
                             the_other_pr_mapping_size = list(weight_r_loop[the_other_pr_mapping_name].values())[0]
                             required_oa_dim_size *= the_other_pr_mapping_size
                         if required_oa_dim_size > self.oa_dim_sizes[output_served_oa_dim]:
@@ -519,7 +621,9 @@ class SpatialMappingGeneratorStage(Stage):
         return list(filter(lambda x: 1 < x <= n, divisors(n)))
 
     @staticmethod
-    def identify_layer_operand_representation(layer: LayerNode) -> tuple[LayerOperand | None, LayerOperand | None]:
+    def identify_layer_operand_representation(
+        layer: LayerNode,
+    ) -> tuple[LayerOperand | None, LayerOperand | None]:
         """
         # TODO requires documentation
         """
@@ -549,7 +653,6 @@ class SpatialMappingGeneratorStage(Stage):
     def modify_innermost_input_mem_size(self, user_spatial_mapping: SpatialMapping) -> Accelerator:
         """!
         # TODO needs cleanup
-        # ! This only works for single core
         """
         # To support OX, OY unrolling, we will scale the lowest input mem size by OXu*OYu
         # to avoid the MemoryTooSmallException in loma stage.
@@ -566,6 +669,8 @@ class SpatialMappingGeneratorStage(Stage):
         # get name of OX, OY (weight ir layer dims)
         weight_ir_layer_dims: list[LayerDim] = self.layer.loop_relevancy_info.get_ir_layer_dims(const_operand)
         # get the oa_dim name served by input innermost memory level
+        act_innermost_mem_level = None
+        act_served_oa_dims = ServedMemDimensions(set())
         for memory_level in innermost_levels:
             mem_ops = memory_level.operands
             if self.layer.memory_operand_links.layer_to_mem_op(act_operand) in mem_ops:
@@ -606,17 +711,17 @@ class SpatialMappingGeneratorStage(Stage):
                 prev_size = memory_instance.size
                 new_size = memory_instance.size * mem_scaling_factor
                 memory_instance.update_size(new_size)
-                logger.info("Updated %s size from %i to %i", memory_instance, prev_size, new_size)
-            operands = tuple(memory_level.operands)
-            port_alloc = memory_level.port_alloc_raw
-            served_dimensions_vec = memory_level.served_dimensions_vec
-            assert len(served_dimensions_vec) >= 1
-            served_dimensions = served_dimensions_vec[0]
+                logger.info(
+                    "Updated %s size from %i to %i",
+                    memory_instance,
+                    prev_size,
+                    new_size,
+                )
 
             new_memory_instance: MemoryInstance = pickle_deepcopy(memory_instance)
-            new_operands: tuple[MemoryOperand, ...] = pickle_deepcopy(operands)
-            new_port_alloc: PortAllocUserFormat = pickle_deepcopy(port_alloc)
-            new_served_dimensions = pickle_deepcopy(served_dimensions)
+            new_operands = pickle_deepcopy(memory_level.operands)
+            new_port_alloc = pickle_deepcopy(memory_level.port_alloc_raw)
+            new_served_dimensions = pickle_deepcopy(memory_level.served_dimensions)
             new_memory_hierarchy.add_memory(
                 memory_instance=new_memory_instance,
                 operands=new_operands,
@@ -624,9 +729,8 @@ class SpatialMappingGeneratorStage(Stage):
                 served_dimensions=new_served_dimensions,
             )
         # Create the new core
-        new_id = self.core.id
         new_core = Core(
-            id=new_id,
+            core_id=self.core.id,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )

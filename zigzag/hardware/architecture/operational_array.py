@@ -1,10 +1,11 @@
+import math
 from abc import ABCMeta
 from typing import Any
-import math
+
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.operational_unit import (
-    OperationalUnit,
     Multiplier,
+    OperationalUnit,
 )
 from zigzag.utils import json_repr_handler
 
@@ -44,7 +45,6 @@ class OperationalArray(OperationalArrayABC):
 
 
 class MultiplierArray(OperationalArray):
-
     def __init__(
         self,
         multiplier: Multiplier,

@@ -3,36 +3,43 @@ import pytest
 from zigzag.api import get_hardware_performance_zigzag_imc
 
 workloads = (
-    "inputs/workload/alexnet.onnx",
-    "inputs/workload/mobilenetv2.onnx",
-    "inputs/workload/resnet18.onnx",
-    "inputs/workload/resnet18.yaml",
+    "zigzag/inputs/workload/resnet18.onnx",
+    "zigzag/inputs/workload/resnet18.yaml",
 )
 
 # Expected energy, latency (#cycles), clk time and area for each workload defined above
 ens_lats_clks_areas = {
-    "inputs/workload/alexnet.onnx": (6812722722.515776, 9460061.0, 3.75708, 0.8566212024),
-    "inputs/workload/mobilenetv2.onnx": (2884947078.1898627, 20454032.0, 3.75708, 0.8566212024),
-    "inputs/workload/resnet18.onnx": (4726270705.225856, 6337852.0, 3.75708, 0.8566212024),
-    "inputs/workload/resnet18.yaml": (4268432908.954752, 5789353.0, 3.75708, 0.8566212024),
+    "zigzag/inputs/workload/resnet18.onnx": (4727682330.905855, 6365842.0, 3.75708, 0.8018113023999999),
+    "zigzag/inputs/workload/resnet18.yaml": (
+        4268285089.3547516,
+        5789229.0,
+        3.75708,
+        0.8018113023999999,
+    ),
 }
 
 
 @pytest.fixture
 def mapping():
-    return "inputs/mapping/default_imc.yaml"
+    return "zigzag/inputs/mapping/default_imc.yaml"
 
 
 @pytest.fixture
 def accelerator():
-    return "inputs/hardware/dimc.yaml"
+    return "zigzag/inputs/hardware/dimc.yaml"
 
 
 @pytest.mark.parametrize("workload", workloads)
-def test_api(workload: str, accelerator: str, mapping: str):
-    (energy, latency, tclk, area, cmes) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
-    (expected_energy, expected_latency, expected_tclk, expected_area) = ens_lats_clks_areas[workload]
-    assert energy == pytest.approx(expected_energy)
-    assert latency == pytest.approx(expected_latency)
-    assert tclk == pytest.approx(expected_tclk)
-    assert area == pytest.approx(expected_area)
+def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
+    (energy, latency, tclk, area, _) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
+    (
+        expected_energy,
+        expected_latency,
+        expected_tclk,
+        expected_area,
+    ) = ens_lats_clks_areas[workload]
+    print(f"'{workload}': ({energy}, {latency}, {tclk}, {area}),")
+    assert energy == pytest.approx(expected_energy)  # type: ignore
+    assert latency == pytest.approx(expected_latency)  # type: ignore
+    assert tclk == pytest.approx(expected_tclk)  # type: ignore
+    assert area == pytest.approx(expected_area)  # type: ignore

@@ -1,6 +1,6 @@
 from zigzag.datatypes import LayerOperand
-from zigzag.workload.LayerNodeABC import LayerNodeABC
 from zigzag.workload.layer_attributes import InputOperandSource
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
 
 class DummyNode(LayerNodeABC):
@@ -9,18 +9,27 @@ class DummyNode(LayerNodeABC):
     but will be skipped by the underlying engines, treating it as a 0 HW cost node.
     """
 
-    def __init__(self, layer_id: int, predecessor: int | None, node_name: str = "", type: str | None = None) -> None:
+    def __init__(self, node_id: int, predecessors: list[int], node_type: str, node_name: str = "") -> None:
         """
         Initialize the DummyNode by setting its id, the node's predecessors and optionally giving it a name.
         @param id (int): id for this node
         @param predecessor (list): list of ids of this node's predecessor nodes
         @param node_name (str, optional): a name for this node, e.g. the node's name within the onnx model
         """
-        super().__init__(layer_id, node_name)
-        self.input_operand_source: InputOperandSource = (
-            {LayerOperand("I"): predecessor} if predecessor is not None else {}
-        )
-        self.type = type
+        LayerNodeABC.__init__(self, node_id, node_name)
+
+        if len(predecessors) == 0:
+            self.input_operand_source: InputOperandSource = {}
+        elif len(predecessors) == 1:
+            self.input_operand_source = {LayerOperand("I"): predecessors[0]}
+        else:
+            # We currently don't support more than 2 sources so we can also use `I` and `W` for the layer operands
+            self.input_operand_source = {
+                LayerOperand("I"): predecessors[0],
+                LayerOperand("W"): predecessors[1],
+            }
+
+        self.type = node_type
         # We assume these nodes are mapped on a core with id -1
         self.core_allocation = -1
         self.runtime = 0
@@ -31,7 +40,7 @@ class DummyNode(LayerNodeABC):
         return f"DummyNode({self.id})"
 
     def set_start(self, start: int):
-        """! Set the start time in ccyles of this node
+        """! Set the start time in cyles of this node
         @param start : start time in cycles
         """
         self.start = start

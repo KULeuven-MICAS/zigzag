@@ -1,9 +1,9 @@
-from typing import TypeAlias
 from math import prod
+from typing import TypeAlias
 
-from zigzag.datatypes import LayerOperand, PrLoop, UnrollFactor, LayerDim
-from zigzag.workload.layer_attributes import LayerDimSizes
+from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor
 from zigzag.utils import pickle_deepcopy
+from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
 
 SpatialMappingPerMemLvl: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor | float]]]]
@@ -40,7 +40,6 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
     per_pr_data_reuse: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = dict()
 
     for operand in pr_operand_list:
-
         # initialize current and below level pr loop size
         cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactor]] = {
             pr_data_dim: {pr_loop_dim: 1 for pr_loop_dim in pr_operand_loop_lut[operand][pr_data_dim]}
@@ -77,8 +76,9 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
                     if any(lp_type == loop_type for lp_type in pr_operand_loop_lut[operand][pr_data_dim]):
                         cabl_pr_lp_size[pr_data_dim][loop_type] *= loop_size
 
-                        # compute pr related data dimension size and data dimension reuse at current and below joint levels
-                        # based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled into r and ir loops.
+                        # compute pr related data dimension size and data dimension reuse at current and below joint
+                        # levels based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled
+                        # into r and ir loops.
                         pr_loop_combined_to_r = layer_node.calc_tensor_dim(
                             pr_data_dim, LayerDimSizes(cabl_pr_lp_size[pr_data_dim])
                         )

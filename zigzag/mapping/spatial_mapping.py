@@ -3,14 +3,11 @@ import logging
 import math
 from typing import Any
 
-from zigzag.datatypes import OADimension, LayerDim, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
+from zigzag.utils import UniqueMessageFilter, json_repr_handler
 from zigzag.workload.LayerAttribute import LayerAttribute
-from zigzag.utils import UniqueMessageFilter, json_repr_handler
-from zigzag.utils import UniqueMessageFilter, json_repr_handler
-
 
 logger = logging.getLogger(__name__)
-logger.addFilter(UniqueMessageFilter())
 logger.addFilter(UniqueMessageFilter())
 
 
@@ -37,6 +34,9 @@ class MappingSingleOADim:
     def keys(self):
         return self.__data.keys()
 
+    def get_data(self):
+        return self.__data
+
     def __getitem__(self, key: LayerDim):
         return self.__data[key]
 
@@ -49,11 +49,13 @@ class MappingSingleOADim:
     def items(self):
         return self.__data.items()
 
+    def update(self, other: "MappingSingleOADim"):
+        self.__data.update(other.get_data())
+
     def __setitem__(self, key: LayerDim, value: UnrollFactor | float):
         self.__data[key] = value  # type: ignore
 
     def __str__(self):
-        return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
         return str({str(k): str(v) for k, v in self.items()}).replace("'", "")
 
     def __repr__(self):
@@ -119,7 +121,6 @@ class SpatialMapping(LayerAttribute):
         assert all(given_oa_dim in self for given_oa_dim in self.oa_dim_sizes), "SpatialMapping misses OADimension"
 
         for oa_dim in self.oa_dims:
-
             for layer_dim, unrolling in self[oa_dim].items():
                 # 4)
                 if layer_dim not in max_unrollings[oa_dim]:
@@ -153,7 +154,7 @@ class SpatialMapping(LayerAttribute):
         - that each LayerDim unrolling does not exceed the unrolling prescribed in max_unrollings
         Reduce the unrollings otherwise.
         @param dict of `LayerDimSizes`. `LayerDimSizes` instance cannot be used due to circular import.
-        # TODO should be moved to something similar to `parse_user_input`
+
         """
         assert self.oa_dim_sizes is not None, "Initialize OA Dimensions first"
 
@@ -294,7 +295,6 @@ class SpatialMapping(LayerAttribute):
 
     def __str__(self):
         return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
-        return str({str(k): str(v) for k, v in self.items()}).replace('"', "").replace("'", "")
 
     def __eq__(self, other: Any) -> bool:
         """! Return true if the contained dimensions are the same and all MappingSingleOADims are the same"""
@@ -319,9 +319,31 @@ class SpatialMappingHint(LayerAttribute):
     def __init__(self, data: dict[OADimension, set[LayerDim]]):
         self.data = data
 
-    def complete_with_defaults(self, oa_dim_sizes: dict[OADimension, int], layer_dims: set[LayerDim]):
+    def clear_invalid_hits(self, valid_layer_dims: list[LayerDim]):
+        """Check the hints at all contained OADimension. If the OADimension doesn't contain a single LayerDim that is
+        also present in the given list `valid_layer_dims`, remove the OADimension from this instance.
+        """
+        invalid_oa_dims: list[OADimension] = []
+        for oa_dim, hints in self.data.items():
+            if not any([layer_dim in valid_layer_dims for layer_dim in hints]):
+                logger.warning(
+                    "Spatial mapping hint %s at OADimension %s doesn't contain a single layer dimension that is "
+                    "in part of this layer: %s. Removing spatial mapping hints at %s.",
+                    self,
+                    oa_dim,
+                    valid_layer_dims,
+                    oa_dim,
+                )
+                invalid_oa_dims.append(oa_dim)
+
+        for oa_dim in invalid_oa_dims:
+            del self.data[oa_dim]
+
+    def complete_with_defaults(self, oa_dim_sizes: dict[OADimension, int], layer_dims: list[LayerDim]):
+        """For all OADimensions in `oa_dim_sizes` that are not already in this SpatialMappingHint, fill the hints for
+        that OADimension with all LayerDims from `layer_dims`."""
         for oa_dim in filter(lambda x: x not in self, oa_dim_sizes):
-            self.data[oa_dim] = layer_dims
+            self.data[oa_dim] = set(layer_dims)
 
     def __getitem__(self, key: OADimension):
         return self.data[key]

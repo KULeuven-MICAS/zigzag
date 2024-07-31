@@ -1,10 +1,8 @@
+import logging
+import math
 from copy import deepcopy
 from dataclasses import dataclass
-from dataclasses import dataclass
 from math import gcd
-import logging as _logging
-import math
-
 
 from zigzag.datatypes import (
     LayerDim,
@@ -15,7 +13,7 @@ from zigzag.datatypes import (
     UnrollFactor,
 )
 from zigzag.mapping.spatial_mapping import SpatialMapping, SpatialMappingHint
-from zigzag.workload.LayerNodeABC import LayerNodeABC
+from zigzag.utils import json_repr_handler
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
     LayerDimRelation,
@@ -23,12 +21,12 @@ from zigzag.workload.layer_attributes import (
     LayerEquation,
     LayerOperandPrecision,
     LayerPadding,
-    MemoryOperandLinks,
     LayerTemporalOrdering,
+    MemoryOperandLinks,
 )
-from zigzag.utils import json_repr_handler
+from zigzag.workload.LayerNodeABC import LayerNodeABC
 
-logger = _logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class LoopRelevancyInfo:
@@ -41,7 +39,7 @@ class LoopRelevancyInfo:
         self.r_dims: dict[LayerOperand, list[LayerDim]] = dict()
         self.ir_dims: dict[LayerOperand, list[LayerDim]] = dict()
         self.pr_dims: dict[LayerOperand, dict[LayerDim, list[LayerDim]]] = dict()
-        self.__orig_pr_loop: PrLoop
+        self.orig_pr_loop: PrLoop
 
     def get_r_layer_dims(self, layer_operand: LayerOperand) -> list[LayerDim]:
         return self.r_dims[layer_operand]
@@ -61,19 +59,22 @@ class LoopRelevancyInfo:
         new.r_dims = deepcopy(self.r_dims)
         new.ir_dims = deepcopy(self.ir_dims)
         for layer_op in self.pr_dims:
-            new.r_dims[layer_op] += [pr_layer_dim.create_r_version() for pr_layer_dim in self.__orig_pr_loop]
-            new.ir_dims[layer_op] += [pr_layer_dim.create_ir_version() for pr_layer_dim in self.__orig_pr_loop]
+            new.r_dims[layer_op] += [pr_layer_dim.create_r_version() for pr_layer_dim in self.orig_pr_loop]
+            new.ir_dims[layer_op] += [pr_layer_dim.create_ir_version() for pr_layer_dim in self.orig_pr_loop]
         return new
 
     @staticmethod
     def extract_relevancy_info(
-        equation: LayerEquation, layer_dim_sizes: LayerDimSizes, pr_loop: PrLoop, pr_loop_list: LoopList
+        equation: LayerEquation,
+        layer_dim_sizes: LayerDimSizes,
+        pr_loop: PrLoop,
+        pr_loop_list: LoopList,
     ) -> "LoopRelevancyInfo":
         """!
         # TODO requires cleanup and documentation
         """
         self = LoopRelevancyInfo()
-        self.__orig_pr_loop = pr_loop
+        self.orig_pr_loop = pr_loop
 
         dimension_list = layer_dim_sizes.layer_dims
         for layer_op in equation.get_contained_operands():
@@ -99,6 +100,8 @@ class LoopRelevancyInfo:
 
 @dataclass
 class LayerNodeAttributes:
+    """Packs the attributes needed to initialize a LayerNode"""
+
     layer_type: str
     equation: LayerEquation
     layer_dim_sizes: LayerDimSizes
@@ -126,8 +129,6 @@ class LayerNode(LayerNodeABC):
         Equal-to-1 loop dimensions are eliminated.
         @param layer_id: The identifier (key) of the layer, as defined in the workload
         @param node_name: an optional name for the Node. E.g. the node's name from the onnx model.
-
-        # TODO clean up this method. Too many lines for a clean init method.
         """
         LayerNodeABC.__init__(self, node_id=layer_id, node_name=node_name)
 
@@ -169,12 +170,55 @@ class LayerNode(LayerNodeABC):
         self.operand_size_elem: dict[LayerOperand, UnrollFactor] = dict()
         self.extract_layer_info()
 
+    def get_act_layer_op(self) -> LayerOperand:
+        """Return the `I` LayerOperand: either the non-constant operand or one of the input operands if none are
+        constant"""
+        if len(self.constant_operands) == 1:
+            # regular layers
+            weight_layer_op = self.constant_operands[0]
+            act_layer_op = [operand for operand in self.input_operands if operand != weight_layer_op].pop()
+        elif len(self.constant_operands) == 0:
+            # None constant: take the second one
+            act_layer_op = self.input_operands[1]
+        else:
+            pr_loop_key = next(iter(self.pr_loop.keys()))
+            related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
+                layer_op: self.equation.get_r_layer_dims(layer_op)
+                for layer_op in self.equation.get_contained_operands()
+            }
+            act_layer_op = [
+                operand_in_layer
+                for operand_in_layer, related_loop in related_loop_dict.items()
+                if pr_loop_key in related_loop
+            ].pop()
+        return act_layer_op
+
+    def get_weight_layer_op(
+        self,
+    ) -> LayerOperand:
+        """Return the `W` LayerOperand: either the constant operand or one of the input operands if none are
+        constant"""
+        if len(self.constant_operands) == 1:
+            # regular layers
+            weight_layer_op = self.constant_operands[0]
+        elif len(self.constant_operands) == 0:
+            # Adder layers
+            weight_layer_op = self.input_operands[0]
+        else:
+            act_layer_op = self.get_act_layer_op()
+            weight_layer_op = [x for x in self.constant_operands if x != act_layer_op].pop()
+        return weight_layer_op
+
     def build_pr_funcs(self) -> tuple[PrLoop, LoopList, PrScalingFactors]:
         """!
         # TODO requires documentation
         """
         if len(self.dimension_relations) > 0:
-            pr_loop, pr_loop_list, pr_scaling_factors = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
+            (
+                pr_loop,
+                pr_loop_list,
+                pr_scaling_factors,
+            ) = LayerDimRelation.extract_pr_loop_info(self.dimension_relations)
         else:
             pr_loop, pr_loop_list, pr_scaling_factors = {}, [], {}
 
@@ -187,6 +231,8 @@ class LayerNode(LayerNodeABC):
         """! JSON representation used for saving this object to a json file."""
         return json_repr_handler(
             {
+                "name": self.name,
+                "type": self.type,
                 "equation": self.equation,
                 "equation_relations": self.dimension_relations,
                 "loop_dimensions": self.layer_dim_sizes,
@@ -267,7 +313,7 @@ class LayerNode(LayerNodeABC):
     def extract_layer_info(self):
         """! This function extract basic information for each layer node."""
 
-        self.total_MAC_count = self.layer_dim_sizes.total_size
+        self.total_mac_count = self.layer_dim_sizes.total_size
 
         # each operand's size (Unit: # of data element)
         for layer_op in self.layer_operands:
@@ -287,7 +333,7 @@ class LayerNode(LayerNodeABC):
         # i.e. each data element can be used to support how many MAC operation.
         operand_data_reuse: dict[LayerOperand, float] = {}
         for operand, size_in_elem in self.operand_size_elem.items():
-            operand_data_reuse[operand] = self.total_MAC_count / size_in_elem
+            operand_data_reuse[operand] = self.total_mac_count / size_in_elem
         self.operand_data_reuse = operand_data_reuse
 
     def get_operand_irrelevant_layer_dims(self, layer_op: LayerOperand) -> list[LayerDim]:

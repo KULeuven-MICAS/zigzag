@@ -1,24 +1,25 @@
 from math import prod
 
-
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
-from zigzag.workload.layer_node import LayerNode
-from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl, decouple_pr_loop
+from zigzag.mapping.mapping_assist_funcs import (
+    SpatialMappingPerMemLvl,
+    decouple_pr_loop,
+)
 from zigzag.utils import json_repr_handler
+from zigzag.workload.layer_node import LayerNode
 
 
 class SpatialMappingInternal:
     """! Class that collect all the info related to spatial mapping."""
 
     def __init__(self, spatial_mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNode"):
-
         self.mapping_dict_origin = spatial_mapping_dict
         self.mapping_dict_reform: SpatialMappingPerMemLvl = decouple_pr_loop(spatial_mapping_dict, layer_node)
         self.layer_node = layer_node
         self.layer_operands: list[LayerOperand] = layer_node.layer_operands
 
         # Extract architecture level count for each operand from spatial mapping definition, starting from MAC level
-        self.arch_level = {op: len(smap) for op, smap in spatial_mapping_dict.items()}
+        self.arch_level = {op: len(spatial_mapping) for op, spatial_mapping in spatial_mapping_dict.items()}
 
         # Calculate unrolled loop size for different loop types (r/ir/total)
         self.calc_unroll_size()
@@ -46,7 +47,12 @@ class SpatialMappingInternal:
 
     def __jsonrepr__(self):
         """! JSON representation of this object to save it to a file."""
-        return json_repr_handler({"spatial_mapping": self.mapping_dict_origin})
+        return json_repr_handler(
+            {
+                layer_op: [[str(loop_factor_pair) for loop_factor_pair in mem_level] for mem_level in mapping_layer_op]
+                for layer_op, mapping_layer_op in self.mapping_dict_origin.items()
+            }
+        )
 
     def get_unrolling(self, op: LayerOperand, level: int):
         """! Return the unrolled loops for operand 'op' at level 'level'.
@@ -113,9 +119,10 @@ class SpatialMappingInternal:
 
         #  ASSERT: The bottom level (MAC level) unit count must be the same for all operand
         bottom_unit_count = [unit_count[op][0] for op in unit_count.keys()]
-        assert all(
-            x == bottom_unit_count[0] for x in bottom_unit_count
-        ), f"The MAC level unit count is not the same for all operand {bottom_unit_count}, please correct the spatial mapping."
+        assert all(x == bottom_unit_count[0] for x in bottom_unit_count), (
+            f"The MAC level unit count is not the same for all operand {bottom_unit_count}, "
+            f"please correct the spatial mapping."
+        )
 
         #  Number of unit at each level that hold unique data (for each operand)
         unit_unique = {
@@ -166,9 +173,10 @@ class SpatialMappingInternal:
         self.mem_bw_boost = mem_bw_boost
 
     def save_spatial_loop_dim_size(self) -> None:
-        """! Save the loops that were unrolled spatially in a list without any arch level information for easy access in loma.
-        We take one of the input operands and go through the spatial mapping dict for that operand.
-        Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels."""
+        """! Save the loops that were unrolled spatially in a list without any arch level information for easy access in
+        loma. We take one of the input operands and go through the spatial mapping dict for that operand.
+        Which operand shouldn't matter as all operands store the same loops, but possibly at different arch levels.
+        """
 
         op = self.layer_node.input_operands[0]
         self.spatial_loop_dim_size: list[tuple[LayerDim, UnrollFactor]] = [

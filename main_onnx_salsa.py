@@ -1,66 +1,53 @@
-#   =====================================================================
-#   Title:        main_onnx_salsa.py
-#   Description:
-#
-#   Date:        02.01.2023
-#
-#   =====================================================================
-#
-#   Copyright (C) 2020 ETH Zurich and University of Bologna.
-#
-#   Author: Victor Jung, ETH Zurich
-#
-#   SPDX-License-Identifier: Apache-2.0
-#
-#   Licensed under the Apache License, Version 2.0 (the License); you may
-#   not use this file except in compliance with the License.
-#   You may obtain a copy of the License at
-#
-#   www.apache.org/licenses/LICENSE-2.0
-#
-#   Unless required by applicable law or agreed to in writing, software
-#   distributed under the License is distributed on an AS IS BASIS, WITHOUT
-#   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#   See the License for the specific language governing permissions and
-#   limitations under the License.
-#
+"""
+=====================================================================
+Title:        main_onnx_salsa.py
+Description:
 
-from zigzag.stages import *
-import argparse
+Date:        02.01.2023
+
+=====================================================================
+
+Copyright (C) 2020 ETH Zurich and University of Bologna.
+
+Author: Victor Jung, ETH Zurich
+
+SPDX-License-Identifier: Apache-2.0
+
+Licensed under the Apache License, Version 2.0 (the License); you may
+not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an AS IS BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
+import logging
 import re
 
+from zigzag.parser.arguments import get_arg_parser
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.MainStage import MainStage
 from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage
 from zigzag.stages.SalsaStage import SalsaStage
+from zigzag.stages.save_stages import SimpleSaveStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.reduce_stages import MinimalLatencyStage
-from zigzag.stages.save_stages import SimpleSaveStage
 
-# Get the onnx model, the mapping and accelerator arguments
-parser = argparse.ArgumentParser(description="Setup zigzag inputs")
-parser.add_argument(
-    "--model", metavar="path", required=True, help="path to onnx model, e.g. inputs/examples/my_onnx_model.onnx"
-)
-parser.add_argument(
-    "--mapping", metavar="path", required=True, help="path to mapping file, e.g., inputs.examples.my_mapping"
-)
-parser.add_argument(
-    "--accelerator",
-    metavar="path",
-    required=True,
-    help="module path to the accelerator, e.g. inputs.examples.accelerator1",
-)
+parser = get_arg_parser()
 args = parser.parse_args()
 
 # Initialize the logger
-import logging as _logging
 
-_logging_level = _logging.INFO
-_logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-_logging.basicConfig(level=_logging_level, format=_logging_format)
+logging_level = logging.INFO
+logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
+logging.basicConfig(level=logging_level, format=logging_format)
 
 hw_name = args.accelerator.split(".")[-1]
 wl_name = re.split(r"/|\.", args.model)[-1]
@@ -86,8 +73,8 @@ mainstage = MainStage(
     accelerator=args.accelerator,  # required by AcceleratorParserStage
     workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
-    dump_filename_pattern=f"outputs/{experiment_id}-layer_?.json",  # output file save pattern
-    loma_lpf_limit=6,  # required by LomaStage
+    dump_folder=f"outputs/{experiment_id}",  # Output folder
+    loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
     loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
     salsa_iteration_number=1000,
     salsa_start_temperature=0.05,

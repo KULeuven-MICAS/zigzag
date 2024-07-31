@@ -13,8 +13,8 @@ class Adder:
         @param fan_in: the number of input data to be added together.
         @param unit_cost: one addition energy.
         @param unit_area: one adder area.
-        @param input_precision: input data precision. If it is 'int' format, it means the same precision is applied to all input data;
-        if it is 'list' format, it allows to define for different input data the different precision.
+        @param input_precision: input data precision. If it is 'int' format, it means the same precision is applied to
+        all input data; if it is 'list' format, it allows to define for different input data the different precision.
         @param output_precision: output data precision.
         """
         self.fan_in = fan_in

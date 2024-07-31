@@ -1,11 +1,14 @@
-from typing import Any
+import json
+import logging
 import os
 import pickle
-import json
-import yaml
-import logging
+from typing import Any
 
-from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
+from zigzag.cost_model.cost_model import (
+    CostModelEvaluation,
+    CostModelEvaluationABC,
+    CumulativeCME,
+)
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.utils import json_repr_handler
 
@@ -17,48 +20,44 @@ class CompleteSaveStage(Stage):
     at the end of the iteration.
     """
 
-    def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
+    def __init__(self, list_of_callables: list[StageCallable], *, dump_folder: str, **kwargs: Any):
         """
-        @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables). Must contain `?`
-        @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+        @param dump_folder: Output folder for dumps
+        @param kwargs: any kwargs, passed on to substages
         """
         super().__init__(list_of_callables, **kwargs)
-        self.dump_filename_pattern = dump_filename_pattern
+        self.dump_folder = dump_folder
 
     def run(self):
         """! Run the complete save stage by running the substage and saving the CostModelEvaluation json
         representation."""
-        self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
+        self.kwargs["dump_folder"] = self.dump_folder
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
 
         for cme, extra_info in substage.run():
             if isinstance(cme, CumulativeCME):
-                filename = self.dump_filename_pattern.replace("?", "overall_complete")
+                json_filename = self.dump_folder + "/overall_complete.json"
             elif isinstance(cme, CostModelEvaluation):
-                filename = self.dump_filename_pattern.replace("?", f"{cme.layer}_complete")
+                # Slashes are interpreted by subfolders and must be replaced in the file name
+                layer_name = cme.layer.name.replace("/", "_")
+                json_filename = self.dump_folder + f"/{layer_name}_complete.json"
             else:
                 raise NotImplementedError
 
-            self.save_to_json(cme, filename=filename)
-            yaml_name = os.path.join(os.path.splitext(filename)[0], ".yml")
-            self.save_to_yaml(json_name=filename, yaml_name=yaml_name)
+            self.save_to_json(cme, filename=json_filename)
             logger.info(
-                f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
+                "Saved %s with energy %s and latency %s to %s",
+                cme,
+                f"{cme.energy_total:.3e}",
+                f"{cme.latency_total2:.3e}",
+                json_filename,
             )
             yield cme, extra_info
 
     def save_to_json(self, obj: object, filename: str):
         os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "w") as fp:
+        with open(filename, "w", encoding="UTF-8") as fp:
             json.dump(obj, fp, default=json_repr_handler, indent=4)
-
-    def save_to_yaml(self, json_name: str, yaml_name: str):
-        os.makedirs(os.path.dirname(yaml_name), exist_ok=True)
-        with open(json_name, "r") as fp:
-            res = json.load(fp)
-        with open(yaml_name, "w") as fp:
-            yaml.dump(res, fp, Dumper=yaml.SafeDumper)
 
 
 class SimpleSaveStage(Stage):
@@ -67,32 +66,38 @@ class SimpleSaveStage(Stage):
     In this simple version, only the energy total and latency total are saved.
     """
 
-    def __init__(self, list_of_callables: list[StageCallable], *, dump_filename_pattern: str, **kwargs: Any):
+    def __init__(self, list_of_callables: list[StageCallable], *, dump_folder: str, **kwargs: Any):
         """
         @param list_of_callables: see Stage
-        @param dump_filename_pattern: filename string formatting pattern, which can use named field whose values will be
-        in kwargs (thus supplied by higher level runnables)
-        @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+        @param dump_folder: Output folder for dumps
+        @param kwargs: any kwargs, passed on to substages
         """
         super().__init__(list_of_callables, **kwargs)
-        self.dump_filename_pattern = dump_filename_pattern
+        self.dump_folder = dump_folder
 
     def run(self):
         """! Run the simple save stage by running the substage and saving the CostModelEvaluation simple json
         representation."""
-        self.kwargs["dump_filename_pattern"] = self.dump_filename_pattern
+        self.kwargs["dump_folder"] = self.dump_folder
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
 
         for cme, extra_info in substage.run():
             if isinstance(cme, CumulativeCME):
-                filename = self.dump_filename_pattern.replace("?", "overall_simple")
+                json_filename = self.dump_folder + "/overall_simple.json"
             elif isinstance(cme, CostModelEvaluation):
-                filename = self.dump_filename_pattern.replace("?", f"{cme.layer}_simple")
+                # Slashes are interpreted by subfolders and must be replaced in the file name
+                layer_name = cme.layer.name.replace("/", "_")
+                json_filename = self.dump_folder + f"/{layer_name}_simple.json"
             else:
                 raise NotImplementedError
-            self.save_to_json(cme, filename=filename)
+
+            self.save_to_json(cme, filename=json_filename)
             logger.info(
-                f"Saved {cme} with energy {cme.energy_total:.3e} and latency {cme.latency_total2:.3e} to {filename}"
+                "Saved %s with energy %s and latency %s to %s",
+                cme,
+                f"{cme.energy_total:.3e}",
+                f"{cme.latency_total2:.3e}",
+                json_filename,
             )
             yield cme, extra_info
 
@@ -109,28 +114,43 @@ class SimpleSaveStage(Stage):
 class PickleSaveStage(Stage):
     """! Class that dumps all received CMEs into a list and saves that list to a pickle file."""
 
-    def __init__(self, list_of_callables: list[StageCallable], *, pickle_filename: str, **kwargs: Any):
+    def __init__(
+        self,
+        list_of_callables: list[StageCallable],
+        *,
+        pickle_filename: str,
+        **kwargs: Any,
+    ):
         """
         @param list_of_callables: see Stage
         @param pickle_filename: output pickle filename
-        @param kwargs: any kwargs, passed on to substages and can be used in dump_filename_pattern
+        @param kwargs: any kwargs, passed on to substages
         """
         super().__init__(list_of_callables, **kwargs)
         self.pickle_filename = pickle_filename
 
     def run(self):
-        """! Run the simple save stage by running the substage and saving the CostModelEvaluation simple json representation.
-        This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is passed as extra_info
+        """! Run the simple save stage by running the substage and saving the CostModelEvaluation simple json
+        representation. This should be placed above a ReduceStage such as the SumStage, as we assume the list of CMEs is
+        passed as extra_info
         """
         substage = self.list_of_callables[0](self.list_of_callables[1:], **self.kwargs)
         for cme, extra_info in substage.run():
-            all_cmes: list[CostModelEvaluation] = [cme for (cme, _) in extra_info]
+            all_cmes: list[CostModelEvaluationABC] = [cme for (cme, _) in extra_info]
             yield cme, extra_info
 
         # After we have received all the CMEs, save them to the specified output location.
         dirname = os.path.dirname(self.pickle_filename)
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        with open(self.pickle_filename, "wb") as handle:
-            pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)
-        logger.info(f"Saved pickled list of {len(all_cmes)} CMEs to {self.pickle_filename}.")
+
+        try:
+            with open(self.pickle_filename, "wb") as handle:
+                pickle.dump(all_cmes, handle, protocol=pickle.HIGHEST_PROTOCOL)  # type: ignore
+            logger.info(
+                "Saved pickled list of %i CMEs to %s.",
+                len(all_cmes),  # type: ignore
+                self.pickle_filename,
+            )
+        except NameError:
+            logger.warning("No CMEs found to save in PickleSaveStage")

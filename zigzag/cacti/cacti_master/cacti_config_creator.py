@@ -1,8 +1,8 @@
 import os
+from typing import Any
 
 
 class CactiConfig:
-
     def __init__(self):
         # content = f.readlines()
         self.baseline_config = [
@@ -142,9 +142,11 @@ class CactiConfig:
             "\n",
             "\n",
             "\n",
-            "#### Default CONFIGURATION values for baseline external IO parameters to DRAM. More details can be found in the CACTI-IO technical report (), especially Chapters 2 and 3.\n",
+            "#### Default CONFIGURATION values for baseline external IO parameters to DRAM. More details can be found "
+            "in the CACTI-IO technical report (), especially Chapters 2 and 3.\n",
             "\n",
-            "# Memory Type (D3=DDR3, D4=DDR4, L=LPDDR2, W=WideIO, S=Serial). Additional memory types can be defined by the user in extio_technology.cc, along with their technology and configuration parameters.\n",
+            "# Memory Type (D3=DDR3, D4=DDR4, L=LPDDR2, W=WideIO, S=Serial). Additional memory types can be defined by "
+            "the user in extio_technology.cc, along with their technology and configuration parameters.\n",
             "\n",
             '-dram_type "DDR3"\n',
             '//-dram_type "DDR4"\n',
@@ -159,7 +161,8 @@ class CactiConfig:
             '//-io state "IDLE"\n',
             '//-io state "SLEEP"\n',
             "\n",
-            "#Address bus timing. To alleviate the timing on the command and address bus due to high loading (shared across all memories on the channel), the interface allows for multi-cycle timing options. \n",
+            "#Address bus timing. To alleviate the timing on the command and address bus due to high loading (shared "
+            "across all memories on the channel), the interface allows for multi-cycle timing options. \n",
             "\n",
             "//-addr_timing 0.5 //DDR\n",
             "-addr_timing 1.0 //SDR (half of DQ rate)\n",
@@ -172,39 +175,50 @@ class CactiConfig:
             "\n",
             "# IO frequency (MHz) (frequency of the external memory interface).\n",
             "\n",
-            "-bus_freq 800 MHz //As of current memory standards (2013), valid range 0 to 1.5 GHz for DDR3, 0 to 533 MHz for LPDDR2, 0 - 800 MHz for WideIO and 0 - 3 GHz for Low-swing differential. However this can change, and the user is free to define valid ranges based on new memory types or extending beyond existing standards for existing dram types.\n",
+            "-bus_freq 800 MHz //As of current memory standards (2013), valid range 0 to 1.5 GHz for DDR3, 0 to 533 "
+            "MHz for LPDDR2, 0 - 800 MHz for WideIO and 0 - 3 GHz for Low-swing differential. However this can change, "
+            "and the user is free to define valid ranges based on new memory types or extending beyond existing "
+            "standards for existing dram types.\n",
             "\n",
             "# Duty Cycle (fraction of time in the Memory State defined above)\n",
             "\n",
             "-duty_cycle 1.0 //Valid range 0 to 1.0\n",
             "\n",
-            "# Activity factor for Data (0->1 transitions) per cycle (for DDR, need to account for the higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
+            "# Activity factor for Data (0->1 transitions) per cycle (for DDR, need to account for the higher activity "
+            "in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
             " \n",
             "-activity_dq 1.0 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR\n",
             "\n",
-            "# Activity factor for Control/Address (0->1 transitions) per cycle (for DDR, need to account for the higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
+            "# Activity factor for Control/Address (0->1 transitions) per cycle (for DDR, need to account for the "
+            "higher activity in this parameter. E.g. max. activity factor for DDR is 1.0, for SDR is 0.5)\n",
             "\n",
-            "-activity_ca 0.5 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR, 0 to 0.25 for 2T, and 0 to 0.17 for 3T\n",
+            "-activity_ca 0.5 //Valid range 0 to 1.0 for DDR, 0 to 0.5 for SDR, 0 to 0.25 for 2T, and 0 to 0.17 for "
+            "3T\n",
             "\n",
             "# Number of DQ pins \n",
             "\n",
             "-num_dq 72 //Number of DQ pins. Includes ECC pins.\n",
             "\n",
-            "# Number of DQS pins. DQS is a data strobe that is sent along with a small number of data-lanes so the source synchronous timing is local to these DQ bits. Typically, 1 DQS per byte (8 DQ bits) is used. The DQS is also typucally differential, just like the CLK pin. \n",
+            "# Number of DQS pins. DQS is a data strobe that is sent along with a small number of data-lanes so the "
+            "source synchronous timing is local to these DQ bits. Typically, 1 DQS per byte (8 DQ bits) is used. The "
+            "DQS is also typucally differential, just like the CLK pin. \n",
             "\n",
-            "-num_dqs 18 //2 x differential pairs. Include ECC pins as well. Valid range 0 to 18. For x4 memories, could have 36 DQS pins.\n",
+            "-num_dqs 18 //2 x differential pairs. Include ECC pins as well. Valid range 0 to 18. For x4 memories, "
+            "could have 36 DQS pins.\n",
             "\n",
             "# Number of CA pins \n",
             "\n",
             "-num_ca 25 //Valid range 0 to 35 pins.\n",
             "\n",
-            "# Number of CLK pins. CLK is typically a differential pair. In some cases additional CLK pairs may be used to limit the loading on the CLK pin. \n",
+            "# Number of CLK pins. CLK is typically a differential pair. In some cases additional CLK pairs may be "
+            "used to limit the loading on the CLK pin. \n",
             "\n",
             "-num_clk  2 //2 x differential pair. Valid values: 0/2/4.\n",
             "\n",
             "# Number of Physical Ranks\n",
             "\n",
-            "-num_mem_dq 2 //Number of ranks (loads on DQ and DQS) per buffer/register. If multiple LRDIMMs or buffer chips exist, the analysis for capacity and power is reported per buffer/register. \n",
+            "-num_mem_dq 2 //Number of ranks (loads on DQ and DQS) per buffer/register. If multiple LRDIMMs or buffer "
+            "chips exist, the analysis for capacity and power is reported per buffer/register. \n",
             "\n",
             "# Width of the Memory Data Bus\n",
             "\n",
@@ -266,7 +280,7 @@ class CactiConfig:
             "=======USER DEFINE======= \n",
         ]
 
-        self.config_options = {}
+        self.config_options: dict[str, Any] = {}
         self.config_options["cache_size"] = {
             "string": "-size (bytes) ",
             "option": [
@@ -360,17 +374,17 @@ class CactiConfig:
 
         return
 
-    def change_default_value(self, name_list, new_value_list):
+    def change_default_value(self, name_list: list[str], new_value_list: list[Any]):
         for idx, name in enumerate(name_list):
             self.config_options[name]["default"] = new_value_list[idx]
 
-    def write_config(self, user_config, path):
-        f = open(path, "w+")
+    def write_config(self, user_config: list[Any], path: str):
+        f = open(path, "w+", encoding="UTF-8")
         f.write("".join(self.baseline_config))
         f.write("".join(user_config))
         f.close()
 
-    def call_cacti(self, cacti_master_path, self_gen_cfg_path):
+    def call_cacti(self, cacti_master_path: str, self_gen_cfg_path: str):
         # os.system('./cacti -infile ./self_gen/cache.cfg')
 
         print("##########################################################################################")
@@ -384,13 +398,13 @@ class CactiConfig:
         cacti_cmd = f"./cacti -infile {self_gen_cfg_path_relative}"
         stream = os.popen(cacti_cmd)
         output = stream.readlines()
-        for l in output:
-            print(l, end="")
+        for line in output:
+            print(line, end="")
         # Change back to the original working directory
         os.chdir(original_cwd)
         return output
 
-    def cacti_auto(self, user_input, cacti_master_path, self_gen_cfg_path):
+    def cacti_auto(self, user_input: list[Any], cacti_master_path: str, self_gen_cfg_path: str):
         """
         user_input format can be 1 out of these 3:
         user_input = ['default']
@@ -398,33 +412,29 @@ class CactiConfig:
         user_input = ['sweep', ['IO_bus_width'/'']]
         """
         print(f"{self_gen_cfg_path=}")
-        user_config = []
+        user_config: list[Any] = []
         if user_input[0] == "default":
-            for itm in self.config_options.keys():
-                user_config.append(self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n")
+            for value in self.config_options.values():
+                user_config.append(value["string"] + str(value["default"]) + "\n")
             self.write_config(user_config, self_gen_cfg_path)
             self.call_cacti(cacti_master_path, self_gen_cfg_path)
 
         if user_input[0] == "single":
-            for itm in self.config_options.keys():
-                if itm in user_input[1][0]:
-                    ii = user_input[1][0].index(itm)
-                    user_config.append(self.config_options[itm]["string"] + str(user_input[1][1][ii]) + "\n")
+            for item, value in self.config_options.items():
+                if item in user_input[1][0]:
+                    ii = user_input[1][0].index(item)
+                    user_config.append(value["string"] + str(user_input[1][1][ii]) + "\n")
                 else:
-                    user_config.append(
-                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
-                    )
+                    user_config.append(value["string"] + str(value["default"]) + "\n")
             self.write_config(user_config, self_gen_cfg_path)
             self.call_cacti(cacti_master_path, self_gen_cfg_path)
 
         if user_input[0] == "sweep":
             # produce non-sweeping term
-            common_part = []
-            for itm in self.config_options.keys():
-                if itm not in user_input[1]:
-                    common_part.append(
-                        self.config_options[itm]["string"] + str(self.config_options[itm]["default"]) + "\n"
-                    )
+            common_part: list[str] = []
+            for item, value in self.config_options.items():
+                if item not in user_input[1]:
+                    common_part.append(value["string"] + str(value["default"]) + "\n")
 
             for itm in user_input[1]:
                 for va in self.config_options[itm]["option"]:

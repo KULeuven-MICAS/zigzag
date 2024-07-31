@@ -1,23 +1,24 @@
+import logging
 import math
 import re
-from typing import TypeAlias
+from collections import defaultdict
 from typing import TypeAlias
 
-
-from zigzag.workload.LayerAttribute import LayerAttribute
 from zigzag.datatypes import (
     Constants,
-    LayerOperand,
     LayerDim,
-    MemoryOperand,
+    LayerOperand,
     LoopList,
+    MemoryOperand,
     PrLoop,
     PrScalingFactors,
     UnrollFactor,
     UnrollFactorInt,
 )
+from zigzag.workload.LayerAttribute import LayerAttribute
 
-InputOperandSource: TypeAlias = dict[LayerOperand, int]
+logger = logging.getLogger(__name__)
+
 InputOperandSource: TypeAlias = dict[LayerOperand, int]
 
 
@@ -85,15 +86,15 @@ class LayerDimSizes(LayerAttribute):
     def __add__(self, other: "LayerDimSizes"):
         return LayerDimSizes(self.data | other.data)
 
-    def __add__(self, other: "LayerDimSizes"):
-        return LayerDimSizes(self.data | other.data)
-
 
 class LayerOperandPrecision(LayerAttribute):
     """! Contains the bit precision of each layer operand"""
 
     def __init__(self, data: dict[LayerOperand, int]):
         self.data = data
+
+    def __getitem__(self, layer_op: LayerOperand):
+        return self.data[layer_op]
 
     @property
     def final_output_precision(self) -> int:
@@ -139,7 +140,14 @@ class LayerDimRelation(LayerAttribute):
     dimension) and the loop dimension is required. e.g. `dim1 = coef2 * dim2 + coef3 * dim3`
     """
 
-    def __init__(self, dim_1: LayerDim, dim_2: LayerDim, dim_3: LayerDim, coef_2: int, coef_3: int):
+    def __init__(
+        self,
+        dim_1: LayerDim,
+        dim_2: LayerDim,
+        dim_3: LayerDim,
+        coef_2: int,
+        coef_3: int,
+    ):
         self.dim_1 = dim_1
         self.dim_2 = dim_2
         self.dim_3 = dim_3
@@ -148,7 +156,9 @@ class LayerDimRelation(LayerAttribute):
         self.data = f"{dim_1} = {coef_2}*{dim_2} + {coef_3}*{dim_3}"
 
     @staticmethod
-    def extract_pr_loop_info(relations: list["LayerDimRelation"]) -> tuple[PrLoop, LoopList, PrScalingFactors]:
+    def extract_pr_loop_info(
+        relations: list["LayerDimRelation"],
+    ) -> tuple[PrLoop, LoopList, PrScalingFactors]:
         """!
         # TODO requires cleanup and documentation
         """
@@ -165,27 +175,60 @@ class LayerDimRelation(LayerAttribute):
             val = [relation.dim_2, relation.dim_3]
             pr_loop[key] = val
             pr_loop_list.extend([key] + val)
-            scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
-            scaling_factors = {relation.dim_2: relation.coef_2, relation.dim_3: relation.coef_3}
+            scaling_factors = {
+                relation.dim_2: relation.coef_2,
+                relation.dim_3: relation.coef_3,
+            }
+            scaling_factors = {
+                relation.dim_2: relation.coef_2,
+                relation.dim_3: relation.coef_3,
+            }
             pr_scaling_factors[key] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
 
 class LayerTemporalOrdering(LayerAttribute):
-    """
-    # TODO is this ever used?
-    """
+    """Represents a user-defined temporal ordering"""
 
-    def __init__(self, data: dict[LayerOperand, UnrollFactorInt]):
-        self.data = data
+    def __init__(self, data: list[list[str | UnrollFactorInt]]):
+        """data will look like:
+        [['K', 12],
+         ['C',  3]]
+        """
+        self.data = [(LayerDim(str(loop[0])), int(loop[1])) for loop in data]
 
     @staticmethod
     def empty():
-        return LayerTemporalOrdering({})
+        return LayerTemporalOrdering([])
 
-    def __delitem__(self, x: LayerOperand):
-        del self.data[x]
+    def is_empty(self):
+        return len(self.data) == 0
+
+    def is_complete(self, temporal_loop_sizes: dict[LayerDim, UnrollFactor]):
+        """Return wether this temporal ordering matches the given, mandatory loop sizes"""
+        all_loops: defaultdict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
+        for layer_dim, factor in self.data:
+            all_loops[layer_dim] *= factor
+
+        for layer_dim in all_loops:
+            if all_loops[layer_dim] == 1:
+                del all_loops[layer_dim]
+
+        return all_loops == temporal_loop_sizes
+
+    def remove_invalid_layer_dims(self, layer_dim_sizes: LayerDimSizes, layer_name: str = ""):
+        for i, mapping in list(enumerate(self.data))[::-1]:
+            if mapping[0] not in layer_dim_sizes.layer_dims:
+                logger.warning(
+                    "Supplied temporal ordering %s%s thrown out because layer dimension is not present in " "the layer",
+                    mapping,
+                    "" if layer_name == "" else f" for layer {layer_name}",
+                )
+                del self.data[i]
+
+    def to_legacy_format(self):
+        return self.data
 
 
 class LayerPadding(LayerAttribute):
@@ -198,8 +241,5 @@ class LayerPadding(LayerAttribute):
         return self.data[key] if key in self.data else LayerPadding.DEFAULT
 
     @staticmethod
-    def empty():
-        return LayerPadding({})
-
     def empty():
         return LayerPadding({})

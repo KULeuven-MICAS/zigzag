@@ -1,11 +1,17 @@
 from collections import defaultdict
-import numpy as np
 from math import prod
 
+import numpy as np
 
-from zigzag.datatypes import Constants, LayerDim, LayerOperand, MemoryOperand, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import (
+    Constants,
+    LayerDim,
+    LayerOperand,
+    MemoryOperand,
+    UnrollFactor,
+    UnrollFactorInt,
+)
 from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping, TemporalMappingDict
@@ -15,15 +21,11 @@ from zigzag.workload.layer_node import LayerNode
 
 
 class MemoryHierarchyTooSmallException(Exception):
-    """! Missing description"""
-
-    pass
+    """Indicates that the layer does not fit entirely within the memory hierarchy for this temporal ordering"""
 
 
 class MemoryTooSmallException(Exception):
-    """! Missing description"""
-
-    pass
+    """Indicates that some memory instance is too small to support this temporal ordering"""
 
 
 class MemoryAllocator:
@@ -90,10 +92,9 @@ class MemoryAllocator:
 
         # self.nodes contains the different memory nodes in bottom-up fashion
         core_id = self.layer.core_allocation[0]
-        memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(core_id).memory_hierarchy
+        memory_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
         top_levels = {mem_op: memory_hierarchy.get_operand_top_level(mem_op) for mem_op in self.mem_ops}
-        nodes = memory_hierarchy.nodes
-        for node in nodes:
+        for node in memory_hierarchy.topological_sort():
             self.allocate_node(node, top_levels)
 
         # After all the nodes have been allocated, we can create the TemporalMapping
@@ -104,7 +105,8 @@ class MemoryAllocator:
     def allocate_node(self, node: MemoryLevel, top_levels: dict[MemoryOperand, MemoryLevel]):
         """! Allocate a single memory node with the best loops that remain in the unallocated loop ordering.
         @param node: The MemoryLevel to which we will allocate loops.
-        @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that mem_op.
+        @param top_levels: A list of MemoryLevels for each mem_op that is the highest MemoryLevel that stores that
+          mem_op.
         #TODO cleanup
         """
 
@@ -113,8 +115,6 @@ class MemoryAllocator:
         # Then select only the mem operands that are required for this layer (e.g. pooling has no weights so one mem
         # op less)
         mem_ops = [mem_op for mem_op in mem_ops if mem_op in self.mem_ops]
-        # Does this node support double buffering # TODO this is not used
-        db_support = node.memory_instance.double_buffering_support
         # Get the capacity of this memory node (in bits)
         mem_capacity = node.memory_instance.size
 
@@ -148,7 +148,7 @@ class MemoryAllocator:
             mem_level_op = self.mem_level[layer_op]
             spatial_loops = self.spatial_mapping.get_unrolling(op=layer_op, level=mem_level_op)
             for loop_dim, loop_size in spatial_loops:
-                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, type="spatial")
+                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, loop_type="spatial")
                 self.allocated[mem_op].append(spatial_loop)
 
             # Check if this node (i.e. MemoryLevel) is the highest level of memory hierarchy.
@@ -188,25 +188,30 @@ class MemoryAllocator:
             size = self.calc_loops_size(loops, mem_op, unallocated_loops)
             # double size allocated if the node uses double buffering
             if db_support:
-                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:
+                if len(unallocated_loops[i:]) > 0 and size < all_loops_size:  # type: ignore
                     size *= 2
             if size <= mem_capacity:
                 sizes.append(size)
             else:
                 if i == 0:  # This means we can't even store the already allocated loops
                     raise MemoryTooSmallException(
-                        f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} mem_capacity={mem_capacity}"
+                        f"Memory capacity overflow for mem_op {mem_op}. loops={loops} size={size} "
+                        f"mem_capacity={mem_capacity}"
                     )
                 break  # Stop as soon as we have added a loop that overflows the memory
         return sizes
 
     def calc_loops_size(
-        self, loops: list[Loop], mem_op: MemoryOperand, all_unallocated_loops: list[Loop]
+        self,
+        loops: list[Loop],
+        mem_op: MemoryOperand,
+        all_unallocated_loops: list[Loop],
     ) -> UnrollFactor:
         """! Calculate the 'mem_op' tensor size required for all the loops in 'loops'.
         @param loops: The loops we want to calculate the size for.
         @para mem_op: The memory operand we are calculating the size for.
-        @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision calculation.
+        @param all_unallocated_loops: All unallocated loops for this MemoryLevel node. Needed for output precision
+        calculation.
         """
 
         # First we compute the size of all loop dimensions present in this layer given the loops in 'loops'.
@@ -256,7 +261,7 @@ class MemoryAllocator:
         # TODO: Take into account the operand precision which can change based on the loops picked
         mem_capacity = node.memory_instance.size
 
-        # nb_operations = self.__main_inputs.layer.total_MAC_count
+        # nb_operations = self.__main_inputs.layer.total_mac_count
         # all_accesses = {mem_op: [nb_operations//size for size in all_sizes[mem_op]] for mem_op in mem_ops}
 
         # If for one of the mem_ops this is the top level memory, we have to enforce that all unallocated loops
