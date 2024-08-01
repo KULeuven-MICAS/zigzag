@@ -1,4 +1,4 @@
-from zigzag.datatypes import LayerDim, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import LayerDim, UnrollFactor
 
 
 class Loop:

@@ -7,7 +7,7 @@ import numpy as np
 from sympy.ntheory import factorint  # type: ignore
 from tqdm import tqdm
 
-from zigzag.datatypes import LayerDim, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import LayerDim, UnrollFactor
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping

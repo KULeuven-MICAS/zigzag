@@ -1,7 +1,7 @@
 from math import prod
 from typing import TypeAlias
 
-from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor, UnrollFactorInt
+from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
