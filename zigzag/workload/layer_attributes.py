@@ -1,7 +1,7 @@
 import logging
-import math
 import re
 from collections import defaultdict
+from math import prod
 from typing import TypeAlias
 
 from zigzag.datatypes import (
@@ -46,9 +46,7 @@ class LayerEquation(LayerAttribute):
         """! Return a list with all LayerDims that are `relevant` for the given LayerOperand"""
         layer_operands = self.get_contained_operands()
         assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
-        assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
         layer_op_idx = layer_operands.index(layer_op)
-        slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         disassembly_start_idx = slice_indices[layer_op_idx] + 1
         disassembly_end_idx = slice_indices[layer_op_idx + 1] - 1
@@ -69,7 +67,7 @@ class LayerDimSizes(LayerAttribute):
 
     @property
     def total_size(self) -> UnrollFactor:
-        return math.prod(self.data.values())
+        return prod(self.data.values())
 
     def items(self):
         return self.data.items()
@@ -77,7 +75,7 @@ class LayerDimSizes(LayerAttribute):
     def copy(self):
         return LayerDimSizes(self.data.copy())
 
-    def __setitem__(self, key: LayerDim, value: int):
+    def __setitem__(self, key: LayerDim, value: UnrollFactor):
         self.data[key] = value
 
     def __delitem__(self, key: LayerDim):
@@ -109,33 +107,27 @@ class MemoryOperandLinks(LayerAttribute):
 
     def __init__(self, data: dict[LayerOperand, MemoryOperand]):
         self.data = data
+        # Class variables are computed and stored once to improve runtime performance
+        self.layer_operands = list(self.data.keys())
+        self.mem_operands = list(self.data.values())
+        self.__mem_to_layer_op_dict = {self.data[layer_op]: layer_op for layer_op in self.layer_operands}
+        assert len(self.__mem_to_layer_op_dict) == len(self.data), "MemoryOperandLinks contains duplicate MemoryOperand"
 
     def layer_to_mem_op(self, layer_op: LayerOperand) -> MemoryOperand:
-        assert self.contains_layer_op(layer_op)
         return self.data[layer_op]
 
     def mem_to_layer_op(self, mem_op: MemoryOperand) -> LayerOperand:
-        """! Given a MemoryOperand, return the linked LayerOperand or None if the MemoryOperand is not contained
-        within"""
-        assert self.contains_mem_op(mem_op)
-        candidates = {k for k, v in self.data.items() if v == mem_op}
-        assert len(candidates) <= 1, f"MemoryOperandLinks contains duplicate MemoryOperand {mem_op}"
-        assert len(candidates) > 0, f"Memory operand {mem_op} is not present"
-        return candidates.pop()
+        """! Given a MemoryOperand, return the linked LayerOperand"""
+        return self.__mem_to_layer_op_dict[mem_op]
+
+    def layer_and_mem_ops(self):
+        return self.data.items()
 
     def contains_layer_op(self, layer_op: LayerOperand) -> bool:
         return layer_op in self.layer_operands
 
     def contains_mem_op(self, mem_op: MemoryOperand) -> bool:
         return mem_op in self.mem_operands
-
-    @property
-    def layer_operands(self) -> set[LayerOperand]:
-        return set(self.data.keys())
-
-    @property
-    def mem_operands(self) -> set[MemoryOperand]:
-        return set(self.data.values())
 
     def copy(self):
         return MemoryOperandLinks(self.data.copy())
@@ -176,23 +168,14 @@ class LayerDimRelation(LayerAttribute):
         pr_scaling_factors: PrScalingFactors = {}
 
         for relation in relations:
-            key = relation.dim_1
-            val = [relation.dim_2, relation.dim_3]
+            pr_loop[relation.dim_1] = (relation.dim_2, relation.dim_3)
+            pr_loop_list.extend([relation.dim_1, relation.dim_2, relation.dim_3])
+            scaling_factors = (
+                (relation.dim_2, relation.coef_2),
+                (relation.dim_3, relation.coef_3),
+            )
 
-        for relation in relations:
-            key = relation.dim_1
-            val = [relation.dim_2, relation.dim_3]
-            pr_loop[key] = val
-            pr_loop_list.extend([key] + val)
-            scaling_factors = {
-                relation.dim_2: relation.coef_2,
-                relation.dim_3: relation.coef_3,
-            }
-            scaling_factors = {
-                relation.dim_2: relation.coef_2,
-                relation.dim_3: relation.coef_3,
-            }
-            pr_scaling_factors[key] = scaling_factors
+            pr_scaling_factors[relation.dim_1] = scaling_factors
 
         return pr_loop, pr_loop_list, pr_scaling_factors
 
