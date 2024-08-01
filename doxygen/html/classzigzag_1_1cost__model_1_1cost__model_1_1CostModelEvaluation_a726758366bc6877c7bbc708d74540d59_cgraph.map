@@ -1,0 +1,5 @@
+<map id="calc_data_loading_offloading_latency" name="calc_data_loading_offloading_latency">
+<area shape="rect" id="node1" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="5,23,216,65"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title=" " alt="" coords="272,5,455,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3" title=" " alt="" coords="264,56,463,83"/>
+</map>

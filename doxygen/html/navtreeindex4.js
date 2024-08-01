@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae67a422836fd5f530bb392b7889836f9":[2,0,2,6,0,1],
 "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html":[2,0,2,7,0,0],
 "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,2,7,0,0,0],
@@ -183,8 +182,8 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,3],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,3,2],
 "files.html":[3,0],
-"functions.html":[2,3,0,0],
 "functions.html":[2,3,0],
+"functions.html":[2,3,0,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "functions_vars_s.html":[2,3,2,16],
 "functions_vars_t.html":[2,3,2,17],
 "functions_vars_u.html":[2,3,2,18],
-"functions_vars_v.html":[2,3,2,19]
+"functions_vars_v.html":[2,3,2,19],
+"functions_vars_w.html":[2,3,2,20]
 };

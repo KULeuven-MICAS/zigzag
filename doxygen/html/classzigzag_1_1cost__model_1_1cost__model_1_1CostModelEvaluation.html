@@ -154,6 +154,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2766e8eb31bba2ded9efa2f2967366c8"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2766e8eb31bba2ded9efa2f2967366c8">combine_data_transfer_rate_per_physical_port</a> (self)</td></tr>
 <tr class="memdesc:a2766e8eb31bba2ded9efa2f2967366c8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port activity per memory instance per physical memory port Step 2: calculate SS combine and MUW union parameters per physical memory port.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2766e8eb31bba2ded9efa2f2967366c8">More...</a><br /></td></tr>
 <tr class="separator:a2766e8eb31bba2ded9efa2f2967366c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3fdc4752ff12861a99b16eb7fc42f74c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c">calc_loading_single_port</a> (self, MemoryPort port)</td></tr>
+<tr class="separator:a3fdc4752ff12861a99b16eb7fc42f74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2407686888368aea3cef598765be6ab3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3">calc_offloading_single_port</a> (self, MemoryPort port)</td></tr>
+<tr class="separator:a2407686888368aea3cef598765be6ab3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a726758366bc6877c7bbc708d74540d59"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59">calc_data_loading_offloading_latency</a> (self)</td></tr>
 <tr class="memdesc:a726758366bc6877c7bbc708d74540d59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands' / the last-time output operand's data movement on corresponding ports.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59">More...</a><br /></td></tr>
 <tr class="separator:a726758366bc6877c7bbc708d74540d59"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -247,14 +251,6 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a69df9fb43452060a876375cb4177d3ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a927a2a45c2cae48a92efb48a16677678"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a927a2a45c2cae48a92efb48a16677678">stall_slack_comb</a></td></tr>
 <tr class="separator:a927a2a45c2cae48a92efb48a16677678"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac803aa68b2fc4802366582ca537a4911"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac803aa68b2fc4802366582ca537a4911">data_loading_per_mem_inst</a></td></tr>
-<tr class="separator:ac803aa68b2fc4802366582ca537a4911"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a33f26d039371a35c423bd56202d9f0d4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a33f26d039371a35c423bd56202d9f0d4">data_loading_cc_per_op</a></td></tr>
-<tr class="separator:a33f26d039371a35c423bd56202d9f0d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa06c1f116faea05b45a9de46abacbbb3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa06c1f116faea05b45a9de46abacbbb3">data_offloading_per_mem_inst</a></td></tr>
-<tr class="separator:aa06c1f116faea05b45a9de46abacbbb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e983b5073c0411f2363c3218437ac2a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8e983b5073c0411f2363c3218437ac2a">data_offloading_per_op</a></td></tr>
-<tr class="separator:a8e983b5073c0411f2363c3218437ac2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a09c3d6ae12fe0469f495f0280f3c1730"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a09c3d6ae12fe0469f495f0280f3c1730">data_loading_cc_pair_combined_per_op</a></td></tr>
 <tr class="separator:a09c3d6ae12fe0469f495f0280f3c1730"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad36024a5bb36f75094e5183470921c6f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad36024a5bb36f75094e5183470921c6f">data_loading_individual_part</a></td></tr>
@@ -463,6 +459,16 @@ Here is the caller graph for this function:</div>
 
 <p>Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands' / the last-time output operand's data movement on corresponding ports. </p>
 <div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_cgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_cgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_cgraph">
+<area shape="rect" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="5,23,216,65"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title=" " alt="" coords="272,5,455,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3" title=" " alt="" coords="264,56,463,83"/>
+</map>
+</div>
+<div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
 <div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a726758366bc6877c7bbc708d74540d59_icgraph" alt=""/></div>
@@ -606,7 +612,9 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a121476a4036ca47e8998da4b011085bf" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="174,152,349,179"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="184,203,339,229"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2766e8eb31bba2ded9efa2f2967366c8" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="173,254,350,295"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab79772b92e6547fa56eb0ee81f8f4d42" title=" " alt="" coords="415,152,591,179"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title=" " alt="" coords="423,47,605,73"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3" title=" " alt="" coords="415,97,613,124"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab79772b92e6547fa56eb0ee81f8f4d42" title=" " alt="" coords="426,152,602,179"/>
 </map>
 </div>
 <div class="dynheader">
@@ -615,6 +623,48 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8aaf4a383a6d93dc6c79b262c9fb8caa_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8aaf4a383a6d93dc6c79b262c9fb8caa_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8aaf4a383a6d93dc6c79b262c9fb8caa_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8aaf4a383a6d93dc6c79b262c9fb8caa_icgraph">
 <area shape="rect" title="Calculate latency in 4 steps." alt="" coords="541,39,644,65"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="351,5,393,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="251,56,493,112"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a3fdc4752ff12861a99b16eb7fc42f74c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3fdc4752ff12861a99b16eb7fc42f74c">&#9670;&nbsp;</a></span>calc_loading_single_port()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def calc_loading_single_port </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemoryPort&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a3fdc4752ff12861a99b16eb7fc42f74c_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a3fdc4752ff12861a99b16eb7fc42f74c_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a3fdc4752ff12861a99b16eb7fc42f74c_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a3fdc4752ff12861a99b16eb7fc42f74c_icgraph">
+<area shape="rect" title=" " alt="" coords="1091,39,1273,65"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="832,31,1043,73"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8aaf4a383a6d93dc6c79b262c9fb8caa" title="Calculate latency in 4 steps." alt="" coords="611,5,714,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="541,56,784,112"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="351,5,393,32"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="251,56,493,112"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
@@ -754,6 +804,48 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a0a7c56cfe2d93a828eb89bac51779d60_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a0a7c56cfe2d93a828eb89bac51779d60_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a0a7c56cfe2d93a828eb89bac51779d60_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a0a7c56cfe2d93a828eb89bac51779d60_icgraph">
 <area shape="rect" title="Calculates the memory word access based on unit memory&#39;s data element move count and the physical mem..." alt="" coords="541,39,741,65"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="351,5,393,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="251,56,493,112"/>
+<area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="a2407686888368aea3cef598765be6ab3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2407686888368aea3cef598765be6ab3">&#9670;&nbsp;</a></span>calc_offloading_single_port()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def calc_offloading_single_port </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemoryPort&#160;</td>
+          <td class="paramname"><em>port</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a2407686888368aea3cef598765be6ab3_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a2407686888368aea3cef598765be6ab3_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a2407686888368aea3cef598765be6ab3_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a2407686888368aea3cef598765be6ab3_icgraph">
+<area shape="rect" title=" " alt="" coords="1091,39,1289,65"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a726758366bc6877c7bbc708d74540d59" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="832,31,1043,73"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8aaf4a383a6d93dc6c79b262c9fb8caa" title="Calculate latency in 4 steps." alt="" coords="611,5,714,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="541,56,784,112"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="351,5,393,32"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="251,56,493,112"/>
 <area shape="rect" href="classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
@@ -913,7 +1005,9 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a121476a4036ca47e8998da4b011085bf" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="421,400,595,427"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519" title="This function integrates the previous calculated SScomb, data loading and off&#45;loading cycle to get th..." alt="" coords="431,451,585,477"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2766e8eb31bba2ded9efa2f2967366c8" title="Consider memory sharing and port sharing, combine the data transfer activity Step 1: collect port act..." alt="" coords="419,187,597,229"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab79772b92e6547fa56eb0ee81f8f4d42" title=" " alt="" coords="677,400,853,427"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title=" " alt="" coords="685,345,868,372"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3" title=" " alt="" coords="677,295,876,321"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab79772b92e6547fa56eb0ee81f8f4d42" title=" " alt="" coords="689,400,865,427"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#aa18f60e79c7586e3499d3c82a7437230" title="This function calculate the Tclk for IMC (In&#45;Memory&#45;Computing)" alt="" coords="387,501,629,557"/>
 <area shape="rect" href="namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="439,582,577,623"/>
 </map>
@@ -1001,20 +1095,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a33f26d039371a35c423bd56202d9f0d4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a33f26d039371a35c423bd56202d9f0d4">&#9670;&nbsp;</a></span>data_loading_cc_per_op</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">data_loading_cc_per_op</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a5ec9357113aee0ad27c7f2d7e81347e1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a5ec9357113aee0ad27c7f2d7e81347e1">&#9670;&nbsp;</a></span>data_loading_cycle</h2>
 
@@ -1057,20 +1137,6 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="ac803aa68b2fc4802366582ca537a4911"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac803aa68b2fc4802366582ca537a4911">&#9670;&nbsp;</a></span>data_loading_per_mem_inst</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">data_loading_per_mem_inst</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a6928b54197d29118829943aa396cb1a1"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6928b54197d29118829943aa396cb1a1">&#9670;&nbsp;</a></span>data_loading_shared_part</h2>
 
@@ -1107,34 +1173,6 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">data_offloading_cycle</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="aa06c1f116faea05b45a9de46abacbbb3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa06c1f116faea05b45a9de46abacbbb3">&#9670;&nbsp;</a></span>data_offloading_per_mem_inst</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">data_offloading_per_mem_inst</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8e983b5073c0411f2363c3218437ac2a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e983b5073c0411f2363c3218437ac2a">&#9670;&nbsp;</a></span>data_offloading_per_op</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">data_offloading_per_op</td>
         </tr>
       </table>
 </div><div class="memdoc">

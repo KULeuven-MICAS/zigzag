@@ -6,6 +6,7 @@ var classarchitecture_1_1memory__port_1_1MemoryPort =
     [ "__repr__", "classarchitecture_1_1memory__port_1_1MemoryPort.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "__str__", "classarchitecture_1_1memory__port_1_1MemoryPort.html#a23e8041ce1015febe4fdace3225714f9", null ],
     [ "add_port_function", "classarchitecture_1_1memory__port_1_1MemoryPort.html#abb12c699fe1a2b152cd708f5c24d30db", null ],
+    [ "port_is_shared_by_two_input_operands", "classarchitecture_1_1memory__port_1_1MemoryPort.html#ada87977c7874e1333bc09818be482c07", null ],
     [ "attr", "classarchitecture_1_1memory__port_1_1MemoryPort.html#a710acfac10f0042826d2d6d9c213ae7b", null ],
     [ "bw", "classarchitecture_1_1memory__port_1_1MemoryPort.html#a3f7228a3941f19f282647a09dd494528", null ],
     [ "bw_min", "classarchitecture_1_1memory__port_1_1MemoryPort.html#a03797021fcbbfd6ff4c26b4fb7c4afbf", null ],
