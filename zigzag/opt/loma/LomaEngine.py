@@ -7,7 +7,7 @@ import numpy as np
 from sympy.ntheory import factorint  # type: ignore
 from tqdm import tqdm
 
-from zigzag.datatypes import LayerDim, UnrollFactor
+from zigzag.datatypes import LayerDim, UnrollFactorInt
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
@@ -138,7 +138,7 @@ class LomaEngine:
         temporal_loop_dim_size_no_1s = {key: val for key, val in layer_dim_sizes.items() if val > 1}
         return temporal_loop_dim_size_no_1s
 
-    def update_min_lpf_factor(self, loop_sizes: dict[LayerDim, UnrollFactor]):
+    def update_min_lpf_factor(self, loop_sizes: dict[LayerDim, UnrollFactorInt]):
         min_nb_temporal_loops = len(loop_sizes)
         if self.lpf_limit is not None and self.lpf_limit < min_nb_temporal_loops:
             logger.debug(
@@ -168,14 +168,14 @@ class LomaEngine:
             factors: dict[int, int] = factorint(tl_size)  # type: ignore
             pfs = []
             counts = []
-            for pf, multiplicity in factors.items():
-                pfs.append(pf)
-                counts.append(multiplicity)
-                for _ in range(multiplicity):
-                    lpfs.append((tl_dim, pf))
-            temporal_loop_pfs[tl_dim] = tuple(pfs)
-            temporal_loop_pf_counts[tl_dim] = tuple(counts)
-            temporal_loop_pf_count_sums[tl_dim] = sum(counts)
+            for pf, multiplicity in factors.items():  # type: ignore
+                pfs.append(pf)  # type: ignore
+                counts.append(multiplicity)  # type: ignore
+                for _ in range(multiplicity):  # type: ignore
+                    lpfs.append((tl_dim, pf))  # type: ignore
+            temporal_loop_pfs[tl_dim] = tuple(pfs)  # type: ignore
+            temporal_loop_pf_counts[tl_dim] = tuple(counts)  # type: ignore
+            temporal_loop_pf_count_sums[tl_dim] = sum(counts)  # type: ignore
 
         # If there are no temporal LPFs generated, i.e. all loops are unrolled spatially,
         # we manually insert a loop of size 1

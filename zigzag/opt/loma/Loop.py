@@ -1,10 +1,10 @@
-from zigzag.datatypes import LayerDim, UnrollFactor
+from zigzag.datatypes import LayerDim, UnrollFactorInt
 
 
 class Loop:
     """! Class that stores a single for-loop's information."""
 
-    def __init__(self, layer_dim: LayerDim, size: UnrollFactor, loop_type: str = "temporal"):
+    def __init__(self, layer_dim: LayerDim, size: UnrollFactorInt, loop_type: str = "temporal"):
         """! Initialize the loop with the given layer_dim string and size"""
         self.layer_dim = layer_dim
         self.size = size

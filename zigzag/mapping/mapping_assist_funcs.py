@@ -1,7 +1,7 @@
 from math import prod
 from typing import TypeAlias
 
-from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor
+from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor, UnrollFactorInt
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
@@ -41,7 +41,7 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
 
     for operand in pr_operand_list:
         # initialize current and below level pr loop size
-        cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactor]] = {
+        cabl_pr_lp_size: dict[LayerDim, dict[LayerDim, UnrollFactorInt]] = {
             pr_data_dim: {pr_loop_dim: 1 for pr_loop_dim in pr_operand_loop_lut[operand][pr_data_dim]}
             for pr_data_dim in pr_operand_loop_lut[operand]
         }
@@ -74,7 +74,7 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
                     continue
                 for pr_data_dim in pr_operand_loop_lut[operand].keys():
                     if any(lp_type == loop_type for lp_type in pr_operand_loop_lut[operand][pr_data_dim]):
-                        cabl_pr_lp_size[pr_data_dim][loop_type] *= loop_size
+                        cabl_pr_lp_size[pr_data_dim][loop_type] *= int(loop_size)
 
                         # compute pr related data dimension size and data dimension reuse at current and below joint
                         # levels based on pr_funcs (dynamic functions extracted in LayerNode). Each pr loop is decoupled

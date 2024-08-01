@@ -1,7 +1,7 @@
 import logging
-import math
 import re
 from collections import defaultdict
+from math import prod
 from typing import TypeAlias
 
 from zigzag.datatypes import (
@@ -12,7 +12,6 @@ from zigzag.datatypes import (
     MemoryOperand,
     PrLoop,
     PrScalingFactors,
-    UnrollFactor,
     UnrollFactorInt,
 )
 from zigzag.workload.LayerAttribute import LayerAttribute
@@ -46,9 +45,7 @@ class LayerEquation(LayerAttribute):
         """! Return a list with all LayerDims that are `relevant` for the given LayerOperand"""
         layer_operands = self.get_contained_operands()
         assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
-        assert layer_op in layer_operands, f"Given LayerOperand {layer_op} is not part of this equation"
         layer_op_idx = layer_operands.index(layer_op)
-        slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         slice_indices = self.__get_operand_start_indices() + [len(self.disassembly) + 1]
         disassembly_start_idx = slice_indices[layer_op_idx] + 1
         disassembly_end_idx = slice_indices[layer_op_idx + 1] - 1
@@ -60,7 +57,7 @@ class LayerDimSizes(LayerAttribute):
     """! Contains the size of each computation loop as defined in the workload,
     e.g. `{'B': 1, 'K': 32, 'C': 64, 'OY': 28, 'OX': 28, 'FY': 1, 'FX': 1, 'G': 1`"""
 
-    def __init__(self, data: dict[LayerDim, UnrollFactor]):
+    def __init__(self, data: dict[LayerDim, UnrollFactorInt]):
         self.data = data
 
     @property
@@ -68,8 +65,8 @@ class LayerDimSizes(LayerAttribute):
         return list(self.data.keys())
 
     @property
-    def total_size(self) -> UnrollFactor:
-        return math.prod(self.data.values())
+    def total_size(self) -> UnrollFactorInt:
+        return prod(self.data.values())
 
     def items(self):
         return self.data.items()
@@ -77,7 +74,7 @@ class LayerDimSizes(LayerAttribute):
     def copy(self):
         return LayerDimSizes(self.data.copy())
 
-    def __setitem__(self, key: LayerDim, value: int):
+    def __setitem__(self, key: LayerDim, value: UnrollFactorInt):
         self.data[key] = value
 
     def __delitem__(self, key: LayerDim):
@@ -199,9 +196,9 @@ class LayerTemporalOrdering(LayerAttribute):
     def is_empty(self):
         return len(self.data) == 0
 
-    def is_complete(self, temporal_loop_sizes: dict[LayerDim, UnrollFactor]):
+    def is_complete(self, temporal_loop_sizes: dict[LayerDim, UnrollFactorInt]):
         """Return wether this temporal ordering matches the given, mandatory loop sizes"""
-        all_loops: defaultdict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
+        all_loops: defaultdict[LayerDim, UnrollFactorInt] = defaultdict(lambda: 1)
         for layer_dim, factor in self.data:
             all_loops[layer_dim] *= factor
 
