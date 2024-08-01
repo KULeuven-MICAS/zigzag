@@ -7,7 +7,7 @@ import numpy as np
 from sympy.ntheory import factorint  # type: ignore
 from tqdm import tqdm
 
-from zigzag.datatypes import LayerDim, UnrollFactorInt
+from zigzag.datatypes import LayerDim, UnrollFactor, UnrollFactorInt
 from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
@@ -138,7 +138,7 @@ class LomaEngine:
         temporal_loop_dim_size_no_1s = {key: val for key, val in layer_dim_sizes.items() if val > 1}
         return temporal_loop_dim_size_no_1s
 
-    def update_min_lpf_factor(self, loop_sizes: dict[LayerDim, UnrollFactorInt]):
+    def update_min_lpf_factor(self, loop_sizes: dict[LayerDim, UnrollFactor]):
         min_nb_temporal_loops = len(loop_sizes)
         if self.lpf_limit is not None and self.lpf_limit < min_nb_temporal_loops:
             logger.debug(

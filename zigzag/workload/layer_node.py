@@ -250,9 +250,8 @@ class LayerNode(LayerNodeABC):
         if dim in layer_dim_sizes:
             return layer_dim_sizes[dim]
         elif dim in self.pr_loop:
-            related_dimension_sizes: tuple[int, int] = tuple(
-                layer_dim_sizes[related_dim] for related_dim in self.pr_loop[dim]
-            )
+            # TODO this int conversion is suspicious
+            related_dimension_sizes = tuple(int(layer_dim_sizes[related_dim]) for related_dim in self.pr_loop[dim])
             scaling_factors = tuple(t[1] for t in self.pr_scaling_factors[dim])
             pr_dim_size = self.calc_pr_dimension_size(
                 sa=scaling_factors[0], a=related_dimension_sizes[0], sb=scaling_factors[1], b=related_dimension_sizes[1]

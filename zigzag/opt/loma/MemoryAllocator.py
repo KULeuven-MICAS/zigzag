@@ -62,8 +62,7 @@ class MemoryAllocator:
         self.allocated: dict[MemoryOperand, list[Loop]] = {}
         for layer_op, mem_op in self.layer_and_mem_ops:
             self.allocated[mem_op] = [
-                Loop(dim, int(size), "spatial")
-                for (dim, size) in self.spatial_mapping.get_unrolling(op=layer_op, level=0)
+                Loop(dim, size, "spatial") for (dim, size) in self.spatial_mapping.get_unrolling(op=layer_op, level=0)
             ]
 
         # Initialize the level of memory hierarchy for each layer operand at 1 (first memory level).
@@ -135,7 +134,7 @@ class MemoryAllocator:
             mem_level_op = self.mem_level[layer_op]
             spatial_loops = self.spatial_mapping.get_unrolling(op=layer_op, level=mem_level_op)
             for loop_dim, loop_size in spatial_loops:
-                spatial_loop = Loop(layer_dim=loop_dim, size=int(loop_size), loop_type="spatial")
+                spatial_loop = Loop(layer_dim=loop_dim, size=loop_size, loop_type="spatial")
                 self.allocated[mem_op].append(spatial_loop)
 
             # Check if this node (i.e. MemoryLevel) is the highest level of memory hierarchy.
@@ -224,7 +223,7 @@ class MemoryAllocator:
         """
 
         # First we compute the size of all loop dimensions present in this layer given the loops in 'loops'.
-        all_dim_sizes: dict[LayerDim, int] = defaultdict(lambda: 1)
+        all_dim_sizes: dict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
         for loop in loops:
             all_dim_sizes[loop.layer_dim] *= loop.size
 
