@@ -7,6 +7,7 @@ import numpy as np
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import ArrayType, Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.memory_port import MemoryPort
 from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.mapping.data_movement import AccessEnergy, DataDirection, MemoryAccesses
@@ -866,105 +867,128 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # Assuming all the memory ports can work in parallel
         self.stall_slack_comb = max(stall_slack_comb_list)
 
+    def calc_loading_single_port(self, port: MemoryPort):
+        data_loading: list[PortBeginOrEndActivity] = []
+
+        for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
+            # Only input operands
+            if mem_op not in [Constants.MEM_OP_1, Constants.MEM_OP_2]:
+                continue
+
+            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            period_count = self.mapping_int.unit_mem_data_movement[layer_op][
+                mem_lv
+            ].data_trans_period_count.get_single_dir_data(mov_dir)
+
+            # skip for the inactive data movement
+            if period_count == 0:
+                continue
+
+            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
+                mem_lv
+            ].data_trans_amount_per_period.get_single_dir_data(mov_dir) * self.mapping_int.unit_mem_data_movement[
+                layer_op
+            ][
+                mem_lv
+            ].data_precision.get_single_dir_data(
+                mov_dir
+            )
+
+            mem_bw = (
+                self.mem_r_bw_dict[mem_op][mem_lv]
+                if mov_dir == DataDirection.RD_OUT_TO_HIGH or mov_dir == DataDirection.RD_OUT_TO_LOW
+                else self.mem_w_bw_dict[mem_op][mem_lv]
+            )
+
+            port_activity = PortBeginOrEndActivity(
+                real_cycle,
+                data_in_charge,
+                mem_bw,
+                layer_op,
+                mem_lv,
+                mov_dir,
+            )
+            data_loading.append(port_activity)
+            # Update class variable
+            self.data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = (
+                real_cycle,
+                port.port_is_shared_by_two_input_operands,
+            )
+
+        return data_loading
+
+    def calc_offloading_single_port(self, port: MemoryPort):
+        # data_loading_single[str(port)] = []
+        # data_offloading_single[str(port)] = []
+        data_offloading: list[PortBeginOrEndActivity] = []
+
+        for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
+            # Only for output mem ops
+            if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2]:
+                continue
+
+            # don't consider partial sum flowing in the final data off-loading stage
+            if mov_dir == DataDirection.RD_OUT_TO_LOW or mov_dir == DataDirection.WR_IN_BY_HIGH:
+                continue
+
+            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            period_count = self.mapping_int.unit_mem_data_movement[layer_op][
+                mem_lv
+            ].data_trans_period_count.get_single_dir_data(mov_dir)
+
+            # skip for the inactive data movement
+            if period_count == 0:
+                continue
+
+            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
+            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
+                mem_lv
+            ].data_trans_amount_per_period.get_single_dir_data(mov_dir) * self.mapping_int.unit_mem_data_movement[
+                layer_op
+            ][
+                mem_lv
+            ].data_precision.get_single_dir_data(
+                mov_dir
+            )
+
+            mem_bw = (
+                self.mem_r_bw_dict[mem_op][mem_lv]
+                if mov_dir == DataDirection.RD_OUT_TO_HIGH
+                else self.mem_w_bw_dict[mem_op][mem_lv]
+            )
+
+            port_activity = PortBeginOrEndActivity(
+                real_cycle,
+                data_in_charge,
+                mem_bw,
+                layer_op,
+                mem_lv,
+                mov_dir,
+            )
+            data_offloading.append(port_activity)
+            # Update class variable
+            self.data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = real_cycle
+
+        return data_offloading
+
     def calc_data_loading_offloading_latency(self):
         """! Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands'
         / the last-time output operand's data movement on corresponding ports.
         """
-        # Collect ports' initial data-loading and final data-offloading activities
-        data_loading_per_mem_inst: list[dict[str, list[PortBeginOrEndActivity]]] = []
-        data_loading_cc_per_op: dict[LayerOperand, dict[str, tuple[int | float, bool]]] = {
+
+        self.data_loading_per_mem_inst: list[dict[MemoryPort, list[PortBeginOrEndActivity]]] = []
+        self.data_offloading_per_mem_inst: list[dict[MemoryPort, list[PortBeginOrEndActivity]]] = []
+        self.data_loading_cc_per_op: dict[LayerOperand, dict[str, tuple[int | float, bool]]] = {
             op: {} for op in self.layer.input_operands
         }
-        data_offloading_per_mem_inst: list[dict[str, list[PortBeginOrEndActivity]]] = []
-        data_offloading_cc_per_op: dict[str, int | float] = {}
+        self.data_offloading_cc_per_op: dict[str, int | float] = {}
+
         for mem_instance in self.mem_level_list:
-            data_loading_single: dict[str, list[PortBeginOrEndActivity]] = {}
-            data_offloading_single: dict[str, list[PortBeginOrEndActivity]] = {}
-            port_list = mem_instance.port_list
-            for port in port_list:
-                data_loading_single[str(port)] = []
-                data_offloading_single[str(port)] = []
-                served_operands = set(
-                    s[0] for s in port.served_op_lv_dir if s[0] in [Constants.MEM_OP_1, Constants.MEM_OP_2]
-                )
-                port_is_shared_by_two_input_operands = len(served_operands) > 1
-                for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
-                    if self.memory_operand_links.contains_mem_op(mem_op):
-                        layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                        period_count = self.mapping_int.unit_mem_data_movement[layer_op][
-                            mem_lv
-                        ].data_trans_period_count.get_single_dir_data(mov_dir)
-                        if period_count == 0:
-                            # skip for the inactive data movement
-                            continue
-                        if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2]:
-                            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
-                            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
-                                mem_lv
-                            ].data_trans_amount_per_period.get_single_dir_data(
-                                mov_dir
-                            ) * self.mapping_int.unit_mem_data_movement[
-                                layer_op
-                            ][
-                                mem_lv
-                            ].data_precision.get_single_dir_data(
-                                mov_dir
-                            )
-                            if mov_dir == DataDirection.RD_OUT_TO_HIGH or mov_dir == DataDirection.RD_OUT_TO_LOW:
-                                mem_bw = self.mem_r_bw_dict[mem_op][mem_lv]
-                            else:
-                                mem_bw = self.mem_w_bw_dict[mem_op][mem_lv]
-                            port_activity = PortBeginOrEndActivity(
-                                real_cycle,
-                                data_in_charge,
-                                mem_bw,
-                                layer_op,
-                                mem_lv,
-                                mov_dir,
-                            )
-                            data_loading_single[str(port)].append(port_activity)
-                            data_loading_cc_per_op[layer_op][layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = (
-                                real_cycle,
-                                port_is_shared_by_two_input_operands,
-                            )
-                        else:
-                            if mov_dir == DataDirection.RD_OUT_TO_LOW or mov_dir == DataDirection.WR_IN_BY_HIGH:
-                                # don't consider partial sum flowing in the final data off-loading stage
-                                continue
-                            real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
-                            data_in_charge = self.mapping_int.unit_mem_data_movement[layer_op][
-                                mem_lv
-                            ].data_trans_amount_per_period.get_single_dir_data(
-                                mov_dir
-                            ) * self.mapping_int.unit_mem_data_movement[
-                                layer_op
-                            ][
-                                mem_lv
-                            ].data_precision.get_single_dir_data(
-                                mov_dir
-                            )
-                            if mov_dir == DataDirection.RD_OUT_TO_HIGH:
-                                mem_bw = self.mem_r_bw_dict[mem_op][mem_lv]
-                            else:
-                                mem_bw = self.mem_w_bw_dict[mem_op][mem_lv]
-
-                            port_activity = PortBeginOrEndActivity(
-                                real_cycle,
-                                data_in_charge,
-                                mem_bw,
-                                layer_op,
-                                mem_lv,
-                                mov_dir,
-                            )
-                            data_offloading_single[str(port)].append(port_activity)
-                            data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + str(mov_dir)] = real_cycle
-
-            data_loading_per_mem_inst.append(data_loading_single)
-            data_offloading_per_mem_inst.append(data_offloading_single)
-        self.data_loading_per_mem_inst = data_loading_per_mem_inst
-        self.data_loading_cc_per_op = data_loading_cc_per_op
-        self.data_offloading_per_mem_inst = data_offloading_per_mem_inst
-        self.data_offloading_per_op = data_offloading_cc_per_op
+            data_loading_per_port = {port: self.calc_loading_single_port(port) for port in mem_instance.port_list}
+            data_offloading_per_port = {port: self.calc_offloading_single_port(port) for port in mem_instance.port_list}
+            self.data_loading_per_mem_inst.append(data_loading_per_port)
+            self.data_offloading_per_mem_inst.append(data_offloading_per_port)
 
         # Combine ports' initial data-loading activities to get the data loading cycle amount
         data_loading_cc_pair_combined_per_op: dict[LayerOperand, list[int | float]] = {
@@ -973,12 +997,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
         data_loading_individual_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
         data_loading_half_shared_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
         data_loading_shared_part: dict[LayerOperand, int | float] = {op: 0 for op in self.layer.input_operands}
+
         for layer_op in self.layer.input_operands:
             for mem_lv in range(self.active_mem_level[layer_op] - 1):
-                elem1 = data_loading_cc_per_op[layer_op][
+                elem1 = self.data_loading_cc_per_op[layer_op][
                     layer_op.name + str(mem_lv) + "_" + str(DataDirection.WR_IN_BY_HIGH)
                 ]
-                elem2 = data_loading_cc_per_op[layer_op][
+                elem2 = self.data_loading_cc_per_op[layer_op][
                     layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.RD_OUT_TO_LOW)
                 ]
                 completely_shared = elem1[1] and elem2[1]
@@ -1024,8 +1049,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
         data_offloading_cc_pair_combined: list[int | float] = []
         layer_op = self.layer.output_operand
         for mem_lv in range(self.active_mem_level[layer_op] - 1):
-            elem1 = data_offloading_cc_per_op[layer_op.name + str(mem_lv) + "_" + str(DataDirection.RD_OUT_TO_HIGH)]
-            elem2 = data_offloading_cc_per_op[layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.WR_IN_BY_LOW)]
+            elem1 = self.data_offloading_cc_per_op[
+                layer_op.name + str(mem_lv) + "_" + str(DataDirection.RD_OUT_TO_HIGH)
+            ]
+            elem2 = self.data_offloading_cc_per_op[
+                layer_op.name + str(mem_lv + 1) + "_" + str(DataDirection.WR_IN_BY_LOW)
+            ]
             longest_offloading_cc = max(elem1, elem2)
             # for the ports that serve the same data movement purpose, take the longest data loading cycle
             data_offloading_cc_pair_combined.append(longest_offloading_cc)
