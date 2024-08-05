@@ -6,22 +6,22 @@ class OperationalUnit:
 
     def __init__(
         self,
-        unit_cost: float,
-        unit_area: float,
+        energy_cost: float,
+        area: float,
     ):
         """
-        @param unit_cost: The energy cost of performing a single operation.
-        @param unit_area: The area of a single operational unit.
+        @param energy_cost: The energy cost of performing a single operation.
+        @param area: The area of a single operational unit.
         """
-        self.cost = unit_cost
-        self.area = unit_area
+        self.energy_cost = energy_cost
+        self.area = area
 
     def __jsonrepr__(self):
         """! JSON Representation of this class to save it to a json file."""
         return json_repr_handler(self.__dict__)
 
     def __eq__(self, other: object) -> bool:
-        return isinstance(other, OperationalUnit) and self.cost == other.cost and self.area == other.area
+        return isinstance(other, OperationalUnit) and self.energy_cost == other.energy_cost and self.area == other.area
 
 
 class Multiplier(OperationalUnit):
