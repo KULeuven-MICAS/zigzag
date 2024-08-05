@@ -4,6 +4,9 @@ var dir_d52934d047cd7858e503be898722847b =
     [ "Accelerator.py", "Accelerator_8py.html", [
       [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", "classarchitecture_1_1Accelerator_1_1Accelerator" ]
     ] ],
+    [ "Adder.py", "Adder_8py.html", [
+      [ "Adder", "classarchitecture_1_1Adder_1_1Adder.html", "classarchitecture_1_1Adder_1_1Adder" ]
+    ] ],
     [ "Core.py", "Core_8py.html", [
       [ "Core", "classarchitecture_1_1Core_1_1Core.html", "classarchitecture_1_1Core_1_1Core" ]
     ] ],
