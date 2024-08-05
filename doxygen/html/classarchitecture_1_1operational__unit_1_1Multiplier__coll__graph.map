@@ -1,4 +1,4 @@
 <map id="Multiplier" name="Multiplier">
-<area shape="rect" id="node1" title=" " alt="" coords="26,80,110,107"/>
+<area shape="rect" id="node1" title="Renames OperationalUnit to Multiplier, same functionality." alt="" coords="26,80,110,107"/>
 <area shape="rect" id="node2" href="$classarchitecture_1_1operational__unit_1_1OperationalUnit.html" title="General class for a unit that performs a certain operation." alt="" coords="5,5,131,32"/>
 </map>
