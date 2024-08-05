@@ -103,6 +103,7 @@ memories:
 operational_array:
   is_imc: True
   imc_type: analog
+  input_precision: [8, 8] # unit: bit
   bit_serial_precision: 2 # unit: bit
   adc_resolution: 8 # unit: bit
   dimensions: [D1, D2]
