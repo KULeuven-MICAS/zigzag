@@ -100,11 +100,11 @@ class GemmParser(ONNXOperatorParser):
 
         # Construct equation
         layer_dim_h = "[h]" if size_h else ""
-        part_O = f"O[b]{layer_dim_h}[k][d]"
-        part_I = f"I[b]{layer_dim_h}[k][c]"
+        part_out = f"O[b]{layer_dim_h}[k][d]"
+        part_in = f"I[b]{layer_dim_h}[k][c]"
         # No batch dimensions (B or H) if the weights are constant
-        part_W = f"W{'' if weights_are_constant else '[b]' + layer_dim_h}[c][d]"
-        data["equation"] = f"{part_O}+={part_I}*{part_W}"
+        part_weight = f"W{'' if weights_are_constant else '[b]' + layer_dim_h}[c][d]"
+        data["equation"] = f"{part_out}+={part_in}*{part_weight}"
 
         return data
 
