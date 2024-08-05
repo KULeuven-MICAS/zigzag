@@ -19,7 +19,7 @@ memories:
         tl: r_port_1
         fl: w_port_2
         th: r_port_2
-    served_dimensions: [D3]
+    served_dimensions: [D2]
 
   l1:
     size: 262144
