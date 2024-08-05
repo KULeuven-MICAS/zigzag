@@ -1,0 +1,8 @@
+<map id="get_layer_node_user_format" name="get_layer_node_user_format">
+<area shape="rect" id="node1" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="5,86,163,127"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#aa8d6e5e080d24ac227bd133f3eea7000" title="Return the activation precision for this node." alt="" coords="501,7,744,63"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#adb4cffad0ef7498a2c0a0831a2d82ddd" title="Return the intermediate output precision for this node." alt="" coords="211,39,453,95"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a29abb9ea8ccef05203cf5e7b3c3c0626" title="Compute node input sources." alt="" coords="211,119,453,175"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html#a2a0bce792b3642443a412af901506173" title="Return the weight precision for this node." alt="" coords="501,144,744,200"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1parser_1_1onnx_1_1utils.html#af36248a572c3ac0636b23d4e6203a9ef" title="Return the value of an attribute of given name from the given attributes If name does not exist in at..." alt="" coords="792,79,993,121"/>
+</map>

@@ -4,9 +4,6 @@ var annotated_dup =
       [ "Accelerator", "namespacearchitecture_1_1Accelerator.html", [
         [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", "classarchitecture_1_1Accelerator_1_1Accelerator" ]
       ] ],
-      [ "Adder", "namespacearchitecture_1_1Adder.html", [
-        [ "Adder", "classarchitecture_1_1Adder_1_1Adder.html", "classarchitecture_1_1Adder_1_1Adder" ]
-      ] ],
       [ "Core", "namespacearchitecture_1_1Core.html", [
         [ "Core", "classarchitecture_1_1Core_1_1Core.html", "classarchitecture_1_1Core_1_1Core" ]
       ] ],

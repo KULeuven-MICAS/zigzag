@@ -50,11 +50,11 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "AcceleratorParserStage_8py.html",
-"classarchitecture_1_1memory__port_1_1MemoryPort.html#a3f7228a3941f19f282647a09dd494528",
-"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a23e8041ce1015febe4fdace3225714f9",
-"classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1",
-"classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213",
-"functions_vars_w.html"
+"classarchitecture_1_1memory__port_1_1MemoryPort.html#af96227fa172ee2434ffb6b967edce50b",
+"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a9e58287a6ac34d4b0df3a3d1e5a11322",
+"classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#ac965bc4f14353d22b2ded9fedd74a6da",
+"classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a23e8041ce1015febe4fdace3225714f9",
+"layer__attributes_8py.html#a29e9feb3c43f689a578959453e3699fd"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
