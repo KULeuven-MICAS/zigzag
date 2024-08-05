@@ -21,15 +21,8 @@ class OperationalUnit:
         return json_repr_handler(self.__dict__)
 
     def __eq__(self, other: object) -> bool:
-        if not isinstance(other, OperationalUnit):
-            return False
-        return self.precision == other.precision and self.cost == other.cost and self.area == other.area
+        return isinstance(other, OperationalUnit) and self.cost == other.cost and self.area == other.area
 
 
 class Multiplier(OperationalUnit):
-    def __init__(self, energy_cost: float, area: float):
-        """
-        @param energy_cost: The energy cost of performing a single multiplication.
-        @param area: The area of a single multiplier.
-        """
-        super().__init__(energy_cost, area)
+    """Renames OperationalUnit to Multiplier, same functionality"""
