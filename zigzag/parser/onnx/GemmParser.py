@@ -29,34 +29,44 @@ class GemmParser(ONNXOperatorParser):
         """! Run the parser"""
         return self.generate_layer_node()
 
+    def get_operand_source_user_format(self, predecessors: list[int]):
+        """Set input source and indicate constat operands"""
+        match len(predecessors):
+            case 0:
+                # No source operands -> assume one is constant
+                return {"W": self.node_id}
+            case 1:
+                # One source operand, one constant
+                return {"W": self.node_id, "I": predecessors[0]}
+            case 2:
+                # Two source operands, none are constant (W and I can be swapped)
+                return {"W": predecessors[1], "I": predecessors[0]}
+            case _:
+                raise ValueError("No more than 2 layer predecessors expected")
+
     def get_layer_node_user_format(
         self,
-        batch_size: int,
-        size_c: int,
-        size_k: int,
-        size_d: int,
+        input_shape: list[int],
+        output_shape: list[int],
     ) -> dict[str, Any]:
         """! Generate layer data in user input format for MatMul or GEMM ONNX nodes.
-        I[B][K][C} * W[1 or B][C][D]-> O [B][K][D]
+        I[B]   [K][C] * W([B])   [C][D]-> O [B]   [K][D] or
+        I[B][H][K][C] * W([B][H])[C][D]-> O [B][H][K][D]
+
         """
+        predecessors = self.get_node_predecessors()
+        act_precision = self.get_activation_precision()
+        weight_precision = self.get_weight_precision()
+        intermediate_output_precision = self.get_intermediate_output_precision()
+        # If there are 2 input nodes, `weights` represents a variable input
+        weights_are_constant = len(predecessors) < 2
 
         data: dict[str, Any] = {}
         data["id"] = self.node_id
         data["name"] = self.node.name
         data["operator_type"] = self.node.op_type
-        data["loop_dims"] = ["B", "C", "K", "D"]
-        data["loop_sizes"] = [batch_size, size_c, size_k, size_d]
         data["dimension_relations"] = []
-
-        predecessors = self.get_node_predecessors()
-        act_precision = self.get_activation_precision()
-        weight_precision = self.get_weight_precision()
-        intermediate_output_precision = self.get_intermediate_output_precision()
-
-        # If there are 2 input nodes, `weights` represents a variable input
-        weights_are_constant = len(predecessors) < 2
-
-        data["equation"] = f"O[b][k][d]+=I[b][k][c]*W{'' if weights_are_constant else '[b]'}[c][d]"
+        data["operand_source"] = self.get_operand_source_user_format(predecessors)
         data["operand_precision"] = {
             "W": weight_precision if weights_are_constant else act_precision,
             "I": act_precision,
@@ -64,23 +74,43 @@ class GemmParser(ONNXOperatorParser):
             "O": intermediate_output_precision,
         }
 
-        match len(predecessors):
-            case 0:
-                # No source operands -> assume one is constant
-                data["operand_source"] = {"W": self.node_id}
-            case 1:
-                # One source operand, one constant
-                data["operand_source"] = {"W": self.node_id, "I": predecessors[0]}
+        # I[B,H][K][C] * W[B,H][C][D] -> O[B,H][K][D]
+        assert input_shape[-2] == output_shape[-2], "First dimension of input and output matrix must be the same"
+        size_k = input_shape[-2]
+        size_c = input_shape[-1]
+        size_d = output_shape[-1]
+        size_h = 0  # In transformers, this dimension represents the number of heads
+
+        match len(input_shape):
             case 2:
-                # Two source operands, none are constant (W and I can be swapped)
-                data["operand_source"] = {"W": predecessors[1], "I": predecessors[0]}
+                batch_size = 1
+            case 3:
+                assert input_shape[0] == output_shape[0], "Batch size should be the same for input and output"
+                batch_size = 1 if input_shape[0] == 0 else input_shape[0]
+            case 4:
+                assert input_shape[0] == output_shape[0], "Batch size should be the same for input and output"
+                assert input_shape[1] == output_shape[1], "Batch size (axis=1) should be the same for input and output"
+                batch_size = 1 if input_shape[0] == 0 else input_shape[0]
+                size_h = 0 if input_shape[1] == 0 else input_shape[1]
             case _:
-                raise ValueError("No more than 2 layer predecessors expected")
+                raise ValueError("Input size of GeMM or Matmul ONNX node must be either 2, 3 or 4.")
+
+        data["loop_dims"] = ["B", "C", "K", "D"] + (["H"] if size_h else [])
+        data["loop_sizes"] = [batch_size, size_c, size_k, size_d] + ([size_h] if size_h else [])
+
+        # Construct equation
+        layer_dim_h = "[h]" if size_h else ""
+        part_O = f"O[b]{layer_dim_h}[k][d]"
+        part_I = f"I[b]{layer_dim_h}[k][c]"
+        # No batch dimensions (B or H) if the weights are constant
+        part_W = f"W{'' if weights_are_constant else '[b]' + layer_dim_h}[c][d]"
+        data["equation"] = f"{part_O}+={part_I}*{part_W}"
 
         return data
 
     def generate_layer_node(self):
         input_shape, output_shape = get_node_input_output_dimension_shapes(self.node, self.onnx_model)
+        assert len(input_shape) == len(output_shape), "Input and output size expected to be the same"
 
         transpose_first_input = get_attribute_ints_with_name("transA", self.node.attribute, default=0)
         if transpose_first_input:
@@ -91,31 +121,10 @@ class GemmParser(ONNXOperatorParser):
         if not input_shape:
             input_shape = self.infer_input_activation_shape(output_shape)
 
-        assert len(input_shape) == len(output_shape), "Input and output size expected to be the same"
-        assert input_shape[0] == output_shape[0], "Batch size should be the same for input and output"
-
-        # I[B][K][C] * W[B][C][D] -> O[B][K][D]
-        match len(input_shape):
-            case 2:
-                size_k = input_shape[0]
-                size_c = input_shape[1]
-                size_d = output_shape[1]
-                batch_size = 1
-            case 3:
-                assert input_shape[1] == output_shape[1], "First dimension of input and output matrix must be the same"
-                batch_size = 1 if input_shape[0] == 0 else input_shape[0]
-                size_k = input_shape[1]
-                size_c = input_shape[2]
-                size_d = output_shape[2]
-            case _:
-                raise ValueError("Input size of Matmul ONNX node must be either 2 or 3.")
-
         # Create LayerNode
         layer_data = self.get_layer_node_user_format(
-            batch_size=batch_size,
-            size_c=size_c,
-            size_k=size_k,
-            size_d=size_d,
+            input_shape,
+            output_shape,
         )
         factory = LayerNodeFactory(layer_data, self.mapping_data)
         layer_node = factory.create()
