@@ -10,8 +10,7 @@ repos:
         types_or: [python, pyi]
         args:
           [
-            check,
-            --select,
+            --extend-select,
             I,
             --fix,
             --exit-non-zero-on-fix,

@@ -168,14 +168,14 @@ class LomaEngine:
             factors: dict[int, int] = factorint(tl_size)  # type: ignore
             pfs = []
             counts = []
-            for pf, multiplicity in factors.items():
-                pfs.append(pf)
-                counts.append(multiplicity)
-                for _ in range(multiplicity):
-                    lpfs.append((tl_dim, pf))
-            temporal_loop_pfs[tl_dim] = tuple(pfs)
-            temporal_loop_pf_counts[tl_dim] = tuple(counts)
-            temporal_loop_pf_count_sums[tl_dim] = sum(counts)
+            for pf, multiplicity in factors.items():  # type: ignore
+                pfs.append(pf)  # type: ignore
+                counts.append(multiplicity)  # type: ignore
+                for _ in range(multiplicity):  # type: ignore
+                    lpfs.append((tl_dim, pf))  # type: ignore
+            temporal_loop_pfs[tl_dim] = tuple(pfs)  # type: ignore
+            temporal_loop_pf_counts[tl_dim] = tuple(counts)  # type: ignore
+            temporal_loop_pf_count_sums[tl_dim] = sum(counts)  # type: ignore
 
         # If there are no temporal LPFs generated, i.e. all loops are unrolled spatially,
         # we manually insert a loop of size 1

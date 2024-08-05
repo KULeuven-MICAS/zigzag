@@ -2,7 +2,7 @@ import re
 from enum import StrEnum
 from typing import Any, TypeAlias
 
-from zigzag.datatypes import MemoryOperand
+from zigzag.datatypes import Constants, MemoryOperand
 from zigzag.parser.AcceleratorValidator import AcceleratorValidator
 
 
@@ -59,6 +59,11 @@ class MemoryPort:
 
     def add_port_function(self, operand_level_direction: OperandDirection):
         self.served_op_lv_dir.append(operand_level_direction)
+
+    @property
+    def port_is_shared_by_two_input_operands(self):
+        served_operands = set(s[0] for s in self.served_op_lv_dir if s[0] in [Constants.MEM_OP_1, Constants.MEM_OP_2])
+        return len(served_operands) > 1
 
     def __str__(self):
         return str(self.name)
