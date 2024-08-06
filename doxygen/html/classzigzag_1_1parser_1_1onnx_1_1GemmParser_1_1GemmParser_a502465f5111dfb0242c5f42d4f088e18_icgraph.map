@@ -1,9 +1,0 @@
-<map id="get_operand_source_user_format" name="get_operand_source_user_format">
-<area shape="rect" id="node1" title="Set input source and indicate constant operands." alt="" coords="1000,31,1153,73"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#af45d05ffd6eda00619c34dcbacafc8aa" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="795,31,952,73"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="555,5,714,32"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="523,56,747,112"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="341,8,384,35"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,203,73"/>
-<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="251,61,475,102"/>
-</map>

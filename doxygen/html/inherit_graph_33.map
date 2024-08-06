@@ -1,3 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html" title=" " alt="" coords="5,5,133,32"/>
+<area shape="rect" id="node1" href="$classarchitecture_1_1operational__unit_1_1OperationalUnit.html" title="General class for a unit that performs a certain operation." alt="" coords="5,5,131,32"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1operational__unit_1_1Multiplier.html" title="Renames OperationalUnit to Multiplier, same functionality." alt="" coords="179,5,263,32"/>
 </map>
