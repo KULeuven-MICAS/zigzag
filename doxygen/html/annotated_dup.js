@@ -4,6 +4,9 @@ var annotated_dup =
       [ "Accelerator", "namespacearchitecture_1_1Accelerator.html", [
         [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", "classarchitecture_1_1Accelerator_1_1Accelerator" ]
       ] ],
+      [ "Adder", "namespacearchitecture_1_1Adder.html", [
+        [ "Adder", "classarchitecture_1_1Adder_1_1Adder.html", "classarchitecture_1_1Adder_1_1Adder" ]
+      ] ],
       [ "Core", "namespacearchitecture_1_1Core.html", [
         [ "Core", "classarchitecture_1_1Core_1_1Core.html", "classarchitecture_1_1Core_1_1Core" ]
       ] ],
@@ -39,7 +42,7 @@ var annotated_dup =
       ] ],
       [ "operational_unit", "namespacearchitecture_1_1operational__unit.html", [
         [ "OperationalUnit", "classarchitecture_1_1operational__unit_1_1OperationalUnit.html", "classarchitecture_1_1operational__unit_1_1OperationalUnit" ],
-        [ "Multiplier", "classarchitecture_1_1operational__unit_1_1Multiplier.html", null ]
+        [ "Multiplier", "classarchitecture_1_1operational__unit_1_1Multiplier.html", "classarchitecture_1_1operational__unit_1_1Multiplier" ]
       ] ]
     ] ],
     [ "cacti_parser", "namespacecacti__parser.html", [
