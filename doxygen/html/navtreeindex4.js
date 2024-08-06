@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a486c0f3a7960647e00ea890a1d197d51":[2,0,2,7,1,0,5],
 "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a5360195b0688439cb6da5d1ca38a6212":[2,0,2,7,1,0,10],
 "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a550769bbd4e7537ff90a656f5b0c23b2":[2,0,2,7,1,0,12],
 "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html#a7aead736a07eaf25623ad7bfa1f0ee2d":[2,0,2,7,1,0,13],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "index.html":[],
 "layer__attributes_8py.html":[3,0,0,8,3],
 "layer__attributes_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,8,3,7],
-"layer__attributes_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,8,3,8],
-"layer__node_8py.html":[3,0,0,8,4]
+"layer__attributes_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,8,3,8]
 };
