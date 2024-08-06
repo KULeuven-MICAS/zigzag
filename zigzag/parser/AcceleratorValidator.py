@@ -133,7 +133,7 @@ class AcceleratorValidator:
                 },
                 "input_precision": {
                     "type": "list",
-                    "required": True,
+                    "required": False,
                     "schema": {"type": "integer"},
                     "minlength": 2,
                     "maxlength": 2,
@@ -339,6 +339,8 @@ class AcceleratorValidator:
             self.invalidate("Weight precision is not in the power of 2.")
         if imc_data["imc_type"] == "digital" and imc_data["adc_resolution"] != 0:
             self.invalidate("Digital IMC core but 'adc_resolution' is defined")
+        if "input_precision" not in imc_data:
+            self.invalidate("IMC core requires definition of 'input_precision'")
 
     def validate_operational_array_non_imc(self):
         """Assumes that the multiplier type is not IMC"""

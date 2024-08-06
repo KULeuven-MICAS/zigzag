@@ -577,7 +577,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         assert isinstance(
             operational_array, OperationalArray
         ), "This method expects an OperationalArray instance. Otherwise, the method should be overridden in a subclass."
-        single_mac_energy = operational_array.unit.cost
+        single_mac_energy = operational_array.unit.energy_cost
         self.mac_energy = single_mac_energy * self.layer.total_mac_count
 
     def calc_memory_energy_cost(self):
