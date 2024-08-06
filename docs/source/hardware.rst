@@ -13,8 +13,6 @@ Accelerating inference of a neural network requires the execution of multiplicat
 
 The operational unit object has the following attributes:
 
-* **input_precision**: List of input operand (data) precision in the number of bits for each input operand (typically there are two input operands for a Multiplier).
-* **output_precision**: The bit precision of the operation's output (e.g., for a multiplier, the output_precision is auto-set to be the sum of two input operands' precision).
 * **energy**: Energy of executing a single operation (e.g., a multiplication).
 * **area**: The hardware area overhead of a single operational unit (e.g., a multiplier).
 

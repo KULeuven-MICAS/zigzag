@@ -73,7 +73,6 @@ class CoreFactory:
         op_array_data: dict[str, Any] = self.data["operational_array"]
 
         multiplier = Multiplier(
-            input_precision=op_array_data["input_precision"],
             energy_cost=op_array_data["multiplier_energy"],
             area=op_array_data["multiplier_area"],
         )
