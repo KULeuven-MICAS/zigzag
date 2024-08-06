@@ -100,11 +100,16 @@ class Constants:
 
     MEM_OP_1 = MemoryOperand(AcceleratorValidator.MEM_OP_1_STR)
     MEM_OP_2 = MemoryOperand(AcceleratorValidator.MEM_OP_2_STR)
+    
+class UnknownUnrollFactor:
+    '''! Placeholder class for unknown unroll factors, denoted by * in the mapping file'''
+    pass
+    
 
 
 ###### Type aliases ######
 UnrollFactor: TypeAlias = int | float
-UnrollFactorInt: TypeAlias = int
+UnrollFactorInt: TypeAlias = int | UnknownUnrollFactor
 
 PrLoop: TypeAlias = dict[LayerDim, tuple[LayerDim, LayerDim]]
 LoopList: TypeAlias = list[LayerDim]

@@ -6,6 +6,7 @@ from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
 from zigzag.mapping.TemporalMapping import TemporalMapping
 from zigzag.opt.loma.LomaEngine import LomaEngine
 from zigzag.opt.loma.MemoryAllocator import MemoryAllocator
+from zigzag.opt.loma.multipermute import PermutationConstraint
 from zigzag.stages.Stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
 
@@ -58,23 +59,17 @@ class TemporalMappingGeneratorStage(Stage):
         all_temporal_loops = engine.get_temporal_loops()
         if provided_ordering.is_complete(all_temporal_loops):
             allocator = MemoryAllocator(
-                self.accelerator, self.layer, self.spatial_mapping, provided_ordering.to_legacy_format()
+                self.accelerator, self.layer, self.spatial_mapping, provided_ordering.to_legacy_format() # type: ignore
             )
             temporal_mapping = allocator.run()
             yield temporal_mapping
             return
         else:
-            # Only log if user has provided some incomplete mapping
-            if not provided_ordering.is_empty():
-                logger.warning(
-                    "Provided temporal mapping %s for layer %s is incomplete. It does the mandatory loops %s. Make "
-                    "sure the given spatial and temporal mapping cover the full workload. Generating temporal mapping "
-                    "from scratch.",
-                    provided_ordering,
-                    self.layer.name,
-                    all_temporal_loops,
-                )
+            constraints: list[PermutationConstraint] = provided_ordering.get_constraints()
+            engine.give_constraints(constraints)
 
             # Generate from scratch
             for mapping in engine.run():
                 yield mapping
+        
+    

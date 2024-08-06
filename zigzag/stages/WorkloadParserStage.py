@@ -1,6 +1,7 @@
 import logging
 from typing import Any
 
+from zigzag.datatypes import UnknownUnrollFactor
 from zigzag.parser.MappingValidator import MappingValidator
 from zigzag.parser.workload_factory import WorkloadFactory
 from zigzag.parser.WorkloadValidator import WorkloadValidator
@@ -60,6 +61,9 @@ class WorkloadParserStage(Stage):
         mapping_validator = MappingValidator(mapping_data)
         mapping_data = mapping_validator.normalized_data
         mapping_validate_success = mapping_validator.validate()
+        for temp_map in mapping_data[0]["temporal_ordering"]:
+            if temp_map[1] == "*":
+                temp_map[1] = UnknownUnrollFactor()
         if not mapping_validate_success:
             raise ValueError("Failed to validate user provided mapping.")
         return mapping_data

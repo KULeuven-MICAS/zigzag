@@ -34,7 +34,10 @@
 # of Variables by Prefix Shifts."  Aaron Williams, 2009
 
 
+from abc import ABC
 from typing import Any
+
+from zigzag.datatypes import LayerDim
 
 
 class ListElement:
@@ -49,7 +52,41 @@ class ListElement:
             o = o.next_elem
             i += 1
         return o
+class PermutationConstraint(ABC):
+    """! An abstract class to represent a constraint on a permutation."""
 
+    def is_valid(self, permutation: list[Any]) -> bool:
+        """! Returns True if the permutation satisfies the constraint."""
+        raise NotImplementedError
+
+
+class StaticPositionsConstraint(PermutationConstraint):
+    """! A class to represent a constraint on a permutation that requires a predefined order for some or all elements."""
+
+    static_positions: dict[int, LayerDim]
+
+    def __init__(self, static_positions: dict[int, LayerDim]):
+        self.static_positions = static_positions
+
+    def is_valid(self, permutation: list[Any]) -> bool:
+        for position, item in self.static_positions.items():
+            if permutation[position][0] != item:
+                return False
+        return True
+
+class StaticPositionsAndSizesConstraint(PermutationConstraint):
+    """! A class to represent a constraint on a permutation that requires a predefined order and size for some or all elements."""
+
+    static_positions_and_sizes: dict[int, tuple[LayerDim, int]]
+
+    def __init__(self, static_positions_and_sizes: dict[int, tuple[LayerDim, int]]):
+        self.static_positions_and_sizes = static_positions_and_sizes
+
+    def is_valid(self, permutation: list[Any]) -> bool:
+        for position, (item, size) in self.static_positions_and_sizes.items():
+            if permutation[position][0] != item or permutation[position][1] != size:
+                return False
+        return True
 
 def init(multiset: list[Any]):
     multiset.sort()  # ensures proper non-increasing order
@@ -69,10 +106,11 @@ def visit(h: ListElement) -> list[Any]:
     return this_list
 
 
-def permutations(multiset: list[Any]):
+def permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
     """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
-    yield visit(h)
+    if all([constr.is_valid(visit(h)) for constr in constraints]):
+        yield visit(h)
     while j.next_elem is not None or j.value < h.value:
         if j.next_elem is not None and i.value >= j.next_elem.value:
             s = j
@@ -85,4 +123,5 @@ def permutations(multiset: list[Any]):
             i = t
         j = i.next_elem
         h = t
-        yield visit(h)
+        if all([constr.is_valid(visit(h)) for constr in constraints]):
+             yield visit(h)
