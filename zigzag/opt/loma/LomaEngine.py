@@ -72,10 +72,9 @@ class LomaEngine:
         self.memory_hierarchy = accelerator.get_core(core_id).memory_hierarchy
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
-    
+
     def give_constraints(self, constraints: list[PermutationConstraint]) -> None:
         self.constraints = constraints
-        
 
     def run(self) -> Generator[TemporalMapping, None, None]:
         """! Runs the LomaEngine
@@ -90,7 +89,7 @@ class LomaEngine:
 
         yielded = False
         for ordering in self.ordering_generator():
-            allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering) # type: ignore
+            allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)  # type: ignore
             # using try catch here because in the depth-first mode the highest level might not be big enough
             try:
                 temporal_mapping = allocator.run()  # allocate this ordering to the memories
@@ -215,37 +214,39 @@ class LomaEngine:
             "Launching %s temporal loop order permutations.",
             f"{self.nb_permutations:,}",
         )
-        
-        
+
     def reduce_static_fps(self):
         static_sizes: list[tuple[LayerDim, int]] = []
         for constr in self.constraints:
             if isinstance(constr, StaticPositionsAndSizesConstraint):
                 static_sizes = list(constr.static_positions_and_sizes.values())
         for static_size in static_sizes:
-            factor_list: dict[int, int] = factorint(static_size[1]) # type: ignore
-            for factor, multiplicity in factor_list.items(): # type: ignore
+            factor_list: dict[int, int] = factorint(static_size[1])  # type: ignore
+            for factor, multiplicity in factor_list.items():  # type: ignore
                 index = self.temporal_loop_pfs[static_size[0]].index(factor)
                 if self.temporal_loop_pf_counts[static_size[0]][index] >= multiplicity:
                     self.temporal_loop_pf_counts[static_size[0]] = tuple(
-                        count - multiplicity if i == index else count for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])) # type: ignore
+                        count - multiplicity if i == index else count
+                        for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
+                    )
                     # Add the static size to the count sums
                     if static_size[1] in self.temporal_loop_pfs[static_size[0]]:
                         self.temporal_loop_pf_counts[static_size[0]] = tuple(
-                            count + 1 if i == index else count for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]]) # type: ignore
-                            )
-                    else: 
+                            count + 1 if i == index else count
+                            for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
+                        )
+                    else:
                         self.temporal_loop_pfs[static_size[0]] += (static_size[1],)
                         self.temporal_loop_pf_counts[static_size[0]] += (1,)
-                    self.temporal_loop_pf_count_sums[static_size[0]] -= (multiplicity - 1)
-        
+                    self.temporal_loop_pf_count_sums[static_size[0]] -= multiplicity - 1
+
         lpfs: list[tuple[LayerDim, int]] = []
         for layer_dim, loop in self.temporal_loop_pfs.items():
             for pf, count in zip(loop, self.temporal_loop_pf_counts[layer_dim]):
                 lpfs += list(((layer_dim, pf),) * count)
         self.lpfs = lpfs
-        
-    def find_smallest_non_static_pf(self, layer_dim: LayerDim) -> tuple[int,int]:
+
+    def find_smallest_non_static_pf(self, layer_dim: LayerDim) -> tuple[int, int]:
         static_sizes: list[tuple[LayerDim, int]] = []
         for constr in self.constraints:
             if isinstance(constr, StaticPositionsAndSizesConstraint):
@@ -254,17 +255,21 @@ class LomaEngine:
         smallvalue = 0
         already_first = False
         for i in range(len(self.temporal_loop_pfs[layer_dim])):
-            if self.temporal_loop_pfs[layer_dim][i] not in static_sizes_list or self.temporal_loop_pf_counts[layer_dim][i] > static_sizes_list.count(self.temporal_loop_pfs[layer_dim][i]):
+            if self.temporal_loop_pfs[layer_dim][i] not in static_sizes_list or self.temporal_loop_pf_counts[layer_dim][
+                i
+            ] > static_sizes_list.count(self.temporal_loop_pfs[layer_dim][i]):
                 if already_first:
                     return (smallvalue, i)
-                elif self.temporal_loop_pf_counts[layer_dim][i] > static_sizes_list.count(self.temporal_loop_pfs[layer_dim][i]) + 1:
+                elif (
+                    self.temporal_loop_pf_counts[layer_dim][i]
+                    > static_sizes_list.count(self.temporal_loop_pfs[layer_dim][i]) + 1
+                ):
                     return (i, i)
                 else:
                     smallvalue = i
                     already_first = True
         return (smallvalue, len(self.temporal_loop_pfs[layer_dim]) - 1)
-            
-        
+
     def limit_lpfs(self) -> None:
         """! Function to limit the total number of loop prime factors present in this instance.
         This function scans the lpfs and while the number of lpfs is greater than self.lpf_limit it:
@@ -319,8 +324,6 @@ class LomaEngine:
 
         logger.debug("Limited layer %s to %i lpfs.", self.layer, len(self.lpfs))
         return
-    
-    
 
     def ordering_generator(self) -> Generator[list[tuple[LayerDim, int]], None, None]:
         """! Generator that yields all orderings of the temporal loops."""

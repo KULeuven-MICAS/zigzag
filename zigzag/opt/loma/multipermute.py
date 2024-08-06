@@ -52,6 +52,8 @@ class ListElement:
             o = o.next_elem
             i += 1
         return o
+
+
 class PermutationConstraint(ABC):
     """! An abstract class to represent a constraint on a permutation."""
 
@@ -61,7 +63,8 @@ class PermutationConstraint(ABC):
 
 
 class StaticPositionsConstraint(PermutationConstraint):
-    """! A class to represent a constraint on a permutation that requires a predefined order for some or all elements."""
+    """! A class to represent a constraint on a permutation that requires
+    a predefined order for some or all elements."""
 
     static_positions: dict[int, LayerDim]
 
@@ -74,8 +77,10 @@ class StaticPositionsConstraint(PermutationConstraint):
                 return False
         return True
 
+
 class StaticPositionsAndSizesConstraint(PermutationConstraint):
-    """! A class to represent a constraint on a permutation that requires a predefined order and size for some or all elements."""
+    """! A class to represent a constraint on a permutation
+    that requires a predefined order and size for some or all elements."""
 
     static_positions_and_sizes: dict[int, tuple[LayerDim, int]]
 
@@ -87,6 +92,7 @@ class StaticPositionsAndSizesConstraint(PermutationConstraint):
             if permutation[position][0] != item or permutation[position][1] != size:
                 return False
         return True
+
 
 def init(multiset: list[Any]):
     multiset.sort()  # ensures proper non-increasing order
@@ -124,4 +130,4 @@ def permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
         j = i.next_elem
         h = t
         if all([constr.is_valid(visit(h)) for constr in constraints]):
-             yield visit(h)
+            yield visit(h)

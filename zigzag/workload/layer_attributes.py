@@ -15,7 +15,11 @@ from zigzag.datatypes import (
     UnrollFactor,
     UnrollFactorInt,
 )
-from zigzag.opt.loma.multipermute import PermutationConstraint, StaticPositionsAndSizesConstraint, StaticPositionsConstraint
+from zigzag.opt.loma.multipermute import (
+    PermutationConstraint,
+    StaticPositionsAndSizesConstraint,
+    StaticPositionsConstraint,
+)
 from zigzag.workload.LayerAttribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
@@ -191,7 +195,7 @@ class LayerTemporalOrdering(LayerAttribute):
         """
         self.data = [(LayerDim(str(loop[0])), int(loop[1]) if isinstance(loop[1], int) else None) for loop in data]
         pass
-    
+
     @staticmethod
     def empty():
         return LayerTemporalOrdering([])
@@ -226,13 +230,13 @@ class LayerTemporalOrdering(LayerAttribute):
 
     def to_legacy_format(self):
         return self.data
-    
+
     def get_constraints(self) -> list[PermutationConstraint]:
         static_posistions_dict: dict[int, LayerDim] = {}
         static_posistions_and_sizes_dict: dict[int, tuple[LayerDim, int]] = {}
         outer_loop = False
         for count, (layer_dim, factor) in enumerate(self.data):
-            if (layer_dim.name == '*') and (factor is None):
+            if (layer_dim.name == "*") and (factor is None):
                 outer_loop = True
             elif factor is None:
                 if not outer_loop:

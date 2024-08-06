@@ -84,7 +84,7 @@ class MappingValidator:
             "type": "list",
             "schema": {
                 "type": "list",
-                "items": [{"type": "string"}, {"oneof":[{"type": "integer"}, {"type": "string","allowed": ["*"]}]}],
+                "items": [{"type": "string"}, {"oneof": [{"type": "integer"}, {"type": "string", "allowed": ["*"]}]}],
                 "minlength": 2,
                 "maxlength": 2,
             },

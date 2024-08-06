@@ -59,7 +59,7 @@ class TemporalMappingGeneratorStage(Stage):
         all_temporal_loops = engine.get_temporal_loops()
         if provided_ordering.is_complete(all_temporal_loops):
             allocator = MemoryAllocator(
-                self.accelerator, self.layer, self.spatial_mapping, provided_ordering.to_legacy_format() # type: ignore
+                self.accelerator, self.layer, self.spatial_mapping, provided_ordering.to_legacy_format()  # type: ignore
             )
             temporal_mapping = allocator.run()
             yield temporal_mapping
@@ -71,5 +71,3 @@ class TemporalMappingGeneratorStage(Stage):
             # Generate from scratch
             for mapping in engine.run():
                 yield mapping
-        
-    
