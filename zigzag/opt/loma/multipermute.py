@@ -58,7 +58,8 @@ class PermutationConstraint(ABC):
     """! An abstract class to represent a constraint on a permutation."""
 
     @abstractmethod
-    def is_valid(self, permutation: list[Any]) -> bool: ...
+    def is_valid(self, permutation: list[Any]) -> bool:
+        ...
 
 
 class StaticPositionsConstraint(PermutationConstraint):
@@ -99,7 +100,7 @@ def init(multiset: list[Any]):
 
 
 def visit(h: ListElement) -> list[Any]:
-    """! Converts our bespoke linked list to a python list. hi"""
+    """! Converts our bespoke linked list to a python list."""
     o = h
     this_list: list[Any] = []
     while o is not None:
