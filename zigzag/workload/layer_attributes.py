@@ -194,7 +194,6 @@ class LayerTemporalOrdering(LayerAttribute):
          ['C',  3]]
         """
         self.data = [(LayerDim(str(loop[0])), int(loop[1]) if isinstance(loop[1], int) else None) for loop in data]
-        pass
 
     @staticmethod
     def empty():
@@ -236,7 +235,7 @@ class LayerTemporalOrdering(LayerAttribute):
         static_posistions_and_sizes_dict: dict[int, tuple[LayerDim, int]] = {}
         outer_loop = False
         for count, (layer_dim, factor) in enumerate(self.data):
-            if (layer_dim.name == "*") and (factor is None):
+            if (layer_dim == Constants.UNKNOWN_DIM_OPERATOR) and (factor is None):
                 outer_loop = True
             elif factor is None:
                 if not outer_loop:

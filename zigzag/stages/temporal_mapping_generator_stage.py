@@ -66,7 +66,7 @@ class TemporalMappingGeneratorStage(Stage):
             return
         else:
             constraints: list[PermutationConstraint] = provided_ordering.get_constraints()
-            engine.give_constraints(constraints)
+            engine.set_constraints(constraints)
 
             # Generate from scratch
             for mapping in engine.run():

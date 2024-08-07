@@ -73,7 +73,7 @@ class LomaEngine:
 
         self.show_progress_bar = kwargs.get("loma_show_progress_bar", False)
 
-    def give_constraints(self, constraints: list[PermutationConstraint]) -> None:
+    def set_constraints(self, constraints: list[PermutationConstraint]) -> None:
         self.constraints = constraints
 
     def run(self) -> Generator[TemporalMapping, None, None]:
