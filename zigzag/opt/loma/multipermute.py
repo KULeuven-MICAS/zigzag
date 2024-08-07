@@ -99,7 +99,7 @@ def init(multiset: list[Any]):
 
 
 def visit(h: ListElement) -> list[Any]:
-    """! Converts our bespoke linked list to a python list."""
+    """! Converts our bespoke linked list to a python list. hi"""
     o = h
     this_list: list[Any] = []
     while o is not None:
