@@ -1,5 +1,5 @@
 name: Python test typeguard
-on: [push]
+on: [push, pull_request]
 
 jobs:
   test-typeguard:
