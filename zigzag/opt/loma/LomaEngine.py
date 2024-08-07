@@ -217,28 +217,38 @@ class LomaEngine:
 
     def reduce_static_fps(self):
         static_sizes: list[tuple[LayerDim, int]] = []
-        for constr in self.constraints:
-            if isinstance(constr, StaticPositionsAndSizesConstraint):
-                static_sizes = list(constr.static_positions_and_sizes.values())
-        for static_size in static_sizes:
-            factor_list: dict[int, int] = factorint(static_size[1])  # type: ignore
-            for factor, multiplicity in factor_list.items():  # type: ignore
-                index = self.temporal_loop_pfs[static_size[0]].index(factor)
-                if self.temporal_loop_pf_counts[static_size[0]][index] >= multiplicity:
-                    self.temporal_loop_pf_counts[static_size[0]] = tuple(
-                        count - multiplicity if i == index else count
-                        for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
-                    )
-                    # Add the static size to the count sums
-                    if static_size[1] in self.temporal_loop_pfs[static_size[0]]:
-                        self.temporal_loop_pf_counts[static_size[0]] = tuple(
-                            count + 1 if i == index else count
-                            for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
-                        )
-                    else:
-                        self.temporal_loop_pfs[static_size[0]] += (static_size[1],)
-                        self.temporal_loop_pf_counts[static_size[0]] += (1,)
-                    self.temporal_loop_pf_count_sums[static_size[0]] -= multiplicity - 1
+     try:
+         static_sizes = next(
+                (
+                    v.static_positions_and_sizes.values()
+                    for v in self.constraints
+                    if isinstance(v, StaticPositionsAndSizesConstraint)
+                )
+            )
+     
+          for static_size in static_sizes:
+              factor_list: dict[int, int] = factorint(static_size[1])  # type: ignore
+              for factor, multiplicity in factor_list.items():  # type: ignore
+                  index = self.temporal_loop_pfs[static_size[0]].index(factor)
+                  if self.temporal_loop_pf_counts[static_size[0]][index] >= multiplicity:
+                      self.temporal_loop_pf_counts[static_size[0]] = tuple(
+                          count - multiplicity if i == index else count
+                          for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
+                      )
+                      # Add the static size to the count sums
+                      if static_size[1] in self.temporal_loop_pfs[static_size[0]]:
+                          self.temporal_loop_pf_counts[static_size[0]] = tuple(
+                              count + 1 if i == index else count
+                              for i, count in enumerate(self.temporal_loop_pf_counts[static_size[0]])  # type: ignore
+                          )
+                      else:
+                          self.temporal_loop_pfs[static_size[0]] += (static_size[1],)
+                          self.temporal_loop_pf_counts[static_size[0]] += (1,)
+                      self.temporal_loop_pf_count_sums[static_size[0]] -= multiplicity - 1
+    except StopIteration:
+        # No static sizes
+        pass
+                      
 
         lpfs: list[tuple[LayerDim, int]] = []
         for layer_dim, loop in self.temporal_loop_pfs.items():
