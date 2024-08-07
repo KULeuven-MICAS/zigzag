@@ -112,7 +112,7 @@ def visit(h: ListElement) -> list[Any]:
 def permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
     """! Generator providing all multiset permutations of a multiset."""
     h, i, j = init(multiset)
-    if all([constr.is_valid(visit(h)) for constr in constraints]):
+    if all(constr.is_valid(visit(h)) for constr in constraints):
         yield visit(h)
     while j.next_elem is not None or j.value < h.value:
         if j.next_elem is not None and i.value >= j.next_elem.value:
