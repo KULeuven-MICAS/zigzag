@@ -58,10 +58,12 @@ class PermutationConstraint(ABC):
     """! An abstract class to represent a constraint on a permutation."""
 
     @abstractmethod
-    def is_valid(self, permutation: list[Any]) -> bool: ...
+    def is_valid(self, permutation: list[Any]) -> bool:
+        ...
 
     @abstractmethod
-    def is_empty(self) -> bool: ...
+    def is_empty(self) -> bool:
+        ...
 
 
 class StaticPositionsConstraint(PermutationConstraint):
@@ -118,7 +120,7 @@ def visit(h: ListElement) -> list[Any]:
 
 
 def constrainded_permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
-    """! Generator providing all multiset permutations of a multiset."""
+    """! Generator providing all multiset permutations of a multiset with constraints."""
     h, i, j = init(multiset)
     if all(constr.is_valid(visit(h)) for constr in constraints):
         yield visit(h)
