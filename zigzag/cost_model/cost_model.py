@@ -361,7 +361,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.calc_energy()
         self.calc_latency()
 
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=512)
     def __get_shared_mem_list(
         self,
         mem_op: MemoryOperand,
