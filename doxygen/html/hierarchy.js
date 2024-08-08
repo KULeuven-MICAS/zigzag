@@ -178,6 +178,9 @@ var hierarchy =
       [ "DataDirection", "classarchitecture_1_1memory__port_1_1DataDirection.html", null ],
       [ "MemoryPortType", "classarchitecture_1_1memory__port_1_1MemoryPortType.html", null ]
     ] ],
+    [ "TypedDict", null, [
+      [ "MemoryUtilization", "classzigzag_1_1cost__model_1_1cost__model_1_1MemoryUtilization.html", null ]
+    ] ],
     [ "Validator", null, [
       [ "UpgradedValidator", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator.html", null ]
     ] ]
