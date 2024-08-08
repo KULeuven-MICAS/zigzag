@@ -45,6 +45,11 @@ class ConvParser(ONNXOperatorParser):
         given Layer Attribute, the Layer Attribute is not included in the returned dict.
         """
 
+        predecessors = self.get_node_predecessors()
+        act_precision = self.get_activation_precision()
+        weight_precision = self.get_weight_precision()
+        intermediate_output_precision = self.get_intermediate_output_precision()
+
         data: dict[str, Any] = {}
         data["id"] = self.node_id
         data["name"] = self.node.name
@@ -53,6 +58,7 @@ class ConvParser(ONNXOperatorParser):
         # in the equation.  This is because we construct the dimensionality order and then add the padding to those last
         # dimensions in the order
         data["equation"] = "O[b][g][k][oy][ox]+=W[g][k][c][fy][fx]*I[b][g][c][iy][ix]"
+        data["operand_source"] = self.get_operand_source_user_format(predecessors)
 
         # Get dimension sizes from input parameters
         assert ia_shape[0] == oa_shape[0], "Batch size is different for input and output activations."
@@ -65,6 +71,7 @@ class ConvParser(ONNXOperatorParser):
         size_iy = ia_shape[2]
         size_fx = kernel_shape[0]
         size_fy = kernel_shape[1]
+
         data["loop_dims"] = ["B", "K", "G", "OX", "OY", "C", "FX", "FY"]
         data["loop_sizes"] = [
             batch_size,
@@ -80,13 +87,13 @@ class ConvParser(ONNXOperatorParser):
             f"ix={strides[0]}*ox+{dilations[0]}*fx",
             f"iy={strides[1]}*oy+{dilations[1]}*fy",
         ]
-        data["operand_precision"] = {"O": 16, "O_final": 8, "W": 8, "I": 8}
 
-        # Operand sources
-        predecessors = self.get_node_predecessors()
-        data["operand_source"] = {"W": self.node_id}
-        if len(predecessors) >= 1:
-            data["operand_source"]["I"] = predecessors[0]
+        data["operand_precision"] = {
+            "W": weight_precision,
+            "I": act_precision,
+            "O_final": act_precision,
+            "O": intermediate_output_precision,
+        }
 
         # Add padding information
         data["pr_loop_dims"] = ["IX", "IY"]

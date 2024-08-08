@@ -29,21 +29,6 @@ class GemmParser(ONNXOperatorParser):
         """! Run the parser"""
         return self.generate_layer_node()
 
-    def get_operand_source_user_format(self, predecessors: list[int]):
-        """Set input source and indicate constant operands"""
-        match len(predecessors):
-            case 0:
-                # No source operands -> all are considered constant
-                return {"W": self.node_id, "I": self.node_id}
-            case 1:
-                # One source operand, one constant
-                return {"W": self.node_id, "I": predecessors[0]}
-            case 2:
-                # Two source operands, none are constant (W and I can be swapped)
-                return {"W": predecessors[1], "I": predecessors[0]}
-            case _:
-                raise ValueError("No more than 2 layer predecessors expected")
-
     def get_layer_node_user_format(
         self,
         input_shape: list[int],
