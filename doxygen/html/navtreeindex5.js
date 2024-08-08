@@ -1,5 +1,9 @@
 var NAVTREEINDEX5 =
 {
+"functions_vars_p.html":[2,3,2,13],
+"functions_vars_q.html":[2,3,2,14],
+"functions_vars_r.html":[2,3,2,15],
+"functions_vars_s.html":[2,3,2,16],
 "functions_vars_t.html":[2,3,2,17],
 "functions_vars_u.html":[2,3,2,18],
 "functions_vars_v.html":[2,3,2,19],
@@ -30,9 +34,10 @@ var NAVTREEINDEX5 =
 "memory__level_8py.html":[3,0,0,2,0,6],
 "memory__port_8py.html":[3,0,0,2,0,7],
 "multipermute_8py.html":[3,0,0,4,0,4],
-"multipermute_8py.html#a2878c24d2f169db7fd9b3a8937b58d0e":[3,0,0,4,0,4,4],
-"multipermute_8py.html#a888ad2558d0e38d8a84c49f0898cfe07":[3,0,0,4,0,4,6],
-"multipermute_8py.html#a9d8cb61bc788253555e46157bd64a467":[3,0,0,4,0,4,5],
+"multipermute_8py.html#a2878c24d2f169db7fd9b3a8937b58d0e":[3,0,0,4,0,4,5],
+"multipermute_8py.html#a888ad2558d0e38d8a84c49f0898cfe07":[3,0,0,4,0,4,7],
+"multipermute_8py.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e":[3,0,0,4,0,4,6],
+"multipermute_8py.html#ae159cba3a39da4e02b06e0c45bc8dd90":[3,0,0,4,0,4,4],
 "namespacemembers.html":[1,0],
 "namespacemembers_func.html":[1,1],
 "namespacemembers_vars.html":[1,2],

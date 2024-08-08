@@ -13,6 +13,7 @@ var classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine =
     [ "update_min_lpf_factor", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a846600cefce439f87136dc8525e86969", null ],
     [ "accelerator", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#abad7d445eb555517f300b6de6986a765", null ],
     [ "constraints", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a516d171854a08808880d42484fa737a1", null ],
+    [ "has_constraints", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a0a52aa5a9aab80d1ff48e55e3d186704", null ],
     [ "layer", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a95f2e9e3b2b2d837f962bcfb58a2011e", null ],
     [ "lpf_limit", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#abaf5f317a670bea71ee80c5254732965", null ],
     [ "lpfs", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#a1ed04d46ecd4f94e8eb9b3d9a9a1f1a0", null ],
