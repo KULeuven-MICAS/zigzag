@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#abad7d445eb555517f300b6de6986a765":[2,0,2,5,13,0,3],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,2,5,13,0,2],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html":[2,0,2,6,0],
 "classzigzag_1_1utils_1_1UniqueMessageFilter.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,6,0,0],
@@ -161,7 +160,7 @@ var NAVTREEINDEX4 =
 "classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#ae64f0875afe3067b97ba370b354b9213":[2,0,2,7,3,0,0],
 "cost__model_2____init_____8py.html":[3,0,0,1,0],
 "cost__model_8py.html":[3,0,0,1,1],
-"cost__model_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,1,1,4],
+"cost__model_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,1,1,3],
 "cost__model__imc_8py.html":[3,0,0,1,2],
 "cost__model__imc_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,1,2,1],
 "data__movement_8py.html":[3,0,0,3,1],
@@ -187,8 +186,8 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,3],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,3,2],
 "files.html":[3,0],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
@@ -233,8 +232,8 @@ var NAVTREEINDEX4 =
 "functions_t.html":[2,3,0,19],
 "functions_u.html":[2,3,0,20],
 "functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2,0],
 "functions_vars.html":[2,3,2],
+"functions_vars.html":[2,3,2,0],
 "functions_vars_b.html":[2,3,2,1],
 "functions_vars_c.html":[2,3,2,2],
 "functions_vars_d.html":[2,3,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "functions_vars_o.html":[2,3,2,12],
 "functions_vars_p.html":[2,3,2,13],
 "functions_vars_q.html":[2,3,2,14],
-"functions_vars_r.html":[2,3,2,15]
+"functions_vars_r.html":[2,3,2,15],
+"functions_vars_s.html":[2,3,2,16]
 };

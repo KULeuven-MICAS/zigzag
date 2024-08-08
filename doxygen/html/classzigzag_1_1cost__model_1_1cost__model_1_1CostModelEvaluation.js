@@ -49,7 +49,7 @@ var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
     [ "mem_energy_breakdown_further", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a6177a49df9115c373128fd4f2be5e94e", null ],
     [ "mem_hierarchy_dict", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa192ec0feee472fb02654eb92fc5d878", null ],
     [ "mem_level_list", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#af329035d3add361f02f65c7add64435a", null ],
-    [ "mem_sharing_tuple", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#adbde13addf059371be1ee9084cbd9813", null ],
+    [ "mem_sharing_list", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a11ac1508f800047958376085487533c3", null ],
     [ "mem_size_dict", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9de9f586c3351a83ff68606239babab3", null ],
     [ "mem_updating_window_union_collect", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5a028d7422c2015e9a9f6e7dae7924b0", null ],
     [ "mem_utili_individual", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0c53fbb91c880ae99bd7092d27148bfb", null ],

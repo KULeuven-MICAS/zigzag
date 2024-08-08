@@ -1,4 +1,4 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,60,32"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1utils_1_1UniqueMessageFilter.html" title="Prevents the logger from filtering duplicate messages." alt="" coords="108,5,267,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,5,85,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator.html" title="Subclass of Cerberus&#39;s Validator that adds some custom types and allows for the document to be a top&#45;..." alt="" coords="133,5,276,32"/>
 </map>
