@@ -1,6 +1,9 @@
 import logging
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
+from functools import lru_cache
 from math import ceil
+from typing import TypedDict
 
 import numpy as np
 
@@ -18,6 +21,11 @@ from zigzag.utils import json_repr_handler, pickle_deepcopy
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
+
+
+class MemoryUtilization(TypedDict):
+    individual: dict[LayerOperand, list[float]]
+    shared: dict[LayerOperand, list[float]]
 
 
 class CostModelEvaluationABC(metaclass=ABCMeta):
@@ -316,7 +324,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mem_size_dict = core.mem_size_dict
         self.mem_r_bw_dict, self.mem_w_bw_dict = core.get_memory_bw_dict()
         self.mem_r_bw_min_dict, self.mem_w_bw_min_dict = core.get_memory_bw_min_dict()
-        self.mem_sharing_list = core.mem_sharing_list
+        self.mem_sharing_tuple = tuple(tuple(i.items()) for i in core.mem_sharing_list)
         self.memory_operand_links = layer.memory_operand_links
 
         self.cumulative_layer_ids: list[int] = []  # In case the CME results from adding other CMEs together
@@ -353,20 +361,19 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.calc_energy()
         self.calc_latency()
 
+    @lru_cache(maxsize=None)
     def __get_shared_mem_list(
         self,
         mem_op: MemoryOperand,
         mem_lv: int,
-        memory_sharing_list: list[dict[MemoryOperand, int]],
-    ) -> list[tuple[MemoryOperand, int]] | None:
+    ) -> tuple[tuple[MemoryOperand, int], ...] | None:
         """! Given a certain operand's storage level (for example (A,1): operand A's 1st memory level),
         return a list of the rest operand's storage levels that share physical memory with the former one (A1)
         """
-        for mem_share_group in memory_sharing_list:
-            mem_share_grp = list(mem_share_group.items())
-            mem_target = (mem_op, mem_lv)
-            if mem_target in mem_share_grp:
-                return mem_share_grp
+        for mem_share_group in self.mem_sharing_tuple:
+            if (mem_op, mem_lv) in mem_share_group:
+                return mem_share_group
+        return None
 
     def __calc_mem_updating_window_union(self, port_duty_list: list[PortActivity]) -> int:
         """!  This function calculates the union length of all the share-port MUW (memory updating window).
@@ -414,154 +421,125 @@ class CostModelEvaluation(CostModelEvaluationABC):
         return union * input_dict[max_period_operand]["PC"]
 
     def calc_memory_utilization(self) -> None:
-        """! Calculate occupancy for each physical memory based on the mapping."""
-        # mem_utili_individual: the memory utilization of each operand individually.
-        # mem_utili_shared: the memory utilization taking operand memory sharing into consideration.
-        mem_utilization_individual: dict[LayerOperand, list[float]] = {}
-        effective_mem_utilization_individual: dict[LayerOperand, list[float]] = {}
+        mem_utilization: MemoryUtilization = {
+            "individual": defaultdict(list),
+            "shared": defaultdict(list),
+        }
+        effective_mem_utilization: MemoryUtilization = {
+            "individual": defaultdict(list),
+            "shared": defaultdict(list),
+        }
+
         for layer_op in self.layer.layer_operands:
-            mem_utilization_individual[layer_op] = []
-            effective_mem_utilization_individual[layer_op] = []
+            mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)
             for mem_lv in range(self.active_mem_level[layer_op]):
-                mem_utilization = (
-                    self.mapping.data_bit_per_level_unrolled[layer_op][mem_lv + 1]
-                    / self.mem_size_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
+                mem_utilization["individual"][layer_op].append(
+                    self.mapping.data_bit_per_level_unrolled[layer_op][mem_lv + 1] / self.mem_size_dict[mem_op][mem_lv]
                 )
-                assert mem_utilization <= 1, (
-                    f"Operand {layer_op} memory level {mem_lv}'s individual memory utilization is "
-                    f"{mem_utilization}, which is larger than 1 "
-                    f"(memory level starts from 0)"
+                effective_mem_utilization["individual"][layer_op].append(
+                    self.mapping.effective_data_bit[layer_op][mem_lv + 1] / self.mem_size_dict[mem_op][mem_lv]
                 )
-                mem_utilization_individual[layer_op].append(mem_utilization)
 
-                # if we do not count copied data in parallel memories as effective, what is the utilization then? =>
-                effective_mem_utilization = (
-                    self.mapping.effective_data_bit[layer_op][mem_lv + 1]
-                    / self.mem_size_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                )
-                effective_mem_utilization_individual[layer_op].append(effective_mem_utilization)
+        mem_utili_shared = pickle_deepcopy(mem_utilization["individual"])
+        effective_mem_utilization_shared = pickle_deepcopy(effective_mem_utilization["individual"])
 
-        mem_utili_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(mem_utilization_individual)
-        effective_mem_utilization_shared: dict[LayerOperand, list[float]] = pickle_deepcopy(
-            effective_mem_utilization_individual
-        )
-        for mem_share_dict in self.mem_sharing_list:
-            mem_utilization = 0
-            effective_mem_utilization = 0
-            for mem_op, mem_lv in mem_share_dict.items():
-                # mem to layer op might not contain this mem op (e.g. pooling layer)
-                if self.memory_operand_links.contains_mem_op(mem_op):
-                    layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                    mem_utilization += mem_utilization_individual[layer_op][mem_lv]
-                    effective_mem_utilization += effective_mem_utilization_individual[layer_op][mem_lv]
-            assert mem_utilization <= 1, (
-                f"Memory shared by {mem_share_dict} (memory operand, memory level) has shared utilization of "
-                f"{mem_utilization}, which is > 1 "
-                f"(memory level starts from 0)."
+        for mem_share_dict in self.mem_sharing_tuple:
+            mem_utilization_sum = sum(
+                mem_utilization["individual"][self.memory_operand_links.mem_to_layer_op(mem_op)][mem_lv]
+                for mem_op, mem_lv in mem_share_dict
+                if self.memory_operand_links.contains_mem_op(mem_op)
             )
-            for mem_op, mem_lv in mem_share_dict.items():
+            effective_mem_utilization_sum = sum(
+                effective_mem_utilization["individual"][self.memory_operand_links.mem_to_layer_op(mem_op)][mem_lv]
+                for mem_op, mem_lv in mem_share_dict
+                if self.memory_operand_links.contains_mem_op(mem_op)
+            )
+
+            for mem_op, mem_lv in mem_share_dict:
                 if self.memory_operand_links.contains_mem_op(mem_op):
                     layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-                    mem_utili_shared[layer_op][mem_lv] = mem_utilization
-                    effective_mem_utilization_shared[layer_op][mem_lv] = effective_mem_utilization
+                    mem_utili_shared[layer_op][mem_lv] = mem_utilization_sum
+                    effective_mem_utilization_shared[layer_op][mem_lv] = effective_mem_utilization_sum
 
-        self.mem_utili_individual = mem_utilization_individual
+        self.mem_utili_individual = mem_utilization["individual"]
         self.mem_utili_shared = mem_utili_shared
-        self.effective_mem_utili_individual = effective_mem_utilization_individual
+        self.effective_mem_utili_individual = effective_mem_utilization["individual"]
         self.effective_mem_utili_shared = effective_mem_utilization_shared
 
     def calc_memory_word_access(self) -> None:
-        """! Calculates the memory word access based on unit memory's data element move count and the physical
-        memory bw."""
-        memory_word_access: dict[LayerOperand, list[MemoryAccesses]] = {}
+        memory_word_access: dict[LayerOperand, list[MemoryAccesses]] = defaultdict(list)
+
         for layer_op in self.layer.layer_operands:
-            memory_word_access[layer_op] = []
+            mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)
             for mem_lv in range(self.mapping.mem_level[layer_op]):
-                # wr_in_by_low
-                data_elem_move_per_period = self.mapping.unit_mem_data_movement[layer_op][
-                    mem_lv
-                ].data_trans_amount_per_period.wr_in_by_low
-                data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_low
-                if data_elem_move_per_period == 0 or data_precision == 0:
-                    wr_in_by_low: int = 0
-                else:
-                    total_period_count = self.mapping.unit_mem_data_movement[layer_op][
-                        mem_lv
-                    ].data_trans_period_count.wr_in_by_low
-                    max_bw = self.mem_w_bw_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    min_bw = self.mem_w_bw_min_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    wr_in_by_low = int(
-                        ceil((data_elem_move_per_period * data_precision) / min_bw)
-                        * (min_bw / max_bw)
-                        * total_period_count
-                        * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
-                    )
+                data_elem_move = self.mapping.unit_mem_data_movement[layer_op][mem_lv]
+                max_bw = self.mem_w_bw_dict[mem_op][mem_lv]
+                min_bw = self.mem_w_bw_min_dict[mem_op][mem_lv]
 
-                # rd_out_to_low
-                data_elem_move_per_period = self.mapping.unit_mem_data_movement[layer_op][
-                    mem_lv
-                ].data_trans_amount_per_period.rd_out_to_low
-                data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.rd_out_to_low
-                if data_elem_move_per_period == 0 or data_precision == 0:
-                    rd_out_to_low: int = 0
-                else:
-                    total_period_count = self.mapping.unit_mem_data_movement[layer_op][
-                        mem_lv
-                    ].data_trans_period_count.rd_out_to_low
-                    max_bw = self.mem_r_bw_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    min_bw = self.mem_r_bw_min_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    rd_out_to_low = int(
-                        ceil((data_elem_move_per_period * data_precision) / min_bw)
-                        * (min_bw / max_bw)
-                        * total_period_count
-                        * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
-                    )
+                wr_in_by_low = self._calc_memory_access(
+                    data_elem_move.data_trans_amount_per_period.wr_in_by_low,
+                    data_elem_move.data_precision.wr_in_by_low,
+                    data_elem_move.data_trans_period_count.wr_in_by_low,
+                    max_bw,
+                    min_bw,
+                    layer_op,
+                    mem_lv,
+                )
 
-                # rd_out_to_high
-                data_elem_move_per_period = self.mapping.unit_mem_data_movement[layer_op][
-                    mem_lv
-                ].data_trans_amount_per_period.rd_out_to_high
-                if data_elem_move_per_period == 0:
-                    rd_out_to_high: int = 0
-                else:
-                    data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.rd_out_to_high
-                    total_period_count = self.mapping.unit_mem_data_movement[layer_op][
-                        mem_lv
-                    ].data_trans_period_count.rd_out_to_high
-                    max_bw = self.mem_r_bw_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    min_bw = self.mem_r_bw_min_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    rd_out_to_high = int(
-                        ceil((data_elem_move_per_period * data_precision) / min_bw)
-                        * (min_bw / max_bw)
-                        * total_period_count
-                        * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
-                    )
+                rd_out_to_low = self._calc_memory_access(
+                    data_elem_move.data_trans_amount_per_period.rd_out_to_low,
+                    data_elem_move.data_precision.rd_out_to_low,
+                    data_elem_move.data_trans_period_count.rd_out_to_low,
+                    self.mem_r_bw_dict[mem_op][mem_lv],
+                    self.mem_r_bw_min_dict[mem_op][mem_lv],
+                    layer_op,
+                    mem_lv,
+                )
 
-                # wr_in_by_high
-                data_elem_move_per_period = self.mapping.unit_mem_data_movement[layer_op][
-                    mem_lv
-                ].data_trans_amount_per_period.wr_in_by_high
-                if data_elem_move_per_period == 0:
-                    wr_in_by_high: int = 0
-                else:
-                    data_precision = self.mapping.unit_mem_data_movement[layer_op][mem_lv].data_precision.wr_in_by_high
-                    total_period_count = self.mapping.unit_mem_data_movement[layer_op][
-                        mem_lv
-                    ].data_trans_period_count.wr_in_by_high
-                    max_bw = self.mem_w_bw_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    min_bw = self.mem_w_bw_min_dict[self.memory_operand_links.layer_to_mem_op(layer_op)][mem_lv]
-                    wr_in_by_high = int(
-                        ceil((data_elem_move_per_period * data_precision) / min_bw)
-                        * (min_bw / max_bw)
-                        * total_period_count
-                        * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
-                    )
+                rd_out_to_high = self._calc_memory_access(
+                    data_elem_move.data_trans_amount_per_period.rd_out_to_high,
+                    data_elem_move.data_precision.rd_out_to_high,
+                    data_elem_move.data_trans_period_count.rd_out_to_high,
+                    self.mem_r_bw_dict[mem_op][mem_lv],
+                    self.mem_r_bw_min_dict[mem_op][mem_lv],
+                    layer_op,
+                    mem_lv,
+                )
 
-                # All
-                memory_word_access_single = MemoryAccesses(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
-                memory_word_access[layer_op].append(memory_word_access_single)
+                wr_in_by_high = self._calc_memory_access(
+                    data_elem_move.data_trans_amount_per_period.wr_in_by_high,
+                    data_elem_move.data_precision.wr_in_by_high,
+                    data_elem_move.data_trans_period_count.wr_in_by_high,
+                    max_bw,
+                    min_bw,
+                    layer_op,
+                    mem_lv,
+                )
+
+                memory_word_access[layer_op].append(
+                    MemoryAccesses(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
+                )
 
         self.memory_word_access = memory_word_access
+
+    def _calc_memory_access(
+        self,
+        data_elem_move_per_period: int,
+        data_precision: int,
+        total_period_count: int,
+        max_bw: int,
+        min_bw: int,
+        layer_op: LayerOperand,
+        mem_lv: int,
+    ) -> int:
+        if data_elem_move_per_period == 0 or data_precision == 0:
+            return 0
+        return int(
+            ceil((data_elem_move_per_period * data_precision) / min_bw)
+            * (min_bw / max_bw)
+            * total_period_count
+            * self.mapping.spatial_mapping.unit_count[layer_op][mem_lv + 1]
+        )
 
     def calc_energy(self) -> None:
         """! Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing
@@ -673,7 +651,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     <= 1 - self.effective_mem_utili_shared[layer_op][mem_lv]
                 ):
                     double_buffer_true[layer_op].append(True)
-                    shared_mem_list = self.__get_shared_mem_list(mem_op, mem_lv, self.mem_sharing_list)
+                    shared_mem_list = self.__get_shared_mem_list(mem_op, mem_lv)
                     # When one of the operand in the shared memory get the "double-buffer" chance,
                     # all operands of that shared memory level need to update the memory utilization
                     # for later memory free space evaluation
@@ -984,9 +962,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
         }
         self.data_offloading_cc_per_op: dict[str, int | float] = {}
 
-        for mem_instance in self.mem_level_list:
-            data_loading_per_port = {port: self.calc_loading_single_port(port) for port in mem_instance.port_list}
-            data_offloading_per_port = {port: self.calc_offloading_single_port(port) for port in mem_instance.port_list}
+        for mem_level in self.mem_level_list:
+            data_loading_per_port = {port: self.calc_loading_single_port(port) for port in mem_level.port_list}
+            data_offloading_per_port = {port: self.calc_offloading_single_port(port) for port in mem_level.port_list}
             self.data_loading_per_mem_inst.append(data_loading_per_port)
             self.data_offloading_per_mem_inst.append(data_offloading_per_port)
 
