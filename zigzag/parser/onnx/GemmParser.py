@@ -33,8 +33,8 @@ class GemmParser(ONNXOperatorParser):
         """Set input source and indicate constant operands"""
         match len(predecessors):
             case 0:
-                # No source operands -> assume one is constant
-                return {"W": self.node_id}
+                # No source operands -> all are considered constant
+                return {"W": self.node_id, "I": self.node_id}
             case 1:
                 # One source operand, one constant
                 return {"W": self.node_id, "I": predecessors[0]}
