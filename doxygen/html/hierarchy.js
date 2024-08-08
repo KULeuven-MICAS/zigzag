@@ -137,6 +137,12 @@ var hierarchy =
     [ "TemporalMapping", "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html", null ],
     [ "WorkloadFactory", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory.html", null ],
     [ "WorkloadValidator", "classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator.html", null ],
+    [ "ABC", null, [
+      [ "PermutationConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html", [
+        [ "StaticPositionsAndSizesConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html", null ],
+        [ "StaticPositionsConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html", null ]
+      ] ]
+    ] ],
     [ "ABCMeta", null, [
       [ "OperationalArrayABC", "classarchitecture_1_1operational__array_1_1OperationalArrayABC.html", null ],
       [ "CostModelEvaluationABC", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html", null ],

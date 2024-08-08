@@ -96,6 +96,15 @@ $(document).ready(function(){initNavTree('namespacezigzag_1_1opt_1_1loma_1_1mult
 Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html">ListElement</a></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html">PermutationConstraint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">An abstract class to represent a constraint on a permutation.  <a href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html">StaticPositionsConstraint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class to represent a constraint on a permutation that requires a predefined order for some or all elements.  <a href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html">StaticPositionsAndSizesConstraint</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A class to represent a constraint on a permutation that requires a predefined order and size for some or all elements.  <a href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -104,9 +113,9 @@ Functions</h2></td></tr>
 <tr class="memitem:a888ad2558d0e38d8a84c49f0898cfe07"><td class="memItemLeft" align="right" valign="top">list[Any]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a888ad2558d0e38d8a84c49f0898cfe07">visit</a> (<a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html">ListElement</a> h)</td></tr>
 <tr class="memdesc:a888ad2558d0e38d8a84c49f0898cfe07"><td class="mdescLeft">&#160;</td><td class="mdescRight">Converts our bespoke linked list to a python list.  <a href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a888ad2558d0e38d8a84c49f0898cfe07">More...</a><br /></td></tr>
 <tr class="separator:a888ad2558d0e38d8a84c49f0898cfe07"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf46ca90c8f5a34ff3b9a8aa2bfbc96e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e">permutations</a> (list[Any] multiset)</td></tr>
-<tr class="memdesc:abf46ca90c8f5a34ff3b9a8aa2bfbc96e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generator providing all multiset permutations of a multiset.  <a href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e">More...</a><br /></td></tr>
-<tr class="separator:abf46ca90c8f5a34ff3b9a8aa2bfbc96e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d8cb61bc788253555e46157bd64a467"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a9d8cb61bc788253555e46157bd64a467">permutations</a> (list[Any] multiset, list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html">PermutationConstraint</a>] constraints)</td></tr>
+<tr class="memdesc:a9d8cb61bc788253555e46157bd64a467"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generator providing all multiset permutations of a multiset.  <a href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a9d8cb61bc788253555e46157bd64a467">More...</a><br /></td></tr>
+<tr class="separator:a9d8cb61bc788253555e46157bd64a467"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
 <a id="a2878c24d2f169db7fd9b3a8937b58d0e"></a>
@@ -130,15 +139,15 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_a2878c24d2f169db7fd9b3a8937b58d0e_icgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a2878c24d2f169db7fd9b3a8937b58d0e_icgraph" alt=""/></div>
 <map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a2878c24d2f169db7fd9b3a8937b58d0e_icgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a2878c24d2f169db7fd9b3a8937b58d0e_icgraph">
 <area shape="rect" title=" " alt="" coords="441,13,484,39"/>
-<area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
+<area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a9d8cb61bc788253555e46157bd64a467" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,5,236,47"/>
 </map>
 </div>
 
 </div>
 </div>
-<a id="abf46ca90c8f5a34ff3b9a8aa2bfbc96e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf46ca90c8f5a34ff3b9a8aa2bfbc96e">&#9670;&nbsp;</a></span>permutations()</h2>
+<a id="a9d8cb61bc788253555e46157bd64a467"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d8cb61bc788253555e46157bd64a467">&#9670;&nbsp;</a></span>permutations()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,8 +156,18 @@ Here is the caller graph for this function:</div>
           <td class="memname">def zigzag.opt.loma.multipermute.permutations </td>
           <td>(</td>
           <td class="paramtype">list[Any]&#160;</td>
-          <td class="paramname"><em>multiset</em></td><td>)</td>
+          <td class="paramname"><em>multiset</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">list[<a class="el" href="classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html">PermutationConstraint</a>]&#160;</td>
+          <td class="paramname"><em>constraints</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -157,8 +176,8 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_cgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_cgraph" alt=""/></div>
-<map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_cgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_cgraph">
+<div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_cgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_cgraph" alt=""/></div>
+<map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_cgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_cgraph">
 <area shape="rect" title="Generator providing all multiset permutations of a multiset." alt="" coords="5,31,115,57"/>
 <area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a2878c24d2f169db7fd9b3a8937b58d0e" title=" " alt="" coords="167,5,209,32"/>
 <area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a888ad2558d0e38d8a84c49f0898cfe07" title="Converts our bespoke linked list to a python list." alt="" coords="163,56,213,83"/>
@@ -167,8 +186,8 @@ Here is the call graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_icgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_icgraph" alt=""/></div>
-<map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_icgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_abf46ca90c8f5a34ff3b9a8aa2bfbc96e_icgraph">
+<div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_icgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_icgraph" alt=""/></div>
+<map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_icgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a9d8cb61bc788253555e46157bd64a467_icgraph">
 <area shape="rect" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,5,236,47"/>
 </map>
@@ -199,7 +218,7 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="namespacezigzag_1_1opt_1_1loma_1_1multipermute_a888ad2558d0e38d8a84c49f0898cfe07_icgraph.png" border="0" usemap="#anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a888ad2558d0e38d8a84c49f0898cfe07_icgraph" alt=""/></div>
 <map name="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a888ad2558d0e38d8a84c49f0898cfe07_icgraph" id="anamespacezigzag_1_1opt_1_1loma_1_1multipermute_a888ad2558d0e38d8a84c49f0898cfe07_icgraph">
 <area shape="rect" title="Converts our bespoke linked list to a python list." alt="" coords="441,13,492,39"/>
-<area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
+<area shape="rect" href="namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a9d8cb61bc788253555e46157bd64a467" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
 <area shape="rect" href="classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,5,236,47"/>
 </map>
 </div>

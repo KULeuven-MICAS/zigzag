@@ -105,7 +105,10 @@ var annotated_dup =
             [ "MemoryAllocator", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator" ]
           ] ],
           [ "multipermute", "namespacezigzag_1_1opt_1_1loma_1_1multipermute.html", [
-            [ "ListElement", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement" ]
+            [ "ListElement", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement" ],
+            [ "PermutationConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint" ],
+            [ "StaticPositionsConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint" ],
+            [ "StaticPositionsAndSizesConstraint", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint" ]
           ] ]
         ] ],
         [ "salsa", "namespacezigzag_1_1opt_1_1salsa.html", [

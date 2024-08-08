@@ -1,0 +1,6 @@
+<map id="PermutationConstraint" name="PermutationConstraint">
+<area shape="rect" id="node1" title="An abstract class to represent a constraint on a permutation." alt="" coords="161,80,331,107"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html" title="A class to represent a constraint on a permutation that requires a predefined order and size for some..." alt="" coords="5,155,249,181"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html" title="A class to represent a constraint on a permutation that requires a predefined order for some or all e..." alt="" coords="273,155,459,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="221,5,271,32"/>
+</map>

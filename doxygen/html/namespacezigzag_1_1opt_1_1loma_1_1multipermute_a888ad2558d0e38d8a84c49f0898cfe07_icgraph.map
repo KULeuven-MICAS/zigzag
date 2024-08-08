@@ -1,5 +1,5 @@
 <map id="visit" name="visit">
 <area shape="rect" id="node1" title="Converts our bespoke linked list to a python list." alt="" coords="441,13,492,39"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#a9d8cb61bc788253555e46157bd64a467" title="Generator providing all multiset permutations of a multiset." alt="" coords="284,13,393,39"/>
 <area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,5,236,47"/>
 </map>
