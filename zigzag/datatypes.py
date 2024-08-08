@@ -1,6 +1,6 @@
 import re
 from abc import ABCMeta
-from typing import Any, TypeAlias
+from typing import Any, Literal, TypeAlias
 
 import numpy as np
 
@@ -100,11 +100,13 @@ class Constants:
 
     MEM_OP_1 = MemoryOperand(AcceleratorValidator.MEM_OP_1_STR)
     MEM_OP_2 = MemoryOperand(AcceleratorValidator.MEM_OP_2_STR)
+    UNKNOWN_DIM_OPERATOR = LayerDim("*")
 
 
 ###### Type aliases ######
+UnknownUnrollFactor: TypeAlias = Literal["*"]
 UnrollFactor: TypeAlias = int | float
-UnrollFactorInt: TypeAlias = int
+UnrollFactorInt: TypeAlias = int | UnknownUnrollFactor
 
 PrLoop: TypeAlias = dict[LayerDim, tuple[LayerDim, LayerDim]]
 LoopList: TypeAlias = list[LayerDim]

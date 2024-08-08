@@ -15,6 +15,11 @@ from zigzag.datatypes import (
     UnrollFactor,
     UnrollFactorInt,
 )
+from zigzag.opt.loma.multipermute import (
+    PermutationConstraint,
+    StaticPositionsAndSizesConstraint,
+    StaticPositionsConstraint,
+)
 from zigzag.workload.LayerAttribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
@@ -188,7 +193,7 @@ class LayerTemporalOrdering(LayerAttribute):
         [['K', 12],
          ['C',  3]]
         """
-        self.data = [(LayerDim(str(loop[0])), int(loop[1])) for loop in data]
+        self.data = [(LayerDim(str(loop[0])), int(loop[1]) if isinstance(loop[1], int) else None) for loop in data]
 
     @staticmethod
     def empty():
@@ -201,7 +206,10 @@ class LayerTemporalOrdering(LayerAttribute):
         """Return wether this temporal ordering matches the given, mandatory loop sizes"""
         all_loops: defaultdict[LayerDim, UnrollFactor] = defaultdict(lambda: 1)
         for layer_dim, factor in self.data:
-            all_loops[layer_dim] *= factor
+            if not isinstance(factor, int):
+                return False
+            else:
+                all_loops[layer_dim] *= factor
 
         for layer_dim in all_loops:
             if all_loops[layer_dim] == 1:
@@ -221,6 +229,27 @@ class LayerTemporalOrdering(LayerAttribute):
 
     def to_legacy_format(self):
         return self.data
+
+    def get_constraints(self) -> list[PermutationConstraint]:
+        static_posistions_dict: dict[int, LayerDim] = {}
+        static_posistions_and_sizes_dict: dict[int, tuple[LayerDim, int]] = {}
+        outer_loop = False
+        for count, (layer_dim, factor) in enumerate(self.data):
+            if (layer_dim == Constants.UNKNOWN_DIM_OPERATOR) and (factor is None):
+                outer_loop = True
+            elif factor is None:
+                if not outer_loop:
+                    static_posistions_dict[count] = layer_dim
+                else:
+                    static_posistions_dict[count - len(self.data)] = layer_dim
+            else:
+                if not outer_loop:
+                    static_posistions_and_sizes_dict[count] = (layer_dim, factor)
+                else:
+                    static_posistions_and_sizes_dict[count - len(self.data)] = (layer_dim, factor)
+        static_positions = StaticPositionsConstraint(static_posistions_dict)
+        static_posistions_and_sizes = StaticPositionsAndSizesConstraint(static_posistions_and_sizes_dict)
+        return [static_positions, static_posistions_and_sizes]
 
 
 class LayerPadding(LayerAttribute):
