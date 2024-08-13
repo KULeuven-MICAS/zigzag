@@ -6,8 +6,6 @@ from onnx import ModelProto
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-
-# from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.stages.exploit_data_locality_stages import (
     ExploitInterLayerDataLocalityStage,
@@ -30,7 +28,7 @@ def get_hardware_performance_zigzag(
     mapping: str,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
-    pickle_filename: str = "outputs/list_of_cmes.pickle",
+    pickle_filename: str | None = None,
     lpf_limit: int = 6,
     nb_spatial_mappings_generated: int = 3,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
@@ -45,6 +43,8 @@ def get_hardware_performance_zigzag(
     @nb_spatial_mappings_generated Max nb of spatial mappings that are automatically generated in
         SpatialMappingGeneratorStage
     """
+
+    pickle_filename = f"{dump_folder}/list_of_cmes.pickle" if pickle_filename is None else pickle_filename
 
     # Initialize the logger
     logging_level = logging.INFO
@@ -81,7 +81,6 @@ def get_hardware_performance_zigzag(
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -156,7 +155,6 @@ def get_hardware_performance_zigzag_imc(
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -233,7 +231,6 @@ def get_hardware_performance_zigzag_with_exploit_data_locality(
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
@@ -306,7 +303,6 @@ def get_hardware_performance_zigzag_with_mix_spatial_mapping(
             SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
             opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
             TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            # TemporalOrderingConversionStage,  # Parse user-defined fixed temporal mapping order
             CostModelStage,  # Evaluate generated SM and TM through cost model
         ],
         accelerator=accelerator,  # required by AcceleratorParserStage
