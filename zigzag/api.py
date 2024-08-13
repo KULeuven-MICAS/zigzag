@@ -16,6 +16,7 @@ from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
 from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
 from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
+from zigzag.stages.Stage import StageCallable
 from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
 from zigzag.stages.VisualizationStage import VisualizationStage
 from zigzag.stages.WorkloadParserStage import WorkloadParserStage
@@ -26,24 +27,31 @@ def get_hardware_performance_zigzag(
     workload: str | ModelProto,
     accelerator: str,
     mapping: str,
+    *,
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str | None = None,
     lpf_limit: int = 6,
     nb_spatial_mappings_generated: int = 3,
+    in_memory_compute: bool = False,
+    exploit_data_locality: bool = False,
+    enable_mix_spatial_mapping: bool = False,
 ) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """! Function of deriving the accelerator cost (both digital and in-memory-computing cores are supported)
-    @param workload Either a filepath to the workload ONNX or yaml file, an ONNX model
-    @param accelerator Filepath to accelerator yaml file
-    @param mapping Filepath to mapping yaml file
-    @param opt Optimization criterion: either `energy`, `latency` or `EDP`
-    @param dump_filename_pattern Filename pattern for file dumps
-    @param pickle_filename Filename of pickle dump
-    @lpf_limit
-    @nb_spatial_mappings_generated Max nb of spatial mappings that are automatically generated in
-        SpatialMappingGeneratorStage
+    """! ZigZag API: estimates the cost of running the given workload on the given hardware architecture.
+    @param workload Either a filepath to the workload ONNX or yaml file, an ONNX model.
+    @param accelerator Filepath to accelerator yaml file.
+    @param mapping Filepath to mapping yaml file.
+    @param opt Optimization criterion: either `energy`, `latency` or `EDP`.
+    @param dump_folder Folder where outputs will be saved.
+    @param pickle_filename Filename of pickle dump.
+    @param lpf_limit Determines the number of temporal unrollings that are evaluated.
+    @param nb_spatial_mappings_generated Max nb of spatial mappings automatically generated (if not provided in
+        mapping).
+    @param in_memory_compute Optimizes the run for IMC architectures.
+    @param exploit_data_locality Iff true, an attempt will be made to keep data in lower-level memory in between layers
+    @param enable_mix_spatial_mapping Wether `mixed` spatial mappings will be generated, i.e. unrolling multiple Layer
+        Dimensions in a single Operational Array Dimension.
     """
-
     pickle_filename = f"{dump_folder}/list_of_cmes.pickle" if pickle_filename is None else pickle_filename
 
     # Initialize the logger
@@ -62,115 +70,67 @@ def get_hardware_performance_zigzag(
             raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
 
     # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or (workload.split(".")[-1] == "onnx"):
-        workload_parser_stage = ONNXModelParserStage
-    else:
-        workload_parser_stage = WorkloadParserStage
-
-    mainstage = MainStage(
-        [  # Initialize the MainStage as entry point
-            workload_parser_stage,  # Parse the ONNX Model into the workload
-            AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-            SimpleSaveStage,  # Save the summed CME energy and latency to a json
-            PickleSaveStage,  # Save all received CMEs in a list to a pickle file
-            SumStage,  # Sum up the received best CME across all layers of the workload
-            WorkloadStage,  # Iterate through the different layers in the workload
-            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            CompleteSaveStage,  # Save each processed layer to a json
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            CostModelStage,  # Evaluate generated SM and TM through cost model
-        ],
-        accelerator=accelerator,  # required by AcceleratorParserStage
-        workload=workload,  # required by workload_parser_stage
-        mapping=mapping,  # required by workload_parser_stage
-        dump_folder=dump_folder,  # output file save pattern
-        pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=lpf_limit,  # required by TemporalMappingGeneratorStage
-        loma_show_progress_bar=True,
-        # Max nb of spatial mappings that are automatically generated in SpatialMappingGeneratorStage
-        nb_mappings_generated=nb_spatial_mappings_generated,
-        # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
-        enable_mix_spatial_mapping_generation=False,
-        # If we need access the same input data multiple times from the innermost memory level and the data size is
-        # smaller than the memory read bw,
-        # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
-        # long as it is needed).
-        # By default, if the parameter is not defined, it will be set as False internally.
-        access_same_data_considered_as_no_access=True,
+    workload_parser_stage = (
+        ONNXModelParserStage
+        if isinstance(workload, ModelProto) or (workload.split(".")[-1] == "onnx")
+        else WorkloadParserStage
     )
 
-    # Launch the MainStage
-    cmes = mainstage.run()
+    # Add stages to keep whole layers in lower level memory instead of rewriting to DRAM, if possible
+    do_exploint_inter_layer_locality = in_memory_compute or exploit_data_locality
+    # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
+    do_mix_spatial_mapping_generation = in_memory_compute or enable_mix_spatial_mapping
 
-    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
+    stages = [
+        # Parse the ONNX Model into the workload
+        workload_parser_stage,
+        # Parse the accelerator module/passthrough given accelerator
+        AcceleratorParserStage,
+        # Save the summed CME energy and latency to a json
+        SimpleSaveStage,
+        # Save all received CMEs in a list to a pickle file
+        PickleSaveStage,
+        # Sum up the received best CME across all layers of the workload
+        SumStage,
+        # Search the lowest allowed memory level per operand per layer
+        SearchInterLayerDataLocalityStage if do_exploint_inter_layer_locality else None,
+        # Iterate through the different layers in the workload
+        WorkloadStage,
+        # Save the chosen loop ordering and memory hierarchy
+        VisualizationStage,
+        # Remove unused memories
+        ExploitInterLayerDataLocalityStage if do_exploint_inter_layer_locality else None,
+        # Save each processed layer to a json
+        CompleteSaveStage,
+        # Reduce all CMEs, returning minimal energy/latency one
+        opt_stage,
+        # Generate multiple spatial mappings (SM)
+        SpatialMappingGeneratorStage,
+        # Reduce all CMEs, returning minimal energy/latency one
+        opt_stage,
+        # Generate multiple temporal mappings (TM)
+        TemporalMappingGeneratorStage,
+        # Evaluate generated SM and TM through cost model
+        CostModelStage,
+    ]
 
+    stage_callables: list[StageCallable] = [s for s in stages if s is not None]
 
-def get_hardware_performance_zigzag_imc(
-    workload: str | ModelProto,
-    accelerator: str,
-    mapping: str,
-    opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}",
-    pickle_filename: str = "outputs/list_of_cmes.pickle",
-) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """! Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned)"""
-
-    # Initialize the logger
-    logging_level = logging.INFO
-    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    logging.basicConfig(level=logging_level, format=logging_format)
-
-    match opt:
-        case "energy":
-            opt_stage = MinimalEnergyStage
-        case "latency":
-            opt_stage = MinimalLatencyStage
-        case "EDP":
-            opt_stage = MinimalEDPStage
-        case _:
-            raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
-
-    # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
-        workload_parser_stage = ONNXModelParserStage
-    else:
-        workload_parser_stage = WorkloadParserStage
-
+    # Initialize the MainStage as entry point
     mainstage = MainStage(
-        [  # Initialize the MainStage as entry point
-            workload_parser_stage,  # Parse the ONNX Model into the workload
-            AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-            CompleteSaveStage,  # Save the summed CME energy and latency to a json
-            PickleSaveStage,  # Save all received CMEs in a list to a pickle file
-            SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchInterLayerDataLocalityStage,  # Search the lowest allowed memory level per operand per layer
-            WorkloadStage,  # Iterate through the different layers in the workload
-            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            ExploitInterLayerDataLocalityStage,  # Remove unused memories
-            CompleteSaveStage,  # Save each processed layer to a json
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            CostModelStage,  # Evaluate generated SM and TM through cost model
-        ],
-        accelerator=accelerator,  # required by AcceleratorParserStage
-        workload=workload,  # required by workload_parser_stage
-        mapping=mapping,  # required by workload_parser_stage
-        dump_folder=dump_folder,  # output file save pattern
-        pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
+        list_of_callables=stage_callables,
+        accelerator=accelerator,
+        workload=workload,
+        mapping=mapping,
+        dump_folder=dump_folder,
+        pickle_filename=pickle_filename,
+        loma_lpf_limit=lpf_limit,
         loma_show_progress_bar=True,
-        enable_mix_spatial_mapping_generation=True,
-        nb_mappings_generated=3,
+        nb_mappings_generated=nb_spatial_mappings_generated,
+        enable_mix_spatial_mapping_generation=do_mix_spatial_mapping_generation,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
-        # smaller than the memory read bw,
-        # take into account only one-time access cost (assume the data can stay at the output pins of the memory as
-        # long as it is needed).
-        # By default, if the parameter is not defined, it will be set as False internally.
+        # smaller than the memory read bw, # take into account only one-time access cost (assume the data can stay at
+        # the output pins of the memory as long as it is needed).
         access_same_data_considered_as_no_access=True,
     )
 
@@ -178,152 +138,17 @@ def get_hardware_performance_zigzag_imc(
     cmes = mainstage.run()
     energy_total: float = cmes[0][0].energy_total
     latency_total: float = cmes[0][0].latency_total2
-    tclk: float = cmes[0][1][0][0].tclk
-    area: float = cmes[0][1][0][0].area_total
 
-    return energy_total, latency_total, tclk, area, cmes
+    if in_memory_compute:
+        tclk: float = cmes[0][1][0][0].tclk
+        area: float = cmes[0][1][0][0].area_total
+        return energy_total, latency_total, tclk, area, cmes  # type: ignore
 
-
-def get_hardware_performance_zigzag_with_exploit_data_locality(
-    workload: str | ModelProto,
-    accelerator: str,
-    mapping: str,
-    opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}",
-    pickle_filename: str = "outputs/list_of_cmes.pickle",
-) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """! Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible"""
-
-    # Initialize the logger
-    logging_level = logging.INFO
-    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    logging.basicConfig(level=logging_level, format=logging_format)
-
-    match opt:
-        case "energy":
-            opt_stage = MinimalEnergyStage
-        case "latency":
-            opt_stage = MinimalLatencyStage
-        case "EDP":
-            opt_stage = MinimalEDPStage
-        case _:
-            raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
-
-    # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
-        workload_parser_stage = ONNXModelParserStage
-    else:
-        workload_parser_stage = WorkloadParserStage
-
-    mainstage = MainStage(
-        [  # Initialize the MainStage as entry point
-            workload_parser_stage,  # Parse the ONNX Model into the workload
-            AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-            SimpleSaveStage,  # Save the summed CME energy and latency to a json
-            PickleSaveStage,  # Save all received CMEs in a list to a pickle file
-            SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
-            WorkloadStage,  # Iterate through the different layers in the workload
-            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
-            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            CompleteSaveStage,  # Save each processed layer to a json
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            CostModelStage,  # Evaluate generated SM and TM through cost model
-        ],
-        accelerator=accelerator,  # required by AcceleratorParserStage
-        workload=workload,  # required by workload_parser_stage
-        mapping=mapping,  # required by workload_parser_stage
-        dump_folder=dump_folder,  # output file save pattern
-        pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
-        loma_show_progress_bar=True,
-        # If we need access the same input data multiple times from the innermost memory level and the data size is
-        # smaller than the memory read bw,
-        # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long
-        # as it is needed).
-        # By default, if the parameter is not defined, it will be set as False internally.
-        access_same_data_considered_as_no_access=True,
-    )
-
-    # Launch the MainStage
-    answers = mainstage.run()
-    # Get CME from answer
-    cmes = answers
-
-    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
+    return energy_total, latency_total, cmes
 
 
-def get_hardware_performance_zigzag_with_mix_spatial_mapping(
-    workload: str | ModelProto,
-    accelerator: str,
-    mapping: str,
-    opt: str = "latency",
-    dump_folder: str = f"outputs/{datetime.now()}",
-    pickle_filename: str = "outputs/list_of_cmes.pickle",
-) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
-    """! Function of deriving accelerator cost when a mixed spatial mapping is required"""
-
-    # Initialize the logger
-    logging_level = logging.INFO
-    logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
-    logging.basicConfig(level=logging_level, format=logging_format)
-
-    match opt:
-        case "energy":
-            opt_stage = MinimalEnergyStage
-        case "latency":
-            opt_stage = MinimalLatencyStage
-        case "EDP":
-            opt_stage = MinimalEDPStage
-        case _:
-            raise NotImplementedError("Optimization criterion 'opt' should be either 'energy' or 'latency' or 'EDP'.")
-
-    # Check workload format and based on it select the correct workload parser stage
-    if isinstance(workload, ModelProto) or workload.split(".")[-1] == "onnx":
-        workload_parser_stage = ONNXModelParserStage
-    else:
-        workload_parser_stage = WorkloadParserStage
-
-    mainstage = MainStage(
-        [  # Initialize the MainStage as entry point
-            workload_parser_stage,  # Parse the ONNX Model into the workload
-            AcceleratorParserStage,  # Parse the accelerator module/passthrough given accelerator
-            SimpleSaveStage,  # Save the summed CME energy and latency to a json
-            PickleSaveStage,  # Save all received CMEs in a list to a pickle file
-            SumStage,  # Sum up the received best CME across all layers of the workload
-            SearchInterLayerDataLocalityStage,  # Search for unused memory instance
-            WorkloadStage,  # Iterate through the different layers in the workload
-            ExploitInterLayerDataLocalityStage,  # Remove unused memory instance
-            VisualizationStage,  # Save the chosen loop ordering and memory hierarchy
-            CompleteSaveStage,  # Save each processed layer to a json
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            SpatialMappingGeneratorStage,  # Generate multiple spatial mappings (SM)
-            opt_stage,  # Reduce all CMEs, returning minimal energy/latency one
-            TemporalMappingGeneratorStage,  # Generate multiple temporal mappings (TM)
-            CostModelStage,  # Evaluate generated SM and TM through cost model
-        ],
-        accelerator=accelerator,  # required by AcceleratorParserStage
-        workload=workload,  # required by workload_parser_stage
-        mapping=mapping,  # required by workload_parser_stage
-        dump_folder=dump_folder,  # output file save pattern
-        pickle_filename=pickle_filename,  # filename for pickled list of cmes
-        loma_lpf_limit=6,  # required by TemporalMappingGeneratorStage
-        loma_show_progress_bar=True,
-        # If we need access the same input data multiple times from the innermost memory level and the data size is
-        # smaller than the memory read bw,
-        # take into account only one-time access cost (assume the data can stay at the output pins of the memory as long
-        # as it is needed).
-        # By default, if the parameter is not defined, it will be set as False internally.
-        access_same_data_considered_as_no_access=True,
-        enable_mix_spatial_mapping_generation=True,  # enable auto-generation of mix spatial mapping
-    )
-
-    # Launch the MainStage
-    answers = mainstage.run()
-    # Get CME from answer
-    cmes = answers
-
-    return cmes[0][0].energy_total, cmes[0][0].latency_total2, cmes
+def get_hardware_performance_zigzag_imc(
+    *args: Any,
+) -> tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+    """Overload with type hint"""
+    return get_hardware_performance_zigzag(*args, in_memory_compute=True)  # type: ignore

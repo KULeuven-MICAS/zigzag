@@ -36,7 +36,7 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
-    (energy, latency, tclk, area, _) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
+    energy, latency, tclk, area, _ = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
     (
         expected_energy,
         expected_latency,
