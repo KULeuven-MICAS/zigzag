@@ -1,7 +1,5 @@
 var NAVTREEINDEX1 =
 {
-"classarchitecture_1_1memory__port_1_1MemoryPort.html#af96227fa172ee2434ffb6b967edce50b":[2,0,0,6,2,1],
-"classarchitecture_1_1memory__port_1_1MemoryPortType.html":[2,0,0,6,0],
 "classarchitecture_1_1memory__port_1_1PortAllocation.html":[2,0,0,6,3],
 "classarchitecture_1_1memory__port_1_1PortAllocation.html#a345bd98a9cab9321c746c2bd83dbe3ae":[2,0,0,6,3,1],
 "classarchitecture_1_1memory__port_1_1PortAllocation.html#a43affe51d1a8910362759db317cf6047":[2,0,0,6,3,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a8c358fbbc89e1cc3019ab7fd0cf7f317":[2,0,2,2,4,0,8],
 "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a9a47563093dfc5ba12274b66e368920c":[2,0,2,2,4,0,2],
 "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#a9e58287a6ac34d4b0df3a3d1e5a11322":[2,0,2,2,4,0,15],
-"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#aa76ed2dd341ca270b3849134804ceffd":[2,0,2,2,4,0,4]
+"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#aa76ed2dd341ca270b3849134804ceffd":[2,0,2,2,4,0,4],
+"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#ab068d8b6aefa6400c2351d73385b6bc1":[2,0,2,2,4,0,12],
+"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#abf4c15ca3686db0642ea95dfaf5101d8":[2,0,2,2,4,0,14]
 };

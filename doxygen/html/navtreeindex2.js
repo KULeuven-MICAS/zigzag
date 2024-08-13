@@ -1,7 +1,5 @@
 var NAVTREEINDEX2 =
 {
-"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#ab068d8b6aefa6400c2351d73385b6bc1":[2,0,2,2,4,0,12],
-"classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#abf4c15ca3686db0642ea95dfaf5101d8":[2,0,2,2,4,0,14],
 "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#adcb98d06d8a1106c818a015fc52afab5":[2,0,2,2,4,0,5],
 "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html#aeba8abf5c1c0d9160c08a2db01ecf78e":[2,0,2,2,4,0,13],
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html":[2,0,2,2,0,2],
@@ -249,5 +247,7 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a4058b26e31caced3c2638241a85e9166":[2,0,2,4,0,2,1],
 "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a40f074953ef1d320cbbfb4b32d8226fd":[2,0,2,4,0,2,4],
 "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,2,4,0,2,7],
-"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a5294362e78cc39484416fcc791e7d7c0":[2,0,2,4,0,2,2]
+"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a5294362e78cc39484416fcc791e7d7c0":[2,0,2,4,0,2,2],
+"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a9a91e7e510072dc29a497d1e7907e0f9":[2,0,2,4,0,2,6],
+"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,2,4,0,2,8]
 };

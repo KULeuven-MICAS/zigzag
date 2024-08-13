@@ -1,7 +1,5 @@
 var NAVTREEINDEX3 =
 {
-"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a9a91e7e510072dc29a497d1e7907e0f9":[2,0,2,4,0,2,6],
-"classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,2,4,0,2,8],
 "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html":[2,0,2,4,3,0,0],
 "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a11ca96dc836ddb84fb694554c9e06bf6":[2,0,2,4,3,0,0,5],
 "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a3f954a739989f453e42fa97cb171c657":[2,0,2,4,3,0,0,4],
@@ -249,5 +247,7 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#abab504413e85c79174a5ef6e02cad92e":[2,0,2,5,9,1,0],
 "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,2,5,9,1,1],
 "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html":[2,0,2,5,13,0],
-"classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a1818dd727f53ab87876e8da1ce8d3fa8":[2,0,2,5,13,0,0]
+"classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a1818dd727f53ab87876e8da1ce8d3fa8":[2,0,2,5,13,0,0],
+"classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a1a81b4276ed57e54580bef8cb37bb2e5":[2,0,2,5,13,0,5],
+"classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html#a320e60190c5e2b6835e33500c25f3ca9":[2,0,2,5,13,0,1]
 };
