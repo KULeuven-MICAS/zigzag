@@ -1,5 +1,5 @@
-<map id="get_intermediate_output_precision" name="get_intermediate_output_precision">
-<area shape="rect" id="node1" title="Return the intermediate output precision for this node." alt="" coords="1111,53,1293,94"/>
+<map id="get_operand_source_user_format" name="get_operand_source_user_format">
+<area shape="rect" id="node1" title="Set input source and indicate constant operands." alt="" coords="1111,53,1264,94"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#af45d05ffd6eda00619c34dcbacafc8aa" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="828,5,1063,61"/>
 <area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="833,85,1057,141"/>
 <area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,17,780,58"/>

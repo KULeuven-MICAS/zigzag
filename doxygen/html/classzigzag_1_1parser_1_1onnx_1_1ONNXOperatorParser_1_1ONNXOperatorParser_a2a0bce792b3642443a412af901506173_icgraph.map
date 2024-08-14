@@ -1,9 +1,10 @@
 <map id="get_weight_precision" name="get_weight_precision">
-<area shape="rect" id="node1" title="Return the weight precision for this node." alt="" coords="1111,50,1271,77"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#af45d05ffd6eda00619c34dcbacafc8aa" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="828,35,1063,91"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,5,780,47"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="545,71,769,127"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,8,485,49"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,43,203,84"/>
-<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="256,75,480,116"/>
+<area shape="rect" id="node1" title="Return the weight precision for this node." alt="" coords="1111,60,1271,87"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#af45d05ffd6eda00619c34dcbacafc8aa" title="Generate layer data in user input format for MatMul or GEMM ONNX nodes." alt="" coords="828,5,1063,61"/>
+<area shape="rect" id="node8" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#aa7f94d8d5470d213a5eb67ad7367c282" title="Generate the necessary dictionary items required for the LayerNode creation." alt="" coords="833,85,1057,141"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#a80d931d1762c1f1db8f3dffc0ef42b62" title=" " alt="" coords="533,17,780,58"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#a5246bcd2a24a0392d62e0f1565035fe1" title=" " alt="" coords="545,83,769,139"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser." alt="" coords="251,19,485,61"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1Stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,54,203,95"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html#afff24f54a20c7f088789768b86c00170" title="Run the parser and return the created LayerNode object." alt="" coords="256,86,480,127"/>
 </map>
