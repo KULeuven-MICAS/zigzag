@@ -1,0 +1,4 @@
+<map id="get_hardware_performance_zigzag_imc" name="get_hardware_performance_zigzag_imc">
+<area shape="rect" id="node1" title="Overload with type hint." alt="" coords="5,5,207,47"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
+</map>
