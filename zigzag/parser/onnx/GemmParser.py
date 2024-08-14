@@ -29,21 +29,6 @@ class GemmParser(ONNXOperatorParser):
         """! Run the parser"""
         return self.generate_layer_node()
 
-    def get_operand_source_user_format(self, predecessors: list[int]):
-        """Set input source and indicate constant operands"""
-        match len(predecessors):
-            case 0:
-                # No source operands -> assume one is constant
-                return {"W": self.node_id}
-            case 1:
-                # One source operand, one constant
-                return {"W": self.node_id, "I": predecessors[0]}
-            case 2:
-                # Two source operands, none are constant (W and I can be swapped)
-                return {"W": predecessors[1], "I": predecessors[0]}
-            case _:
-                raise ValueError("No more than 2 layer predecessors expected")
-
     def get_layer_node_user_format(
         self,
         input_shape: list[int],
@@ -83,7 +68,7 @@ class GemmParser(ONNXOperatorParser):
 
         match len(input_shape):
             case 2:
-                batch_size = 1
+                batch_size = 0
             case 3:
                 assert input_shape[0] == output_shape[0], "Batch size should be the same for input and output"
                 batch_size = 1 if input_shape[0] == 0 else input_shape[0]
@@ -95,15 +80,18 @@ class GemmParser(ONNXOperatorParser):
             case _:
                 raise ValueError("Input size of GeMM or Matmul ONNX node must be either 2, 3 or 4.")
 
-        data["loop_dims"] = ["B", "C", "D", "K"] + (["H"] if size_h else [])
-        data["loop_sizes"] = [batch_size, size_c, size_d, size_k] + ([size_h] if size_h else [])
+        # Construct sizes
+        loop_dim_b_h = (["B"] if batch_size else []) + (["H"] if size_h else [])
+        loop_size_b_h = ([batch_size] if batch_size else []) + ([size_h] if size_h else [])
+        data["loop_dims"] = ["C", "D", "K"] + loop_dim_b_h
+        data["loop_sizes"] = [size_c, size_d, size_k] + loop_size_b_h
 
         # Construct equation
-        layer_dim_h = "[h]" if size_h else ""
-        part_out = f"O[b]{layer_dim_h}[d][k]"
-        part_in = f"I[b]{layer_dim_h}[d][c]"
+        layer_dim_b_h = ("[b]" if batch_size else "") + ("[h]" if size_h else "")
+        part_out = f"O{layer_dim_b_h}[d][k]"
+        part_in = f"I{layer_dim_b_h}[d][c]"
         # No batch dimensions (B or H) if the weights are constant
-        part_weight = f"W{'' if weights_are_constant else '[b]' + layer_dim_h}[c][k]"
+        part_weight = f"W{'' if weights_are_constant else layer_dim_b_h}[c][k]"
         data["equation"] = f"{part_out}+={part_in}*{part_weight}"
 
         return data
