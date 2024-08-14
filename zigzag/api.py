@@ -36,7 +36,10 @@ def get_hardware_performance_zigzag(
     in_memory_compute: bool = False,
     exploit_data_locality: bool = False,
     enable_mix_spatial_mapping: bool = False,
-) -> tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]:
+) -> (
+    tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]
+    | tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]
+):
     """! ZigZag API: estimates the cost of running the given workload on the given hardware architecture.
     @param workload Either a filepath to the workload ONNX or yaml file, an ONNX model.
     @param accelerator Filepath to accelerator yaml file.
