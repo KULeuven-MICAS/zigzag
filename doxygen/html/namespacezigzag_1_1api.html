@@ -93,28 +93,25 @@ $(document).ready(function(){initNavTree('namespacezigzag_1_1api.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a136a6f3c440a46c31a9c602842e8bc6c"><td class="memItemLeft" align="right" valign="top">tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a136a6f3c440a46c31a9c602842e8bc6c">get_hardware_performance_zigzag</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;, int lpf_limit=6, int nb_spatial_mappings_generated=3)</td></tr>
-<tr class="memdesc:a136a6f3c440a46c31a9c602842e8bc6c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving the accelerator cost (both digital and in-memory-computing cores are supported)  <a href="namespacezigzag_1_1api.html#a136a6f3c440a46c31a9c602842e8bc6c">More...</a><br /></td></tr>
-<tr class="separator:a136a6f3c440a46c31a9c602842e8bc6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6abdc57a231cae04a264cba063a90e0c"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a6abdc57a231cae04a264cba063a90e0c">get_hardware_performance_zigzag_imc</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
-<tr class="memdesc:a6abdc57a231cae04a264cba063a90e0c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned)  <a href="namespacezigzag_1_1api.html#a6abdc57a231cae04a264cba063a90e0c">More...</a><br /></td></tr>
-<tr class="separator:a6abdc57a231cae04a264cba063a90e0c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8a8ba60c00f927bdea9000297c602ff"><td class="memItemLeft" align="right" valign="top">tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#aa8a8ba60c00f927bdea9000297c602ff">get_hardware_performance_zigzag_with_exploit_data_locality</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
-<tr class="memdesc:aa8a8ba60c00f927bdea9000297c602ff"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible.  <a href="namespacezigzag_1_1api.html#aa8a8ba60c00f927bdea9000297c602ff">More...</a><br /></td></tr>
-<tr class="separator:aa8a8ba60c00f927bdea9000297c602ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf83ff932aeb7d1dc77cc802a4fe5194"><td class="memItemLeft" align="right" valign="top">tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#aaf83ff932aeb7d1dc77cc802a4fe5194">get_hardware_performance_zigzag_with_mix_spatial_mapping</a> (str|ModelProto workload, str accelerator, str mapping, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str pickle_filename=&quot;outputs/list_of_cmes.pickle&quot;)</td></tr>
-<tr class="memdesc:aaf83ff932aeb7d1dc77cc802a4fe5194"><td class="mdescLeft">&#160;</td><td class="mdescRight">Function of deriving accelerator cost when a mixed spatial mapping is required.  <a href="namespacezigzag_1_1api.html#aaf83ff932aeb7d1dc77cc802a4fe5194">More...</a><br /></td></tr>
-<tr class="separator:aaf83ff932aeb7d1dc77cc802a4fe5194"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="memItemLeft" align="right" valign="top">( tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]|tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]])&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1">get_hardware_performance_zigzag</a> (str|ModelProto workload, str accelerator, str mapping, *str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str|None pickle_filename=None, int lpf_limit=6, int nb_spatial_mappings_generated=3, bool in_memory_compute=False, bool exploit_data_locality=False, bool enable_mix_spatial_mapping=False)</td></tr>
+<tr class="memdesc:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">ZigZag API: estimates the cost of running the given workload on the given hardware architecture.  <a href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1">More...</a><br /></td></tr>
+<tr class="separator:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a97cf011d1ddc096ee6a44473345a5865"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865">get_hardware_performance_zigzag_imc</a> (*Any args)</td></tr>
+<tr class="memdesc:a97cf011d1ddc096ee6a44473345a5865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload with type hint.  <a href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865">More...</a><br /></td></tr>
+<tr class="separator:a97cf011d1ddc096ee6a44473345a5865"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a136a6f3c440a46c31a9c602842e8bc6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a136a6f3c440a46c31a9c602842e8bc6c">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag()</h2>
+<a id="a0acbac3ee70c0e54ff94dffe4df69dc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0acbac3ee70c0e54ff94dffe4df69dc1">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]] zigzag.api.get_hardware_performance_zigzag </td>
+          <td class="memname"> (
+    tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]
+    | tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]
+) zigzag.api.get_hardware_performance_zigzag </td>
           <td>(</td>
           <td class="paramtype">str | ModelProto&#160;</td>
           <td class="paramname"><em>workload</em>, </td>
@@ -134,7 +131,7 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">str &#160;</td>
+          <td class="paramtype">*str &#160;</td>
           <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
         </tr>
         <tr>
@@ -146,8 +143,8 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>pickle_filename</em> = <code>&quot;outputs/list_of_cmes.pickle&quot;</code>, </td>
+          <td class="paramtype">str | None &#160;</td>
+          <td class="paramname"><em>pickle_filename</em> = <code>None</code>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -159,7 +156,25 @@ Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &#160;</td>
-          <td class="paramname"><em>nb_spatial_mappings_generated</em> = <code>3</code>&#160;</td>
+          <td class="paramname"><em>nb_spatial_mappings_generated</em> = <code>3</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &#160;</td>
+          <td class="paramname"><em>in_memory_compute</em> = <code>False</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &#160;</td>
+          <td class="paramname"><em>exploit_data_locality</em> = <code>False</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool &#160;</td>
+          <td class="paramname"><em>enable_mix_spatial_mapping</em> = <code>False</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -169,23 +184,37 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function of deriving the accelerator cost (both digital and in-memory-computing cores are supported) </p>
+<p>ZigZag API: estimates the cost of running the given workload on the given hardware architecture. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">workload</td><td>Either a filepath to the workload ONNX or yaml file, an ONNX model </td></tr>
-    <tr><td class="paramname">accelerator</td><td>Filepath to accelerator yaml file </td></tr>
-    <tr><td class="paramname">mapping</td><td>Filepath to mapping yaml file </td></tr>
-    <tr><td class="paramname">opt</td><td>Optimization criterion: either <code>energy</code>, <code>latency</code> or <code>EDP</code> </td></tr>
-    <tr><td class="paramname">dump_filename_pattern</td><td>Filename pattern for file dumps </td></tr>
-    <tr><td class="paramname">pickle_filename</td><td>Filename of pickle dump @lpf_limit @nb_spatial_mappings_generated Max nb of spatial mappings that are automatically generated in SpatialMappingGeneratorStage </td></tr>
+    <tr><td class="paramname">workload</td><td>Either a filepath to the workload ONNX or yaml file, an ONNX model. </td></tr>
+    <tr><td class="paramname">accelerator</td><td>Filepath to accelerator yaml file. </td></tr>
+    <tr><td class="paramname">mapping</td><td>Filepath to mapping yaml file. </td></tr>
+    <tr><td class="paramname">opt</td><td>Optimization criterion: either <code>energy</code>, <code>latency</code> or <code>EDP</code>. </td></tr>
+    <tr><td class="paramname">dump_folder</td><td>Folder where outputs will be saved. </td></tr>
+    <tr><td class="paramname">pickle_filename</td><td>Filename of pickle dump. </td></tr>
+    <tr><td class="paramname">lpf_limit</td><td>Determines the number of temporal unrollings that are evaluated. </td></tr>
+    <tr><td class="paramname">nb_spatial_mappings_generated</td><td>Max nb of spatial mappings automatically generated (if not provided in mapping). </td></tr>
+    <tr><td class="paramname">in_memory_compute</td><td>Optimizes the run for IMC architectures. </td></tr>
+    <tr><td class="paramname">exploit_data_locality</td><td>Iff true, an attempt will be made to keep data in lower-level memory in between layers </td></tr>
+    <tr><td class="paramname">enable_mix_spatial_mapping</td><td>Wether <code>mixed</code> spatial mappings will be generated, i.e. unrolling multiple Layer Dimensions in a single Operational Array Dimension. </td></tr>
   </table>
   </dd>
 </dl>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph.png" border="0" usemap="#anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph" alt=""/></div>
+<map name="anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph" id="anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph">
+<area shape="rect" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
+<area shape="rect" href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865" title="Overload with type hint." alt="" coords="5,5,207,47"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a6abdc57a231cae04a264cba063a90e0c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6abdc57a231cae04a264cba063a90e0c">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag_imc()</h2>
+<a id="a97cf011d1ddc096ee6a44473345a5865"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a97cf011d1ddc096ee6a44473345a5865">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag_imc()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -193,156 +222,23 @@ Functions</h2></td></tr>
         <tr>
           <td class="memname"> tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]] zigzag.api.get_hardware_performance_zigzag_imc </td>
           <td>(</td>
-          <td class="paramtype">str | ModelProto&#160;</td>
-          <td class="paramname"><em>workload</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
+          <td class="paramtype">*Any&#160;</td>
+          <td class="paramname"><em>args</em></td><td>)</td>
           <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>accelerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>mapping</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>dump_folder</em> = <code>f&quot;outputs/{datetime.now()}&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>pickle_filename</em> = <code>&quot;outputs/list_of_cmes.pickle&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Function of deriving cost of solely in-memory computing accelerators (tclk and area will be returned) </p>
-
+<p>Overload with type hint. </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="namespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph.png" border="0" usemap="#anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph" alt=""/></div>
+<map name="anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph" id="anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph">
+<area shape="rect" title="Overload with type hint." alt="" coords="5,5,207,47"/>
+<area shape="rect" href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
+</map>
 </div>
-</div>
-<a id="aa8a8ba60c00f927bdea9000297c602ff"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8a8ba60c00f927bdea9000297c602ff">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag_with_exploit_data_locality()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]] zigzag.api.get_hardware_performance_zigzag_with_exploit_data_locality </td>
-          <td>(</td>
-          <td class="paramtype">str | ModelProto&#160;</td>
-          <td class="paramname"><em>workload</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>accelerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>mapping</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>dump_folder</em> = <code>f&quot;outputs/{datetime.now()}&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>pickle_filename</em> = <code>&quot;outputs/list_of_cmes.pickle&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Function of deriving cost when output of intermediate layers is kept in memory levels as low as possible. </p>
-
-</div>
-</div>
-<a id="aaf83ff932aeb7d1dc77cc802a4fe5194"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaf83ff932aeb7d1dc77cc802a4fe5194">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag_with_mix_spatial_mapping()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]] zigzag.api.get_hardware_performance_zigzag_with_mix_spatial_mapping </td>
-          <td>(</td>
-          <td class="paramtype">str | ModelProto&#160;</td>
-          <td class="paramname"><em>workload</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>accelerator</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str&#160;</td>
-          <td class="paramname"><em>mapping</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>dump_folder</em> = <code>f&quot;outputs/{datetime.now()}&quot;</code>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">str &#160;</td>
-          <td class="paramname"><em>pickle_filename</em> = <code>&quot;outputs/list_of_cmes.pickle&quot;</code>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Function of deriving accelerator cost when a mixed spatial mapping is required. </p>
 
 </div>
 </div>

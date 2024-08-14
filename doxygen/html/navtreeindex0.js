@@ -65,10 +65,8 @@ var NAVTREEINDEX0 =
 "accelerator__factory_8py.html":[3,0,0,5,2],
 "annotated.html":[2,0],
 "api_8py.html":[3,0,0,11],
-"api_8py.html#a136a6f3c440a46c31a9c602842e8bc6c":[3,0,0,11,0],
-"api_8py.html#a6abdc57a231cae04a264cba063a90e0c":[3,0,0,11,1],
-"api_8py.html#aa8a8ba60c00f927bdea9000297c602ff":[3,0,0,11,2],
-"api_8py.html#aaf83ff932aeb7d1dc77cc802a4fe5194":[3,0,0,11,3],
+"api_8py.html#a0acbac3ee70c0e54ff94dffe4df69dc1":[3,0,0,11,0],
+"api_8py.html#a97cf011d1ddc096ee6a44473345a5865":[3,0,0,11,1],
 "arguments_8py.html":[3,0,0,5,4],
 "arguments_8py.html#afb776418962f44c1896a1f73105c241f":[3,0,0,5,4,0],
 "cacti__parser_8py.html":[3,0,0,0,0],
@@ -249,5 +247,7 @@ var NAVTREEINDEX0 =
 "classarchitecture_1_1memory__port_1_1MemoryPort.html#abb12c699fe1a2b152cd708f5c24d30db":[2,0,0,6,2,5],
 "classarchitecture_1_1memory__port_1_1MemoryPort.html#ad850ab7fb0b6ef87daae6d1d4dfa9e3a":[2,0,0,6,2,11],
 "classarchitecture_1_1memory__port_1_1MemoryPort.html#ada87977c7874e1333bc09818be482c07":[2,0,0,6,2,6],
-"classarchitecture_1_1memory__port_1_1MemoryPort.html#af0eb2c102993b8bf8bfd6d0f5db45e9a":[2,0,0,6,2,0]
+"classarchitecture_1_1memory__port_1_1MemoryPort.html#af0eb2c102993b8bf8bfd6d0f5db45e9a":[2,0,0,6,2,0],
+"classarchitecture_1_1memory__port_1_1MemoryPort.html#af96227fa172ee2434ffb6b967edce50b":[2,0,0,6,2,1],
+"classarchitecture_1_1memory__port_1_1MemoryPortType.html":[2,0,0,6,0]
 };
