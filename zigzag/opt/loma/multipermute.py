@@ -61,6 +61,10 @@ class PermutationConstraint(ABC):
     def is_valid(self, permutation: list[Any]) -> bool:
         ...
 
+    @abstractmethod
+    def is_empty(self) -> bool:
+        ...
+
 
 class StaticPositionsConstraint(PermutationConstraint):
     """! A class to represent a constraint on a permutation that requires
@@ -73,6 +77,9 @@ class StaticPositionsConstraint(PermutationConstraint):
 
     def is_valid(self, permutation: list[Any]) -> bool:
         return all(permutation[position][0] == item for position, item in self.static_positions.items())
+
+    def is_empty(self):
+        return not self.static_positions or len(self.static_positions) == 0
 
 
 class StaticPositionsAndSizesConstraint(PermutationConstraint):
@@ -89,6 +96,9 @@ class StaticPositionsAndSizesConstraint(PermutationConstraint):
             permutation[position][0] == item and permutation[position][1] == size
             for position, (item, size) in self.static_positions_and_sizes.items()
         )
+
+    def is_empty(self):
+        return not self.static_positions_and_sizes or len(self.static_positions_and_sizes) == 0
 
 
 def init(multiset: list[Any]):
@@ -109,8 +119,8 @@ def visit(h: ListElement) -> list[Any]:
     return this_list
 
 
-def permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
-    """! Generator providing all multiset permutations of a multiset."""
+def constrainded_permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
+    """! Generator providing all multiset permutations of a multiset with constraints."""
     h, i, j = init(multiset)
     if all(constr.is_valid(visit(h)) for constr in constraints):
         yield visit(h)
@@ -128,3 +138,22 @@ def permutations(multiset: list[Any], constraints: list[PermutationConstraint]):
         h = t
         if all(constr.is_valid(visit(h)) for constr in constraints):
             yield visit(h)
+
+
+def permutations(multiset: list[Any]):
+    """! Generator providing all multiset permutations of a multiset."""
+    h, i, j = init(multiset)
+    yield visit(h)
+    while j.next_elem is not None or j.value < h.value:
+        if j.next_elem is not None and i.value >= j.next_elem.value:
+            s = j
+        else:
+            s = i
+        t = s.next_elem
+        s.next_elem = t.next_elem
+        t.next_elem = h
+        if t.value < h.value:
+            i = t
+        j = i.next_elem
+        h = t
+        yield visit(h)

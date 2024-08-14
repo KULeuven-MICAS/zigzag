@@ -16,7 +16,12 @@ from zigzag.opt.loma.MemoryAllocator import (
     MemoryHierarchyTooSmallException,
     MemoryTooSmallException,
 )
-from zigzag.opt.loma.multipermute import PermutationConstraint, StaticPositionsAndSizesConstraint, permutations
+from zigzag.opt.loma.multipermute import (
+    PermutationConstraint,
+    StaticPositionsAndSizesConstraint,
+    constrainded_permutations,
+    permutations,
+)
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
@@ -63,6 +68,7 @@ class LomaEngine:
         self.layer = layer
         self.spatial_mapping = spatial_mapping
         self.constraints = []
+        self.has_constraints = False
 
         # Extract the memory hierarchy from the accelerator
         # TODO: Take into account that data might be stored in lower level,
@@ -75,6 +81,7 @@ class LomaEngine:
 
     def set_constraints(self, constraints: list[PermutationConstraint]) -> None:
         self.constraints = constraints
+        self.has_constraints = True
 
     def run(self) -> Generator[TemporalMapping, None, None]:
         """! Runs the LomaEngine
@@ -284,7 +291,8 @@ class LomaEngine:
         - picks the loop dimension that has the most lpfs
         - merges the smallest two lpfs of that loop dimension (multiplying their values)
         """
-        self.reduce_static_fps()
+        if self.has_constraints:
+            self.reduce_static_fps()
         n_pf = sum(self.temporal_loop_pf_count_sums.values())
         if self.lpf_limit is None or n_pf <= self.lpf_limit:
             logger.debug("No lpf limiting performed for layer %s", self.layer)
@@ -335,4 +343,7 @@ class LomaEngine:
 
     def ordering_generator(self) -> Generator[list[tuple[LayerDim, int]], None, None]:
         """! Generator that yields all orderings of the temporal loops."""
-        return permutations(self.lpfs, self.constraints)  # type:ignore
+        if self.has_constraints:
+            return constrainded_permutations(self.lpfs, self.constraints)  # type:ignore
+        else:
+            return permutations(self.lpfs)
