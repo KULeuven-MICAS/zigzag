@@ -36,13 +36,8 @@ def accelerator():
 
 @pytest.mark.parametrize("workload", workloads)
 def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
-    (energy, latency, tclk, area, _) = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
-    (
-        expected_energy,
-        expected_latency,
-        expected_tclk,
-        expected_area,
-    ) = ens_lats_clks_areas[workload]
+    energy, latency, tclk, area, _ = get_hardware_performance_zigzag_imc(workload, accelerator, mapping)
+    expected_energy, expected_latency, expected_tclk, expected_area = ens_lats_clks_areas[workload]
     assert energy == pytest.approx(expected_energy)  # type: ignore
     assert latency == pytest.approx(expected_latency)  # type: ignore
     assert tclk == pytest.approx(expected_tclk)  # type: ignore
