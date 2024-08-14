@@ -77,7 +77,7 @@ def get_hardware_performance_zigzag(
     )
 
     # Add stages to keep whole layers in lower level memory instead of rewriting to DRAM, if possible
-    do_exploint_inter_layer_locality = in_memory_compute or exploit_data_locality
+    do_exploint_inter_layer_locality = in_memory_compute or exploit_data_locality or enable_mix_spatial_mapping
     # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
     do_mix_spatial_mapping_generation = in_memory_compute or enable_mix_spatial_mapping
 
