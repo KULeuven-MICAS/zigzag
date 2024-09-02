@@ -180,8 +180,8 @@ class SpatialMappingGeneratorStage(Stage):
             yield candidate
 
     def limit_unrolling_to_mem_bandwidth(
-        self, mapping: dict[OADimension, dict[LayerDim, UnrollFactorInt]]
-    ) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
+        self, mapping: dict[OADimension, dict[LayerDim, int]]
+    ) -> dict[OADimension, dict[LayerDim, int]]:
         """! Scale the given unroll factors such that they do not exceed the bandwidths of the memory structure"""
 
         def conditional_log(layer_dim: LayerDim, oa_dim: OADimension, value: int, mem_name: str):
@@ -296,7 +296,7 @@ class SpatialMappingGeneratorStage(Stage):
                         mapping[oa_dim].update(unrollings)
         return mapping
 
-    def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, UnrollFactorInt]]:
+    def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, int]]:
         """! Generate a SpatialMapping that contains the maximal unroll factor for every Operational
         Array OADimension and every Layer Dimensions. Note that this is NOT a valid mapping as each
         OADimension contains ALL Layer Dimensions, maximally unrolled."""
@@ -316,7 +316,7 @@ class SpatialMappingGeneratorStage(Stage):
     def generate_spatial_mapping_single_oa_dim(
         self,
         unroll_hints: set[LayerDim],
-        max_unrollings: dict[LayerDim, UnrollFactorInt],
+        max_unrollings: dict[LayerDim, int],
         oa_dim_size: int,
     ) -> Generator[MappingSingleOADim, None, None]:
         """! Generate a list of possible mappings for the given OADimension. Possible mappings include
