@@ -1,7 +1,7 @@
 import logging
-from typing import Any
+from typing import Any, Type
 
-from onnx import ModelProto
+from onnx import ModelProto, NodeProto
 
 from zigzag.parser.onnx.conv_parser import ConvParser
 from zigzag.parser.onnx.default_node_parser import DefaultNodeParser
@@ -19,6 +19,14 @@ logger = logging.getLogger(__name__)
 
 class ONNXModelParser:
     """! Parses the ONNX model into a workload."""
+
+    # Map the node's op_type to the corresponding Parser class
+    PARSER_MAPPING: dict[str, Type[ONNXOperatorParser]] = {
+        "QLinearConv": ConvParser,
+        "Conv": ConvParser,
+        "MatMul": MatMulParser,
+        "Gemm": GemmParser,
+    }
 
     def __init__(self, onnx_model: str | ModelProto, mapping_yaml_path: str) -> None:
         assert isinstance(onnx_model, (str, ModelProto)), f"Given onnx_model is of type {type(onnx_model)}."
@@ -40,6 +48,12 @@ class ONNXModelParser:
         self.mapping_data = WorkloadParserStage.parse_mapping_data(self.mapping_yaml_path)
 
         return self.parse_workload_from_onnx_model_and_mapping()
+
+    def get_parser_class(self, node: NodeProto):
+        parser_class = ONNXModelParser.PARSER_MAPPING.get(node.op_type)
+        if not parser_class:
+            return DefaultNodeParser
+        return parser_class
 
     def parse_workload_from_onnx_model_and_mapping(self):
         """! Converts an onnx model into a workload object.
@@ -72,15 +86,14 @@ class ONNXModelParser:
             nodes_inputs[node_id] = node.input
             nodes_outputs[node_id] = node.output
 
-            if node.op_type in ["QLinearConv", "Conv"]:
-                parser = ConvParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
-            elif node.op_type in ["MatMul"]:
-                parser = MatMulParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
-            elif node.op_type in ["Gemm"]:
-                parser = GemmParser(node_id, node, nodes_outputs, self.mapping_data, self.onnx_model)
-            # it is not a convolutional node, so create a DummyNode
-            else:
-                parser = DefaultNodeParser(node_id, node, nodes_outputs, self.onnx_model)
+            parser_class = self.get_parser_class(node)
+            parser = parser_class(
+                node_id=node_id,
+                node=node,
+                nodes_outputs=nodes_outputs,
+                onnx_model=self.onnx_model,
+                mapping_data=self.mapping_data,
+            )
 
             node_obj = parser.run()
             # Add the node_obj to the ONNXWorkload

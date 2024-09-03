@@ -3,6 +3,7 @@ from typing import Any
 
 from onnx import ModelProto, NodeProto
 
+from zigzag.hardware.architecture.Accelerator import Accelerator
 from zigzag.parser.onnx.utils import get_attribute_ints_with_name, get_onnx_tensor_type
 from zigzag.workload.layer_node_abc import LayerNodeABC
 
@@ -21,11 +22,16 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         node: NodeProto,
         nodes_outputs: dict[int, Any],
         onnx_model: ModelProto,
+        *,
+        mapping_data: list[dict[str, Any]] | None = None,
+        accelerator: Accelerator | None = None,
     ) -> None:
         self.node_id = node_id
         self.node = node
         self.nodes_outputs = nodes_outputs
         self.onnx_model = onnx_model
+        self.mapping_data = mapping_data
+        self.accelerator = accelerator
 
     @abstractmethod
     def run(self) -> LayerNodeABC:
@@ -47,13 +53,15 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         """! Return the name of the weight input of this node depending on its operator type
         @param node (NodeProto): The node
         """
-        op_type = node.op_type  # 'Conv', 'QLinearConv', ...
-        if op_type == "Conv":
-            return node.input[1]
-        elif op_type == "QLinearConv":
-            return node.input[3]
-        else:
-            raise NotImplementedError(f"Retrieving weight name for onnx node of type {op_type} is not supported.")
+        match node.op_type:
+            case "Conv":
+                return node.input[1]
+            case "QLinearConv":
+                return node.input[3]
+            case _:
+                raise NotImplementedError(
+                    f"Retrieving weight name for onnx node of type {node.op_type} is not supported."
+                )
 
     def get_node_predecessors(self) -> list[int]:
         """Compute node input sources"""
