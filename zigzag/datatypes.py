@@ -93,13 +93,16 @@ class OADimension(OperandABC):
 class Constants:
     """! Store constant objects used throughout ZigZag (instead of hardcoding them)"""
 
-    OUTPUT_LAYER_OP = LayerOperand(AcceleratorValidator.OUTPUT_OPERAND_STR)
-    FINAL_OUTPUT_LAYER_OP = LayerOperand(AcceleratorValidator.FINAL_OUTPUT_OPERAND_STR)
-    OUTPUT_MEM_OP = MemoryOperand(AcceleratorValidator.OUTPUT_OPERAND_STR)
-    FINAL_OUTPUT_MEM_OP = MemoryOperand(AcceleratorValidator.FINAL_OUTPUT_OPERAND_STR)
+    LAYER_OP_I = LayerOperand("I")
+    LAYER_OP_W = LayerOperand("W")
+    OUTPUT_LAYER_OP = LayerOperand("O")
+    FINAL_OUTPUT_LAYER_OP = LayerOperand("O_final")
 
-    MEM_OP_1 = MemoryOperand(AcceleratorValidator.MEM_OP_1_STR)
-    MEM_OP_2 = MemoryOperand(AcceleratorValidator.MEM_OP_2_STR)
+    MEM_OP_1 = MemoryOperand("I1")
+    MEM_OP_2 = MemoryOperand("I2")
+    OUTPUT_MEM_OP = MemoryOperand("O")
+    FINAL_OUTPUT_MEM_OP = MemoryOperand("O_final")
+
     UNKNOWN_DIM_OPERATOR = LayerDim("*")
 
 

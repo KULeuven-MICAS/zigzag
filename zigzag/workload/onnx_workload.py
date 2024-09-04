@@ -25,7 +25,6 @@ class ONNXWorkload(WorkloadABC[LayerNodeABC]):
         self.add_workload_node(node_obj)
         edges: list[tuple[LayerNodeABC, LayerNodeABC]] = []
         for parent_id in node_obj.input_operand_source.values():
-            # for parent_id in parents:
             parent_node_obj = self.node_id_to_obj[parent_id]
             edges.append((parent_node_obj, node_obj))
             self.add_workload_edges_from(edges)
