@@ -54,8 +54,22 @@ var annotated_dup =
     [ "onnx_model_parser", "namespaceonnx__model__parser.html", [
       [ "ONNXModelParserStage", "classonnx__model__parser_1_1ONNXModelParserStage.html", "classonnx__model__parser_1_1ONNXModelParserStage" ]
     ] ],
+    [ "plot_temporal_mapping", "namespaceplot__temporal__mapping.html", [
+      [ "PlotTemporalMappingsStage", "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html", "classplot__temporal__mapping_1_1PlotTemporalMappingsStage" ]
+    ] ],
+    [ "reduce_stages", "namespacereduce__stages.html", [
+      [ "MinimalEnergyStage", "classreduce__stages_1_1MinimalEnergyStage.html", "classreduce__stages_1_1MinimalEnergyStage" ],
+      [ "MinimalLatencyStage", "classreduce__stages_1_1MinimalLatencyStage.html", "classreduce__stages_1_1MinimalLatencyStage" ],
+      [ "MinimalEDPStage", "classreduce__stages_1_1MinimalEDPStage.html", "classreduce__stages_1_1MinimalEDPStage" ],
+      [ "SumStage", "classreduce__stages_1_1SumStage.html", "classreduce__stages_1_1SumStage" ]
+    ] ],
     [ "salsa", "namespacesalsa.html", [
       [ "SalsaStage", "classsalsa_1_1SalsaStage.html", "classsalsa_1_1SalsaStage" ]
+    ] ],
+    [ "save", "namespacesave.html", [
+      [ "CompleteSaveStage", "classsave_1_1CompleteSaveStage.html", "classsave_1_1CompleteSaveStage" ],
+      [ "SimpleSaveStage", "classsave_1_1SimpleSaveStage.html", "classsave_1_1SimpleSaveStage" ],
+      [ "PickleSaveStage", "classsave_1_1PickleSaveStage.html", "classsave_1_1PickleSaveStage" ]
     ] ],
     [ "spatial_mapping_conversion", "namespacespatial__mapping__conversion.html", [
       [ "SpatialMappingConversionStage", "classspatial__mapping__conversion_1_1SpatialMappingConversionStage.html", "classspatial__mapping__conversion_1_1SpatialMappingConversionStage" ]
@@ -65,6 +79,9 @@ var annotated_dup =
     ] ],
     [ "temporal_mapping_generator_stage", "namespacetemporal__mapping__generator__stage.html", [
       [ "TemporalMappingGeneratorStage", "classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html", "classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage" ]
+    ] ],
+    [ "visualization", "namespacevisualization.html", [
+      [ "VisualizationStage", "classvisualization_1_1VisualizationStage.html", "classvisualization_1_1VisualizationStage" ]
     ] ],
     [ "workload_parser", "namespaceworkload__parser.html", [
       [ "WorkloadParserStage", "classworkload__parser_1_1WorkloadParserStage.html", "classworkload__parser_1_1WorkloadParserStage" ]
