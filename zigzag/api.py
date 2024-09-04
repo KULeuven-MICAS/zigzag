@@ -13,9 +13,9 @@ from zigzag.stages.exploit_data_locality_stages import (
 from zigzag.stages.main import MainStage
 from zigzag.stages.mapping.spatial_mapping_generation import SpatialMappingGeneratorStage
 from zigzag.stages.mapping.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
-from zigzag.stages.output.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
-from zigzag.stages.output.save import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
-from zigzag.stages.output.visualization import VisualizationStage
+from zigzag.stages.results.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
+from zigzag.stages.results.save import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.results.visualization import VisualizationStage
 from zigzag.stages.parser.accelerator_parser import AcceleratorParserStage
 from zigzag.stages.parser.onnx_model_parser import ONNXModelParserStage
 from zigzag.stages.parser.workload_parser import WorkloadParserStage
