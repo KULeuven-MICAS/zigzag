@@ -5,9 +5,9 @@ import networkx as nx
 from networkx import DiGraph
 
 from zigzag.datatypes import MemoryOperand
+from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
-from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import json_repr_handler
 

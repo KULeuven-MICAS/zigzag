@@ -15,9 +15,9 @@ from zigzag.datatypes import (
 )
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.core import Core
-from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.mapping.spatial_mapping import (
     MappingSingleOADim,
     SpatialMapping,
