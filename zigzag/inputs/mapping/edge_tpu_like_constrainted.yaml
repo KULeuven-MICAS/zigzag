@@ -11,8 +11,8 @@
       - OY, 4
   temporal_ordering:
     - ['*','*']
-    - [G, '*']
-    - [OY, 8]
+    - [K, '*']
+    - [OY, 2]
     - [OX, '*']
   memory_operand_links:
     O: O
@@ -32,8 +32,8 @@
       - OY, 1
   temporal_ordering:
     - ['*','*']
-    - [G, '*']
-    - [OY, 8]
+    - [G, 8]
+    - [OY, '*']
     - [OX, '*']
   memory_operand_links:
     O: O
@@ -53,8 +53,8 @@
       - OY, 1
   temporal_ordering:
     - ['*','*']
-    - [G, '*']
-    - [OY, 8]
+    - [G, 8]
+    - [OY, '*']
     - [OX, '*']
   memory_operand_links:
     O: O
