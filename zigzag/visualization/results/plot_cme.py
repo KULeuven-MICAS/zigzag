@@ -6,8 +6,8 @@ import seaborn
 
 from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC
 from zigzag.datatypes import ArrayType, LayerOperand
+from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import DataDirection
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.mapping.data_movement import AccessEnergy
 
 # MPL FONT SIZES

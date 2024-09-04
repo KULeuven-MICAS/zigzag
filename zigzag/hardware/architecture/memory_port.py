@@ -3,7 +3,7 @@ from enum import StrEnum
 from typing import Any, TypeAlias
 
 from zigzag.datatypes import Constants, MemoryOperand
-from zigzag.parser.AcceleratorValidator import AcceleratorValidator
+from zigzag.parser.accelerator_validator import AcceleratorValidator
 
 
 class MemoryPortType(StrEnum):

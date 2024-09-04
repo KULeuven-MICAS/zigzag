@@ -5,22 +5,22 @@ from typing import Any
 from onnx import ModelProto
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.evaluation.cost_model_evaluation import CostModelStage
 from zigzag.stages.exploit_data_locality_stages import (
     ExploitInterLayerDataLocalityStage,
     SearchInterLayerDataLocalityStage,
 )
-from zigzag.stages.MainStage import MainStage
-from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
-from zigzag.stages.save_stages import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
-from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
-from zigzag.stages.Stage import StageCallable
-from zigzag.stages.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
-from zigzag.stages.VisualizationStage import VisualizationStage
-from zigzag.stages.WorkloadParserStage import WorkloadParserStage
-from zigzag.stages.WorkloadStage import WorkloadStage
+from zigzag.stages.main import MainStage
+from zigzag.stages.mapping.spatial_mapping_generation import SpatialMappingGeneratorStage
+from zigzag.stages.mapping.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
+from zigzag.stages.output.reduce_stages import MinimalEDPStage, MinimalEnergyStage, MinimalLatencyStage, SumStage
+from zigzag.stages.output.save import CompleteSaveStage, PickleSaveStage, SimpleSaveStage
+from zigzag.stages.output.visualization import VisualizationStage
+from zigzag.stages.parser.accelerator_parser import AcceleratorParserStage
+from zigzag.stages.parser.onnx_model_parser import ONNXModelParserStage
+from zigzag.stages.parser.workload_parser import WorkloadParserStage
+from zigzag.stages.stage import StageCallable
+from zigzag.stages.workload_iterator import WorkloadStage
 
 
 def get_hardware_performance_zigzag(

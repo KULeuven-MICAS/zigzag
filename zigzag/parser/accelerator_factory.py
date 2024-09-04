@@ -7,13 +7,13 @@ from zigzag.datatypes import (
     OADimension,
     UnrollFactor,
 )
-from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.Core import Core
-from zigzag.hardware.architecture.ImcArray import ImcArray
+from zigzag.hardware.architecture.accelerator import Accelerator
+from zigzag.hardware.architecture.core import Core
+from zigzag.hardware.architecture.imc_array import ImcArray
+from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
+from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import DataDirection, PortAllocation
-from zigzag.hardware.architecture.MemoryHierarchy import MemoryHierarchy
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import (
     MultiplierArray,
     OperationalArrayABC,

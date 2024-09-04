@@ -6,14 +6,14 @@ import numpy as np
 
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import ArrayType, Constants, LayerOperand, MemoryOperand
-from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.accelerator import Accelerator
+from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import MemoryPort
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArray
 from zigzag.mapping.data_movement import AccessEnergy, DataDirection, MemoryAccesses
-from zigzag.mapping.Mapping import Mapping
-from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.mapping.TemporalMapping import TemporalMapping
+from zigzag.mapping.mapping import Mapping
+from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
+from zigzag.mapping.temporal_mapping import TemporalMapping
 from zigzag.utils import json_repr_handler, pickle_deepcopy
 from zigzag.workload.layer_node import LayerNode
 

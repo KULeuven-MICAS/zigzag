@@ -1,10 +1,10 @@
 import logging
 
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.hardware.architecture.Accelerator import Accelerator
-from zigzag.hardware.architecture.ImcArray import ImcArray
-from zigzag.mapping.SpatialMappingInternal import SpatialMappingInternal
-from zigzag.mapping.TemporalMapping import TemporalMapping
+from zigzag.hardware.architecture.accelerator import Accelerator
+from zigzag.hardware.architecture.imc_array import ImcArray
+from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
+from zigzag.mapping.temporal_mapping import TemporalMapping
 from zigzag.utils import json_repr_handler
 from zigzag.workload.layer_node import LayerNode
 

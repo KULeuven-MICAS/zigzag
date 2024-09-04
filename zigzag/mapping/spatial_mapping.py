@@ -5,7 +5,7 @@ from typing import Any
 
 from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
 from zigzag.utils import UniqueMessageFilter, json_repr_handler
-from zigzag.workload.LayerAttribute import LayerAttribute
+from zigzag.workload.layer_attribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())

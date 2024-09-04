@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from zigzag.workload.DNNWorkload import DNNWorkload
+from zigzag.workload.dnn_workload import DNNWorkload
 
 
 def visualize_dnn_graph(graph: DNNWorkload):

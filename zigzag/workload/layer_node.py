@@ -23,7 +23,7 @@ from zigzag.workload.layer_attributes import (
     LayerTemporalOrdering,
     MemoryOperandLinks,
 )
-from zigzag.workload.LayerNodeABC import LayerNodeABC
+from zigzag.workload.layer_node_abc import LayerNodeABC
 
 logger = logging.getLogger(__name__)
 
