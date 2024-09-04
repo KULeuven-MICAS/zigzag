@@ -1,0 +1,9 @@
+<map id="LayerNodeABC" name="LayerNodeABC">
+<area shape="rect" id="node1" title="Represents a single layer of a workload in any form." alt="" coords="124,80,243,107"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html" title="A class to represent an ONNX node that is not &quot;accelerateable&quot;." alt="" coords="5,155,113,181"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html" title="Represents a single layer in a workload." alt="" coords="137,155,229,181"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html" title="Represents a workload graph parsed from ONNX." alt="" coords="254,155,377,181"/>
+<area shape="rect" id="node2" title=" " alt="" coords="84,5,173,32"/>
+<area shape="rect" id="node3" title=" " alt="" coords="198,5,281,32"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="127,229,240,256"/>
+</map>

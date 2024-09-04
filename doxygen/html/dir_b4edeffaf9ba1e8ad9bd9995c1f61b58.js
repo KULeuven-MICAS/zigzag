@@ -7,12 +7,12 @@ var dir_b4edeffaf9ba1e8ad9bd9995c1f61b58 =
       [ "CoreFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory" ],
       [ "MemoryFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory" ]
     ] ],
-    [ "AcceleratorValidator.py", "AcceleratorValidator_8py.html", "AcceleratorValidator_8py" ],
+    [ "accelerator_validator.py", "accelerator__validator_8py.html", "accelerator__validator_8py" ],
     [ "arguments.py", "arguments_8py.html", "arguments_8py" ],
-    [ "MappingValidator.py", "MappingValidator_8py.html", "MappingValidator_8py" ],
-    [ "UpgradedValidator.py", "UpgradedValidator_8py.html", [
-      [ "UpgradedValidator", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator.html", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator" ]
+    [ "mapping_validator.py", "mapping__validator_8py.html", "mapping__validator_8py" ],
+    [ "upgraded_validator.py", "upgraded__validator_8py.html", [
+      [ "UpgradedValidator", "classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator.html", "classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator" ]
     ] ],
     [ "workload_factory.py", "workload__factory_8py.html", "workload__factory_8py" ],
-    [ "WorkloadValidator.py", "WorkloadValidator_8py.html", "WorkloadValidator_8py" ]
+    [ "workload_validator.py", "workload__validator_8py.html", "workload__validator_8py" ]
 ];

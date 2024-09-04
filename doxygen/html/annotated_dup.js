@@ -1,20 +1,29 @@
 var annotated_dup =
 [
+    [ "accelerator_parser", "namespaceaccelerator__parser.html", [
+      [ "AcceleratorParserStage", "classaccelerator__parser_1_1AcceleratorParserStage.html", "classaccelerator__parser_1_1AcceleratorParserStage" ]
+    ] ],
     [ "architecture", "namespacearchitecture.html", [
-      [ "Accelerator", "namespacearchitecture_1_1Accelerator.html", [
-        [ "Accelerator", "classarchitecture_1_1Accelerator_1_1Accelerator.html", "classarchitecture_1_1Accelerator_1_1Accelerator" ]
+      [ "accelerator", "namespacearchitecture_1_1accelerator.html", [
+        [ "Accelerator", "classarchitecture_1_1accelerator_1_1Accelerator.html", "classarchitecture_1_1accelerator_1_1Accelerator" ]
       ] ],
-      [ "Core", "namespacearchitecture_1_1Core.html", [
-        [ "Core", "classarchitecture_1_1Core_1_1Core.html", "classarchitecture_1_1Core_1_1Core" ]
+      [ "core", "namespacearchitecture_1_1core.html", [
+        [ "Core", "classarchitecture_1_1core_1_1Core.html", "classarchitecture_1_1core_1_1Core" ]
       ] ],
       [ "get_cacti_cost", "namespacearchitecture_1_1get__cacti__cost.html", [
         [ "CactiConfig", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig" ]
       ] ],
+      [ "imc_array", "namespacearchitecture_1_1imc__array.html", [
+        [ "ImcArray", "classarchitecture_1_1imc__array_1_1ImcArray.html", "classarchitecture_1_1imc__array_1_1ImcArray" ]
+      ] ],
       [ "imc_unit", "namespacearchitecture_1_1imc__unit.html", [
         [ "ImcUnit", "classarchitecture_1_1imc__unit_1_1ImcUnit.html", "classarchitecture_1_1imc__unit_1_1ImcUnit" ]
       ] ],
-      [ "ImcArray", "namespacearchitecture_1_1ImcArray.html", [
-        [ "ImcArray", "classarchitecture_1_1ImcArray_1_1ImcArray.html", "classarchitecture_1_1ImcArray_1_1ImcArray" ]
+      [ "memory_hierarchy", "namespacearchitecture_1_1memory__hierarchy.html", [
+        [ "MemoryHierarchy", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy" ]
+      ] ],
+      [ "memory_instance", "namespacearchitecture_1_1memory__instance.html", [
+        [ "MemoryInstance", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html", "classarchitecture_1_1memory__instance_1_1MemoryInstance" ]
       ] ],
       [ "memory_level", "namespacearchitecture_1_1memory__level.html", [
         [ "ServedMemDimensions", "classarchitecture_1_1memory__level_1_1ServedMemDimensions.html", "classarchitecture_1_1memory__level_1_1ServedMemDimensions" ],
@@ -25,12 +34,6 @@ var annotated_dup =
         [ "DataDirection", "classarchitecture_1_1memory__port_1_1DataDirection.html", null ],
         [ "MemoryPort", "classarchitecture_1_1memory__port_1_1MemoryPort.html", "classarchitecture_1_1memory__port_1_1MemoryPort" ],
         [ "PortAllocation", "classarchitecture_1_1memory__port_1_1PortAllocation.html", "classarchitecture_1_1memory__port_1_1PortAllocation" ]
-      ] ],
-      [ "MemoryHierarchy", "namespacearchitecture_1_1MemoryHierarchy.html", [
-        [ "MemoryHierarchy", "classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy.html", "classarchitecture_1_1MemoryHierarchy_1_1MemoryHierarchy" ]
-      ] ],
-      [ "MemoryInstance", "namespacearchitecture_1_1MemoryInstance.html", [
-        [ "MemoryInstance", "classarchitecture_1_1MemoryInstance_1_1MemoryInstance.html", "classarchitecture_1_1MemoryInstance_1_1MemoryInstance" ]
       ] ],
       [ "operational_array", "namespacearchitecture_1_1operational__array.html", [
         [ "OperationalArrayABC", "classarchitecture_1_1operational__array_1_1OperationalArrayABC.html", "classarchitecture_1_1operational__array_1_1OperationalArrayABC" ],
@@ -44,6 +47,27 @@ var annotated_dup =
     ] ],
     [ "cacti_parser", "namespacecacti__parser.html", [
       [ "CactiParser", "classcacti__parser_1_1CactiParser.html", "classcacti__parser_1_1CactiParser" ]
+    ] ],
+    [ "cost_model_evaluation", "namespacecost__model__evaluation.html", [
+      [ "CostModelStage", "classcost__model__evaluation_1_1CostModelStage.html", "classcost__model__evaluation_1_1CostModelStage" ]
+    ] ],
+    [ "onnx_model_parser", "namespaceonnx__model__parser.html", [
+      [ "ONNXModelParserStage", "classonnx__model__parser_1_1ONNXModelParserStage.html", "classonnx__model__parser_1_1ONNXModelParserStage" ]
+    ] ],
+    [ "salsa", "namespacesalsa.html", [
+      [ "SalsaStage", "classsalsa_1_1SalsaStage.html", "classsalsa_1_1SalsaStage" ]
+    ] ],
+    [ "spatial_mapping_conversion", "namespacespatial__mapping__conversion.html", [
+      [ "SpatialMappingConversionStage", "classspatial__mapping__conversion_1_1SpatialMappingConversionStage.html", "classspatial__mapping__conversion_1_1SpatialMappingConversionStage" ]
+    ] ],
+    [ "spatial_mapping_generation", "namespacespatial__mapping__generation.html", [
+      [ "SpatialMappingGeneratorStage", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage" ]
+    ] ],
+    [ "temporal_mapping_generator_stage", "namespacetemporal__mapping__generator__stage.html", [
+      [ "TemporalMappingGeneratorStage", "classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html", "classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage" ]
+    ] ],
+    [ "workload_parser", "namespaceworkload__parser.html", [
+      [ "WorkloadParserStage", "classworkload__parser_1_1WorkloadParserStage.html", "classworkload__parser_1_1WorkloadParserStage" ]
     ] ],
     [ "zigzag", "namespacezigzag.html", [
       [ "cost_model", "namespacezigzag_1_1cost__model.html", [
@@ -75,34 +99,34 @@ var annotated_dup =
           [ "AccessEnergy", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy" ],
           [ "DataMovePattern", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern" ]
         ] ],
-        [ "Mapping", "namespacezigzag_1_1mapping_1_1Mapping.html", [
-          [ "Mapping", "classzigzag_1_1mapping_1_1Mapping_1_1Mapping.html", "classzigzag_1_1mapping_1_1Mapping_1_1Mapping" ]
+        [ "mapping", "namespacezigzag_1_1mapping_1_1mapping.html", [
+          [ "Mapping", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html", "classzigzag_1_1mapping_1_1mapping_1_1Mapping" ]
         ] ],
         [ "spatial_mapping", "namespacezigzag_1_1mapping_1_1spatial__mapping.html", [
           [ "MappingSingleOADim", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html", "classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim" ],
           [ "SpatialMapping", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping" ],
           [ "SpatialMappingHint", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint" ]
         ] ],
-        [ "SpatialMappingInternal", "namespacezigzag_1_1mapping_1_1SpatialMappingInternal.html", [
-          [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal.html", "classzigzag_1_1mapping_1_1SpatialMappingInternal_1_1SpatialMappingInternal" ]
+        [ "spatial_mapping_internal", "namespacezigzag_1_1mapping_1_1spatial__mapping__internal.html", [
+          [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal.html", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal" ]
         ] ],
-        [ "TemporalMapping", "namespacezigzag_1_1mapping_1_1TemporalMapping.html", [
-          [ "TemporalMapping", "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping.html", "classzigzag_1_1mapping_1_1TemporalMapping_1_1TemporalMapping" ]
+        [ "temporal_mapping", "namespacezigzag_1_1mapping_1_1temporal__mapping.html", [
+          [ "TemporalMapping", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping" ]
         ] ]
       ] ],
       [ "opt", "namespacezigzag_1_1opt.html", [
         [ "loma", "namespacezigzag_1_1opt_1_1loma.html", [
-          [ "LomaEngine", "namespacezigzag_1_1opt_1_1loma_1_1LomaEngine.html", [
-            [ "NoValidLoopOrderingFoundException", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1NoValidLoopOrderingFoundException.html", null ],
-            [ "LomaEngine", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine.html", "classzigzag_1_1opt_1_1loma_1_1LomaEngine_1_1LomaEngine" ]
+          [ "engine", "namespacezigzag_1_1opt_1_1loma_1_1engine.html", [
+            [ "NoValidLoopOrderingFoundException", "classzigzag_1_1opt_1_1loma_1_1engine_1_1NoValidLoopOrderingFoundException.html", null ],
+            [ "LomaEngine", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine" ]
           ] ],
-          [ "Loop", "namespacezigzag_1_1opt_1_1loma_1_1Loop.html", [
-            [ "Loop", "classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop.html", "classzigzag_1_1opt_1_1loma_1_1Loop_1_1Loop" ]
+          [ "loop", "namespacezigzag_1_1opt_1_1loma_1_1loop.html", [
+            [ "Loop", "classzigzag_1_1opt_1_1loma_1_1loop_1_1Loop.html", "classzigzag_1_1opt_1_1loma_1_1loop_1_1Loop" ]
           ] ],
-          [ "MemoryAllocator", "namespacezigzag_1_1opt_1_1loma_1_1MemoryAllocator.html", [
-            [ "MemoryHierarchyTooSmallException", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryHierarchyTooSmallException.html", null ],
-            [ "MemoryTooSmallException", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryTooSmallException.html", null ],
-            [ "MemoryAllocator", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html", "classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator" ]
+          [ "memory_allocator", "namespacezigzag_1_1opt_1_1loma_1_1memory__allocator.html", [
+            [ "MemoryHierarchyTooSmallException", "classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryHierarchyTooSmallException.html", null ],
+            [ "MemoryTooSmallException", "classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryTooSmallException.html", null ],
+            [ "MemoryAllocator", "classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html", "classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator" ]
           ] ],
           [ "multipermute", "namespacezigzag_1_1opt_1_1loma_1_1multipermute.html", [
             [ "ListElement", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement.html", "classzigzag_1_1opt_1_1loma_1_1multipermute_1_1ListElement" ],
@@ -112,11 +136,11 @@ var annotated_dup =
           ] ]
         ] ],
         [ "salsa", "namespacezigzag_1_1opt_1_1salsa.html", [
-          [ "SalsaEngine", "namespacezigzag_1_1opt_1_1salsa_1_1SalsaEngine.html", [
-            [ "SalsaEngine", "classzigzag_1_1opt_1_1salsa_1_1SalsaEngine_1_1SalsaEngine.html", "classzigzag_1_1opt_1_1salsa_1_1SalsaEngine_1_1SalsaEngine" ]
+          [ "engine", "namespacezigzag_1_1opt_1_1salsa_1_1engine.html", [
+            [ "SalsaEngine", "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html", "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine" ]
           ] ],
-          [ "SalsaState", "namespacezigzag_1_1opt_1_1salsa_1_1SalsaState.html", [
-            [ "SalsaState", "classzigzag_1_1opt_1_1salsa_1_1SalsaState_1_1SalsaState.html", "classzigzag_1_1opt_1_1salsa_1_1SalsaState_1_1SalsaState" ]
+          [ "state", "namespacezigzag_1_1opt_1_1salsa_1_1state.html", [
+            [ "SalsaState", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState" ]
           ] ]
         ] ]
       ] ],
@@ -126,73 +150,55 @@ var annotated_dup =
           [ "CoreFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory" ],
           [ "MemoryFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory" ]
         ] ],
-        [ "AcceleratorValidator", "namespacezigzag_1_1parser_1_1AcceleratorValidator.html", [
-          [ "AcceleratorValidator", "classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator.html", "classzigzag_1_1parser_1_1AcceleratorValidator_1_1AcceleratorValidator" ]
+        [ "accelerator_validator", "namespacezigzag_1_1parser_1_1accelerator__validator.html", [
+          [ "AcceleratorValidator", "classzigzag_1_1parser_1_1accelerator__validator_1_1AcceleratorValidator.html", "classzigzag_1_1parser_1_1accelerator__validator_1_1AcceleratorValidator" ]
         ] ],
-        [ "MappingValidator", "namespacezigzag_1_1parser_1_1MappingValidator.html", [
-          [ "MappingValidator", "classzigzag_1_1parser_1_1MappingValidator_1_1MappingValidator.html", "classzigzag_1_1parser_1_1MappingValidator_1_1MappingValidator" ]
+        [ "mapping_validator", "namespacezigzag_1_1parser_1_1mapping__validator.html", [
+          [ "MappingValidator", "classzigzag_1_1parser_1_1mapping__validator_1_1MappingValidator.html", "classzigzag_1_1parser_1_1mapping__validator_1_1MappingValidator" ]
         ] ],
         [ "onnx", "namespacezigzag_1_1parser_1_1onnx.html", [
-          [ "ConvParser", "namespacezigzag_1_1parser_1_1onnx_1_1ConvParser.html", [
-            [ "ConvParser", "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser.html", "classzigzag_1_1parser_1_1onnx_1_1ConvParser_1_1ConvParser" ]
+          [ "conv_parser", "namespacezigzag_1_1parser_1_1onnx_1_1conv__parser.html", [
+            [ "ConvParser", "classzigzag_1_1parser_1_1onnx_1_1conv__parser_1_1ConvParser.html", "classzigzag_1_1parser_1_1onnx_1_1conv__parser_1_1ConvParser" ]
           ] ],
-          [ "DefaultNodeParser", "namespacezigzag_1_1parser_1_1onnx_1_1DefaultNodeParser.html", [
-            [ "DefaultNodeParser", "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser.html", "classzigzag_1_1parser_1_1onnx_1_1DefaultNodeParser_1_1DefaultNodeParser" ]
+          [ "default_node_parser", "namespacezigzag_1_1parser_1_1onnx_1_1default__node__parser.html", [
+            [ "DefaultNodeParser", "classzigzag_1_1parser_1_1onnx_1_1default__node__parser_1_1DefaultNodeParser.html", "classzigzag_1_1parser_1_1onnx_1_1default__node__parser_1_1DefaultNodeParser" ]
           ] ],
-          [ "GemmParser", "namespacezigzag_1_1parser_1_1onnx_1_1GemmParser.html", [
-            [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser.html", "classzigzag_1_1parser_1_1onnx_1_1GemmParser_1_1GemmParser" ]
+          [ "gemm_parser", "namespacezigzag_1_1parser_1_1onnx_1_1gemm__parser.html", [
+            [ "GemmParser", "classzigzag_1_1parser_1_1onnx_1_1gemm__parser_1_1GemmParser.html", "classzigzag_1_1parser_1_1onnx_1_1gemm__parser_1_1GemmParser" ]
           ] ],
-          [ "MatMulParser", "namespacezigzag_1_1parser_1_1onnx_1_1MatMulParser.html", [
-            [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1MatMulParser_1_1MatMulParser.html", null ]
+          [ "matmul_parser", "namespacezigzag_1_1parser_1_1onnx_1_1matmul__parser.html", [
+            [ "MatMulParser", "classzigzag_1_1parser_1_1onnx_1_1matmul__parser_1_1MatMulParser.html", null ]
           ] ],
-          [ "ONNXModelParser", "namespacezigzag_1_1parser_1_1onnx_1_1ONNXModelParser.html", [
-            [ "ONNXModelParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser.html", "classzigzag_1_1parser_1_1onnx_1_1ONNXModelParser_1_1ONNXModelParser" ]
+          [ "onnx_model_parser", "namespacezigzag_1_1parser_1_1onnx_1_1onnx__model__parser.html", [
+            [ "ONNXModelParser", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser" ]
           ] ],
-          [ "ONNXOperatorParser", "namespacezigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser.html", [
-            [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser.html", "classzigzag_1_1parser_1_1onnx_1_1ONNXOperatorParser_1_1ONNXOperatorParser" ]
+          [ "onnx_operator_parser", "namespacezigzag_1_1parser_1_1onnx_1_1onnx__operator__parser.html", [
+            [ "ONNXOperatorParser", "classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html", "classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser" ]
           ] ],
           [ "utils", "namespacezigzag_1_1parser_1_1onnx_1_1utils.html", [
             [ "OnnxTensorCategory", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory" ],
             [ "OnnxTensorType", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html", null ]
           ] ]
         ] ],
-        [ "UpgradedValidator", "namespacezigzag_1_1parser_1_1UpgradedValidator.html", [
-          [ "UpgradedValidator", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator.html", "classzigzag_1_1parser_1_1UpgradedValidator_1_1UpgradedValidator" ]
+        [ "upgraded_validator", "namespacezigzag_1_1parser_1_1upgraded__validator.html", [
+          [ "UpgradedValidator", "classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator.html", "classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator" ]
         ] ],
         [ "workload_factory", "namespacezigzag_1_1parser_1_1workload__factory.html", [
           [ "WorkloadFactory", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory" ],
           [ "LayerNodeFactory", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory" ],
           [ "MappingFactory", "classzigzag_1_1parser_1_1workload__factory_1_1MappingFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1MappingFactory" ]
         ] ],
-        [ "WorkloadValidator", "namespacezigzag_1_1parser_1_1WorkloadValidator.html", [
-          [ "WorkloadValidator", "classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator.html", "classzigzag_1_1parser_1_1WorkloadValidator_1_1WorkloadValidator" ]
+        [ "workload_validator", "namespacezigzag_1_1parser_1_1workload__validator.html", [
+          [ "WorkloadValidator", "classzigzag_1_1parser_1_1workload__validator_1_1WorkloadValidator.html", "classzigzag_1_1parser_1_1workload__validator_1_1WorkloadValidator" ]
         ] ]
       ] ],
       [ "stages", "namespacezigzag_1_1stages.html", [
-        [ "AcceleratorParserStage", "namespacezigzag_1_1stages_1_1AcceleratorParserStage.html", [
-          [ "AcceleratorParserStage", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage.html", "classzigzag_1_1stages_1_1AcceleratorParserStage_1_1AcceleratorParserStage" ]
-        ] ],
-        [ "CostModelStage", "namespacezigzag_1_1stages_1_1CostModelStage.html", [
-          [ "CostModelStage", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage.html", "classzigzag_1_1stages_1_1CostModelStage_1_1CostModelStage" ]
-        ] ],
         [ "exploit_data_locality_stages", "namespacezigzag_1_1stages_1_1exploit__data__locality__stages.html", [
           [ "SearchInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage" ],
           [ "ExploitInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage" ]
         ] ],
-        [ "MainStage", "namespacezigzag_1_1stages_1_1MainStage.html", [
-          [ "MainStage", "classzigzag_1_1stages_1_1MainStage_1_1MainStage.html", "classzigzag_1_1stages_1_1MainStage_1_1MainStage" ]
-        ] ],
-        [ "ONNXModelParserStage", "namespacezigzag_1_1stages_1_1ONNXModelParserStage.html", [
-          [ "ONNXModelParserStage", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage.html", "classzigzag_1_1stages_1_1ONNXModelParserStage_1_1ONNXModelParserStage" ]
-        ] ],
-        [ "PlotTemporalMappingsStage", "namespacezigzag_1_1stages_1_1PlotTemporalMappingsStage.html", [
-          [ "PlotTemporalMappingsStage", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage.html", "classzigzag_1_1stages_1_1PlotTemporalMappingsStage_1_1PlotTemporalMappingsStage" ]
-        ] ],
-        [ "reduce_stages", "namespacezigzag_1_1stages_1_1reduce__stages.html", [
-          [ "MinimalEnergyStage", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEnergyStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEnergyStage" ],
-          [ "MinimalLatencyStage", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalLatencyStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalLatencyStage" ],
-          [ "MinimalEDPStage", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1MinimalEDPStage" ],
-          [ "SumStage", "classzigzag_1_1stages_1_1reduce__stages_1_1SumStage.html", "classzigzag_1_1stages_1_1reduce__stages_1_1SumStage" ]
+        [ "main", "namespacezigzag_1_1stages_1_1main.html", [
+          [ "MainStage", "classzigzag_1_1stages_1_1main_1_1MainStage.html", "classzigzag_1_1stages_1_1main_1_1MainStage" ]
         ] ],
         [ "run_opt_stages", "namespacezigzag_1_1stages_1_1run__opt__stages.html", [
           [ "RemoveExtraInfoStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html", "classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage" ],
@@ -201,46 +207,29 @@ var annotated_dup =
           [ "MultiProcessingSpawnStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage" ],
           [ "MultiProcessingGatherStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage" ]
         ] ],
-        [ "SalsaStage", "namespacezigzag_1_1stages_1_1SalsaStage.html", [
-          [ "SalsaStage", "classzigzag_1_1stages_1_1SalsaStage_1_1SalsaStage.html", "classzigzag_1_1stages_1_1SalsaStage_1_1SalsaStage" ]
+        [ "stage", "namespacezigzag_1_1stages_1_1stage.html", [
+          [ "Stage", "classzigzag_1_1stages_1_1stage_1_1Stage.html", "classzigzag_1_1stages_1_1stage_1_1Stage" ],
+          [ "StageCallable", "classzigzag_1_1stages_1_1stage_1_1StageCallable.html", "classzigzag_1_1stages_1_1stage_1_1StageCallable" ]
         ] ],
-        [ "save_stages", "namespacezigzag_1_1stages_1_1save__stages.html", [
-          [ "CompleteSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1CompleteSaveStage" ],
-          [ "SimpleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1SimpleSaveStage" ],
-          [ "PickleSaveStage", "classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage.html", "classzigzag_1_1stages_1_1save__stages_1_1PickleSaveStage" ]
+        [ "workload_iterator", "namespacezigzag_1_1stages_1_1workload__iterator.html", [
+          [ "WorkloadStage", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage" ]
         ] ],
-        [ "SpatialMappingConversionStage", "namespacezigzag_1_1stages_1_1SpatialMappingConversionStage.html", [
-          [ "SpatialMappingConversionStage", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage.html", "classzigzag_1_1stages_1_1SpatialMappingConversionStage_1_1SpatialMappingConversionStage" ]
-        ] ],
-        [ "SpatialMappingGeneratorStage", "namespacezigzag_1_1stages_1_1SpatialMappingGeneratorStage.html", [
-          [ "SpatialMappingGeneratorStage", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage.html", "classzigzag_1_1stages_1_1SpatialMappingGeneratorStage_1_1SpatialMappingGeneratorStage" ]
-        ] ],
-        [ "Stage", "namespacezigzag_1_1stages_1_1Stage.html", [
-          [ "Stage", "classzigzag_1_1stages_1_1Stage_1_1Stage.html", "classzigzag_1_1stages_1_1Stage_1_1Stage" ],
-          [ "StageCallable", "classzigzag_1_1stages_1_1Stage_1_1StageCallable.html", "classzigzag_1_1stages_1_1Stage_1_1StageCallable" ]
-        ] ],
-        [ "temporal_mapping_generator_stage", "namespacezigzag_1_1stages_1_1temporal__mapping__generator__stage.html", [
-          [ "TemporalMappingGeneratorStage", "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html", "classzigzag_1_1stages_1_1temporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage" ]
-        ] ],
-        [ "VisualizationStage", "namespacezigzag_1_1stages_1_1VisualizationStage.html", [
-          [ "VisualizationStage", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage.html", "classzigzag_1_1stages_1_1VisualizationStage_1_1VisualizationStage" ]
-        ] ],
-        [ "WorkloadParserStage", "namespacezigzag_1_1stages_1_1WorkloadParserStage.html", [
-          [ "WorkloadParserStage", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage.html", "classzigzag_1_1stages_1_1WorkloadParserStage_1_1WorkloadParserStage" ]
-        ] ],
-        [ "WorkloadStage", "namespacezigzag_1_1stages_1_1WorkloadStage.html", [
-          [ "WorkloadStage", "classzigzag_1_1stages_1_1WorkloadStage_1_1WorkloadStage.html", "classzigzag_1_1stages_1_1WorkloadStage_1_1WorkloadStage" ]
+        [ "workload_parser", "namespacezigzag_1_1stages_1_1workload__parser.html", [
+          [ "WorkloadParserStage", "classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html", "classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage" ]
         ] ]
       ] ],
       [ "utils", "namespacezigzag_1_1utils.html", [
         [ "UniqueMessageFilter", "classzigzag_1_1utils_1_1UniqueMessageFilter.html", "classzigzag_1_1utils_1_1UniqueMessageFilter" ]
       ] ],
       [ "workload", "namespacezigzag_1_1workload.html", [
-        [ "DNNWorkload", "namespacezigzag_1_1workload_1_1DNNWorkload.html", [
-          [ "DNNWorkload", "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload.html", "classzigzag_1_1workload_1_1DNNWorkload_1_1DNNWorkload" ]
+        [ "dnn_workload", "namespacezigzag_1_1workload_1_1dnn__workload.html", [
+          [ "DNNWorkload", "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html", "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload" ]
         ] ],
-        [ "DummyNode", "namespacezigzag_1_1workload_1_1DummyNode.html", [
-          [ "DummyNode", "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode.html", "classzigzag_1_1workload_1_1DummyNode_1_1DummyNode" ]
+        [ "dummy_node", "namespacezigzag_1_1workload_1_1dummy__node.html", [
+          [ "DummyNode", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode" ]
+        ] ],
+        [ "layer_attribute", "namespacezigzag_1_1workload_1_1layer__attribute.html", [
+          [ "LayerAttribute", "classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html", "classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute" ]
         ] ],
         [ "layer_attributes", "namespacezigzag_1_1workload_1_1layer__attributes.html", [
           [ "LayerEquation", "classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation.html", "classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation" ],
@@ -256,17 +245,14 @@ var annotated_dup =
           [ "LayerNodeAttributes", "classzigzag_1_1workload_1_1layer__node_1_1LayerNodeAttributes.html", null ],
           [ "LayerNode", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode" ]
         ] ],
-        [ "LayerAttribute", "namespacezigzag_1_1workload_1_1LayerAttribute.html", [
-          [ "LayerAttribute", "classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute.html", "classzigzag_1_1workload_1_1LayerAttribute_1_1LayerAttribute" ]
+        [ "layer_node_abc", "namespacezigzag_1_1workload_1_1layer__node__abc.html", [
+          [ "LayerNodeABC", "classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html", "classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC" ]
         ] ],
-        [ "LayerNodeABC", "namespacezigzag_1_1workload_1_1LayerNodeABC.html", [
-          [ "LayerNodeABC", "classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC.html", "classzigzag_1_1workload_1_1LayerNodeABC_1_1LayerNodeABC" ]
+        [ "onnx_workload", "namespacezigzag_1_1workload_1_1onnx__workload.html", [
+          [ "ONNXWorkload", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload" ]
         ] ],
-        [ "ONNXWorkload", "namespacezigzag_1_1workload_1_1ONNXWorkload.html", [
-          [ "ONNXWorkload", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1ONNXWorkload_1_1ONNXWorkload" ]
-        ] ],
-        [ "Workload", "namespacezigzag_1_1workload_1_1Workload.html", [
-          [ "WorkloadABC", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1Workload_1_1WorkloadABC" ]
+        [ "workload_abc", "namespacezigzag_1_1workload_1_1workload__abc.html", [
+          [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC" ]
         ] ]
       ] ]
     ] ]

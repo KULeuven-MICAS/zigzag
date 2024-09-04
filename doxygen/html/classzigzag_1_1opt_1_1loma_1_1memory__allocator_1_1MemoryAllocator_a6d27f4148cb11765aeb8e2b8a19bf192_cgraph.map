@@ -1,0 +1,6 @@
+<map id="calc_size_slices" name="calc_size_slices">
+<area shape="rect" id="node1" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="5,56,131,83"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="256,5,379,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="263,56,372,83"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="179,107,456,163"/>
+</map>

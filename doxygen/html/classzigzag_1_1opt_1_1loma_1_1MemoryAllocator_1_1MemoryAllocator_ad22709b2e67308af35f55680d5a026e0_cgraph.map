@@ -1,9 +1,0 @@
-<map id="run" name="run">
-<area shape="rect" id="node1" title="Run the memory allocation process." alt="" coords="5,117,48,144"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="96,117,209,144"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#a6d27f4148cb11765aeb8e2b8a19bf192" title="Calculate the required memory size to store different slices of the unallocated loops,..." alt="" coords="297,63,422,89"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3" title="Given a MemoryOperand, return the linked LayerOperand." alt="" coords="509,107,787,163"/>
-<area shape="rect" id="node7" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="257,168,461,195"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#ae5d0801754d5b9152109c0b51e10f33a" title="Calculate the &#39;mem_op&#39; tensor size required for all the loops in &#39;loops&#39;." alt="" coords="587,5,709,32"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1opt_1_1loma_1_1MemoryAllocator_1_1MemoryAllocator.html#afd37d5e95f14a794bbf8e95519d46c32" title="Get the precision at which this tensor will have to be stored in the MemoryLevel node." alt="" coords="593,56,703,83"/>
-</map>

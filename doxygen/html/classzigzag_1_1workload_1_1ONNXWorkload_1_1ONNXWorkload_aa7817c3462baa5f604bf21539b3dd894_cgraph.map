@@ -1,5 +1,0 @@
-<map id="add" name="add">
-<area shape="rect" id="node1" title="Add a node object to the ONNX workload graph." alt="" coords="5,57,52,84"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#aeb3be5876602dac9fa7620885b20fd03" title=" " alt="" coords="119,5,325,61"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1workload_1_1Workload_1_1WorkloadABC.html#a3c2017440571d04e5652c904bfd91918" title=" " alt="" coords="100,86,344,127"/>
-</map>
