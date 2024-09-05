@@ -20,7 +20,7 @@ from zigzag.opt.loma.multipermute import (
     StaticPositionsAndSizesConstraint,
     StaticPositionsConstraint,
 )
-from zigzag.workload.LayerAttribute import LayerAttribute
+from zigzag.workload.layer_attribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
 

@@ -14,9 +14,9 @@ from zigzag.mapping.spatial_mapping import (
     SpatialMapping,
     SpatialMappingHint,
 )
-from zigzag.parser.WorkloadValidator import WorkloadValidator
+from zigzag.parser.workload_validator import WorkloadValidator
 from zigzag.utils import UniqueMessageFilter
-from zigzag.workload.DNNWorkload import DNNWorkload
+from zigzag.workload.dnn_workload import DNNWorkload
 from zigzag.workload.layer_attributes import (
     InputOperandSource,
     LayerDimRelation,

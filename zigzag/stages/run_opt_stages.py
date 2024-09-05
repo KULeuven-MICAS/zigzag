@@ -4,7 +4,7 @@ import os
 from typing import Any, Callable
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
-from zigzag.stages.Stage import Stage, StageCallable
+from zigzag.stages.stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
 

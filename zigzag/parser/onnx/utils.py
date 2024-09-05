@@ -53,7 +53,7 @@ def unroll_branches(graph: GraphProto) -> GraphProto:
             value_info = next(i for i in graph.value_info if i.name == input_name)
             # Add value info to original graph output if it's not present
             if input_name not in [vi.name for vi in graph.output]:
-                graph.output.extend([value_info])
+                graph.results.extend([value_info])
             # Add value info to subgraph input if it's not present
             if input_name not in [vi.name for vi in g0.input]:
                 g0.input.extend([value_info])

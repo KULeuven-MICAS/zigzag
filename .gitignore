@@ -161,3 +161,6 @@ debug*
 # cacti cache files for imc
 zigzag/cacti/cacti_master/self_gen/*
 zigzag/cacti/cacti_master/*.yaml
+
+# .sh files
+*.sh

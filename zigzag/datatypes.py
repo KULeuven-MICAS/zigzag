@@ -4,7 +4,7 @@ from typing import Any, Literal, TypeAlias
 
 import numpy as np
 
-from zigzag.parser.AcceleratorValidator import AcceleratorValidator
+from zigzag.parser.accelerator_validator import AcceleratorValidator
 
 
 class OperandABC(metaclass=ABCMeta):

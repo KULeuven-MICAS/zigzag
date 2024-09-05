@@ -4,7 +4,7 @@ import math
 from zigzag.datatypes import LayerDim, LayerOperand, OADimension, UnrollFactor
 from zigzag.hardware.architecture.get_cacti_cost import get_cacti_cost
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
-from zigzag.mapping.Mapping import Mapping
+from zigzag.mapping.mapping import Mapping
 from zigzag.mapping.spatial_mapping import MappingSingleOADim
 from zigzag.workload.layer_node import LayerNode
 

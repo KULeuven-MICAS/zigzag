@@ -2,12 +2,12 @@ import math
 from typing import Any
 
 from zigzag.datatypes import MemoryOperand, OADimension
+from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import (
     MemoryPort,
     MemoryPortType,
     PortAllocation,
 )
-from zigzag.hardware.architecture.MemoryInstance import MemoryInstance
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 
 
