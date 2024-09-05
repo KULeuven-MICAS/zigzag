@@ -15,13 +15,6 @@ class AcceleratorValidator:
     DIMENSION_REGEX = r"^D\d$"
     PORT_REGEX = r"^[r]?[w]?_port_\d+$"
 
-    # Intermediate output operand. Hard coded, and must be specified by the user as such
-    OUTPUT_OPERAND_STR = "O"
-    # Final output operand after scaling. Hard coded, and must be specified by the user as such
-    FINAL_OUTPUT_OPERAND_STR = "O_final"
-    MEM_OP_1_STR = "I1"
-    MEM_OP_2_STR = "I2"
-
     SCHEMA = {
         "name": {"type": "string", "required": True},
         "memories": {

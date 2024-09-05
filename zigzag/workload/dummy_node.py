@@ -1,4 +1,4 @@
-from zigzag.datatypes import LayerOperand
+from zigzag.datatypes import Constants
 from zigzag.workload.layer_attributes import InputOperandSource
 from zigzag.workload.layer_node_abc import LayerNodeABC
 
@@ -18,16 +18,17 @@ class DummyNode(LayerNodeABC):
         """
         LayerNodeABC.__init__(self, node_id, node_name)
 
-        if len(predecessors) == 0:
-            self.input_operand_source: InputOperandSource = {}
-        elif len(predecessors) == 1:
-            self.input_operand_source = {LayerOperand("I"): predecessors[0]}
-        else:
-            # We currently don't support more than 2 sources so we can also use `I` and `W` for the layer operands
-            self.input_operand_source = {
-                LayerOperand("I"): predecessors[0],
-                LayerOperand("W"): predecessors[1],
-            }
+        match len(predecessors):
+            case 0:
+                self.input_operand_source: InputOperandSource = {}
+            case 1:
+                self.input_operand_source = {Constants.LAYER_OP_I: predecessors[0]}
+            case _:
+                # We currently don't support more than 2 sources so we can also use `I` and `W` for the layer operands
+                self.input_operand_source = {
+                    Constants.LAYER_OP_I: predecessors[0],
+                    Constants.LAYER_OP_W: predecessors[1],
+                }
 
         self.type = node_type
         # We assume these nodes are mapped on a core with id -1

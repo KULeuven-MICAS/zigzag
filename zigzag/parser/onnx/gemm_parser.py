@@ -1,7 +1,5 @@
 from typing import Any
 
-from onnx import ModelProto, NodeProto
-
 from zigzag.parser.onnx.onnx_operator_parser import ONNXOperatorParser
 from zigzag.parser.onnx.utils import (
     get_attribute_ints_with_name,
@@ -13,17 +11,6 @@ from zigzag.workload.layer_node import LayerNode
 
 class GemmParser(ONNXOperatorParser):
     """! Parses an ONNX Gemm operator into a LayerNode"""
-
-    def __init__(
-        self,
-        node_id: int,
-        node: NodeProto,
-        nodes_outputs: dict[int, Any],
-        mapping_data: list[dict[str, Any]],
-        onnx_model: ModelProto,
-    ) -> None:
-        super().__init__(node_id, node, nodes_outputs, onnx_model)
-        self.mapping_data = mapping_data
 
     def run(self) -> LayerNode:
         """! Run the parser"""
