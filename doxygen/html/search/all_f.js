@@ -37,6 +37,5 @@ var searchData=
   ['output_649',['OUTPUT',['../classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html#a3198f9593a6b56e6fc4678a14d413ff1',1,'zigzag::parser::onnx::utils::OnnxTensorCategory']]],
   ['output_5fir_5floop_5fsize_5fcaal_650',['output_ir_loop_size_caal',['../classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#a575168334b8acb31db40c99bb27e1b30',1,'zigzag::mapping::mapping::Mapping']]],
   ['output_5flayer_5fop_651',['OUTPUT_LAYER_OP',['../classzigzag_1_1datatypes_1_1Constants.html#a58be78b184da7ef3fdce22ea01acff84',1,'zigzag::datatypes::Constants']]],
-  ['output_5fmem_5fop_652',['OUTPUT_MEM_OP',['../classzigzag_1_1datatypes_1_1Constants.html#a47352becbb40036a8dcc091b2b0bfa2d',1,'zigzag::datatypes::Constants']]],
-  ['output_5foperand_5fstr_653',['OUTPUT_OPERAND_STR',['../classzigzag_1_1parser_1_1accelerator__validator_1_1AcceleratorValidator.html#a5daf7e15b99072cfbdd18a8b2e0ece94',1,'zigzag::parser::accelerator_validator::AcceleratorValidator']]]
+  ['output_5fmem_5fop_652',['OUTPUT_MEM_OP',['../classzigzag_1_1datatypes_1_1Constants.html#a47352becbb40036a8dcc091b2b0bfa2d',1,'zigzag::datatypes::Constants']]]
 ];

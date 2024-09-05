@@ -1,6 +1,7 @@
 var classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser =
 [
     [ "__init__", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#a07d50f099181b9433f7416c6bff14fb1", null ],
+    [ "get_parser_class", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#a5c040baaf517fe40385a214c7cdbac8c", null ],
     [ "parse_workload_from_onnx_model_and_mapping", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#ade99e4499eaf6da42cc6e1cfab009081", null ],
     [ "run", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#ada2ad33b3a3b364f30e0f5d7d5201d73", null ],
     [ "mapping_data", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#a3f954a739989f453e42fa97cb171c657", null ],
