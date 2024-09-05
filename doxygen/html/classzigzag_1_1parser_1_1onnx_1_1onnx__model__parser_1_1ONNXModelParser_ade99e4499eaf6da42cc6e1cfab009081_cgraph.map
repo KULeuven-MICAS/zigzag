@@ -1,0 +1,4 @@
+<map id="parse_workload_from_onnx_model_and_mapping" name="parse_workload_from_onnx_model_and_mapping">
+<area shape="rect" id="node1" title="Converts an onnx model into a workload object." alt="" coords="5,5,209,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#a5c040baaf517fe40385a214c7cdbac8c" title=" " alt="" coords="257,13,388,39"/>
+</map>
