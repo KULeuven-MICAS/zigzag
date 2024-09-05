@@ -3,7 +3,7 @@ from typing import Any
 
 from onnx import ModelProto, NodeProto
 
-from zigzag.hardware.architecture.Accelerator import Accelerator
+from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.parser.onnx.utils import get_attribute_ints_with_name, get_onnx_tensor_type
 from zigzag.workload.layer_node_abc import LayerNodeABC
 
