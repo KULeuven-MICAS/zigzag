@@ -7,6 +7,7 @@ from zigzag.parser.onnx.conv_parser import ConvParser
 from zigzag.parser.onnx.default_node_parser import DefaultNodeParser
 from zigzag.parser.onnx.gemm_parser import GemmParser
 from zigzag.parser.onnx.matmul_parser import MatMulParser
+from zigzag.parser.onnx.onnx_operator_parser import ONNXOperatorParser
 from zigzag.parser.onnx.utils import (
     parse_dynamic_onnx_model,
     parse_onnx_model_from_path,

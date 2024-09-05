@@ -1,7 +1,5 @@
 from typing import Any
 
-from onnx import ModelProto, NodeProto
-
 from zigzag.parser.onnx.onnx_operator_parser import ONNXOperatorParser
 from zigzag.parser.onnx.utils import (
     get_attribute_ints_with_name,
