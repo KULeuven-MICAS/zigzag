@@ -1,6 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a3cf49332e77fc1ef7fe0fb33f147f84d":[2,0,14,7,3,1,1],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,14,7,3,1,8],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a84f7fd0f8ebb7d4d4166c84bf455c71a":[2,0,14,7,3,1,6],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#aa557c0a1292ba357db900b8d2f8cd96e":[2,0,14,7,3,1,5],
@@ -153,16 +152,16 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,5],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,5,2],
 "files.html":[3,0],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
 "functions_d.html":[2,3,0,4],
 "functions_e.html":[2,3,0,5],
 "functions_f.html":[2,3,0,6],
-"functions_func.html":[2,3,1,0],
 "functions_func.html":[2,3,1],
+"functions_func.html":[2,3,1,0],
 "functions_func_a.html":[2,3,1,1],
 "functions_func_b.html":[2,3,1,2],
 "functions_func_c.html":[2,3,1,3],
@@ -199,8 +198,8 @@ var NAVTREEINDEX4 =
 "functions_t.html":[2,3,0,19],
 "functions_u.html":[2,3,0,20],
 "functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2],
 "functions_vars.html":[2,3,2,0],
+"functions_vars.html":[2,3,2],
 "functions_vars_b.html":[2,3,2,1],
 "functions_vars_c.html":[2,3,2,2],
 "functions_vars_d.html":[2,3,2,3],
@@ -249,5 +248,6 @@ var NAVTREEINDEX4 =
 "mapping__assist__funcs_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,3,3,2],
 "mapping__assist__funcs_8py.html#a93a85a91d438a1bc260d32aef08a6180":[3,0,0,3,3,0],
 "mapping__assist__funcs_8py.html#a98824e40fda888066262630f7fbf9a66":[3,0,0,3,3,1],
-"mapping__validator_8py.html":[3,0,0,5,5]
+"mapping__validator_8py.html":[3,0,0,5,5],
+"mapping__validator_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,5,5,1]
 };
