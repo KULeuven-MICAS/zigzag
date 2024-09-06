@@ -29,8 +29,7 @@ class Stage(metaclass=ABCMeta):
             )
 
     @abstractmethod
-    def run(self) -> Generator[tuple[CostModelEvaluationABC, Any], None, None]:
-        ...
+    def run(self) -> Generator[tuple[CostModelEvaluationABC, Any], None, None]: ...
 
     def __iter__(self):
         return self.run()
@@ -45,5 +44,4 @@ class Stage(metaclass=ABCMeta):
 
 @runtime_checkable
 class StageCallable(Protocol):
-    def __call__(self, list_of_callables: list["StageCallable"], **kwagrs: Any) -> Stage:
-        ...
+    def __call__(self, list_of_callables: list["StageCallable"], **kwagrs: Any) -> Stage: ...

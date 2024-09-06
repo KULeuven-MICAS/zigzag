@@ -49,8 +49,7 @@ class WorkloadABC(DiGraph, Generic[T], metaclass=ABCMeta):
                 return node
         raise ValueError(f"Node with id {node_id} not found in workload")
 
-    def get_copy_no_dummy(self) -> "WorkloadABC[LayerNode]":
-        ...
+    def get_copy_no_dummy(self) -> "WorkloadABC[LayerNode]": ...
 
     @property
     def node_list(self) -> list[T]:
