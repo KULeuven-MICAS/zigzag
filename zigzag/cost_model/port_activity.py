@@ -1,6 +1,6 @@
 from zigzag.datatypes import LayerOperand
 from zigzag.hardware.architecture.memory_port import DataDirection
-
+from zigzag.utils import hash_sha512
 
 class PortActivity:
     """!  Class that collects all the data transfer rate (periodic) information for each DTL (data transfer link)."""
@@ -51,7 +51,7 @@ class PortActivity:
         return str(self.served_op_lv_dir)
 
     def __hash__(self):
-        return hash(self.served_op_lv_dir)
+        return hash_sha512(self.served_op_lv_dir)
 
 
 class PortBeginOrEndActivity:
