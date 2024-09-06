@@ -1,18 +1,15 @@
 from collections import defaultdict
-from typing import Any, Iterator
-
-import networkx as nx
-from networkx import DiGraph
+from typing import Any
 
 from zigzag.datatypes import MemoryOperand
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel, ServedMemDimensions
 from zigzag.hardware.architecture.memory_port import PortAllocation
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
-from zigzag.utils import json_repr_handler
+from zigzag.utils import DiGraphWrapper, json_repr_handler
 
 
-class MemoryHierarchy(DiGraph):
+class MemoryHierarchy(DiGraphWrapper[MemoryLevel]):
     """! Class that represents a memory hierarchy as a directed networkx graph.
     The memory hierarchy graph is directed, with the root nodes representing the lowest level
     in the memory hierarchy.
@@ -71,7 +68,7 @@ class MemoryHierarchy(DiGraph):
         # Compute which memory level this is for all the operands
         mem_level_of_operands: dict[MemoryOperand, int] = {}
         for mem_op in operands:
-            nb_levels_so_far = len([node for node in self.memory_nodes if mem_op in node.operands])
+            nb_levels_so_far = len([node for node in self.node_list if mem_op in node.operands])
             mem_level_of_operands[mem_op] = nb_levels_so_far
 
         memory_level = MemoryLevel(
@@ -94,11 +91,11 @@ class MemoryHierarchy(DiGraph):
                 to_edge_from.add(m)
 
         # Add the node to the graph
-        self.__add_node(memory_level)
+        self.add_node(memory_level)
 
         for sink_node in to_edge_from:
             # Add an edge from this sink node to the current node
-            self.__add_edge(sink_node, memory_level)
+            self.add_edge(sink_node, memory_level)
 
     def get_memory_levels(self, mem_op: MemoryOperand) -> list[MemoryLevel]:
         """! Returns a list of memories in the memory hierarchy for the memory operand.
@@ -113,11 +110,11 @@ class MemoryHierarchy(DiGraph):
 
     def get_inner_memories(self) -> list[MemoryLevel]:
         """! Returns the inner-most memory levels for all memory operands."""
-        return [node for node, in_degree in self.in_degree() if in_degree == 0]  # type: ignore
+        return [node for node, in_degree in self.in_degree() if in_degree == 0]
 
     def get_outer_memories(self) -> list[MemoryLevel]:
         """! Returns the outer-most memory levels for all memory operands."""
-        return [node for node, out_degree in self.out_degree() if out_degree == 0]  # type: ignore
+        return [node for node, out_degree in self.out_degree() if out_degree == 0]
 
     def get_top_memories(self) -> tuple[list[MemoryLevel], int]:
         """! Returns the 'top'-most MemoryLevels, where 'the' level of MemoryLevel is considered to be the largest
@@ -125,7 +122,7 @@ class MemoryHierarchy(DiGraph):
         @return (list_of_memories_on_top_level, top_level)
         """
         level_to_mems: defaultdict[int, list[MemoryLevel]] = defaultdict(lambda: [])
-        for node in self.memory_nodes:
+        for node in self.node_list:
             level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys())
         return level_to_mems[top_level], top_level
@@ -136,7 +133,7 @@ class MemoryHierarchy(DiGraph):
         'The' level of a MemoryLevel is considered to be the largest level it has across its assigned operands.
         """
         level_to_mems: dict[int, list[MemoryLevel]] = defaultdict(lambda: [])
-        for node in self.memory_nodes:
+        for node in self.node_list:
             if operand in node.operands:
                 level_to_mems[max(node.mem_level_of_operands.values())].append(node)
         top_level = max(level_to_mems.keys()) if level_to_mems else -1
@@ -151,23 +148,6 @@ class MemoryHierarchy(DiGraph):
                     return mem
         raise ValueError(f"Operand {operand} not found in any of the memory instances.")
 
-    def topological_sort(self) -> Iterator[MemoryLevel]:
-        """! Wrap `DiGraph.topological_sort` with correct type annotation"""
-        return nx.topological_sort(self)  # type: ignore
-
-    def __add_node(self, node: MemoryLevel) -> None:
-        """! Wrap `DiGraph.add_node` with correct type annotation"""
-        self.add_node(node)  # type: ignore
-
-    def __add_edge(self, sink_node: MemoryLevel, source_node: MemoryLevel):
-        """! Wrap `DiGraph.add_edge` with correct type annotation"""
-        self.add_edge(sink_node, source_node)  # type: ignore
-
-    @property
-    def memory_nodes(self) -> list[MemoryLevel]:
-        """! Wrap `DiGraph.nodes()` with custom type annotation"""
-        return list(self.nodes())  # type: ignore
-
     def __jsonrepr__(self):
         """! JSON Representation of this object to save it to a json file."""
         return json_repr_handler(list(self.topological_sort()))
@@ -176,5 +156,5 @@ class MemoryHierarchy(DiGraph):
         return (
             isinstance(other, MemoryHierarchy)
             and self.nb_levels == other.nb_levels
-            and all([self_ml == other_ml for self_ml, other_ml in zip(self.memory_nodes, other.memory_nodes)])
+            and all([self_ml == other_ml for self_ml, other_ml in zip(self.node_list, other.node_list)])
         )
