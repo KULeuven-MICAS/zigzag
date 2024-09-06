@@ -4,9 +4,8 @@ import math
 from typing import Any
 
 from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
-from zigzag.utils import UniqueMessageFilter, json_repr_handler
+from zigzag.utils import UniqueMessageFilter, hash_sha512, json_repr_handler
 from zigzag.workload.layer_attribute import LayerAttribute
-from zigzag.utils import hash_sha512
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())

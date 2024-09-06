@@ -11,6 +11,7 @@ from zigzag.hardware.architecture.memory_port import (
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import hash_sha512
 
+
 class ServedMemDimensions:
     """! Represents a collection of Operational Array Dimensions (served by some Memory Instance)"""
 

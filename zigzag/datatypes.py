@@ -7,6 +7,7 @@ import numpy as np
 from zigzag.parser.accelerator_validator import AcceleratorValidator
 from zigzag.utils import hash_sha512
 
+
 class OperandABC(metaclass=ABCMeta):
     """! Abstract Base Class for all dimension- and operand-like classes"""
 
