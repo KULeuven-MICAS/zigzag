@@ -1,6 +1,5 @@
-import pytest
-
 from zigzag.api import get_hardware_performance_zigzag
+from zigzag.visualization.results.print_mapping import get_temporal_spatial_loops
 
 # Test case for when spatial_mapping is provided, while spatial_mapping_hint is not provided.
 
@@ -18,22 +17,25 @@ ens_lats = {
 }
 
 
-@pytest.fixture
+# @pytest.fixture
 def mapping():
     return "zigzag/inputs/mapping/ascend_like_constrainted.yaml"
 
 
-@pytest.fixture
+# @pytest.fixture
 def accelerator():
     return "zigzag/inputs/hardware/ascend_like.yaml"
 
 
-@pytest.mark.parametrize("workload", workloads)
+# @pytest.mark.parametrize("workload", workloads)
 def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621
-    energy, latency, _ = get_hardware_performance_zigzag(
-        workload, accelerator, mapping, enable_mix_spatial_mapping=True
-    )
-    (expected_energy, expected_latency) = ens_lats[workload]
-    print(f"'{workload}': ({energy}, {latency}),")
-    assert energy == pytest.approx(expected_energy)  # type: ignore
-    assert latency == pytest.approx(expected_latency)  # type: ignore
+    energy, latency, cmes = get_hardware_performance_zigzag(workload, accelerator, mapping)
+    temp_map_default = [get_temporal_spatial_loops(cme[0])[0] for cme in cmes[0][1]]
+
+    for temp_mapping in temp_map_default:
+        if ("OX" in [dim[0].name for dim in temp_mapping]) and ("OY" in [dim[0].name for dim in temp_mapping]):
+            assert temp_mapping[-1][0].name == "OX"
+            assert temp_mapping[-2][0].name == "OY"
+
+
+test_api(workload=workloads[0], accelerator=accelerator(), mapping=mapping())

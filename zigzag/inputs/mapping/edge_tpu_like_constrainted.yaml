@@ -10,10 +10,9 @@
     D4:
       - OY, 4
   temporal_ordering:
-    - ['*','*']
-    - [K, '*']
-    - [OY, 2]
+    - [OY, '*']
     - [OX, '*']
+    - ['*','*']
   memory_operand_links:
     O: O
     W: I2
@@ -31,10 +30,9 @@
     D4:
       - OY, 1
   temporal_ordering:
-    - ['*','*']
-    - [G, 8]
     - [OY, '*']
     - [OX, '*']
+    - ['*','*']
   memory_operand_links:
     O: O
     W: I2
@@ -52,10 +50,9 @@
     D4:
       - OY, 1
   temporal_ordering:
-    - ['*','*']
-    - [G, 8]
     - [OY, '*']
     - [OX, '*']
+    - ['*','*']
   memory_operand_links:
     O: O
     W: I2

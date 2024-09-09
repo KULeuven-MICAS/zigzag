@@ -6,9 +6,9 @@
     D2:
       - C, 32
   temporal_ordering:
+    - [OX, '*']
+    - [OY, '*']
     - ['*','*']
-    - [K, '*']
-    - [C, '*']
   memory_operand_links:
     O: O
     W: I2
