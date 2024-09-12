@@ -1,5 +1,6 @@
 var NAVTREEINDEX3 =
 {
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,14,3,1,1,0,4],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a9633a6a95e13e957076a6800eeb191a7":[2,0,14,3,1,1,0,1],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aa5d555210685086c19e5d08afca6685b":[2,0,14,3,1,1,0,7],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#abad7d445eb555517f300b6de6986a765":[2,0,14,3,1,1,0,2],
@@ -248,6 +249,5 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a758c7cbcd8e932121d56aaf23f8a70c3":[2,0,14,7,3,4,1],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa62fe23629f7a9f596b52532583c1356":[2,0,14,7,3,4,4],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa96b76e119daad6f927c53d4278710ca":[2,0,14,7,3,4,2],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html":[2,0,14,7,3,1],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a346a02ddda6a49acf3f412cee1157968":[2,0,14,7,3,1,7]
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html":[2,0,14,7,3,1]
 };

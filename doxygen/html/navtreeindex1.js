@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html#a826ddfd70786504e468eec75c57ee1c6":[2,0,5,0,0],
 "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,5,0,1],
 "classreduce__stages_1_1MinimalEDPStage.html":[2,0,6,2],
 "classreduce__stages_1_1MinimalEDPStage.html#a48897909da05b9250de128368f26dd5e":[2,0,6,2,0],
@@ -248,6 +249,5 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a5012d7ea0cd7d7ffd209e4828ffb1d27":[2,0,14,2,0,3,17],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a5b4bc8a55977ff0a16170caf0067208c":[2,0,14,2,0,3,7],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7268b63a9ca99a6496f5caed5c7203d8":[2,0,14,2,0,3,12],
-"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7fe92493100146ec038c75aec0be102e":[2,0,14,2,0,3,5],
-"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a884bea0158394cff7700dfd66ed9c7be":[2,0,14,2,0,3,15]
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7fe92493100146ec038c75aec0be102e":[2,0,14,2,0,3,5]
 };
