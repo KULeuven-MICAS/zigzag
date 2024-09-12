@@ -130,3 +130,10 @@ class Core:
             and self.operational_array == other.operational_array
             and self.memory_hierarchy == other.memory_hierarchy
         )
+
+    def has_same_performance(self, other: object) -> bool:
+        return (
+            isinstance(other, Core)
+            and self.operational_array == other.operational_array
+            and self.memory_hierarchy == other.memory_hierarchy
+        )
