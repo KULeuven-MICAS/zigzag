@@ -121,7 +121,7 @@ class Core:
         return json_repr_handler(self.__dict__)
 
     def __hash__(self) -> int:
-        return hash_sha512(self.id)
+        return self.id
 
     def __eq__(self, other: object) -> bool:
         return (
