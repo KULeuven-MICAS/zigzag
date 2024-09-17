@@ -351,18 +351,6 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         self.active_mem_level = self.mapping.mem_level
 
-        from zigzag.datatypes import LayerDim
-
-        wanted_tm = [
-            [],
-            [(LayerDim("C"), 4), (LayerDim("FY"), 3), (LayerDim("OY"), 28)],
-            [(LayerDim("K"), 4), (LayerDim("FX"), 3), (LayerDim("OX"), 28)],
-            [],
-        ]
-        got_tm = next((v for k, v in self.temporal_mapping.mapping_dic_origin.items() if k.name == "W"))
-        if got_tm == wanted_tm:
-            pass
-
         # Run the cost model evaluation
         self.run()
 
@@ -1189,8 +1177,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
     @staticmethod
     def reduce_balanced(c_list: list[float], m_list: list[float], s: float) -> list[float]:
-        c_result = c_list.copy()
         """Balance c_list towards minimums m_list with a total maximum reduction of s."""
+        c_result = c_list.copy()
         if s <= 0 or not c_list:
             return c_list
 
