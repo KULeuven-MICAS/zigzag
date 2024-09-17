@@ -89,6 +89,7 @@ var annotated_dup =
     [ "zigzag", "namespacezigzag.html", [
       [ "cost_model", "namespacezigzag_1_1cost__model.html", [
         [ "cost_model", "namespacezigzag_1_1cost__model_1_1cost__model.html", [
+          [ "MemoryUtilization", "classzigzag_1_1cost__model_1_1cost__model_1_1MemoryUtilization.html", null ],
           [ "CostModelEvaluationABC", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC" ],
           [ "CumulativeCME", "classzigzag_1_1cost__model_1_1cost__model_1_1CumulativeCME.html", "classzigzag_1_1cost__model_1_1cost__model_1_1CumulativeCME" ],
           [ "CostModelEvaluation", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation" ]
