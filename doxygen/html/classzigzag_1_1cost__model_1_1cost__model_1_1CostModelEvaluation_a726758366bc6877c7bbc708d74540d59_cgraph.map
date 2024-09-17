@@ -1,8 +1,5 @@
 <map id="calc_data_loading_offloading_latency" name="calc_data_loading_offloading_latency">
 <area shape="rect" id="node1" title="Calculate the initial/final data loading/off&#45;loading cycle by separating out the first&#45;time input ope..." alt="" coords="5,23,216,65"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9e0624639e89bf3c2564c002d845f7b9" title=" " alt="" coords="268,5,443,32"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="264,56,447,83"/>
-<area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="514,11,675,53"/>
-<area shape="rect" id="node6" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="495,77,695,133"/>
-<area shape="rect" id="node5" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="743,19,875,45"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title=" " alt="" coords="272,5,455,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2407686888368aea3cef598765be6ab3" title=" " alt="" coords="264,56,463,83"/>
 </map>
