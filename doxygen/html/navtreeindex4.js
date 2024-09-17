@@ -1,11 +1,5 @@
 var NAVTREEINDEX4 =
 {
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a0ce1268264a01fef3e3eb7bb5d590cf6":[2,0,14,7,3,4,0],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,14,7,3,4,3],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a758c7cbcd8e932121d56aaf23f8a70c3":[2,0,14,7,3,4,1],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa62fe23629f7a9f596b52532583c1356":[2,0,14,7,3,4,4],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa96b76e119daad6f927c53d4278710ca":[2,0,14,7,3,4,2],
-"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html":[2,0,14,7,3,1],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a346a02ddda6a49acf3f412cee1157968":[2,0,14,7,3,1,7],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a3cf49332e77fc1ef7fe0fb33f147f84d":[2,0,14,7,3,1,1],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,14,7,3,1,8],
@@ -125,7 +119,7 @@ var NAVTREEINDEX4 =
 "core_8py.html":[3,0,0,2,0,2],
 "cost__model_2____init_____8py.html":[3,0,0,1,0],
 "cost__model_8py.html":[3,0,0,1,1],
-"cost__model_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,1,1,4],
+"cost__model_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,1,1,3],
 "cost__model__evaluation_8py.html":[3,0,0,6,0,0],
 "cost__model__evaluation_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,0,0,1],
 "cost__model__imc_8py.html":[3,0,0,1,2],
@@ -160,8 +154,8 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,5],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,5,2],
 "files.html":[3,0],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
@@ -249,5 +243,11 @@ var NAVTREEINDEX4 =
 "loma_2engine_8py.html":[3,0,0,4,0,1],
 "loma_2engine_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,4,0,1,2],
 "loop_8py.html":[3,0,0,4,0,2],
-"main_8py.html":[3,0,0,6,6]
+"main_8py.html":[3,0,0,6,6],
+"mapping_2____init_____8py.html":[3,0,0,3,0],
+"mapping_8py.html":[3,0,0,3,2],
+"mapping__assist__funcs_8py.html":[3,0,0,3,3],
+"mapping__assist__funcs_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,3,3,2],
+"mapping__assist__funcs_8py.html#a93a85a91d438a1bc260d32aef08a6180":[3,0,0,3,3,0],
+"mapping__assist__funcs_8py.html#a98824e40fda888066262630f7fbf9a66":[3,0,0,3,3,1]
 };
