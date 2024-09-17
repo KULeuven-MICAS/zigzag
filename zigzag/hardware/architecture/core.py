@@ -4,7 +4,7 @@ from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.mapping.spatial_mapping import SpatialMapping
-from zigzag.utils import hash_sha512, json_repr_handler
+from zigzag.utils import json_repr_handler
 
 
 class Core:
