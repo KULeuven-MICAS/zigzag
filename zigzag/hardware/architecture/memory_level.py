@@ -9,6 +9,7 @@ from zigzag.hardware.architecture.memory_port import (
     PortAllocation,
 )
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
+from zigzag.utils import hash_sha512
 
 
 class ServedMemDimensions:
@@ -163,4 +164,4 @@ class MemoryLevel:
         )
 
     def __hash__(self) -> int:
-        return hash(self.id)
+        return hash_sha512(self.id)

@@ -1,10 +1,16 @@
 import logging
 import pickle
 from copy import deepcopy
+from hashlib import sha512
 from typing import Any
 
 import numpy as np
 import yaml
+
+
+def hash_sha512(data: Any) -> int:
+    """! Hashes the input data using SHA-512"""
+    return int(sha512(pickle.dumps(data)).hexdigest(), 16)
 
 
 def pickle_deepcopy(to_copy: Any) -> Any:

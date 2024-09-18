@@ -5,6 +5,7 @@ from typing import Any, Literal, TypeAlias
 import numpy as np
 
 from zigzag.parser.accelerator_validator import AcceleratorValidator
+from zigzag.utils import hash_sha512
 
 
 class OperandABC(metaclass=ABCMeta):
@@ -12,7 +13,7 @@ class OperandABC(metaclass=ABCMeta):
 
     def __init__(self, name: str):
         self.__name = name
-        self.__hash = hash(name) ^ hash(type(self))
+        self.__hash = hash_sha512(name) ^ hash_sha512(type(self))
 
     @property
     def name(self):

@@ -121,12 +121,19 @@ class Core:
         return json_repr_handler(self.__dict__)
 
     def __hash__(self) -> int:
-        return hash(self.id)
+        return self.id
 
     def __eq__(self, other: object) -> bool:
         return (
             isinstance(other, Core)
             and self.id == other.id
+            and self.operational_array == other.operational_array
+            and self.memory_hierarchy == other.memory_hierarchy
+        )
+
+    def has_same_performance(self, other: object) -> bool:
+        return (
+            isinstance(other, Core)
             and self.operational_array == other.operational_array
             and self.memory_hierarchy == other.memory_hierarchy
         )

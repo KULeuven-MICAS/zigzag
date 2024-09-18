@@ -4,7 +4,7 @@ import math
 from typing import Any
 
 from zigzag.datatypes import LayerDim, OADimension, UnrollFactor, UnrollFactorInt
-from zigzag.utils import UniqueMessageFilter, json_repr_handler
+from zigzag.utils import UniqueMessageFilter, hash_sha512, json_repr_handler
 from zigzag.workload.layer_attribute import LayerAttribute
 
 logger = logging.getLogger(__name__)
@@ -74,7 +74,7 @@ class MappingSingleOADim:
         )
 
     def __hash__(self):
-        return hash(frozenset(self.__data))
+        return hash_sha512(frozenset(self.__data))
 
 
 class SpatialMapping(LayerAttribute):
@@ -306,7 +306,7 @@ class SpatialMapping(LayerAttribute):
         )
 
     def __hash__(self):
-        return hash(frozenset(map(lambda x: (x[0], hash(x[1])), self.items())))
+        return hash_sha512(frozenset(map(lambda x: (x[0], hash_sha512(x[1])), self.items())))
 
     @staticmethod
     def empty() -> "SpatialMapping":
