@@ -106,7 +106,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         # Update the latency model to fit IMC requirement
         super().combine_data_transfer_rate_per_physical_port()
         self.update_tclk()
-        super().calc_data_loading_offloading_latency()
+        super().calc_data_loading_latency()
         # find the cycle count per mac
         cycles_per_mac = self.operational_array.activation_precision / self.operational_array.bit_serial_precision
         super().calc_overall_latency(cycles_per_mac=cycles_per_mac)

@@ -40,7 +40,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.mac_energy: float
         self.mem_energy: float
         self.energy_total: float
-        self.data_loading_cycle: float
+        self.data_onloading_cycle: float
         self.data_offloading_cycle: float
         self.ideal_cycle: float
         self.ideal_temporal_cycle: float
@@ -113,7 +113,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
             result.memory_word_access[layer_op] = other.memory_word_access[layer_op]
 
         # Latency
-        result.data_loading_cycle = self.data_loading_cycle + other.data_loading_cycle
+        result.data_loading_cycle = self.data_onloading_cycle + other.data_onloading_cycle
         result.data_offloading_cycle = self.data_offloading_cycle + other.data_offloading_cycle
         result.ideal_cycle = self.ideal_cycle + other.ideal_cycle
         result.ideal_temporal_cycle = self.ideal_temporal_cycle + other.ideal_temporal_cycle
@@ -179,7 +179,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         }
 
         # Latency
-        result.data_loading_cycle *= number
+        result.data_onloading_cycle *= number
         result.data_offloading_cycle *= number
         result.ideal_cycle *= number
         result.ideal_temporal_cycle *= number
@@ -630,7 +630,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.calc_double_buffer_flag()
         self.calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link()
         self.combine_data_transfer_rate_per_physical_port()
-        self.calc_data_loading_offloading_latency()
+        self.calc_data_loading_latency()
         self.calc_overall_latency()
 
     def calc_double_buffer_flag(self) -> None:
@@ -996,7 +996,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         return data_loading
 
-    def calc_loading_combined(self):
+    def calc_onloading_combined(self):
         # Combine ports' initial data-loading activities to get the data loading cycle amount
         data_loading_cc_pair_combined_per_op: dict[LayerOperand, list[int | float]] = {
             op: [] for op in self.layer.input_operands
@@ -1070,15 +1070,15 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.data_offloading_cc_pair_combined = data_offloading_cc_pair_combined
         return data_offloading_cycle
 
-    def calc_borrowed_cycles_and_bandwidth(self) -> tuple[float, float]:
+    def calc_borrowed_loading_cycles_and_bandwidth(self) -> tuple[float, float]:
         """! Calculate the amount of cycles and bandwidth that are borrowed from the computation phase."""
         borrowed_cycles_ports = self.total_loading_offfloading_cycles_during_computation
         borrowed_bw_ports = self.total_loading_offloading_bw_during_computaton
         return max(borrowed_cycles_ports.values(), default=0), max(borrowed_bw_ports.values(), default=0)
 
-    def calc_data_loading_offloading_latency(self):
-        """! Calculate the initial/final data loading/off-loading cycle by separating out the first-time input operands'
-        / the last-time output operand's data movement on corresponding ports.
+    def calc_data_loading_latency(self):
+        """! Calculate the number of data onloading/offloading cycles.
+        This function first gathers the correct cycles per port, then combines them.
         """
         self.data_loading_per_mem_inst: list[dict[MemoryPort, list[PortBeginOrEndActivity]]] = []
         self.data_offloading_per_mem_inst: list[dict[MemoryPort, list[PortBeginOrEndActivity]]] = []
@@ -1095,16 +1095,16 @@ class CostModelEvaluation(CostModelEvaluationABC):
             data_loading_per_port = {port: self.calc_loading_single_port(port) for port in mem_level.port_list}
             self.data_loading_per_mem_inst.append(data_loading_per_port)
 
-        # Combine the loading of all ports to get the data loading cycle amount
-        data_loading_cycle = self.calc_loading_combined()
-        self.data_loading_cycle = data_loading_cycle
+        # Combine the onloading of all ports to get the data onloading cycle amount
+        data_onloading_cycle = self.calc_onloading_combined()
+        self.data_onloading_cycle = data_onloading_cycle
 
         # Combine the offloading of all ports to get the data offloading cycle amount
         data_offloading_cycle = self.calc_offloading_combined()
         self.data_offloading_cycle = data_offloading_cycle
 
         # Combine the borrowed cycles and bandwidth for loading and offloading during computation
-        borrowed_cycles, borrowed_bandwidth = self.calc_borrowed_cycles_and_bandwidth()
+        borrowed_cycles, borrowed_bandwidth = self.calc_borrowed_loading_cycles_and_bandwidth()
         self.loading_offloading_cycles_borrowed_from_computation = borrowed_cycles
         self.loading_offloading_bandwidth_borrowed_from_computation = borrowed_bandwidth
 
@@ -1130,12 +1130,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
         mac_utilization0 = ideal_cycle / latency_total0
 
         # Total latency with the initial data loading, but without the final data off-loading
-        latency_total1 = ideal_temporal_cycle + self.stall_slack_comb + self.data_loading_cycle
+        latency_total1 = ideal_temporal_cycle + self.stall_slack_comb + self.data_onloading_cycle
         mac_utilization1 = ideal_cycle / latency_total1
 
         # Total latency with both the initial data loading and the final data off-loading
         latency_total2 = (
-            ideal_temporal_cycle + self.stall_slack_comb + self.data_loading_cycle + self.data_offloading_cycle
+            ideal_temporal_cycle + self.stall_slack_comb + self.data_onloading_cycle + self.data_offloading_cycle
         )
         mac_utilization2 = ideal_cycle / latency_total2
 
