@@ -151,6 +151,7 @@ class MemoryFactory:
         return MemoryInstance(
             name=self.name,
             size=self.data["size"],
+            mem_type=self.data["mem_type"],
             r_bw=self.data["r_bw"],
             w_bw=self.data["w_bw"],
             r_cost=self.data["r_cost"],
