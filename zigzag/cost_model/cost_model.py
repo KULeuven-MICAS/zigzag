@@ -113,7 +113,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
             result.memory_word_access[layer_op] = other.memory_word_access[layer_op]
 
         # Latency
-        result.data_loading_cycle = self.data_onloading_cycle + other.data_onloading_cycle
+        result.data_onloading_cycle = self.data_onloading_cycle + other.data_onloading_cycle
         result.data_offloading_cycle = self.data_offloading_cycle + other.data_offloading_cycle
         result.ideal_cycle = self.ideal_cycle + other.ideal_cycle
         result.ideal_temporal_cycle = self.ideal_temporal_cycle + other.ideal_temporal_cycle
@@ -259,7 +259,7 @@ class CumulativeCME(CostModelEvaluationABC):
         self.mac_energy: float = 0.0
         self.mem_energy: float = 0.0
         self.energy_total: float = 0.0
-        self.data_loading_cycle: float = 0.0
+        self.data_onloading_cycle: float = 0.0
         self.data_offloading_cycle: float = 0.0
         self.ideal_cycle: float = 0.0
         self.ideal_temporal_cycle: float = 0.0
@@ -1030,7 +1030,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     data_loading_half_shared_part[layer_op] = longest_loading_cc
 
         if len(self.layer.input_operands) == 1:
-            data_loading_cycle = data_loading_individual_part[self.layer.input_operands[0]]
+            data_onloading_cycle = data_loading_individual_part[self.layer.input_operands[0]]
         else:
             op1 = self.layer.input_operands[0]
             op2 = self.layer.input_operands[1]
@@ -1042,13 +1042,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 data_loading_shared_part[op1] + data_loading_half_shared_part[op1] + data_loading_individual_part[op1],
                 data_loading_half_shared_part[op2] + data_loading_individual_part[op2],
             )
-            data_loading_cycle = min(possible1, possible2)
+            data_onloading_cycle = min(possible1, possible2)
 
         self.data_loading_cc_pair_combined_per_op = data_loading_cc_pair_combined_per_op
         self.data_loading_individual_part = data_loading_individual_part
         self.data_loading_half_shared_part = data_loading_half_shared_part
         self.data_loading_shared_part = data_loading_shared_part
-        return data_loading_cycle
+        return data_onloading_cycle
 
     def calc_offloading_combined(self):
         # Combine ports' final data-offloading activities to get the data offloading cycle amount
