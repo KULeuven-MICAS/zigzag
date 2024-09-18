@@ -10,7 +10,6 @@ var classarchitecture_1_1core_1_1Core =
     [ "get_memory_bw_min_dict", "classarchitecture_1_1core_1_1Core.html#ae52c3608ce5ae4c6aab0809f90acc300", null ],
     [ "get_memory_level", "classarchitecture_1_1core_1_1Core.html#ab899d4139182f7e8f1b3a334a85edb89", null ],
     [ "get_top_memory_instance", "classarchitecture_1_1core_1_1Core.html#a45f9ba77e394eb4dca718106890d0127", null ],
-    [ "has_same_performance", "classarchitecture_1_1core_1_1Core.html#a02706321dc36092930472e5da3e0eb96", null ],
     [ "recalculate_memory_hierarchy_information", "classarchitecture_1_1core_1_1Core.html#ac4945045b334bd6f01fe0a3ac9bd53d2", null ],
     [ "dataflows", "classarchitecture_1_1core_1_1Core.html#aa0b4d699e044760ccc80ad9cd986956f", null ],
     [ "id", "classarchitecture_1_1core_1_1Core.html#acf2488b95c97e0378c9bf49de3b50f28", null ],
