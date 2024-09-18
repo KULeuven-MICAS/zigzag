@@ -1,0 +1,8 @@
+<map id="hash_sha512" name="hash_sha512">
+<area shape="rect" id="node1" title="Hashes the input data using SHA&#45;512." alt="" coords="289,180,396,207"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a3195ea87162f33a34d0079931a8194ca" title=" " alt="" coords="37,5,210,61"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1memory__level_1_1MemoryLevel.html#ae27a7920f84bb5c804c9615ef57874e5" title=" " alt="" coords="44,85,203,141"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1MappingSingleOADim.html#a3195ea87162f33a34d0079931a8194ca" title=" " alt="" coords="5,165,241,221"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a3195ea87162f33a34d0079931a8194ca" title=" " alt="" coords="26,245,221,301"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1datatypes_1_1OperandABC.html#a62899b2921b8dce56eae23683b126261" title=" " alt="" coords="27,326,219,367"/>
+</map>
