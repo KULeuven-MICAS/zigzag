@@ -1,20 +1,18 @@
-import os
-import sys
 import argparse
+import os
 import re
+import sys
 
 sys.path.insert(0, os.getcwd())
+from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
 from zigzag.stages.CostModelStage import CostModelStage
+from zigzag.stages.LomaStage import LomaStage
 from zigzag.stages.MainStage import MainStage
+from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
+from zigzag.stages.reduce_stages import MinimalLatencyStage
+from zigzag.stages.save_stages import CompleteSaveStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.LomaStage import LomaStage
-from zigzag.stages.save_stages import CompleteSaveStage
-from zigzag.stages.reduce_stages import MinimalLatencyStage
-
-
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )

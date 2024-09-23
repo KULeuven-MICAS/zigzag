@@ -1,20 +1,18 @@
-import os
-import sys
 import argparse
+import os
 import re
+import sys
 
 sys.path.insert(0, os.getcwd())
-from zigzag.stages.CostModelStage import CostModelStage
-from zigzag.stages.MainStage import MainStage
-from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
-from zigzag.stages.WorkloadStage import WorkloadStage
-from zigzag.stages.ONNXModelParserStage import ONNXModelParserStage
-from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
-from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
-from zigzag.stages.save_stages import CompleteSaveStage
-from zigzag.stages.reduce_stages import MinimalLatencyStage
-
-
+from zigzag.stages.evaluation.cost_model_evaluation import CostModelStage
+from zigzag.stages.main import MainStage
+from zigzag.stages.mapping.spatial_mapping_generation import SpatialMappingGeneratorStage
+from zigzag.stages.mapping.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
+from zigzag.stages.parser.accelerator_parser import AcceleratorParserStage
+from zigzag.stages.parser.onnx_model_parser import ONNXModelParserStage
+from zigzag.stages.results.reduce_stages import MinimalLatencyStage
+from zigzag.stages.results.save import CompleteSaveStage
+from zigzag.stages.workload_iterator import WorkloadStage
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
@@ -24,20 +22,23 @@ parser = argparse.ArgumentParser(description="Setup zigzag inputs")
 parser.add_argument(
     "--model",
     metavar="path",
-    required=True,
-    help="path to onnx model, e.g. inputs/examples/my_onnx_model.onnx",
+    required=False,
+    default="lab1/resnet18_first_layer.onnx",
+    help="path to onnx model, e.g. zigzag/inputs/workload/resnet18.onnx",
 )
 parser.add_argument(
     "--mapping",
     metavar="path",
-    required=True,
-    help="path to mapping file, e.g., inputs.examples.my_mapping",
+    required=False,
+    default="lab1/mapping.yaml",
+    help="path to mapping file, e.g., zigzag/inputs/mapping/resnet18.yaml",
 )
 parser.add_argument(
     "--accelerator",
     metavar="path",
-    required=True,
-    help="module path to the accelerator, e.g. inputs.examples.accelerator1",
+    required=False,
+    default="zigzag/inputs/hardware/tpu_like.yaml",
+    help="module path to the accelerator, e.g. zigzag/inputs/hardware/tpu_like.yaml",
 )
 args = parser.parse_args()
 
@@ -66,13 +67,13 @@ mainstage = MainStage(
         WorkloadStage,  # Iterates through the different layers in the workload
         SpatialMappingGeneratorStage,  # Converts the provided spatial mapping to ZigZag's internal representation
         MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
-        TemporalOrderingConversionStage,  # Converts defined temporal_ordering to temporal mapping
+        TemporalMappingGeneratorStage,  # Converts defined temporal_ordering to temporal mapping
         CostModelStage,  # Evaluates generated SM and TM through cost model
     ],
     accelerator=args.accelerator,  # required by AcceleratorParserStage
     workload=args.model,  # required by ONNXModelParserStage
     mapping=args.mapping,  # required by ONNXModelParserStage
-    dump_filename_pattern=f"lab1/outputs/{experiment_id}-?.json",  # output file save pattern, ? will be replaced
+    dump_folder="lab1/outputs",  # output file save pattern, ? will be replaced
     loma_lpf_limit=6,  # required by LomaStage
     loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
 )
@@ -82,4 +83,4 @@ answers = mainstage.run()
 # Plot the energy and latency breakdown of our cost model evaluation
 cme = answers[0][0]
 save_path = "lab1/outputs/breakdown.png"
-bar_plot_cost_model_evaluations_breakdown([cme], save_path=save_path, xtick_rotation=0)
+bar_plot_cost_model_evaluations_breakdown([cme], save_path=save_path)

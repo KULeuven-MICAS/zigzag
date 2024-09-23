@@ -1,6 +1,7 @@
+import logging as _logging
 import os
 import sys
-import logging as _logging
+
 sys.path.insert(0, os.getcwd())
 from zigzag.hardware.architecture.ImcArray import ImcArray
 from zigzag.stages.AcceleratorParserStage import AcceleratorParserStage
