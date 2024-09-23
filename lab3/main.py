@@ -6,7 +6,6 @@ sys.path.insert(0, os.getcwd())
 from zigzag.api import get_hardware_performance_zigzag
 from zigzag.visualization.results.plot_cme import bar_plot_cost_model_evaluations_total
 
-
 # Path to the workload onnx model
 # onnx_model_path = "zigzag/inputs/examples/workload/resnet18.onnx"
 onnx_model_path = "lab1/resnet18_first_layer.onnx"

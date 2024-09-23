@@ -1,9 +1,13 @@
+import logging as _logging
 import os
 import sys
-import logging as _logging
+
 sys.path.insert(0, os.getcwd())
 from zigzag.api import get_hardware_performance_zigzag_imc
-from zigzag.visualization.results.plot_cme import bar_plot_cost_model_evaluations_breakdown, bar_plot_cost_model_evaluations_total
+from zigzag.visualization.results.plot_cme import (
+    bar_plot_cost_model_evaluations_breakdown,
+    bar_plot_cost_model_evaluations_total,
+)
 
 _logging_level = _logging.INFO
 _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
@@ -41,11 +45,7 @@ bar_plot_cost_model_evaluations_total(
     labels=x_labels,
     save_path="lab5/outputs/plot_total.png",
 )
-bar_plot_cost_model_evaluations_breakdown(
-    [cme],
-    save_path="lab5/outputs/plot_breakdown.png",
-    xtick_rotation=0
-)
+bar_plot_cost_model_evaluations_breakdown([cme], save_path="lab5/outputs/plot_breakdown.png", xtick_rotation=0)
 total_mac_count = cme.layer.total_MAC_count
 delay_in_ns = energy * cme.tclk  # unit: ns
 tops_system = total_mac_count * 2 / delay_in_ns / 1000
