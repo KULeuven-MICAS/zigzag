@@ -95,7 +95,7 @@ class DiGraphWrapper(Generic[T], DiGraph):
     @overload
     def in_edges(self, node: T) -> list[tuple[T, T]]: ...
 
-    def in_edges(  # type: ignore
+    def in_edges(  # type: ignore # pylint: disable=W0246
         self,
         node: T,
         data: bool = False,
@@ -111,7 +111,7 @@ class DiGraphWrapper(Generic[T], DiGraph):
     @overload
     def out_edges(self, node: T) -> list[tuple[T, T]]: ...
 
-    def out_edges(  # type: ignore
+    def out_edges(  # type: ignore # pylint: disable=W0246
         self,
         node: T,
         data: bool = False,
@@ -136,29 +136,32 @@ class DiGraphWrapper(Generic[T], DiGraph):
             return super().out_degree(node)  # type: ignore
         return super().out_degree()  # type: ignore
 
-    def successors(self, node: T) -> Iterator[T]:  # type: ignore
+    def successors(self, node: T) -> Iterator[T]:  # type: ignore # pylint: disable=W0246
         return super().successors(node)  # type: ignore
 
-    def predecessors(self, node: T) -> Iterator[T]:  # type: ignore
+    def predecessors(self, node: T) -> Iterator[T]:  # type: ignore # pylint: disable=W0246
         return super().predecessors(node)  # type: ignore
 
     @typeguard_ignore
     def topological_sort(self) -> Iterator[T]:
         return nx.topological_sort(self)  # type: ignore
 
-    def add_node(self, node: T) -> None:  # type: ignore
+    def add_node(self, node: T) -> None:  # type: ignore # pylint: disable=W0246
         super().add_node(node)  # type: ignore
 
-    def add_nodes_from(self, node: Sequence[T]) -> None:  # type: ignore
+    def add_nodes_from(self, node: Sequence[T]) -> None:  # pylint: disable=W0246
         super().add_nodes_from(node)  # type: ignore
 
-    def remove_nodes_from(self, nodes: Iterator[T]) -> None:
+    def remove_nodes_from(self, nodes: Iterator[T]) -> None:  # pylint: disable=W0246
         super().remove_nodes_from(nodes)  # type: ignore
 
-    def add_edge(self, edge_from: T, edge_to: T) -> None:  # type: ignore
+    def add_edge(self, edge_from: T, edge_to: T) -> None:  # type: ignore # pylint: disable=W0246
         super().add_edge(edge_from, edge_to)  # type: ignore
 
-    def add_edges_from(self, edges: Sequence[tuple[T, T] | tuple[T, T, Any]]) -> None:  # type: ignore
+    def add_edges_from(  # type: ignore # pylint: disable=W0246
+        self,
+        edges: Sequence[tuple[T, T] | tuple[T, T, Any]],
+    ) -> None:
         super().add_edges_from(edges)  # type: ignore
 
     def all_simple_paths(self, producer: T, consumer: T) -> Iterator[list[T]]:
