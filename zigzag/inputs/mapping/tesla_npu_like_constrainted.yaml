@@ -9,7 +9,6 @@
       - OY, 4
   temporal_ordering:
     - [OY, '*']
-    - [OX, '*']
     - ['*','*']
   memory_operand_links:
     O: O
@@ -27,7 +26,6 @@
       - OY, 1
   temporal_ordering:
     - [OY, '*']
-    - [OX, '*']
     - ['*','*']
   memory_operand_links:
     O: O
@@ -45,7 +43,6 @@
       - OY, 1
   temporal_ordering:
     - [OY, '*']
-    - [OX, '*']
     - ['*','*']
   memory_operand_links:
     O: O

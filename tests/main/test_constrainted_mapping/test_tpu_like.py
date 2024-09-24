@@ -1,3 +1,5 @@
+import pytest
+
 from zigzag.api import get_hardware_performance_zigzag
 from zigzag.visualization.results.print_mapping import get_temporal_spatial_loops
 
@@ -17,17 +19,17 @@ ens_lats = {
 }
 
 
-# @pytest.fixture
+@pytest.fixture
 def mapping():
     return "zigzag/inputs/mapping/tpu_like_constrainted.yaml"
 
 
-# @pytest.fixture
+@pytest.fixture
 def accelerator():
     return "zigzag/inputs/hardware/tpu_like.yaml"
 
 
-# @pytest.mark.parametrize("workload", workloads)
+@pytest.mark.parametrize("workload", workloads)
 def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=W0621  # pylint: disable=W0621
     energy, latency, cmes = get_hardware_performance_zigzag(workload, accelerator, mapping)
     temp_map_default = [get_temporal_spatial_loops(cme[0])[0] for cme in cmes[0][1]]
