@@ -38,6 +38,3 @@ def test_api(workload: str, accelerator: str, mapping: str):  # pylint: disable=
         if ("OX" in [dim[0].name for dim in temp_mapping]) and ("OY" in [dim[0].name for dim in temp_mapping]):
             assert temp_mapping[-2][0].name == "OX"
             assert temp_mapping[-1][0].name == "OY"
-
-
-test_api(workload=workloads[0], accelerator=accelerator(), mapping=mapping())
