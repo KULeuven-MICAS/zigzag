@@ -863,7 +863,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             minimal_cycles_op = ceil(minimal_bits / port.bw)
             min_required_cycles.append(minimal_cycles_op)
             # self.real_data_trans_cycle takes into account that the MemoryLevel might be unrolled
-            # This inreases the 'effective bandwidth' for the WR_IN_BY_HIGH direction
+            # This increases the 'effective bandwidth' for the WR_IN_BY_HIGH direction
             # and thus reduces the total required cycles for loading
             total_cycles_op = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
             total_required_cycles.append(total_cycles_op)
@@ -901,8 +901,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
             )
         # Save the amount of cycles and average bandwidth that were borrowed from the computation phase
         borrowed_cycles_from_computation = sum(total_required_cycles) - sum(reduced_loading_cycles)
-        self.total_loading_offfloading_cycles_during_computation[port] = borrowed_cycles_from_computation
-        self.total_loading_offloading_bw_during_computaton[port] = (
+        self.total_loading_cycles_during_computation[port] = borrowed_cycles_from_computation
+        self.total_loading_bw_during_computation[port] = (
             borrowed_cycles_from_computation / total_computation_cycles
         ) * port.bw
         # Create the PortBeginOrEndActivity objects with the reduced cycles and data
@@ -915,17 +915,17 @@ class CostModelEvaluation(CostModelEvaluationABC):
         port_activities: list[PortBeginOrEndActivity] = []
         for mem_op, mem_lv, mov_dir in mem_op_level_direction_combs:
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-            umdm = self.mapping_int.unit_mem_data_movement[layer_op][mem_lv]
-            period_count = umdm.data_trans_period_count.get_single_dir_data(mov_dir)
+            unit_mem_data_movement = self.mapping_int.unit_mem_data_movement[layer_op][mem_lv]
+            period_count = unit_mem_data_movement.data_trans_period_count.get_single_dir_data(mov_dir)
 
             # skip for the inactive data movement
             if period_count == 0:
                 continue
 
             real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
-            data_in_charge = umdm.data_trans_amount_per_period.get_single_dir_data(
+            data_in_charge = unit_mem_data_movement.data_trans_amount_per_period.get_single_dir_data(
                 mov_dir
-            ) * umdm.data_precision.get_single_dir_data(mov_dir)
+            ) * unit_mem_data_movement.data_precision.get_single_dir_data(mov_dir)
 
             mem_bw = port.bw
 
@@ -956,7 +956,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # Initialize the data loading list
         data_loading: list[PortBeginOrEndActivity] = []
         # Abbreviate the unit memory data movement from the mapping
-        umdm = self.mapping_int.unit_mem_data_movement
+        unit_mem_data_movement = self.mapping_int.unit_mem_data_movement
         # Get the output operand
         output_mem_op = self.memory_operand_links.layer_to_mem_op(self.layer.output_operand)
 
@@ -971,7 +971,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             ):
                 continue
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-            period_count = umdm[layer_op][mem_lv].data_trans_period_count.get_single_dir_data(mov_dir)
+            period_count = unit_mem_data_movement[layer_op][mem_lv].data_trans_period_count.get_single_dir_data(mov_dir)
             if period_count == 0:
                 continue
             elif period_count == 1:
@@ -983,7 +983,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         total_req_bw_aver_computation = 0
         for mem_op, mem_lv, mov_dir in combs_period_count_greater_than_1:
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-            req_bw_aver = umdm[layer_op][mem_lv].req_mem_bw_aver.get_single_dir_data(mov_dir)
+            req_bw_aver = unit_mem_data_movement[layer_op][mem_lv].req_mem_bw_aver.get_single_dir_data(mov_dir)
             total_req_bw_aver_computation += req_bw_aver
 
         data_loading += self.calc_loading_single_port_period_count_1(
@@ -1072,8 +1072,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
     def calc_borrowed_loading_cycles_and_bandwidth(self) -> tuple[float, float]:
         """! Calculate the amount of cycles and bandwidth that are borrowed from the computation phase."""
-        borrowed_cycles_ports = self.total_loading_offfloading_cycles_during_computation
-        borrowed_bw_ports = self.total_loading_offloading_bw_during_computaton
+        borrowed_cycles_ports = self.total_loading_cycles_during_computation
+        borrowed_bw_ports = self.total_loading_bw_during_computation
         return max(borrowed_cycles_ports.values(), default=0), max(borrowed_bw_ports.values(), default=0)
 
     def calc_data_loading_latency(self):
@@ -1088,8 +1088,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.data_offloading_cc_per_op: dict[LayerOperand, dict[str, tuple[int | float, bool]]] = {
             self.layer.output_operand: {}
         }
-        self.total_loading_offfloading_cycles_during_computation: dict[MemoryPort, int | float] = {}
-        self.total_loading_offloading_bw_during_computaton: dict[MemoryPort, int | float] = {}
+        self.total_loading_cycles_during_computation: dict[MemoryPort, int | float] = {}
+        self.total_loading_bw_during_computation: dict[MemoryPort, int | float] = {}
 
         for mem_level in self.mem_level_list:
             data_loading_per_port = {port: self.calc_loading_single_port(port) for port in mem_level.port_list}
