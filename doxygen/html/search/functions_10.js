@@ -1,15 +1,15 @@
 var searchData=
 [
-  ['parse_5faccelerator_1514',['parse_accelerator',['../classaccelerator__parser_1_1AcceleratorParserStage.html#a7923fb8ddf774aa5366337b8885bc7e3',1,'accelerator_parser::AcceleratorParserStage']]],
-  ['parse_5fdynamic_5fonnx_5fmodel_1515',['parse_dynamic_onnx_model',['../namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a0bd28035f9bc4d1d49cf4a377ad5a363',1,'zigzag::parser::onnx::utils']]],
-  ['parse_5fmapping_5fdata_1516',['parse_mapping_data',['../classworkload__parser_1_1WorkloadParserStage.html#ae2202c5549d9be3dc510d6732f217425',1,'workload_parser.WorkloadParserStage.parse_mapping_data()'],['../classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ae2202c5549d9be3dc510d6732f217425',1,'zigzag.stages.workload_parser.WorkloadParserStage.parse_mapping_data()']]],
-  ['parse_5fonnx_5fmodel_5ffrom_5fpath_1517',['parse_onnx_model_from_path',['../namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35cfc1e6036daf70a3bc413dff5d4252',1,'zigzag::parser::onnx::utils']]],
-  ['parse_5fworkload_1518',['parse_workload',['../classworkload__parser_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04',1,'workload_parser.WorkloadParserStage.parse_workload()'],['../classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04',1,'zigzag.stages.workload_parser.WorkloadParserStage.parse_workload()']]],
-  ['parse_5fworkload_5ffrom_5fonnx_5fmodel_5fand_5fmapping_1519',['parse_workload_from_onnx_model_and_mapping',['../classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#ade99e4499eaf6da42cc6e1cfab009081',1,'zigzag::parser::onnx::onnx_model_parser::ONNXModelParser']]],
-  ['permutations_1520',['permutations',['../namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e',1,'zigzag::opt::loma::multipermute']]],
-  ['pickle_5fdeepcopy_1521',['pickle_deepcopy',['../namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb',1,'zigzag::utils']]],
-  ['pickle_5fload_1522',['pickle_load',['../namespacezigzag_1_1utils.html#a61b7596b4d8c5d44ecfe895ec138e37b',1,'zigzag::utils']]],
-  ['pickle_5fsave_1523',['pickle_save',['../namespacezigzag_1_1utils.html#aa2a1be84452c12a2acebdcf02fca0502',1,'zigzag::utils']]],
-  ['port_5fis_5fshared_5fby_5ftwo_5finput_5foperands_1524',['port_is_shared_by_two_input_operands',['../classarchitecture_1_1memory__port_1_1MemoryPort.html#ada87977c7874e1333bc09818be482c07',1,'architecture::memory_port::MemoryPort']]],
-  ['print_5fmapping_1525',['print_mapping',['../namespacezigzag_1_1visualization_1_1results_1_1print__mapping.html#ae8d9f7389d31bd70c182cd9ffd03024f',1,'zigzag::visualization::results::print_mapping']]]
+  ['parse_5faccelerator_1528',['parse_accelerator',['../classaccelerator__parser_1_1AcceleratorParserStage.html#a7923fb8ddf774aa5366337b8885bc7e3',1,'accelerator_parser::AcceleratorParserStage']]],
+  ['parse_5fdynamic_5fonnx_5fmodel_1529',['parse_dynamic_onnx_model',['../namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a0bd28035f9bc4d1d49cf4a377ad5a363',1,'zigzag::parser::onnx::utils']]],
+  ['parse_5fmapping_5fdata_1530',['parse_mapping_data',['../classworkload__parser_1_1WorkloadParserStage.html#ae2202c5549d9be3dc510d6732f217425',1,'workload_parser.WorkloadParserStage.parse_mapping_data()'],['../classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ae2202c5549d9be3dc510d6732f217425',1,'zigzag.stages.workload_parser.WorkloadParserStage.parse_mapping_data()']]],
+  ['parse_5fonnx_5fmodel_5ffrom_5fpath_1531',['parse_onnx_model_from_path',['../namespacezigzag_1_1parser_1_1onnx_1_1utils.html#a35cfc1e6036daf70a3bc413dff5d4252',1,'zigzag::parser::onnx::utils']]],
+  ['parse_5fworkload_1532',['parse_workload',['../classworkload__parser_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04',1,'workload_parser.WorkloadParserStage.parse_workload()'],['../classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04',1,'zigzag.stages.workload_parser.WorkloadParserStage.parse_workload()']]],
+  ['parse_5fworkload_5ffrom_5fonnx_5fmodel_5fand_5fmapping_1533',['parse_workload_from_onnx_model_and_mapping',['../classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html#ade99e4499eaf6da42cc6e1cfab009081',1,'zigzag::parser::onnx::onnx_model_parser::ONNXModelParser']]],
+  ['permutations_1534',['permutations',['../namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e',1,'zigzag::opt::loma::multipermute']]],
+  ['pickle_5fdeepcopy_1535',['pickle_deepcopy',['../namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb',1,'zigzag::utils']]],
+  ['pickle_5fload_1536',['pickle_load',['../namespacezigzag_1_1utils.html#a61b7596b4d8c5d44ecfe895ec138e37b',1,'zigzag::utils']]],
+  ['pickle_5fsave_1537',['pickle_save',['../namespacezigzag_1_1utils.html#aa2a1be84452c12a2acebdcf02fca0502',1,'zigzag::utils']]],
+  ['port_5fis_5fshared_5fby_5ftwo_5finput_5foperands_1538',['port_is_shared_by_two_input_operands',['../classarchitecture_1_1memory__port_1_1MemoryPort.html#ada87977c7874e1333bc09818be482c07',1,'architecture::memory_port::MemoryPort']]],
+  ['print_5fmapping_1539',['print_mapping',['../namespacezigzag_1_1visualization_1_1results_1_1print__mapping.html#ae8d9f7389d31bd70c182cd9ffd03024f',1,'zigzag::visualization::results::print_mapping']]]
 ];

@@ -1,7 +1,7 @@
 <map id="pickle_deepcopy" name="pickle_deepcopy">
 <area shape="rect" id="node1" title=" " alt="" coords="1209,265,1340,292"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html#a552e79ccaeebe4cbf1e36be4831cf0d7" title=" " alt="" coords="879,5,1121,61"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0d6d1972f7a636ec3f0edb20c42f545a" title="Calculate occupancy for each physical memory based on the mapping." alt="" coords="544,83,787,139"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0d6d1972f7a636ec3f0edb20c42f545a" title=" " alt="" coords="544,83,787,139"/>
 <area shape="rect" id="node7" href="$namespacezigzag_1_1mapping_1_1mapping__assist__funcs.html#a93a85a91d438a1bc260d32aef08a6180" title="This function decouples the pr loops into data size (r loops) and data reuse (ir loops)." alt="" coords="572,272,759,328"/>
 <area shape="rect" id="node8" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html#a27726fb3963f0cb40688fc6a1ac636f0" title=" " alt="" coords="839,137,1161,207"/>
 <area shape="rect" id="node10" href="$namespacezigzag_1_1visualization_1_1results_1_1print__mapping.html#abe8a97cf290a0fd7e145928b90fc46a8" title=" " alt="" coords="865,443,1135,485"/>
