@@ -5,7 +5,7 @@ from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.imc_array import ImcArray
 from zigzag.stages.stage import Stage, StageCallable
 from zigzag.workload.layer_node import LayerNode
-from zigzag.workload.workload_abc import WorkloadABC
+from zigzag.workload.workload_abc import WorkloadABC, WorkloadNoDummyABC
 
 logger = logging.getLogger(__name__)
 
@@ -17,7 +17,7 @@ class WorkloadStage(Stage):
         self,
         list_of_callables: list[StageCallable],
         *,
-        workload: WorkloadABC,
+        workload: WorkloadABC | WorkloadNoDummyABC,
         accelerator: Accelerator,
         **kwargs: Any,
     ):

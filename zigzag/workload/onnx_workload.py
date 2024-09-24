@@ -1,6 +1,8 @@
 from copy import deepcopy
 from typing import Any
 
+from typeguard import typeguard_ignore
+
 from zigzag.workload.dummy_node import DummyNode
 from zigzag.workload.layer_node import LayerNode
 from zigzag.workload.layer_node_abc import LayerNodeABC
@@ -29,6 +31,7 @@ class ONNXWorkload(WorkloadABC):
             edges.append((parent_node_obj, node_obj))
             self.add_edges_from(edges)
 
+    @typeguard_ignore
     def get_copy_no_dummy(self) -> WorkloadNoDummyABC:
         """! Remove dummy nodes (layers) in the graph
         Redirect the outgoing edges of dummy nodes to non-dummy nodes Method: for each dummy node, add edges between its
@@ -44,8 +47,5 @@ class ONNXWorkload(WorkloadABC):
 
         workload_copy.remove_nodes_from(iter(dummy_nodes))
 
-        # Typecast
-        workload_result: WorkloadNoDummyABC = workload_copy  # type: ignore
-
-        assert all([isinstance(x, LayerNode) for x in workload_result.node_list])
-        return workload_result
+        assert all([isinstance(x, LayerNode) for x in workload_copy.node_list])
+        return workload_copy  # type: ignore

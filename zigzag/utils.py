@@ -1,12 +1,13 @@
 import logging
 import pickle
 from copy import deepcopy
-from typing import Any, Generic, Iterator, Literal, Sequence, TypeVar, overload
+from typing import Any, Generic, Iterator, Literal, Sequence, TypeVar, no_type_check, overload
 
 import networkx as nx
 import numpy as np
 import yaml
 from networkx import DiGraph
+from typeguard import typeguard_ignore
 
 
 def pickle_deepcopy(to_copy: Any) -> Any:
@@ -81,17 +82,18 @@ class UniqueMessageFilter(logging.Filter):
 T = TypeVar("T")
 
 
+@no_type_check
 class DiGraphWrapper(Generic[T], DiGraph):
     """Wraps the DiGraph class with type annotations for the nodes"""
 
     @overload
-    def in_edges(self, node: T, data: Literal[False]) -> list[tuple[T, T]]: ...  # type: ignore
+    def in_edges(self, node: T, data: Literal[False]) -> list[tuple[T, T]]: ...
 
     @overload
-    def in_edges(self, node: T, data: Literal[True]) -> list[tuple[T, T, dict[str, Any]]]: ...  # type: ignore
+    def in_edges(self, node: T, data: Literal[True]) -> list[tuple[T, T, dict[str, Any]]]: ...
 
     @overload
-    def in_edges(self, node: T) -> list[tuple[T, T]]: ...  # type: ignore
+    def in_edges(self, node: T) -> list[tuple[T, T]]: ...
 
     def in_edges(  # type: ignore
         self,
@@ -101,13 +103,13 @@ class DiGraphWrapper(Generic[T], DiGraph):
         return super().in_edges(node, data)  # type: ignore
 
     @overload
-    def out_edges(self, node: T, data: Literal[True]) -> list[tuple[T, T, dict[str, Any]]]: ...  # type: ignore
+    def out_edges(self, node: T, data: Literal[True]) -> list[tuple[T, T, dict[str, Any]]]: ...
 
     @overload
-    def out_edges(self, node: T, data: Literal[False]) -> list[tuple[T, T]]: ...  # type: ignore
+    def out_edges(self, node: T, data: Literal[False]) -> list[tuple[T, T]]: ...
 
     @overload
-    def out_edges(self, node: T) -> list[tuple[T, T]]: ...  # type: ignore
+    def out_edges(self, node: T) -> list[tuple[T, T]]: ...
 
     def out_edges(  # type: ignore
         self,
@@ -116,21 +118,22 @@ class DiGraphWrapper(Generic[T], DiGraph):
     ) -> list[tuple[T, T]] | list[tuple[T, T, dict[str, Any]]]:
         return super().out_edges(node, data)  # type: ignore
 
+    @typeguard_ignore
     def in_degree(self) -> Iterator[tuple[T, int]]:  # type: ignore
-        return super().in_degree()  # type:ignore
+        return super().in_degree()  # type: ignore
 
     @overload
-    def out_degree(self, node: Literal[None]) -> Iterator[tuple[T, int]]: ...  # type: ignore
+    def out_degree(self, node: Literal[None]) -> Iterator[tuple[T, int]]: ...
 
     @overload
-    def out_degree(self) -> Iterator[tuple[T, int]]: ...  # type: ignore
+    def out_degree(self) -> Iterator[tuple[T, int]]: ...
 
     @overload
-    def out_degree(self, node: T) -> int: ...  # type: ignore
+    def out_degree(self, node: T) -> int: ...
 
     def out_degree(self, node: T | None = None) -> int | Iterator[tuple[T, int]]:  # type: ignore
         if node:
-            return super().out_degree(node)  # type:ignore
+            return super().out_degree(node)  # type: ignore
         return super().out_degree()  # type: ignore
 
     def successors(self, node: T) -> Iterator[T]:  # type: ignore
@@ -139,6 +142,7 @@ class DiGraphWrapper(Generic[T], DiGraph):
     def predecessors(self, node: T) -> Iterator[T]:  # type: ignore
         return super().predecessors(node)  # type: ignore
 
+    @typeguard_ignore
     def topological_sort(self) -> Iterator[T]:
         return nx.topological_sort(self)  # type: ignore
 
