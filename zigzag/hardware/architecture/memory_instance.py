@@ -5,6 +5,24 @@ from zigzag.utils import json_repr_handler
 class MemoryInstance:
     """A single instance within the memory hierarchy, without information about connectivity."""
 
+    name: str
+    size: int
+    r_bw: int
+    w_bw: int
+    r_cost: float
+    w_cost: float
+    area: float
+    r_port: int
+    w_port: int
+    rw_port: int
+    latency: int
+    min_r_granularity: int
+    min_w_granularity: int
+    mem_type: str
+    auto_cost_extraction: bool
+    double_buffering_support: bool
+    shared_memory_group_id: int
+
     def __init__(
         self,
         name: str,

@@ -36,7 +36,7 @@ def pickle_load(path: str):
     return obj
 
 
-def open_yaml(path: str):
+def open_yaml(path: str) -> dict[str, Any]:
     with open(path, encoding="utf-8") as f:
         data = yaml.safe_load(f)
     return data

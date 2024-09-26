@@ -13,6 +13,19 @@ class Core:
     on top.
     """
 
+    id: int
+    operational_array: OperationalArrayABC
+    memory_hierarchy: MemoryHierarchy
+    dataflows: SpatialMapping | None
+    mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]]
+    mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]]
+    mem_size_dict: dict[MemoryOperand, list[int]]
+    mem_r_bw_dict: dict[MemoryOperand, list[int]]
+    mem_w_bw_dict: dict[MemoryOperand, list[int]]
+    mem_r_bw_min_dict: dict[MemoryOperand, list[int]]
+    mem_w_bw_min_dict: dict[MemoryOperand, list[int]]
+    memory_sharing_list: list[dict[MemoryOperand, int]]
+
     def __init__(
         self,
         core_id: int,
@@ -21,13 +34,9 @@ class Core:
         dataflows: SpatialMapping | None = None,
     ):
         self.id = core_id
-        self.id = core_id
         self.operational_array = operational_array
         self.memory_hierarchy = memory_hierarchy
-        self.mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
-
-        self.dataflows = dataflows
-        self.mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
+        self.mem_hierarchy_dict = {}
 
         self.dataflows = dataflows
         self.recalculate_memory_hierarchy_information()
@@ -44,59 +53,51 @@ class Core:
 
     def __generate_memory_hierarchy_dict(self):
         mem_operands = self.memory_hierarchy.nb_levels.keys()
-        mem_hierarchy_dict: dict[MemoryOperand, list[MemoryLevel]] = {}
-        mem_size_dict: dict[MemoryOperand, list[int]] = {}
-        mem_r_bw_dict: dict[MemoryOperand, list[int]] = {}
-        mem_w_bw_dict: dict[MemoryOperand, list[int]] = {}
-        mem_r_bw_min_dict: dict[MemoryOperand, list[int]] = {}
-        mem_w_bw_min_dict: dict[MemoryOperand, list[int]] = {}
+        self.mem_hierarchy_dict = {}
+        self.mem_size_dict = {}
+        self.mem_r_bw_dict = {}
+        self.mem_w_bw_dict = {}
+        self.mem_r_bw_min_dict = {}
+        self.mem_w_bw_min_dict = {}
         for mem_op in mem_operands:
-            mem_hierarchy_dict[mem_op] = [
+            self.mem_hierarchy_dict[mem_op] = [
                 node for node in self.memory_hierarchy.topological_sort() if mem_op in node.operands
             ]
-            mem_size_dict[mem_op] = [
+            self.mem_size_dict[mem_op] = [
                 node.memory_instance.size
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-            mem_r_bw_dict[mem_op] = [
+            self.mem_r_bw_dict[mem_op] = [
                 node.memory_instance.r_bw
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-            mem_w_bw_dict[mem_op] = [
+            self.mem_w_bw_dict[mem_op] = [
                 node.memory_instance.w_bw
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-            mem_r_bw_min_dict[mem_op] = [
+            self.mem_r_bw_min_dict[mem_op] = [
                 node.memory_instance.r_bw_min
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-            mem_w_bw_min_dict[mem_op] = [
+            self.mem_w_bw_min_dict[mem_op] = [
                 node.memory_instance.w_bw_min
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-        self.mem_hierarchy_dict = mem_hierarchy_dict
-        self.mem_size_dict = mem_size_dict
-        self.mem_r_bw_dict = mem_r_bw_dict
-        self.mem_w_bw_dict = mem_w_bw_dict
-        self.mem_r_bw_min_dict = mem_r_bw_min_dict
-        self.mem_w_bw_min_dict = mem_w_bw_min_dict
 
     def __generate_memory_sharing_list(self):
         """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same
         physical memory"""
-        memory_sharing_list: list[dict[MemoryOperand, int]] = []
+        self.memory_sharing_list = []
         for mem_lv in self.mem_hierarchy_dict.values():
             for mem in mem_lv:
                 operand_mem_share = mem.mem_level_of_operands
-                if len(operand_mem_share) > 1 and operand_mem_share not in memory_sharing_list:
-                    memory_sharing_list.append(operand_mem_share)
-
-        self.mem_sharing_list = memory_sharing_list
+                if len(operand_mem_share) > 1 and operand_mem_share not in self.memory_sharing_list:
+                    self.memory_sharing_list.append(operand_mem_share)
 
     def get_top_memory_instance(self, mem_op: MemoryOperand) -> MemoryInstance:
         if mem_op not in self.memory_hierarchy.get_operands():
