@@ -101,9 +101,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a50f1950c0e272688386eb259cb1b8fc3"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a50f1950c0e272688386eb259cb1b8fc3">__init__</a> (self, dict[str, Any] <a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a511ae0b1c13f95e5f08f1a0dd3da3d93">data</a>)</td></tr>
 <tr class="memdesc:a50f1950c0e272688386eb259cb1b8fc3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Generate an <code>Core</code> instance from the validated user-provided data.  <a href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a50f1950c0e272688386eb259cb1b8fc3">More...</a><br /></td></tr>
 <tr class="separator:a50f1950c0e272688386eb259cb1b8fc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae10530af7878e85e3a8ba565d27f781b"><td class="memItemLeft" align="right" valign="top">Core&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b">create</a> (self, int core_id=1)</td></tr>
-<tr class="memdesc:ae10530af7878e85e3a8ba565d27f781b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a Core instance from the user-provided data.  <a href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b">More...</a><br /></td></tr>
-<tr class="separator:ae10530af7878e85e3a8ba565d27f781b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5d8b1a10e76c92bd81bf736778c26506"><td class="memItemLeft" align="right" valign="top">Core&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506">create</a> (self, int core_id=1, int|None shared_mem_group_id=None)</td></tr>
+<tr class="memdesc:a5d8b1a10e76c92bd81bf736778c26506"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create a Core instance from the user-provided data.  <a href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506">More...</a><br /></td></tr>
+<tr class="separator:a5d8b1a10e76c92bd81bf736778c26506"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a16d4196d1f5510aef5391b6e8f2525c1"><td class="memItemLeft" align="right" valign="top">OperationalArrayABC&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a16d4196d1f5510aef5391b6e8f2525c1">create_operational_array</a> (self)</td></tr>
 <tr class="separator:a16d4196d1f5510aef5391b6e8f2525c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad0bc534982d51e64d0721b0cd9fc5376"><td class="memItemLeft" align="right" valign="top">MultiplierArray&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ad0bc534982d51e64d0721b0cd9fc5376">create_non_imc_array</a> (self)</td></tr>
@@ -152,8 +152,8 @@ Public Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae10530af7878e85e3a8ba565d27f781b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae10530af7878e85e3a8ba565d27f781b">&#9670;&nbsp;</a></span>create()</h2>
+<a id="a5d8b1a10e76c92bd81bf736778c26506"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5d8b1a10e76c92bd81bf736778c26506">&#9670;&nbsp;</a></span>create()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -168,7 +168,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">int &#160;</td>
-          <td class="paramname"><em>core_id</em> = <code>1</code>&#160;</td>
+          <td class="paramname"><em>core_id</em> = <code>1</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int | None &#160;</td>
+          <td class="paramname"><em>shared_mem_group_id</em> = <code>None</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -183,8 +189,8 @@ Public Attributes</h2></td></tr>
 <div class="dynheader">
 Here is the call graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ae10530af7878e85e3a8ba565d27f781b_cgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ae10530af7878e85e3a8ba565d27f781b_cgraph" alt=""/></div>
-<map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ae10530af7878e85e3a8ba565d27f781b_cgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ae10530af7878e85e3a8ba565d27f781b_cgraph">
+<div class="center"><img src="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a5d8b1a10e76c92bd81bf736778c26506_cgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a5d8b1a10e76c92bd81bf736778c26506_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a5d8b1a10e76c92bd81bf736778c26506_cgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a5d8b1a10e76c92bd81bf736778c26506_cgraph">
 <area shape="rect" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,42,68,69"/>
 <area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a7f3b00a89eeb9c17c8c7b35231fcad72" title=" " alt="" coords="121,13,255,39"/>
 <area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a16d4196d1f5510aef5391b6e8f2525c1" title=" " alt="" coords="116,64,260,105"/>
@@ -226,7 +232,7 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a7f3b00a89eeb9c17c8c7b35231fcad72_icgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a7f3b00a89eeb9c17c8c7b35231fcad72_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a7f3b00a89eeb9c17c8c7b35231fcad72_icgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a7f3b00a89eeb9c17c8c7b35231fcad72_icgraph">
 <area shape="rect" title=" " alt="" coords="116,5,249,32"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,5,68,32"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,5,68,32"/>
 </map>
 </div>
 
@@ -254,7 +260,7 @@ Here is the caller graph for this function:</div>
 <map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_aaebf20f75b0bca54496825e05b820a5b_icgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_aaebf20f75b0bca54496825e05b820a5b_icgraph">
 <area shape="rect" title=" " alt="" coords="308,13,443,39"/>
 <area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a16d4196d1f5510aef5391b6e8f2525c1" title=" " alt="" coords="116,5,260,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
 </map>
 </div>
 
@@ -282,7 +288,7 @@ Here is the caller graph for this function:</div>
 <map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ad0bc534982d51e64d0721b0cd9fc5376_icgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_ad0bc534982d51e64d0721b0cd9fc5376_icgraph">
 <area shape="rect" title=" " alt="" coords="308,13,475,39"/>
 <area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a16d4196d1f5510aef5391b6e8f2525c1" title=" " alt="" coords="116,5,260,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
 </map>
 </div>
 
@@ -319,7 +325,7 @@ Here is the caller graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a16d4196d1f5510aef5391b6e8f2525c1_icgraph.png" border="0" usemap="#aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a16d4196d1f5510aef5391b6e8f2525c1_icgraph" alt=""/></div>
 <map name="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a16d4196d1f5510aef5391b6e8f2525c1_icgraph" id="aclasszigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory_a16d4196d1f5510aef5391b6e8f2525c1_icgraph">
 <area shape="rect" title=" " alt="" coords="116,5,260,47"/>
-<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#ae10530af7878e85e3a8ba565d27f781b" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
+<area shape="rect" href="classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html#a5d8b1a10e76c92bd81bf736778c26506" title="Create a Core instance from the user&#45;provided data." alt="" coords="5,13,68,39"/>
 </map>
 </div>
 

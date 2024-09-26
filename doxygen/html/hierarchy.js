@@ -110,14 +110,16 @@ var hierarchy =
       [ "LayerNodeABC", "classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html", [
         [ "DummyNode", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html", null ],
         [ "LayerNode", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html", [
-          [ "DNNWorkload", "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html", null ]
+          [ "WorkloadNoDummyABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html", [
+            [ "DNNWorkload", "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html", null ]
+          ] ]
         ] ],
-        [ "ONNXWorkload", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html", null ]
+        [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", [
+          [ "ONNXWorkload", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html", null ]
+        ] ]
       ] ],
-      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", [
-        [ "DNNWorkload", "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html", null ],
-        [ "ONNXWorkload", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html", null ]
-      ] ]
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ],
+      [ "WorkloadNoDummyABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html", null ]
     ] ],
     [ "ONNXModelParser", "classzigzag_1_1parser_1_1onnx_1_1onnx__model__parser_1_1ONNXModelParser.html", null ],
     [ "OnnxTensorType", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html", null ],
@@ -133,7 +135,11 @@ var hierarchy =
     [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal.html", null ],
     [ "T", null, [
       [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
-      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ]
+      [ "DiGraphWrapper", "classzigzag_1_1utils_1_1DiGraphWrapper.html", [
+        [ "MemoryHierarchy", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html", null ],
+        [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ],
+        [ "WorkloadNoDummyABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html", null ]
+      ] ]
     ] ],
     [ "TemporalMapping", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html", null ],
     [ "WorkloadFactory", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory.html", null ],
@@ -153,21 +159,24 @@ var hierarchy =
       [ "Stage", "classzigzag_1_1stages_1_1stage_1_1Stage.html", null ],
       [ "LayerAttribute", "classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html", null ],
       [ "LayerNodeABC", "classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html", null ],
-      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ]
+      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ],
+      [ "WorkloadNoDummyABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html", null ]
     ] ],
     [ "DiGraph", null, [
-      [ "MemoryHierarchy", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html", null ],
-      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ]
+      [ "DiGraphWrapper", "classzigzag_1_1utils_1_1DiGraphWrapper.html", null ]
     ] ],
     [ "Enum", null, [
       [ "OnnxTensorCategory", "classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorCategory.html", null ]
     ] ],
     [ "Generic", null, [
       [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", null ],
-      [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", null ]
+      [ "DiGraphWrapper", "classzigzag_1_1utils_1_1DiGraphWrapper.html", null ]
     ] ],
     [ "ImcUnit", null, [
       [ "ImcArray", "classarchitecture_1_1imc__array_1_1ImcArray.html", null ]
+    ] ],
+    [ "MemoryLevel", null, [
+      [ "MemoryHierarchy", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html", null ]
     ] ],
     [ "OperationalArrayABC", null, [
       [ "ImcUnit", "classarchitecture_1_1imc__unit_1_1ImcUnit.html", null ]

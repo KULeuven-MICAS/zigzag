@@ -1,5 +1,4 @@
 <map id="get_memory_levels" name="get_memory_levels">
-<area shape="rect" id="node1" title="Returns a list of memories in the memory hierarchy for the memory operand." alt="" coords="5,35,156,61"/>
-<area shape="rect" id="node2" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a70e8f3b017dc7752bcfaab0c9c9040a3" title="Wrap DiGraph.topological_sort with correct type annotation." alt="" coords="267,5,393,32"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html#ae68565334d1b8db29bf1917b7262c2d1" title=" " alt="" coords="204,57,456,98"/>
+<area shape="rect" id="node1" title="Returns a list of memories in the memory hierarchy for the memory operand." alt="" coords="5,5,156,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#ae68565334d1b8db29bf1917b7262c2d1" title=" " alt="" coords="204,5,519,32"/>
 </map>

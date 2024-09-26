@@ -1,7 +1,7 @@
 <map id="add_memory" name="add_memory">
 <area shape="rect" id="node1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,81,113,108"/>
-<area shape="rect" id="node2" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a0c71897df78582e2900f81bac38f1887" title=" " alt="" coords="198,5,297,32"/>
-<area shape="rect" id="node3" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a91517d825468edeb11eacd3c65981f8e" title=" " alt="" coords="198,56,297,83"/>
-<area shape="rect" id="node4" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="161,107,333,133"/>
-<area shape="rect" id="node5" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#ab390f2fe72333440201b6370714bec0e" title="Wrap DiGraph.nodes() with custom type annotation." alt="" coords="381,132,504,159"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#a690dd28cc3d7599e5e67eeb47378508a" title=" " alt="" coords="161,5,436,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#afb7cfc46c59f268b599dd90cd943cbd8" title=" " alt="" coords="161,56,436,83"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="213,107,385,133"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#a80ec1a7f8c717c9fb18b59b729cd1649" title=" " alt="" coords="484,132,755,159"/>
 </map>

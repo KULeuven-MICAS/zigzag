@@ -237,7 +237,8 @@ var annotated_dup =
         ] ]
       ] ],
       [ "utils", "namespacezigzag_1_1utils.html", [
-        [ "UniqueMessageFilter", "classzigzag_1_1utils_1_1UniqueMessageFilter.html", "classzigzag_1_1utils_1_1UniqueMessageFilter" ]
+        [ "UniqueMessageFilter", "classzigzag_1_1utils_1_1UniqueMessageFilter.html", "classzigzag_1_1utils_1_1UniqueMessageFilter" ],
+        [ "DiGraphWrapper", "classzigzag_1_1utils_1_1DiGraphWrapper.html", "classzigzag_1_1utils_1_1DiGraphWrapper" ]
       ] ],
       [ "workload", "namespacezigzag_1_1workload.html", [
         [ "dnn_workload", "namespacezigzag_1_1workload_1_1dnn__workload.html", [
@@ -270,7 +271,8 @@ var annotated_dup =
           [ "ONNXWorkload", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html", "classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload" ]
         ] ],
         [ "workload_abc", "namespacezigzag_1_1workload_1_1workload__abc.html", [
-          [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC" ]
+          [ "WorkloadABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC" ],
+          [ "WorkloadNoDummyABC", "classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html", null ]
         ] ]
       ] ]
     ] ]

@@ -98,8 +98,8 @@ $(document).ready(function(){initNavTree('classzigzag_1_1parser_1_1accelerator__
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a3f2d5a7406cfffe0adea1c474a3ecd6c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3f2d5a7406cfffe0adea1c474a3ecd6c">__init__</a> (self, str <a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#ab74e6bf80237ddc4109968cedc58c151">name</a>, dict[str, Any] mem_data)</td></tr>
-<tr class="separator:a3f2d5a7406cfffe0adea1c474a3ecd6c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a43604a6181cb501b56597fc4dbc80909"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a43604a6181cb501b56597fc4dbc80909">__init__</a> (self, str <a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#ab74e6bf80237ddc4109968cedc58c151">name</a>, dict[str, Any] mem_data, int <a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a02862ffba7a32e1eda766bf8c8ce8293">shared_mem_group_id</a>=-1)</td></tr>
+<tr class="separator:a43604a6181cb501b56597fc4dbc80909"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3c82b469fd0758b532bdee818625e897"><td class="memItemLeft" align="right" valign="top">MemoryInstance&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3c82b469fd0758b532bdee818625e897">create_memory_instance</a> (self)</td></tr>
 <tr class="separator:a3c82b469fd0758b532bdee818625e897"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4058b26e31caced3c2638241a85e9166"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a4058b26e31caced3c2638241a85e9166">add_memory_to_graph</a> (self, MemoryHierarchy mem_graph)</td></tr>
@@ -121,12 +121,14 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a511ae0b1c13f95e5f08f1a0dd3da3d93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab74e6bf80237ddc4109968cedc58c151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#ab74e6bf80237ddc4109968cedc58c151">name</a></td></tr>
 <tr class="separator:ab74e6bf80237ddc4109968cedc58c151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02862ffba7a32e1eda766bf8c8ce8293"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a02862ffba7a32e1eda766bf8c8ce8293">shared_mem_group_id</a></td></tr>
+<tr class="separator:a02862ffba7a32e1eda766bf8c8ce8293"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Create MemoryInstances and adds them to memory hierarchy. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a3f2d5a7406cfffe0adea1c474a3ecd6c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3f2d5a7406cfffe0adea1c474a3ecd6c">&#9670;&nbsp;</a></span>__init__()</h2>
+<a id="a43604a6181cb501b56597fc4dbc80909"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a43604a6181cb501b56597fc4dbc80909">&#9670;&nbsp;</a></span>__init__()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +149,13 @@ Public Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">dict[str, Any]&#160;</td>
-          <td class="paramname"><em>mem_data</em>&#160;</td>
+          <td class="paramname"><em>mem_data</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int &#160;</td>
+          <td class="paramname"><em>shared_mem_group_id</em> = <code>-1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -384,6 +392,20 @@ Here is the caller graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">name</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a02862ffba7a32e1eda766bf8c8ce8293"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02862ffba7a32e1eda766bf8c8ce8293">&#9670;&nbsp;</a></span>shared_mem_group_id</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">shared_mem_group_id</td>
         </tr>
       </table>
 </div><div class="memdoc">

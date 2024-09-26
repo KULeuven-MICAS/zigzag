@@ -1,0 +1,12 @@
+<map id="WorkloadNoDummyABC" name="WorkloadNoDummyABC">
+<area shape="rect" id="node1" title=" " alt="" coords="233,229,413,256"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="266,304,379,331"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html" title="Wraps the DiGraph class with type annotations for the nodes." alt="" coords="83,155,213,181"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,80,77,107"/>
+<area shape="rect" id="node4" title=" " alt="" coords="102,80,141,107"/>
+<area shape="rect" id="node5" title=" " alt="" coords="165,80,240,107"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html" title="Represents a single layer in a workload." alt="" coords="322,155,414,181"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html" title="Represents a single layer of a workload in any form." alt="" coords="315,80,434,107"/>
+<area shape="rect" id="node8" title=" " alt="" coords="274,5,363,32"/>
+<area shape="rect" id="node9" title=" " alt="" coords="409,5,492,32"/>
+</map>

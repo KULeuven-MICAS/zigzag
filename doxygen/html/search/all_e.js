@@ -11,7 +11,7 @@ var searchData=
   ['node_613',['node',['../classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html#ae0682e96cacac1e6c208357a99dbd6d0',1,'zigzag::parser::onnx::onnx_operator_parser::ONNXOperatorParser']]],
   ['node_5fdata_614',['node_data',['../classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html#aab338877ff277ff1273f0c56033cd978',1,'zigzag::parser::workload_factory::LayerNodeFactory']]],
   ['node_5fid_615',['node_id',['../classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html#a018cb6fe637d3a25a67e794d620808ec',1,'zigzag::parser::onnx::onnx_operator_parser::ONNXOperatorParser']]],
-  ['node_5flist_616',['node_list',['../classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html#a80ec1a7f8c717c9fb18b59b729cd1649',1,'zigzag::workload::workload_abc::WorkloadABC']]],
+  ['node_5flist_616',['node_list',['../classzigzag_1_1utils_1_1DiGraphWrapper.html#a80ec1a7f8c717c9fb18b59b729cd1649',1,'zigzag::utils::DiGraphWrapper']]],
   ['nodes_5foutputs_617',['nodes_outputs',['../classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html#a520ae6b76229044ba736c8221af5bd0b',1,'zigzag::parser::onnx::onnx_operator_parser::ONNXOperatorParser']]],
   ['non_5ftrivial_5fdivisors_618',['non_trivial_divisors',['../classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a34dfd3c8ddac3b098abbd6b4f5874472',1,'spatial_mapping_generation::SpatialMappingGeneratorStage']]],
   ['normalize_5flist_619',['normalize_list',['../classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator.html#a64e7d020d738e9bdb2320f8233384419',1,'zigzag::parser::upgraded_validator::UpgradedValidator']]],
