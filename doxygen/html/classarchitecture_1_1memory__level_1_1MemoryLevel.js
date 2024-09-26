@@ -8,6 +8,7 @@ var classarchitecture_1_1memory__level_1_1MemoryLevel =
     [ "__str__", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a23e8041ce1015febe4fdace3225714f9", null ],
     [ "unroll_count", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3a4e597428382b082f0f0cbd2e06bb9b", null ],
     [ "formatted_string", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a4c903cdbc3e810787448630bfb6698a2", null ],
+    [ "id", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#acf2488b95c97e0378c9bf49de3b50f28", null ],
     [ "mem_level_of_operands", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#aa8b56d5e6d19d9c97111a3a2acfa05b3", null ],
     [ "memory_instance", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3eb53135525a27c4d8420b6334b564c6", null ],
     [ "name", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#ab74e6bf80237ddc4109968cedc58c151", null ],

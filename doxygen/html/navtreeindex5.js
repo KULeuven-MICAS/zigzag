@@ -1,5 +1,8 @@
 var NAVTREEINDEX5 =
 {
+"get__cacti__cost_8py.html#aa1ff5066f9ac1d6daab64e85ff953f9e":[3,0,0,2,0,3,2],
+"get__cacti__cost_8py.html#aec2fa46bcba0f621cf9f3ee4f572b498":[3,0,0,2,0,3,1],
+"hardware_2architecture_2____init_____8py.html":[3,0,0,2,0,0],
 "hardware_2architecture_2memory__hierarchy_8py.html":[3,0,0,2,0,6],
 "hierarchy.html":[2,2],
 "imc__array_8py.html":[3,0,0,2,0,4],
@@ -125,7 +128,7 @@ var NAVTREEINDEX5 =
 "utils_8py.html#aa2a1be84452c12a2acebdcf02fca0502":[3,0,0,13,7],
 "utils_8py.html#aa5f0207606d7e164d68fd1a43818db14":[3,0,0,13,2],
 "utils_8py.html#ab42dda6f6ce7e693f82e03b5764c5cd1":[3,0,0,13,3],
-"utils_8py.html#ab9a7c4966ea10d51e733e4a1ec8a8be2":[3,0,0,13,4],
+"utils_8py.html#ac3f9a824086ca56804c311e6addc4494":[3,0,0,13,4],
 "utils_8py.html#addfd6d573902614df054d7def823f0cb":[3,0,0,13,5],
 "utils_8py.html#adf1f3edb9115acb0a1e04209b7a9937b":[3,0,0,13,8],
 "visualization_2____init_____8py.html":[3,0,0,7,2],
