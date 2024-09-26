@@ -1,13 +1,19 @@
 import logging
 import pickle
 from copy import deepcopy
+from hashlib import sha512  # type: ignore
 from typing import Any, Generic, Iterator, Literal, Sequence, TypeVar, no_type_check, overload
 
 import networkx as nx
 import numpy as np
 import yaml
 from networkx import DiGraph
-from typeguard import typeguard_ignore
+from typeguard import typeguard_ignore  # type: ignore
+
+
+def hash_sha512(data: Any) -> int:
+    """! Hashes the input data using SHA-512"""
+    return int(sha512(pickle.dumps(data)).hexdigest(), 16)  # type: ignore
 
 
 def pickle_deepcopy(to_copy: Any) -> Any:
