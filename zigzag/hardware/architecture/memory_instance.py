@@ -23,6 +23,7 @@ class MemoryInstance:
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
         double_buffering_support: bool = False,
+        shared_memory_group_id: int = -1,
     ):
         """
         Collect all the basic information of a physical memory module.
@@ -42,6 +43,8 @@ class MemoryInstance:
         @param mem_type (str): The type of memory. Used for CACTI cost extraction.
         @param auto_cost_extraction (bool): Automatically extract the read cost, write cost and area using CACTI.
         @param double_buffering_support (bool): Support for double buffering on this memory instance.
+        @param shared_memory_group_id: used to indicate whether two MemoryInstance instances represent the same, shared
+            memory between two cores (feature used in Stream).
         """
         if auto_cost_extraction:
             cacti_parser = CactiParser()
@@ -84,7 +87,8 @@ class MemoryInstance:
         return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__
 
     def __hash__(self):
-        return id(self)  # unique for every object within its lifetime
+        # id(self)  # unique for every object within its lifetime
+        return hash(frozenset(self.__dict__.values()))
 
     def __str__(self):
         return f"MemoryInstance({self.name})"
