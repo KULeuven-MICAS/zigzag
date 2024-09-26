@@ -15,6 +15,7 @@ var classarchitecture_1_1memory__instance_1_1MemoryInstance =
     [ "r_cost", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6700ef6022c4d3b47bc8853b9e3bbda5", null ],
     [ "r_port_nb", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a753ec6ba440e5bdb256e74ebce5014a4", null ],
     [ "rw_port_nb", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#abd6968727b513b98262190127603887c", null ],
+    [ "shared_memory_group_id", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a1b4ee6db99019b84211c6b0ce9c06118", null ],
     [ "size", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#aa3d6656320f1a7278c0c2c7fdf07617c", null ],
     [ "w_bw", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ad829648a1521637ed7b78c667ff7a05a", null ],
     [ "w_cost", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a78d8307278252d887b53662040fa6004", null ],

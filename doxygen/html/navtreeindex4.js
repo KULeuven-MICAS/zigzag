@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0eefc4dfe20e299c997385acdaffb1f6":[2,0,14,7,1,0,8],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a":[2,0,14,7,1,0,6],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a2064095b23e37a6d94a80f8c74f3e23b":[2,0,14,7,1,0,3],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a23e8041ce1015febe4fdace3225714f9":[2,0,14,7,1,0,1],
@@ -175,8 +176,8 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,5],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,5,2],
 "files.html":[3,0],
-"functions.html":[2,3,0,0],
 "functions.html":[2,3,0],
+"functions.html":[2,3,0,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "get__cacti__cost_8py.html":[3,0,0,2,0,3],
 "get__cacti__cost_8py.html#aa1ff5066f9ac1d6daab64e85ff953f9e":[3,0,0,2,0,3,2],
 "get__cacti__cost_8py.html#aec2fa46bcba0f621cf9f3ee4f572b498":[3,0,0,2,0,3,1],
-"hardware_2architecture_2____init_____8py.html":[3,0,0,2,0,0],
-"hardware_2architecture_2memory__hierarchy_8py.html":[3,0,0,2,0,6]
+"hardware_2architecture_2____init_____8py.html":[3,0,0,2,0,0]
 };
