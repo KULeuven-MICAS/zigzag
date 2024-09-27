@@ -12,6 +12,7 @@ var classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy =
     [ "get_outer_memories", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a2b02ca9141845b4493667cc3963c4b30", null ],
     [ "get_top_memories", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a7065d96596225f81ca0e96d8041297e9", null ],
     [ "memory_level_id", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a153826093c22fce046d69281c7bd1137", null ],
+    [ "name", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151", null ],
     [ "nb_levels", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#aff389cbb45db6e5bef71287d38a0b7d8", null ],
     [ "operational_array", "classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#aa551b39d3cb97666fedabc767a91f4a6", null ]
 ];

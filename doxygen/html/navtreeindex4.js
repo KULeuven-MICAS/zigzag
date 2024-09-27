@@ -1,5 +1,6 @@
 var NAVTREEINDEX4 =
 {
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html":[2,0,14,7,1,0],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3":[2,0,14,7,1,0,7],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0eefc4dfe20e299c997385acdaffb1f6":[2,0,14,7,1,0,8],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a":[2,0,14,7,1,0,6],
@@ -179,16 +180,16 @@ var NAVTREEINDEX4 =
 "exploit__data__locality__stages_8py.html":[3,0,0,6,5],
 "exploit__data__locality__stages_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,5,2],
 "files.html":[3,0],
-"functions.html":[2,3,0],
 "functions.html":[2,3,0,0],
+"functions.html":[2,3,0],
 "functions_a.html":[2,3,0,1],
 "functions_b.html":[2,3,0,2],
 "functions_c.html":[2,3,0,3],
 "functions_d.html":[2,3,0,4],
 "functions_e.html":[2,3,0,5],
 "functions_f.html":[2,3,0,6],
-"functions_func.html":[2,3,1,0],
 "functions_func.html":[2,3,1],
+"functions_func.html":[2,3,1,0],
 "functions_func_a.html":[2,3,1,1],
 "functions_func_b.html":[2,3,1,2],
 "functions_func_c.html":[2,3,1,3],
@@ -225,8 +226,8 @@ var NAVTREEINDEX4 =
 "functions_t.html":[2,3,0,19],
 "functions_u.html":[2,3,0,20],
 "functions_v.html":[2,3,0,21],
-"functions_vars.html":[2,3,2],
 "functions_vars.html":[2,3,2,0],
+"functions_vars.html":[2,3,2],
 "functions_vars_b.html":[2,3,2,1],
 "functions_vars_c.html":[2,3,2,2],
 "functions_vars_d.html":[2,3,2,3],
@@ -248,6 +249,5 @@ var NAVTREEINDEX4 =
 "functions_vars_v.html":[2,3,2,19],
 "functions_vars_w.html":[2,3,2,20],
 "functions_w.html":[2,3,0,22],
-"gemm__parser_8py.html":[3,0,0,5,0,3],
-"get__cacti__cost_8py.html":[3,0,0,2,0,3]
+"gemm__parser_8py.html":[3,0,0,5,0,3]
 };

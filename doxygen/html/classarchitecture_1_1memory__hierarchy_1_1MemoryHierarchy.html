@@ -124,7 +124,7 @@ Collaboration diagram for MemoryHierarchy:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9e362926a85ac44abc040492eb005b6a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a9e362926a85ac44abc040492eb005b6a">__init__</a> (self, OperationalArrayABC <a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#aa551b39d3cb97666fedabc767a91f4a6">operational_array</a>, str name=&quot;Memory Hierarchy&quot;, **Any attr)</td></tr>
+<tr class="memitem:a9e362926a85ac44abc040492eb005b6a"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a9e362926a85ac44abc040492eb005b6a">__init__</a> (self, OperationalArrayABC <a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#aa551b39d3cb97666fedabc767a91f4a6">operational_array</a>, str <a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151">name</a>=&quot;Memory Hierarchy&quot;, **Any attr)</td></tr>
 <tr class="memdesc:a9e362926a85ac44abc040492eb005b6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the memory hierarchy graph.  <a href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a9e362926a85ac44abc040492eb005b6a">More...</a><br /></td></tr>
 <tr class="separator:a9e362926a85ac44abc040492eb005b6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a145984bbf07fb21fc672ba1988066cd1"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a145984bbf07fb21fc672ba1988066cd1">add_memory</a> (self, MemoryInstance memory_instance, list[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>] operands, PortAllocation port_alloc, ServedMemDimensions served_dimensions)</td></tr>
@@ -210,6 +210,8 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
+<tr class="memitem:ab74e6bf80237ddc4109968cedc58c151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#ab74e6bf80237ddc4109968cedc58c151">name</a></td></tr>
+<tr class="separator:ab74e6bf80237ddc4109968cedc58c151"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa551b39d3cb97666fedabc767a91f4a6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#aa551b39d3cb97666fedabc767a91f4a6">operational_array</a></td></tr>
 <tr class="separator:aa551b39d3cb97666fedabc767a91f4a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a153826093c22fce046d69281c7bd1137"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a153826093c22fce046d69281c7bd1137">memory_level_id</a></td></tr>
@@ -266,15 +268,6 @@ Public Attributes</h2></td></tr>
   </table>
   </dd>
 </dl>
-<div class="dynheader">
-Here is the call graph for this function:</div>
-<div class="dyncontent">
-<div class="center"><img src="classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy_a9e362926a85ac44abc040492eb005b6a_cgraph.png" border="0" usemap="#aclassarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy_a9e362926a85ac44abc040492eb005b6a_cgraph" alt=""/></div>
-<map name="aclassarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy_a9e362926a85ac44abc040492eb005b6a_cgraph" id="aclassarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy_a9e362926a85ac44abc040492eb005b6a_cgraph">
-<area shape="rect" title="Initialize the memory hierarchy graph." alt="" coords="5,13,76,39"/>
-<area shape="rect" href="classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02" title="Protect the class variable from reassignment (as this would invalidate the stored hash value)" alt="" coords="124,5,316,47"/>
-</map>
-</div>
 
 </div>
 </div>
@@ -643,6 +636,20 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">memory_level_id</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab74e6bf80237ddc4109968cedc58c151"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab74e6bf80237ddc4109968cedc58c151">&#9670;&nbsp;</a></span>name</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">name</td>
         </tr>
       </table>
 </div><div class="memdoc">

@@ -17,10 +17,10 @@ var classarchitecture_1_1core_1_1Core =
     [ "mem_hierarchy_dict", "classarchitecture_1_1core_1_1Core.html#aa192ec0feee472fb02654eb92fc5d878", null ],
     [ "mem_r_bw_dict", "classarchitecture_1_1core_1_1Core.html#a4ca9a7e5cfa10b26d46f47711d5e72e2", null ],
     [ "mem_r_bw_min_dict", "classarchitecture_1_1core_1_1Core.html#ae485f08c58f542c4ccf01c34cb184831", null ],
+    [ "mem_sharing_list", "classarchitecture_1_1core_1_1Core.html#a11ac1508f800047958376085487533c3", null ],
     [ "mem_size_dict", "classarchitecture_1_1core_1_1Core.html#a9de9f586c3351a83ff68606239babab3", null ],
     [ "mem_w_bw_dict", "classarchitecture_1_1core_1_1Core.html#ae171552e048c6b4a459150e63fc506f8", null ],
     [ "mem_w_bw_min_dict", "classarchitecture_1_1core_1_1Core.html#a9d841433eee83ec266c37e5e1d45cbe0", null ],
     [ "memory_hierarchy", "classarchitecture_1_1core_1_1Core.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
-    [ "memory_sharing_list", "classarchitecture_1_1core_1_1Core.html#a41d111ed1f2f23dca8db3a0d50787674", null ],
     [ "operational_array", "classarchitecture_1_1core_1_1Core.html#aa551b39d3cb97666fedabc767a91f4a6", null ]
 ];
