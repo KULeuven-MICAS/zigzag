@@ -24,7 +24,7 @@ class Core:
     mem_w_bw_dict: dict[MemoryOperand, list[int]]
     mem_r_bw_min_dict: dict[MemoryOperand, list[int]]
     mem_w_bw_min_dict: dict[MemoryOperand, list[int]]
-    memory_sharing_list: list[dict[MemoryOperand, int]]
+    mem_sharing_list: list[dict[MemoryOperand, int]]
 
     def __init__(
         self,
@@ -49,7 +49,7 @@ class Core:
 
     def recalculate_memory_hierarchy_information(self):
         self.__generate_memory_hierarchy_dict()
-        self.__generate_memory_sharing_list()
+        self.__generate_mem_sharing_list()
 
     def __generate_memory_hierarchy_dict(self):
         mem_operands = self.memory_hierarchy.nb_levels.keys()
@@ -89,15 +89,15 @@ class Core:
                 if mem_op in node.operands
             ]
 
-    def __generate_memory_sharing_list(self):
+    def __generate_mem_sharing_list(self):
         """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same
         physical memory"""
-        self.memory_sharing_list = []
+        self.mem_sharing_list = []
         for mem_lv in self.mem_hierarchy_dict.values():
             for mem in mem_lv:
                 operand_mem_share = mem.mem_level_of_operands
-                if len(operand_mem_share) > 1 and operand_mem_share not in self.memory_sharing_list:
-                    self.memory_sharing_list.append(operand_mem_share)
+                if len(operand_mem_share) > 1 and operand_mem_share not in self.mem_sharing_list:
+                    self.mem_sharing_list.append(operand_mem_share)
 
     def get_top_memory_instance(self, mem_op: MemoryOperand) -> MemoryInstance:
         if mem_op not in self.memory_hierarchy.get_operands():

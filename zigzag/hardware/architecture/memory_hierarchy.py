@@ -15,6 +15,13 @@ class MemoryHierarchy(DiGraphWrapper[MemoryLevel]):
     in the memory hierarchy.
     """
 
+    name: str
+    operational_array: OperationalArrayABC
+    operansd: set[MemoryOperand]
+    nb_levels: dict[MemoryOperand, int]
+    mem_level_list: list[MemoryLevel]
+    memory_level_id: int
+
     def __init__(
         self,
         operational_array: OperationalArrayABC,
@@ -28,7 +35,7 @@ class MemoryHierarchy(DiGraphWrapper[MemoryLevel]):
         @param nodes: a list of MemoryLevels. Entries need to be provided from lowest to highest memory level.
         """
         super().__init__(**attr)  # type: ignore
-        self.name: str = name
+        self.name = name  # type: ignore
         self.operational_array = operational_array
         # Initialize the set that will store all memory operands
         self.operands: set[MemoryOperand] = set()
