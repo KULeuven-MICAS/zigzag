@@ -31,6 +31,8 @@ class MemoryUtilization(TypedDict):
 class CostModelEvaluationABC(metaclass=ABCMeta):
     """! Superclass for CostModelEvaluation and CumulativeCME"""
 
+    accelerator: Accelerator
+
     @abstractmethod
     def __init__(self) -> None:
         # Attributes that all subclasses should define
@@ -53,6 +55,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.mac_utilization2: float
 
         self.accelerator: Accelerator | None
+
+    @property
+    def core(self):
+        return self.accelerator
 
     def __add__(self, other: "CostModelEvaluationABC") -> "CumulativeCME":
         result = CumulativeCME()
@@ -304,7 +310,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         @param layer the layer to run
         @param access_same_data_considered_as_no_access (optional)
         """
-        self.accelerator: Accelerator = accelerator
+        self.accelerator = accelerator
         self.layer: LayerNode = layer
         self.spatial_mapping = spatial_mapping
         self.spatial_mapping_int = spatial_mapping_int  # the original spatial mapping without decimal

@@ -41,8 +41,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         access_same_data_considered_as_no_access: bool = True,
     ):
         self.is_imc = True
-        assert isinstance(self.accelerator.operational_array, ImcArray)
-        self.operational_array: ImcArray = self.accelerator.operational_array
+        assert isinstance(accelerator.operational_array, ImcArray)
+        self.operational_array: ImcArray = accelerator.operational_array
         super().__init__(
             accelerator=accelerator,
             layer=layer,
