@@ -195,8 +195,7 @@ class SpatialMappingConversionStage(Stage):
         # TODO This should be a class
         """
         mapping_per_mem_lvl: SpatialMappingPerMemLvl = {}
-        core_id = self.layer.core_allocation[0]
-        mem_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
+        mem_hierarchy = self.accelerator.memory_hierarchy
         for layer_op in self.memory_operand_links.layer_operands:
             mem_op = self.memory_operand_links.layer_to_mem_op(layer_op)
             usm_copy = user_spatial_mapping.copy()

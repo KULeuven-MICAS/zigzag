@@ -35,9 +35,7 @@ class WorkloadStage(Stage):
                 continue
             # Skip Pooling, Add layers for imc. This happens only when the workload is manually defined.
             # No skipping if the workload is from onnx.
-            core_id = layer.core_allocation[0]
-            core = self.accelerator.get_core(core_id)
-            operational_array = core.operational_array
+            operational_array = self.accelerator.operational_array
             if isinstance(operational_array, ImcArray) and layer.type in [
                 "Pooling",
                 "Add",

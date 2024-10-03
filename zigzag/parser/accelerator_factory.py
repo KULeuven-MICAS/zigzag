@@ -8,7 +8,6 @@ from zigzag.datatypes import (
     UnrollFactor,
 )
 from zigzag.hardware.architecture.accelerator import Accelerator
-from zigzag.hardware.architecture.core import Core
 from zigzag.hardware.architecture.imc_array import ImcArray
 from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
@@ -21,34 +20,34 @@ from zigzag.hardware.architecture.operational_array import (
 from zigzag.hardware.architecture.operational_unit import Multiplier
 from zigzag.mapping.spatial_mapping import MappingSingleOADim, SpatialMapping
 
+# class AcceleratorFactory:
+#     """! Converts valid user-provided accelerator data into an `Accelerator` instance"""
+
+#     def __init__(self, data: dict[str, Any]):
+#         """! Generate an `Accelerator` instance from the validated user-provided data."""
+#         self.data = data
+
+#     def create(self) -> Accelerator:
+#         """! Create an Accelerator instance from the user-provided data.
+#         NOTE the memory instances must be defined from lowest to highest.
+#         """
+#         core_factory = CoreFactory(self.data)
+#         core = core_factory.create()
+#         return Accelerator(name=self.data["name"], core_set={core})
+
 
 class AcceleratorFactory:
     """! Converts valid user-provided accelerator data into an `Accelerator` instance"""
 
     def __init__(self, data: dict[str, Any]):
-        """! Generate an `Accelerator` instance from the validated user-provided data."""
-        self.data = data
-
-    def create(self) -> Accelerator:
-        """! Create an Accelerator instance from the user-provided data.
-        NOTE the memory instances must be defined from lowest to highest.
-        """
-        core_factory = CoreFactory(self.data)
-        core = core_factory.create()
-        return Accelerator(name=self.data["name"], core_set={core})
-
-
-class CoreFactory:
-    """! Converts valid user-provided accelerator data into a `Core` instance"""
-
-    def __init__(self, data: dict[str, Any]):
         """! Generate an `Core` instance from the validated user-provided data."""
         self.data = data
 
-    def create(self, core_id: int = 1, shared_mem_group_id: int | None = None) -> Core:
+    def create(self, core_id: int = 0, shared_mem_group_id: int | None = None) -> Accelerator:
         """! Create a Core instance from the user-provided data.
         NOTE the memory instances must be defined from lowest to highest.
         """
+        name = self.data["name"]
         operational_array = self.create_operational_array()
 
         mem_graph = MemoryHierarchy(operational_array)
@@ -61,8 +60,9 @@ class CoreFactory:
             )
             memory_factory.add_memory_to_graph(mem_graph)
 
-        return Core(
+        return Accelerator(
             core_id=core_id,
+            name=name,
             operational_array=operational_array,
             memory_hierarchy=mem_graph,
             dataflows=dataflows,

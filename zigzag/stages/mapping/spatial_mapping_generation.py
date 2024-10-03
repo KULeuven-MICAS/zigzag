@@ -14,7 +14,6 @@ from zigzag.datatypes import (
     UnrollFactorInt,
 )
 from zigzag.hardware.architecture.accelerator import Accelerator
-from zigzag.hardware.architecture.core import Core
 from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
@@ -73,10 +72,8 @@ class SpatialMappingGeneratorStage(Stage):
         self.nb_mappings_generated = nb_mappings_generated
 
         self.layer_dim_sizes = self.layer.layer_dim_sizes
-        core_id = layer.core_allocation[0]
-        self.core = self.accelerator.get_core(core_id)
-        self.oa_dim_sizes = self.core.operational_array.dimension_sizes
-        self.memory_hierarchy = self.core.memory_hierarchy
+        self.oa_dim_sizes = self.accelerator.operational_array.dimension_sizes
+        self.memory_hierarchy = self.accelerator.memory_hierarchy
 
         # Spatial mapping hint
         self.spatial_mapping_hint = self.layer.spatial_mapping_hint
@@ -701,7 +698,7 @@ class SpatialMappingGeneratorStage(Stage):
         # Initialize the new memory hierarchy
         mh_name = self.memory_hierarchy.name
         new_mh_name = mh_name + "-supporting-diagonal-map"
-        operational_array = self.core.operational_array
+        operational_array = self.accelerator.operational_array
         new_memory_hierarchy = MemoryHierarchy(operational_array, new_mh_name)
         # Add memories to the new memory hierarchy with the correct attributes
         for memory_level in self.memory_hierarchy.mem_level_list:
@@ -729,18 +726,12 @@ class SpatialMappingGeneratorStage(Stage):
                 served_dimensions=new_served_dimensions,
             )
         # Create the new core
-        new_core = Core(
-            core_id=self.core.id,
+        new_name = self.accelerator.name + "-supporting-diagonal-map"
+        new_accelerator = Accelerator(
+            core_id=self.accelerator.id,
+            name=new_name,
             operational_array=operational_array,
             memory_hierarchy=new_memory_hierarchy,
         )
 
-        # Create the new accelerator
-        name = self.accelerator.name
-        new_name = name + "-supporting-diagonal-map"
-        new_cores = {new_core}
-        new_accelerator = Accelerator(
-            name=new_name,
-            core_set=new_cores,
-        )
         return new_accelerator
