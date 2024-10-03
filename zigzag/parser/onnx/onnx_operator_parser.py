@@ -34,8 +34,7 @@ class ONNXOperatorParser(metaclass=ABCMeta):
         self.accelerator = accelerator
 
     @abstractmethod
-    def run(self) -> LayerNodeABC:
-        ...
+    def run(self) -> LayerNodeABC: ...
 
     def get_input_output_weight_data_type(self):
         """! Return the data type of the input, output and weight tensors of this node."""

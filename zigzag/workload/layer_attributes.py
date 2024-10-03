@@ -110,6 +110,9 @@ class LayerOperandPrecision(LayerAttribute):
 class MemoryOperandLinks(LayerAttribute):
     """! Links LayerOperand to MemoryOperand."""
 
+    layer_operands: list[LayerOperand]
+    mem_operands: list[MemoryOperand]
+
     def __init__(self, data: dict[LayerOperand, MemoryOperand]):
         self.data = data
         # Class variables are computed and stored once to improve runtime performance
@@ -231,25 +234,25 @@ class LayerTemporalOrdering(LayerAttribute):
         return self.data
 
     def get_constraints(self) -> list[PermutationConstraint]:
-        static_posistions_dict: dict[int, LayerDim] = {}
-        static_posistions_and_sizes_dict: dict[int, tuple[LayerDim, int]] = {}
+        static_positions_dict: dict[int, LayerDim] = {}
+        static_positions_and_sizes_dict: dict[int, tuple[LayerDim, int]] = {}
         outer_loop = False
         for count, (layer_dim, factor) in enumerate(self.data):
             if (layer_dim == Constants.UNKNOWN_DIM_OPERATOR) and (factor is None):
                 outer_loop = True
             elif factor is None:
                 if not outer_loop:
-                    static_posistions_dict[count] = layer_dim
+                    static_positions_dict[count] = layer_dim
                 else:
-                    static_posistions_dict[count - len(self.data)] = layer_dim
+                    static_positions_dict[count - len(self.data)] = layer_dim
             else:
                 if not outer_loop:
-                    static_posistions_and_sizes_dict[count] = (layer_dim, factor)
+                    static_positions_and_sizes_dict[count] = (layer_dim, factor)
                 else:
-                    static_posistions_and_sizes_dict[count - len(self.data)] = (layer_dim, factor)
-        static_positions = StaticPositionsConstraint(static_posistions_dict)
-        static_posistions_and_sizes = StaticPositionsAndSizesConstraint(static_posistions_and_sizes_dict)
-        return [static_positions, static_posistions_and_sizes]
+                    static_positions_and_sizes_dict[count - len(self.data)] = (layer_dim, factor)
+        static_positions = StaticPositionsConstraint(static_positions_dict)
+        static_positions_and_sizes = StaticPositionsAndSizesConstraint(static_positions_and_sizes_dict)
+        return [static_positions, static_positions_and_sizes]
 
 
 class LayerPadding(LayerAttribute):

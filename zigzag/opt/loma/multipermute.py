@@ -58,12 +58,10 @@ class PermutationConstraint(ABC):
     """! An abstract class to represent a constraint on a permutation."""
 
     @abstractmethod
-    def is_valid(self, permutation: list[Any]) -> bool:
-        ...
+    def is_valid(self, permutation: list[Any]) -> bool: ...
 
     @abstractmethod
-    def is_empty(self) -> bool:
-        ...
+    def is_empty(self) -> bool: ...
 
 
 class StaticPositionsConstraint(PermutationConstraint):

@@ -2,10 +2,10 @@ from copy import deepcopy
 from typing import Any
 
 from zigzag.workload.layer_node import LayerNode
-from zigzag.workload.workload_abc import WorkloadABC
+from zigzag.workload.workload_abc import WorkloadNoDummyABC
 
 
-class DNNWorkload(WorkloadABC[LayerNode]):
+class DNNWorkload(WorkloadNoDummyABC):
     """Extends the ABC for workloads. For user-defined workloads (from yaml), the DummyNodes are not saved so this class
     only holds (non-dummy) LayerNodes"""
 
@@ -13,7 +13,7 @@ class DNNWorkload(WorkloadABC[LayerNode]):
         """!
         @return (self): Directed Graph with nodes the layers and edges the connections between layers.
         """
-        super().__init__(**attr)
+        super().__init__(**attr)  # type: ignore
 
         layer_id_to_obj: dict[int, LayerNode] = {}
         self.layer_node_list = nodes
@@ -21,7 +21,7 @@ class DNNWorkload(WorkloadABC[LayerNode]):
         for layer_node in nodes:
             layer_id_to_obj[layer_node.id] = layer_node
 
-            self.add_workload_node(layer_node)
+            self.add_node(layer_node)
             # Find all of its operand sources and add edges accordingly
             edges: list[tuple[LayerNode, LayerNode]] = []
             for _, parent_id in layer_node.input_operand_source.items():
@@ -30,8 +30,8 @@ class DNNWorkload(WorkloadABC[LayerNode]):
                 parent_layer = layer_id_to_obj[parent_id]
                 edges.append((parent_layer, layer_node))
 
-            self.add_workload_edges_from(edges)
+            self.add_edges_from(edges)
 
-    def get_copy_no_dummy(self) -> WorkloadABC[LayerNode]:
+    def get_copy_no_dummy(self) -> "DNNWorkload":
         """Return a copy. DNNWorkloads don't contain DummyNodes in the first place."""
         return deepcopy(self)

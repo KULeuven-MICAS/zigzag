@@ -48,6 +48,21 @@ class MemoryLevel:
     """Represents a single memory in the memory hierarchy, consisting of a memory instance and connectivity
     information"""
 
+    memory_instance: MemoryInstance
+    operands: list[MemoryOperand]
+    mem_level_of_operands: dict[MemoryOperand, int]
+    oa_dim_sizes: dict[OADimension, int]
+    port_alloc: PortAllocation
+    served_dimensions: ServedMemDimensions
+    id: int
+    name: str
+    port_alloc_raw: PortAllocation
+    read_energy: float
+    write_energy: float
+    read_bw: float
+    write_bw: float
+    port_list: list[MemoryPort]
+
     def __init__(
         self,
         memory_instance: MemoryInstance,
@@ -64,10 +79,9 @@ class MemoryLevel:
         """
         self.memory_instance = memory_instance
         self.operands = operands
-        self.operands = operands
         self.mem_level_of_operands = mem_level_of_operands
         self.oa_dim_sizes = operational_array.dimension_sizes
-        self.id: int = identifier
+        self.id = identifier
         self.served_dimensions = served_dimensions
         self.name = self.memory_instance.name
 

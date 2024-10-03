@@ -234,9 +234,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
                     "layer": (
                         self.layer
                         if isinstance(self, CostModelEvaluation)
-                        else self.layer_ids
-                        if isinstance(self, CumulativeCME)
-                        else None
+                        else self.layer_ids if isinstance(self, CumulativeCME) else None
                     ),
                     "spatial_mapping": (self.spatial_mapping_int if isinstance(self, CostModelEvaluation) else None),
                     "temporal_mapping": (self.temporal_mapping if isinstance(self, CostModelEvaluation) else None),

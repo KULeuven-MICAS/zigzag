@@ -124,6 +124,27 @@ class LayerNodeAttributes:
 class LayerNode(LayerNodeABC):
     """! Represents a single layer in a workload."""
 
+    type: str
+    equation: LayerEquation
+    layer_dim_sizes: LayerDimSizes
+    operand_precision: LayerOperandPrecision
+    dimension_relations: list[LayerDimRelation]
+    spatial_mapping: SpatialMapping
+    spatial_mapping_hint: SpatialMappingHint
+    core_allocation: list[int]
+    core_allocation_is_fixed: bool
+    memory_operand_links: MemoryOperandLinks
+    temporal_ordering: LayerTemporalOrdering
+    padding: LayerPadding
+    constant_operands: list[LayerOperand]
+    input_operand_source: InputOperandSource
+    layer_operands: list[LayerOperand]
+    output_operand: LayerOperand
+    input_operands: list[LayerOperand]
+    layer_dims: list[LayerDim]
+    pr_loop: PrLoop
+    pr_layer_dim_sizes: LayerDimSizes | None
+
     def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
@@ -153,8 +174,8 @@ class LayerNode(LayerNodeABC):
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
-        self.output_operand: LayerOperand = self.layer_operands[0]
-        self.input_operands: list[LayerOperand] = self.layer_operands[1:]
+        self.output_operand = self.layer_operands[0]
+        self.input_operands = self.layer_operands[1:]
         self.layer_dims = list(self.layer_dim_sizes.layer_dims)
 
         self.pr_loop, pr_loop_list, self.pr_scaling_factors = self.build_pr_funcs()

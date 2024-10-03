@@ -45,7 +45,7 @@ class CoreFactory:
         """! Generate an `Core` instance from the validated user-provided data."""
         self.data = data
 
-    def create(self, core_id: int = 1) -> Core:
+    def create(self, core_id: int = 1, shared_mem_group_id: int | None = None) -> Core:
         """! Create a Core instance from the user-provided data.
         NOTE the memory instances must be defined from lowest to highest.
         """
@@ -53,9 +53,12 @@ class CoreFactory:
 
         mem_graph = MemoryHierarchy(operational_array)
         dataflows = self.create_dataflows()
+        shared_mem_group_id = core_id if shared_mem_group_id is None else shared_mem_group_id
 
         for mem_name in self.data["memories"]:
-            memory_factory = MemoryFactory(mem_name, self.data["memories"][mem_name])
+            memory_factory = MemoryFactory(
+                mem_name, self.data["memories"][mem_name], shared_mem_group_id=shared_mem_group_id
+            )
             memory_factory.add_memory_to_graph(mem_graph)
 
         return Core(
@@ -143,9 +146,10 @@ class CoreFactory:
 class MemoryFactory:
     """! Create MemoryInstances and adds them to memory hierarchy."""
 
-    def __init__(self, name: str, mem_data: dict[str, Any]):
+    def __init__(self, name: str, mem_data: dict[str, Any], shared_mem_group_id: int = -1):
         self.data = mem_data
         self.name = name
+        self.shared_mem_group_id = shared_mem_group_id
 
     def create_memory_instance(self) -> MemoryInstance:
         return MemoryInstance(
@@ -164,6 +168,7 @@ class MemoryFactory:
             min_r_granularity=self.data["min_r_granularity"],
             min_w_granularity=self.data["min_w_granularity"],
             auto_cost_extraction=self.data["auto_cost_extraction"],
+            shared_memory_group_id=self.shared_mem_group_id,
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:
