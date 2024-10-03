@@ -7,6 +7,9 @@ var annotated_dup =
       [ "accelerator", "namespacearchitecture_1_1accelerator.html", [
         [ "Accelerator", "classarchitecture_1_1accelerator_1_1Accelerator.html", "classarchitecture_1_1accelerator_1_1Accelerator" ]
       ] ],
+      [ "core", "namespacearchitecture_1_1core.html", [
+        [ "Core", "classarchitecture_1_1core_1_1Core.html", "classarchitecture_1_1core_1_1Core" ]
+      ] ],
       [ "get_cacti_cost", "namespacearchitecture_1_1get__cacti__cost.html", [
         [ "CactiConfig", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig" ]
       ] ],
@@ -162,6 +165,7 @@ var annotated_dup =
       [ "parser", "namespacezigzag_1_1parser.html", [
         [ "accelerator_factory", "namespacezigzag_1_1parser_1_1accelerator__factory.html", [
           [ "AcceleratorFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory" ],
+          [ "CoreFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory" ],
           [ "MemoryFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory" ]
         ] ],
         [ "accelerator_validator", "namespacezigzag_1_1parser_1_1accelerator__validator.html", [

@@ -25,6 +25,7 @@ var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
     [ "access_same_data_considered_as_no_access", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa209863329672dbf0472644e1f14bda9", null ],
     [ "active_mem_level", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad5e427b2f4a2536addf6f125fa17e515", null ],
     [ "allowed_mem_update_cycle", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8f623306502e588c8694deb9a091d332", null ],
+    [ "core_id", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a1dcb76a1629c0153d7ab81183ecfd650", null ],
     [ "data_loading_cc_pair_combined_per_op", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a09c3d6ae12fe0469f495f0280f3c1730", null ],
     [ "data_loading_half_shared_part", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a4f4070c6f076ad3d758385d57a1714a0", null ],
     [ "data_loading_individual_part", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad36024a5bb36f75094e5183470921c6f", null ],

@@ -43,13 +43,14 @@ var searchData=
   ['arraytype_60',['ArrayType',['../namespacezigzag_1_1datatypes.html#a6a03cb2a3ac6197231b65056e6b01ee9',1,'zigzag::datatypes']]],
   ['attr_61',['attr',['../classarchitecture_1_1memory__port_1_1MemoryPort.html#a710acfac10f0042826d2d6d9c213ae7b',1,'architecture::memory_port::MemoryPort']]],
   ['auto_5fcost_5fextraction_62',['auto_cost_extraction',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#a1d055e1a44e4e516b800806da7911dd1',1,'architecture::imc_unit::ImcUnit']]],
-  ['get_5fcacti_5fcost_63',['get_cacti_cost',['../namespacearchitecture_1_1get__cacti__cost.html',1,'architecture']]],
-  ['imc_5farray_64',['imc_array',['../namespacearchitecture_1_1imc__array.html',1,'architecture']]],
-  ['imc_5funit_65',['imc_unit',['../namespacearchitecture_1_1imc__unit.html',1,'architecture']]],
-  ['memory_5fhierarchy_66',['memory_hierarchy',['../namespacearchitecture_1_1memory__hierarchy.html',1,'architecture']]],
-  ['memory_5finstance_67',['memory_instance',['../namespacearchitecture_1_1memory__instance.html',1,'architecture']]],
-  ['memory_5flevel_68',['memory_level',['../namespacearchitecture_1_1memory__level.html',1,'architecture']]],
-  ['memory_5fport_69',['memory_port',['../namespacearchitecture_1_1memory__port.html',1,'architecture']]],
-  ['operational_5farray_70',['operational_array',['../namespacearchitecture_1_1operational__array.html',1,'architecture']]],
-  ['operational_5funit_71',['operational_unit',['../namespacearchitecture_1_1operational__unit.html',1,'architecture']]]
+  ['core_63',['core',['../namespacearchitecture_1_1core.html',1,'architecture']]],
+  ['get_5fcacti_5fcost_64',['get_cacti_cost',['../namespacearchitecture_1_1get__cacti__cost.html',1,'architecture']]],
+  ['imc_5farray_65',['imc_array',['../namespacearchitecture_1_1imc__array.html',1,'architecture']]],
+  ['imc_5funit_66',['imc_unit',['../namespacearchitecture_1_1imc__unit.html',1,'architecture']]],
+  ['memory_5fhierarchy_67',['memory_hierarchy',['../namespacearchitecture_1_1memory__hierarchy.html',1,'architecture']]],
+  ['memory_5finstance_68',['memory_instance',['../namespacearchitecture_1_1memory__instance.html',1,'architecture']]],
+  ['memory_5flevel_69',['memory_level',['../namespacearchitecture_1_1memory__level.html',1,'architecture']]],
+  ['memory_5fport_70',['memory_port',['../namespacearchitecture_1_1memory__port.html',1,'architecture']]],
+  ['operational_5farray_71',['operational_array',['../namespacearchitecture_1_1operational__array.html',1,'architecture']]],
+  ['operational_5funit_72',['operational_unit',['../namespacearchitecture_1_1operational__unit.html',1,'architecture']]]
 ];

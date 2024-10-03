@@ -4,6 +4,9 @@ var dir_d52934d047cd7858e503be898722847b =
     [ "accelerator.py", "accelerator_8py.html", [
       [ "Accelerator", "classarchitecture_1_1accelerator_1_1Accelerator.html", "classarchitecture_1_1accelerator_1_1Accelerator" ]
     ] ],
+    [ "core.py", "core_8py.html", [
+      [ "Core", "classarchitecture_1_1core_1_1Core.html", "classarchitecture_1_1core_1_1Core" ]
+    ] ],
     [ "get_cacti_cost.py", "get__cacti__cost_8py.html", "get__cacti__cost_8py" ],
     [ "imc_array.py", "imc__array_8py.html", [
       [ "ImcArray", "classarchitecture_1_1imc__array_1_1ImcArray.html", "classarchitecture_1_1imc__array_1_1ImcArray" ]

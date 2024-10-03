@@ -9,6 +9,7 @@ var classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC 
     [ "run", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4", null ],
     [ "update_tclk", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#aa18f60e79c7586e3499d3c82a7437230", null ],
     [ "area_total", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a7bd41c716bcdf1e84b45a736505ff0ac", null ],
+    [ "core", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#ab65a1cfe05166d06195718a9587d7b86", null ],
     [ "imc_area", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a4946f590d5d5f91969711250210c4c57", null ],
     [ "imc_area_breakdown", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a71e4a844e1eb13694c368fa2eec86bf4", null ],
     [ "is_imc", "classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a47a8b221b7bc3449f76b36db32e4a5a9", null ],
