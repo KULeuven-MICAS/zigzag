@@ -1,3 +1,6 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="node1" href="$classzigzag_1_1parser_1_1onnx_1_1utils_1_1OnnxTensorType.html" title=" " alt="" coords="5,5,133,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,31,55,57"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html" title="An abstract class to represent a constraint on a permutation." alt="" coords="103,31,272,57"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsAndSizesConstraint.html" title="A class to represent a constraint on a permutation that requires a predefined order and size for some..." alt="" coords="320,5,564,32"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1opt_1_1loma_1_1multipermute_1_1StaticPositionsConstraint.html" title="A class to represent a constraint on a permutation that requires a predefined order for some or all e..." alt="" coords="349,56,535,83"/>
 </map>

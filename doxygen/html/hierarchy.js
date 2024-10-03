@@ -6,8 +6,6 @@ var hierarchy =
     [ "CactiConfig", "classarchitecture_1_1get__cacti__cost_1_1CactiConfig.html", null ],
     [ "CactiParser", "classcacti__parser_1_1CactiParser.html", null ],
     [ "Constants", "classzigzag_1_1datatypes_1_1Constants.html", null ],
-    [ "Core", "classarchitecture_1_1core_1_1Core.html", null ],
-    [ "CoreFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html", null ],
     [ "DataMovePattern", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html", null ],
     [ "Exception", null, [
       [ "NoValidLoopOrderingFoundException", "classzigzag_1_1opt_1_1loma_1_1engine_1_1NoValidLoopOrderingFoundException.html", null ],

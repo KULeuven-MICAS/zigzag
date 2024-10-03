@@ -11,7 +11,6 @@ var classspatial__mapping__generation_1_1SpatialMappingGeneratorStage =
     [ "modify_innermost_input_mem_size", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd", null ],
     [ "run", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0", null ],
     [ "accelerator", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#abad7d445eb555517f300b6de6986a765", null ],
-    [ "core", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#ab65a1cfe05166d06195718a9587d7b86", null ],
     [ "enable_mix_spatial_mapping_generation", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a94b4f6906447a8e50a8aa36caf9c6feb", null ],
     [ "enable_weight_diagonal_mapping", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#afe2fd943fcfd4f5b89fe0be20c00c15e", null ],
     [ "layer", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a95f2e9e3b2b2d837f962bcfb58a2011e", null ],
