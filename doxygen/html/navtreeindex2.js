@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7fe92493100146ec038c75aec0be102e":[2,0,14,2,0,3,5],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a884bea0158394cff7700dfd66ed9c7be":[2,0,14,2,0,3,15],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,2,0,3,1],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#aaf641640a6bb51f2721214fa04682001":[2,0,14,2,0,3,9],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,14,2,0,3,18],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html":[2,0,14,3,1,1,0],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,3,1,1,0,9],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a1a81b4276ed57e54580bef8cb37bb2e5":[2,0,14,3,1,1,0,8],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a426881a3bcefffb848ae2384261a9b7d":[2,0,14,3,1,1,0,6],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a7238caf9eafa12c99aa6935323bd4841":[2,0,14,3,1,1,0,0],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,14,3,1,1,0,4]
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a426881a3bcefffb848ae2384261a9b7d":[2,0,14,3,1,1,0,6]
 };
