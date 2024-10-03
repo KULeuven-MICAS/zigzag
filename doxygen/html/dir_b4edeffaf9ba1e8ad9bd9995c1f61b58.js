@@ -4,7 +4,6 @@ var dir_b4edeffaf9ba1e8ad9bd9995c1f61b58 =
     [ "__init__.py", "parser_2____init_____8py.html", null ],
     [ "accelerator_factory.py", "accelerator__factory_8py.html", [
       [ "AcceleratorFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory" ],
-      [ "CoreFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1CoreFactory" ],
       [ "MemoryFactory", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html", "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory" ]
     ] ],
     [ "accelerator_validator.py", "accelerator__validator_8py.html", "accelerator__validator_8py" ],
