@@ -50,7 +50,7 @@ class Accelerator:
         memory = [node for node in self.memory_hierarchy.topological_sort() if mem_op in node.operands]
         return memory[mem_lv]
 
-    def recalculate_memory_hierarchy_information(self):
+    def recalculate_memory_hierarchy_information(self) -> None:
         self.__generate_memory_hierarchy_dict()
         self.__generate_mem_sharing_list()
 
@@ -135,9 +135,7 @@ class Accelerator:
             and self.memory_hierarchy == other.memory_hierarchy
         )
 
-    def has_same_performance(self, other: object) -> bool:
-        return (
-            isinstance(other, Accelerator)
-            and self.operational_array == other.operational_array
-            and self.memory_hierarchy == other.memory_hierarchy
+    def has_same_performance(self, other: "Accelerator") -> bool:
+        return self.operational_array == other.operational_array and self.memory_hierarchy.has_same_performance(
+            other.memory_hierarchy
         )

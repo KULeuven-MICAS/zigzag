@@ -105,8 +105,25 @@ class MemoryInstance:
     def __eq__(self, other: object) -> bool:
         return isinstance(other, MemoryInstance) and self.__dict__ == other.__dict__
 
+    def has_same_performance(self, other: "MemoryInstance"):
+        """Wether using this instance will result in the same estimations as using the other instance. This method
+        differs from __eq__ since it does not consider e.g. the shared_memory_group_id"""
+        return (
+            self.size == other.size
+            and self.r_bw == other.r_bw
+            and self.w_bw == other.w_bw
+            and self.r_cost == other.r_cost
+            and self.w_cost == other.w_cost
+            and self.r_port_nb == other.r_port_nb
+            and self.w_port_nb == other.w_port_nb
+            and self.rw_port_nb == other.rw_port_nb
+            and self.latency == other.latency
+            and self.double_buffering_support == other.double_buffering_support
+            and self.r_bw_min == other.r_bw_min
+            and self.w_bw_min == other.w_bw_min
+        )
+
     def __hash__(self):
-        # id(self)  # unique for every object within its lifetime
         return hash(frozenset(self.__dict__.values()))
 
     def __str__(self):
