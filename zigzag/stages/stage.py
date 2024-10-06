@@ -12,7 +12,7 @@ class Stage(metaclass=ABCMeta):
     def __init__(
         self,
         list_of_callables: list["StageCallable"],
-        **kwargs: dict[str, Any],
+        **kwargs: Any,
     ):
         """
         @param list_of_callables: a list of callables, that must have a signature compatible with this __init__ function
