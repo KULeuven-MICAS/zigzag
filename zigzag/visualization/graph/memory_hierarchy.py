@@ -52,4 +52,4 @@ if __name__ == "__main__":
     with open("../list_of_cmes.pickle", "rb") as handle:
         list_of_cme = pickle.load(handle)
     cme = list_of_cme[0]
-    visualize_memory_hierarchy_graph(cme.accelerator.cores[0].memory_hierarchy)
+    visualize_memory_hierarchy_graph(cme.accelerator.memory_hierarchy)

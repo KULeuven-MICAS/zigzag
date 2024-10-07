@@ -7,6 +7,8 @@ from zigzag.cost_model.cost_model import CostModelEvaluationABC
 class Stage(metaclass=ABCMeta):
     """! Abstract superclass for Runnables"""
 
+    kwargs: dict[str, Any]
+
     def __init__(
         self,
         list_of_callables: list["StageCallable"],
@@ -24,8 +26,8 @@ class Stage(metaclass=ABCMeta):
 
         if list_of_callables in ([], tuple(), set(), None) and not self.is_leaf():
             raise ValueError(
-                "List of callables empty on a non leaf runnable, so nothing can be generated.\
-                    Final callable in list_of_callables must return Stage instances that have is_leaf() == True"
+                "List of callables empty on a non leaf runnable, so nothing can be generated. "
+                "Final callable in list_of_callables must return Stage instances that have is_leaf() == True"
             )
 
     @abstractmethod

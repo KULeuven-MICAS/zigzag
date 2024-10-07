@@ -82,8 +82,7 @@ class MemoryAllocator:
         """
 
         # self.nodes contains the different memory nodes in bottom-up fashion
-        core_id = self.layer.core_allocation[0]
-        memory_hierarchy = self.accelerator.get_core(core_id).memory_hierarchy
+        memory_hierarchy = self.accelerator.memory_hierarchy
         top_levels = {mem_op: memory_hierarchy.get_operand_top_level(mem_op) for mem_op in self.mem_ops}
         for node in memory_hierarchy.topological_sort():
             self.allocate_node(node, top_levels)

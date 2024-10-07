@@ -17,7 +17,6 @@ def get_temporal_spatial_loops(
     """
     # TODO documentation, split this up into multiple, sensible functions
     """
-    core = cme.accelerator.get_core(cme.layer.core_allocation[0])
     operand_links = cme.layer.memory_operand_links
 
     tm: dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]] = pickle_deepcopy(
@@ -37,7 +36,7 @@ def get_temporal_spatial_loops(
             idx = tm[layer_op][level].index(tl)
             tm[layer_op][level].pop(idx)
             # Get the name of this memory level
-            mem_name = core.get_memory_level(mem_op, level).memory_instance.name
+            mem_name = cme.accelerator.get_memory_level(mem_op, level).memory_instance.name
             mem_names.append(mem_name)
             all_mem_names.add(mem_name)
         mem_names_tuple = tuple(mem_names)

@@ -50,7 +50,7 @@ class MemoryHierarchy(DiGraphWrapper[MemoryLevel]):
         operands: list[MemoryOperand],
         port_alloc: PortAllocation,
         served_dimensions: ServedMemDimensions,
-    ):
+    ) -> None:
         """! Adds a memory to the memory hierarchy graph.
         NOTE: memory level need to be added from bottom level (e.g., Reg) to top level (e.g., DRAM) for each operand !!!
 
@@ -164,4 +164,9 @@ class MemoryHierarchy(DiGraphWrapper[MemoryLevel]):
             isinstance(other, MemoryHierarchy)
             and self.nb_levels == other.nb_levels
             and all([self_ml == other_ml for self_ml, other_ml in zip(self.node_list, other.node_list)])
+        )
+
+    def has_same_performance(self, other: "MemoryHierarchy"):
+        return self.nb_levels == other.nb_levels and all(
+            [self_ml.has_same_performance(other_ml) for self_ml, other_ml in zip(self.node_list, other.node_list)]
         )

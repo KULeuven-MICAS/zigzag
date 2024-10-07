@@ -6,6 +6,9 @@ from zigzag.workload.layer_attributes import InputOperandSource
 class LayerNodeABC(metaclass=ABCMeta):
     """Represents a single layer of a workload in any form."""
 
+    id: int
+    name: str
+
     def __init__(self, node_id: int, node_name: str):
         self.id = node_id
         self.name = node_name

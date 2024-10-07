@@ -39,9 +39,7 @@ class CostModelStage(Stage):
 
     def run(self):
         """! Run the cost model stage by calling the internal zigzag cost model with the correct inputs."""
-        core_id = self.layer.core_allocation[0]
-        core = self.accelerator.get_core(core_id)
-        operational_array = core.operational_array
+        operational_array = self.accelerator.operational_array
         if isinstance(operational_array, ImcArray):
             cme = CostModelEvaluationForIMC(
                 accelerator=self.accelerator,

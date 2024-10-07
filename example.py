@@ -8,7 +8,7 @@ from zigzag.visualization.results.plot_cme import (
 from zigzag.visualization.results.print_mapping import print_mapping
 
 model = "resnet"
-workload_path = "zigzag/inputs/workload/resnet18.yaml"  # or "zigzag/inputs/workload/resnet18.onnx"
+workload_path = "zigzag/inputs/workload/resnet18.onnx"  # or "zigzag/inputs/workload/resnet18.yaml"
 accelerator_path = "zigzag/inputs/hardware/tpu_like.yaml"
 mapping_path = "zigzag/inputs/mapping/tpu_like.yaml"
 pickle_filename = f"outputs/{model}-saved_list_of_cmes.pickle"

@@ -51,7 +51,7 @@ def get_energy_array(
     """Convert the given list of cmes to a numpy array with the energy per layer, memory level, operand and data
     direction. Output shape: (cmes, all_mems, all_ops, data_directions)"""
 
-    mem_hierarchy = cmes[0].accelerator.get_core(cmes[0].layer.core_allocation[0]).memory_hierarchy
+    mem_hierarchy = cmes[0].accelerator.memory_hierarchy
     access_energy: dict[int, defaultdict[LayerOperand, defaultdict[MemoryInstance, AccessEnergy]]] = {
         idx: defaultdict(lambda: defaultdict(lambda: AccessEnergy(0, 0, 0, 0))) for idx in range(len(cmes))
     }
@@ -100,7 +100,7 @@ def get_latency_array(cmes: list[CostModelEvaluation]):
 def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC], save_path: str):
     # Input-specific
     cmes_to_plot: list[CostModelEvaluation] = [cme for cme in cmes if isinstance(cme, CostModelEvaluation)]
-    mem_hierarchy = cmes_to_plot[0].accelerator.get_core(cmes_to_plot[0].layer.core_allocation[0]).memory_hierarchy
+    mem_hierarchy = cmes_to_plot[0].accelerator.memory_hierarchy
     memories = [mem_level.memory_instance for mem_level in mem_hierarchy.mem_level_list]
     all_mems = sorted(memories, key=lambda x: x.size)
     all_ops = list({layer_op for cme in cmes_to_plot for layer_op in cme.layer.layer_operands})

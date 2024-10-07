@@ -177,5 +177,14 @@ class MemoryLevel:
             and self.served_dimensions == other.served_dimensions
         )
 
+    def has_same_performance(self, other: "MemoryLevel"):
+        return (
+            self.memory_instance.has_same_performance(other.memory_instance)
+            and self.operands == other.operands
+            and self.mem_level_of_operands == other.mem_level_of_operands
+            and self.port_list == other.port_list
+            and self.served_dimensions == other.served_dimensions
+        )
+
     def __hash__(self) -> int:
         return hash_sha512(self.id)

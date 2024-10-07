@@ -48,7 +48,7 @@ class VisualizationStage(Stage):
 
     def __save_mem_hierarchy(self, cme: CostModelEvaluation):
         visualize_memory_hierarchy_graph(
-            cme.accelerator.cores[0].memory_hierarchy,
+            cme.accelerator.memory_hierarchy,
             save_path=self.dump_folder + "/mem_hierarchy.png",
         )
         self.figure_is_saved = True

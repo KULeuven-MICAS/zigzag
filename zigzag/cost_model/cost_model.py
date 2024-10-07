@@ -31,6 +31,8 @@ class MemoryUtilization(TypedDict):
 class CostModelEvaluationABC(metaclass=ABCMeta):
     """! Superclass for CostModelEvaluation and CumulativeCME"""
 
+    accelerator: Accelerator
+
     @abstractmethod
     def __init__(self) -> None:
         # Attributes that all subclasses should define
@@ -53,6 +55,10 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.mac_utilization2: float
 
         self.accelerator: Accelerator | None
+
+    @property
+    def core(self):
+        return self.accelerator
 
     def __add__(self, other: "CostModelEvaluationABC") -> "CumulativeCME":
         result = CumulativeCME()
@@ -130,10 +136,8 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         for cme in (self, other):
             if isinstance(cme, CostModelEvaluation):
                 result.layer_ids.append(cme.layer.id)
-                result.core_ids.append(cme.core_id)
             elif isinstance(cme, CumulativeCME):
                 result.layer_ids += cme.layer_ids
-                result.core_ids += cme.core_ids
 
         # Select accelerator for result
         if isinstance(self, CumulativeCME) and self.accelerator is None:
@@ -252,7 +256,6 @@ class CumulativeCME(CostModelEvaluationABC):
         self.memory_word_access: dict[LayerOperand, list[MemoryAccesses]] = dict()
 
         self.layer_ids: list[int] = []
-        self.core_ids: list[int] = []
 
         self.mac_energy: float = 0.0
         self.mem_energy: float = 0.0
@@ -307,25 +310,22 @@ class CostModelEvaluation(CostModelEvaluationABC):
         @param layer the layer to run
         @param access_same_data_considered_as_no_access (optional)
         """
-        self.accelerator: Accelerator = accelerator  # type: ignore
+        self.accelerator = accelerator
         self.layer: LayerNode = layer
         self.spatial_mapping = spatial_mapping
         self.spatial_mapping_int = spatial_mapping_int  # the original spatial mapping without decimal
         self.temporal_mapping = temporal_mapping
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
 
-        self.core_id = layer.core_allocation[0]
-        core = accelerator.get_core(self.core_id)
-        self.mem_level_list = core.memory_hierarchy.mem_level_list
-        self.mem_hierarchy_dict = core.mem_hierarchy_dict
-        self.mem_size_dict = core.mem_size_dict
-        self.mem_r_bw_dict, self.mem_w_bw_dict = core.get_memory_bw_dict()
-        self.mem_r_bw_min_dict, self.mem_w_bw_min_dict = core.get_memory_bw_min_dict()
-        self.mem_sharing_tuple = tuple(tuple(i.items()) for i in core.mem_sharing_list)
+        self.mem_level_list = accelerator.memory_hierarchy.mem_level_list
+        self.mem_hierarchy_dict = accelerator.mem_hierarchy_dict
+        self.mem_size_dict = accelerator.mem_size_dict
+        self.mem_r_bw_dict, self.mem_w_bw_dict = accelerator.get_memory_bw_dict()
+        self.mem_r_bw_min_dict, self.mem_w_bw_min_dict = accelerator.get_memory_bw_min_dict()
+        self.mem_sharing_tuple = tuple(tuple(i.items()) for i in accelerator.mem_sharing_list)
         self.memory_operand_links = layer.memory_operand_links
 
         self.cumulative_layer_ids: list[int] = []  # In case the CME results from adding other CMEs together
-        self.cumulative_core_ids: list[int] = []
 
         # generate the integer spatial mapping from fractional spatial mapping (due to greedy mapping support).
         # Later the fractional one is used for calculating energy, and the integer one is used for calculating latency
@@ -547,8 +547,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
     def calc_mac_energy_cost(self) -> None:
         """! Calculate the dynamic MAC energy"""
-        core = self.accelerator.get_core(self.core_id)
-        operational_array = core.operational_array
+        operational_array = self.accelerator.operational_array
         assert isinstance(
             operational_array, OperationalArray
         ), "This method expects an OperationalArray instance. Otherwise, the method should be overridden in a subclass."
@@ -563,8 +562,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
 
         The energy total consumption is saved in self.energy_total.
         """
-        core = self.accelerator.get_core(self.core_id)
-        mem_hierarchy = core.memory_hierarchy
+        mem_hierarchy = self.accelerator.memory_hierarchy
 
         mem_energy_breakdown: dict[LayerOperand, list[float]] = {}
         mem_energy_breakdown_further: dict[LayerOperand, list[AccessEnergy]] = {}
@@ -1112,10 +1110,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = int(
-            ceil(
-                self.layer.total_mac_count / self.accelerator.get_core(self.core_id).operational_array.total_unit_count
-            )
-            * cycles_per_mac
+            ceil(self.layer.total_mac_count / self.accelerator.operational_array.total_unit_count) * cycles_per_mac
         )
 
         # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
@@ -1167,7 +1162,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         return total_inst_bw
 
     def __str__(self):
-        return f"CostModelEvaluation({self.layer}, core {self.core_id})"
+        return f"CostModelEvaluation({self.layer}, {self.accelerator})"
 
     def __repr__(self):
         return str(self)
