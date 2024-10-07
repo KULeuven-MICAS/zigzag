@@ -23,6 +23,24 @@ class MemoryInstance:
     double_buffering_support: bool
     shared_memory_group_id: int
 
+    name: str
+    size: int
+    r_bw: int
+    w_bw: int
+    r_cost: float
+    w_cost: float
+    area: float
+    r_port: int
+    w_port: int
+    rw_port: int
+    latency: int
+    min_r_granularity: int
+    min_w_granularity: int
+    mem_type: str
+    auto_cost_extraction: bool
+    double_buffering_support: bool
+    shared_memory_group_id: int
+
     def __init__(
         self,
         name: str,
