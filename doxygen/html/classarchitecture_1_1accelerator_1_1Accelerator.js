@@ -1,9 +1,27 @@
 var classarchitecture_1_1accelerator_1_1Accelerator =
 [
-    [ "__init__", "classarchitecture_1_1accelerator_1_1Accelerator.html#a03bf896da156db25e3e118a95fd77452", null ],
+    [ "__init__", "classarchitecture_1_1accelerator_1_1Accelerator.html#ab71484515541b20f71820cc4b3807ff5", null ],
+    [ "__eq__", "classarchitecture_1_1accelerator_1_1Accelerator.html#a4ebc07e33d57e463c0e249dfce215d96", null ],
+    [ "__hash__", "classarchitecture_1_1accelerator_1_1Accelerator.html#ae27a7920f84bb5c804c9615ef57874e5", null ],
     [ "__jsonrepr__", "classarchitecture_1_1accelerator_1_1Accelerator.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__repr__", "classarchitecture_1_1accelerator_1_1Accelerator.html#aea815b0c6c23fc48a11ee0404b782c7a", null ],
     [ "__str__", "classarchitecture_1_1accelerator_1_1Accelerator.html#ae07f7930f92d3591c93e2381cd5be285", null ],
-    [ "get_core", "classarchitecture_1_1accelerator_1_1Accelerator.html#a5c6abc2137096ae246363ca3707eabcd", null ],
-    [ "cores", "classarchitecture_1_1accelerator_1_1Accelerator.html#a544fab0363e5669bce84b499e2e92ad0", null ]
+    [ "get_memory_bw_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#a907e46fd23c244a5e10c50d8b6f07a58", null ],
+    [ "get_memory_bw_min_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#ae52c3608ce5ae4c6aab0809f90acc300", null ],
+    [ "get_memory_level", "classarchitecture_1_1accelerator_1_1Accelerator.html#ab899d4139182f7e8f1b3a334a85edb89", null ],
+    [ "get_top_memory_instance", "classarchitecture_1_1accelerator_1_1Accelerator.html#a45f9ba77e394eb4dca718106890d0127", null ],
+    [ "has_same_performance", "classarchitecture_1_1accelerator_1_1Accelerator.html#adf377cf2bd1e6c2c848b629b5f510117", null ],
+    [ "recalculate_memory_hierarchy_information", "classarchitecture_1_1accelerator_1_1Accelerator.html#a6e080bbbe923fb73ee7498b6bd2956fc", null ],
+    [ "dataflows", "classarchitecture_1_1accelerator_1_1Accelerator.html#aa0b4d699e044760ccc80ad9cd986956f", null ],
+    [ "id", "classarchitecture_1_1accelerator_1_1Accelerator.html#acf2488b95c97e0378c9bf49de3b50f28", null ],
+    [ "mem_hierarchy_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#aa192ec0feee472fb02654eb92fc5d878", null ],
+    [ "mem_r_bw_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#a4ca9a7e5cfa10b26d46f47711d5e72e2", null ],
+    [ "mem_r_bw_min_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#ae485f08c58f542c4ccf01c34cb184831", null ],
+    [ "mem_sharing_list", "classarchitecture_1_1accelerator_1_1Accelerator.html#a11ac1508f800047958376085487533c3", null ],
+    [ "mem_size_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#a9de9f586c3351a83ff68606239babab3", null ],
+    [ "mem_w_bw_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#ae171552e048c6b4a459150e63fc506f8", null ],
+    [ "mem_w_bw_min_dict", "classarchitecture_1_1accelerator_1_1Accelerator.html#a9d841433eee83ec266c37e5e1d45cbe0", null ],
+    [ "memory_hierarchy", "classarchitecture_1_1accelerator_1_1Accelerator.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
+    [ "name", "classarchitecture_1_1accelerator_1_1Accelerator.html#ab74e6bf80237ddc4109968cedc58c151", null ],
+    [ "operational_array", "classarchitecture_1_1accelerator_1_1Accelerator.html#aa551b39d3cb97666fedabc767a91f4a6", null ]
 ];

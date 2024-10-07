@@ -1,5 +1,5 @@
 <map id="add_node" name="add_node">
 <area shape="rect" id="node1" title=" " alt="" coords="288,50,373,77"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html#aa7817c3462baa5f604bf21539b3dd894" title="Add a node object to the ONNX workload graph." alt="" coords="12,5,233,47"/>
-<area shape="rect" id="node3" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a145984bbf07fb21fc672ba1988066cd1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,71,240,127"/>
+<area shape="rect" id="node3" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a076833357061645386c28eaa8e14a313" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,71,240,127"/>
 </map>

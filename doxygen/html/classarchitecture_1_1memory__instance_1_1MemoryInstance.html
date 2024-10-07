@@ -109,6 +109,9 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a0ab94b5e657e9550a1b27ace112c727d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ebc07e33d57e463c0e249dfce215d96"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4ebc07e33d57e463c0e249dfce215d96">__eq__</a> (self, object other)</td></tr>
 <tr class="separator:a4ebc07e33d57e463c0e249dfce215d96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6b860acb11fbe745a80b327460e2e6b2"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6b860acb11fbe745a80b327460e2e6b2">has_same_performance</a> (self, &quot;MemoryInstance&quot; other)</td></tr>
+<tr class="memdesc:a6b860acb11fbe745a80b327460e2e6b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Wether using this instance will result in the same estimations as using the other instance.  <a href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6b860acb11fbe745a80b327460e2e6b2">More...</a><br /></td></tr>
+<tr class="separator:a6b860acb11fbe745a80b327460e2e6b2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3195ea87162f33a34d0079931a8194ca"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a3195ea87162f33a34d0079931a8194ca">__hash__</a> (self)</td></tr>
 <tr class="separator:a3195ea87162f33a34d0079931a8194ca"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
@@ -144,6 +147,10 @@ Public Attributes</h2></td></tr>
 <tr class="separator:a6018e152103e9e6473041dba3a23f818"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b4ee6db99019b84211c6b0ce9c06118"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a1b4ee6db99019b84211c6b0ce9c06118">shared_memory_group_id</a></td></tr>
 <tr class="separator:a1b4ee6db99019b84211c6b0ce9c06118"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae80c294c818332480b21f83d6ed5c141"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ae80c294c818332480b21f83d6ed5c141">r_bw_min</a></td></tr>
+<tr class="separator:ae80c294c818332480b21f83d6ed5c141"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4652c359e411f9533cb602b493ad29d0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4652c359e411f9533cb602b493ad29d0">w_bw_min</a></td></tr>
+<tr class="separator:a4652c359e411f9533cb602b493ad29d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A single instance within the memory hierarchy, without information about connectivity. </p>
@@ -406,6 +413,37 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="a6b860acb11fbe745a80b327460e2e6b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6b860acb11fbe745a80b327460e2e6b2">&#9670;&nbsp;</a></span>has_same_performance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def has_same_performance </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">&quot;MemoryInstance&quot;&#160;</td>
+          <td class="paramname"><em>other</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Wether using this instance will result in the same estimations as using the other instance. </p>
+<p>This method differs from <b>eq</b> since it does not consider e.g. the shared_memory_group_id </p>
+
+</div>
+</div>
 <a id="a0d67ea128a26d2a3cebe0cd8d777e358"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0d67ea128a26d2a3cebe0cd8d777e358">&#9670;&nbsp;</a></span>update_size()</h2>
 
@@ -507,6 +545,20 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
+<a id="ae80c294c818332480b21f83d6ed5c141"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae80c294c818332480b21f83d6ed5c141">&#9670;&nbsp;</a></span>r_bw_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">r_bw_min</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a6700ef6022c4d3b47bc8853b9e3bbda5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6700ef6022c4d3b47bc8853b9e3bbda5">&#9670;&nbsp;</a></span>r_cost</h2>
 
@@ -585,6 +637,20 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">w_bw</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4652c359e411f9533cb602b493ad29d0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4652c359e411f9533cb602b493ad29d0">&#9670;&nbsp;</a></span>w_bw_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">w_bw_min</td>
         </tr>
       </table>
 </div><div class="memdoc">

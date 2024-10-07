@@ -1,7 +1,8 @@
 <map id="node_list" name="node_list">
-<area shape="rect" id="node1" title=" " alt="" coords="568,68,649,94"/>
-<area shape="rect" id="node2" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a145984bbf07fb21fc672ba1988066cd1" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,28,240,84"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#a9264e80279ae60999d3c9e6d08c3548f" title=" " alt="" coords="336,34,472,61"/>
-<area shape="rect" id="node4" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="288,85,520,141"/>
-<area shape="rect" id="node5" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a7065d96596225f81ca0e96d8041297e9" title="Returns the &#39;top&#39;&#45;most MemoryLevels, where &#39;the&#39; level of MemoryLevel is considered to be the largest..." alt="" coords="288,165,520,221"/>
+<area shape="rect" id="node1" title=" " alt="" coords="571,107,652,134"/>
+<area shape="rect" id="node2" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a076833357061645386c28eaa8e14a313" title="Adds a memory to the memory hierarchy graph." alt="" coords="5,35,240,91"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html#a9264e80279ae60999d3c9e6d08c3548f" title=" " alt="" coords="337,42,473,68"/>
+<area shape="rect" id="node4" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a5fc034d4a829558731bae29f4a0f3ddb" title="Finds the highest level of memories that have the given operand assigned to it, and returns the Memor..." alt="" coords="289,92,521,148"/>
+<area shape="rect" id="node5" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a7065d96596225f81ca0e96d8041297e9" title="Returns the &#39;top&#39;&#45;most MemoryLevels, where &#39;the&#39; level of MemoryLevel is considered to be the largest..." alt="" coords="289,172,521,228"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a9b82f5409b92bc0b9cd8a2c5bef1ed6b" title=" " alt="" coords="288,252,523,308"/>
 </map>

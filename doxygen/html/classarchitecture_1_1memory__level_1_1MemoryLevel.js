@@ -6,6 +6,7 @@ var classarchitecture_1_1memory__level_1_1MemoryLevel =
     [ "__jsonrepr__", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__repr__", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "__str__", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a23e8041ce1015febe4fdace3225714f9", null ],
+    [ "has_same_performance", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#adf735de5d6e593c5f826f1f89642f76c", null ],
     [ "unroll_count", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3a4e597428382b082f0f0cbd2e06bb9b", null ],
     [ "formatted_string", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#a4c903cdbc3e810787448630bfb6698a2", null ],
     [ "id", "classarchitecture_1_1memory__level_1_1MemoryLevel.html#acf2488b95c97e0378c9bf49de3b50f28", null ],
