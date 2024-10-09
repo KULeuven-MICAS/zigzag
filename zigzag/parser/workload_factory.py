@@ -27,7 +27,7 @@ from zigzag.workload.layer_attributes import (
     LayerTemporalOrdering,
     MemoryOperandLinks,
 )
-from zigzag.workload.layer_node import LayerNode, LayerNodeAttributes
+from zigzag.workload.layer_node import LayerNode, LayerNodeAttributes, MappingAttributes
 
 logger = logging.getLogger(__name__)
 logger.addFilter(UniqueMessageFilter())
@@ -66,7 +66,13 @@ class LayerNodeFactory:
 
     def create(self) -> LayerNode:
         node_attr = self.create_node_attr()
-        return LayerNode(layer_id=self.layer_id, node_name=self.node_name, node_attr=node_attr)
+        mapping_attr = self.create_mapping_attr(node_attr.layer_dim_sizes)
+        return LayerNode(
+            layer_id=self.layer_id,
+            node_name=self.node_name,
+            node_attr=node_attr,
+            mapping_attr=mapping_attr,
+        )
 
     def create_node_attr(self) -> LayerNodeAttributes:
         # From node data
@@ -80,6 +86,21 @@ class LayerNodeFactory:
         padding = self.create_padding()
         pr_layer_dim_sizes = self.create_pr_layer_dim_sizes()
 
+        return LayerNodeAttributes(
+            layer_type=layer_type,
+            equation=equation,
+            layer_dim_sizes=layer_dim_sizes,
+            operand_precision=operand_precision,
+            dimension_relations=dimension_relations,
+            constant_operands=constant_operands,
+            input_operand_source=input_operand_source,
+            padding=padding,
+            pr_layer_dim_sizes=pr_layer_dim_sizes,
+        )
+
+    def create_mapping_attr(self, layer_dim_sizes: LayerDimSizes):
+        layer_type: str = self.node_data["operator_type"]
+
         # From mapping data
         mapping_factory = MappingFactory(self.node_name, layer_type, self.mapping_data)
         spatial_mapping = mapping_factory.create_spatial_mapping()
@@ -90,22 +111,13 @@ class LayerNodeFactory:
         temporal_ordering = mapping_factory.create_temporal_ordering()
         temporal_ordering.remove_invalid_layer_dims(layer_dim_sizes, self.node_name)
 
-        return LayerNodeAttributes(
-            layer_type=layer_type,
-            equation=equation,
-            layer_dim_sizes=layer_dim_sizes,
-            operand_precision=operand_precision,
-            dimension_relations=dimension_relations,
-            constant_operands=constant_operands,
-            input_operand_source=input_operand_source,
+        return MappingAttributes(
             spatial_mapping=spatial_mapping,
             spatial_mapping_hint=spatial_mapping_hint,
             core_allocation=core_allocation,
             core_allocation_is_fixed=core_allocation_is_fixed,
             memory_operand_links=memory_operand_links,
             temporal_ordering=temporal_ordering,
-            padding=padding,
-            pr_layer_dim_sizes=pr_layer_dim_sizes,
         )
 
     def create_equation(self) -> LayerEquation:

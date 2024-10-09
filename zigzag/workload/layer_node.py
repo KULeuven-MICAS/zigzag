@@ -109,16 +109,22 @@ class LayerNodeAttributes:
     layer_dim_sizes: LayerDimSizes
     operand_precision: LayerOperandPrecision
     dimension_relations: list[LayerDimRelation]
+    padding: LayerPadding
+    constant_operands: list[LayerOperand]
+    input_operand_source: InputOperandSource
+    pr_layer_dim_sizes: LayerDimSizes | None
+
+
+@dataclass
+class MappingAttributes:
+    """Packs the attributes needed to initialize a LayerNode, related to the mapping"""
+
     spatial_mapping: SpatialMapping
     spatial_mapping_hint: SpatialMappingHint
     core_allocation: list[int]
     core_allocation_is_fixed: bool
     memory_operand_links: MemoryOperandLinks
     temporal_ordering: LayerTemporalOrdering
-    padding: LayerPadding
-    constant_operands: list[LayerOperand]
-    input_operand_source: InputOperandSource
-    pr_layer_dim_sizes: LayerDimSizes | None
 
 
 class LayerNode(LayerNodeABC):
@@ -145,7 +151,7 @@ class LayerNode(LayerNodeABC):
     pr_loop: PrLoop
     pr_layer_dim_sizes: LayerDimSizes | None
 
-    def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes):
+    def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes, mapping_attr: MappingAttributes):
         """
         To construct each layer node, algorithm equation/dimension/indirect relation are parsed.
         This parser collects information of operand, loop dimension, and loop relevance.
@@ -161,16 +167,17 @@ class LayerNode(LayerNodeABC):
         self.layer_dim_sizes = node_attr.layer_dim_sizes
         self.operand_precision = node_attr.operand_precision
         self.dimension_relations = node_attr.dimension_relations
-        self.spatial_mapping = node_attr.spatial_mapping
-        self.spatial_mapping_hint = node_attr.spatial_mapping_hint
-        self.core_allocation = node_attr.core_allocation
-        self.core_allocation_is_fixed = node_attr.core_allocation_is_fixed
-        self.memory_operand_links = node_attr.memory_operand_links
-        self.temporal_ordering = node_attr.temporal_ordering
         self.padding = node_attr.padding
         self.constant_operands = node_attr.constant_operands
         self.input_operand_source = node_attr.input_operand_source
         pr_layer_dim_sizes = node_attr.pr_layer_dim_sizes
+
+        self.spatial_mapping = mapping_attr.spatial_mapping
+        self.spatial_mapping_hint = mapping_attr.spatial_mapping_hint
+        self.core_allocation = mapping_attr.core_allocation
+        self.core_allocation_is_fixed = mapping_attr.core_allocation_is_fixed
+        self.memory_operand_links = mapping_attr.memory_operand_links
+        self.temporal_ordering = mapping_attr.temporal_ordering
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
@@ -357,16 +364,21 @@ class LayerNode(LayerNodeABC):
             layer_dim_sizes=self.layer_dim_sizes,
             operand_precision=self.operand_precision,
             dimension_relations=self.dimension_relations,
-            spatial_mapping=self.spatial_mapping,
-            spatial_mapping_hint=self.spatial_mapping_hint,
-            core_allocation=self.core_allocation,
-            core_allocation_is_fixed=self.core_allocation_is_fixed,
-            memory_operand_links=self.memory_operand_links,
-            temporal_ordering=self.temporal_ordering,
             padding=self.padding,
             constant_operands=self.constant_operands,
             input_operand_source=self.input_operand_source,
             pr_layer_dim_sizes=self.pr_layer_dim_sizes,
         )
         # Make sure the new attributes don't simply point to the old instances
+        return deepcopy(attributes)
+
+    def extract_mapping_attr(self) -> MappingAttributes:
+        attributes = MappingAttributes(
+            spatial_mapping=self.spatial_mapping,
+            spatial_mapping_hint=self.spatial_mapping_hint,
+            core_allocation=self.core_allocation,
+            core_allocation_is_fixed=self.core_allocation_is_fixed,
+            memory_operand_links=self.memory_operand_links,
+            temporal_ordering=self.temporal_ordering,
+        )
         return deepcopy(attributes)
