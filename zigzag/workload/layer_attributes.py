@@ -254,6 +254,9 @@ class LayerTemporalOrdering(LayerAttribute):
         static_positions_and_sizes = StaticPositionsAndSizesConstraint(static_positions_and_sizes_dict)
         return [static_positions, static_positions_and_sizes]
 
+    def __hash__(self):
+        return hash(tuple(tuple(x) for x in self.data))
+
 
 class LayerPadding(LayerAttribute):
     DEFAULT = (0, 0)

@@ -31,7 +31,6 @@ from copy import deepcopy
 from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.datatypes import LayerDim, UnrollFactorInt
 from zigzag.hardware.architecture.accelerator import Accelerator
-from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
 from zigzag.opt.loma.memory_allocator import MemoryAllocator
 from zigzag.workload.layer_node import LayerNode
@@ -53,7 +52,7 @@ class SalsaState:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
-        self.memory_hierarchy: MemoryHierarchy = self.accelerator.get_core(layer.core_allocation[0]).memory_hierarchy
+        self.memory_hierarchy = self.accelerator.memory_hierarchy
         self.opt_criterion_name = opt_criterion_name
 
         allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)

@@ -1,5 +1,4 @@
 - name: default
-  core_allocation: [1]
   spatial_mapping_hint:
     D1: [K]
     D2: [OX, OY]
@@ -9,7 +8,6 @@
     I: I1
 
 - name: Add
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - G, 32
@@ -23,7 +21,6 @@
     I: I1
 
 - name: Pooling
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - G, 32

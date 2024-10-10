@@ -31,8 +31,6 @@ class DummyNode(LayerNodeABC):
                 }
 
         self.type = node_type
-        # We assume these nodes are mapped on a core with id -1
-        self.core_allocation = -1
         self.runtime = 0
         self.start = None
         self.end = None
