@@ -1,5 +1,4 @@
 - name: default
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - K, 32
@@ -11,7 +10,6 @@
     I: I1
 
 - name: Add
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - G, 32
@@ -23,7 +21,6 @@
     I: I1
 
 - name: Pooling
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - G, 32
@@ -35,7 +32,6 @@
     I: I1
 
 - name: example_name_of_layer0
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - C, 32

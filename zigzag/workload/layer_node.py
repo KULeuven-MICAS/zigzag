@@ -121,8 +121,6 @@ class MappingAttributes:
 
     spatial_mapping: SpatialMapping
     spatial_mapping_hint: SpatialMappingHint
-    core_allocation: list[int]
-    core_allocation_is_fixed: bool
     memory_operand_links: MemoryOperandLinks
     temporal_ordering: LayerTemporalOrdering
 
@@ -137,8 +135,6 @@ class LayerNode(LayerNodeABC):
     dimension_relations: list[LayerDimRelation]
     spatial_mapping: SpatialMapping
     spatial_mapping_hint: SpatialMappingHint
-    core_allocation: list[int]
-    core_allocation_is_fixed: bool
     memory_operand_links: MemoryOperandLinks
     temporal_ordering: LayerTemporalOrdering
     padding: LayerPadding
@@ -174,8 +170,6 @@ class LayerNode(LayerNodeABC):
 
         self.spatial_mapping = mapping_attr.spatial_mapping
         self.spatial_mapping_hint = mapping_attr.spatial_mapping_hint
-        self.core_allocation = mapping_attr.core_allocation
-        self.core_allocation_is_fixed = mapping_attr.core_allocation_is_fixed
         self.memory_operand_links = mapping_attr.memory_operand_links
         self.temporal_ordering = mapping_attr.temporal_ordering
 
@@ -261,8 +255,6 @@ class LayerNode(LayerNodeABC):
                 "equation_relations": self.dimension_relations,
                 "loop_dimensions": self.layer_dim_sizes,
                 "operand_precision": self.operand_precision,
-                "core_allocation": self.core_allocation,
-                "core_allocation_is_fixed": self.core_allocation_is_fixed,
                 "user_spatial_mapping": self.spatial_mapping,
                 "memory_operand_links": self.memory_operand_links,
             }
@@ -376,8 +368,6 @@ class LayerNode(LayerNodeABC):
         attributes = MappingAttributes(
             spatial_mapping=self.spatial_mapping,
             spatial_mapping_hint=self.spatial_mapping_hint,
-            core_allocation=self.core_allocation,
-            core_allocation_is_fixed=self.core_allocation_is_fixed,
             memory_operand_links=self.memory_operand_links,
             temporal_ordering=self.temporal_ordering,
         )
