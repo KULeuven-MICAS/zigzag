@@ -46,10 +46,11 @@ class WorkloadFactory:
 class LayerNodeFactory:
     """Creates a LayerNode instance from a validated and normalized user definition of a single workload layer"""
 
-    def __init__(self, node_data: dict[str, Any], mapping_data: list[dict[str, Any]]):
+    def __init__(self, node_data: dict[str, Any], mapping_data: list[dict[str, Any]] | None):
         """!
         @node_data validated and normalized user-defined data for a single workload layer
-        @mapping_data validated and normalized user-defined data for all mappings
+        @mapping_data validated and normalized user-defined data for all mappings, or None is case no mapping-related
+        instances need to be constructed
         """
         self.node_data = node_data
         self.mapping_data = mapping_data
@@ -91,6 +92,7 @@ class LayerNodeFactory:
         )
 
     def create_mapping_attr(self, layer_dim_sizes: LayerDimSizes):
+        assert self.mapping_data, "LayerNodeFactory is initialized with empty mapping data"
         layer_type: str = self.node_data["operator_type"]
 
         # From mapping data
