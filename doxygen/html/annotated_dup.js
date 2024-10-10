@@ -167,6 +167,9 @@ var annotated_dup =
         [ "accelerator_validator", "namespacezigzag_1_1parser_1_1accelerator__validator.html", [
           [ "AcceleratorValidator", "classzigzag_1_1parser_1_1accelerator__validator_1_1AcceleratorValidator.html", "classzigzag_1_1parser_1_1accelerator__validator_1_1AcceleratorValidator" ]
         ] ],
+        [ "mapping_factory", "namespacezigzag_1_1parser_1_1mapping__factory.html", [
+          [ "MappingFactory", "classzigzag_1_1parser_1_1mapping__factory_1_1MappingFactory.html", "classzigzag_1_1parser_1_1mapping__factory_1_1MappingFactory" ]
+        ] ],
         [ "mapping_validator", "namespacezigzag_1_1parser_1_1mapping__validator.html", [
           [ "MappingValidator", "classzigzag_1_1parser_1_1mapping__validator_1_1MappingValidator.html", "classzigzag_1_1parser_1_1mapping__validator_1_1MappingValidator" ]
         ] ],
@@ -199,8 +202,7 @@ var annotated_dup =
         ] ],
         [ "workload_factory", "namespacezigzag_1_1parser_1_1workload__factory.html", [
           [ "WorkloadFactory", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1WorkloadFactory" ],
-          [ "LayerNodeFactory", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory" ],
-          [ "MappingFactory", "classzigzag_1_1parser_1_1workload__factory_1_1MappingFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1MappingFactory" ]
+          [ "LayerNodeFactory", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory.html", "classzigzag_1_1parser_1_1workload__factory_1_1LayerNodeFactory" ]
         ] ],
         [ "workload_validator", "namespacezigzag_1_1parser_1_1workload__validator.html", [
           [ "WorkloadValidator", "classzigzag_1_1parser_1_1workload__validator_1_1WorkloadValidator.html", "classzigzag_1_1parser_1_1workload__validator_1_1WorkloadValidator" ]
@@ -258,6 +260,7 @@ var annotated_dup =
         [ "layer_node", "namespacezigzag_1_1workload_1_1layer__node.html", [
           [ "LoopRelevancyInfo", "classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html", "classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo" ],
           [ "LayerNodeAttributes", "classzigzag_1_1workload_1_1layer__node_1_1LayerNodeAttributes.html", null ],
+          [ "MappingAttributes", "classzigzag_1_1workload_1_1layer__node_1_1MappingAttributes.html", null ],
           [ "LayerNode", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode" ]
         ] ],
         [ "layer_node_abc", "namespacezigzag_1_1workload_1_1layer__node__abc.html", [

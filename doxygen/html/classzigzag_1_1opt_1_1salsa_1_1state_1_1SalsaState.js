@@ -5,6 +5,7 @@ var classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState =
     [ "accelerator", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#abad7d445eb555517f300b6de6986a765", null ],
     [ "cme", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#ae3c6a5283e6e1961f1c6b696f5ebc65c", null ],
     [ "layer", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a95f2e9e3b2b2d837f962bcfb58a2011e", null ],
+    [ "memory_hierarchy", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
     [ "opt_criterion", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#ac5b2a256bb93b42a50adee5fc41f5479", null ],
     [ "opt_criterion_name", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a426881a3bcefffb848ae2384261a9b7d", null ],
     [ "ordering", "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aa5d555210685086c19e5d08afca6685b", null ],

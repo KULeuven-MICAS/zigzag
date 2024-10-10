@@ -1,6 +1,6 @@
 var classzigzag_1_1workload_1_1layer__node_1_1LayerNode =
 [
-    [ "__init__", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89b3368dd19728de4b8f079a8042e48c", null ],
+    [ "__init__", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a6a0be7fe1474613c2093b0ac74930341", null ],
     [ "__jsonrepr__", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__str__", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23e8041ce1015febe4fdace3225714f9", null ],
     [ "build_pr_funcs", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#aa9003f6e013308f95ede5cd35bcc1372", null ],
@@ -9,13 +9,12 @@ var classzigzag_1_1workload_1_1layer__node_1_1LayerNode =
     [ "calc_tensor_dims", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a272bd4ec4c1bf0fa00cefb2dc7de46db", null ],
     [ "calc_tensor_size", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a402b9f9fa470419fcda8774138b4833d", null ],
     [ "extract_layer_info", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a971853921d3f04d3990a962215f3a163", null ],
+    [ "extract_mapping_attr", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23a6b6c449f3e9955e94de4753a4c0e7", null ],
     [ "extract_node_attr", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a19aaaeba0364048770de0bcb52477845", null ],
     [ "get_act_layer_op", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad0399cf1b160514e14caa9e3248697c3", null ],
     [ "get_operand_irrelevant_layer_dims", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ac7862b7128a792b23f9e814ece9cbf24", null ],
     [ "get_weight_layer_op", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a89dcae46f7523061cd20da9783fac3e8", null ],
     [ "constant_operands", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a538b5481191cd8f52c356e62203e53f6", null ],
-    [ "core_allocation", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a0eefc4dfe20e299c997385acdaffb1f6", null ],
-    [ "core_allocation_is_fixed", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#ad666f1db22c59b6282c05170dac408d1", null ],
     [ "dimension_relations", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a787aea16346715009d0662ca88d603bb", null ],
     [ "equation", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a676b8a528e3ffd5ceeb075991bd23cf7", null ],
     [ "input_operand_source", "classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a5360195b0688439cb6da5d1ca38a6212", null ],

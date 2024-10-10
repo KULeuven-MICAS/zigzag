@@ -8,7 +8,6 @@ var classzigzag_1_1workload_1_1dummy__node_1_1DummyNode =
     [ "has_end", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a486c0f3a7960647e00ea890a1d197d51", null ],
     [ "set_end", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a", null ],
     [ "set_start", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3", null ],
-    [ "core_allocation", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0eefc4dfe20e299c997385acdaffb1f6", null ],
     [ "end", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#afb358f48b1646c750fb9da6c6585be2b", null ],
     [ "input_operand_source", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a5360195b0688439cb6da5d1ca38a6212", null ],
     [ "runtime", "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#aaca40adbdaefd717dec8cd204e5e59ea", null ],
