@@ -24,8 +24,7 @@ An example mapping is given below. The name of the mapping must correspond to an
 .. code-block:: yaml 
 
     - name: example_name_of_layer0
-    core_allocation: [1]
-    spatial_mapping:
+      spatial_mapping:
         D1:
         - C, 32
         D2:

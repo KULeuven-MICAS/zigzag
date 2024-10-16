@@ -12,12 +12,6 @@ class MappingValidator:
     # Schema for a single operation, UpgradeValidator extrapolates to list of operations
     SCHEMA_SINGLE = {
         "name": {"type": "string", "required": True},
-        "core_allocation": {
-            "type": "list",
-            "schema": {"type": "integer"},
-            "default": [0],
-        },
-        "core_allocation_is_fixed": {"type": "boolean", "default": False},
         "spatial_mapping": {
             "type": "dict",
             "schema": {

@@ -1,5 +1,4 @@
 - name: default
-  core_allocation: [1]
   spatial_mapping:
     D1:
       - K, 32
