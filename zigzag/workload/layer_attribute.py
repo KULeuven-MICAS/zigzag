@@ -34,3 +34,10 @@ class LayerAttribute(metaclass=ABCMeta):
 
     def __eq__(self, other: object):
         return isinstance(other, LayerAttribute) and self.data == other.data
+
+    def __hash__(self):
+        if isinstance(self.data, dict):
+            return hash(frozenset(self.data.items()))  # type: ignore
+        elif isinstance(self.data, str):
+            return hash(self.data)
+        raise NotImplementedError
