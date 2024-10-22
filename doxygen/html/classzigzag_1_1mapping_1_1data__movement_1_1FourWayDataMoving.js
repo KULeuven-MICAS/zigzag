@@ -1,6 +1,7 @@
 var classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving =
 [
     [ "__init__", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#ad37c1eb648d9ed838e32ebe9989cfd4d", null ],
+    [ "__add__", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#aebeb063ed11c0678ca2d42cbc1631995", null ],
     [ "__jsonrepr__", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__repr__", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "get_single_dir_data", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#a7c949b09c9db03c375e7be3b75f18609", null ],

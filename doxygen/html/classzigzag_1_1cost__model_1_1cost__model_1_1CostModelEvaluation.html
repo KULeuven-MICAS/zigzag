@@ -175,9 +175,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5d499d2d9dd603b7df072ba0e109519"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519">calc_overall_latency</a> (self, float cycles_per_mac=1)</td></tr>
 <tr class="memdesc:ae5d499d2d9dd603b7df072ba0e109519"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519">More...</a><br /></td></tr>
 <tr class="separator:ae5d499d2d9dd603b7df072ba0e109519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7f43de4ac45a958df21241426bbefa8d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html">MemoryAccesses</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a7f43de4ac45a958df21241426bbefa8d">get_total_inst_bandwidth</a> (self, MemoryInstance memory_instance)</td></tr>
-<tr class="memdesc:a7f43de4ac45a958df21241426bbefa8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a7f43de4ac45a958df21241426bbefa8d">More...</a><br /></td></tr>
-<tr class="separator:a7f43de4ac45a958df21241426bbefa8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a6644ca935bcc16a939902343c7d0f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5a6644ca935bcc16a939902343c7d0f8">get_total_inst_bandwidth</a> (self, MemoryLevel memory_level)</td></tr>
+<tr class="memdesc:a5a6644ca935bcc16a939902343c7d0f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5a6644ca935bcc16a939902343c7d0f8">More...</a><br /></td></tr>
+<tr class="separator:a5a6644ca935bcc16a939902343c7d0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
 <tr class="separator:a23e8041ce1015febe4fdace3225714f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a47563093dfc5ba12274b66e368920c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9a47563093dfc5ba12274b66e368920c">__repr__</a> (self)</td></tr>
@@ -1130,14 +1130,14 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a7f43de4ac45a958df21241426bbefa8d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7f43de4ac45a958df21241426bbefa8d">&#9670;&nbsp;</a></span>get_total_inst_bandwidth()</h2>
+<a id="a5a6644ca935bcc16a939902343c7d0f8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a6644ca935bcc16a939902343c7d0f8">&#9670;&nbsp;</a></span>get_total_inst_bandwidth()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"> <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html">MemoryAccesses</a> get_total_inst_bandwidth </td>
+          <td class="memname"> <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int] get_total_inst_bandwidth </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -1145,8 +1145,8 @@ Here is the caller graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">MemoryInstance&#160;</td>
-          <td class="paramname"><em>memory_instance</em>&#160;</td>
+          <td class="paramtype">MemoryLevel&#160;</td>
+          <td class="paramname"><em>memory_level</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1156,8 +1156,8 @@ Here is the caller graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME. </p>
-<p>Returns empty bandwidth requirements if the given memory instance is not included in this CME's memory hierarchy. NOTE: this function is used in Stream </p>
+<p>Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME. </p>
+<p>Raises an assertion error if the given memory level is not included in this CME's memory hierarchy. NOTE: this function is used in Stream </p>
 
 </div>
 </div>
