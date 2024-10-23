@@ -10,10 +10,10 @@ import numpy as np
 from zigzag.cost_model.port_activity import PortActivity, PortBeginOrEndActivity
 from zigzag.datatypes import ArrayType, Constants, LayerOperand, MemoryOperand
 from zigzag.hardware.architecture.accelerator import Accelerator
-from zigzag.hardware.architecture.memory_instance import MemoryInstance
+from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.memory_port import MemoryPort
 from zigzag.hardware.architecture.operational_array import OperationalArray
-from zigzag.mapping.data_movement import AccessEnergy, DataDirection, MemoryAccesses
+from zigzag.mapping.data_movement import AccessEnergy, DataDirection, FourWayDataMoving, MemoryAccesses
 from zigzag.mapping.mapping import Mapping
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
 from zigzag.mapping.temporal_mapping import TemporalMapping
@@ -1141,23 +1141,28 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mac_utilization1 = mac_utilization1
         self.mac_utilization2 = mac_utilization2
 
-    def get_total_inst_bandwidth(self, memory_instance: MemoryInstance) -> MemoryAccesses:
-        """Given a cost model evaluation and a memory instance, compute the memory's total instantaneous bandwidth
-        required throughout the execution of the layer that corresponds to this CME. Returns empty bandwidth
-        requirements if the given memory instance is not included in this CME's memory hierarchy.
+    def get_total_inst_bandwidth(self, memory_level: MemoryLevel) -> FourWayDataMoving[int]:
+        """Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth
+        required throughout the execution of the layer that corresponds to this CME. Raises an assertion error
+        if the given memory level is not included in this CME's memory hierarchy.
         NOTE: this function is used in Stream
         """
-        # Check which operands require offchip memory throughout the computation
-        offchip_mem_operands: list[MemoryOperand] = []
-        for op, memory_levels in self.mem_hierarchy_dict.items():
-            last_mem_level = memory_levels[-1]
-            if last_mem_level.memory_instance == memory_instance:
-                offchip_mem_operands.append(op)
-        # Obtain the required instantaneous bandwidth to/from offchip for these operands
-        total_inst_bw = MemoryAccesses(0, 0, 0, 0)
-        for mem_op in offchip_mem_operands:
+        # Check that the given MemoryInstance is part of the memory hierarchy of this CME
+        assert (
+            memory_level in self.mem_level_list
+        ), f"Memory level {memory_level} is not part of the memory hierarchy of this cost model evaluation."
+        # Obtain the required instantaneous bandwidth to/from the memory for its operands
+        total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        for mem_op in memory_level.operands:
             layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-            inst_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
+            req_elem_per_cc_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
+            precision_4way = self.mapping.unit_mem_data_movement[layer_op][-1].data_precision
+            inst_bw_4way = FourWayDataMoving(
+                req_elem_per_cc_4way.rd_out_to_low * precision_4way.rd_out_to_low,
+                req_elem_per_cc_4way.wr_in_by_low * precision_4way.wr_in_by_low,
+                req_elem_per_cc_4way.rd_out_to_high * precision_4way.rd_out_to_high,
+                req_elem_per_cc_4way.wr_in_by_high * precision_4way.wr_in_by_high,
+            )
             total_inst_bw += inst_bw_4way
         return total_inst_bw
 
