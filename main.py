@@ -28,6 +28,7 @@ get_hardware_performance_zigzag(
     accelerator=args.accelerator,
     workload=args.model,
     mapping=args.mapping,
+    temporal_mapping_search_engine="loma",
     opt="latency",
     dump_folder=f"outputs/{experiment_id}",
     pickle_filename=f"outputs/{pickle_name}.pickle",
