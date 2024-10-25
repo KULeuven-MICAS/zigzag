@@ -63,7 +63,7 @@ ZigZag requires an inferred onnx model, as it needs to know the shapes of all in
 Manual layer definition
 =======================
 
-It is also possible to manually define your own workload layers.
+It is also possible to manually define your own workload layers. In that case, the ``main.py`` file should be executed instead of ``main_onnx.py``. Moreover, the workload file should be provided as input together with the accelerator, and there is no onnx model loaded.
 
 Each layer definition is represented as a YAML entry, which should have the following attributes:
 
