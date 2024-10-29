@@ -31,10 +31,11 @@ GROUP_SPACING = 1
 
 
 def shorten_onnx_layer_name(name: str):
-    """Names generated in the ONNX format are quite long (e.g. `layer1/layer1.0/conv2/Conv). This function extracts
-    the most informative part"""
+    """Names generated in the ONNX format are quite long (e.g. `layer1/layer1.0/conv2/Conv`). This function extracts
+    the most informative part (`conv2/Conv` in this case)"""
     try:
-        return name.split("/")[-2]
+        last_two = name.split("/")[-2:]
+        return "/".join(last_two)
     except IndexError:
         return name
 
