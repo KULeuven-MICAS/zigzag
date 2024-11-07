@@ -1168,7 +1168,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # we put it in the WR_IN_BY_HIGH direction if the output memory operand is present in the memory level.
         # Otherwise, we put it in the RD_OUT_TO_LOW direction.
         for port in memory_level.port_list:
-            if MemoryOperand("O") in memory_level.operands:
+            if Constants.OUTPUT_MEM_OP in memory_level.operands:
                 total_inst_bw.wr_in_by_high += self.total_loading_bw_during_computation[port]
             else:
                 total_inst_bw.rd_out_to_low += self.total_loading_bw_during_computation[port]
