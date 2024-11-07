@@ -481,9 +481,10 @@ class Mapping:
         # e.g. for the DTL of Global Buffer (Weight) talking to spatially unrolled Weight Reg File,
         # each Weight Reg File's required write BW is indicated by "_L",
         # while Global Buffer (Weight)'s required read BW is indicate by "_H"
+        # The unit of these variables is bits per cycle
         req_mem_bw_low_raw = {
             op: [
-                data_each_level_unrolled[op][lv] / cycle_each_level[op][lv]
+                data_each_level_unrolled[op][lv] * self.data_precision_dict[op][lv] / cycle_each_level[op][lv]
                 for lv in range(self.spatial_mapping.arch_level[op])
             ]
             for op in self.operand_list

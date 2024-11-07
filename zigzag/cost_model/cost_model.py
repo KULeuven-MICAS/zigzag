@@ -1151,19 +1151,27 @@ class CostModelEvaluation(CostModelEvaluationABC):
         assert (
             memory_level in self.mem_level_list
         ), f"Memory level {memory_level} is not part of the memory hierarchy of this cost model evaluation."
-        # Obtain the required instantaneous bandwidth to/from the memory for its operands
+        # Obtain the required instantaneous bandwidth to/from the memory for its operands during computation
         total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
         for mem_op in memory_level.operands:
             layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-            req_elem_per_cc_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
-            precision_4way = self.mapping.unit_mem_data_movement[layer_op][-1].data_precision
+            req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
             inst_bw_4way = FourWayDataMoving(
-                req_elem_per_cc_4way.rd_out_to_low * precision_4way.rd_out_to_low,
-                req_elem_per_cc_4way.wr_in_by_low * precision_4way.wr_in_by_low,
-                req_elem_per_cc_4way.rd_out_to_high * precision_4way.rd_out_to_high,
-                req_elem_per_cc_4way.wr_in_by_high * precision_4way.wr_in_by_high,
+                req_bw_4way.rd_out_to_low,
+                req_bw_4way.wr_in_by_low,
+                req_bw_4way.rd_out_to_high,
+                req_bw_4way.wr_in_by_high,
             )
             total_inst_bw += inst_bw_4way
+        # Add the potential borrowed bandwidth by the loading phases (onloading and offloading)
+        # As this bandwidth is already aggregated across all directions for a single port,
+        # we put it in the WR_IN_BY_HIGH direction if the output memory operand is present in the memory level.
+        # Otherwise, we put it in the RD_OUT_TO_LOW direction.
+        for port in memory_level.port_list:
+            if MemoryOperand("O") in memory_level.operands:
+                total_inst_bw.wr_in_by_high += self.total_loading_bw_during_computation[port]
+            else:
+                total_inst_bw.rd_out_to_low += self.total_loading_bw_during_computation[port]
         return total_inst_bw
 
     def __str__(self):

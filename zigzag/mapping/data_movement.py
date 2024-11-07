@@ -127,14 +127,14 @@ class DataMovePattern:
 
     def __init__(self, operand: LayerOperand, mem_level: int):
         self.name = operand.name + str(mem_level)
-        self.data_elem_move_count = MemoryAccesses(0, 0, 0, 0)
-        self.data_precision = MemoryAccesses(0, 0, 0, 0)
-        self.req_mem_bw_aver = MemoryAccesses(0, 0, 0, 0)
-        self.req_mem_bw_inst = MemoryAccesses(0, 0, 0, 0)
-        self.data_trans_period = MemoryAccesses(0, 0, 0, 0)
-        self.data_trans_period_count = MemoryAccesses(0, 0, 0, 0)
-        self.data_trans_amount_per_period = MemoryAccesses(0, 0, 0, 0)
-        self.inst_data_trans_window = MemoryAccesses(0, 0, 0, 0)
+        self.data_elem_move_count = MemoryAccesses(0, 0, 0, 0)  # elements
+        self.data_precision = MemoryAccesses(0, 0, 0, 0)  # bits/element
+        self.req_mem_bw_aver = MemoryAccesses(0, 0, 0, 0)  # bits/cycle
+        self.req_mem_bw_inst = MemoryAccesses(0, 0, 0, 0)  # bits/cycle
+        self.data_trans_period = MemoryAccesses(0, 0, 0, 0)  # cycles
+        self.data_trans_period_count = MemoryAccesses(0, 0, 0, 0)  # periods
+        self.data_trans_amount_per_period = MemoryAccesses(0, 0, 0, 0)  # elements
+        self.inst_data_trans_window = MemoryAccesses(0, 0, 0, 0)  # cycles
 
     def set_data_elem_move_count(
         self,
