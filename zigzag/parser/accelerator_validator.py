@@ -132,8 +132,8 @@ class AcceleratorValidator:
                     "maxlength": 2,
                 },
                 # Non-IMC properties
-                "multiplier_energy": {"type": "float", "required": False},
-                "multiplier_area": {"type": "float", "required": False},
+                "unit_energy": {"type": "float", "required": False},
+                "unit_area": {"type": "float", "required": False},
                 # IMC properties
                 "imc_type": {
                     "type": "string",

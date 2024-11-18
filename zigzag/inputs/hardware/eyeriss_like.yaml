@@ -135,7 +135,7 @@ memories:
     served_dimensions: [D1, D2]
 
 operational_array:
-  multiplier_energy: 0.5 # pJ
-  multiplier_area: 0.1 # unit
+  unit_energy: 0.5 # pJ
+  unit_area: 0.1 # unit
   dimensions: [D1, D2]
   sizes: [14, 12]
