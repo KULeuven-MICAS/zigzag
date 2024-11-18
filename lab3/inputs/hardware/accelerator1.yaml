@@ -1,9 +1,8 @@
 name: accelerator1
 
-multipliers:
-  input_precision: [8, 8]
-  multiplier_energy: 1 # pJ
-  multiplier_area: 1 # unit
+operational_array:
+  unit_energy: 0.04 # pJ
+  unit_area: 1 # unit
   dimensions: [D1, D2]
   sizes: [32, 32]
 
