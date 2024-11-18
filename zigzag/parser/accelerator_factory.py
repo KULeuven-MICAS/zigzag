@@ -76,8 +76,8 @@ class AcceleratorFactory:
         op_array_data: dict[str, Any] = self.data["operational_array"]
 
         multiplier = Multiplier(
-            energy_cost=op_array_data["multiplier_energy"],
-            area=op_array_data["multiplier_area"],
+            energy_cost=op_array_data["unit_energy"],
+            area=op_array_data["unit_area"],
         )
         oa_dims: list[str] = op_array_data["dimensions"]
         dimension_sizes: dict[OADimension, int] = {

@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from typing import Any
+from typing import Any, Literal
 
 from onnx import ModelProto
 
@@ -11,6 +11,7 @@ from zigzag.stages.exploit_data_locality_stages import (
     SearchInterLayerDataLocalityStage,
 )
 from zigzag.stages.main import MainStage
+from zigzag.stages.mapping.salsa import SalsaStage
 from zigzag.stages.mapping.spatial_mapping_generation import SpatialMappingGeneratorStage
 from zigzag.stages.mapping.temporal_mapping_generator_stage import TemporalMappingGeneratorStage
 from zigzag.stages.parser.accelerator_parser import AcceleratorParserStage
@@ -28,6 +29,7 @@ def get_hardware_performance_zigzag(
     accelerator: str,
     mapping: str,
     *,
+    temporal_mapping_search_engine: Literal["loma"] | Literal["salsa"] = "loma",
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str | None = None,
@@ -83,6 +85,8 @@ def get_hardware_performance_zigzag(
     do_exploint_inter_layer_locality = in_memory_compute or exploit_data_locality or enable_mix_spatial_mapping
     # Whether `mixed` mappings (e.g. `D1: {K:8, C:4}`) can be generated
     do_mix_spatial_mapping_generation = in_memory_compute or enable_mix_spatial_mapping
+    # Select temporal mapping engine based on the function input
+    temporal_mapping_engine = SalsaStage if temporal_mapping_search_engine == "salsa" else TemporalMappingGeneratorStage
 
     stages = [
         # Parse the ONNX Model into the workload
@@ -112,7 +116,7 @@ def get_hardware_performance_zigzag(
         # Reduce all CMEs, returning minimal energy/latency one
         opt_stage,
         # Generate multiple temporal mappings (TM)
-        TemporalMappingGeneratorStage,
+        temporal_mapping_engine,
         # Evaluate generated SM and TM through cost model
         CostModelStage,
     ]
