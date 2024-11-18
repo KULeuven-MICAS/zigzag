@@ -7,7 +7,6 @@ from zigzag.visualization.results.plot_cme import (
 )
 from zigzag.visualization.results.print_mapping import print_mapping
 
-
 # Initialize the logger
 logging_level = logging.INFO
 logging_format = "%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)s - %(message)s"
