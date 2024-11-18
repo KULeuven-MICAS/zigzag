@@ -93,16 +93,16 @@ $(document).ready(function(){initNavTree('namespacezigzag_1_1api.html',''); init
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="memItemLeft" align="right" valign="top">( tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]|tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]])&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1">get_hardware_performance_zigzag</a> (str|ModelProto workload, str accelerator, str mapping, *str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str|None pickle_filename=None, int lpf_limit=6, int nb_spatial_mappings_generated=3, bool in_memory_compute=False, bool exploit_data_locality=False, bool enable_mix_spatial_mapping=False)</td></tr>
-<tr class="memdesc:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">ZigZag API: estimates the cost of running the given workload on the given hardware architecture.  <a href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1">More...</a><br /></td></tr>
-<tr class="separator:a0acbac3ee70c0e54ff94dffe4df69dc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a848c2307c6f621fe6f967cce35a30206"><td class="memItemLeft" align="right" valign="top">( tuple[float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]|tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]])&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a848c2307c6f621fe6f967cce35a30206">get_hardware_performance_zigzag</a> (str|ModelProto workload, str accelerator, str mapping, *Literal[&quot;loma&quot;]|Literal[&quot;salsa&quot;] temporal_mapping_search_engine=&quot;loma&quot;, str opt=&quot;latency&quot;, str dump_folder=f&quot;outputs/{datetime.now()}&quot;, str|None pickle_filename=None, int lpf_limit=6, int nb_spatial_mappings_generated=3, bool in_memory_compute=False, bool exploit_data_locality=False, bool enable_mix_spatial_mapping=False)</td></tr>
+<tr class="memdesc:a848c2307c6f621fe6f967cce35a30206"><td class="mdescLeft">&#160;</td><td class="mdescRight">ZigZag API: estimates the cost of running the given workload on the given hardware architecture.  <a href="namespacezigzag_1_1api.html#a848c2307c6f621fe6f967cce35a30206">More...</a><br /></td></tr>
+<tr class="separator:a848c2307c6f621fe6f967cce35a30206"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97cf011d1ddc096ee6a44473345a5865"><td class="memItemLeft" align="right" valign="top">tuple[float, float, float, float, list[tuple[<a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html">CostModelEvaluationABC</a>, Any]]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865">get_hardware_performance_zigzag_imc</a> (*Any args)</td></tr>
 <tr class="memdesc:a97cf011d1ddc096ee6a44473345a5865"><td class="mdescLeft">&#160;</td><td class="mdescRight">Overload with type hint.  <a href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865">More...</a><br /></td></tr>
 <tr class="separator:a97cf011d1ddc096ee6a44473345a5865"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Function Documentation</h2>
-<a id="a0acbac3ee70c0e54ff94dffe4df69dc1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0acbac3ee70c0e54ff94dffe4df69dc1">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag()</h2>
+<a id="a848c2307c6f621fe6f967cce35a30206"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a848c2307c6f621fe6f967cce35a30206">&#9670;&nbsp;</a></span>get_hardware_performance_zigzag()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -131,7 +131,13 @@ Functions</h2></td></tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">*str &#160;</td>
+          <td class="paramtype">*Literal[&quot;loma&quot;] | Literal[&quot;salsa&quot;] &#160;</td>
+          <td class="paramname"><em>temporal_mapping_search_engine</em> = <code>&quot;loma&quot;</code>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">str &#160;</td>
           <td class="paramname"><em>opt</em> = <code>&quot;latency&quot;</code>, </td>
         </tr>
         <tr>
@@ -204,8 +210,8 @@ Functions</h2></td></tr>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="namespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph.png" border="0" usemap="#anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph" alt=""/></div>
-<map name="anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph" id="anamespacezigzag_1_1api_a0acbac3ee70c0e54ff94dffe4df69dc1_icgraph">
+<div class="center"><img src="namespacezigzag_1_1api_a848c2307c6f621fe6f967cce35a30206_icgraph.png" border="0" usemap="#anamespacezigzag_1_1api_a848c2307c6f621fe6f967cce35a30206_icgraph" alt=""/></div>
+<map name="anamespacezigzag_1_1api_a848c2307c6f621fe6f967cce35a30206_icgraph" id="anamespacezigzag_1_1api_a848c2307c6f621fe6f967cce35a30206_icgraph">
 <area shape="rect" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
 <area shape="rect" href="namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865" title="Overload with type hint." alt="" coords="5,5,207,47"/>
 </map>
@@ -236,7 +242,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="namespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph.png" border="0" usemap="#anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph" alt=""/></div>
 <map name="anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph" id="anamespacezigzag_1_1api_a97cf011d1ddc096ee6a44473345a5865_cgraph">
 <area shape="rect" title="Overload with type hint." alt="" coords="5,5,207,47"/>
-<area shape="rect" href="namespacezigzag_1_1api.html#a0acbac3ee70c0e54ff94dffe4df69dc1" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
+<area shape="rect" href="namespacezigzag_1_1api.html#a848c2307c6f621fe6f967cce35a30206" title="ZigZag API: estimates the cost of running the given workload on the given hardware architecture." alt="" coords="255,5,456,47"/>
 </map>
 </div>
 
