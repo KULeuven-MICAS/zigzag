@@ -7,7 +7,7 @@ operational_array:
   sizes: [32, 32]
 
 memories:
-  rf_1B:
+  rf_1B_I2:
     size: 8
     r_bw: 8
     w_bw: 8
@@ -25,7 +25,7 @@ memories:
         tl: r_port_1
     served_dimensions: [D1] # One per column
 
-  rf_1B:
+  rf_1B_I1:
     size: 8
     r_bw: 8
     w_bw: 8
@@ -43,7 +43,7 @@ memories:
         tl: r_port_1
     served_dimensions: [D2] # One per row
 
-  rf_4B:
+  rf_4B_O:
     size: 32
     r_bw: 32
     w_bw: 32
