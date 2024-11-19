@@ -13,15 +13,15 @@ logging_format = "%(asctime)s - %(name)s.%(funcName)s +%(lineno)s - %(levelname)
 logging.basicConfig(level=logging_level, format=logging_format)
 
 # Define the experiment id and pickle name
-hw_name = "tpu_like"
+hw_name = "accelerator1"
 workload_name = "resnet18_first_layer"
 experiment_id = f"{hw_name}-{workload_name}"
 pickle_name = f"{experiment_id}-saved_list_of_cmes"
 
 # Define main input paths
-accelerator = "zigzag/inputs/hardware/tpu_like.yaml"
-workload = "lab2/resnet18_first_layer.onnx"
-mapping = "lab2/mapping.yaml"
+accelerator = "lab2/inputs/hardware/accelerator1.yaml"
+workload = "lab2/inputs/workload/resnet18_first_layer.onnx"
+mapping = "lab2/inputs/mapping/mapping.yaml"
 assert os.path.exists(mapping), "Copy mapping.yaml from lab1 and modify it for lab2."
 
 # Define other inputs of api call

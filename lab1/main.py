@@ -1,5 +1,8 @@
 import logging
+import sys
+import os
 
+sys.path.insert(0, os.getcwd())  # For importing zigzag
 from zigzag.api import get_hardware_performance_zigzag
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
@@ -18,9 +21,9 @@ experiment_id = f"{hw_name}-{workload_name}"
 pickle_name = f"{experiment_id}-saved_list_of_cmes"
 
 # Define main input paths
-accelerator = "zigzag/inputs/hardware/tpu_like.yaml"
-workload = "lab1/resnet18_first_layer.onnx"
-mapping = "lab1/mapping.yaml"
+accelerator = "lab1/inputs/hardware/accelerator1.yaml"
+workload = "lab1/inputs/workload/resnet18_first_layer.onnx"
+mapping = "lab1/inputs/mapping/mapping.yaml"
 
 # Define other inputs of api call
 temporal_mapping_search_engine = "loma"
