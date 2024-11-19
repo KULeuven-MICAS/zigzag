@@ -64,10 +64,10 @@ memories:
 
   sram_16KB_I2:
     size: 131072
-    r_bw: 128
-    w_bw: 128
-    r_cost: 416.16  # TODO
-    w_cost: 378.4  # TODO
+    r_bw: 256
+    w_bw: 256
+    r_cost: 10.5
+    w_cost: 12.8
     area: 0
     r_port: 1
     w_port: 1
@@ -83,8 +83,8 @@ memories:
     size: 524288
     r_bw: 512
     w_bw: 512
-    r_cost: 416.16  # TODO
-    w_cost: 378.4  # TODO
+    r_cost: 19.6
+    w_cost: 22.5
     area: 0
     r_port: 0
     w_port: 0
@@ -104,8 +104,8 @@ memories:
     size: 4294967296
     r_bw: 64
     w_bw: 64
-    r_cost: 700  # TODO
-    w_cost: 750  # TODO
+    r_cost: 700
+    w_cost: 750
     area: 0
     r_port: 0
     w_port: 0
