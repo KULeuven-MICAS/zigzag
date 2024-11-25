@@ -1,9 +1,11 @@
-# Lab 2: Automating the temporal mapping
+# Lab 2: Automating the mapping
 
 ## Objective
 The goal of this lab is to have ZigZag generate multiple temporal mappings automatically, and only return the best one it found. 
 
 Keep in mind that each evaluated mapping is uniquely different in loop ordering and memory allocation. Using traditional simulation, this would take orders of magnitude longer to 1. encode the mappings as a different control flow and 2. use cycle-accurate simulations to obtain the performance and switching activity. The trade-off is that the analytical cost model makes simplifying assumptions on both the hardware and the mapping of the workload onto its resources.
+
+As a second goal the user will automate the spatial mapping themselves (see Questions & Answers for more info).
 
 ## Setup
 1. Ensure you have installed the requirements in `requirements.txt`.
@@ -12,21 +14,22 @@ Keep in mind that each evaluated mapping is uniquely different in loop ordering 
 ## Inputs
 There are three main inputs defined in the `inputs/` folder:
 1. **Workload**: _[Same as lab1]_ The first layer of ResNet18 in ONNX format. The layer name is `Conv1`. You can use [Netron](https://netron.app) to visualize the model.
-2. **Hardware**: _[Same as lab1]_ A sample accelerator is encoded in `accelerator1.yaml`. This accelerator includes 32x32 operational units with a hierarchy of memories attached which store different `memory operands I1, I2, O`.
+2. **Hardware**: _[Same as lab1]_ A sample accelerator is encoded in `accelerator1.yaml`. This accelerator includes 32x32 operational units with a hierarchy of memories attached which store different `memory operands` `I1`, `I2`, `O`.
 3. **Mapping**: The mapping specifies for the `Conv1` layer only the spatial mapping. The `TemporalMappingGeneratorStage` automatically detects there is no user-defined temoral loop ordering and generates multiple temporal mappings to be evaluated by the cost model.
 
 ## Running the Experiment
 Run the main file:
-    ```
-    python lab2/main.py
-    ```
+```python
+# Call this from the base folder
+python lab2/main.py
+```
     
 As only the spatial mapping is fixed, there will be multiple cost model evaluations. The progress is shown through a bar, where the numbers to the right indicate the evaluated and total amount of mappings that will be evaluated.
 
 ## Outputs
 The results of the experiment will be saved in the `outputs/` folder.
 
-## Homework
+## Questions & Answers
 
 - What does the API call optimize for? Try changing this to a different valid criterion and analyze the impact on the performance.
     > <details>
@@ -60,7 +63,7 @@ The results of the experiment will be saved in the `outputs/` folder.
     > <details>
     > <summary>Answer</summary>
     > 
-    > Identically to the temporal ordering, you can simply remove the defined spatial mapping in the mapping file. Then, the `SpatialMappingGeneratorStage` will automatically generate a number of spatial mappings. For each generated spatial mapping, the same flow will run as before: multiple temporal mappings are evaluated and filtered to return the best one wrt. the optimization criterion.
+    > Identically to the temporal ordering, you can simply remove the defined spatial mapping in the mapping file. Then, the `SpatialMappingGeneratorStage` inside the API will automatically generate a number of spatial mappings. For each generated spatial mapping, the same flow will run as before: multiple temporal mappings are evaluated and filtered to return the best one wrt. the optimization criterion.
     >
     > The standard number of spatial mappings evaluated is 3, which are those with the highest spatial utilization. This can be increased or reduced by passing a different `nb_spatial_mappings_generated` to the API call.
     > 
