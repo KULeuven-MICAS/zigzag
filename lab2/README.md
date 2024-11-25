@@ -26,8 +26,18 @@ python lab2/main.py
     
 As only the spatial mapping is fixed, there will be multiple cost model evaluations. The progress is shown through a bar, where the numbers to the right indicate the evaluated and total amount of mappings that will be evaluated.
 
-## Outputs
+## Outputs _[same as lab1]_
 The results of the experiment will be saved in the `outputs/` folder.
+
+- `breakdown.png` shows an energy and latency breakdown for the different layers evaluated (only one here). The energy is broken down into the operational level (MAC) and memory levels. As each memory level can store one or more operands, it is colored by operand. Moreover, it breaks down the energy cost for 4 different read/write directions of the memory. The latency is broken down into the ideal computation time (assuming perfect utilization of the operational array), the added cycles due to spatial stalls which represent the spatial underutilization (due to imperfect spatial loop unrolling), the added cycles due to temporal stalls (due to imperfect memory bandwidth), and the added on-loading and off-loading cycles (due to the very first.last iteration on/off-loading of inputs/outputs).
+
+- `Conv1_complete.json` contains all input and output information of the cost model evaluation. 
+
+- `overall_simple.json` aggregates the energy and latency of all layers (only one here).
+
+- `mem_hierarchy.png` shows the constructed hierarchy of memories and for each level which operands they store and the amount of times it's replicated (more info on this in `lab3`).
+
+- `loop_ordering.txt` shows for all evaluated layers the returned mapping. This includes both the temporal aspect, where different loops are assigned at the memory levels (which can be different for different operands due to ZigZag's uneven mapping representation). The spatial aspect shows the spatially unrolled loops.
 
 ## Questions & Answers
 
