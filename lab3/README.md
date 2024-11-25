@@ -133,9 +133,18 @@ python lab3/main.py
     
 ZigZag will optimize the temporal mapping for all three accelerator architectures with their defined spatial mappings. The resulting energy and latency is shown for the different accelerators. Note that all three are running the exact same workload.
 
-## Outputs
+## Outputs _[same as lab1/2]_
 The results of the experiment will be saved in the `outputs/` folder.
 
+- `breakdown.png` shows an energy and latency breakdown for the different layers evaluated (only one here). The energy is broken down into the operational level (MAC) and memory levels. As each memory level can store one or more operands, it is colored by operand. Moreover, it breaks down the energy cost for 4 different read/write directions of the memory. The latency is broken down into the ideal computation time (assuming perfect utilization of the operational array), the added cycles due to spatial stalls which represent the spatial underutilization (due to imperfect spatial loop unrolling), the added cycles due to temporal stalls (due to imperfect memory bandwidth), and the added on-loading and off-loading cycles (due to the very first.last iteration on/off-loading of inputs/outputs).
+
+- `Conv1_complete.json` contains all input and output information of the cost model evaluation. 
+
+- `overall_simple.json` aggregates the energy and latency of all layers (only one here).
+
+- `mem_hierarchy.png` shows the constructed hierarchy of memories and for each level which operands they store and the amount of times it's replicated (more info on this in `lab3`).
+
+- `loop_ordering.txt` shows for all evaluated layers the returned mapping. This includes both the temporal aspect, where different loops are assigned at the memory levels (which can be different for different operands due to ZigZag's uneven mapping representation). The spatial aspect shows the spatially unrolled loops.
 ## Questions & Answers
 
 - Try drawing the lowest memory levels for the `accelerator2.yaml` architecture description. Which level has the most instances?

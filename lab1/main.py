@@ -44,6 +44,6 @@ energy, latency, results = get_hardware_performance_zigzag(
 
 # Save a bar plot of the cost model evaluations breakdown
 cmes = [result[0] for result in results[0][1]]
-save_path = "lab1/outputs/breakdown.png"
+save_path = os.path.join(dump_folder, "breakdown.png")
 bar_plot_cost_model_evaluations_breakdown(cmes, save_path=save_path)
 print_mapping(cmes[0])

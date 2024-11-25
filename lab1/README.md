@@ -41,6 +41,42 @@ The mapping is fixed in both the spatial and temporal domains, resulting in a si
 ## Outputs
 The results of the experiment will be saved in the `outputs/` folder.
 
+- `breakdown.png` shows an energy and latency breakdown for the different layers evaluated (only one here). The energy is broken down into the operational level (MAC) and memory levels. As each memory level can store one or more operands, it is colored by operand. Moreover, it breaks down the energy cost for 4 different read/write directions of the memory. The latency is broken down into the ideal computation time (assuming perfect utilization of the operational array), the added cycles due to spatial stalls which represent the spatial underutilization (due to imperfect spatial loop unrolling), the added cycles due to temporal stalls (due to imperfect memory bandwidth), and the added on-loading and off-loading cycles (due to the very first.last iteration on/off-loading of inputs/outputs).
+<img src="./assets/breakdown.png" width="800">
+
+- `Conv1_complete.json` contains all input and output information of the cost model evaluation. 
+
+- `overall_simple.json` aggregates the energy and latency of all layers (only one here).
+
+- `mem_hierarchy.png` shows the constructed hierarchy of memories and for each level which operands they store and the amount of times it's replicated (more info on this in `lab3`).
+<img src="./assets/mem_hierarchy.png" width="800"> 
+
+- `loop_ordering.txt` shows for all evaluated layers the returned mapping. This includes both the temporal aspect, where different loops are assigned at the memory levels (which can be different for different operands due to ZigZag's uneven mapping representation). The spatial aspect shows the spatially unrolled loops.
+```
+Loop ordering for Conv1
+============================================================================================
+Temporal Loops                     O                  W                  I                  
+============================================================================================
+for K in [0, 2):                   dram               sram_16KB_I2       dram               
+--------------------------------------------------------------------------------------------
+  for FY in [0, 7):                dram               sram_16KB_I2       dram               
+--------------------------------------------------------------------------------------------
+    for FX in [0, 7):              dram               sram_16KB_I2       dram               
+--------------------------------------------------------------------------------------------
+      for OY in [0, 112):          dram               sram_16KB_I2       sram_64KB_I1_O     
+--------------------------------------------------------------------------------------------
+        for OX in [0, 112):        sram_64KB_I1_O     sram_16KB_I2       sram_64KB_I1_O     
+--------------------------------------------------------------------------------------------
+============================================================================================
+Spatial Loops                                                                               
+============================================================================================
+          parfor K in [0, 32):                                                              
+--------------------------------------------------------------------------------------------
+          parfor C in [0, 3):                                                               
+--------------------------------------------------------------------------------------------
+
+```
+
 ## Questions & Answers
 
 - Take a look inside the ZigZag API call in `zigzag/api.py`. Do you understand the meaning of all the defined stages and all arguments passed to these stages?
