@@ -14,17 +14,34 @@ There are three main inputs defined in the `inputs/` folder:
 3. **Mapping**: The mapping specifies for the `Conv1` layer both the spatial mapping and the temporal loop ordering. The spatial mapping links to the dimensions of the operational array defined in the hardware. The temporal loop ordering specifies the orders of the loops from inner to outer. Additionally, the mapping also specifies the operand links which link together the `memory operands` and the `layer operands`.
 
 ## Running the Experiment
-Run the main file:
-    ```
-    python lab1/main.py
-    ```
+
+The main file located at `lab1/main.py` sets the paths to the three main inputs, parses out some more names and an `experiment_id` to use for the saving of the outputs and calls the ZigZag API as follows:
+```python
+energy, latency, results = get_hardware_performance_zigzag(
+    accelerator=accelerator,
+    workload=workload,
+    mapping=mapping,
+    temporal_mapping_search_engine=temporal_mapping_search_engine,
+    opt=optimization_criterion,
+    dump_folder=dump_folder,
+    pickle_filename=pickle_filename,
+)
+```
+Besides the three main inputs, there are several other parameters required for this API call. `temporal_mapping_search_engine` chooses the engine to use under the hood to optimize the temporal mapping. This is typically set to `loma` but can also be `salsa`. The `opt` parameter specifies what to optimize spatial/temporal mappings for. This can be `latency`, `energy` or `EDP`. The last two parameters `dump_folder` and `pickle_filename` are required for output saving.
+
+Now that you understand the paremeters of the API call, launch it through the main file:
+```python
+# Call this from the base folder
+python lab1/main.py
+```
+
     
 The mapping is fixed in both the spatial and temporal domains, resulting in a single cost model evaluation (CME).
 
 ## Outputs
 The results of the experiment will be saved in the `outputs/` folder.
 
-## Homework
+## Questions & Answers
 
 - Take a look inside the ZigZag API call in `zigzag/api.py`. Do you understand the meaning of all the defined stages and all arguments passed to these stages?
     > <details>
