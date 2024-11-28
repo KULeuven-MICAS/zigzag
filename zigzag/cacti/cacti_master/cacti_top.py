@@ -110,8 +110,8 @@ with open(f"{self_gen_path}/cache.cfg.out", "r", encoding="UTF-8") as fp:
             for jj, each_value in enumerate(each_line.split(",")):
                 try:
                     result[attribute_list[jj]].append(float(each_value))  # type: ignore
-                except IndexError:
-                    pass
+                except ValueError:
+                    result[attribute_list[jj]].append(each_value)
 
 
 for i in range(len(result[" Capacity (bytes)"])):
