@@ -40,6 +40,9 @@ class MemoryInstance:
     auto_cost_extraction: bool
     double_buffering_support: bool
     shared_memory_group_id: int
+    is_imc: bool
+    cacti_size_scaling: float
+    cacti_bw_scaling: float
 
     def __init__(
         self,
@@ -60,6 +63,9 @@ class MemoryInstance:
         auto_cost_extraction: bool = False,
         double_buffering_support: bool = False,
         shared_memory_group_id: int = -1,
+        is_imc: bool = False,
+        cacti_size_scaling: float = 1,
+        cacti_bw_scaling: float = 1
     ):
         """
         Collect all the basic information of a physical memory module.
@@ -81,27 +87,47 @@ class MemoryInstance:
         @param double_buffering_support (bool): Support for double buffering on this memory instance.
         @param shared_memory_group_id: used to indicate whether two MemoryInstance instances represent the same, shared
             memory between two cores (feature used in Stream).
+        @param is_imc: whether the memory instance is the in-memory-computing memory.
+        @param cacti_size_scaling: the size scaling factor for the memory when auto_cost_extraction is enabled.
+        @param cacti_bw_scaling: the bandwidth scaling factor for the memory when auto_cost_extraction is enabled.
         """
         if auto_cost_extraction:
             cacti_parser = CactiParser()
-            r_cost, w_cost, area = cacti_parser.get_item(
-                mem_name=name,
-                mem_type=mem_type,
-                size=size,
-                r_bw=r_bw,
-                r_port=r_port,
-                w_port=w_port,
-                rw_port=rw_port,
-                bank=1,
-            )
+            if is_imc:
+                r_cost, w_cost, area = cacti_parser.get_item(
+                    mem_name=name,
+                    mem_type=mem_type,
+                    size=size * cacti_size_scaling,
+                    r_bw=r_bw * cacti_bw_scaling,
+                    r_port=r_port,
+                    w_port=w_port,
+                    rw_port=rw_port,
+                    bank=1,
+                )
+            else:
+                r_cost, w_cost, area = cacti_parser.get_item(
+                    mem_name=name,
+                    mem_type=mem_type,
+                    size=size,
+                    r_bw=r_bw,
+                    r_port=r_port,
+                    w_port=w_port,
+                    rw_port=rw_port,
+                    bank=1,
+                )
 
         self.name = name
         self.size = size
         self.r_bw = r_bw
         self.w_bw = w_bw
-        self.r_cost = r_cost
-        self.w_cost = w_cost
-        self.area = area
+        if is_imc and (cacti_size_scaling != 1 or cacti_bw_scaling != 1):
+            self.w_cost = w_cost / cacti_bw_scaling
+            self.r_cost = 0  # cost has been included in the imc operational array
+            self.area = 0  # cost has been included in the imc operational array
+        else:
+            self.r_cost = r_cost
+            self.w_cost = w_cost
+            self.area = area
         self.r_port_nb = r_port
         self.w_port_nb = w_port
         self.rw_port_nb = rw_port
