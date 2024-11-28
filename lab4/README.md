@@ -9,7 +9,9 @@ The goal of this lab is to perform the first run of the ZigZag-IMC, a ZigZag ext
 
 ## Inputs
 There is one main input defined in the current folder:
-1. **Hardware**: A sample accelerator is encoded in `imc_macro.yaml`. This accelerator features an Analog-based IMC (AIMC) array composed of 32×32 INT8 IMC units (`cells`). Each column has a 3-bit ADC, and the array processes activations in a bit-serial dataflow, handling 2 bits per cycle.
+1. **Hardware**: A sample accelerator is encoded in `imc_macro.yaml`. This accelerator features an Analog-based IMC (AIMC) array composed of 32×32 INT8 IMC units (`cells`). Each column has a 3-bit ADC, and the array processes activations in a bit-serial dataflow, handling 2 bits per cycle. The corresponding hardware is shown in the image below.
+
+<img src="./lab4/lab4.png" title="Analog In-Memory Computing hardware template">
 
 ## Running the Experiment
 
