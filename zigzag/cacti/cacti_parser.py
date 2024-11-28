@@ -72,7 +72,7 @@ class CactiParser:
         w_port: int,
         rw_port: int,
         bank: int,
-        technology: float = 0.022,
+        technology: float = 0.028,
         mem_pool_path: str = MEM_POOL_PATH,
         cacti_top_path: str = CACTI_TOP_PATH,
     ) -> None:
@@ -104,6 +104,8 @@ class CactiParser:
                 "--technology",
                 str(technology),
             ],
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.STDOUT
         )
 
         if p != 0:
@@ -120,7 +122,7 @@ class CactiParser:
         w_port: int,
         rw_port: int,
         bank: int,
-        technology: float = 0.022,
+        technology: float = 0.028,
         mem_pool_path: str = MEM_POOL_PATH,
         cacti_top_path: str = CACTI_TOP_PATH,
     ) -> tuple[float, float, float]:
@@ -132,7 +134,7 @@ class CactiParser:
         if not os.path.exists(cacti_top_path):
             raise FileNotFoundError(f"Cacti top file doesn't exist: {cacti_top_path}.")
 
-        logger.info(
+        logger.debug(
             "Extracting memory costs with CACTI for %s with size = %i and r_bw = %i.",
             mem_name,
             size,
@@ -207,7 +209,7 @@ class CactiParser:
                     and (tech == technology)
                     and (bank_count == bank)
                 ):
-                    logger.info(
+                    logger.debug(
                         "Extracted memory costs with CACTI for %s: r_cost = %f, w_cost = %f, area = %f.",
                         mem_name,
                         read_cost,
