@@ -56,7 +56,7 @@ Additionally, the following components appear only in the energy cost breakdown:
     > <details>
     > <summary>Answer</summary>
     >
-    > The ADCs are the primary bottleneck, consuming 53% of the clock cycle. The Adders_pv circuit is the secondary bottleneck, consuming 28% of the clock cycle.
+    > The ADCs are the primary bottleneck, consuming 53% of the clock cycle. The `adders_pv` is the secondary bottleneck, consuming 28% of the clock cycle.
     >
     > </details>
 
