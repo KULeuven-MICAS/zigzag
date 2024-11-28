@@ -411,7 +411,7 @@ class CactiConfig:
         user_input = ['single', [['mem_type', 'technology', ...], ['"ram"', 0.028, ...]]
         user_input = ['sweep', ['IO_bus_width'/'']]
         """
-        print(f"{self_gen_cfg_path=}")
+        print(f"self_gen_cfg_path={self_gen_cfg_path}")
         user_config: list[Any] = []
         if user_input[0] == "default":
             for value in self.config_options.values():
