@@ -84,15 +84,23 @@ Additionally, the following components appear only in the energy cost breakdown:
     > <details>
     > <summary>Answer</summary>
     >
-    > xxx
+    > Given 1024 cells per column, the required ADC resolution is log2(1024) = 10 bits. When simulated with 10-bit ADCs, all performance metrics (TOP/s, TOP/s/W, and TOP/s/mm²) decrease significantly due to ADCs becoming the dominant cost factor in area, delay, and energy consumption.
     >
     > </details>
 
-- How do you configure an IMC array containing 16 macros, each with dimensions [D1, D2] = [1024, 1024]? How does the peak performance change when using this 16-bank IMC array?
+- How do you configure an IMC array containing 16 macros, each with dimensions [D1, D2] = [1024, 1024] (ADC resolution: 3 bits)? How does the peak performance change when using this 16-bank IMC array?
     > <details>
     > <summary>Answer</summary>
     >
-    > xxx
+    > To configure a 16-macro IMC array, modify `imc_macro.yaml` by updating the following rows:
+    >
+    > `adc_resolution: 3`
+    >
+    > `dimensions: [D1, D2, D3]`
+    >
+    > `sizes: [1024, 1024, 16]`
+    >
+    > Compared to the single-macro 1024×1024 IMC, the 16-macro IMC achieves 16-fold higher TOP/s, while maintaining the same TOP/s/W and TOP/s/mm².
     >
     > </details>
 
@@ -100,7 +108,23 @@ Additionally, the following components appear only in the energy cost breakdown:
     > <details>
     > <summary>Answer</summary>
     >
-    > xxx
+    > To configure a 16-macro DIMC array, modify `imc_macro.yaml` by updating the following rows:
+    >
+    > `imc_type: digital`
+    >
+    > `bit_serial_precision: 1`
+    >
+    > `#  adc_resolution: 3`
+    >
+    > Note you need to comment out the `adc_resolution` row, as DIMC does not use ADCs.
+    >
+    > Comparing the 16-macro DIMC to AIMC:
+    >
+    > - **Component costs**: the cost of all analog components (`dacs`, `adcs`, `analog_bl_addition`) becomes zero for DIMC.
+    > - **TOP/s:** DIMC achieves higher throughput due to faster clock frequency.
+    > - **TOP/s/W:** DIMC shows lower efficiency due to digital addition logic overhead.
+    > - **TOP/s/mm²:** Both architectures show similar efficiency but with different bottlenecks. AIMC: Limited by ADCs. DIMC: Limited by the regular adder trees (`adders_regular`).
+    > 
     >
     > </details>
 
@@ -108,6 +132,16 @@ Additionally, the following components appear only in the energy cost breakdown:
     > <details>
     > <summary>Answer</summary>
     >
-    > xxx
+    > To configure a single-macro DIMC with [D1, D2] being [32, 32], modify `imc_macro.yaml` by updating the following rows:
+    >
+    > `dimensions: [D1, D2]`
+    >
+    > `sizes: [32, 32]`
+    >
+    > Comparing the single-macro DIMC to the 16-macro DIMC:
+    >
+    > - **TOP/s:** The 16-macro DIMC achieves 16-fold higher throughput.
+    > - **TOP/s/W:** The 16-macro DIMC shows slightly lower efficiency due to increased adder tree depth.
+    > - **TOP/s/mm²:** Same reason as TOP/s/W. The 16-macro DIMC shows slightly lower efficiency due to increased adder tree depth.
     >
     > </details>
