@@ -48,6 +48,7 @@ class AcceleratorFactory:
         NOTE the memory instances must be defined from lowest to highest.
         """
         name = self.data["name"]
+        is_imc = self.data["operational_array"]["is_imc"]
         operational_array = self.create_operational_array()
 
         mem_graph = MemoryHierarchy(operational_array)
@@ -55,8 +56,15 @@ class AcceleratorFactory:
         shared_mem_group_id = core_id if shared_mem_group_id is None else shared_mem_group_id
 
         for mem_name in self.data["memories"]:
+            if len(mem_graph) == 0 and is_imc:
+                cacti_bw_scaling = list(operational_array.dimension_sizes.values())[0]
+                cacti_size_scaling = list(operational_array.dimension_sizes.values())[1] * cacti_bw_scaling
+            else:
+                cacti_bw_scaling = 1
+                cacti_size_scaling = 1
             memory_factory = MemoryFactory(
-                mem_name, self.data["memories"][mem_name], shared_mem_group_id=shared_mem_group_id
+                mem_name, self.data["memories"][mem_name], shared_mem_group_id=shared_mem_group_id,
+                is_imc=is_imc, cacti_size_scaling=cacti_size_scaling, cacti_bw_scaling=cacti_bw_scaling
             )
             memory_factory.add_memory_to_graph(mem_graph)
 
@@ -146,10 +154,14 @@ class AcceleratorFactory:
 class MemoryFactory:
     """! Create MemoryInstances and adds them to memory hierarchy."""
 
-    def __init__(self, name: str, mem_data: dict[str, Any], shared_mem_group_id: int = -1):
+    def __init__(self, name: str, mem_data: dict[str, Any], shared_mem_group_id: int = -1, is_imc: bool = False,
+                 cacti_size_scaling: float = 1, cacti_bw_scaling: float = 1):
         self.data = mem_data
         self.name = name
         self.shared_mem_group_id = shared_mem_group_id
+        self.is_imc = is_imc
+        self.cacti_size_scaling = cacti_size_scaling
+        self.cacti_bw_scaling = cacti_bw_scaling
 
     def create_memory_instance(self) -> MemoryInstance:
         return MemoryInstance(
@@ -169,6 +181,9 @@ class MemoryFactory:
             min_w_granularity=self.data["min_w_granularity"],
             auto_cost_extraction=self.data["auto_cost_extraction"],
             shared_memory_group_id=self.shared_mem_group_id,
+            is_imc=self.is_imc,
+            cacti_size_scaling=self.cacti_size_scaling,
+            cacti_bw_scaling=self.cacti_bw_scaling
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:
