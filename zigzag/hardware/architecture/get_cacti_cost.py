@@ -604,15 +604,18 @@ def get_w_cost_per_weight_from_cacti(
 
 
 if __name__ == "__main__":
-    mem_size_list = [32*32*8//8]
-    bw = 32*8
+    mem_size_list = [32 * 32 * 8 // 8]
+    bw = 32 * 8
     for mem_size in mem_size_list:
-        access_time, area, r_cost, w_cost = get_cacti_cost(cacti_path=f"../../cacti/cacti_master", tech_node=0.028, mem_type="sram",
-                       mem_size_in_byte=mem_size, bw=bw)
+        access_time, area, r_cost, w_cost = get_cacti_cost(
+            cacti_path="../../cacti/cacti_master", tech_node=0.028, mem_type="sram", mem_size_in_byte=mem_size, bw=bw
+        )
         r_cost_per_bit = round(r_cost / bw, 2)
         if mem_size < 1024:
             print(f"mem size: {mem_size}[B], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]")
-        elif mem_size < 1024*1024:
+        elif mem_size < 1024 * 1024:
             print(f"mem size: {mem_size//1024}[KB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]")
         else:
-            print(f"mem size: {mem_size // 1024 // 1024}[MB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]")
+            print(
+            f"mem size: {mem_size // 1024 // 1024}[MB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]"
+            )
