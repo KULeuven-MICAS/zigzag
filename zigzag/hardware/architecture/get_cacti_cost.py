@@ -617,5 +617,5 @@ if __name__ == "__main__":
             print(f"mem size: {mem_size//1024}[KB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]")
         else:
             print(
-            f"mem size: {mem_size // 1024 // 1024}[MB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]"
+                f"mem size: {mem_size // 1024 // 1024}[MB], r_cost_per_bit: {r_cost_per_bit}[pJ/bit], area: {area} [mm2]"
             )

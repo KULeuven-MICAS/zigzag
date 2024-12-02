@@ -68,7 +68,7 @@ class AcceleratorFactory:
                 shared_mem_group_id=shared_mem_group_id,
                 is_imc=is_imc,
                 cacti_size_scaling=cacti_size_scaling,
-                cacti_bw_scaling=cacti_bw_scaling
+                cacti_bw_scaling=cacti_bw_scaling,
             )
             memory_factory.add_memory_to_graph(mem_graph)
 
@@ -159,13 +159,13 @@ class MemoryFactory:
     """! Create MemoryInstances and adds them to memory hierarchy."""
 
     def __init__(
-            self,
-            name: str,
-            mem_data: dict[str, Any],
-            shared_mem_group_id: int = -1,
-            is_imc: bool = False,
-            cacti_size_scaling: float = 1,
-            cacti_bw_scaling: float = 1,
+        self,
+        name: str,
+        mem_data: dict[str, Any],
+        shared_mem_group_id: int = -1,
+        is_imc: bool = False,
+        cacti_size_scaling: float = 1,
+        cacti_bw_scaling: float = 1,
     ):
         self.data = mem_data
         self.name = name
