@@ -105,7 +105,7 @@ class CactiParser:
                 str(technology),
             ],
             stdout=subprocess.DEVNULL,
-            stderr=subprocess.STDOUT
+            stderr=subprocess.STDOUT,
         )
 
         if p != 0:

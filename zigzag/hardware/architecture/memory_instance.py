@@ -65,7 +65,7 @@ class MemoryInstance:
         shared_memory_group_id: int = -1,
         is_imc: bool = False,
         cacti_size_scaling: float = 1,
-        cacti_bw_scaling: float = 1
+        cacti_bw_scaling: float = 1,
     ):
         """
         Collect all the basic information of a physical memory module.
@@ -104,6 +104,9 @@ class MemoryInstance:
                     rw_port=rw_port,
                     bank=1,
                 )
+                self.w_cost = w_cost / cacti_bw_scaling
+                self.r_cost = 0  # cost has been included in the imc operational array
+                self.area = 0  # cost has been included in the imc operational array
             else:
                 r_cost, w_cost, area = cacti_parser.get_item(
                     mem_name=name,
@@ -120,14 +123,9 @@ class MemoryInstance:
         self.size = size
         self.r_bw = r_bw
         self.w_bw = w_bw
-        if is_imc and (cacti_size_scaling != 1 or cacti_bw_scaling != 1):
-            self.w_cost = w_cost / cacti_bw_scaling
-            self.r_cost = 0  # cost has been included in the imc operational array
-            self.area = 0  # cost has been included in the imc operational array
-        else:
-            self.r_cost = r_cost
-            self.w_cost = w_cost
-            self.area = area
+        self.r_cost = r_cost
+        self.w_cost = w_cost
+        self.area = area
         self.r_port_nb = r_port
         self.w_port_nb = w_port
         self.rw_port_nb = rw_port

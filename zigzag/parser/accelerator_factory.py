@@ -63,8 +63,12 @@ class AcceleratorFactory:
                 cacti_bw_scaling = 1
                 cacti_size_scaling = 1
             memory_factory = MemoryFactory(
-                mem_name, self.data["memories"][mem_name], shared_mem_group_id=shared_mem_group_id,
-                is_imc=is_imc, cacti_size_scaling=cacti_size_scaling, cacti_bw_scaling=cacti_bw_scaling
+                mem_name,
+                self.data["memories"][mem_name],
+                shared_mem_group_id=shared_mem_group_id,
+                is_imc=is_imc,
+                cacti_size_scaling=cacti_size_scaling,
+                cacti_bw_scaling=cacti_bw_scaling
             )
             memory_factory.add_memory_to_graph(mem_graph)
 
@@ -154,8 +158,15 @@ class AcceleratorFactory:
 class MemoryFactory:
     """! Create MemoryInstances and adds them to memory hierarchy."""
 
-    def __init__(self, name: str, mem_data: dict[str, Any], shared_mem_group_id: int = -1, is_imc: bool = False,
-                 cacti_size_scaling: float = 1, cacti_bw_scaling: float = 1):
+    def __init__(
+            self,
+            name: str,
+            mem_data: dict[str, Any],
+            shared_mem_group_id: int = -1,
+            is_imc: bool = False,
+            cacti_size_scaling: float = 1,
+            cacti_bw_scaling: float = 1,
+    ):
         self.data = mem_data
         self.name = name
         self.shared_mem_group_id = shared_mem_group_id
@@ -183,7 +194,7 @@ class MemoryFactory:
             shared_memory_group_id=self.shared_mem_group_id,
             is_imc=self.is_imc,
             cacti_size_scaling=self.cacti_size_scaling,
-            cacti_bw_scaling=self.cacti_bw_scaling
+            cacti_bw_scaling=self.cacti_bw_scaling,
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:
