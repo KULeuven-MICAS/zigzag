@@ -1,12 +1,11 @@
-===================
-Installing ZigZag
-===================
+============
+Installation
+============
 
 This guide provides step-by-step instructions for setting up ZigZag. If you're already familiar with Python development environments and IDEs, you can skip to the **Installing ZigZag** section below.
 
-=======================
-Setting Up the Basics
-=======================
+Environment
+===========
 
 To use ZigZag effectively, we recommend setting up a Python virtual environment and optionally using an IDE like VS Code. Of course, you may use any IDE of your choice.
 
@@ -19,41 +18,43 @@ Linux/Mac
 ~~~~~~~~~
 1. **Install Python 3.11 or newer**:
    Ensure you have Python installed. You can check with:
+
    .. code-block:: sh
 
        python3 --version
 
-   Install Python if necessary via your package manager or from the [official website](https://www.python.org/downloads/).
+   Install Python if necessary via your package manager or from the `official website <https://www.python.org/downloads/>`_.
 
 2. **Set up a virtual environment**:
+
    .. code-block:: sh
 
        python3 -m venv zigzag_env
        source zigzag_env/bin/activate
 
 3. **Install VS Code (Optional)**:
-   Download and install VS Code from [here](https://code.visualstudio.com/). Add the Python extension for an enhanced development experience.
+   Download and install VS Code from `here <https://code.visualstudio.com/>`_. Add the Python extension for an enhanced development experience.
 
 Windows
 ~~~~~~~
 1. **Install Python 3.11 or newer**:
-   Download Python from the [official website](https://www.python.org/downloads/). Ensure you check the box to "Add Python to PATH" during installation.
+   Download Python from the `official website <https://www.python.org/downloads/>`_. Ensure you check the box to "Add Python to PATH" during installation.
 
 2. **Set up a virtual environment**:
    Open Command Prompt or PowerShell and run:
+   
    .. code-block:: sh
 
        python -m venv zigzag_env
        zigzag_env\Scripts\activate
 
 3. **Install VS Code (Optional)**:
-   Download and install VS Code from [here](https://code.visualstudio.com/). Add the Python extension for an enhanced development experience.
+   Download and install VS Code from `here <https://code.visualstudio.com/>`_. Add the Python extension for an enhanced development experience.
 
 **Note**: If you already have your development environment set up, you can skip to the **Installing ZigZag** section below.
 
-==========================
 Installing ZigZag
-==========================
+=================
 
 Installing as a Package
 -----------------------
