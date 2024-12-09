@@ -1,17 +1,31 @@
-# Lab 4: First Run of the ZigZag-IMC Extension
+# Lab 4: First Run of the In-Memory Computing: Macro-Level Performance Evaluation
 
 ## Objective
-The goal of this lab is to perform the first run of the ZigZag-IMC, a ZigZag extension for In-Memory-Computing (IMC). You will derive the peak performance and cost breakdown of a defined Analog IMC array.
+The goal of this lab is to perform the first run of the ZigZag-IMC, a ZigZag extension for SRAM-based In-Memory-Computing (IMC).
+Since ZigZag-IMC has been merged within ZigZag, we will refer to them simply as ZigZag from here on.
+
+In existing IMC literature works, it is common that every work will report its peak macro-level performance.
+However, it is hard to grasp the design bottleneck without detailed analysis on the cost breakdown.
+In this lab, you will play with an IMC macro and understand how the peak performance and bottleneck vary under different hardware configurations.
+To simplify the lab, sparsity is not considered.
+
+## Background
+
+IMC emerges as a promising alternative for Von-Neumann architecture when facing data-intensive applications (especially for AI).
+By integrating MAC logics within the memory, IMC can conduct Matrix Multiplication (MatMul) inside the memory without energy-expensive data read/write operations.
+A general IMC template is shown in the image below, which is used in this lab.
+If you are looking for more IMC background and modeling details, please have a check on the materials (videos, validation scripts, papers) we provide at https://github.com/KULeuven-MICAS/zigzag-imc.
+
+<img src="./lab4.png" title="Analog In-Memory Computing hardware template">
 
 ## Setup
 1. Ensure you have installed the requirements in `requirements.txt`.
 2. Make sure you are in the base directory, as `lab4/main.py` automatically inserts this into PATH which is needed for the ZigZag imports.
 
 ## Inputs
-There is one main input defined in the current folder:
-1. **Hardware**: A sample accelerator is encoded in `imc_macro.yaml`. This accelerator features an Analog-based IMC (AIMC) array composed of 32×32 INT8 IMC units (`cells`). Each column has a 3-bit ADC, and the array processes activations in a bit-serial dataflow, handling 2 bits per cycle. The corresponding hardware is shown in the image below.
+There is one main input:
+1. **Hardware**: A sample accelerator is encoded in `imc_macro.yaml`. This accelerator features an Analog-based IMC (AIMC) array composed of 32×32 INT8 IMC units (`cells`). Each column has a 3-bit ADC, and the array processes activations in a bit-serial dataflow, handling 2 bits per cycle.
 
-<img src="./lab4.png" title="Analog In-Memory Computing hardware template">
 
 ## Running the Experiment
 
@@ -36,13 +50,13 @@ The cost breakdown includes the following components:
 - `adcs`: ADCs ((Analog-to-Digital Converters) for converting analog results to digital signals.
 - `mults`: multipliers required by the MAC (Multiply-Accumulate) operations.
 - `adders_regular`: regular adder trees required by the MAC operations (inputs with the same place value).
-- `adders_pv`: special adder trees for summing inputs across different place values.
+- `adders_pv`: adder trees for summing inputs across different place values.
 - `accumulators`: accumulation logics and accumulation registers for storing partial-sums.
 
 Additionally, the following components appear only in the energy cost breakdown:
 
-- `local_bl_precharging`: Energy consumed by precharging local bitlines within each cell group. Automatically calculated when multiple values share a cell group.
-- `analog_bl_addition`: Energy consumed by analog addition on bitlines.
+- `local_bl_precharging`: energy consumed by precharging local bitlines within each cell group. Automatically calculated when multiple values share a cell group.
+- `analog_bl_addition`: energy consumed by analog addition on bitlines.
 
 ## Questions & Answers
 

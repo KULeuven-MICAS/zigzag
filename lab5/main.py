@@ -53,7 +53,7 @@ print_mapping(cmes[0])
 
 # Calculate system-level performance metrics
 total_mac_count = cmes[0].layer.total_mac_count
-delay_in_ns = energy * cmes[0].tclk  # unit: ns
+delay_in_ns = latency * cmes[0].tclk  # unit: ns
 tops_system = total_mac_count * 2 / delay_in_ns / 1000
 topsw_system = total_mac_count * 2 / energy
 topsmm2_system = tops_system / cmes[0].area_total
@@ -71,8 +71,8 @@ data loading: {cmes[0].data_onloading_cycle}, data offloading: {cmes[0].data_off
 # Print out information in the terminal
 macro_performance_info = f"TOP/s: {round(tops_peak, 4)}, TOP/s/W: {round(topsw_peak, 4)}, \
 TOP/s/mm^2: {round(topsmm2_peak, 4)}"
-system_performance_info = f"TOP/s: {round(tops_system, 4)}, TOP/s/W: {round(topsw_system, 4)}, \
-TOP/s/mm^2: {round(topsmm2_system, 4)}"
+system_performance_info = f"TOP/s: {round(tops_system, 7)}, TOP/s/W: {round(topsw_system, 7)}, \
+TOP/s/mm^2: {round(topsmm2_system, 7)}"
 
 logger.info("spatial mapping: %s", cmes[0].layer.spatial_mapping)
 logger.info("energy (pJ): %s [%s]", round(energy, 2), energy_breakdown_info)

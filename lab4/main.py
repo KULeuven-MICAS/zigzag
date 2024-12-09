@@ -11,7 +11,7 @@ _logging_format = "%(asctime)s - %(funcName)s +%(lineno)s - %(levelname)s - %(me
 _logging.basicConfig(level=_logging_level, format=_logging_format)
 logger = _logging.getLogger(__name__)
 
-hardware = "lab4/imc_macro.yaml"
+hardware = "lab4/inputs/hardware/imc_macro.yaml"
 
 accelerator = AcceleratorParserStage.parse_accelerator(hardware)
 core = accelerator
