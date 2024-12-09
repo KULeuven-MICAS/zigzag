@@ -15,7 +15,7 @@ As a second goal the user will automate the spatial mapping themselves (see Ques
 There are three main inputs defined in the `inputs/` folder:
 1. **Workload**: _[Same as lab1]_ The first layer of ResNet18 in ONNX format. The layer name is `Conv1`. You can use [Netron](https://netron.app) to visualize the model.
 2. **Hardware**: _[Same as lab1]_ A sample accelerator is encoded in `accelerator1.yaml`. This accelerator includes 32x32 operational units with a hierarchy of memories attached which store different `memory operands` `I1`, `I2`, `O`.
-3. **Mapping**: The mapping specifies for the `Conv1` layer only the spatial mapping. The `TemporalMappingGeneratorStage` automatically detects there is no user-defined temoral loop ordering and generates multiple temporal mappings to be evaluated by the cost model.
+3. **Mapping**: The mapping specifies for the `Conv1` layer only the spatial mapping. The `TemporalMappingGeneratorStage` automatically detects if there is any user-defined temporal loop ordering and generates multiple temporal mappings to be evaluated by the cost model.
 
 ## Running the Experiment
 Run the main file:
