@@ -2,7 +2,11 @@
 Installation
 ============
 
-This guide provides step-by-step instructions for setting up ZigZag. If you're already familiar with Python development environments and IDEs, you can skip to the **Installing ZigZag** section below.
+This guide provides step-by-step instructions for setting up ZigZag.
+
+.. note::
+
+   If you're already familiar with Python development environments and IDEs, skip to the **Installing ZigZag** section below.
 
 Environment
 ===========
@@ -50,8 +54,6 @@ Windows
 
 3. **Install VS Code (Optional)**:
    Download and install VS Code from `here <https://code.visualstudio.com/>`_. Add the Python extension for an enhanced development experience.
-
-**Note**: If you already have your development environment set up, you can skip to the **Installing ZigZag** section below.
 
 Installing ZigZag
 =================
