@@ -1,4 +1,4 @@
-# Lab 4: First Run of the In-Memory Computing: Macro-Level Performance Evaluation
+# Lab 4: First Run of the ZigZag-IMC Extension: Macro-Level Performance Evaluation for In-Memory Computing
 
 ## Objective
 The goal of this lab is to perform the first run of the ZigZag-IMC, a ZigZag extension for SRAM-based In-Memory-Computing (IMC).
