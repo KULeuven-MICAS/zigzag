@@ -8,28 +8,28 @@ ZigZag bridges the gap between algorithmic DL decisions and their acceleration c
 
 ## 📚 Labs Overview
 
-### Lab 1: First Run of the ZigZag Framework
+### [Lab 1: First Run of the ZigZag Framework](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab1)
 - **Objective**: Perform the first run of the ZigZag framework.
 - **Key Learnings**:
   - Setting up the environment and running the ZigZag framework.
   - Understanding the inputs: workload, hardware, and mapping.
   - Analyzing the outputs: energy and latency breakdown, memory hierarchy, and loop ordering.
 
-### Lab 2: Automating the Mapping
+### [Lab 2: Automating the Mapping](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab2)
 - **Objective**: Automate the generation of multiple temporal mappings and return the best one.
 - **Key Learnings**:
   - Automating temporal mapping generation using the `TemporalMappingGeneratorStage`.
   - Understanding the impact of different optimization criteria.
   - Analyzing the outputs: energy and latency breakdown, memory hierarchy, and loop ordering.
 
-### Lab 3: Hardware Architecture
+### [Lab 3: Hardware Architecture](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab3)
 - **Objective**: Understand the hardware architecture components of ZigZag.
 - **Key Learnings**:
   - Understanding the operational array and memory hierarchy.
   - Exploring the relationship between memory interconnection and spatial mapping.
   - Running experiments with different accelerator architectures and analyzing the results.
 
-### Lab 4: First Run of the ZigZag-IMC Extension
+### [Lab 4: First Run of the ZigZag-IMC Extension](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab4)
 - **Objective**: Perform the first run of the ZigZag-IMC extension.
 - **Key Learnings**:
   - Setting up and running the ZigZag-IMC extension.
