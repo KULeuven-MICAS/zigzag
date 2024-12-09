@@ -2,48 +2,104 @@
 Installing ZigZag
 ===================
 
-Installing as a package
+This guide provides step-by-step instructions for setting up ZigZag. If you're already familiar with Python development environments and IDEs, you can skip to the **Installing ZigZag** section below.
+
+=======================
+Setting Up the Basics
 =======================
 
-If you're interested in using the ZigZag framework as an end user, and not interested in making any modifications to its internals, you can make ZigZag available by directly installing it using pip in your ``venv`` or ``conda`` environment:
+To use ZigZag effectively, we recommend setting up a Python virtual environment and optionally using an IDE like VS Code. Of course, you may use any IDE of your choice.
+
+Basic Setup
+-----------
+
+Follow these steps to prepare your system for Python development:
+
+Linux/Mac
+~~~~~~~~~
+1. **Install Python 3.11 or newer**:
+   Ensure you have Python installed. You can check with:
+   .. code-block:: sh
+
+       python3 --version
+
+   Install Python if necessary via your package manager or from the [official website](https://www.python.org/downloads/).
+
+2. **Set up a virtual environment**:
+   .. code-block:: sh
+
+       python3 -m venv zigzag_env
+       source zigzag_env/bin/activate
+
+3. **Install VS Code (Optional)**:
+   Download and install VS Code from [here](https://code.visualstudio.com/). Add the Python extension for an enhanced development experience.
+
+Windows
+~~~~~~~
+1. **Install Python 3.11 or newer**:
+   Download Python from the [official website](https://www.python.org/downloads/). Ensure you check the box to "Add Python to PATH" during installation.
+
+2. **Set up a virtual environment**:
+   Open Command Prompt or PowerShell and run:
+   .. code-block:: sh
+
+       python -m venv zigzag_env
+       zigzag_env\Scripts\activate
+
+3. **Install VS Code (Optional)**:
+   Download and install VS Code from [here](https://code.visualstudio.com/). Add the Python extension for an enhanced development experience.
+
+**Note**: If you already have your development environment set up, you can skip to the **Installing ZigZag** section below.
+
+==========================
+Installing ZigZag
+==========================
+
+Installing as a Package
+-----------------------
+
+If you're an end user and don't need to modify ZigZag's internals, you can install it directly via pip:
 
 .. code-block:: sh
 
     pip install zigzag-dse
 
-After installation, you can take a look at the :doc:`api` documentation on how to use the api.
+After installation, you can explore the :doc:`api` documentation to understand how to use the framework.
 
-Manual clone
-============
-
-If you want to add custom functionality to the framework, you can clone the repository manually:
-
-Prerequisites
--------------
-
-* ``git``: for cloning the repository
-* ``pip``: for installing the required packages
-* ``python>=3.11``: for running the framework
-
-Installation
+Manual Clone
 ------------
 
-Clone the repository
+For users interested in adding custom functionality or contributing to ZigZag, follow these steps:
 
-.. code-block:: sh
+Prerequisites
+~~~~~~~~~~~~~
+Ensure you have the following installed:
+- ``git``: For cloning the repository.
+- ``pip``: For installing the required packages.
+- ``python>=3.11``: For running the framework.
 
-    git clone git@github.com:KULeuven-MICAS/zigzag.git
+Installation Steps
+~~~~~~~~~~~~~~~~~~
 
-or 
+1. **Clone the repository**:
+   Use one of the following commands:
+   .. code-block:: sh
 
-.. code-block:: sh
+       git clone git@github.com:KULeuven-MICAS/zigzag.git
 
-    git clone https://github.com/KULeuven-MICAS/zigzag.git
+   Or:
+   .. code-block:: sh
 
-Install requirements through pip. Alternatively, anaconda spec file is also provided.
+       git clone https://github.com/KULeuven-MICAS/zigzag.git
 
-.. code-block:: sh
+2. **Install dependencies**:
+   Navigate to the cloned repository folder and install the required packages:
+   .. code-block:: sh
 
-    pip install -r requirements.txt
+       cd zigzag
+       pip install -r requirements.txt
 
-Once the dependencies are installed, ZigZag can be run through the main file with provided arguments. More details are provided in :doc:`getting-started`.
+   Alternatively, an Anaconda spec file is also provided if you prefer to use conda.
+
+3. **Run ZigZag**:
+   You can now execute ZigZag through the main file with the provided arguments. For more details, see the :doc:`getting-started` documentation.
