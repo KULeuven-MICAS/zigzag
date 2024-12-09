@@ -694,3 +694,33 @@
   size_byte: 33554432
   technology: '0.022'
 
+1024_Byte_256_BW_1_1_0_BANK_COUNT_1_TECH_0.028:
+  IO_bus_width: 256
+  area: 0.012752
+  bank_count: '1'
+  cost:
+    read_word: 0.00478175
+    write_word: 0.00558964
+  ex_rd_port: '1'
+  ex_wr_port: '1'
+  memory_type: sram
+  rd_wr_port: '0'
+  size_bit: 8192
+  size_byte: 1024
+  technology: '0.028'
+
+2048_Byte_512_BW_1_1_0_BANK_COUNT_1_TECH_0.028:
+  IO_bus_width: 512
+  area: 0.0416345
+  bank_count: '1'
+  cost:
+    read_word: 0.016863
+    write_word: 0.0177358
+  ex_rd_port: '1'
+  ex_wr_port: '1'
+  memory_type: sram
+  rd_wr_port: '0'
+  size_bit: 16384
+  size_byte: 2048
+  technology: '0.028'
+
