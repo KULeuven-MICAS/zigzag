@@ -1,3 +1,7 @@
+import os
+import sys
+
+sys.path.insert(0, os.getcwd())  # For importing zigzag
 from zigzag.api import get_hardware_performance_zigzag
 
 # Path to the workload onnx model
