@@ -1183,9 +1183,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
             if memory_operand not in [mem_op for mem_op, _, _ in port.served_op_lv_dir]:
                 continue
             if Constants.OUTPUT_MEM_OP in memory_level.operands:
-                inst_bw.wr_in_by_high += ceil(self.loading_bw_during_computation.get(port, {}).get(memory_operand, 0) * scaling)
+                inst_bw.wr_in_by_high += ceil(
+                    self.loading_bw_during_computation.get(port, {}).get(memory_operand, 0) * scaling
+                )
             else:
-                inst_bw.rd_out_to_low += ceil(self.loading_bw_during_computation.get(port, {}).get(memory_operand, 0) * scaling)
+                inst_bw.rd_out_to_low += ceil(
+                    self.loading_bw_during_computation.get(port, {}).get(memory_operand, 0) * scaling
+                )
         return inst_bw
 
     def get_total_inst_bandwidth(self, memory_level: MemoryLevel, scaling: float = 1) -> FourWayDataMoving[int]:
