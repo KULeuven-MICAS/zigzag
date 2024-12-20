@@ -1,5 +1,6 @@
 var NAVTREEINDEX5 =
 {
+"hardware_2architecture_2memory__hierarchy_8py.html":[3,0,0,2,0,5],
 "hierarchy.html":[2,2],
 "imc__array_8py.html":[3,0,0,2,0,3],
 "imc__unit_8py.html":[3,0,0,2,0,4],

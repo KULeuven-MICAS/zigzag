@@ -1,0 +1,4 @@
+<map id="get_inst_bandwidth" name="get_inst_bandwidth">
+<area shape="rect" id="node1" title="Given a memory level and a memory operand, compute the memory&#39;s instantaneous bandwidth required for ..." alt="" coords="240,5,389,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae51e371052f21e4bdcf0001829be09f7" title="Given a cost model evaluation and a memory level, compute the memory&#39;s total instantaneous bandwidth ..." alt="" coords="5,5,192,32"/>
+</map>

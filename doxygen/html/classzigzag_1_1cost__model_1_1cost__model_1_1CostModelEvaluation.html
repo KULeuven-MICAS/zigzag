@@ -175,9 +175,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae5d499d2d9dd603b7df072ba0e109519"><td class="memItemLeft" align="right" valign="top">None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519">calc_overall_latency</a> (self, float cycles_per_mac=1)</td></tr>
 <tr class="memdesc:ae5d499d2d9dd603b7df072ba0e109519"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the overall latency.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519">More...</a><br /></td></tr>
 <tr class="separator:ae5d499d2d9dd603b7df072ba0e109519"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5a6644ca935bcc16a939902343c7d0f8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5a6644ca935bcc16a939902343c7d0f8">get_total_inst_bandwidth</a> (self, MemoryLevel memory_level)</td></tr>
-<tr class="memdesc:a5a6644ca935bcc16a939902343c7d0f8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5a6644ca935bcc16a939902343c7d0f8">More...</a><br /></td></tr>
-<tr class="separator:a5a6644ca935bcc16a939902343c7d0f8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aadaa91ed1e68a2856615bbf7f3e36bd8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aadaa91ed1e68a2856615bbf7f3e36bd8">get_inst_bandwidth</a> (self, MemoryLevel memory_level, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> memory_operand, float scaling=1)</td></tr>
+<tr class="memdesc:aadaa91ed1e68a2856615bbf7f3e36bd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a memory level and a memory operand, compute the memory's instantaneous bandwidth required for the memory operand during computation.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aadaa91ed1e68a2856615bbf7f3e36bd8">More...</a><br /></td></tr>
+<tr class="separator:aadaa91ed1e68a2856615bbf7f3e36bd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae51e371052f21e4bdcf0001829be09f7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae51e371052f21e4bdcf0001829be09f7">get_total_inst_bandwidth</a> (self, MemoryLevel memory_level, float scaling=1)</td></tr>
+<tr class="memdesc:ae51e371052f21e4bdcf0001829be09f7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae51e371052f21e4bdcf0001829be09f7">More...</a><br /></td></tr>
+<tr class="separator:ae51e371052f21e4bdcf0001829be09f7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
 <tr class="separator:a23e8041ce1015febe4fdace3225714f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9a47563093dfc5ba12274b66e368920c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9a47563093dfc5ba12274b66e368920c">__repr__</a> (self)</td></tr>
@@ -200,9 +203,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a68aae9340e0d24e88f1f0450f9dce47e"><td class="memItemLeft" align="right" valign="top">list[float]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e">reduce_balanced</a> (list[float] c_list, list[float] m_list, float s)</td></tr>
-<tr class="memdesc:a68aae9340e0d24e88f1f0450f9dce47e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balance c_list towards minimums m_list with a total maximum reduction of s.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e">More...</a><br /></td></tr>
-<tr class="separator:a68aae9340e0d24e88f1f0450f9dce47e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8fcb680a83394e8e700c26c8f3f443ce"><td class="memItemLeft" align="right" valign="top">tuple[list[float], list[float]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce">reduce_balanced</a> (list[float] c_list, list[float] m_list, float s)</td></tr>
+<tr class="memdesc:a8fcb680a83394e8e700c26c8f3f443ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balance c_list towards minimums m_list with a total maximum reduction of s.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce">More...</a><br /></td></tr>
+<tr class="separator:a8fcb680a83394e8e700c26c8f3f443ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -512,7 +515,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="248,99,439,126"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="506,5,667,47"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="487,71,687,127"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="735,13,867,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="735,13,867,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -663,7 +666,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="399,101,589,127"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="657,5,818,47"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="637,71,837,127"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="885,13,1017,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="885,13,1017,39"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2dc7f125d2f4382423715f6c781343fe" title=" " alt="" coords="406,151,582,178"/>
 </map>
 </div>
@@ -716,7 +719,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="5,50,188,77"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="255,5,417,47"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="236,71,436,127"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="484,13,616,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="484,13,616,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -781,7 +784,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph">
 <area shape="rect" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="5,5,167,47"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="215,13,347,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="215,13,347,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1130,8 +1133,60 @@ Here is the caller graph for this function:</div>
 
 </div>
 </div>
-<a id="a5a6644ca935bcc16a939902343c7d0f8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5a6644ca935bcc16a939902343c7d0f8">&#9670;&nbsp;</a></span>get_total_inst_bandwidth()</h2>
+<a id="aadaa91ed1e68a2856615bbf7f3e36bd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadaa91ed1e68a2856615bbf7f3e36bd8">&#9670;&nbsp;</a></span>get_inst_bandwidth()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"> <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int] get_inst_bandwidth </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">MemoryLevel&#160;</td>
+          <td class="paramname"><em>memory_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td>
+          <td class="paramname"><em>memory_operand</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &#160;</td>
+          <td class="paramname"><em>scaling</em> = <code>1</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Given a memory level and a memory operand, compute the memory's instantaneous bandwidth required for the memory operand during computation. </p>
+<p>An additonal scaling factor can be applied to the returned bandwidth NOTE: This function is used in Stream </p>
+<div class="dynheader">
+Here is the caller graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_aadaa91ed1e68a2856615bbf7f3e36bd8_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_aadaa91ed1e68a2856615bbf7f3e36bd8_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_aadaa91ed1e68a2856615bbf7f3e36bd8_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_aadaa91ed1e68a2856615bbf7f3e36bd8_icgraph">
+<area shape="rect" title="Given a memory level and a memory operand, compute the memory&#39;s instantaneous bandwidth required for ..." alt="" coords="240,5,389,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae51e371052f21e4bdcf0001829be09f7" title="Given a cost model evaluation and a memory level, compute the memory&#39;s total instantaneous bandwidth ..." alt="" coords="5,5,192,32"/>
+</map>
+</div>
+
+</div>
+</div>
+<a id="ae51e371052f21e4bdcf0001829be09f7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae51e371052f21e4bdcf0001829be09f7">&#9670;&nbsp;</a></span>get_total_inst_bandwidth()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1146,7 +1201,13 @@ Here is the caller graph for this function:</div>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">MemoryLevel&#160;</td>
-          <td class="paramname"><em>memory_level</em>&#160;</td>
+          <td class="paramname"><em>memory_level</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float &#160;</td>
+          <td class="paramname"><em>scaling</em> = <code>1</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -1158,11 +1219,20 @@ Here is the caller graph for this function:</div>
 
 <p>Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth required throughout the execution of the layer that corresponds to this CME. </p>
 <p>Raises an assertion error if the given memory level is not included in this CME's memory hierarchy. NOTE: this function is used in Stream </p>
+<div class="dynheader">
+Here is the call graph for this function:</div>
+<div class="dyncontent">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_ae51e371052f21e4bdcf0001829be09f7_cgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_ae51e371052f21e4bdcf0001829be09f7_cgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_ae51e371052f21e4bdcf0001829be09f7_cgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_ae51e371052f21e4bdcf0001829be09f7_cgraph">
+<area shape="rect" title="Given a cost model evaluation and a memory level, compute the memory&#39;s total instantaneous bandwidth ..." alt="" coords="5,5,192,32"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aadaa91ed1e68a2856615bbf7f3e36bd8" title="Given a memory level and a memory operand, compute the memory&#39;s instantaneous bandwidth required for ..." alt="" coords="240,5,389,32"/>
+</map>
+</div>
 
 </div>
 </div>
-<a id="a68aae9340e0d24e88f1f0450f9dce47e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a68aae9340e0d24e88f1f0450f9dce47e">&#9670;&nbsp;</a></span>reduce_balanced()</h2>
+<a id="a8fcb680a83394e8e700c26c8f3f443ce"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fcb680a83394e8e700c26c8f3f443ce">&#9670;&nbsp;</a></span>reduce_balanced()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1171,7 +1241,7 @@ Here is the caller graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> list[float] reduce_balanced </td>
+          <td class="memname"> tuple[list[float], list[float]] reduce_balanced </td>
           <td>(</td>
           <td class="paramtype">list[float]&#160;</td>
           <td class="paramname"><em>c_list</em>, </td>
@@ -1205,8 +1275,8 @@ Here is the caller graph for this function:</div>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a68aae9340e0d24e88f1f0450f9dce47e_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a68aae9340e0d24e88f1f0450f9dce47e_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a68aae9340e0d24e88f1f0450f9dce47e_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a68aae9340e0d24e88f1f0450f9dce47e_icgraph">
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph">
 <area shape="rect" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1513,39,1645,65"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="1304,31,1465,73"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="1073,39,1256,65"/>
@@ -1263,7 +1333,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="677,288,868,315"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="935,194,1097,235"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="916,260,1116,316"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a68aae9340e0d24e88f1f0450f9dce47e" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1164,201,1296,228"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1164,201,1296,228"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2dc7f125d2f4382423715f6c781343fe" title=" " alt="" coords="685,187,861,213"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#aa18f60e79c7586e3499d3c82a7437230" title="This function calculate the Tclk for IMC (In&#45;Memory&#45;Computing)" alt="" coords="387,485,629,541"/>
 <area shape="rect" href="namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="439,566,577,607"/>

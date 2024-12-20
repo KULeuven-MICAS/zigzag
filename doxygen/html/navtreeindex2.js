@@ -1,5 +1,6 @@
 var NAVTREEINDEX2 =
 {
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a34705971fb4c761986d4e2978179c17c":[2,0,14,2,0,3,10],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a376dfbf6569dd8eb389002ac63ee5c30":[2,0,14,2,0,3,13],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a4f69354cae88513c476abf59e9b3d6f2":[2,0,14,2,0,3,19],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a5012d7ea0cd7d7ffd209e4828ffb1d27":[2,0,14,2,0,3,17],
@@ -30,7 +31,7 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,2,0,0,3],
 "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#ab7f824e2764640e26f404451267bc7c2":[2,0,14,2,0,0,12],
 "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#ad37c1eb648d9ed838e32ebe9989cfd4d":[2,0,14,2,0,0,0],
-"classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#aebeb063ed11c0678ca2d42cbc1631995":[2,0,14,2,0,0,1],
+"classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#af6dacbb69e32cdbdded0c90352320b77":[2,0,14,2,0,0,1],
 "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#af8856fd1159c6efefaddca8e667ea220":[2,0,14,2,0,0,9],
 "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#aff169982b58b788a6c1099f65aec3ab0":[2,0,14,2,0,0,7],
 "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html":[2,0,14,2,0,1],
@@ -248,6 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abad7d445eb555517f300b6de6986a765":[2,0,14,3,1,0,0,5],
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abaf5f317a670bea71ee80c5254732965":[2,0,14,3,1,0,0,9],
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abb61bc4f1668ed9a0d6236c7799cd08d":[2,0,14,3,1,0,0,13],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abd1e5bae637da295e27991d8c3a806e2":[2,0,14,3,1,0,0,3],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#ac043b09e6f6aa476ed2ea2de8c321b83":[2,0,14,3,1,0,0,14]
+"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abd1e5bae637da295e27991d8c3a806e2":[2,0,14,3,1,0,0,3]
 };
