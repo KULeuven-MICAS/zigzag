@@ -869,9 +869,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # TODO: make this more accurate by subtracting the final iteration cycles
         cycles_surplus = max(0, ((port.bw - total_req_bw_aver_computation) / port.bw) * total_computation_cycles)
         # Reduce the loading cycles during loading with the surplus
-        remaining_loading_cycles, reductions = self.reduce_balanced(total_required_cycles, min_required_cycles, cycles_surplus)
+        remaining_loading_cycles, reductions = self.reduce_balanced(
+            total_required_cycles, min_required_cycles, cycles_surplus
+        )
         port_activities: list[PortBeginOrEndActivity] = []
-        for (mem_op, mem_lv, mov_dir), remainder, reduction in zip(mem_op_level_direction_combs, remaining_loading_cycles, reductions):
+        for (mem_op, mem_lv, mov_dir), remainder, reduction in zip(
+            mem_op_level_direction_combs, remaining_loading_cycles, reductions
+        ):
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
             data_loaded = remainder * port.bw
             port_activity = PortBeginOrEndActivity(
@@ -901,7 +905,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
             self.loading_cycles_during_computation[port][mem_op] = reduction
             self.loading_bw_during_computation[port][mem_op] = ceil((reduction / total_computation_cycles) * port.bw)
         # Save the amount of cycles and average bandwidth that were borrowed from the computation phase
-        self.total_loading_cycles_during_computation[port] = sum(self.loading_cycles_during_computation.get(port, {}).values())
+        self.total_loading_cycles_during_computation[port] = sum(
+            self.loading_cycles_during_computation.get(port, {}).values()
+        )
         self.total_loading_bw_during_computation[port] = sum(self.loading_bw_during_computation.get(port, {}).values())
         return port_activities
 
@@ -1145,10 +1151,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mac_utilization1 = mac_utilization1
         self.mac_utilization2 = mac_utilization2
 
-    def get_inst_bandwidth(self, memory_level: MemoryLevel, memory_operand: MemoryOperand, scaling: float = 1) -> FourWayDataMoving[int]:
+    def get_inst_bandwidth(
+        self, memory_level: MemoryLevel, memory_operand: MemoryOperand, scaling: float = 1
+    ) -> FourWayDataMoving[int]:
         """! Given a memory level and a memory operand, compute the memory's instantaneous bandwidth required
         for the memory operand during computation.
-        An additonal scaling factor can be applied to the returned bandwidth 
+        An additonal scaling factor can be applied to the returned bandwidth
         NOTE: This function is used in Stream
         """
         # Check that the given MemoryInstance is part of the memory hierarchy of this CME
@@ -1172,7 +1180,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         ## LOADING PHASE BORROWED BANDWIDTH
         # Iterate through the ports of the memory level that serve the given memory operand
         for port in memory_level.port_list:
-            if not memory_operand in [mem_op for mem_op, _, _ in port.served_op_lv_dir]:
+            if memory_operand not in [mem_op for mem_op, _, _ in port.served_op_lv_dir]:
                 continue
             if Constants.OUTPUT_MEM_OP in memory_level.operands:
                 inst_bw.wr_in_by_high += ceil(self.loading_bw_during_computation[port][memory_operand] * scaling)
