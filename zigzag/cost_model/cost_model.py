@@ -1170,7 +1170,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # Obtain the required instantaneous bandwidth to/from the memory for its operands during computation
         inst_bw = FourWayDataMoving(0, 0, 0, 0)
         layer_op = self.memory_operand_links.mem_to_layer_op(memory_operand)
-        req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][memory_level_index + 1].req_mem_bw_inst
+        req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][memory_level_index].req_mem_bw_inst
         inst_bw += FourWayDataMoving(
             ceil(req_bw_4way.rd_out_to_low * scaling),
             ceil(req_bw_4way.wr_in_by_low * scaling),
