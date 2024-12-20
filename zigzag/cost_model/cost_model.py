@@ -767,9 +767,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """
         # Step 1: collect port activity per memory instance per physical memory port
         port_activity_collect: list[dict[str, list[PortActivity]]] = []
-        for mem_instance in self.mem_level_list:
+        for mem_level in self.mem_level_list:
             port_activity_single: dict[str, list[PortActivity]] = {}
-            port_list = mem_instance.port_list
+            port_list = mem_level.port_list
             for port in port_list:
                 port_activity_single[str(port)] = []
                 for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
@@ -869,13 +869,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # TODO: make this more accurate by subtracting the final iteration cycles
         cycles_surplus = max(0, ((port.bw - total_req_bw_aver_computation) / port.bw) * total_computation_cycles)
         # Reduce the loading cycles during loading with the surplus
-        reduced_loading_cycles = self.reduce_balanced(total_required_cycles, min_required_cycles, cycles_surplus)
+        remaining_loading_cycles, reductions = self.reduce_balanced(total_required_cycles, min_required_cycles, cycles_surplus)
         port_activities: list[PortBeginOrEndActivity] = []
-        for (mem_op, mem_lv, mov_dir), cycles in zip(mem_op_level_direction_combs, reduced_loading_cycles):
+        for (mem_op, mem_lv, mov_dir), remainder, reduction in zip(mem_op_level_direction_combs, remaining_loading_cycles, reductions):
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
-            data_loaded = cycles * port.bw
+            data_loaded = remainder * port.bw
             port_activity = PortBeginOrEndActivity(
-                cycles,
+                remainder,
                 data_loaded,
                 port.bw,
                 layer_op,
@@ -891,16 +891,18 @@ class CostModelEvaluation(CostModelEvaluationABC):
             )
             str_identifier = f"{layer_op.name}{mem_lv}_{mov_dir}"
             class_var_to_update[layer_op][str_identifier] = (
-                cycles,
+                remainder,
                 port.port_is_shared_by_two_input_operands,
             )
+            # Save the amount of cycles and average bandwidth borrowed for this operand
+            if port not in self.loading_cycles_during_computation:
+                self.loading_cycles_during_computation[port] = {}
+                self.loading_bw_during_computation[port] = {}
+            self.loading_cycles_during_computation[port][mem_op] = reduction
+            self.loading_bw_during_computation[port][mem_op] = ceil((reduction / total_computation_cycles) * port.bw)
         # Save the amount of cycles and average bandwidth that were borrowed from the computation phase
-        borrowed_cycles_from_computation = sum(total_required_cycles) - sum(reduced_loading_cycles)
-        self.total_loading_cycles_during_computation[port] = borrowed_cycles_from_computation
-        self.total_loading_bw_during_computation[port] = (
-            borrowed_cycles_from_computation / total_computation_cycles
-        ) * port.bw
-        # Create the PortBeginOrEndActivity objects with the reduced cycles and data
+        self.total_loading_cycles_during_computation[port] = sum(self.loading_cycles_during_computation.get(port, {}).values())
+        self.total_loading_bw_during_computation[port] = sum(self.loading_bw_during_computation.get(port, {}).values())
         return port_activities
 
     def calc_loading_single_port_period_count_greater_than_1(
@@ -1083,6 +1085,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.data_offloading_cc_per_op: dict[LayerOperand, dict[str, tuple[int | float, bool]]] = {
             self.layer.output_operand: {}
         }
+        self.loading_cycles_during_computation: dict[MemoryPort, dict[MemoryOperand, int | float]] = {}
+        self.loading_bw_during_computation: dict[MemoryPort, dict[MemoryOperand, int | float]] = {}
         self.total_loading_cycles_during_computation: dict[MemoryPort, int | float] = {}
         self.total_loading_bw_during_computation: dict[MemoryPort, int | float] = {}
 
@@ -1141,37 +1145,50 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.mac_utilization1 = mac_utilization1
         self.mac_utilization2 = mac_utilization2
 
-    def get_total_inst_bandwidth(self, memory_level: MemoryLevel) -> FourWayDataMoving[int]:
-        """Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth
-        required throughout the execution of the layer that corresponds to this CME. Raises an assertion error
-        if the given memory level is not included in this CME's memory hierarchy.
-        NOTE: this function is used in Stream
+    def get_inst_bandwidth(self, memory_level: MemoryLevel, memory_operand: MemoryOperand, scaling: float = 1) -> FourWayDataMoving[int]:
+        """! Given a memory level and a memory operand, compute the memory's instantaneous bandwidth required
+        for the memory operand during computation.
+        An additonal scaling factor can be applied to the returned bandwidth 
+        NOTE: This function is used in Stream
         """
         # Check that the given MemoryInstance is part of the memory hierarchy of this CME
         assert (
             memory_level in self.mem_level_list
         ), f"Memory level {memory_level} is not part of the memory hierarchy of this cost model evaluation."
+        ## COMPUTATION PHASE REQUIRED BANDWIDTH
+        # Get the memory level index for the given operand
+        memory_levels = self.accelerator.memory_hierarchy.get_memory_levels(memory_operand)
+        memory_level_index = memory_levels.index(memory_level)
         # Obtain the required instantaneous bandwidth to/from the memory for its operands during computation
+        inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        layer_op = self.memory_operand_links.mem_to_layer_op(memory_operand)
+        req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][memory_level_index].req_mem_bw_inst
+        inst_bw += FourWayDataMoving(
+            ceil(req_bw_4way.rd_out_to_low * scaling),
+            ceil(req_bw_4way.wr_in_by_low * scaling),
+            ceil(req_bw_4way.rd_out_to_high * scaling),
+            ceil(req_bw_4way.wr_in_by_high * scaling),
+        )
+        ## LOADING PHASE BORROWED BANDWIDTH
+        # Iterate through the ports of the memory level that serve the given memory operand
+        for port in memory_level.port_list:
+            if not memory_operand in [mem_op for mem_op, _, _ in port.served_op_lv_dir]:
+                continue
+            if Constants.OUTPUT_MEM_OP in memory_level.operands:
+                inst_bw.wr_in_by_high += ceil(self.loading_bw_during_computation[port][memory_operand] * scaling)
+            else:
+                inst_bw.rd_out_to_low += ceil(self.loading_bw_during_computation[port][memory_operand] * scaling)
+        return inst_bw
+
+    def get_total_inst_bandwidth(self, memory_level: MemoryLevel, scaling: float = 1) -> FourWayDataMoving[int]:
+        """Given a cost model evaluation and a memory level, compute the memory's total instantaneous bandwidth
+        required throughout the execution of the layer that corresponds to this CME. Raises an assertion error
+        if the given memory level is not included in this CME's memory hierarchy.
+        NOTE: this function is used in Stream
+        """
         total_inst_bw = FourWayDataMoving(0, 0, 0, 0)
         for mem_op in memory_level.operands:
-            layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-            req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][-1].req_mem_bw_inst
-            inst_bw_4way = FourWayDataMoving(
-                req_bw_4way.rd_out_to_low,
-                req_bw_4way.wr_in_by_low,
-                req_bw_4way.rd_out_to_high,
-                req_bw_4way.wr_in_by_high,
-            )
-            total_inst_bw += inst_bw_4way
-        # Add the potential borrowed bandwidth by the loading phases (onloading and offloading)
-        # As this bandwidth is already aggregated across all directions for a single port,
-        # we put it in the WR_IN_BY_HIGH direction if the output memory operand is present in the memory level.
-        # Otherwise, we put it in the RD_OUT_TO_LOW direction.
-        for port in memory_level.port_list:
-            if Constants.OUTPUT_MEM_OP in memory_level.operands:
-                total_inst_bw.wr_in_by_high += self.total_loading_bw_during_computation[port]
-            else:
-                total_inst_bw.rd_out_to_low += self.total_loading_bw_during_computation[port]
+            total_inst_bw += self.get_inst_bandwidth(memory_level, mem_op, scaling)
         return total_inst_bw
 
     def __str__(self):
@@ -1181,11 +1198,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
         return str(self)
 
     @staticmethod
-    def reduce_balanced(c_list: list[float], m_list: list[float], s: float) -> list[float]:
+    def reduce_balanced(c_list: list[float], m_list: list[float], s: float) -> tuple[list[float], list[float]]:
         """Balance c_list towards minimums m_list with a total maximum reduction of s."""
         c_result = c_list.copy()
+        reductions = [0.0] * len(c_list)
         if s <= 0 or not c_list:
-            return c_list
+            return c_list, reductions
 
         # Sort indices by c_list values in descending order
         indices = sorted(range(len(c_list)), key=lambda i: c_list[i], reverse=True)
@@ -1199,11 +1217,13 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 reduction = c_sorted[i] - m_sorted[i]
                 for j in range(i + 1):
                     c_sorted[j] -= reduction
+                    reductions[indices[j]] += reduction
                 s -= max_reducible
             else:
                 reduction = s / (i + 1)
                 for j in range(i + 1):
                     c_sorted[j] -= reduction
+                    reductions[indices[j]] += reduction
                 s = 0
                 break
 
@@ -1211,4 +1231,4 @@ class CostModelEvaluation(CostModelEvaluationABC):
         for i, idx in enumerate(indices):
             c_result[idx] = c_sorted[i]
 
-        return c_result
+        return c_result, reductions

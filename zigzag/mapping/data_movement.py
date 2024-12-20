@@ -84,7 +84,7 @@ class FourWayDataMoving(Generic[T], metaclass=ABCMeta):
             self.wr_in_by_high * other,
         )
 
-    def __add__(self, other: "FourWayDataMoving[T]"):
+    def __add__(self, other: "FourWayDataMoving[T]") -> "FourWayDataMoving[T]":
         return self._add_with_type(other, type(self))
 
     def __repr__(self):
