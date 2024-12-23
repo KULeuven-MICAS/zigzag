@@ -1010,9 +1010,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         for mem_op, mem_lv, mov_dir in combs_period_count_greater_than_1:
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
             req_bw_aver = unit_mem_data_movement[layer_op][mem_lv].req_mem_bw_aver.get_single_dir_data(mov_dir)
-            req_bw_aver = ceil(
-                req_bw_aver / self.cycles_per_op
-            )  # average bandwidth is lower for higher cycles_per_op
+            req_bw_aver = ceil(req_bw_aver / self.cycles_per_op)  # average bandwidth is lower for higher cycles_per_op
             total_req_bw_aver_computation += req_bw_aver
 
         data_loading += self.calc_loading_single_port_period_count_1(
