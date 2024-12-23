@@ -303,7 +303,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         spatial_mapping_int: SpatialMappingInternal,
         temporal_mapping: TemporalMapping,
         access_same_data_considered_as_no_access: bool = True,
-        cycles_per_mac: float = 1.0,
+        cycles_per_op: float = 1.0,
     ):
         """
         After initialization, the cost model evaluation is run
@@ -348,7 +348,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         )
 
         self.active_mem_level = self.mapping.mem_level
-        self.cycles_per_mac = cycles_per_mac
+        self.cycles_per_op = cycles_per_op
 
         # Run the cost model evaluation
         self.run()
@@ -767,10 +767,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
             ].inst_data_trans_window.rd_out_to_high
 
         # Take cycles per mac into account
-        rd_out_to_low_allowed = ceil(rd_out_to_low_allowed * self.cycles_per_mac)
-        wr_in_by_low_allowed = ceil(wr_in_by_low_allowed * self.cycles_per_mac)
-        rd_out_to_high_allowed = ceil(rd_out_to_high_allowed * self.cycles_per_mac)
-        wr_in_by_high_allowed = ceil(wr_in_by_high_allowed * self.cycles_per_mac)
+        rd_out_to_low_allowed = ceil(rd_out_to_low_allowed * self.cycles_per_op)
+        wr_in_by_low_allowed = ceil(wr_in_by_low_allowed * self.cycles_per_op)
+        rd_out_to_high_allowed = ceil(rd_out_to_high_allowed * self.cycles_per_op)
+        wr_in_by_high_allowed = ceil(wr_in_by_high_allowed * self.cycles_per_op)
 
         # All
         updating_window = MemoryAccesses(
@@ -806,7 +806,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                         period = self.mapping_int.unit_mem_data_movement[layer_op][
                             mem_lv
                         ].data_trans_period.get_single_dir_data(mov_dir)
-                        period = ceil(period * self.cycles_per_mac)
+                        period = ceil(period * self.cycles_per_op)
                         real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
                         allowed_cycle = self.allowed_mem_update_cycle[layer_op][mem_lv].get_single_dir_data(mov_dir)
                         port_activity = PortActivity(
@@ -887,7 +887,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             total_required_cycles.append(total_cycles_op)
 
         # Get the total amount of cycles of computation (corresponds to latency_total0)
-        total_computation_cycles = ceil(self.temporal_mapping.total_cycle * self.cycles_per_mac) + self.stall_slack_comb
+        total_computation_cycles = ceil(self.temporal_mapping.total_cycle * self.cycles_per_op) + self.stall_slack_comb
         # Get the total amount of cycles that we can use for loading during computation
         # TODO: make this more accurate by subtracting the final iteration cycles
         cycles_surplus = max(0, ((port.bw - total_req_bw_aver_computation) / port.bw) * total_computation_cycles)
@@ -1011,8 +1011,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
             layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
             req_bw_aver = unit_mem_data_movement[layer_op][mem_lv].req_mem_bw_aver.get_single_dir_data(mov_dir)
             req_bw_aver = ceil(
-                req_bw_aver / self.cycles_per_mac
-            )  # average bandwidth is lower for higher cycles_per_mac
+                req_bw_aver / self.cycles_per_op
+            )  # average bandwidth is lower for higher cycles_per_op
             total_req_bw_aver_computation += req_bw_aver
 
         data_loading += self.calc_loading_single_port_period_count_1(
@@ -1142,15 +1142,15 @@ class CostModelEvaluation(CostModelEvaluationABC):
     def calc_overall_latency(self) -> None:
         """! This function integrates the previous calculated SScomb, data loading and off-loading cycle to get the
         overall latency
-        @param cycles_per_mac: cycle counts per mac operand (>1 for bit-serial computation)
+        @param cycles_per_op: cycle counts per mac operand (>1 for bit-serial computation)
         """
         # the ideal cycle count assuming the MAC array is 100% utilized
         ideal_cycle = ceil(
-            ceil(self.layer.total_mac_count / self.accelerator.operational_array.total_unit_count) * self.cycles_per_mac
+            ceil(self.layer.total_mac_count / self.accelerator.operational_array.total_unit_count) * self.cycles_per_op
         )
 
         # the ideal temporal cycle count given the spatial mapping (the spatial mapping can be non-ideal)
-        ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle * self.cycles_per_mac
+        ideal_temporal_cycle = self.mapping_int.temporal_mapping.total_cycle * self.cycles_per_op
         mac_spatial_utilization = ideal_cycle / ideal_temporal_cycle
 
         # Total latency without the initial data loading and the final data off-loading
@@ -1198,14 +1198,14 @@ class CostModelEvaluation(CostModelEvaluationABC):
         layer_op = self.memory_operand_links.mem_to_layer_op(memory_operand)
         req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][memory_level_index].req_mem_bw_inst
         inst_bw += FourWayDataMoving(
-            ceil(req_bw_4way.rd_out_to_low * scaling / self.cycles_per_mac),  # lower bw for higher cycles_per_mac
-            ceil(req_bw_4way.wr_in_by_low * scaling / self.cycles_per_mac),  # lower bw for higher cycles_per_mac
-            ceil(req_bw_4way.rd_out_to_high * scaling / self.cycles_per_mac),  # lower bw for higher cycles_per_mac
-            ceil(req_bw_4way.wr_in_by_high * scaling / self.cycles_per_mac),  # lower bw for higher cycles_per_mac
+            ceil(req_bw_4way.rd_out_to_low * scaling / self.cycles_per_op),  # lower bw for higher cycles_per_op
+            ceil(req_bw_4way.wr_in_by_low * scaling / self.cycles_per_op),  # lower bw for higher cycles_per_op
+            ceil(req_bw_4way.rd_out_to_high * scaling / self.cycles_per_op),  # lower bw for higher cycles_per_op
+            ceil(req_bw_4way.wr_in_by_high * scaling / self.cycles_per_op),  # lower bw for higher cycles_per_op
         )
         ## LOADING PHASE BORROWED BANDWIDTH
         # Iterate through the ports of the memory level that serve the given memory operand
-        # The cme attributes used below already take into account self.cycles_per_mac
+        # The cme attributes used below already take into account self.cycles_per_op
         for port in memory_level.port_list:
             if memory_operand not in [mem_op for mem_op, _, _ in port.served_op_lv_dir]:
                 continue
