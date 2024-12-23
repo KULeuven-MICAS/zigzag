@@ -1,6 +1,6 @@
 var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
 [
-    [ "__init__", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a497289773e7219c53b6af16f894ae844", null ],
+    [ "__init__", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a5c217181e76e9fd7f3d934406f7b7205", null ],
     [ "__repr__", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "__str__", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a23e8041ce1015febe4fdace3225714f9", null ],
     [ "calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#abbdf8bbf346e3c1c8767fc2333d16eac", null ],
@@ -18,7 +18,9 @@ var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
     [ "calc_memory_word_access", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0a7c56cfe2d93a828eb89bac51779d60", null ],
     [ "calc_offloading_combined", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a4ad2a05257daa34e4849d11098bf6a46", null ],
     [ "calc_onloading_combined", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92", null ],
-    [ "calc_overall_latency", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae5d499d2d9dd603b7df072ba0e109519", null ],
+    [ "calc_overall_latency", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae4b7207a4fe5c6655351bc8ddd7f3a2d", null ],
+    [ "calculate_allowed_transfer_cycles", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a63acb16daf05d0e283399220cd470a55", null ],
+    [ "calculate_real_data_transfer_cycles", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a62dcafc48cd929b178076df35b862912", null ],
     [ "combine_data_transfer_rate_per_physical_port", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2766e8eb31bba2ded9efa2f2967366c8", null ],
     [ "get_inst_bandwidth", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aadaa91ed1e68a2856615bbf7f3e36bd8", null ],
     [ "get_total_inst_bandwidth", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ae51e371052f21e4bdcf0001829be09f7", null ],
@@ -27,6 +29,7 @@ var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
     [ "access_same_data_considered_as_no_access", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa209863329672dbf0472644e1f14bda9", null ],
     [ "active_mem_level", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad5e427b2f4a2536addf6f125fa17e515", null ],
     [ "allowed_mem_update_cycle", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8f623306502e588c8694deb9a091d332", null ],
+    [ "cycles_per_op", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a4cf829dae540f3396e8b48f8f5459bb9", null ],
     [ "data_loading_cc_pair_combined_per_op", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a09c3d6ae12fe0469f495f0280f3c1730", null ],
     [ "data_loading_half_shared_part", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a4f4070c6f076ad3d758385d57a1714a0", null ],
     [ "data_loading_individual_part", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad36024a5bb36f75094e5183470921c6f", null ],

@@ -1,0 +1,9 @@
+<map id="calculate_allowed_transfer_cycles" name="calculate_allowed_transfer_cycles">
+<area shape="rect" id="node1" title=" " alt="" coords="1053,31,1251,73"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#abbdf8bbf346e3c1c8767fc2333d16eac" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="831,24,1005,80"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8aaf4a383a6d93dc6c79b262c9fb8caa" title="Calculate latency in 4 steps." alt="" coords="610,5,713,32"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="540,56,783,112"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="349,5,392,32"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a670fe67276cb94775a042958fe2c79d4" title="Run the cost model evaluation." alt="" coords="249,56,492,112"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,31,201,73"/>
+</map>

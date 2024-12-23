@@ -1,5 +1,8 @@
 var NAVTREEINDEX5 =
 {
+"get__cacti__cost_8py.html#aa1ff5066f9ac1d6daab64e85ff953f9e":[3,0,0,2,0,2,2],
+"get__cacti__cost_8py.html#aec2fa46bcba0f621cf9f3ee4f572b498":[3,0,0,2,0,2,1],
+"hardware_2architecture_2____init_____8py.html":[3,0,0,2,0,0],
 "hardware_2architecture_2memory__hierarchy_8py.html":[3,0,0,2,0,5],
 "hierarchy.html":[2,2],
 "imc__array_8py.html":[3,0,0,2,0,3],

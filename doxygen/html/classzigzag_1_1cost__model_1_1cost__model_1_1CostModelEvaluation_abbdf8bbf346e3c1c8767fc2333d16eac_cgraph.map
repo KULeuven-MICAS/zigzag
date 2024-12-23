@@ -1,0 +1,5 @@
+<map id="calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link" name="calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link">
+<area shape="rect" id="node1" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="5,31,180,87"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a63acb16daf05d0e283399220cd470a55" title=" " alt="" coords="228,5,425,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a62dcafc48cd929b178076df35b862912" title=" " alt="" coords="252,71,401,112"/>
+</map>
