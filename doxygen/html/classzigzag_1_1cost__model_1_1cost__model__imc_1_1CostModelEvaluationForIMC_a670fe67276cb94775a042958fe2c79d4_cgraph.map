@@ -2,7 +2,7 @@
 <area shape="rect" id="node1" title="Run the cost model evaluation." alt="" coords="5,516,48,543"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a03bd359d34c64ff656ae98ce3d05f913" title="Calculates the energy cost of this cost model evaluation by calculating the memory reading/writing en..." alt="" coords="96,104,339,160"/>
 <area shape="rect" id="node6" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8aaf4a383a6d93dc6c79b262c9fb8caa" title="Calculate latency in 4 steps." alt="" coords="96,399,339,455"/>
-<area shape="rect" id="node20" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="Calculate latency in 4 steps." alt="" coords="166,483,269,509"/>
+<area shape="rect" id="node20" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a8427f972cb66d7cb6138322a233efe35" title="The latency calculation is largely identical to that of the superclass, but with some modifications t..." alt="" coords="166,483,269,509"/>
 <area shape="rect" id="node22" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0d6d1972f7a636ec3f0edb20c42f545a" title=" " alt="" coords="96,533,339,589"/>
 <area shape="rect" id="node24" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0a7c56cfe2d93a828eb89bac51779d60" title=" " alt="" coords="96,613,339,669"/>
 <area shape="rect" id="node26" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#a94b0a0aea6f69b447c7b7875cb3d90ac" title=" " alt="" coords="149,693,286,720"/>

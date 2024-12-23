@@ -1,5 +1,5 @@
 <map id="calc_latency" name="calc_latency">
-<area shape="rect" id="node1" title="Calculate latency in 4 steps." alt="" coords="5,344,108,371"/>
+<area shape="rect" id="node1" title="The latency calculation is largely identical to that of the superclass, but with some modifications t..." alt="" coords="5,344,108,371"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#abbdf8bbf346e3c1c8767fc2333d16eac" title="Construct a 4&#45;way data transfer pattern for each unit mem, calculate {allowed_mem_updating_cycle,..." alt="" coords="171,78,413,149"/>
 <area shape="rect" id="node5" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0b067ef9c9f4a12be3421c7b011242e1" title="Calculate the number of data onloading/offloading cycles." alt="" coords="171,209,413,265"/>
 <area shape="rect" id="node11" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a121476a4036ca47e8998da4b011085bf" title="This function checks the double&#45;buffer possibility for each operand at each memory level (minimal mem..." alt="" coords="171,289,413,345"/>
