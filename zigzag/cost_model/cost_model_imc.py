@@ -85,7 +85,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
 
     def calc_latency(self):
         """!
-        The latency calculation is largely identical to that of the superclass, but with some modifications to fit the IMC requirement.
+        The latency calculation is largely identical to that of the superclass,
+        but with some modifications to fit the IMC requirement.
         """
         super().calc_double_buffer_flag()
         super().calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link()
