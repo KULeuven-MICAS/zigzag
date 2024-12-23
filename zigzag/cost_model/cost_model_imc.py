@@ -50,6 +50,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
             spatial_mapping_int=spatial_mapping_int,
             temporal_mapping=temporal_mapping,
             access_same_data_considered_as_no_access=access_same_data_considered_as_no_access,
+            cycles_per_op=self.operational_array.activation_precision / self.operational_array.bit_serial_precision,
         )
 
     def run(self) -> None:
@@ -83,22 +84,8 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         self.mac_energy = sum([energy for energy in self.mac_energy_breakdown.values()])
 
     def calc_latency(self):
-        """!  Calculate latency in 4 steps
-
-        1) As we already calculated the ideal data transfer rate in combined_mapping.py (in the Mapping class),
-        here we start with calculating the required (or allowed) memory updating window by comparing the effective
-        data size with the physical memory size at each level. If the effective data size is smaller than 50%
-        of the physical memory size, then we take the whole period as the allowed memory updating window (double buffer
-        effect);
-        otherwise we take the the period divided by the top_ir_loop as the allowed memory updating window.
-
-        2) Then, we compute the real data transfer rate given the actual memory bw per functional port pair,
-        assuming we have enough memory ports.
-
-        3) In reality, there is no infinite memory port to use. So, as the second step, we combine the real
-        data transfer attributes per physical memory port.
-
-        4) Finally, we combine the stall/slack of each memory port to get the final latency.
+        """!
+        The latency calculation is largely identical to that of the superclass, but with some modifications to fit the IMC requirement.
         """
         super().calc_double_buffer_flag()
         super().calc_allowed_and_real_data_transfer_cycle_per_data_transfer_link()
@@ -106,9 +93,7 @@ class CostModelEvaluationForIMC(CostModelEvaluation):
         super().combine_data_transfer_rate_per_physical_port()
         self.update_tclk()
         super().calc_data_loading_latency()
-        # find the cycle count per mac
-        cycles_per_mac = self.operational_array.activation_precision / self.operational_array.bit_serial_precision
-        super().calc_overall_latency(cycles_per_mac=cycles_per_mac)
+        super().calc_overall_latency()
 
     def update_tclk(self):
         """! This function calculate the Tclk for IMC (In-Memory-Computing)"""
