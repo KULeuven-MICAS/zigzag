@@ -11,13 +11,13 @@ workloads = (
 ens_lats_clks_areas = {
     "zigzag/inputs/workload/resnet18.onnx": (
         4726170712.825855,
-        6337728.0,
+        5681000.0,
         3.75708,
         0.8018113023999999,
     ),
     "zigzag/inputs/workload/resnet18.yaml": (
         4268285089.3547516,
-        5789229.0,
+        5114707.0,
         3.75708,
         0.8018113023999999,
     ),
