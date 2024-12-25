@@ -1,5 +1,4 @@
 - name: default
-  core_allocation: [1]
   memory_operand_links:
     O: O
     W: I2
@@ -9,5 +8,3 @@
       - K
     D2:
       - C
-      - FX
-      - FY

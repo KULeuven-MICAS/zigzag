@@ -724,3 +724,18 @@
   size_byte: 2048
   technology: '0.028'
 
+1024_Byte_256_BW_0_0_1_BANK_COUNT_1_TECH_0.028:
+  IO_bus_width: 256
+  area: 0.00489173
+  bank_count: '1'
+  cost:
+    read_word: 0.00354582
+    write_word: 0.0041352
+  ex_rd_port: '0'
+  ex_wr_port: '0'
+  memory_type: sram
+  rd_wr_port: '1'
+  size_bit: 8192
+  size_byte: 1024
+  technology: '0.028'
+

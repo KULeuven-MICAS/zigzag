@@ -82,8 +82,8 @@ memories:
     size: 8589934592
     r_bw: 524288
     w_bw: 524288
-    r_cost: 700
-    w_cost: 750
+    r_cost: 470
+    w_cost: 470
     area: 0
     r_port: 0
     w_port: 0
@@ -107,4 +107,4 @@ operational_array:
   input_precision: [8, 8] # unit: bit
   bit_serial_precision: 1 # unit: bit
   dimensions: [D1, D2]
-  sizes: [64, 256]
+  sizes: [32, 32]
