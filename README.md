@@ -33,17 +33,18 @@ ZigZag bridges the gap between algorithmic DL decisions and their acceleration c
 - **Objective**: Perform the first run of the ZigZag-IMC extension.
 - **Key Learnings**:
   - Setting up and running the ZigZag-IMC extension.
-  - Understanding the inputs and outputs specific to in-memory computing (IMC) cores.
+  - Understanding the inputs and outputs specific to in-memory computing (IMC) macros.
   - Analyzing the macro-level results and comparing between digital and analog IMC cores.
 
-### [Lab 5: First Run of the ZigZag-IMC Extension](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab5)
-- **Objective**: Understand the differences between system-level and macro-level IMC performance.
+### [Lab 5: System-Level Evaluation for IMC: Spatial Utilization Matters](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab5)
+- **Objective**: Understand the impacts of the spatial under-utilization for IMC cores.
 - **Key Learnings**:
+  - Understanding the differences between system-level and macro-level IMC performance. 
   - Understanding the inputs and outputs specific to in-memory computing (IMC) cores.
   - Analyzing the system-level results and comparing them with macro-level results.
   - Understanding how the spatial utilization impacts the system-level performance.
 
-### [Lab 6: First Run of the ZigZag-IMC Extension](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab6)
+### [Lab 6: System-Level Evaluation for IMC: Temporal Utilization Matters](https://github.com/KULeuven-MICAS/zigzag/tree/tutorial/lab6)
 - **Objective**: Understand the impacts of the temporal under-utilization for IMC cores.
 - **Key Learnings**:
   - Understanding the inputs and outputs specific to in-memory computing (IMC) cores.
