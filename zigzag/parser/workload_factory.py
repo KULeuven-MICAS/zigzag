@@ -154,7 +154,7 @@ class LayerNodeFactory:
 
         return relations
 
-    def create_temporal_operands(self) -> list[LayerOperand]:
+    def create_temporal_operands(self):
         if self.node_data["operator_type"] == "SConv":
             is_state = True
             state_operand = Constants.STATE_LAYER_OP
