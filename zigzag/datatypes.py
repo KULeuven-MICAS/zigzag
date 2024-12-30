@@ -60,7 +60,7 @@ class MemoryOperand(OperandABC):
 
     def is_state(self):
         return self == Constants.STATE_MEM_OP
-    
+
     def is_output(self):
         return self == Constants.OUTPUT_MEM_OP
 

@@ -171,7 +171,7 @@ class MemoryAllocator:
                 dim for dim, _ in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])
             ]
             unallocated_temporal_dims = [unallocated_loop.layer_dim for unallocated_loop in unallocated_loops]
-            unallocated_dims = unallocated_spatial_dims + unallocated_temporal_dims            
+            unallocated_dims = unallocated_spatial_dims + unallocated_temporal_dims
             precision = (
                 0 if any([dim in ir_dims for dim in unallocated_dims])
                 else self.precision[mem_op]

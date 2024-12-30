@@ -172,11 +172,8 @@ class LayerNodeFactory:
             is_temporal = True
             time_dim = LayerDim(self.node_data["time_dim"])
 
-        if is_state and not is_temporal:
-            raise f"Error state layer without temporal dimension."
-
         return is_temporal, time_dim, is_state, state_operand
-    
+
     def create_constant_operands(self) -> list[LayerOperand]:
         operand_sources: dict[str, int] = self.node_data["operand_source"]
         constant_operands: list[str] = [op for op, source in operand_sources.items() if source == self.node_data["id"]]

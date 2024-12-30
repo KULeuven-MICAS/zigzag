@@ -209,7 +209,7 @@ class LayerNode(LayerNodeABC):
             else pr_layer_dim_sizes
         )
         self.loop_relevancy_info = LoopRelevancyInfo.extract_relevancy_info(
-            self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list, self.output_operand, 
+            self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list, self.output_operand,
             self.state_operand, self.time_dim, self.is_state
         )
         self.pr_decoupled_relevancy_info = self.loop_relevancy_info.create_pr_decoupled_relevancy_info()
@@ -395,6 +395,10 @@ class LayerNode(LayerNodeABC):
             constant_operands=self.constant_operands,
             input_operand_source=self.input_operand_source,
             pr_layer_dim_sizes=self.pr_layer_dim_sizes,
+            time_dim=self.time_dim,
+            state_operand=self.state_operand,
+            is_state=self.is_state,
+            is_temporal=self.is_temporal,
         )
         # Make sure the new attributes don't simply point to the old instances
         return deepcopy(attributes)

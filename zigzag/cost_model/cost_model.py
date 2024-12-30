@@ -675,11 +675,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     # for later memory free space evaluation
                     if shared_mem_list is not None:
                         for shared_mem_op, shared_mem_lv in shared_mem_list:
-                            if self.memory_operand_links.contains_mem_op(shared_mem_op) and self.layer.has_mem_op(mem_op):
-                                shared_layer_op = self.memory_operand_links.mem_to_layer_op(shared_mem_op)
-                                self.effective_mem_utili_shared[shared_layer_op][
-                                    shared_mem_lv
-                                ] += self.effective_mem_utili_individual[layer_op][mem_lv]
+                            if self.memory_operand_links.contains_mem_op(shared_mem_op):
+                                if self.layer.has_mem_op(shared_mem_op):
+                                    shared_layer_op = self.memory_operand_links.mem_to_layer_op(shared_mem_op)
+                                    self.effective_mem_utili_shared[shared_layer_op][
+                                        shared_mem_lv
+                                    ] += self.effective_mem_utili_individual[layer_op][mem_lv]
                 else:
                     double_buffer_true[layer_op].append(False)
 

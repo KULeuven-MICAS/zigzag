@@ -1,0 +1,17 @@
+- id: 0 # conv1 stride 2
+  operator_type: Conv
+  equation: O[t][b][k][oy][ox]+=W[k][c][fy][fx]*I[t][b][c][iy][ix]
+  dimension_relations: [ix=2*ox+1*fx, iy=2*oy+1*fy]
+  loop_dims: [T, B, K, C, OY, OX, FY, FX]
+  loop_sizes: [4, 1, 64, 3, 112, 112, 7, 7]
+  operand_precision:
+    O: 16
+    W: 8
+    I: 8
+    O_final: 8
+  operand_source:
+    I: 0
+    W: 0
+
+
+    

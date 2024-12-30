@@ -105,16 +105,16 @@ class LomaEngine:
                     if not found and factor[0] == self.layer.time_dim:
                         found = True
                         first_time_index = index
-                    if irrelevent_dims.__contains__(factor[0]):
+                    if factor[0] in irrelevent_dims:
                         last_ir_index = index
                 if first_time_index > last_ir_index:
                     valid = True
                 else:
                     valid = False
             else:
-                valid = True     
+                valid = True
             if valid:
-                allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)  # type: ignore
+                allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
                 # using try catch here because in the depth-first mode the highest level might not be big enough
                 try:
                     temporal_mapping = allocator.run()  # allocate this ordering to the memories
