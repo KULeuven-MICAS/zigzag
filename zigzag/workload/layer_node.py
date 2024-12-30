@@ -261,7 +261,7 @@ class LayerNode(LayerNodeABC):
         try:
             self.memory_operand_links.mem_to_layer_op(mem_op)
             return True
-        except:
+        except KeyError:
             return False
 
     def build_pr_funcs(self) -> tuple[PrLoop, LoopList, PrScalingFactors]:
