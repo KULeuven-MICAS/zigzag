@@ -45,6 +45,7 @@ class GemmParser(ONNXOperatorParser):
             "O_final": act_precision,
             "O": intermediate_output_precision,
         }
+        data["time_dim"] = ""
 
         # I[B,H][D][C] * W[B,H][C][K] -> O[B,H][D][K]
         assert input_shape[-2] == output_shape[-2], "First dimension of input and output matrix must be the same"

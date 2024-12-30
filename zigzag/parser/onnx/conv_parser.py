@@ -102,6 +102,7 @@ class ConvParser(ONNXOperatorParser):
             [padding[0], padding[2]],
             [padding[1], padding[3]],
         ]
+        data["time_dim"] = ""
 
         return data
 
