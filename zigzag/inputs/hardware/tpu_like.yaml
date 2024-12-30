@@ -18,7 +18,7 @@ memories:
         tl: r_port_1
     served_dimensions: [] # Fully unrolled over all multipliers
 
-  rf_2B:
+  rfO_2B:
     size: 16
     r_bw: 16
     w_bw: 16
@@ -37,6 +37,25 @@ memories:
         th: r_port_2
     served_dimensions: []
 
+  rfS_2B:
+    size: 16
+    r_bw: 16
+    w_bw: 16
+    r_cost: 0.021
+    w_cost: 0.021
+    area: 0
+    r_port: 2
+    w_port: 2
+    rw_port: 0
+    latency: 1
+    operands: [S]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_2
+        th: r_port_2
+    served_dimensions: []
+    
   sram_2MB:
     size: 16777216
     r_bw: 2048
@@ -50,7 +69,7 @@ memories:
     latency: 1
     min_r_granularity: 64
     min_w_granularity: 64
-    operands: [I1, O]
+    operands: [I1, O, S]
     ports:
       - fh: w_port_1
         tl: r_port_1
@@ -58,6 +77,10 @@ memories:
         tl: r_port_1
         fl: w_port_1
         th: r_port_1
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_1
+        th: r_port_1        
     served_dimensions: [D1, D2]
 
   dram:
@@ -71,7 +94,7 @@ memories:
     w_port: 0
     rw_port: 1
     latency: 1
-    operands: [I1, I2, O]
+    operands: [I1, I2, O, S]
     ports:
       - fh: rw_port_1
         tl: rw_port_1
@@ -81,6 +104,10 @@ memories:
         tl: rw_port_1
         fl: rw_port_1
         th: rw_port_1
+      - fh: rw_port_1
+        tl: rw_port_1
+        fl: rw_port_1
+        th: rw_port_1        
     served_dimensions: [D1, D2]
 
 operational_array:

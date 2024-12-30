@@ -71,18 +71,28 @@ class LoopRelevancyInfo:
         layer_dim_sizes: LayerDimSizes,
         pr_loop: PrLoop,
         pr_loop_list: LoopList,
+        output_operand: LayerOperand,
+        state_operand : LayerOperand | None,
+        time_dim : LayerDim | None,
+        is_state : bool,
     ) -> "LoopRelevancyInfo":
         """!
         # TODO requires cleanup and documentation
         """
         self = LoopRelevancyInfo()
         self.orig_pr_loop = pr_loop
-
         dimension_list = layer_dim_sizes.layer_dims
-        for layer_op in equation.get_contained_operands():
-            r_loop_list = equation.get_r_layer_dims(layer_op)
-            ir_loop_list = list(set(dimension_list).difference(r_loop_list))
+        layer_ops = equation.get_contained_operands()
+        if is_state:
+            layer_ops.append(state_operand)
+        for layer_op in layer_ops:
+            if is_state and layer_op == state_operand:
+                r_loop_list = equation.get_r_layer_dims(output_operand).copy()
+                r_loop_list.remove(time_dim)
+            else:
+                r_loop_list = equation.get_r_layer_dims(layer_op)
 
+            ir_loop_list = list(set(dimension_list).difference(r_loop_list))
             pr_loop_remove_flag = any(layer_dim in pr_loop for layer_dim in r_loop_list)
             if pr_loop_remove_flag:
                 self.r_dims[layer_op] = [layer_dim for layer_dim in r_loop_list if layer_dim not in pr_loop_list]
@@ -113,7 +123,10 @@ class LayerNodeAttributes:
     constant_operands: list[LayerOperand]
     input_operand_source: InputOperandSource
     pr_layer_dim_sizes: LayerDimSizes | None
-
+    is_temporal: bool
+    time_dim: LayerDim | None
+    state_operand: LayerOperand | None
+    is_state: bool
 
 @dataclass
 class MappingAttributes:
@@ -146,6 +159,10 @@ class LayerNode(LayerNodeABC):
     layer_dims: list[LayerDim]
     pr_loop: PrLoop
     pr_layer_dim_sizes: LayerDimSizes | None
+    time_dim : LayerDim | None
+    state_operand: LayerOperand | None
+    is_state: bool
+    is_temporal: bool
 
     def __init__(self, layer_id: int, node_name: str, node_attr: LayerNodeAttributes, mapping_attr: MappingAttributes):
         """
@@ -165,6 +182,8 @@ class LayerNode(LayerNodeABC):
         self.dimension_relations = node_attr.dimension_relations
         self.padding = node_attr.padding
         self.constant_operands = node_attr.constant_operands
+        self.time_dim = node_attr.time_dim
+        self.is_temporal = node_attr.is_temporal
         self.input_operand_source = node_attr.input_operand_source
         pr_layer_dim_sizes = node_attr.pr_layer_dim_sizes
 
@@ -175,6 +194,10 @@ class LayerNode(LayerNodeABC):
 
         # Derived attributes
         self.layer_operands = self.equation.get_contained_operands()
+        self.state_operand = node_attr.state_operand
+        self.is_state = node_attr.is_state
+        if self.is_state:
+            self.layer_operands.append(self.state_operand)
         self.output_operand = self.layer_operands[0]
         self.input_operands = self.layer_operands[1:]
         self.layer_dims = list(self.layer_dim_sizes.layer_dims)
@@ -186,7 +209,8 @@ class LayerNode(LayerNodeABC):
             else pr_layer_dim_sizes
         )
         self.loop_relevancy_info = LoopRelevancyInfo.extract_relevancy_info(
-            self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list
+            self.equation, self.layer_dim_sizes, self.pr_loop, pr_loop_list, self.output_operand, 
+            self.state_operand, self.time_dim, self.is_state
         )
         self.pr_decoupled_relevancy_info = self.loop_relevancy_info.create_pr_decoupled_relevancy_info()
 
@@ -232,6 +256,13 @@ class LayerNode(LayerNodeABC):
             act_layer_op = self.get_act_layer_op()
             weight_layer_op = [x for x in self.constant_operands if x != act_layer_op].pop()
         return weight_layer_op
+
+    def has_mem_op(self, mem_op):
+        try:
+            self.memory_operand_links.mem_to_layer_op(mem_op)
+            return True
+        except:
+            return False
 
     def build_pr_funcs(self) -> tuple[PrLoop, LoopList, PrScalingFactors]:
         """!
@@ -333,9 +364,13 @@ class LayerNode(LayerNodeABC):
         # each operand's size (Unit: bit)
         operand_size_bit: dict[LayerOperand, int] = {}
         for layer_op, size_in_elem in self.operand_size_elem.items():
-            operand_size_bit[layer_op] = int(size_in_elem * self.operand_precision[layer_op])
+            # This is correct but we dont want to risk it
+            # if layer_op == self.output_operand:
+            #     precision = self.operand_precision.final_output_precision
+            # else:
+            precision = self.operand_precision[layer_op]
+            operand_size_bit[layer_op] = int(size_in_elem * precision)
         self.operand_size_bit = operand_size_bit
-
         # each operand's total data reuse factor, which is total MAC Op/total operand size (in element),
         # i.e. each data element can be used to support how many MAC operation.
         operand_data_reuse: dict[LayerOperand, float] = {}

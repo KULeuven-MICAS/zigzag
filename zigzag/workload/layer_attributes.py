@@ -106,7 +106,6 @@ class LayerOperandPrecision(LayerAttribute):
             return self.data[Constants.FINAL_OUTPUT_LAYER_OP]
         return self.data[Constants.OUTPUT_LAYER_OP]
 
-
 class MemoryOperandLinks(LayerAttribute):
     """! Links LayerOperand to MemoryOperand."""
 

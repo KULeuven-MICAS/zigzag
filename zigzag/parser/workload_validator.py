@@ -23,6 +23,7 @@ class WorkloadValidator:
         "MaxPool",
         "AveragePool",
         "GlobalAveragePool",
+        "SConv",
     ]
 
     # Schema for a single layer, UpgradeValidator extrapolates to list of layers
@@ -42,6 +43,7 @@ class WorkloadValidator:
         },
         "loop_dims": {"type": "list", "schema": {"type": "string"}, "required": True},
         "loop_sizes": {"type": "list", "schema": {"type": "integer"}, "required": True},
+        "time_dim": {"type": "string", "required": False},
         "operand_precision": {
             "type": "dict",
             "required": True,
@@ -49,7 +51,8 @@ class WorkloadValidator:
                 "I": {"type": "integer", "required": False},
                 "W": {"type": "integer", "required": False},
                 "O": {"type": "integer", "required": True},
-                "O_final": {"type": "integer", "required": True},
+                "O_final": {"type": "integer", "required": False},
+                "S": {"type": "integer", "required": False},
             },
         },
         "operand_source": {
@@ -137,3 +140,4 @@ class WorkloadValidator:
                 self.__invalidate("PR loop sizes defined, but no corresponding PR loop dimensions")
             elif len(layer_data["pr_loop_sizes"]) != len(layer_data["pr_loop_dims"]):
                 self.__invalidate("Number of PR loop dimensions not equal to number of corresponding sizes")
+

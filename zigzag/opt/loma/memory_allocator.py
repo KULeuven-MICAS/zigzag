@@ -48,7 +48,6 @@ class MemoryAllocator:
         self.layer_ops = [layer_op for layer_op, _ in self.layer_and_mem_ops]
         self.mem_ops = [mem_ops for _, mem_ops in self.layer_and_mem_ops]
         self.mem_to_layer_op = {mem_op: layer_op for layer_op, mem_op in self.layer_and_mem_ops}
-
         # Bit precision for the different mem ops
         self.precision: dict[MemoryOperand, int] = {
             mem_op: self.layer.operand_precision[layer_op] for layer_op, mem_op in self.layer_and_mem_ops
@@ -165,6 +164,17 @@ class MemoryAllocator:
                 self.precision[Constants.OUTPUT_MEM_OP]
                 if any([dim in ir_dims for dim in unallocated_dims])
                 else self.precision[Constants.FINAL_OUTPUT_MEM_OP]
+            )
+        elif mem_op == Constants.STATE_MEM_OP:
+            ir_dims = self.layer.loop_relevancy_info.get_ir_layer_dims(self.layer.output_operand)
+            unallocated_spatial_dims = [
+                dim for dim, _ in self.spatial_mapping.get_unrolling_all(layer_op, self.mem_level[layer_op])
+            ]
+            unallocated_temporal_dims = [unallocated_loop.layer_dim for unallocated_loop in unallocated_loops]
+            unallocated_dims = unallocated_spatial_dims + unallocated_temporal_dims            
+            precision = (
+                0 if any([dim in ir_dims for dim in unallocated_dims])
+                else self.precision[mem_op]
             )
         else:
             precision = self.precision[mem_op]

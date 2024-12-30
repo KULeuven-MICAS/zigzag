@@ -45,6 +45,7 @@ class MappingValidator:
                 "O": {"type": "string", "required": True},
                 "W": {"type": "string", "required": True},
                 "I": {"type": "string", "required": True},
+                "S": {"type": "string", "required": False},
             },
             "default": {"O": "O", "I": "I1", "W": "I2"},
         },

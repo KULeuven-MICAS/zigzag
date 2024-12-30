@@ -467,16 +467,16 @@ class CostModelEvaluation(CostModelEvaluationABC):
             mem_utilization_sum = sum(
                 mem_utilization["individual"][self.memory_operand_links.mem_to_layer_op(mem_op)][mem_lv]
                 for mem_op, mem_lv in mem_share_dict
-                if self.memory_operand_links.contains_mem_op(mem_op)
+                if self.memory_operand_links.contains_mem_op(mem_op) and self.layer.has_mem_op(mem_op)
             )
             effective_mem_utilization_sum = sum(
                 effective_mem_utilization["individual"][self.memory_operand_links.mem_to_layer_op(mem_op)][mem_lv]
                 for mem_op, mem_lv in mem_share_dict
-                if self.memory_operand_links.contains_mem_op(mem_op)
+                if self.memory_operand_links.contains_mem_op(mem_op) and self.layer.has_mem_op(mem_op)
             )
 
             for mem_op, mem_lv in mem_share_dict:
-                if self.memory_operand_links.contains_mem_op(mem_op):
+                if self.memory_operand_links.contains_mem_op(mem_op) and self.layer.has_mem_op(mem_op):
                     layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
                     mem_utili_shared[layer_op][mem_lv] = mem_utilization_sum
                     effective_mem_utilization_shared[layer_op][mem_lv] = effective_mem_utilization_sum
@@ -675,7 +675,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     # for later memory free space evaluation
                     if shared_mem_list is not None:
                         for shared_mem_op, shared_mem_lv in shared_mem_list:
-                            if self.memory_operand_links.contains_mem_op(shared_mem_op):
+                            if self.memory_operand_links.contains_mem_op(shared_mem_op) and self.layer.has_mem_op(mem_op):
                                 shared_layer_op = self.memory_operand_links.mem_to_layer_op(shared_mem_op)
                                 self.effective_mem_utili_shared[shared_layer_op][
                                     shared_mem_lv
@@ -816,7 +816,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             for port in port_list:
                 port_activity_single[str(port)] = []
                 for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
-                    if self.memory_operand_links.contains_mem_op(mem_op):
+                    if self.memory_operand_links.contains_mem_op(mem_op) and self.layer.has_mem_op(mem_op):
                         layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
                         period_count = self.mapping_int.unit_mem_data_movement[layer_op][
                             mem_lv
@@ -897,7 +897,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
         min_required_cycles: list[float] = []
         total_required_cycles: list[float] = []
         for mem_op, mem_lv, mov_dir in mem_op_level_direction_combs:
-            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            if self.layer.has_mem_op(mem_op):
+                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            else:
+                continue
             minimal_bits = self.mapping_int.data_bit_per_level_unrolled[layer_op][1]
             minimal_cycles_op = ceil(minimal_bits / port.bw)
             min_required_cycles.append(minimal_cycles_op)
@@ -920,7 +923,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
         for (mem_op, mem_lv, mov_dir), remainder, reduction in zip(
             mem_op_level_direction_combs, remaining_loading_cycles, reductions
         ):
-            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            if self.layer.has_mem_op(mem_op):
+                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            else:
+                continue
             data_loaded = remainder * port.bw
             port_activity = PortBeginOrEndActivity(
                 remainder,
@@ -934,7 +940,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             # Update class variable
             class_var_to_update = (
                 self.data_loading_cc_per_op
-                if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2]
+                if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2, Constants.STATE_MEM_OP]
                 else self.data_offloading_cc_per_op
             )
             str_identifier = f"{layer_op.name}{mem_lv}_{mov_dir}"
@@ -961,7 +967,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
         """! Calculate the loading and offloading activities with mem port movement directions period > 1."""
         port_activities: list[PortBeginOrEndActivity] = []
         for mem_op, mem_lv, mov_dir in mem_op_level_direction_combs:
-            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            if self.layer.has_mem_op(mem_op):
+                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            else:
+                continue
             unit_mem_data_movement = self.mapping_int.unit_mem_data_movement[layer_op][mem_lv]
             period_count = unit_mem_data_movement.data_trans_period_count.get_single_dir_data(mov_dir)
 
@@ -987,7 +996,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             # Update class variable
             class_var_to_update = (
                 self.data_loading_cc_per_op
-                if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2]
+                if mem_op in [Constants.MEM_OP_1, Constants.MEM_OP_2, Constants.STATE_MEM_OP]
                 else self.data_offloading_cc_per_op
             )
             str_identifier = f"{layer_op.name}{mem_lv}_{mov_dir}"
@@ -1017,7 +1026,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 mov_dir == DataDirection.RD_OUT_TO_LOW or mov_dir == DataDirection.WR_IN_BY_HIGH
             ):
                 continue
-            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            if self.layer.has_mem_op(mem_op):
+                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            else:
+                continue
             period_count = unit_mem_data_movement[layer_op][mem_lv].data_trans_period_count.get_single_dir_data(mov_dir)
             if period_count == 0:
                 continue
@@ -1029,7 +1041,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
         # This is the sum of all bandwidths for the operand - movement directions that have > 1 period
         total_req_bw_aver_computation = 0
         for mem_op, mem_lv, mov_dir in combs_period_count_greater_than_1:
-            layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            if self.layer.has_mem_op(mem_op):
+                layer_op = self.memory_operand_links.mem_to_layer_op(mem_op)
+            else:
+                continue
             req_bw_aver = unit_mem_data_movement[layer_op][mem_lv].req_mem_bw_aver.get_single_dir_data(mov_dir)
             req_bw_aver = ceil(req_bw_aver / self.cycles_per_op)  # average bandwidth is lower for higher cycles_per_op
             total_req_bw_aver_computation += req_bw_aver
@@ -1214,6 +1229,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         memory_level_index = memory_levels.index(memory_level)
         # Obtain the required instantaneous bandwidth to/from the memory for its operands during computation
         inst_bw = FourWayDataMoving(0, 0, 0, 0)
+        if not self.layer.has_mem_op(memory_operand):
+            return inst_bw
         layer_op = self.memory_operand_links.mem_to_layer_op(memory_operand)
         req_bw_4way = self.mapping.unit_mem_data_movement[layer_op][memory_level_index].req_mem_bw_inst
         inst_bw += FourWayDataMoving(

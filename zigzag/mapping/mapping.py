@@ -61,7 +61,8 @@ class Mapping:
 
         # Distinguish final output from partial output: "psum_flag"
         self.psum_flag = self.get_psum_flags()
-
+        if self.layer_node.is_state:
+            self.psum_s_flag = self.get_psum_flags(state=True)
         # Generate a dictionary that collect data precision for each operand at each arch level
         self.gen_data_precision_dict()
 
@@ -121,7 +122,7 @@ class Mapping:
         self.combined_mapping_dict_1s1t = combined_mapping_dict_1s1t
         self.combined_mapping_dict_1s2t = combined_mapping_dict_1s2t
 
-    def get_psum_flags(self) -> list[bool]:
+    def get_psum_flags(self, state=False) -> list[bool]:
         """! This function generates an list "psum_flag" that identify whether an output memory
         level holds partial or final output.
         E.g., psum_flag = [True, True, False] means that there are 3 memory levels for output and only the outermost
@@ -129,13 +130,17 @@ class Mapping:
         For indexing convenience, we add an extra False to the end of the psum_flag list.
         # TODO cleanup
         """
+        if state:
+            operand = self.layer_node.state_operand
+        else:
+            operand = self.layer_node.output_operand
         output_operand = self.layer_node.output_operand
         loop_dim_relevancy = self.layer_node.pr_decoupled_relevancy_info
         # output_ir_flag indicate whether at an architectural level, there is output's ir loop in it.
         # True for yes, there is.
-        output_arch_level = self.spatial_mapping.arch_level[output_operand]
+        output_arch_level = self.spatial_mapping.arch_level[operand]
         output_ir_flag = [False] * output_arch_level
-        for level, current_level_loops in enumerate(self.combined_mapping_dict_1s1t_reform[output_operand]):
+        for level, current_level_loops in enumerate(self.combined_mapping_dict_1s1t_reform[operand]):
             for loop_type, loop_dim in current_level_loops:
                 if loop_type in loop_dim_relevancy.get_ir_layer_dims(output_operand) and loop_dim > 1:
                     output_ir_flag[level] = True
@@ -150,6 +155,7 @@ class Mapping:
         """! This function generates a dictionary that collect data precision for each operand at each arch level"""
         input_operands = self.layer_node.input_operands
         output_operand = self.layer_node.output_operand
+        state_operand = self.layer_node.state_operand
         data_precision_dict: dict[LayerOperand, list[int]] = {
             op: [self.layer_node.operand_precision[op]] * (self.mem_level[op] + 1) for op in input_operands
         }
@@ -161,6 +167,15 @@ class Mapping:
                 data_precision_dict[output_operand].append(
                     self.layer_node.operand_precision[Constants.FINAL_OUTPUT_LAYER_OP]
                 )
+        if self.layer_node.is_state:
+            data_precision_dict[state_operand] = []
+            for i in range(self.mem_level[state_operand] + 1):
+                if self.psum_s_flag[i]:
+                    data_precision_dict[state_operand].append(0)
+                else:
+                    data_precision_dict[state_operand].append(
+                        self.layer_node.operand_precision[state_operand]
+                    )            
         self.data_precision_dict = data_precision_dict
 
     def gen_r_ir_loop_list(self):
@@ -360,7 +375,7 @@ class Mapping:
         self.data_access_raw2 = data_access_raw2
 
         # Distinguish read and write, unify input operands and output operand
-        # For input operands
+        # For input operands      
         for operand in self.layer_node.input_operands:
             for mem_level in range(self.mem_level[operand]):
                 unit_mem_data_movement = DataMovePattern(operand, mem_level)
@@ -450,6 +465,58 @@ class Mapping:
             )
 
             self.unit_mem_data_movement[output_operand][mem_level] = unit_mem_data_movement
+
+        # For state operand
+        if self.layer_node.is_state:
+            state_operand = self.layer_node.state_operand
+            for mem_level in range(self.mem_level[state_operand]):
+                unit_mem_data_movement = DataMovePattern(operand, mem_level)
+                # data access count
+                if (
+                    self.access_same_data_considered_as_no_access
+                    and mem_level == 0
+                    and self.accelerator.mem_r_bw_dict[self.layer_node.memory_operand_links[state_operand]][mem_level]
+                    >= self.data_bit_per_level[state_operand][mem_level]
+                    // self.spatial_mapping.unit_unique[state_operand][mem_level + 1]
+                ):
+                    # If we need access the same input data multiple times from the innermost memory level and the data
+                    ##size is smaller than the memory read bw, take into account only one-time access cost (assume the
+                    # data can stay at the output pins of the memory as long as it is needed).
+                    rd_out_to_low = int(
+                        data_access_raw[state_operand][mem_level]
+                        / self.temporal_mapping.mac_level_data_stationary_cycle[state_operand]
+                    )
+                else:
+                    rd_out_to_low = data_access_raw[operand][mem_level]
+                wr_in_by_low = rd_out_to_low
+                wr_in_by_high = data_access_raw2[operand][mem_level + 1]
+                rd_out_to_high = wr_in_by_high
+                unit_mem_data_movement.set_data_elem_move_count(
+                    rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
+                )
+
+                # data precision
+                # to do: use psum_s_flag to set to 0
+                if self.psum_s_flag[mem_level]:
+                    rd_out_to_low_pre = 0
+                    wr_in_by_low_pre = 0
+                else:
+                    rd_out_to_low_pre = self.layer_node.operand_precision[state_operand]
+                    wr_in_by_low_pre = self.layer_node.operand_precision[state_operand]
+                if self.psum_s_flag[mem_level+1]:
+                    rd_out_to_high_pre = 0
+                    wr_in_by_high_pre = 0
+                else:
+                    rd_out_to_high_pre = self.layer_node.operand_precision[state_operand]
+                    wr_in_by_high_pre = self.layer_node.operand_precision[state_operand]
+                unit_mem_data_movement.set_data_precision(
+                    rd_out_to_low_pre,
+                    wr_in_by_low_pre,
+                    rd_out_to_high_pre,
+                    wr_in_by_high_pre,
+                )
+
+                self.unit_mem_data_movement[operand][mem_level] = unit_mem_data_movement
 
     def calc_req_mem_bw_and_data_transfer_rate(self):
         """! This function calculates the average & instant required memory bw and the periodic data transfer
@@ -605,6 +672,61 @@ class Mapping:
             self.unit_mem_data_movement[output_operand][mem_level].set_data_trans_amount_per_period(
                 rd_out_to_low_da, wr_in_by_low_da, rd_out_to_high_da, wr_in_by_high_da
             )
+        
+        # For state operand
+        if self.layer_node.is_state:
+            state_operand = self.layer_node.state_operand
+            for mem_level in range(self.mem_level[state_operand]):
+                if self.psum_s_flag[mem_level]:
+                    wr_in_by_low_bw = 0
+                    wr_in_by_low_pd = 0
+                    wr_in_by_low_pc = 0
+                    wr_in_by_low_da = 0
+                else:
+                    wr_in_by_low_bw = int(req_mem_bw_high_raw[state_operand][mem_level])
+                    wr_in_by_low_pd = int(cycle_each_level[state_operand][mem_level])
+                    wr_in_by_low_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[state_operand][mem_level])
+                    wr_in_by_low_da = int(
+                        data_each_level_unrolled[state_operand][mem_level] * mem_bw_boost_factor[state_operand][mem_level]
+                    )
+                if self.psum_s_flag[mem_level+1]:
+                    rd_out_to_high_bw = 0
+                    rd_out_to_high_pd = 0
+                    rd_out_to_high_pc = 0
+                    rd_out_to_high_da = 0
+                else:
+                    rd_out_to_high_bw = int(req_mem_bw_low_raw[state_operand][mem_level + 1])
+                    rd_out_to_high_pd = int(cycle_each_level[state_operand][mem_level + 1])
+                    rd_out_to_high_pc = int(
+                        self.temporal_mapping.total_cycle // cycle_each_level[state_operand][mem_level + 1]
+                    )
+                    rd_out_to_high_da = data_each_level_unrolled[state_operand][mem_level + 1]
+
+                rd_out_to_low_bw = wr_in_by_low_bw
+                rd_out_to_low_pd = wr_in_by_low_pd
+                rd_out_to_low_pc = wr_in_by_low_pc
+                rd_out_to_low_da = wr_in_by_low_da
+                wr_in_by_high_bw = rd_out_to_high_bw
+                wr_in_by_high_pd = rd_out_to_high_pd
+                wr_in_by_high_pc = rd_out_to_high_pc
+                wr_in_by_high_da = rd_out_to_high_da
+
+                # average required memory BW
+                self.unit_mem_data_movement[state_operand][mem_level].set_req_mem_bw_aver(
+                    rd_out_to_low_bw, wr_in_by_low_bw, rd_out_to_high_bw, wr_in_by_high_bw
+                )
+                # data transfer period
+                self.unit_mem_data_movement[state_operand][mem_level].set_data_trans_period(
+                    rd_out_to_low_pd, wr_in_by_low_pd, rd_out_to_high_pd, wr_in_by_high_pd
+                )
+                # data transfer period count
+                self.unit_mem_data_movement[state_operand][mem_level].set_data_trans_period_count(
+                    rd_out_to_low_pc, wr_in_by_low_pc, rd_out_to_high_pc, wr_in_by_high_pc
+                )
+                # per-period data transfer amount
+                self.unit_mem_data_movement[state_operand][mem_level].set_data_trans_amount_per_period(
+                    rd_out_to_low_da, wr_in_by_low_da, rd_out_to_high_da, wr_in_by_high_da
+                )        
 
         # Calculate the instant memory updating behavior.
         top_ir_loop_size = self.temporal_mapping.top_ir_loop_size

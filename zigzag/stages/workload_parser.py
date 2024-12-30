@@ -37,6 +37,7 @@ class WorkloadParserStage(Stage):
     def parse_workload(self) -> DNNWorkload:
         workload_data = self._parse_workload_data()
         mapping_data = self._parse_mapping_data()
+        logger.info('mapping data', mapping_data)
         factory = WorkloadFactory(workload_data, mapping_data)
         return factory.create()
 

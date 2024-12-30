@@ -100,3 +100,5 @@ class UpgradedValidator(Validator):
         schema = schema["rows"]["schema"] if "rows" in schema else schema  # type: ignore
         assert isinstance(document, (list, tuple, set))
         return [self.add_defaults_to_doc(doc, schema) for doc in document]  # type: ignore
+
+

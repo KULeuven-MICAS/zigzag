@@ -6,6 +6,7 @@ from zigzag.datatypes import (
     LayerDim,
     LayerOperand,
     UnrollFactor,
+    Constants,
 )
 from zigzag.parser.mapping_factory import MappingFactory
 from zigzag.parser.workload_validator import WorkloadValidator
@@ -75,6 +76,7 @@ class LayerNodeFactory:
         operand_precision = self.create_operand_precision()
         dimension_relations = self.create_layer_dim_relations()
         constant_operands = self.create_constant_operands()
+        is_temporal, time_dim, is_state, state_operand = self.create_temporal_operands()
         input_operand_source = self.create_operand_source()
         padding = self.create_padding()
         pr_layer_dim_sizes = self.create_pr_layer_dim_sizes()
@@ -86,6 +88,10 @@ class LayerNodeFactory:
             operand_precision=operand_precision,
             dimension_relations=dimension_relations,
             constant_operands=constant_operands,
+            is_temporal=is_temporal,
+            time_dim=time_dim,
+            is_state=is_state,
+            state_operand=state_operand,
             input_operand_source=input_operand_source,
             padding=padding,
             pr_layer_dim_sizes=pr_layer_dim_sizes,
@@ -148,6 +154,29 @@ class LayerNodeFactory:
 
         return relations
 
+    def create_temporal_operands(self) -> list[LayerOperand]:
+        if self.node_data["operator_type"] == "SConv":
+            is_state = True
+            state_operand = Constants.STATE_LAYER_OP
+        else:
+            is_state = False
+            state_operand = None
+        if self.node_data["time_dim"] == "":
+            if Constants.TIME_DIM.name in self.node_data["loop_dims"]:
+                is_temporal = True
+                time_dim = Constants.TIME_DIM
+            else:
+                is_temporal = False
+                time_dim = None
+        else:
+            is_temporal = True
+            time_dim = LayerDim(self.node_data["time_dim"])
+
+        if is_state and not is_temporal:
+            raise f"Error state layer without temporal dimension."
+
+        return is_temporal, time_dim, is_state, state_operand
+    
     def create_constant_operands(self) -> list[LayerOperand]:
         operand_sources: dict[str, int] = self.node_data["operand_source"]
         constant_operands: list[str] = [op for op, source in operand_sources.items() if source == self.node_data["id"]]

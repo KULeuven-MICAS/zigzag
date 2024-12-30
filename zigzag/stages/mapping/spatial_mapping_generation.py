@@ -129,7 +129,6 @@ class SpatialMappingGeneratorStage(Stage):
         mapping_template = copy.deepcopy(self.provided_mapping)
         mapping_template.initialize_oa_dims(self.oa_dim_sizes)
         mapping_template.check_and_reduce(max_unrollings, self.layer_dim_sizes.data)
-
         oa_dims_to_fill = [x for x in self.oa_dim_sizes if x not in mapping_template]
 
         # Full Spatial Mapping is already defined by user
@@ -195,9 +194,15 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
-                layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+
+                # Check if 
+                if self.layer.has_mem_op(mem_op):
+                    layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+                else:
+                    continue
                 # Either write BW (to write outputs away) or read BW (to read inputs)
                 mem_bandwidth = mem_level.write_bw if layer_op.is_output() else mem_level.read_bw
+                mem_bandwidth = min(mem_level.write_bw, mem_level.read_bw) if layer_op.is_state() else mem_bandwidth
                 # Bit precision of layer operand
                 precision = self.layer.operand_precision[layer_op]
                 irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
@@ -261,11 +266,15 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
-                layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
-                # Either write BW (to write outputs away) or read BW (to read inputs)
+                # Check if exists
+                if self.layer.has_mem_op(mem_op):
+                    layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
+                else:
+                    continue
                 mem_capacity = mem_level.memory_instance.size
                 # Bit precision of layer operand
                 precision = self.layer.operand_precision[layer_op]
+                # Returns o_final !!!
                 irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)
                 total_unrolling_size = 1
                 relevant_oa_dims_spatial_mapping = SpatialMapping({})
@@ -291,6 +300,7 @@ class SpatialMappingGeneratorStage(Stage):
                     )
                     for oa_dim, unrollings in limited_mapping.items():
                         mapping[oa_dim].update(unrollings)
+
         return mapping
 
     def get_max_unrolling(self) -> dict[OADimension, dict[LayerDim, int]]:
@@ -306,7 +316,6 @@ class SpatialMappingGeneratorStage(Stage):
             }
             for oa_dim in self.oa_dim_sizes
         }
-
         max_unrolling = self.limit_unrolling_to_mem_bandwidth(max_unrolling)
         return max_unrolling
 
@@ -374,7 +383,6 @@ class SpatialMappingGeneratorStage(Stage):
         # TODO should it also skip when len == 0?
         if len(self.layer.constant_operands) > 1:
             return spatial_mapping
-
         # Convert LayerDimStr to LayerDim
         layer_dim_size_remainder: dict[LayerDim, UnrollFactor] = dict(self.layer.layer_dim_sizes.items())
 
@@ -609,7 +617,6 @@ class SpatialMappingGeneratorStage(Stage):
             spatial_mapping[act_served_oa_dim] = MappingSingleOADim(
                 {layer_dim: unroll for layer_dim, unroll in best_comb}
             )
-
         return spatial_mapping
 
     @staticmethod

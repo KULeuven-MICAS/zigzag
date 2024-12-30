@@ -11,7 +11,7 @@ class AcceleratorValidator:
     """Validates a single Zigzag accelerator from a user-provided yaml file. Checks if the entries of the yaml file
     are valid and replace unspecified values with defaults."""
 
-    OPERAND_REGEX = r"^I[12]$|^O$"
+    OPERAND_REGEX = r"^I[12]$|^O$|^S$"
     DIMENSION_REGEX = r"^D\d$"
     PORT_REGEX = r"^[r]?[w]?_port_\d+$"
 

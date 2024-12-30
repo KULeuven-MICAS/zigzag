@@ -209,7 +209,7 @@ class MemoryFactory:
         data: dict[MemoryOperand, dict[DataDirection, str]] = dict()
         for mem_op_str in self.data["operands"]:
             mem_op = MemoryOperand(mem_op_str)
-            if mem_op == Constants.OUTPUT_MEM_OP:
+            if mem_op == Constants.OUTPUT_MEM_OP or mem_op == Constants.STATE_MEM_OP:
                 data[mem_op] = {
                     DataDirection.WR_IN_BY_HIGH: "w_port_1",
                     DataDirection.WR_IN_BY_LOW: "w_port_1",

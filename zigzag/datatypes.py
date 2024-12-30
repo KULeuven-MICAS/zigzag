@@ -46,6 +46,8 @@ class OperandABC(metaclass=ABCMeta):
 class LayerOperand(OperandABC):
     """! Operand from the layer definition, e.g. `I`, `W`, `O`."""
 
+    def is_state(self):
+        return self == Constants.STATE_LAYER_OP
     def is_output(self):
         return self == Constants.OUTPUT_LAYER_OP
 
@@ -56,6 +58,9 @@ class LayerOperand(OperandABC):
 class MemoryOperand(OperandABC):
     """! Operand from the memory definition, e.g. `I1`, `I2`, `O`."""
 
+    def is_state(self):
+        return self == Constants.STATE_MEM_OP
+    
     def is_output(self):
         return self == Constants.OUTPUT_MEM_OP
 
@@ -96,14 +101,19 @@ class Constants:
 
     LAYER_OP_I = LayerOperand("I")
     LAYER_OP_W = LayerOperand("W")
+    STATE_LAYER_OP = LayerOperand("S")
+    FINAL_STATE_LAYER_OP = LayerOperand("S_final")
     OUTPUT_LAYER_OP = LayerOperand("O")
     FINAL_OUTPUT_LAYER_OP = LayerOperand("O_final")
 
     MEM_OP_1 = MemoryOperand("I1")
     MEM_OP_2 = MemoryOperand("I2")
+    STATE_MEM_OP = MemoryOperand("S")
+    FINAL_STATE_MEM_OP = MemoryOperand("S_final")
     OUTPUT_MEM_OP = MemoryOperand("O")
     FINAL_OUTPUT_MEM_OP = MemoryOperand("O_final")
 
+    TIME_DIM = LayerDim("T")
     UNKNOWN_DIM_OPERATOR = LayerDim("*")
 
 

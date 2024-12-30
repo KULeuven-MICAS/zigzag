@@ -94,18 +94,39 @@ class LomaEngine:
         pbar = tqdm(total=self.nb_permutations) if self.show_progress_bar else None
 
         yielded = False
+        invalid_orderings = []
         for ordering in self.ordering_generator():
-            allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)  # type: ignore
-            # using try catch here because in the depth-first mode the highest level might not be big enough
-            try:
-                temporal_mapping = allocator.run()  # allocate this ordering to the memories
-                yielded = True
-                yield temporal_mapping
-            except MemoryHierarchyTooSmallException:
-                pass
-            except MemoryTooSmallException:
-                # Skip the ordering that crashed due to ordering (or spatial unrolling) not fitting in memory
-                pass
+            if self.layer.is_state:
+                found = False
+                first_time_index = 100
+                last_ir_index = 0
+                irrelevent_dims = self.layer.loop_relevancy_info.get_ir_layer_dims(self.layer.output_operand)
+                for index, factor in enumerate(ordering):
+                    if not found and factor[0] == self.layer.time_dim:
+                        found = True
+                        first_time_index = index
+                    if irrelevent_dims.__contains__(factor[0]):
+                        last_ir_index = index
+                if first_time_index > last_ir_index:
+                    valid = True
+                else:
+                    valid = False
+            else:
+                valid = True     
+            if valid:
+                allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)  # type: ignore
+                # using try catch here because in the depth-first mode the highest level might not be big enough
+                try:
+                    temporal_mapping = allocator.run()  # allocate this ordering to the memories
+                    yielded = True
+                    yield temporal_mapping
+                except MemoryHierarchyTooSmallException:
+                    pass
+                except MemoryTooSmallException:
+                    # Skip the ordering that crashed due to ordering (or spatial unrolling) not fitting in memory
+                    pass
+            else:
+                invalid_orderings.append(ordering)
             if pbar is not None:
                 pbar.update(1)
 
@@ -120,6 +141,7 @@ class LomaEngine:
                 f"- The layer does not fit within the full memory hierarchy\n"
                 f"- A single operand does not fit within the lowest memory level\n"
                 f"- One of the layer dimensions cannot be split up in appropriate divisors\n"
+                f" Invalid orderings: {invalid_orderings}"
             )
 
     def get_temporal_loops(self):
@@ -230,7 +252,6 @@ class LomaEngine:
                     if isinstance(v, StaticPositionsAndSizesConstraint)
                 )
             )
-
             for static_size in static_sizes:
                 factor_list: dict[int, int] = factorint(static_size[1])  # type: ignore
                 for factor, multiplicity in factor_list.items():  # type: ignore
