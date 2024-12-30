@@ -1,52 +1,44 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Sphinx CD
 
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "master" branch
   push:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
 permissions:
   contents: write
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build-and-deploy:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v3
 
-      # Runs a set of commands using the runners shell
+      - name: Check Python version and packages
+        run: |
+          python --version
+          pip list
+
       - name: build sphinx
         run: |
           cd docs
           pip install --upgrade -r requirements.txt
           sphinx-build --version
           sphinx-build -b html source build
-      
-      # Run doxygen, copy html files and enable ZigZag html icon
+
       - name: build doxygen    
         run: | 
           cd docs
-          sudo apt-get install doxygen graphviz -y
+          sudo apt-get update && sudo apt-get install doxygen graphviz -y
           doxygen doxygen-conf
-          mkdir build/doxygen
-          mv html/ build/doxygen/
+          mkdir -p build/doxygen/html
+          mv html/* build/doxygen/html/
           cp source/zigzag_logo_white_32x32.svg build/doxygen/html/
 
-      - name: Deploy 🚀
+      - name: Deploy ??
         uses: JamesIves/github-pages-deploy-action@v4
         with:
-          folder: docs/build/ # The folder the action should deploy.
+          folder: docs/build/
