@@ -76,7 +76,7 @@ class LayerNodeFactory:
         operand_precision = self.create_operand_precision()
         dimension_relations = self.create_layer_dim_relations()
         constant_operands = self.create_constant_operands()
-        is_temporal, time_dim, is_state, state_operand = self.create_temporal_operands()
+        [is_temporal, time_dim, is_state, state_operand] = self.create_temporal_operands()
         input_operand_source = self.create_operand_source()
         padding = self.create_padding()
         pr_layer_dim_sizes = self.create_pr_layer_dim_sizes()
@@ -172,7 +172,7 @@ class LayerNodeFactory:
             is_temporal = True
             time_dim = LayerDim(self.node_data["time_dim"])
 
-        return is_temporal, time_dim, is_state, state_operand
+        return [is_temporal, time_dim, is_state, state_operand]
 
     def create_constant_operands(self) -> list[LayerOperand]:
         operand_sources: dict[str, int] = self.node_data["operand_source"]
