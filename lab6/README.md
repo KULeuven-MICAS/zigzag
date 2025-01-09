@@ -15,7 +15,7 @@ As the spatial utilization means the percentage of the effectively working PEs c
 
 The underlying reasons of the spatial under-utilization for IMC accelerators, as we saw in lab5, can be:
 1. The PE array shape does not match with the layer requirement. For example, a 32×32 PE array is 75% under-utilized when processing a 32×24 tensor.
-2. The mapping limits the PE processing capability. For example, a 32×32 PE array supporting (K, FX) spatial mapping has only 3/32 utilization when executing a layer with (C, K, FX, FY) = (32, 32, 3, 3).
+2. The mapping limits the PE processing capability. For example, a 32×32 PE array supporting (K, FX) spatial mapping has only (3×32)/(32×32) utilization when executing a layer with (C, K, FX, FY) = (32, 32, 3, 3).
 
 In contrast, the reasons of the temporal under-utilization are attributed to the reasons why the PE array is in idle, which can be:
 1. A memory instance does not have sufficient memory bandwidth, causing the data required by the PE array cannot be ready in time.
