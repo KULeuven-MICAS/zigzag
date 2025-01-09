@@ -14,7 +14,8 @@ To simplify the lab, sparsity is not considered.
 IMC emerges as a promising alternative for Von-Neumann architecture when facing data-intensive applications (especially for AI).
 By integrating MAC logics within the memory, IMC can conduct Matrix Multiplication (MatMul) inside the memory without energy-expensive data read/write operations.
 A general IMC template is shown in the image below, which is used in this lab.
-If you are looking for more IMC background and modeling details, please have a check on the materials (videos, validation scripts, papers) we provide at https://github.com/KULeuven-MICAS/zigzag-imc.
+If you are looking for more IMC background and modeling details, please have a check on the materials (papers, poster, slides, videos) we provide at [paper](https://ieeexplore.ieee.org/document/10323763), [poster](https://drive.google.com/file/d/1EVdua-y2Wg8WL-ovUIw7KUR9kpnpN4AS/view?usp=sharing), [slides](https://docs.google.com/presentation/d/19OXRDh6NCBUIOVGneO3lrZfVT58xh06U/edit?usp=sharing&ouid=108247328431603587200&rtpof=true&sd=true), [video](https://drive.google.com/file/d/10-k4XEPan-O-QAH4Q0uvone36qfNRCpK/view?usp=sharing).
+If you are looking for the validation details, please have a check on our old ZigZag-IMC repository (in ./imc_model_validation folder): https://github.com/KULeuven-MICAS/zigzag-imc.
 
 <img src="./lab4.png" title="Analog In-Memory Computing hardware template">
 
