@@ -1,4 +1,4 @@
-# Lab 6: System-Level Evaluation for IMC: Temporal Utilization Matters [tried to use second layer but onnx extraction failed]
+# Lab 6: System-Level Evaluation for IMC: Temporal Utilization Matters
 
 ## Objective
 In the previous lab, you have understood a gap exists between the system-level performance and the macro-level peak performance due to the spatial under-utilization.
@@ -28,9 +28,9 @@ In contrast, the reasons of the temporal under-utilization are attributed to the
 
 ## Inputs
 There are three main inputs defined in the `inputs/` folder:
-1. **Workload**: _[Same as lab5]_ The first layer of ResNet18 in ONNX format. The layer name is `Conv1`. You can use [Netron](https://netron.app) to visualize the model.
+1. **Workload**: The second layer of ResNet18 in ONNX format. The layer name is `Conv2`. You can use [Netron](https://netron.app) to visualize the model.
 2. **Hardware**: _[Same as lab5]_ A sample accelerator is encoded in `accelerator.yaml`. This accelerator includes 32x32 DIMC operational units with a hierarchy of memories attached which store different `memory operands` `I1`, `I2`, `O`.
-3. **Mapping**: _[Same as lab5]_ The mapping specifies for the `Conv1` layer only the spatial mapping restriction. The `SpatialMappingGeneratorStage` automatically generate all legal spatial mappings. The `TemporalMappingGeneratorStage` automatically detects if there is any user-defined temporal loop ordering and generates multiple temporal mappings to be evaluated by the cost model.
+3. **Mapping**: _[Same as lab5]_ The mapping specifies for the `Conv2` layer only the spatial mapping restriction. The `SpatialMappingGeneratorStage` automatically generate all legal spatial mappings. The `TemporalMappingGeneratorStage` automatically detects if there is any user-defined temporal loop ordering and generates multiple temporal mappings to be evaluated by the cost model.
 
 ## Running the Experiment
 
@@ -58,7 +58,7 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
 
 - `breakdown.png` shows an energy and latency breakdown for the different layers evaluated (only one here). The energy is broken down into the operational level (MAC) and memory levels. As each memory level can store one or more operands, it is colored by operand. Moreover, it breaks down the energy cost for 4 different read/write directions of the memory. The latency is broken down into the ideal computation time (assuming perfect utilization of the operational array), the added cycles due to spatial stalls which represent the spatial underutilization (due to imperfect spatial loop unrolling), the added cycles due to temporal stalls (due to imperfect memory bandwidth), and the added on-loading and off-loading cycles (due to the very first.last iteration on/off-loading of inputs/outputs).
 
-- `Conv1_complete.json` contains all input and output information of the cost model evaluation. 
+- `Conv2_complete.json` contains all input and output information of the cost model evaluation. 
 
 - `overall_simple.json` aggregates the energy and latency of all layers (only one here).
 
@@ -84,7 +84,7 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
     >
     > In the terminal, you can see the reports on the total cycle count (#cycles) and its breakdown. The temporal utilization (TU) can be calculated by dividing the computation cycle count with the overall cycle count.
     > 
-    > TU = 9834496.0 / 9834512.0 = 100%
+    > TU = 903168.0 / 903226.0 = 100%
     > 
     > </details>
   
@@ -97,7 +97,7 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
     > 
     > </details>
 
-- Change the IMC cell to the other type. How to do it? How does the throughput change after that? Why?
+- Change the IMC cell to the other type (6T or 8T). How to do it? How does the throughput change after that? Why?
     > <details>
     > <summary>Answer</summary>
     >
@@ -105,7 +105,7 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
     > - merge the two ports into one rw port (`rw_port`), by setting `rw_port: 1` and disabling original ports (setting `r_port: 0, w_port: 0`).
     > - update the binding of the memory directions (fh, tl) and the port name, by setting `fh: rw_port_1, tl: rw_port_1`.
     >
-    > After switching the SRAM types, you can observe in the terminal that the throughput drops. The reason is the TU drops (from 100% to 89%), as now IMC cells cannot write and read simultaneously. This leads to longer overall cycles and therefore lower throughput.
+    > After switching the SRAM types, you can observe in the terminal that the throughput drops. The reason is the TU drops (from 100% to 89%), as now IMC cells cannot write and read simultaneously. This leads to extra memory stalling cycles and therefore lower throughput.
     > 
     > </details>
 
@@ -115,7 +115,7 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
     >
     > 64KB/access is not realistic. To change it to 128 bit/access, you need to set `r_bw: 128, w_bw: 128` for dram in `accelerator.yaml`.
     >
-    > After rerunning the simulation, the throughput drops, as now the dram bandwidth is insufficient to transfer all operands in time.
+    > After rerunning the simulation, the throughput slightly drops (from 0.073 TOP/s to 0.072 TOP/s), as now the dram bandwidth is insufficient to transfer all operands in time.
     > 
     > </details>
 
@@ -123,8 +123,8 @@ In the `outputs/` folder, following outputs are saved _[same as lab1/2/3/5]_:
     > <details>
     > <summary>Answer</summary>
     >
-    > The two bottlenecks in terms of the Temproal Utilization (TU) are: (1) The sharing w/r port of the IMC array, (2) Insufficient dram bandwidth.
+    > The two bottlenecks in terms of the Temporal Utilization (TU) are: (1) The sharing w/r port of the IMC array, (2) Insufficient dram bandwidth.
     >
-    > The bottlenecks in terms of the Spatial Utilization (SU) is: the PE array shape does not match with the layer shape.
+    > The bottlenecks in terms of the Spatial parallelism is: the PE array shape does not match with the layer shape. Increasing the PE array shape to (64, 64) can definitely improve the throughput.
     > 
     > </details>

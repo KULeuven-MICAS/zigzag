@@ -22,7 +22,7 @@ pickle_name = f"{experiment_id}-saved_list_of_cmes"
 
 # Define main input paths
 accelerator = "lab6/inputs/hardware/accelerator.yaml"
-workload = "lab6/inputs/workload/resnet18_first_layer.onnx"
+workload = "lab6/inputs/workload/resnet18_second_layer.onnx"
 mapping = "lab6/inputs/mapping/mapping.yaml"
 
 # Define other inputs of api call
