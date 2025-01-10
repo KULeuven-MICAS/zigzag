@@ -22,7 +22,7 @@ memories:
     served_dimensions: [D2]
 
   l1:
-    size: 262144
+    size: 4194304
     r_bw: 2048
     w_bw: 2048
     r_cost: 22.9  # TODO
@@ -30,44 +30,44 @@ memories:
     area: 0
     r_port: 0
     w_port: 0
-    rw_port: 1
+    rw_port: 3
     latency: 1
     operands: [I1, I2, O]
     min_r_granularity: 64
     min_w_granularity: 64
     ports:
-      - fh: rw_port_1
+      - fl: rw_port_1
         tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-        fl: rw_port_1
-        th: rw_port_1
+      - fl: rw_port_2
+        tl: rw_port_2
+      - fl: rw_port_3
+        tl: rw_port_3
+      # - fh: rw_port_4
+      #   th: rw_port_4
     served_dimensions: [D1, D2, D3]
 
-  l3:
-    size: 10000000000
-    r_bw: 512
-    w_bw: 512
-    r_cost: 700  # TODO
-    w_cost: 750  # TODO
-    area: 0
-    r_port: 0
-    w_port: 0
-    rw_port: 1
-    latency: 1
-    operands: [I1, I2, O]
-    ports:
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-        fl: rw_port_1
-        th: rw_port_1
-    served_dimensions: [D1, D2, D3]
+  # l3:
+  #   size: 10000000000
+  #   r_bw: 512
+  #   w_bw: 512
+  #   r_cost: 700  # TODO
+  #   w_cost: 750  # TODO
+  #   area: 0
+  #   r_port: 0
+  #   w_port: 0
+  #   rw_port: 1
+  #   latency: 1
+  #   operands: [I1, I2, O]
+  #   ports:
+  #     - fh: rw_port_1
+  #       tl: rw_port_1
+  #     - fh: rw_port_1
+  #       tl: rw_port_1
+  #     - fh: rw_port_1
+  #       tl: rw_port_1
+  #       fl: rw_port_1
+  #       th: rw_port_1
+  #   served_dimensions: [D1, D2, D3]
 
 operational_array:
   input_precision: [8, 8]

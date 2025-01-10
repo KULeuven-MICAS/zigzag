@@ -10,36 +10,21 @@ from zigzag.stages.save_stages import CompleteSaveStage
 from zigzag.stages.WorkloadStage import WorkloadStage
 from zigzag.stages.SpatialMappingGeneratorStage import SpatialMappingGeneratorStage
 from zigzag.stages.reduce_stages import MinimalLatencyStage
+from zigzag.stages.LomaStage import LomaStage
 from zigzag.stages.TemporalOrderingConversionStage import TemporalOrderingConversionStage
 from zigzag.stages.CostModelStage import CostModelStage
 from zigzag.visualization.results.plot_cme import (
     bar_plot_cost_model_evaluations_breakdown,
 )
+from zigzag.api import get_hardware_performance_zigzag
+from zigzag.visualization.results.print_mapping import print_mapping
 
-# Get the onnx model, the mapping and accelerator arguments
-parser = argparse.ArgumentParser(description="Setup zigzag inputs")
-parser.add_argument(
-    "--model",
-    metavar="path",
-    required=False,
-    default="zigzag/inputs/workload/gemm_layer.yaml",
-    help="path to onnx model, e.g. zigzag/inputs/workload/my_model.onnx",
-)
-parser.add_argument(
-    "--mapping",
-    metavar="path",
-    required=False,
-    default="zigzag/inputs/mapping/gemm.yaml",
-    help="path to mapping file, e.g., zigzag/inputs/mapping/my_mapping.yaml",
-)
-parser.add_argument(
-    "--accelerator",
-    metavar="path",
-    required=False,
-    default="zigzag/inputs/hardware/gemm.yaml",
-    help="module path to the accelerator, e.g. zigzag/inputs/hardware/my_accelerator.yaml",
-)
-args = parser.parse_args()
+
+model = "gemm"
+workload_path = "zigzag/inputs/workload/gemm_layer.yaml"  # or "zigzag/inputs/workload/resnet18.yaml"
+accelerator_path = "zigzag/inputs/hardware/gemm.yaml"
+mapping_path = "zigzag/inputs/mapping/gemm.yaml"
+pickle_filename = f"outputs/{model}-saved_list_of_cmes.pickle"
 
 # Initialize the logger
 import logging as _logging
@@ -49,45 +34,28 @@ _logging_level = _logging.INFO
 _logging_format = "%(asctime)s - %(levelname)s - %(message)s"
 _logging.basicConfig(level=_logging_level, format=_logging_format)
 
-hw_name = args.accelerator.split(".")[-1]
-wl_name = re.split(r"/|\.", args.model)[-1]
-if wl_name == "onnx":
-    wl_name = re.split(r"/|\.", args.model)[-2]
-experiment_id = f"{hw_name}-{wl_name}"
 
-# Initialize the MainStage which will start execution.
-# The first argument of this init is the list of stages that will be executed in sequence.
-# The second argument of this init are the arguments required for these different stages.
-mainstage = MainStage(
-    [  # Initializes the MainStage as entry point
-        WorkloadParserStage,  # Parses the manual definition into the workload
-        AcceleratorParserStage,  # Parses the accelerator
-        CompleteSaveStage,  # Saves all received CMEs information to a json
-        WorkloadStage,  # Iterates through the different layers in the workload
-        SpatialMappingGeneratorStage,  # Generates multiple spatial mappings (SM)
-        MinimalLatencyStage,  # Reduces all CMEs, returning minimal latency one
-        TemporalOrderingConversionStage,  # Converts defined temporal_ordering to temporal mapping
-        CostModelStage,  # Evaluates generated SM and TM through cost model
-    ],
-    accelerator=args.accelerator,  # required by AcceleratorParserStage
-    workload=args.model,  # required by ONNXModelParserStage
-    mapping=args.mapping,  # required by ONNXModelParserStage
-    dump_folder=f"outputs/",  # where outputs will be saved to
-    loma_lpf_limit=6,  # required by LomaStage
-    loma_show_progress_bar=True,  # shows a progress bar while iterating over temporal mappings
+energy, latency, answer = get_hardware_performance_zigzag(
+    workload=workload_path,
+    accelerator=accelerator_path,
+    mapping=mapping_path,
+    opt="latency",
+    pickle_filename=pickle_filename,
 )
 
+
 # Launch the MainStage
-answers = mainstage.run()
-# Plot the energy and latency breakdown of our cost model evaluation
-cme = answers[0][0]
-save_path = "outputs/breakdown.png"
-bar_plot_cost_model_evaluations_breakdown([cme], save_path=save_path, xtick_rotation=0)
-from zigzag.visualization.results.print_mapping import print_mapping
+# save_path = "outputs/breakdown.png"
+# bar_plot_cost_model_evaluations_breakdown([cme], save_path=save_path, xtick_rotation=0)
+# from zigzag.visualization.results.print_mapping import print_mapping
+
+# mem_names = [ml.memory_instance.name for ml in cme.mem_level_list]
+# stall_slacks = cme.SS_comb_collect
+# print("Stall and slack per port of each memory instance:")
+# for mem_name, ports_ss in zip(mem_names, stall_slacks):
+#     print(f"  {mem_name}: {ports_ss}")
+cme = answer[0][1][0][0]
 print_mapping(cme)
-mem_names = [ml.memory_instance.name for ml in cme.mem_level_list]
-stall_slacks = cme.SS_comb_collect
-print("Stall and slack per port of each memory instance:")
-for mem_name, ports_ss in zip(mem_names, stall_slacks):
-    print(f"  {mem_name}: {ports_ss}")
-print(f"Latency: {cme.latency_total2:.3e}")
+# print(f"SM: {cme.spatial_mapping}")
+# print(f"TM: {cme.temporal_mapping}")
+print(f"Latency: {cme.latency_total2:.3e} (bd: ideal -> {cme.ideal_temporal_cycle}, stall -> {cme.latency_total0 - cme.ideal_temporal_cycle} onload -> {cme.latency_total1 - cme.latency_total0}, offload -> {cme.latency_total2 - cme.latency_total1})")
