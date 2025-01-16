@@ -3,7 +3,7 @@
   equation: O[b][k]+=I[b][c]*W[c][k]
   dimension_relations: []
   loop_dims: [B, C, K]
-  loop_sizes: [192, 72, 192]
+  loop_sizes: [512, 512, 512]
   operand_precision:
     W: 8
     I: 8
@@ -13,19 +13,3 @@
     I: 0
     W: 0
 
-# conv failed: No valid loop ordering was found for layer example_name_of_layer0. Please make sure the spatial mapping is compatible with the architecture.
-# - id: 0 # conv1 stride 2
-#   name: example_name_of_layer0
-#   operator_type: Conv
-#   equation: O[b][k][oy][ox]+=W[k][c][fy][fx]*I[b][c][iy][ix]
-#   dimension_relations: [ix=2*ox+1*fx, iy=2*oy+1*fy]
-#   loop_dims: [B, K, C, OY, OX, FY, FX]
-#   loop_sizes: [1, 64, 3, 112, 112, 7, 7]
-#   operand_precision:
-#     W: 8
-#     I: 8
-#     O: 32
-#     O_final: 32
-#   operand_source:
-#     I: 0
-#     W: 0
