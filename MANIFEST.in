@@ -1,2 +1,4 @@
 include zigzag/inputs/workload/*.onnx
+include zigzag/inputs/mapping/*.yaml
+include zigzag/inputs/hardware/*.yaml
 recursive-include zigzag/cacti *
