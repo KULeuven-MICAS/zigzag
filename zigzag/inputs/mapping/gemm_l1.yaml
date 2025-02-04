@@ -1,3 +1,8 @@
+- name: Gemm
+  memory_operand_links:
+    O: O
+    W: I2
+    I: I1
 - name: default
   spatial_mapping:
     D1:

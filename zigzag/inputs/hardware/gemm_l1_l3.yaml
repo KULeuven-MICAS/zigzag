@@ -22,7 +22,7 @@ memories:
     served_dimensions: [D2]
 
   l1:
-    size: 4194304
+    size: 943718 # 128 kiB - 10% for the snitch stack
     r_bw: 2048
     w_bw: 2048
     r_cost: 22.9  # TODO
