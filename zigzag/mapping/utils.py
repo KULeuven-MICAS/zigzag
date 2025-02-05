@@ -35,7 +35,6 @@ def get_temporal_loops(cme: CostModelEvaluation):
             all_mem_names.add(mem_name)
         mem_names_tuple = tuple(mem_names)
         temporal_loops.append((tl[0], (0, tl[1]), mem_names_tuple))
-    temporal_loops.reverse()
     return temporal_loops
 
 def get_memory_names(cme: CostModelEvaluation):

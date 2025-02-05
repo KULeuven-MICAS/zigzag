@@ -20,6 +20,7 @@ def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
 
     # Extract the temporal loops, spatial loops, and memories from the cme
     temporal_loops = get_temporal_loops(cme)
+    temporal_loops.reverse()
     spatial_loops = get_spatial_loops(cme)
     memories = get_memory_names(cme)
     loop_column_width = (
