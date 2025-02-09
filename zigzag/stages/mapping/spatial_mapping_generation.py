@@ -17,6 +17,7 @@ from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
+from zigzag.mapping.data_movement import DataDirection
 from zigzag.mapping.spatial_mapping import (
     MappingSingleOADim,
     SpatialMapping,
@@ -197,7 +198,8 @@ class SpatialMappingGeneratorStage(Stage):
             for mem_op in mem_level.operands:
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
                 # Either write BW (to write outputs away) or read BW (to read inputs)
-                mem_bandwidth = mem_level.write_bw if layer_op.is_output() else mem_level.read_bw
+                data_dir = DataDirection.WR_IN_BY_LOW if layer_op.is_output() else DataDirection.RD_OUT_TO_LOW
+                mem_bandwidth = mem_level.get_max_bandwidth(mem_op, data_dir)
                 # Bit precision of layer operand
                 precision = self.layer.operand_precision[layer_op]
                 irrelevant_dimensions = self.layer.get_operand_irrelevant_layer_dims(layer_op)

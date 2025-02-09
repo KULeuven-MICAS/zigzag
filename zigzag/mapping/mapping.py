@@ -4,7 +4,7 @@ import zigzag.mapping.mapping_assist_funcs as mapping_assist_funcs
 from zigzag.datatypes import Constants, LayerDim, LayerOperand, UnrollFactor
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.memory_port import DataDirection
-from zigzag.mapping.data_movement import DataMovePattern
+from zigzag.mapping.data_movement import DataMovePattern, DataMoveAttr, FourWayDataMoving
 from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
 from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingDict
@@ -362,67 +362,71 @@ class Mapping:
         # Distinguish read and write, unify input operands and output operand
         # For input operands
         for operand in self.layer_node.input_operands:
-            for mem_level in range(self.mem_level[operand]):
-                unit_mem_data_movement = DataMovePattern(operand, mem_level)
+            for mem_level_id in range(self.mem_level[operand]):
+                unit_mem_data_movement = DataMovePattern(operand, mem_level_id)
 
                 # data access count
-                if (
-                    self.access_same_data_considered_as_no_access
-                    and mem_level == 0
-                    and self.accelerator.mem_r_bw_dict[self.layer_node.memory_operand_links[operand]][mem_level]
-                    >= self.data_bit_per_level[operand][mem_level]
-                    // self.spatial_mapping.unit_unique[operand][mem_level + 1]
-                ):
+                mem_op = self.layer_node.memory_operand_links[operand]
+                mem_level = self.accelerator.get_memory_level(mem_op, mem_level_id)
+                data_dir = DataDirection.RD_OUT_TO_LOW
+                bw = mem_level.get_max_bandwidth(mem_op, data_dir)
+                nb_mem_units = self.spatial_mapping.unit_unique[operand][mem_level_id + 1]
+                bw_large_enough = bw >= self.data_bit_per_level[operand][mem_level_id] // nb_mem_units
+                if (self.access_same_data_considered_as_no_access and mem_level_id == 0 and bw_large_enough):
                     # If we need access the same input data multiple times from the innermost memory level and the data
-                    ##size is smaller than the memory read bw, take into account only one-time access cost (assume the
+                    # size is smaller than the memory read bw, take into account only one-time access cost (assume the
                     # data can stay at the output pins of the memory as long as it is needed).
                     rd_out_to_low = int(
-                        data_access_raw[operand][mem_level]
+                        data_access_raw[operand][mem_level_id]
                         / self.temporal_mapping.mac_level_data_stationary_cycle[operand]
                     )
                 else:
-                    rd_out_to_low = data_access_raw[operand][mem_level]
+                    rd_out_to_low = data_access_raw[operand][mem_level_id]
                 wr_in_by_low = 0
                 rd_out_to_high = 0
-                wr_in_by_high = data_access_raw2[operand][mem_level + 1]
-                unit_mem_data_movement.set_data_elem_move_count(
-                    rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high
-                )
+                wr_in_by_high = data_access_raw2[operand][mem_level_id + 1]
+                data_elem_move_counts = {
+                    DataDirection.RD_OUT_TO_LOW: rd_out_to_low, 
+                    DataDirection.WR_IN_BY_LOW: wr_in_by_low,
+                    DataDirection.WR_IN_BY_HIGH: wr_in_by_high,
+                    DataDirection.RD_OUT_TO_HIGH: rd_out_to_high
+                }
+                unit_mem_data_movement.set_attribute(DataMoveAttr.DATA_ELEM_MOVE_COUNT, data_elem_move_counts)
                 # data precision
-                rd_out_to_low_pre = self.layer_node.operand_precision[operand]
-                wr_in_by_low_pre = 0
-                rd_out_to_high_pre = 0
-                wr_in_by_high_pre = self.layer_node.operand_precision[operand]
-                unit_mem_data_movement.set_data_precision(
-                    rd_out_to_low_pre,
-                    wr_in_by_low_pre,
-                    rd_out_to_high_pre,
-                    wr_in_by_high_pre,
-                )
-
-                self.unit_mem_data_movement[operand][mem_level] = unit_mem_data_movement
+                data_precisions = {
+                    DataDirection.RD_OUT_TO_LOW: self.layer_node.operand_precision[operand],
+                    DataDirection.WR_IN_BY_LOW: 0,
+                    DataDirection.WR_IN_BY_HIGH: self.layer_node.operand_precision[operand],
+                    DataDirection.RD_OUT_TO_HIGH: 0,
+                }
+                unit_mem_data_movement.set_attribute(DataMoveAttr.DATA_PRECISION, data_precisions)
+                self.unit_mem_data_movement[operand][mem_level_id] = unit_mem_data_movement
 
         # For output operand
         output_operand = self.layer_node.output_operand
-        for mem_level in range(self.mem_level[output_operand]):
-            unit_mem_data_movement = DataMovePattern(output_operand, mem_level)
+        for mem_level_id in range(self.mem_level[output_operand]):
+            unit_mem_data_movement = DataMovePattern(output_operand, mem_level_id)
 
             # Note that the index for data_access_raw is arch_level, which is one level more than mem_level.
             # the first arch_level means the operational array level (e.g. MAC array level);
             # the first mem_level means the innermost memory level (e.g. register file level.
 
             # data access count
-            wr_in_by_low = data_access_raw[output_operand][mem_level]
+            wr_in_by_low = data_access_raw[output_operand][mem_level_id]
             rd_out_to_low = int(
-                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level + 1] - 1)
+                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level_id + 1] - 1)
             )
-
-            rd_out_to_high = data_access_raw2[output_operand][mem_level + 1]
+            rd_out_to_high = data_access_raw2[output_operand][mem_level_id + 1]
             wr_in_by_high = int(
-                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level + 2] - 1)
+                self.layer_node.operand_size_elem[output_operand] * (self.output_ir_loop_size_caal[mem_level_id + 2] - 1)
             )
-
-            unit_mem_data_movement.set_data_elem_move_count(rd_out_to_low, wr_in_by_low, rd_out_to_high, wr_in_by_high)
+            data_access_counts = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high,
+            }
+            unit_mem_data_movement.set_attribute(DataMoveAttr.DATA_ELEM_MOVE_COUNT, data_access_counts)
 
             # data precision
             if rd_out_to_low != 0:
@@ -441,15 +445,14 @@ class Mapping:
                 # final output data precision
                 wr_in_by_high_pre = 0
                 rd_out_to_high_pre = self.layer_node.operand_precision[Constants.FINAL_OUTPUT_LAYER_OP]
-
-            unit_mem_data_movement.set_data_precision(
-                rd_out_to_low_pre,
-                wr_in_by_low_pre,
-                rd_out_to_high_pre,
-                wr_in_by_high_pre,
-            )
-
-            self.unit_mem_data_movement[output_operand][mem_level] = unit_mem_data_movement
+            data_precisions = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low_pre,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low_pre,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_pre,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high_pre,
+            }
+            unit_mem_data_movement.set_attribute(DataMoveAttr.DATA_PRECISION, data_precisions)
+            self.unit_mem_data_movement[output_operand][mem_level_id] = unit_mem_data_movement
 
     def calc_req_mem_bw_and_data_transfer_rate(self):
         """! This function calculates the average & instant required memory bw and the periodic data transfer
@@ -508,34 +511,37 @@ class Mapping:
                 wr_in_by_low_bw = 0
                 rd_out_to_high_bw = 0
                 wr_in_by_high_bw = int(req_mem_bw_low_raw[operand][mem_level + 1])
-                self.unit_mem_data_movement[operand][mem_level].set_req_mem_bw_aver(
-                    rd_out_to_low_bw,
-                    wr_in_by_low_bw,
-                    rd_out_to_high_bw,
-                    wr_in_by_high_bw,
-                )
+                avg_rq_bws = {
+                    DataDirection.RD_OUT_TO_LOW: rd_out_to_low_bw,
+                    DataDirection.WR_IN_BY_LOW: wr_in_by_low_bw,
+                    DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_bw,
+                    DataDirection.WR_IN_BY_HIGH: wr_in_by_high_bw,
+                }
+                self.unit_mem_data_movement[operand][mem_level].set_attribute(DataMoveAttr.REQ_MEM_BW_AVER, avg_rq_bws)
                 # data transfer period
                 rd_out_to_low_pd = int(cycle_each_level[operand][mem_level])
                 wr_in_by_low_pd = 0
                 rd_out_to_high_pd = 0
                 wr_in_by_high_pd = int(cycle_each_level[operand][mem_level + 1])
-                self.unit_mem_data_movement[operand][mem_level].set_data_trans_period(
-                    rd_out_to_low_pd,
-                    wr_in_by_low_pd,
-                    rd_out_to_high_pd,
-                    wr_in_by_high_pd,
-                )
+                data_transfer_periods = {
+                    DataDirection.RD_OUT_TO_LOW: rd_out_to_low_pd,
+                    DataDirection.WR_IN_BY_LOW: wr_in_by_low_pd,
+                    DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_pd,
+                    DataDirection.WR_IN_BY_HIGH: wr_in_by_high_pd,
+                }
+                self.unit_mem_data_movement[operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_PERIOD, data_transfer_periods)
                 # data transfer period count
                 rd_out_to_low_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level])
                 wr_in_by_low_pc = 0
                 rd_out_to_high_pc = 0
                 wr_in_by_high_pc = int(self.temporal_mapping.total_cycle // cycle_each_level[operand][mem_level + 1])
-                self.unit_mem_data_movement[operand][mem_level].set_data_trans_period_count(
-                    rd_out_to_low_pc,
-                    wr_in_by_low_pc,
-                    rd_out_to_high_pc,
-                    wr_in_by_high_pc,
-                )
+                data_transfer_period_counts = {
+                    DataDirection.RD_OUT_TO_LOW: rd_out_to_low_pc,
+                    DataDirection.WR_IN_BY_LOW: wr_in_by_low_pc,
+                    DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_pc,
+                    DataDirection.WR_IN_BY_HIGH: wr_in_by_high_pc,
+                }
+                self.unit_mem_data_movement[operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_PERIOD_COUNT, data_transfer_period_counts)
                 # per-period data transfer amount
                 rd_out_to_low_da = (
                     data_each_level_unrolled[operand][mem_level] * mem_bw_boost_factor[operand][mem_level]
@@ -543,14 +549,13 @@ class Mapping:
                 wr_in_by_low_da = 0
                 rd_out_to_high_da = 0
                 wr_in_by_high_da = data_each_level_unrolled[operand][mem_level + 1]
-
-                self.unit_mem_data_movement[operand][mem_level].set_data_trans_amount_per_period(
-                    rd_out_to_low_da,
-                    wr_in_by_low_da,
-                    rd_out_to_high_da,
-                    wr_in_by_high_da,
-                )
-
+                data_transfer_per_period_amounts = {
+                    DataDirection.RD_OUT_TO_LOW: rd_out_to_low_da,
+                    DataDirection.WR_IN_BY_LOW: wr_in_by_low_da,
+                    DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_da,
+                    DataDirection.WR_IN_BY_HIGH: wr_in_by_high_da,
+                }
+                self.unit_mem_data_movement[operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_AMOUNT_PER_PERIOD, data_transfer_per_period_amounts)
         # For output operand
         output_operand = self.layer_node.output_operand
         for mem_level in range(self.mem_level[output_operand]):
@@ -590,51 +595,58 @@ class Mapping:
                 wr_in_by_high_da = 0
 
             # average required memory BW
-            self.unit_mem_data_movement[output_operand][mem_level].set_req_mem_bw_aver(
-                rd_out_to_low_bw, wr_in_by_low_bw, rd_out_to_high_bw, wr_in_by_high_bw
-            )
+            avg_rq_bws = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low_bw,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low_bw,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_bw,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high_bw,
+            }
+            self.unit_mem_data_movement[output_operand][mem_level].set_attribute(DataMoveAttr.REQ_MEM_BW_AVER, avg_rq_bws)
             # data transfer period
-            self.unit_mem_data_movement[output_operand][mem_level].set_data_trans_period(
-                rd_out_to_low_pd, wr_in_by_low_pd, rd_out_to_high_pd, wr_in_by_high_pd
-            )
+            data_transfer_periods = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low_pd,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low_pd,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_pd,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high_pd,
+            }
+            self.unit_mem_data_movement[output_operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_PERIOD, data_transfer_periods)
             # data transfer period count
-            self.unit_mem_data_movement[output_operand][mem_level].set_data_trans_period_count(
-                rd_out_to_low_pc, wr_in_by_low_pc, rd_out_to_high_pc, wr_in_by_high_pc
-            )
+            data_transfer_period_counts = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low_pc,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low_pc,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_pc,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high_pc,
+            }
+            self.unit_mem_data_movement[output_operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_PERIOD_COUNT, data_transfer_period_counts)
             # per-period data transfer amount
-            self.unit_mem_data_movement[output_operand][mem_level].set_data_trans_amount_per_period(
-                rd_out_to_low_da, wr_in_by_low_da, rd_out_to_high_da, wr_in_by_high_da
-            )
+            data_transfer_per_period_amounts = {
+                DataDirection.RD_OUT_TO_LOW: rd_out_to_low_da,
+                DataDirection.WR_IN_BY_LOW: wr_in_by_low_da,
+                DataDirection.RD_OUT_TO_HIGH: rd_out_to_high_da,
+                DataDirection.WR_IN_BY_HIGH: wr_in_by_high_da,
+            }
+            self.unit_mem_data_movement[output_operand][mem_level].set_attribute(DataMoveAttr.DATA_TRANS_AMOUNT_PER_PERIOD, data_transfer_per_period_amounts)
 
         # Calculate the instant memory updating behavior.
         top_ir_loop_size = self.temporal_mapping.top_ir_loop_size
         for operand in self.operand_list:
             for level, data_movement_item in enumerate(self.unit_mem_data_movement[operand]):
-                req_mem_bw_aver = data_movement_item.req_mem_bw_aver
+                req_mem_bw_aver = data_movement_item.get_attribute(DataMoveAttr.REQ_MEM_BW_AVER)
                 # calculate "instant required memory BW" based on "average required memory BW"
-                rd_out_to_low_bw = int(req_mem_bw_aver.rd_out_to_low * top_ir_loop_size[operand][level])
-                wr_in_by_low_bw = int(req_mem_bw_aver.wr_in_by_low * top_ir_loop_size[operand][level])
-                rd_out_to_high_bw = int(req_mem_bw_aver.rd_out_to_high * top_ir_loop_size[operand][level + 1])
-                wr_in_by_high_bw = int(req_mem_bw_aver.wr_in_by_high * top_ir_loop_size[operand][level + 1])
-                data_movement_item.set_req_mem_bw_inst(
-                    rd_out_to_low_bw,
-                    wr_in_by_low_bw,
-                    rd_out_to_high_bw,
-                    wr_in_by_high_bw,
-                )
-
-                data_trans_period = data_movement_item.data_trans_period
+                top_factor_curr = int(top_ir_loop_size[operand][level])
+                top_factor_next = int(top_ir_loop_size[operand][level + 1])
+                scaling_factors = {
+                    DataDirection.RD_OUT_TO_LOW: top_factor_curr, 
+                    DataDirection.WR_IN_BY_LOW: top_factor_curr, 
+                    DataDirection.RD_OUT_TO_HIGH: top_factor_next, 
+                    DataDirection.WR_IN_BY_HIGH: top_factor_next
+                }
+                req_mem_bw_inst = {data_dir: int(req_mem_bw_aver.get(data_dir) * scaling_factors[data_dir]) for data_dir in DataDirection}
+                data_movement_item.set_attribute(DataMoveAttr.REQ_MEM_BW_INST, req_mem_bw_inst)
                 # calculate "instant data transferring window", assuming non-double buffered memory
-                rd_out_to_low_wd = int(data_trans_period.rd_out_to_low / top_ir_loop_size[operand][level])
-                wr_in_by_low_wd = int(data_trans_period.wr_in_by_low / top_ir_loop_size[operand][level])
-                rd_out_to_high_wd = int(data_trans_period.rd_out_to_high / top_ir_loop_size[operand][level + 1])
-                wr_in_by_high_wd = int(data_trans_period.wr_in_by_high / top_ir_loop_size[operand][level + 1])
-                data_movement_item.set_inst_data_trans_window(
-                    rd_out_to_low_wd,
-                    wr_in_by_low_wd,
-                    rd_out_to_high_wd,
-                    wr_in_by_high_wd,
-                )
+                data_trans_period = data_movement_item.get_attribute(DataMoveAttr.DATA_TRANS_PERIOD)
+                inst_data_trans_window = {data_dir: int(data_trans_period.get(data_dir) / scaling_factors[data_dir]) for data_dir in DataDirection}
+                data_movement_item.set_attribute(DataMoveAttr.INST_DATA_TRANS_WINDOW, inst_data_trans_window)
 
     def disable_data_traffic_external(self):
         """! This function set all the data traffic between the top level memory and the external world to 0
