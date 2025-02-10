@@ -17,7 +17,7 @@ class MemoryInstance:
     w_port: int
     rw_port: int
     latency: int
-    ports: tuple[MemoryPort]
+    ports: tuple[MemoryPort, ...]
     mem_type: str
     auto_cost_extraction: bool
     double_buffering_support: bool
@@ -34,9 +34,7 @@ class MemoryInstance:
         w_port: int = 1,
         rw_port: int = 0,
         latency: int = 1,
-        ports: list[MemoryPort] = [],
-        min_r_granularity: int | None = None,
-        min_w_granularity: int | None = None,
+        ports: tuple[MemoryPort, ...] = tuple(),
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
         double_buffering_support: bool = False,

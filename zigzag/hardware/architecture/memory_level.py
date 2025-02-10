@@ -61,7 +61,7 @@ class MemoryLevel:
     write_energy: float
     read_bw: float
     write_bw: float
-    ports: list[MemoryPort]
+    ports: tuple[MemoryPort, ...]
 
     def __init__(
         self,

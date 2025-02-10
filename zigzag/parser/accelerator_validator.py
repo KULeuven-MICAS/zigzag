@@ -229,7 +229,7 @@ class AcceleratorValidator:
         # Direction of ports is valid
         for port in mem_data["ports"]:
             for allocation in port["allocation"]:
-                operand, direction = allocation.split(", ")
+                _, direction = allocation.split(", ")
                 if direction in ["fh", "fl"] and port["type"] == "read":
                     self.invalidate(f"Read port given for write direction in {mem_name}")
                 if direction in ["th", "tl"] and port["type"] == "write":
