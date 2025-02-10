@@ -54,7 +54,7 @@ def get_energy_array(
 
     mem_hierarchy = cmes[0].accelerator.memory_hierarchy
     access_energy: dict[int, defaultdict[LayerOperand, defaultdict[MemoryInstance, AccessEnergy]]] = {
-        idx: defaultdict(lambda: defaultdict(lambda: AccessEnergy())) for idx in range(len(cmes))
+        idx: defaultdict(lambda: defaultdict(AccessEnergy)) for idx in range(len(cmes))
     }
 
     for cme_idx, cme in enumerate(cmes):
