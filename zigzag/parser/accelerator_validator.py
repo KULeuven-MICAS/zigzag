@@ -62,7 +62,11 @@ class AcceleratorValidator:
                             "type": "dict",
                             "schema": {
                                 "name": {"type": "string", "regex": PORT_REGEX, "required": True},
-                                "type": {"type": "string", "allowed": ["read", "write", "read_write"], "required": True},
+                                "type": {
+                                    "type": "string",
+                                    "allowed": ["read", "write", "read_write"],
+                                    "required": True,
+                                },
                                 "bandwidth_min": {"type": "integer", "required": True},
                                 "bandwidth_max": {"type": "integer", "required": True},
                                 "allocation": {

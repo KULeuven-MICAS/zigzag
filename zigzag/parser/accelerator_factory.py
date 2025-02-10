@@ -12,7 +12,7 @@ from zigzag.hardware.architecture.imc_array import ImcArray
 from zigzag.hardware.architecture.memory_hierarchy import MemoryHierarchy
 from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_level import ServedMemDimensions
-from zigzag.hardware.architecture.memory_port import DataDirection, MemoryPort, PortAllocation, MemoryPortType
+from zigzag.hardware.architecture.memory_port import DataDirection, MemoryPort, MemoryPortType, PortAllocation
 from zigzag.hardware.architecture.operational_array import (
     MultiplierArray,
     OperationalArrayABC,
@@ -163,7 +163,6 @@ class MemoryFactory:
             port = MemoryPort(port_name, port_type, port_bw_min, port_bw_max)
             memory_ports.append(port)
         return tuple(memory_ports)
-        
 
     def create_memory_instance(self) -> MemoryInstance:
         memory_ports = self.create_memory_ports()
@@ -203,7 +202,7 @@ class MemoryFactory:
         """The order of the port allocations matches the order of the MemoryOperands.
         # TODO support empty allocation -> return default configuration
         """
-        allocation_data: dict[MemoryOperand, dict[DataDirection, str]] 
+        allocation_data: dict[MemoryOperand, dict[DataDirection, str]]
         allocation_data = {MemoryOperand(mem_op_str): {} for mem_op_str in self.data["operands"]}
         for port in self.data["ports"]:
             name = port["name"]

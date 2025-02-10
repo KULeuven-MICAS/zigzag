@@ -1,9 +1,9 @@
 - name: default
   spatial_mapping:
     D1:
-      - K, 32
+      - K0, 32
     D2:
-      - C, 32
+      - C0, 32
   memory_operand_links:
     O: O
     W: I2

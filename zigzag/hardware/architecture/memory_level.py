@@ -6,7 +6,6 @@ from zigzag.hardware.architecture.memory_instance import MemoryInstance
 from zigzag.hardware.architecture.memory_port import (
     DataDirection,
     MemoryPort,
-    MemoryPortType,
     PortAllocation,
 )
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
@@ -105,14 +104,13 @@ class MemoryLevel:
         for mem_op, mem_lvl in self.mem_level_of_operands.items():
             allocation_this_mem_op = self.port_alloc_raw.get_alloc_for_mem_op(mem_op)
             for direction, port_name in allocation_this_mem_op.items():
-            # Add operand, memory level, and served data movement direction for each port.
+                # Add operand, memory level, and served data movement direction for each port.
                 port_idx = port_names.index(port_name)
                 mem_port = self.ports[port_idx]
                 mem_port.add_port_function((mem_op, mem_lvl, direction))
                 # Save bandwidth for this mem_op and direction for faster access later.
                 self.bandwidths_min[mem_op][direction] = mem_port.bw_min
                 self.bandwidths_max[mem_op][direction] = mem_port.bw_max
-
 
     def get_min_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int:
         """! Get the minimum memory bandwidth for a specific memory operand and data movement direction"""

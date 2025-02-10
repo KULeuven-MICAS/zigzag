@@ -72,7 +72,6 @@ class Accelerator:
                 if mem_op in node.operands
             ]
 
-
     def __generate_mem_sharing_list(self):
         """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same
         physical memory"""

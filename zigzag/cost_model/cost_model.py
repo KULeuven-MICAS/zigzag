@@ -13,7 +13,7 @@ from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.hardware.architecture.memory_port import MemoryPort
 from zigzag.hardware.architecture.operational_array import OperationalArray
-from zigzag.mapping.data_movement import AccessEnergy, DataDirection, FourWayDataMoving, MemoryAccesses, DataMoveAttr
+from zigzag.mapping.data_movement import AccessEnergy, DataDirection, DataMoveAttr, FourWayDataMoving, MemoryAccesses
 from zigzag.mapping.mapping import Mapping
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
 from zigzag.mapping.temporal_mapping import TemporalMapping
@@ -579,12 +579,14 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 # Here the breakdown only saves the total energy cost per memory level
                 breakdown.append(total_energy_cost_memory)
                 breakdown_further.append(
-                    AccessEnergy({
-                        DataDirection.RD_OUT_TO_HIGH: read_out_energy_to_above,
-                        DataDirection.WR_IN_BY_HIGH: write_in_energy_from_above,
-                        DataDirection.RD_OUT_TO_LOW: read_out_energy_to_below,
-                        DataDirection.WR_IN_BY_LOW: write_in_energy_from_below,
-                    })
+                    AccessEnergy(
+                        {
+                            DataDirection.RD_OUT_TO_HIGH: read_out_energy_to_above,
+                            DataDirection.WR_IN_BY_HIGH: write_in_energy_from_above,
+                            DataDirection.RD_OUT_TO_LOW: read_out_energy_to_below,
+                            DataDirection.WR_IN_BY_LOW: write_in_energy_from_below,
+                        }
+                    )
                 )
                 energy_total += total_energy_cost_memory
             mem_energy_breakdown[layer_op] = breakdown
@@ -710,11 +712,10 @@ class CostModelEvaluation(CostModelEvaluationABC):
             if data_dir in (DataDirection.RD_OUT_TO_HIGH, DataDirection.WR_IN_BY_HIGH):
                 attr_to_use = data_move_attr_next_level
             else:
-                attr_to_use = data_move_attr_this_level 
+                attr_to_use = data_move_attr_this_level
             allowed = umdm.get_attribute(attr_to_use).get(data_dir)
             allowed_transfer_cycles[data_dir] = ceil(allowed * self.cycles_per_op)
         return MemoryAccesses(allowed_transfer_cycles)
-
 
     def combine_data_transfer_rate_per_physical_port(self) -> None:
         """! Consider memory sharing and port sharing, combine the data transfer activity
@@ -821,7 +822,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
         total_computation_cycles = ceil(self.temporal_mapping.total_cycle * self.cycles_per_op) + self.stall_slack_comb
         # Get the total amount of cycles that we can use for loading during computation
         # TODO: make this more accurate by subtracting the final iteration cycles
-        cycles_surplus = max(0, ((port.bw_max - total_req_bw_aver_computation) / port.bw_max) * total_computation_cycles)
+        cycles_surplus = max(
+            0, ((port.bw_max - total_req_bw_aver_computation) / port.bw_max) * total_computation_cycles
+        )
         # Reduce the loading cycles during loading with the surplus
         remaining_loading_cycles, reductions = self.reduce_balanced(
             total_required_cycles, min_required_cycles, cycles_surplus
@@ -857,7 +860,9 @@ class CostModelEvaluation(CostModelEvaluationABC):
                 self.loading_cycles_during_computation[port] = {}
                 self.loading_bw_during_computation[port] = {}
             self.loading_cycles_during_computation[port][mem_op] = reduction
-            self.loading_bw_during_computation[port][mem_op] = ceil((reduction / total_computation_cycles) * port.bw_max)
+            self.loading_bw_during_computation[port][mem_op] = ceil(
+                (reduction / total_computation_cycles) * port.bw_max
+            )
         # Save the amount of cycles and average bandwidth that were borrowed from the computation phase
         self.total_loading_cycles_during_computation[port] = sum(
             self.loading_cycles_during_computation.get(port, {}).values()
@@ -880,7 +885,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             real_cycle = self.real_data_trans_cycle[layer_op][mem_lv].get(mov_dir)
             data_trans_amount = umdm.get_attribute(DataMoveAttr.DATA_TRANS_AMOUNT_PER_PERIOD).get(mov_dir)
             data_precision = umdm.get_attribute(DataMoveAttr.DATA_PRECISION).get(mov_dir)
-            data_in_charge = data_trans_amount * data_precision 
+            data_in_charge = data_trans_amount * data_precision
             mem_bw = port.bw_max
             port_activity = PortBeginOrEndActivity(
                 real_cycle,
