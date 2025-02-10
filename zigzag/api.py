@@ -25,7 +25,7 @@ from zigzag.stages.workload_iterator import WorkloadStage
 
 
 def get_hardware_performance_zigzag(
-    workload: str | ModelProto,
+    workload: str | list[dict[str, Any]] | ModelProto,
     accelerator: str,
     mapping: str,
     *,
@@ -77,7 +77,7 @@ def get_hardware_performance_zigzag(
     # Check workload format and based on it select the correct workload parser stage
     workload_parser_stage = (
         ONNXModelParserStage
-        if isinstance(workload, ModelProto) or (workload.split(".")[-1] == "onnx")
+        if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx")
         else WorkloadParserStage
     )
 
