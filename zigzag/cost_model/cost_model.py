@@ -498,15 +498,21 @@ class CostModelEvaluation(CostModelEvaluationABC):
                     period_count = data_trans_period_count.get(data_dir)
                     max_bw = mem_level.get_max_bandwidth(mem_op, data_dir)
                     min_bw = mem_level.get_min_bandwidth(mem_op, data_dir)
-                    memory_accesses[data_dir] = self._calc_memory_access(
-                        amount,
-                        precision,
-                        period_count,
-                        max_bw,
-                        min_bw,
-                        layer_op,
-                        mem_lvl_id,
-                    )
+                    if min_bw is None and max_bw is None:
+                        if amount == 0:
+                            memory_accesses[data_dir] = 0
+                        else:
+                            raise ValueError(f"Memory bandwidth not defined for {mem_level} {mem_op} {data_dir}")
+                    else:
+                        memory_accesses[data_dir] = self._calc_memory_access(
+                            amount,
+                            precision,
+                            period_count,
+                            max_bw,
+                            min_bw,
+                            layer_op,
+                            mem_lvl_id,
+                        )
                 memory_word_access[layer_op].append(MemoryAccesses(memory_accesses))
         self.memory_word_access = memory_word_access
 

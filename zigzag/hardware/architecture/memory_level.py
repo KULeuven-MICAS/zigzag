@@ -112,11 +112,11 @@ class MemoryLevel:
                 self.bandwidths_min[mem_op][direction] = mem_port.bw_min
                 self.bandwidths_max[mem_op][direction] = mem_port.bw_max
 
-    def get_min_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int:
+    def get_min_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int | None:
         """! Get the minimum memory bandwidth for a specific memory operand and data movement direction"""
         return self.bandwidths_min[operand][dir]
 
-    def get_max_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int:
+    def get_max_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int | None:
         """! Get the maximum memory bandwidth for a specific memory operand and data movement direction"""
         return self.bandwidths_max[operand][dir]
 
