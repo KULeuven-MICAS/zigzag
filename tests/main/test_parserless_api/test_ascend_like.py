@@ -1,11 +1,9 @@
 import pytest
-from zigzag.utils import open_yaml
 
 from zigzag.api import get_hardware_performance_zigzag
+from zigzag.utils import open_yaml
 
-workloads = (
-    "zigzag/inputs/workload/resnet18.yaml",
-)
+workloads = ("zigzag/inputs/workload/resnet18.yaml",)
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
