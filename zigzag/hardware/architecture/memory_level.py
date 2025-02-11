@@ -112,13 +112,13 @@ class MemoryLevel:
                 self.bandwidths_min[mem_op][direction] = mem_port.bw_min
                 self.bandwidths_max[mem_op][direction] = mem_port.bw_max
 
-    def get_min_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int | None:
+    def get_min_bandwidth(self, operand: MemoryOperand, data_dir: DataDirection) -> int | None:
         """! Get the minimum memory bandwidth for a specific memory operand and data movement direction"""
-        return self.bandwidths_min[operand][dir]
+        return self.bandwidths_min[operand][data_dir]
 
-    def get_max_bandwidth(self, operand: MemoryOperand, dir: DataDirection) -> int | None:
+    def get_max_bandwidth(self, operand: MemoryOperand, data_dir: DataDirection) -> int | None:
         """! Get the maximum memory bandwidth for a specific memory operand and data movement direction"""
-        return self.bandwidths_max[operand][dir]
+        return self.bandwidths_max[operand][data_dir]
 
     @property
     def unroll_count(self) -> int:

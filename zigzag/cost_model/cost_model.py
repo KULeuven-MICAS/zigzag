@@ -1128,12 +1128,12 @@ class CostModelEvaluation(CostModelEvaluationABC):
         memory_levels = self.accelerator.memory_hierarchy.get_memory_levels(memory_operand)
         memory_level_index = memory_levels.index(memory_level)
         # Obtain the required instantaneous bandwidth to/from the memory for its operands during computation
-        inst_bw = FourWayDataMoving({dir: 0 for dir in DataDirection})
+        inst_bw = FourWayDataMoving({data_dir: 0 for data_dir in DataDirection})
         layer_op = self.memory_operand_links.mem_to_layer_op(memory_operand)
         umdm = self.mapping_int.unit_mem_data_movement[layer_op][memory_level_index]
         req_bw_4way = umdm.get_attribute(DataMoveAttr.REQ_MEM_BW_INST)
         scaled_bw = FourWayDataMoving(
-            {dir: ceil(req_bw_4way.get(dir) * scaling / self.cycles_per_op) for dir in DataDirection}
+            {data_dir: ceil(req_bw_4way.get(data_dir) * scaling / self.cycles_per_op) for data_dir in DataDirection}
         )
         inst_bw += scaled_bw
         ## LOADING PHASE BORROWED BANDWIDTH
@@ -1160,7 +1160,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         if the given memory level is not included in this CME's memory hierarchy.
         NOTE: this function is used in Stream
         """
-        total_inst_bw = FourWayDataMoving({dir: 0 for dir in DataDirection})
+        total_inst_bw = FourWayDataMoving({data_dir: 0 for data_dir in DataDirection})
         for mem_op in memory_level.operands:
             total_inst_bw += self.get_inst_bandwidth(memory_level, mem_op, scaling)
         return total_inst_bw

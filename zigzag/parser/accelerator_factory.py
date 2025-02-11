@@ -207,9 +207,9 @@ class MemoryFactory:
         for port in self.data["ports"]:
             name = port["name"]
             for alloc in port["allocation"]:
-                operand, dir = alloc.split(", ")
+                operand, data_dir = alloc.split(", ")
                 operand = MemoryOperand(operand)
-                direction = DataDirection(self.translate_to_data_direction(dir))
+                direction = DataDirection(self.translate_to_data_direction(data_dir))
                 allocation_data[operand][direction] = name
         return PortAllocation(allocation_data)
 
