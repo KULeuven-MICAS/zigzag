@@ -504,6 +504,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
                         else:
                             raise ValueError(f"Memory bandwidth not defined for {mem_level} {mem_op} {data_dir}")
                     else:
+                        assert max_bw and min_bw, f"Memory bandwidth not defined for {mem_level} {mem_op} {data_dir}"
                         memory_accesses[data_dir] = self._calc_memory_access(
                             amount,
                             precision,
