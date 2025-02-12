@@ -25,6 +25,7 @@ if __name__ == "__main__":
         opt="latency",
         pickle_filename=pickle_filename,
         dump_folder=dump_folder,
+        lpf_limit=3,
     )
 
 cme: CostModelEvaluation = answer[0][1][0][0]

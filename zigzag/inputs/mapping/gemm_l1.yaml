@@ -1,20 +1,15 @@
-- name: Gemm
-  memory_operand_links:
-    O: O
-    W: I2
-    I: I1
 - name: default
   spatial_mapping:
     D1:
-      - B, 8
+      - D0, 8
     D2:
-      - C, 8
+      - D1, 8
     D3:
-      - K, 8
+      - D2, 8
   temporal_ordering:
-    - [C, "*"]
-    - [K, "*"]
-    - [B, "*"]
+    - [D1, "*"]
+    - [D2, "*"]
+    - [D0, "*"]
   memory_operand_links:
     O: O
     W: I2
