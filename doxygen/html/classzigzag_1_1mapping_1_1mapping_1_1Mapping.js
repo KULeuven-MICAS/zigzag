@@ -1,6 +1,6 @@
 var classzigzag_1_1mapping_1_1mapping_1_1Mapping =
 [
-    [ "__init__", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#aafb067288124ec77c29f64d585c21f84", null ],
+    [ "__init__", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#acb5d36a169d437dafdee2a614f7cdd45", null ],
     [ "calc_data_access", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#a1afa261d59c8f6a083e7eea5c1705c03", null ],
     [ "calc_data_size", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#ab7f027774c48e8794135e6598710eaab", null ],
     [ "calc_effective_data_size", "classzigzag_1_1mapping_1_1mapping_1_1Mapping.html#a62ef1b9ad6d4bc845cbed558caeaf426", null ],
