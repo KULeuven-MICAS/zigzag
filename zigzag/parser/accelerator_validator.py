@@ -213,14 +213,6 @@ class AcceleratorValidator:
             if mem_data["area"] is None:
                 self.invalidate(f"`area` of {mem_name} is missing, and is not automatically extracted using CACTI.")
 
-        # Number of port allocations is consistent with memory operands
-        # nb_operands = len(mem_data["operands"])
-        # nb_ports = len(mem_data["ports"])
-        # if nb_ports != nb_operands:
-        #     self.invalidate(
-        #         f"Number of memory ports ({nb_ports}) does not equal number of operands ({nb_operands}) for {mem_name}"
-        #     )
-
         # No unexpected served dimensions
         for served_dimension in mem_data["served_dimensions"]:
             if served_dimension not in expected_oa_dims:
