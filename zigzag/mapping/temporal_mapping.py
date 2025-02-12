@@ -19,10 +19,13 @@ class TemporalMappingType(StrEnum):
 class TemporalMapping:
     """! Class that collect all the info related to temporal mapping."""
 
-    def __init__(self, temporal_mapping_dict: TemporalMappingDict, layer_node: LayerNode):
+    def __init__(
+        self, temporal_mapping_dict: TemporalMappingDict, layer_node: LayerNode, mapping_type: TemporalMappingType
+    ):
         self.mapping_dic_origin = temporal_mapping_dict
         self.layer_node = layer_node
         self.operand_list = layer_node.layer_operands
+        self.type = mapping_type
 
         # Extract memory hierarchy level count for each operand from temporal mapping definition
         self.mem_level = {op: len(tmap) for (op, tmap) in temporal_mapping_dict.items()}

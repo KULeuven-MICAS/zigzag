@@ -39,6 +39,7 @@ from sympy.ntheory import factorint  # type: ignore
 from zigzag.datatypes import LayerDim
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
+from zigzag.mapping.temporal_mapping import TemporalMappingType
 from zigzag.opt.salsa.state import SalsaState
 from zigzag.workload.layer_node import LayerNode
 
@@ -64,6 +65,7 @@ class SalsaEngine:
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
+        mapping_type: TemporalMappingType,
         **kwargs: Any,
     ):
         """! Initialize the engine with the given:
@@ -79,6 +81,7 @@ class SalsaEngine:
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
+        self.mapping_type = mapping_type
 
         # Algorithm related inputs
         self.iteration_number = kwargs.get("salsa_iteration_number", 1000)
@@ -109,6 +112,7 @@ class SalsaEngine:
             self.spatial_mapping,
             start_ordering,
             self.opt_criterion_name,
+            self.mapping_type,
         )
         current_state = SalsaState(
             self.accelerator,
@@ -116,6 +120,7 @@ class SalsaEngine:
             self.spatial_mapping,
             start_ordering,
             self.opt_criterion_name,
+            self.mapping_type,
         )
         next_state = SalsaState(
             self.accelerator,
@@ -123,6 +128,7 @@ class SalsaEngine:
             self.spatial_mapping,
             start_ordering,
             self.opt_criterion_name,
+            self.mapping_type,
         )
 
         for it in range(self.iteration_number):

@@ -37,7 +37,7 @@ class MemoryAllocator:
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
         ordering: list[tuple[LayerDim, UnrollFactorInt]],
-        mapping_type: TemporalMappingType = TemporalMappingType.EVEN,
+        mapping_type: TemporalMappingType,
     ):
         self.accelerator = accelerator
         self.layer = layer
@@ -93,7 +93,7 @@ class MemoryAllocator:
 
         # After all the nodes have been allocated, we can create the TemporalMapping
         # object from the dictionary we have built
-        temporal_mapping = TemporalMapping(self.temporal_mapping_dict, self.layer)
+        temporal_mapping = TemporalMapping(self.temporal_mapping_dict, self.layer, self.mapping_type)
         return temporal_mapping
 
     def allocate_node(self, node: MemoryLevel, top_levels: dict[MemoryOperand, MemoryLevel]):
