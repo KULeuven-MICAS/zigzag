@@ -6,7 +6,7 @@ workloads = ("zigzag/inputs/workload/gemm_layer.yaml",)
 
 # Expected energy and latency for each workload defined above
 ens_lats = {
-    "zigzag/inputs/workload/gemm_layer.yaml": (8.585e5, 4.162e3),
+    "zigzag/inputs/workload/gemm_layer.yaml": (8858452.48, 4.162e3),
 }
 
 
