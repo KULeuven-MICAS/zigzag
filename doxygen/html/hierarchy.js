@@ -92,8 +92,7 @@ var hierarchy =
         [ "MultiProcessingSpawnStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html", null ],
         [ "RemoveExtraInfoStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html", null ],
         [ "SkipIfDumpExistsStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html", null ],
-        [ "WorkloadStage", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html", null ],
-        [ "WorkloadParserStage", "classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html", null ]
+        [ "WorkloadStage", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html", null ]
       ] ],
       [ "LayerAttribute", "classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html", [
         [ "SpatialMapping", "classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html", null ],

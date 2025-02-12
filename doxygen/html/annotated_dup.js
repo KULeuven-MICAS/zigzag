@@ -229,9 +229,6 @@ var annotated_dup =
         ] ],
         [ "workload_iterator", "namespacezigzag_1_1stages_1_1workload__iterator.html", [
           [ "WorkloadStage", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html", "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage" ]
-        ] ],
-        [ "workload_parser", "namespacezigzag_1_1stages_1_1workload__parser.html", [
-          [ "WorkloadParserStage", "classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html", "classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage" ]
         ] ]
       ] ],
       [ "utils", "namespacezigzag_1_1utils.html", [

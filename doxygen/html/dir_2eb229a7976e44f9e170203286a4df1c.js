@@ -14,6 +14,5 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
       [ "Stage", "classzigzag_1_1stages_1_1stage_1_1Stage.html", "classzigzag_1_1stages_1_1stage_1_1Stage" ],
       [ "StageCallable", "classzigzag_1_1stages_1_1stage_1_1StageCallable.html", "classzigzag_1_1stages_1_1stage_1_1StageCallable" ]
     ] ],
-    [ "workload_iterator.py", "workload__iterator_8py.html", "workload__iterator_8py" ],
-    [ "workload_parser.py", "workload__parser_8py.html", "workload__parser_8py" ]
+    [ "workload_iterator.py", "workload__iterator_8py.html", "workload__iterator_8py" ]
 ];

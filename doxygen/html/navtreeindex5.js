@@ -1,11 +1,5 @@
 var NAVTREEINDEX5 =
 {
-"get__cacti__cost_8py.html#aa1ff5066f9ac1d6daab64e85ff953f9e":[3,0,0,2,0,2,2],
-"get__cacti__cost_8py.html#aec2fa46bcba0f621cf9f3ee4f572b498":[3,0,0,2,0,2,1],
-"hardware_2architecture_2____init_____8py.html":[3,0,0,2,0,0],
-"hardware_2architecture_2memory__hierarchy_8py.html":[3,0,0,2,0,5],
-"hierarchy.html":[2,2],
-"imc__array_8py.html":[3,0,0,2,0,3],
 "imc__unit_8py.html":[3,0,0,2,0,4],
 "index.html":[],
 "layer__attribute_8py.html":[3,0,0,8,3],
@@ -67,8 +61,6 @@ var NAVTREEINDEX5 =
 "parser_2onnx_2utils_8py.html#ac23bed465324e72740dd9df90e7199e2":[3,0,0,5,0,7,7],
 "parser_2onnx_2utils_8py.html#af36248a572c3ac0636b23d4e6203a9ef":[3,0,0,5,0,7,4],
 "parser_2onnx_2utils_8py.html#af43d4b510ae4229ea2f9bd12f8f311eb":[3,0,0,5,0,7,6],
-"parser_2workload__parser_8py.html":[3,0,0,6,2,2],
-"parser_2workload__parser_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,2,2,1],
 "plot__cme_8py.html":[3,0,0,7,1,1],
 "plot__cme_8py.html#a0a9d5550cddea8ab0bda9c72a4df8638":[3,0,0,7,1,1,8],
 "plot__cme_8py.html#a224fa62723511d36c3f9d409b008e0d4":[3,0,0,7,1,1,1],
@@ -151,8 +143,8 @@ var NAVTREEINDEX5 =
 "workload__factory_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,5,8,2],
 "workload__iterator_8py.html":[3,0,0,6,9],
 "workload__iterator_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,9,1],
-"workload__parser_8py.html":[3,0,0,6,10],
-"workload__parser_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,10,1],
+"workload__parser_8py.html":[3,0,0,6,2,2],
+"workload__parser_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,6,2,2,1],
 "workload__validator_8py.html":[3,0,0,5,9],
 "workload__validator_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,5,9,1]
 };

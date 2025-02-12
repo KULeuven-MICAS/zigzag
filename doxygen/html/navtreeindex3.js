@@ -210,12 +210,6 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html#abad7d445eb555517f300b6de6986a765":[2,0,14,5,4,0,2],
 "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,14,5,4,0,1],
 "classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,14,5,4,0,3],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html":[2,0,14,5,5,0],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#a7245ae2f7117f5d1a160de224089d881":[2,0,14,5,5,0,3],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#a90af6e1b3c0f34d9d03212a1fd52750d":[2,0,14,5,5,0,4],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ac78584f68e1c5afe4ec6e0b21b72fd04":[2,0,14,5,5,0,1],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#aca7d0366488ffb5be28560f5f0adc06e":[2,0,14,5,5,0,0],
-"classzigzag_1_1stages_1_1workload__parser_1_1WorkloadParserStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,14,5,5,0,2],
 "classzigzag_1_1utils_1_1DiGraphWrapper.html":[2,0,14,6,1],
 "classzigzag_1_1utils_1_1DiGraphWrapper.html#a0dd23132de35f610f12af5739214db06":[2,0,14,6,1,19],
 "classzigzag_1_1utils_1_1DiGraphWrapper.html#a0ee67f9eb9572d2e40fb321f704a8dba":[2,0,14,6,1,22],
@@ -249,5 +243,11 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html#a2309d53cfa2b2b204c09066726adaa63":[2,0,14,7,0,0,0],
 "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html#a69c3d3e5d73cfb40b5b9e1aec6bea5b2":[2,0,14,7,0,0,1],
 "classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html#a87354906e06d575c139daa3aa942d459":[2,0,14,7,0,0,2],
-"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html":[2,0,14,7,1,0]
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html":[2,0,14,7,1,0],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a0d9db6bd63b208f666ce4814d1d91fc3":[2,0,14,7,1,0,7],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a152d004545d5830c1a6b193cb385f64a":[2,0,14,7,1,0,6],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a2064095b23e37a6d94a80f8c74f3e23b":[2,0,14,7,1,0,3],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a23e8041ce1015febe4fdace3225714f9":[2,0,14,7,1,0,1],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a486c0f3a7960647e00ea890a1d197d51":[2,0,14,7,1,0,5],
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a5360195b0688439cb6da5d1ca38a6212":[2,0,14,7,1,0,9]
 };
