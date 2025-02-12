@@ -9,7 +9,7 @@ from zigzag.hardware.architecture.memory_port import (
     PortAllocation,
 )
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
-from zigzag.utils import hash_sha512
+from zigzag.utils import hash_sha512, pickle_deepcopy
 
 
 class ServedMemDimensions:
@@ -87,7 +87,7 @@ class MemoryLevel:
 
         # for each operand that current memory level holds, allocate physical memory ports to its 4 potential data
         # movement
-        self.ports = memory_instance.ports
+        self.ports = pickle_deepcopy(memory_instance.ports)
         self.port_alloc_raw = port_alloc
         self.__allocate_ports()
 
@@ -101,6 +101,7 @@ class MemoryLevel:
         self.bandwidths_max: dict[MemoryOperand, dict[DataDirection, int]]
         self.bandwidths_min = {op: {data_dir: None for data_dir in DataDirection} for op in self.operands}
         self.bandwidths_max = {op: {data_dir: None for data_dir in DataDirection} for op in self.operands}
+        ports_used = [False] * len(self.ports)
         for mem_op, mem_lvl in self.mem_level_of_operands.items():
             allocation_this_mem_op = self.port_alloc_raw.get_alloc_for_mem_op(mem_op)
             for direction, port_name in allocation_this_mem_op.items():
@@ -111,6 +112,9 @@ class MemoryLevel:
                 # Save bandwidth for this mem_op and direction for faster access later.
                 self.bandwidths_min[mem_op][direction] = mem_port.bw_min
                 self.bandwidths_max[mem_op][direction] = mem_port.bw_max
+                ports_used[port_idx] = True
+        # Remove all ports from self.ports that are not used for this MemoryLevel (e.g. due to removal of some operands)
+        self.ports = tuple([port for port, used in zip(self.ports, ports_used) if used])
 
     def get_min_bandwidth(self, operand: MemoryOperand, data_dir: DataDirection) -> int | None:
         """! Get the minimum memory bandwidth for a specific memory operand and data movement direction"""
