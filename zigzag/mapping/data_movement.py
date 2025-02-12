@@ -55,7 +55,13 @@ class FourWayDataMoving(Generic[T]):
 class MemoryAccesses(FourWayDataMoving[int]):
     """Represents the number of memory accesses in four directions."""
 
-    pass  # Inherits __add__ and __mul__ from FourWayDataMoving
+    def __add__(self, other: "FourWayDataMoving[int]") -> "MemoryAccesses":
+        """Element-wise addition of two AccessEnergy instances."""
+        return MemoryAccesses({key: self.data[key] + other.data[key] for key in DataDirection})
+
+    def __mul__(self, scalar: int) -> "MemoryAccesses":
+        """Element-wise multiplication by a scalar."""
+        return MemoryAccesses({key: self.data[key] * scalar for key in DataDirection})
 
 
 class AccessEnergy(FourWayDataMoving[float]):
