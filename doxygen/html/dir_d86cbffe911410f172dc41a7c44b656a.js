@@ -10,6 +10,5 @@ var dir_d86cbffe911410f172dc41a7c44b656a =
     [ "spatial_mapping_internal.py", "spatial__mapping__internal_8py.html", [
       [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal.html", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal" ]
     ] ],
-    [ "temporal_mapping.py", "temporal__mapping_8py.html", "temporal__mapping_8py" ],
-    [ "utils.py", "mapping_2utils_8py.html", "mapping_2utils_8py" ]
+    [ "temporal_mapping.py", "temporal__mapping_8py.html", "temporal__mapping_8py" ]
 ];

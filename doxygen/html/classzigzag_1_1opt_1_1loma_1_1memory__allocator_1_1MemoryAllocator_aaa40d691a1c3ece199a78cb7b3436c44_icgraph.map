@@ -1,0 +1,7 @@
+<map id="is_valid_idx_combination_for_mapping_type" name="is_valid_idx_combination_for_mapping_type">
+<area shape="rect" id="node1" title="Check if the idx_comb is a valid combination for the mapping_type." alt="" coords="753,5,940,47"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#ab960942130c32a204109eca73c4ecff3" title="Find the best combination of loops from different mem_ops." alt="" coords="501,13,705,39"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#a592ec75b08e20f7e130c1d072beefd93" title="Allocate a single memory node with the best loops that remain in the unallocated loop ordering." alt="" coords="340,13,453,39"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#ad22709b2e67308af35f55680d5a026e0" title="Run the memory allocation process." alt="" coords="249,13,292,39"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,5,201,47"/>
+</map>

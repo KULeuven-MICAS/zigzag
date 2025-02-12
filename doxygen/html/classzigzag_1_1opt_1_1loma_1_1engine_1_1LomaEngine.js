@@ -1,6 +1,6 @@
 var classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine =
 [
-    [ "__init__", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a5be66670721072fa8eef4af2a2aef694", null ],
+    [ "__init__", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a215c459ad85562b4c9e0f6c77a7f1e94", null ],
     [ "compute_nb_permutations", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#ac04e02bbaec679bad7e65e8aae192960", null ],
     [ "find_smallest_non_static_pf", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a0017b34437f773102ec2c5d859f5efce", null ],
     [ "get_prime_factors", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#aeae333df8aa018fd1ebe1e734724da88", null ],
@@ -17,6 +17,7 @@ var classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine =
     [ "layer", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a95f2e9e3b2b2d837f962bcfb58a2011e", null ],
     [ "lpf_limit", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#abaf5f317a670bea71ee80c5254732965", null ],
     [ "lpfs", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a1ed04d46ecd4f94e8eb9b3d9a9a1f1a0", null ],
+    [ "mapping_type", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#aba8809ccf144a88b5fab7160888143ff", null ],
     [ "memory_hierarchy", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a45918c48aae072c98bc1fbd66e5174ac", null ],
     [ "nb_permutations", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#a13fd2782632f407962c85eb6e6ae6a10", null ],
     [ "show_progress_bar", "classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#ab2edaa9e0bb06583fdca7f87dc1ea6ba", null ],
