@@ -15,3 +15,8 @@ class Loop:
 
     def __repr__(self):
         return str(self)
+
+    def __eq__(self, other: object) -> bool:
+        if not isinstance(other, Loop):
+            return False
+        return self.layer_dim == other.layer_dim and self.size == other.size and self.loop_type == other.loop_type

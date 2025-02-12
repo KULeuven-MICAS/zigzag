@@ -1,4 +1,5 @@
 import math
+from enum import StrEnum
 from typing import TypeAlias
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
@@ -6,6 +7,13 @@ from zigzag.utils import json_repr_handler, pickle_deepcopy
 from zigzag.workload.layer_node import LayerNode
 
 TemporalMappingDict: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]]
+
+
+class TemporalMappingType(StrEnum):
+    """! Enum class to represent the type of temporal mapping. This is even or uneven."""
+
+    EVEN = "even"
+    UNEVEN = "uneven"
 
 
 class TemporalMapping:
