@@ -4,7 +4,8 @@ from zigzag.cost_model.cost_model import (
     CumulativeCME,
 )
 from zigzag.datatypes import LayerDim, UnrollFactor
-from zigzag.mapping.utils import get_temporal_loops, get_spatial_loops, get_memory_names
+from zigzag.mapping.utils import get_memory_names, get_spatial_loops, get_temporal_loops
+
 
 def print_mapping(cme: CostModelEvaluationABC, offsets: int = 2):
     """
