@@ -10,93 +10,145 @@ name: generic_array
 memories:
   rf_I:
     size: 1024
-    r_bw: 16
-    w_bw: 16
-    auto_cost_extraction: true
-    r_port: 1
-    w_port: 1
-    rw_port: 0
+    r_cost: 0.095
+    w_cost: 0.095
+    area: 0
     latency: 1
     operands: [I1]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - I1, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - I1, fh
     served_dimensions: []
 
   rf_W: # For MatMul, this will store activations
     size: 1024
-    r_bw: 16
-    w_bw: 16
-    auto_cost_extraction: true
-    r_port: 1
-    w_port: 1
-    rw_port: 0
+    r_cost: 0.095
+    w_cost: 0.095
+    area: 0
     latency: 1
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - I2, fh
     served_dimensions: []
 
   rf_O:
     size: 1024
-    r_bw: 32
-    w_bw: 32
-    auto_cost_extraction: true
-    r_port: 2
-    w_port: 2
-    rw_port: 0
+    r_cost: 0.095
+    w_cost: 0.095
+    area: 0
     latency: 1
     operands: [O]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
-        fl: w_port_2
-        th: r_port_2
+      - name: r_port_1
+        type: read
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, tl
+      - name: r_port_2
+        type: read
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, th
+      - name: w_port_1
+        type: write
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, fh
+      - name: w_port_2
+        type: write
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, fl
     served_dimensions: []
 
   sram_32MB: # From FLAT paper: 8 Tbit/s on-chip BW
-    size: 268_435_456
-    r_bw: 16384 #65_536 #2048
-    w_bw: 16384 #65_536 #2048
-    auto_cost_extraction: true
-    r_port: 2 # 1
-    w_port: 2 # 1
-    rw_port: 0
+    size: 268435456
+    r_cost: 416.16
+    w_cost: 378.4
+    area: 0
     latency: 1
-    # min_r_granularity: 64 # Does this make sense?
-    # min_w_granularity: 64
     operands: [I1, I2, O]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
-      - fh: w_port_2
-        tl: r_port_2
-      - fh: w_port_1
-        tl: r_port_1
-        fl: w_port_1
-        th: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 16384
+        allocation: 
+          - I1, tl
+          - O, tl
+          - O, th
+      - name: r_port_2
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 16384
+        allocation: 
+          - I2, tl
+          - O, tl
+          - O, th
+      - name: w_port_1
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 16384
+        allocation: 
+          - I1, fh
+          - O, fh
+          - O, fl
+      - name: w_port_2
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 16384
+        allocation: 
+          - I2, fh
+          - O, fh
+          - O, fl
     served_dimensions: [D1, D2]
 
   dram: # 400 GB/s
     size: 10000000000
-    r_bw: 2048 # 64
-    w_bw: 2048 # 64
-    auto_cost_extraction: true
-    r_port: 0
-    w_port: 0
-    rw_port: 1
+    r_cost: 700
+    w_cost: 750
+    area: 0
     latency: 10
     operands: [I1, I2, O]
     ports:
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-        fl: rw_port_1
-        th: rw_port_1
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 2048
+        allocation: 
+          - I1, fh
+          - I1, tl
+          - I2, fh
+          - I2, tl
+          - O, fh
+          - O, tl
+          - O, fl
+          - O, th
     served_dimensions: [D1, D2]
 
 operational_array:

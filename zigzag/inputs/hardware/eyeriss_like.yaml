@@ -3,135 +3,155 @@ name: eyeriss_like
 memories:
   rf_64B_A:
     size: 512
-    r_bw: 8
-    w_bw: 8
     r_cost: 1.0
     w_cost: 1.5
     area: 0.3
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
     operands: [I1]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I1, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I1, fh
     served_dimensions: []
 
   rf_64B_W:
     size: 512
-    r_bw: 8
-    w_bw: 8
     r_cost: 1.0
     w_cost: 1.5
     area: 0.3
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I2, fh
     served_dimensions: []
 
   rf_16B:
     size: 128
-    r_bw: 24
-    w_bw: 24
     r_cost: 1.5
     w_cost: 2.0
     area: 0.95
-    r_port: 1
-    w_port: 1
-    rw_port: 1
     latency: 1
     operands: [O]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
-        fl: w_port_2
-        th: r_port_2
+      - name: r_port_1
+        type: read
+        bandwidth_min: 24
+        bandwidth_max: 24
+        allocation: 
+          - O, tl
+          - O, th
+      - name: w_port_1
+        type: write
+        bandwidth_min: 24
+        bandwidth_max: 24
+        allocation: 
+          - O, fh
+          - O, fl
     served_dimensions: []
 
   sram_8KB:
     size: 65536
-    r_bw: 128
-    w_bw: 128
     r_cost: 10.0
     w_cost: 15.0
     area: 3
-    r_port: 0
-    w_port: 1
-    rw_port: 2
     latency: 1
     operands: [O]
     ports:
-      - fh: rw_port_1
-        tl: rw_port_2
-        fl: rw_port_2
-        th: rw_port_1
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 128
+        bandwidth_max: 128
+        allocation: 
+          - O, fh
+          - O, tl
+          - O, fl
+          - O, th
     served_dimensions: [D1, D2]
 
   sram_64KB:
     size: 524288
-    r_bw: 128
-    w_bw: 128
     r_cost: 20
     w_cost: 25
     area: 6
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 128
+        bandwidth_max: 128
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 128
+        bandwidth_max: 128
+        allocation: 
+          - I2, fh
     served_dimensions: [D1, D2]
 
   sram_1M:
     size: 8388608
-    r_bw: 384
-    w_bw: 384
     r_cost: 100
     w_cost: 130
     area: 25
-    r_port: 0
-    w_port: 0
-    rw_port: 2
     latency: 1
     operands: [I1, O]
     ports:
-      - fh: rw_port_1
-        tl: wr_port_2
-      - fh: rw_port_1
-        tl: rw_port_2
-        fl: rw_port_2
-        th: rw_port_1
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 384
+        bandwidth_max: 384
+        allocation: 
+          - I1, fh
+          - I1, tl
+          - O, fh
+          - O, tl
+          - O, fl
+          - O, th
     served_dimensions: [D1, D2]
 
   dram:
     size: 10000000000
-    r_bw: 64
-    w_bw: 64
     r_cost: 1000
     w_cost: 1000
     area: 0
-    r_port: 0
-    w_port: 0
-    rw_port: 1
     latency: 1
     operands: [I1, I2, O]
     ports:
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-        fl: rw_port_1
-        th: rw_port_1
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 64
+        allocation: 
+          - I1, fh
+          - I1, tl
+          - I2, fh
+          - I2, tl
+          - O, fh
+          - O, tl
+          - O, fl
+          - O, th
     served_dimensions: [D1, D2]
 
 operational_array:

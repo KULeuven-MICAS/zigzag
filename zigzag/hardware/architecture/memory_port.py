@@ -7,9 +7,9 @@ from zigzag.parser.accelerator_validator import AcceleratorValidator
 
 
 class MemoryPortType(StrEnum):
-    READ = "r"
-    WRITE = "w"
-    READ_WRITE = "rw"
+    READ = "read"
+    WRITE = "write"
+    READ_WRITE = "read_write"
 
 
 class DataDirection(StrEnum):
@@ -31,22 +31,23 @@ class MemoryPort:
     def __init__(
         self,
         port_name: str,
-        port_bw: int,
-        port_bw_min: int,
-        port_attr: MemoryPortType,
+        type: MemoryPortType,
+        bandwidth_min: int,
+        bandwidth_max: int,
         port_id: int | None = None,
     ):
         """
         Collect all the physical memory port related information here.
         @param port_name:
-        @param port_bw: bit/cc
-        @param port_attr: read_only (r), write_only (w), read_write (rw)
+        @param bandwidth_min: bit/cc
+        @param bandwidth_max: bit/cc
+        @param type: read_only (read), write_only (write), read_write (read_write)
         @param port_id: port index per memory
         """
         self.name = port_name
-        self.bw = port_bw
-        self.bw_min = port_bw_min
-        self.attr = port_attr
+        self.bw_min = bandwidth_min
+        self.bw_max = bandwidth_max
+        self.type = type
         self.served_op_lv_dir: list[OperandDirection] = []
 
         #  to give each port a unique id number
@@ -74,9 +75,9 @@ class MemoryPort:
     def __eq__(self, other: Any) -> bool:
         return (
             isinstance(other, MemoryPort)
-            and self.bw == other.bw
+            and self.bw_max == other.bw_max
             and self.bw_min == other.bw_min
-            and self.attr == other.attr
+            and self.type == other.type
         )
 
     def __hash__(self):

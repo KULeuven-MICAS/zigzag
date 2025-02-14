@@ -54,7 +54,7 @@ def get_energy_array(
 
     mem_hierarchy = cmes[0].accelerator.memory_hierarchy
     access_energy: dict[int, defaultdict[LayerOperand, defaultdict[MemoryInstance, AccessEnergy]]] = {
-        idx: defaultdict(lambda: defaultdict(lambda: AccessEnergy(0, 0, 0, 0))) for idx in range(len(cmes))
+        idx: defaultdict(lambda: defaultdict(AccessEnergy)) for idx in range(len(cmes))
     }
 
     for cme_idx, cme in enumerate(cmes):
@@ -68,7 +68,7 @@ def get_energy_array(
     mem_energy_array = np.array(
         [
             [
-                [[access_energy[cme_idx][op][mem].get_single_dir_data(dir) for dir in DataDirection] for op in all_ops]
+                [[access_energy[cme_idx][op][mem].get(data_dir) for data_dir in DataDirection] for op in all_ops]
                 for mem in all_mems
             ]
             for cme_idx in range(len(cmes))
@@ -110,7 +110,7 @@ def bar_plot_cost_model_evaluations_breakdown(cmes: list[CostModelEvaluationABC]
     groups = [f"{cme.layer.id}: {shorten_onnx_layer_name(cme.layer.name)}" for cme in cmes_to_plot]
     bars_energy = ["MAC"] + [mem.name for mem in all_mems]
     sections_energy = [op.name for op in all_ops]
-    subsections_energy = [str(dir) for dir in DataDirection]
+    subsections_energy = [str(data_dir) for data_dir in DataDirection]
     sections_latency = [
         "Ideal computation",
         "Spatial stall",

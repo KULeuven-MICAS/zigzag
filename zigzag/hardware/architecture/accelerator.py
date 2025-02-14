@@ -71,26 +71,6 @@ class Accelerator:
                 for node in self.memory_hierarchy.topological_sort()
                 if mem_op in node.operands
             ]
-            self.mem_r_bw_dict[mem_op] = [
-                node.memory_instance.r_bw
-                for node in self.memory_hierarchy.topological_sort()
-                if mem_op in node.operands
-            ]
-            self.mem_w_bw_dict[mem_op] = [
-                node.memory_instance.w_bw
-                for node in self.memory_hierarchy.topological_sort()
-                if mem_op in node.operands
-            ]
-            self.mem_r_bw_min_dict[mem_op] = [
-                node.memory_instance.r_bw_min
-                for node in self.memory_hierarchy.topological_sort()
-                if mem_op in node.operands
-            ]
-            self.mem_w_bw_min_dict[mem_op] = [
-                node.memory_instance.w_bw_min
-                for node in self.memory_hierarchy.topological_sort()
-                if mem_op in node.operands
-            ]
 
     def __generate_mem_sharing_list(self):
         """! Generates a list of dictionary that indicates which operand's which memory levels are sharing the same
