@@ -1,6 +1,6 @@
 var classarchitecture_1_1memory__instance_1_1MemoryInstance =
 [
-    [ "__init__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#aadd897cbfa564effaddc9901f95334e3", null ],
+    [ "__init__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a3f95057d08afe94ef2faa378c072ed29", null ],
     [ "__eq__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4ebc07e33d57e463c0e249dfce215d96", null ],
     [ "__hash__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a3195ea87162f33a34d0079931a8194ca", null ],
     [ "__jsonrepr__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
@@ -12,9 +12,15 @@ var classarchitecture_1_1memory__instance_1_1MemoryInstance =
     [ "double_buffering_support", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6018e152103e9e6473041dba3a23f818", null ],
     [ "latency", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a750524522833b141c7659fe21d485394", null ],
     [ "name", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ab74e6bf80237ddc4109968cedc58c151", null ],
-    [ "ports", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ac5a965d3aaf532842d02995e58c647e0", null ],
+    [ "r_bw", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#af89366a61b9ee0794d1428b2fe35fc3c", null ],
+    [ "r_bw_min", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ae80c294c818332480b21f83d6ed5c141", null ],
     [ "r_cost", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6700ef6022c4d3b47bc8853b9e3bbda5", null ],
+    [ "r_port_nb", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a753ec6ba440e5bdb256e74ebce5014a4", null ],
+    [ "rw_port_nb", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#abd6968727b513b98262190127603887c", null ],
     [ "shared_memory_group_id", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a1b4ee6db99019b84211c6b0ce9c06118", null ],
     [ "size", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#aa3d6656320f1a7278c0c2c7fdf07617c", null ],
-    [ "w_cost", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a78d8307278252d887b53662040fa6004", null ]
+    [ "w_bw", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ad829648a1521637ed7b78c667ff7a05a", null ],
+    [ "w_bw_min", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4652c359e411f9533cb602b493ad29d0", null ],
+    [ "w_cost", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a78d8307278252d887b53662040fa6004", null ],
+    [ "w_port_nb", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ad562fc7fd6733eec072c4205f1e6d071", null ]
 ];

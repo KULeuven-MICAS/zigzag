@@ -112,7 +112,6 @@ var annotated_dup =
           [ "FourWayDataMoving", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html", "classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving" ],
           [ "MemoryAccesses", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html", "classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses" ],
           [ "AccessEnergy", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy" ],
-          [ "DataMoveAttr", "classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html", null ],
           [ "DataMovePattern", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html", "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern" ]
         ] ],
         [ "mapping", "namespacezigzag_1_1mapping_1_1mapping.html", [

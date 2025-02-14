@@ -101,12 +101,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae83f9276433a7a3515dc1df922390772"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ae83f9276433a7a3515dc1df922390772">__init__</a> (self, MemoryInstance <a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3eb53135525a27c4d8420b6334b564c6">memory_instance</a>, list[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>] <a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3584acc7021cc5b339564eac253a7e79">operands</a>, dict[<a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>, int] <a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#aa8b56d5e6d19d9c97111a3a2acfa05b3">mem_level_of_operands</a>, PortAllocation port_alloc, <a class="el" href="classarchitecture_1_1memory__level_1_1ServedMemDimensions.html">ServedMemDimensions</a> <a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#afdbf8f0ce5b23be73b1d0095337ab644">served_dimensions</a>, OperationalArrayABC operational_array, int identifier)</td></tr>
 <tr class="memdesc:ae83f9276433a7a3515dc1df922390772"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize the memory level in the hierarchy with the physical memory instance.  <a href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ae83f9276433a7a3515dc1df922390772">More...</a><br /></td></tr>
 <tr class="separator:ae83f9276433a7a3515dc1df922390772"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a500c7fad7c6e29de1ed3f1d7e70dd4ab"><td class="memItemLeft" align="right" valign="top">int|None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a500c7fad7c6e29de1ed3f1d7e70dd4ab">get_min_bandwidth</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> operand, DataDirection data_dir)</td></tr>
-<tr class="memdesc:a500c7fad7c6e29de1ed3f1d7e70dd4ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the minimum memory bandwidth for a specific memory operand and data movement direction.  <a href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a500c7fad7c6e29de1ed3f1d7e70dd4ab">More...</a><br /></td></tr>
-<tr class="separator:a500c7fad7c6e29de1ed3f1d7e70dd4ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a61506826cfeddcdf6c7b02a0c34e48a5"><td class="memItemLeft" align="right" valign="top">int|None&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a61506826cfeddcdf6c7b02a0c34e48a5">get_max_bandwidth</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a> operand, DataDirection data_dir)</td></tr>
-<tr class="memdesc:a61506826cfeddcdf6c7b02a0c34e48a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the maximum memory bandwidth for a specific memory operand and data movement direction.  <a href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a61506826cfeddcdf6c7b02a0c34e48a5">More...</a><br /></td></tr>
-<tr class="separator:a61506826cfeddcdf6c7b02a0c34e48a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a4e597428382b082f0f0cbd2e06bb9b"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3a4e597428382b082f0f0cbd2e06bb9b">unroll_count</a> (self)</td></tr>
 <tr class="memdesc:a3a4e597428382b082f0f0cbd2e06bb9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate how many times this memory instance is unrolled (duplicated) on the Operational Array.  <a href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a3a4e597428382b082f0f0cbd2e06bb9b">More...</a><br /></td></tr>
 <tr class="separator:a3a4e597428382b082f0f0cbd2e06bb9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -140,18 +134,18 @@ Public Attributes</h2></td></tr>
 <tr class="separator:afdbf8f0ce5b23be73b1d0095337ab644"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab74e6bf80237ddc4109968cedc58c151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ab74e6bf80237ddc4109968cedc58c151">name</a></td></tr>
 <tr class="separator:ab74e6bf80237ddc4109968cedc58c151"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac5a965d3aaf532842d02995e58c647e0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ac5a965d3aaf532842d02995e58c647e0">ports</a></td></tr>
-<tr class="separator:ac5a965d3aaf532842d02995e58c647e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19f82be099ec3fd39a70360149bd986f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a19f82be099ec3fd39a70360149bd986f">port_alloc_raw</a></td></tr>
 <tr class="separator:a19f82be099ec3fd39a70360149bd986f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a238befec77ec294abe9464aea3d974b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a238befec77ec294abe9464aea3d974b4">read_energy</a></td></tr>
 <tr class="separator:a238befec77ec294abe9464aea3d974b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e61caab029b3a9052e23c165f9e136e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a4e61caab029b3a9052e23c165f9e136e">write_energy</a></td></tr>
 <tr class="separator:a4e61caab029b3a9052e23c165f9e136e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1325ea7c85cf9ba793fb5dccbe2b5c46"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a1325ea7c85cf9ba793fb5dccbe2b5c46">bandwidths_min</a></td></tr>
-<tr class="separator:a1325ea7c85cf9ba793fb5dccbe2b5c46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6b7579be3a1effc177584a1649cb6e44"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a6b7579be3a1effc177584a1649cb6e44">bandwidths_max</a></td></tr>
-<tr class="separator:a6b7579be3a1effc177584a1649cb6e44"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42fbf66e525f375c0a10566aa42b1856"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a42fbf66e525f375c0a10566aa42b1856">read_bw</a></td></tr>
+<tr class="separator:a42fbf66e525f375c0a10566aa42b1856"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad11c1a436ffc9fa83d78ebb2a56cb8f0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ad11c1a436ffc9fa83d78ebb2a56cb8f0">write_bw</a></td></tr>
+<tr class="separator:ad11c1a436ffc9fa83d78ebb2a56cb8f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0672d1d6ac8199c6be6d51cdaef809b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#ab0672d1d6ac8199c6be6d51cdaef809b">port_list</a></td></tr>
+<tr class="separator:ab0672d1d6ac8199c6be6d51cdaef809b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c903cdbc3e810787448630bfb6698a2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classarchitecture_1_1memory__level_1_1MemoryLevel.html#a4c903cdbc3e810787448630bfb6698a2">formatted_string</a></td></tr>
 <tr class="separator:a4c903cdbc3e810787448630bfb6698a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -352,78 +346,6 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a61506826cfeddcdf6c7b02a0c34e48a5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61506826cfeddcdf6c7b02a0c34e48a5">&#9670;&nbsp;</a></span>get_max_bandwidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> int | None get_max_bandwidth </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td>
-          <td class="paramname"><em>operand</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DataDirection&#160;</td>
-          <td class="paramname"><em>data_dir</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the maximum memory bandwidth for a specific memory operand and data movement direction. </p>
-
-</div>
-</div>
-<a id="a500c7fad7c6e29de1ed3f1d7e70dd4ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a500c7fad7c6e29de1ed3f1d7e70dd4ab">&#9670;&nbsp;</a></span>get_min_bandwidth()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"> int | None get_min_bandwidth </td>
-          <td>(</td>
-          <td class="paramtype">&#160;</td>
-          <td class="paramname"><em>self</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1datatypes_1_1MemoryOperand.html">MemoryOperand</a>&#160;</td>
-          <td class="paramname"><em>operand</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">DataDirection&#160;</td>
-          <td class="paramname"><em>data_dir</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Get the minimum memory bandwidth for a specific memory operand and data movement direction. </p>
-
-</div>
-</div>
 <a id="adf735de5d6e593c5f826f1f89642f76c"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#adf735de5d6e593c5f826f1f89642f76c">&#9670;&nbsp;</a></span>has_same_performance()</h2>
 
@@ -473,34 +395,6 @@ Here is the call graph for this function:</div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a6b7579be3a1effc177584a1649cb6e44"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6b7579be3a1effc177584a1649cb6e44">&#9670;&nbsp;</a></span>bandwidths_max</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bandwidths_max</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a1325ea7c85cf9ba793fb5dccbe2b5c46"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1325ea7c85cf9ba793fb5dccbe2b5c46">&#9670;&nbsp;</a></span>bandwidths_min</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">bandwidths_min</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
 <a id="a4c903cdbc3e810787448630bfb6698a2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4c903cdbc3e810787448630bfb6698a2">&#9670;&nbsp;</a></span>formatted_string</h2>
 
@@ -613,14 +507,28 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="ac5a965d3aaf532842d02995e58c647e0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac5a965d3aaf532842d02995e58c647e0">&#9670;&nbsp;</a></span>ports</h2>
+<a id="ab0672d1d6ac8199c6be6d51cdaef809b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0672d1d6ac8199c6be6d51cdaef809b">&#9670;&nbsp;</a></span>port_list</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">ports</td>
+          <td class="memname">port_list</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a42fbf66e525f375c0a10566aa42b1856"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42fbf66e525f375c0a10566aa42b1856">&#9670;&nbsp;</a></span>read_bw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">read_bw</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -649,6 +557,20 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">served_dimensions</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad11c1a436ffc9fa83d78ebb2a56cb8f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad11c1a436ffc9fa83d78ebb2a56cb8f0">&#9670;&nbsp;</a></span>write_bw</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">write_bw</td>
         </tr>
       </table>
 </div><div class="memdoc">

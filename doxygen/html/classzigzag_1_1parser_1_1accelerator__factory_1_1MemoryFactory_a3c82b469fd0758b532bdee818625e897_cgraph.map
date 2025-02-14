@@ -1,5 +1,4 @@
 <map id="create_memory_instance" name="create_memory_instance">
-<area shape="rect" id="node1" title=" " alt="" coords="5,35,192,61"/>
-<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a37b0a90d50be40d143a25158827d2943" title="Create the memory ports for the memory instance." alt="" coords="253,5,419,32"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02" title="Protect the class variable from reassignment (as this would invalidate the stored hash value)" alt="" coords="240,57,432,98"/>
+<area shape="rect" id="node1" title=" " alt="" coords="5,13,192,39"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02" title="Protect the class variable from reassignment (as this would invalidate the stored hash value)" alt="" coords="240,5,432,47"/>
 </map>

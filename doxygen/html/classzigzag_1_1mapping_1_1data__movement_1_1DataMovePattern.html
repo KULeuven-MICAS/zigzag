@@ -93,21 +93,31 @@ $(document).ready(function(){initNavTree('classzigzag_1_1mapping_1_1data__moveme
 </div><!--header-->
 <div class="contents">
 
-<p>Collects the memory access pattern for each unit memory (memory holding one operand at one level).  
+<p>Collect the memory access pattern for each unit memory (memory that only hold one operand at one level).  
  <a href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#details">More...</a></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac91fd28d4927dae906080d569f9bd0d5"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac91fd28d4927dae906080d569f9bd0d5">__init__</a> (self, <a class="el" href="classzigzag_1_1datatypes_1_1LayerOperand.html">LayerOperand</a> operand, int mem_level)</td></tr>
 <tr class="separator:ac91fd28d4927dae906080d569f9bd0d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adf757cae6d8b375969ba680f9bcbabc0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#adf757cae6d8b375969ba680f9bcbabc0">set_attribute</a> (self, <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html">DataMoveAttr</a> attr, dict[DataDirection, int] values)</td></tr>
-<tr class="memdesc:adf757cae6d8b375969ba680f9bcbabc0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set a given attribute using a dictionary of DataDirection values.  <a href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#adf757cae6d8b375969ba680f9bcbabc0">More...</a><br /></td></tr>
-<tr class="separator:adf757cae6d8b375969ba680f9bcbabc0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac1e43e9bc5326ef7e48ec52c99e2a858"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac1e43e9bc5326ef7e48ec52c99e2a858">get_attribute</a> (self, <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html">DataMoveAttr</a> attr)</td></tr>
-<tr class="memdesc:ac1e43e9bc5326ef7e48ec52c99e2a858"><td class="mdescLeft">&#160;</td><td class="mdescRight">Retrieve a specific attribute.  <a href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac1e43e9bc5326ef7e48ec52c99e2a858">More...</a><br /></td></tr>
-<tr class="separator:ac1e43e9bc5326ef7e48ec52c99e2a858"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeac52a7ba8a9866fad81cfb00fb5c606"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#aeac52a7ba8a9866fad81cfb00fb5c606">set_data_elem_move_count</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:aeac52a7ba8a9866fad81cfb00fb5c606"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4f79a37db0e1a8206bb5fc568b3e18e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ae4f79a37db0e1a8206bb5fc568b3e18e">set_data_precision</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:ae4f79a37db0e1a8206bb5fc568b3e18e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aaf641640a6bb51f2721214fa04682001"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#aaf641640a6bb51f2721214fa04682001">set_req_mem_bw_aver</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:aaf641640a6bb51f2721214fa04682001"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a34705971fb4c761986d4e2978179c17c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a34705971fb4c761986d4e2978179c17c">set_req_mem_bw_inst</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:a34705971fb4c761986d4e2978179c17c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad31fdc92bda3e551297b61e8820bc097"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ad31fdc92bda3e551297b61e8820bc097">set_data_trans_period</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:ad31fdc92bda3e551297b61e8820bc097"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b4bc8a55977ff0a16170caf0067208c"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a5b4bc8a55977ff0a16170caf0067208c">set_data_trans_period_count</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:a5b4bc8a55977ff0a16170caf0067208c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7fe92493100146ec038c75aec0be102e"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7fe92493100146ec038c75aec0be102e">set_data_trans_amount_per_period</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:a7fe92493100146ec038c75aec0be102e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1d7cc4a7e71ff000a6883c63fa09ed1"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ae1d7cc4a7e71ff000a6883c63fa09ed1">set_inst_data_trans_window</a> (self, int rd_out_to_low, int wr_in_by_low, int rd_out_to_high, int wr_in_by_high)</td></tr>
+<tr class="separator:ae1d7cc4a7e71ff000a6883c63fa09ed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac29392721a4f906f815d38fd351045f0"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac29392721a4f906f815d38fd351045f0">update_single_dir_data</a> (self, DataDirection direction, int new_value)</td></tr>
-<tr class="memdesc:ac29392721a4f906f815d38fd351045f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update a single direction value across all attributes.  <a href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac29392721a4f906f815d38fd351045f0">More...</a><br /></td></tr>
+<tr class="memdesc:ac29392721a4f906f815d38fd351045f0"><td class="mdescLeft">&#160;</td><td class="mdescRight">update a single direction value for all data move attributes  <a href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac29392721a4f906f815d38fd351045f0">More...</a><br /></td></tr>
 <tr class="separator:ac29392721a4f906f815d38fd351045f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a23e8041ce1015febe4fdace3225714f9"><td class="memItemLeft" align="right" valign="top">def&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a23e8041ce1015febe4fdace3225714f9">__str__</a> (self)</td></tr>
 <tr class="separator:a23e8041ce1015febe4fdace3225714f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,9 +128,25 @@ Public Member Functions</h2></td></tr>
 Public Attributes</h2></td></tr>
 <tr class="memitem:ab74e6bf80237ddc4109968cedc58c151"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ab74e6bf80237ddc4109968cedc58c151">name</a></td></tr>
 <tr class="separator:ab74e6bf80237ddc4109968cedc58c151"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7268b63a9ca99a6496f5caed5c7203d8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a7268b63a9ca99a6496f5caed5c7203d8">data_elem_move_count</a></td></tr>
+<tr class="separator:a7268b63a9ca99a6496f5caed5c7203d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a376dfbf6569dd8eb389002ac63ee5c30"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a376dfbf6569dd8eb389002ac63ee5c30">data_precision</a></td></tr>
+<tr class="separator:a376dfbf6569dd8eb389002ac63ee5c30"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4f69354cae88513c476abf59e9b3d6f2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a4f69354cae88513c476abf59e9b3d6f2">req_mem_bw_aver</a></td></tr>
+<tr class="separator:a4f69354cae88513c476abf59e9b3d6f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a05fcc51a942ba919fbc43cb3d9a1d5e8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a05fcc51a942ba919fbc43cb3d9a1d5e8">req_mem_bw_inst</a></td></tr>
+<tr class="separator:a05fcc51a942ba919fbc43cb3d9a1d5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a884bea0158394cff7700dfd66ed9c7be"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a884bea0158394cff7700dfd66ed9c7be">data_trans_period</a></td></tr>
+<tr class="separator:a884bea0158394cff7700dfd66ed9c7be"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3ac492f9a1eabe30571bb5dc6c1ebf7"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac3ac492f9a1eabe30571bb5dc6c1ebf7">data_trans_period_count</a></td></tr>
+<tr class="separator:ac3ac492f9a1eabe30571bb5dc6c1ebf7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0736a5fddc1e8cfa39b9964d6d9dfb78"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a0736a5fddc1e8cfa39b9964d6d9dfb78">data_trans_amount_per_period</a></td></tr>
+<tr class="separator:a0736a5fddc1e8cfa39b9964d6d9dfb78"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5012d7ea0cd7d7ffd209e4828ffb1d27"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a5012d7ea0cd7d7ffd209e4828ffb1d27">inst_data_trans_window</a></td></tr>
+<tr class="separator:a5012d7ea0cd7d7ffd209e4828ffb1d27"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Collects the memory access pattern for each unit memory (memory holding one operand at one level). </p>
+<div class="textblock"><p>Collect the memory access pattern for each unit memory (memory that only hold one operand at one level). </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ac91fd28d4927dae906080d569f9bd0d5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac91fd28d4927dae906080d569f9bd0d5">&#9670;&nbsp;</a></span>__init__()</h2>
@@ -202,14 +228,14 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="ac1e43e9bc5326ef7e48ec52c99e2a858"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac1e43e9bc5326ef7e48ec52c99e2a858">&#9670;&nbsp;</a></span>get_attribute()</h2>
+<a id="aeac52a7ba8a9866fad81cfb00fb5c606"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeac52a7ba8a9866fad81cfb00fb5c606">&#9670;&nbsp;</a></span>set_data_elem_move_count()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"> <a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html">FourWayDataMoving</a>[int] get_attribute </td>
+          <td class="memname">def set_data_elem_move_count </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -217,8 +243,26 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html">DataMoveAttr</a>&#160;</td>
-          <td class="paramname"><em>attr</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -228,18 +272,16 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Retrieve a specific attribute. </p>
-
 </div>
 </div>
-<a id="adf757cae6d8b375969ba680f9bcbabc0"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adf757cae6d8b375969ba680f9bcbabc0">&#9670;&nbsp;</a></span>set_attribute()</h2>
+<a id="ae4f79a37db0e1a8206bb5fc568b3e18e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4f79a37db0e1a8206bb5fc568b3e18e">&#9670;&nbsp;</a></span>set_data_precision()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">def set_attribute </td>
+          <td class="memname">def set_data_precision </td>
           <td>(</td>
           <td class="paramtype">&#160;</td>
           <td class="paramname"><em>self</em>, </td>
@@ -247,14 +289,26 @@ Here is the call graph for this function:</div>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html">DataMoveAttr</a>&#160;</td>
-          <td class="paramname"><em>attr</em>, </td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">dict[DataDirection, int]&#160;</td>
-          <td class="paramname"><em>values</em>&#160;</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -264,7 +318,281 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Set a given attribute using a dictionary of DataDirection values. </p>
+</div>
+</div>
+<a id="a7fe92493100146ec038c75aec0be102e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7fe92493100146ec038c75aec0be102e">&#9670;&nbsp;</a></span>set_data_trans_amount_per_period()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_data_trans_amount_per_period </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad31fdc92bda3e551297b61e8820bc097"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad31fdc92bda3e551297b61e8820bc097">&#9670;&nbsp;</a></span>set_data_trans_period()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_data_trans_period </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5b4bc8a55977ff0a16170caf0067208c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b4bc8a55977ff0a16170caf0067208c">&#9670;&nbsp;</a></span>set_data_trans_period_count()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_data_trans_period_count </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae1d7cc4a7e71ff000a6883c63fa09ed1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1d7cc4a7e71ff000a6883c63fa09ed1">&#9670;&nbsp;</a></span>set_inst_data_trans_window()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_inst_data_trans_window </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aaf641640a6bb51f2721214fa04682001"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf641640a6bb51f2721214fa04682001">&#9670;&nbsp;</a></span>set_req_mem_bw_aver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_req_mem_bw_aver </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a34705971fb4c761986d4e2978179c17c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34705971fb4c761986d4e2978179c17c">&#9670;&nbsp;</a></span>set_req_mem_bw_inst()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">def set_req_mem_bw_inst </td>
+          <td>(</td>
+          <td class="paramtype">&#160;</td>
+          <td class="paramname"><em>self</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_low</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>rd_out_to_high</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>wr_in_by_high</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
 
 </div>
 </div>
@@ -300,11 +628,95 @@ Here is the call graph for this function:</div>
       </table>
 </div><div class="memdoc">
 
-<p>Update a single direction value across all attributes. </p>
+<p>update a single direction value for all data move attributes </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
+<a id="a7268b63a9ca99a6496f5caed5c7203d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7268b63a9ca99a6496f5caed5c7203d8">&#9670;&nbsp;</a></span>data_elem_move_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">data_elem_move_count</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a376dfbf6569dd8eb389002ac63ee5c30"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a376dfbf6569dd8eb389002ac63ee5c30">&#9670;&nbsp;</a></span>data_precision</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">data_precision</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0736a5fddc1e8cfa39b9964d6d9dfb78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0736a5fddc1e8cfa39b9964d6d9dfb78">&#9670;&nbsp;</a></span>data_trans_amount_per_period</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">data_trans_amount_per_period</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a884bea0158394cff7700dfd66ed9c7be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a884bea0158394cff7700dfd66ed9c7be">&#9670;&nbsp;</a></span>data_trans_period</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">data_trans_period</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac3ac492f9a1eabe30571bb5dc6c1ebf7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3ac492f9a1eabe30571bb5dc6c1ebf7">&#9670;&nbsp;</a></span>data_trans_period_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">data_trans_period_count</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5012d7ea0cd7d7ffd209e4828ffb1d27"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5012d7ea0cd7d7ffd209e4828ffb1d27">&#9670;&nbsp;</a></span>inst_data_trans_window</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">inst_data_trans_window</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab74e6bf80237ddc4109968cedc58c151"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab74e6bf80237ddc4109968cedc58c151">&#9670;&nbsp;</a></span>name</h2>
 
@@ -313,6 +725,34 @@ Here is the call graph for this function:</div>
       <table class="memname">
         <tr>
           <td class="memname">name</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4f69354cae88513c476abf59e9b3d6f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4f69354cae88513c476abf59e9b3d6f2">&#9670;&nbsp;</a></span>req_mem_bw_aver</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">req_mem_bw_aver</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a05fcc51a942ba919fbc43cb3d9a1d5e8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05fcc51a942ba919fbc43cb3d9a1d5e8">&#9670;&nbsp;</a></span>req_mem_bw_inst</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">req_mem_bw_inst</td>
         </tr>
       </table>
 </div><div class="memdoc">
