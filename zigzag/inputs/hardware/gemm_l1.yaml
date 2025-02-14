@@ -1,0 +1,50 @@
+name: gemm_l1
+
+memories:
+  reg_O:
+    size: 32
+    r_bw: 32
+    w_bw: 32
+    r_cost: 0.02  # TODO
+    w_cost: 0.02  # TODO
+    area: 0
+    r_port: 2
+    w_port: 2
+    rw_port: 0
+    latency: 1
+    auto_cost_extraction: False
+    operands: [O]
+    ports:
+      - fh: w_port_1
+        tl: r_port_1
+        fl: w_port_2
+        th: r_port_2
+    served_dimensions: [D2]
+
+  l1:
+    size: 4194304
+    r_bw: 2048
+    w_bw: 2048
+    r_cost: 22.9  # TODO
+    w_cost: 52.01 # TODO
+    area: 0
+    r_port: 0
+    w_port: 0
+    rw_port: 3
+    latency: 1
+    operands: [I1, I2, O]
+    min_r_granularity: 64
+    min_w_granularity: 64
+    ports:
+      - tl: rw_port_1
+      - tl: rw_port_2
+      - tl: rw_port_3
+        fl: rw_port_3
+    served_dimensions: [D1, D2, D3]
+
+operational_array:
+  input_precision: [8, 8]
+  unit_energy: 0.04 # pJ
+  unit_area: 1 # unit
+  dimensions: [D1, D2, D3]
+  sizes: [8, 8, 8]
