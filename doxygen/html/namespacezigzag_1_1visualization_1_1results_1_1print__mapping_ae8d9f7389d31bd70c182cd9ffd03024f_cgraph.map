@@ -1,7 +1,5 @@
 <map id="print_mapping" name="print_mapping">
-<area shape="rect" id="node1" title="Prints a structured representation of a CostModelEvaluation mapping." alt="" coords="5,71,121,98"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1mapping_1_1utils.html#a564d25f5a7dbc0444f2f646307b8f45c" title=" " alt="" coords="169,5,352,47"/>
-<area shape="rect" id="node3" href="$namespacezigzag_1_1mapping_1_1utils.html#a0d48b7a4fa0fee43d71bf2662f9a1882" title=" " alt="" coords="400,35,583,76"/>
-<area shape="rect" id="node5" href="$namespacezigzag_1_1mapping_1_1utils.html#ab33544acf1b8f5da5082605f5c86ae98" title=" " alt="" coords="169,123,352,164"/>
-<area shape="rect" id="node4" href="$namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="631,35,769,76"/>
+<area shape="rect" id="node1" title="Prints a structured representation of a CostModelEvaluation mapping." alt="" coords="5,13,121,39"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1visualization_1_1results_1_1print__mapping.html#abe8a97cf290a0fd7e145928b90fc46a8" title=" " alt="" coords="169,5,329,47"/>
+<area shape="rect" id="node3" href="$namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="377,5,516,47"/>
 </map>

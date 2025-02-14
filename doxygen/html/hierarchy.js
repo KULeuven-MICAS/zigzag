@@ -184,7 +184,8 @@ var hierarchy =
     ] ],
     [ "StrEnum", null, [
       [ "DataDirection", "classarchitecture_1_1memory__port_1_1DataDirection.html", null ],
-      [ "MemoryPortType", "classarchitecture_1_1memory__port_1_1MemoryPortType.html", null ]
+      [ "MemoryPortType", "classarchitecture_1_1memory__port_1_1MemoryPortType.html", null ],
+      [ "TemporalMappingType", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMappingType.html", null ]
     ] ],
     [ "TypedDict", null, [
       [ "MemoryUtilization", "classzigzag_1_1cost__model_1_1cost__model_1_1MemoryUtilization.html", null ]

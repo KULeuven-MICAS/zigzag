@@ -1,0 +1,5 @@
+<map id="find_best_loop_combination" name="find_best_loop_combination">
+<area shape="rect" id="node1" title="Find the best combination of loops from different mem_ops." alt="" coords="5,13,209,39"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#aaa40d691a1c3ece199a78cb7b3436c44" title="Check if the idx_comb is a valid combination for the mapping_type." alt="" coords="257,5,444,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1memory__allocator_1_1MemoryAllocator.html#a56f0543adab50d6032cce3dcf9d530c2" title="Check if the idx_comb is a valid combination for the EVEN mapping type." alt="" coords="492,5,679,47"/>
+</map>
