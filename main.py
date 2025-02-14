@@ -3,10 +3,7 @@ from datetime import datetime
 
 from zigzag import api
 from zigzag.cost_model.cost_model import CostModelEvaluation
-from zigzag.visualization.results.plot_cme import (
-    bar_plot_cost_model_evaluations_breakdown,
-)
-from zigzag.visualization.results.print_mapping import print_mapping
+from zigzag.visualization import bar_plot_cost_model_evaluations_breakdown, print_mapping
 
 workload_path = "zigzag/inputs/workload/resnet18.onnx"  # or "zigzag/inputs/workload/resnet18.yaml"
 accelerator_path = "zigzag/inputs/hardware/tpu_like.yaml"
