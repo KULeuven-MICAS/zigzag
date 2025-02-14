@@ -54,7 +54,7 @@ var NAVTREEINDEX =
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac91fd28d4927dae906080d569f9bd0d5",
 "classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a02862ffba7a32e1eda766bf8c8ce8293",
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa62fe23629f7a9f596b52532583c1356",
-"memory__allocator_8py.html"
+"mapping__factory_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
