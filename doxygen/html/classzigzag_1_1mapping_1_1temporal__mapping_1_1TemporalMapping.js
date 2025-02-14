@@ -1,6 +1,6 @@
 var classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping =
 [
-    [ "__init__", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a0f6874bd6f1b22709e94c8b409368ab7", null ],
+    [ "__init__", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a4fa09f092901dac622e281fdd6424a52", null ],
     [ "__jsonrepr__", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
     [ "__repr__", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a9a47563093dfc5ba12274b66e368920c", null ],
     [ "__str__", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a23e8041ce1015febe4fdace3225714f9", null ],
@@ -16,6 +16,5 @@ var classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping =
     [ "operand_list", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#aeba8abf5c1c0d9160c08a2db01ecf78e", null ],
     [ "top_ir_loop_size", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#abf4c15ca3686db0642ea95dfaf5101d8", null ],
     [ "top_r_loop_size", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a9e58287a6ac34d4b0df3a3d1e5a11322", null ],
-    [ "total_cycle", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a38c4b314a98ef7fda21ad4da84cd4f9d", null ],
-    [ "type", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a7aead736a07eaf25623ad7bfa1f0ee2d", null ]
+    [ "total_cycle", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a38c4b314a98ef7fda21ad4da84cd4f9d", null ]
 ];

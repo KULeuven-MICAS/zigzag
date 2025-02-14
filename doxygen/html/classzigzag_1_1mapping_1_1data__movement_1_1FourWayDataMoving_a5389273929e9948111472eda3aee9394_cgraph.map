@@ -1,0 +1,4 @@
+<map id="__init__" name="__init__">
+<area shape="rect" id="node1" title="Initialize with a dictionary containing all four DataDirection values, defaulting to zero." alt="" coords="5,5,76,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html#a489fe97fb148cff07f7093edd2adba73" title="Update the value of a specific data direction." alt="" coords="124,5,167,32"/>
+</map>

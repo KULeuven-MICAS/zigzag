@@ -1,5 +1,5 @@
 var classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy =
 [
-    [ "__add__", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#aa31cea2d5cece4bb97cbad20c998c4ad", null ],
-    [ "__mul__", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a01a61e6b776dbd74b54b46deeaeaeb60", null ]
+    [ "__add__", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a39a96ea5606940591c07723dae78db6d", null ],
+    [ "__mul__", "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a281d464f7c67cd1992bd348eaffd07f9", null ]
 ];
