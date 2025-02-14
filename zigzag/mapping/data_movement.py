@@ -90,17 +90,6 @@ class DataMoveAttr(StrEnum):
 class DataMovePattern:
     """Collects the memory access pattern for each unit memory (memory holding one operand at one level)."""
 
-    ATTRIBUTES = [
-        "data_elem_move_count",
-        "data_precision",
-        "req_mem_bw_aver",
-        "req_mem_bw_inst",
-        "data_trans_period",
-        "data_trans_period_count",
-        "data_trans_amount_per_period",
-        "inst_data_trans_window",
-    ]
-
     def __init__(self, operand: LayerOperand, mem_level: int):
         self.name = operand.name + str(mem_level)
 
