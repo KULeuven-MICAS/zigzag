@@ -1,4 +1,5 @@
 import math
+from enum import StrEnum
 from typing import TypeAlias
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
@@ -8,13 +9,23 @@ from zigzag.workload.layer_node import LayerNode
 TemporalMappingDict: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]]
 
 
+class TemporalMappingType(StrEnum):
+    """! Enum class to represent the type of temporal mapping. This is even or uneven."""
+
+    EVEN = "even"
+    UNEVEN = "uneven"
+
+
 class TemporalMapping:
     """! Class that collect all the info related to temporal mapping."""
 
-    def __init__(self, temporal_mapping_dict: TemporalMappingDict, layer_node: LayerNode):
+    def __init__(
+        self, temporal_mapping_dict: TemporalMappingDict, layer_node: LayerNode, mapping_type: TemporalMappingType
+    ):
         self.mapping_dic_origin = temporal_mapping_dict
         self.layer_node = layer_node
         self.operand_list = layer_node.layer_operands
+        self.type = mapping_type
 
         # Extract memory hierarchy level count for each operand from temporal mapping definition
         self.mem_level = {op: len(tmap) for (op, tmap) in temporal_mapping_dict.items()}

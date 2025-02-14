@@ -7,7 +7,7 @@ from zigzag.hardware.architecture.memory_port import DataDirection
 from zigzag.mapping.data_movement import DataMoveAttr, DataMovePattern
 from zigzag.mapping.mapping_assist_funcs import SpatialMappingPerMemLvl
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
-from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingDict
+from zigzag.mapping.temporal_mapping import TemporalMapping
 from zigzag.workload.layer_node import LayerNode
 
 
@@ -22,7 +22,7 @@ class Mapping:
         self,
         accelerator: Accelerator,
         spatial_mapping: SpatialMappingPerMemLvl | SpatialMappingInternal,
-        temporal_mapping: TemporalMappingDict | TemporalMapping,
+        temporal_mapping: TemporalMapping,
         layer_node: LayerNode,
         access_same_data_considered_as_no_access: bool = False,
     ):
@@ -32,10 +32,7 @@ class Mapping:
             self.spatial_mapping = spatial_mapping
         else:
             self.spatial_mapping = SpatialMappingInternal(spatial_mapping, layer_node)
-        if isinstance(temporal_mapping, TemporalMapping):
-            self.temporal_mapping = temporal_mapping
-        else:
-            self.temporal_mapping = TemporalMapping(temporal_mapping, layer_node)
+        self.temporal_mapping = temporal_mapping
         self.layer_node = layer_node
         self.operand_list = layer_node.layer_operands
         self.access_same_data_considered_as_no_access = access_same_data_considered_as_no_access
