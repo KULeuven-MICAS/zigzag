@@ -1,0 +1,5 @@
+<map id="create_memory_ports" name="create_memory_ports">
+<area shape="rect" id="node1" title="Create the memory ports for the memory instance." alt="" coords="460,5,625,32"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a3c82b469fd0758b532bdee818625e897" title=" " alt="" coords="225,5,412,32"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1parser_1_1accelerator__factory_1_1MemoryFactory.html#a4058b26e31caced3c2638241a85e9166" title="Create a new MemoryInstance and add it to the given MemoryHierarchy." alt="" coords="5,5,177,32"/>
+</map>
