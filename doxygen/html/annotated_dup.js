@@ -127,6 +127,7 @@ var annotated_dup =
           [ "SpatialMappingInternal", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal.html", "classzigzag_1_1mapping_1_1spatial__mapping__internal_1_1SpatialMappingInternal" ]
         ] ],
         [ "temporal_mapping", "namespacezigzag_1_1mapping_1_1temporal__mapping.html", [
+          [ "TemporalMappingType", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMappingType.html", null ],
           [ "TemporalMapping", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html", "classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping" ]
         ] ]
       ] ],

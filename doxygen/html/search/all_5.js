@@ -16,11 +16,12 @@ var searchData=
   ['equation_282',['equation',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a676b8a528e3ffd5ceeb075991bd23cf7',1,'zigzag::workload::layer_node::LayerNode']]],
   ['equation_5fregex_283',['EQUATION_REGEX',['../classzigzag_1_1parser_1_1workload__validator_1_1WorkloadValidator.html#a1883a4b8ebb1a31234bcdebe30180d7b',1,'zigzag::parser::workload_validator::WorkloadValidator']]],
   ['errors_284',['errors',['../classzigzag_1_1parser_1_1upgraded__validator_1_1UpgradedValidator.html#a5c61aff729ff55b4a5bd6d7737ab7fac',1,'zigzag::parser::upgraded_validator::UpgradedValidator']]],
-  ['exploit_5fdata_5flocality_5fstages_2epy_285',['exploit_data_locality_stages.py',['../exploit__data__locality__stages_8py.html',1,'']]],
-  ['exploitinterlayerdatalocalitystage_286',['ExploitInterLayerDataLocalityStage',['../classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html',1,'zigzag::stages::exploit_data_locality_stages']]],
-  ['extract_5flayer_5finfo_287',['extract_layer_info',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a971853921d3f04d3990a962215f3a163',1,'zigzag::workload::layer_node::LayerNode']]],
-  ['extract_5fmapping_5fattr_288',['extract_mapping_attr',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23a6b6c449f3e9955e94de4753a4c0e7',1,'zigzag::workload::layer_node::LayerNode']]],
-  ['extract_5fnode_5fattr_289',['extract_node_attr',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a19aaaeba0364048770de0bcb52477845',1,'zigzag::workload::layer_node::LayerNode']]],
-  ['extract_5fpr_5floop_5finfo_290',['extract_pr_loop_info',['../classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#ac41e0072ade904d26654df1998aac760',1,'zigzag::workload::layer_attributes::LayerDimRelation']]],
-  ['extract_5frelevancy_5finfo_291',['extract_relevancy_info',['../classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a9b55a229d8b37811f7586524c378c826',1,'zigzag::workload::layer_node::LoopRelevancyInfo']]]
+  ['even_285',['EVEN',['../classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMappingType.html#a227beb817c69f044ad448c2f8d86f4b7',1,'zigzag::mapping::temporal_mapping::TemporalMappingType']]],
+  ['exploit_5fdata_5flocality_5fstages_2epy_286',['exploit_data_locality_stages.py',['../exploit__data__locality__stages_8py.html',1,'']]],
+  ['exploitinterlayerdatalocalitystage_287',['ExploitInterLayerDataLocalityStage',['../classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html',1,'zigzag::stages::exploit_data_locality_stages']]],
+  ['extract_5flayer_5finfo_288',['extract_layer_info',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a971853921d3f04d3990a962215f3a163',1,'zigzag::workload::layer_node::LayerNode']]],
+  ['extract_5fmapping_5fattr_289',['extract_mapping_attr',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a23a6b6c449f3e9955e94de4753a4c0e7',1,'zigzag::workload::layer_node::LayerNode']]],
+  ['extract_5fnode_5fattr_290',['extract_node_attr',['../classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html#a19aaaeba0364048770de0bcb52477845',1,'zigzag::workload::layer_node::LayerNode']]],
+  ['extract_5fpr_5floop_5finfo_291',['extract_pr_loop_info',['../classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#ac41e0072ade904d26654df1998aac760',1,'zigzag::workload::layer_attributes::LayerDimRelation']]],
+  ['extract_5frelevancy_5finfo_292',['extract_relevancy_info',['../classzigzag_1_1workload_1_1layer__node_1_1LoopRelevancyInfo.html#a9b55a229d8b37811f7586524c378c826',1,'zigzag::workload::layer_node::LoopRelevancyInfo']]]
 ];

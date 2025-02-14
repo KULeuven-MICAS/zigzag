@@ -1,5 +1,16 @@
 var NAVTREEINDEX4 =
 {
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a90d3ec127714791554e4b4778c1924a3":[2,0,14,7,2,0,1],
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a98a0e891a48489d44ed1b6952414bd2b":[2,0,14,7,2,0,0],
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,7,2,0,8],
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#acbc47513d5022e791c61eed51b2f206b":[2,0,14,7,2,0,3],
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#afd64a095585f64cbe93bdc3b13eba041":[2,0,14,7,2,0,7],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html":[2,0,14,7,3,4],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a051f74dda893b6a8cc9801bb36c5b6f3":[2,0,14,7,3,4,5],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a06c5d72ba32b6045a7ed519b5f6ee6c9":[2,0,14,7,3,4,6],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a0ce1268264a01fef3e3eb7bb5d590cf6":[2,0,14,7,3,4,0],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,14,7,3,4,3],
+"classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#a758c7cbcd8e932121d56aaf23f8a70c3":[2,0,14,7,3,4,1],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa62fe23629f7a9f596b52532583c1356":[2,0,14,7,3,4,4],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html#aa96b76e119daad6f927c53d4278710ca":[2,0,14,7,3,4,2],
 "classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html":[2,0,14,7,3,1],
@@ -238,16 +249,5 @@ var NAVTREEINDEX4 =
 "loma_2engine_8py.html#a0b14e488ae28d98d262453f3e9cd6e4d":[3,0,0,4,0,1,2],
 "loop_8py.html":[3,0,0,4,0,2],
 "main_8py.html":[3,0,0,6,6],
-"mapping_2____init_____8py.html":[3,0,0,3,0],
-"mapping_2utils_8py.html":[3,0,0,3,7],
-"mapping_2utils_8py.html#a0d48b7a4fa0fee43d71bf2662f9a1882":[3,0,0,3,7,2],
-"mapping_2utils_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,3,7,3],
-"mapping_2utils_8py.html#a564d25f5a7dbc0444f2f646307b8f45c":[3,0,0,3,7,0],
-"mapping_2utils_8py.html#ab33544acf1b8f5da5082605f5c86ae98":[3,0,0,3,7,1],
-"mapping_8py.html":[3,0,0,3,2],
-"mapping__assist__funcs_8py.html":[3,0,0,3,3],
-"mapping__assist__funcs_8py.html#a29e9feb3c43f689a578959453e3699fd":[3,0,0,3,3,2],
-"mapping__assist__funcs_8py.html#a93a85a91d438a1bc260d32aef08a6180":[3,0,0,3,3,0],
-"mapping__assist__funcs_8py.html#a98824e40fda888066262630f7fbf9a66":[3,0,0,3,3,1],
-"mapping__factory_8py.html":[3,0,0,5,5]
+"mapping_2____init_____8py.html":[3,0,0,3,0]
 };
