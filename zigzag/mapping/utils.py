@@ -4,7 +4,7 @@ from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.datatypes import Constants, LayerDim, UnrollFactor
 from zigzag.utils import pickle_deepcopy
 
-TEMPORAL_LOOPS_T: TypeAlias = list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]]
+TemporalLoopsType: TypeAlias = list[tuple[LayerDim, tuple[int, UnrollFactor], tuple[str, ...]]]
 
 
 def get_spatial_loops(cme: CostModelEvaluation):
@@ -21,7 +21,7 @@ def get_temporal_loops(cme: CostModelEvaluation):
     operand_links = cme.layer.memory_operand_links
     tm = pickle_deepcopy(cme.temporal_mapping.mapping_dic_stationary)
     tls = [loop for level in tm[Constants.OUTPUT_LAYER_OP] for loop in level]
-    temporal_loops: TEMPORAL_LOOPS_T = []
+    temporal_loops: TemporalLoopsType = []
     all_mem_names: set[str] = set()
     for tl in tls:
         mem_names: list[str] = []
