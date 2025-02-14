@@ -1,5 +1,5 @@
 from zigzag.cacti.cacti_parser import CactiParser
-from zigzag.hardware.architecture.memory_port import MemoryPort
+from zigzag.hardware.architecture.memory_port import MemoryPort, MemoryPortType
 from zigzag.utils import json_repr_handler
 
 
@@ -56,7 +56,13 @@ class MemoryInstance:
             memory between two cores (feature used in Stream).
         """
         if auto_cost_extraction:
-            r_bw = next(port.bw_max for port in ports if port.type == "read")
+            try:
+                r_bw = next(port.bw_max for port in ports if port.type == MemoryPortType.READ)
+            except StopIteration:
+                try:
+                    r_bw = next(port.bw_max for port in ports if port.type == MemoryPortType.READ_WRITE)
+                except StopIteration:
+                    raise ValueError(f"MemoryInstance {name} does not have a read or read_write port.")
             cacti_parser = CactiParser()
             r_cost, w_cost, area = cacti_parser.get_item(
                 mem_name=name,
