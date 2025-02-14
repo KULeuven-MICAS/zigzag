@@ -97,7 +97,14 @@ class LomaEngine:
 
         yielded = False
         for ordering in self.ordering_generator():
-            allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering, self.mapping_type)  # type: ignore
+            allocator = MemoryAllocator(  # type: ignore
+                self.accelerator,
+                self.layer,
+                self.spatial_mapping,
+                ordering,
+                self.mapping_type,
+            )
+type: ignore
             # using try catch here because in the depth-first mode the highest level might not be big enough
             try:
                 temporal_mapping = allocator.run()  # allocate this ordering to the memories
