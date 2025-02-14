@@ -101,10 +101,9 @@ class LomaEngine:
                 self.accelerator,
                 self.layer,
                 self.spatial_mapping,
-                ordering,
+                ordering,  # type: ignore
                 self.mapping_type,
             )
-type: ignore
             # using try catch here because in the depth-first mode the highest level might not be big enough
             try:
                 temporal_mapping = allocator.run()  # allocate this ordering to the memories
