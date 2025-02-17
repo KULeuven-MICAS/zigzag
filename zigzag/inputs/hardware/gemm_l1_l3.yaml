@@ -47,30 +47,30 @@ memories:
       - name: rw_port_1
         type: read_write
         bandwidth_min: 64
-        bandwidth_max: 2048
+        bandwidth_max: 512
         allocation: 
-          - I1, fh
           - I1, tl
       - name: rw_port_2
         type: read_write
         bandwidth_min: 64
-        bandwidth_max: 2048
+        bandwidth_max: 512
         allocation: 
-          - I2, fh
           - I2, tl
       - name: rw_port_3
         type: read_write
         bandwidth_min: 64
         bandwidth_max: 2048
         allocation: 
-          - O, fh
           - O, tl
-      - name: rw_port_4
+          - O, fl
+      - name: rw_port_4  # DMA port
         type: read_write
         bandwidth_min: 64
-        bandwidth_max: 2048
+        bandwidth_max: 512
         allocation: 
-          - O, fl
+          - I1, fh
+          - I2, fh
+          - O, fh
           - O, th
     served_dimensions: [D1, D2, D3]
 
