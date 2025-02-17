@@ -1,6 +1,6 @@
 - id: 0
   operator_type: Gemm
-  equation: O[d0][d2]+=I[d0][d1]*W[d1][d2]
+  equation: O[d0][d1]+=I[d0][d2]*W[d2][d1]
   dimension_relations: []
   loop_dims: [D0, D1, D2]
   loop_sizes: [128, 128, 128]
