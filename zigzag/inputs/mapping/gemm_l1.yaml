@@ -3,9 +3,9 @@
     D1:
       - D0, 8
     D2:
-      - D1, 8
-    D3:
       - D2, 8
+    D3:
+      - D1, 8
   temporal_ordering:
     - [D1, "*"]
     - [D2, "*"]
