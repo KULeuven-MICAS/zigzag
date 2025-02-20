@@ -26,6 +26,8 @@ Different design space exploration case studies
 
 * \S. Colleman, P. Zhu, W. Sun and M. Verhelst, "Optimizing Accelerator Configurability for Mobile Transformer Networks," 2022 IEEE 4th International Conference on Artificial Intelligence Circuits and Systems (AICAS), Incheon, Korea, Republic of, 2022, pp. 142-145, doi: 10.1109/AICAS54282.2022.9869945. `[paper] <https://ieeexplore.ieee.org/document/9869945>`_, `[slides] <https://docs.google.com/presentation/d/1tp11akyAVGg3Y20Aupp2wlTRSgg9nKAQ/edit?usp=sharing&ouid=117150865143314519834&rtpof=true&sd=true>`_, `[video] <https://drive.google.com/file/d/1tglc-BCGVclrWT-kNhWy02Vms5sjk1zt/view?usp=sharing>`_
 
+* \R. Geens, M. Shi, A. Symons, C. Fang, and M. Verhelst, "Energy Cost Modelling for Optimizing Large Language Model Inference on Hardware Accelerators," in 2024 IEEE 37th International System-on-Chip Conference (SOCC), Dresden, Germani, 2024, pp. 1–6. doi: 10.1109/SOCC62300.2024.10737844. `[paper] <https://ieeexplore.ieee.org/document/10737844>`_, `[repository] <https://github.com/KULeuven-MICAS/zigzag-llm>`_
+
 
 Extension to support cross-layer depth-first scheduling
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
