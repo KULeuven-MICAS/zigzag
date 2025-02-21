@@ -14,7 +14,7 @@ from zigzag.datatypes import (
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.hardware.architecture.memory_level import MemoryLevel
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
-from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingDict
+from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingDict, TemporalMappingType
 from zigzag.opt.loma.loop import Loop
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
@@ -37,6 +37,7 @@ class MemoryAllocator:
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
         ordering: list[tuple[LayerDim, UnrollFactorInt]],
+        mapping_type: TemporalMappingType,
     ):
         self.accelerator = accelerator
         self.layer = layer
@@ -55,7 +56,8 @@ class MemoryAllocator:
         self.precision[Constants.FINAL_OUTPUT_MEM_OP] = self.layer.operand_precision.final_output_precision
 
         # Initialize the unallocated loops with the ordering for each operand
-        self.unallocated = {mem_op: [Loop(dim, size) for (dim, size) in self.ordering] for mem_op in self.mem_ops}
+        all_temporal_loops = [Loop(dim, size) for (dim, size) in self.ordering]
+        self.unallocated = {mem_op: [loop for loop in all_temporal_loops] for mem_op in self.mem_ops}
 
         # Initialize the allocated loops with the spatial mapping at the operand level for each operand
         self.allocated: dict[MemoryOperand, list[Loop]] = {}
@@ -73,6 +75,8 @@ class MemoryAllocator:
         # The sublists represent the memory levels for that operand and contain the loops allocated to that level.
         self.temporal_mapping_dict: TemporalMappingDict = {layer_op: [] for layer_op in self.layer_ops}
 
+        self.mapping_type = mapping_type
+
     def run(self):
         """! Run the memory allocation process.
         Start by the lowest memory hierarchy level and allocate as much loops as possible
@@ -88,7 +92,7 @@ class MemoryAllocator:
 
         # After all the nodes have been allocated, we can create the TemporalMapping
         # object from the dictionary we have built
-        temporal_mapping = TemporalMapping(self.temporal_mapping_dict, self.layer)
+        temporal_mapping = TemporalMapping(self.temporal_mapping_dict, self.layer, self.mapping_type)
         return temporal_mapping
 
     def allocate_node(self, node: MemoryLevel, top_levels: dict[MemoryOperand, MemoryLevel]):
@@ -307,7 +311,30 @@ class MemoryAllocator:
                         unrolling."""
                     )
                 continue
-            if accesses_comb <= best_accesses:
+            if (accesses_comb <= best_accesses) and self.is_valid_idx_combination_for_mapping_type(
+                current_loop_idxs, mem_ops
+            ):
                 best_accesses = accesses_comb
                 best_loop_idxs = current_loop_idxs
         return best_loop_idxs
+
+    def is_valid_idx_combination_for_mapping_type(self, idx_comb: list[int], mem_ops: list[MemoryOperand]) -> bool:
+        """! Check if the idx_comb is a valid combination for the mapping_type."""
+        if self.mapping_type == TemporalMappingType.UNEVEN:
+            return True
+        elif self.mapping_type == TemporalMappingType.EVEN:
+            return self.is_valid_idx_combination_for_even_mapping_type(idx_comb, mem_ops)
+        else:
+            raise NotImplementedError(f"Mapping type {self.mapping_type} validity checks not implemented.")
+
+    def is_valid_idx_combination_for_even_mapping_type(self, idx_comb: list[int], mem_ops: list[MemoryOperand]):
+        """! Check if the idx_comb is a valid combination for the EVEN mapping type."""
+        to_be_allocated_loops = [
+            loop for mem_op, idx in zip(mem_ops, idx_comb) for loop in self.unallocated[mem_op][idx:]
+        ]
+        to_remain_unallocated_loops = [
+            loop for mem_op, idx in zip(mem_ops, idx_comb) for loop in self.unallocated[mem_op][:idx]
+        ]
+        if any([loop in to_remain_unallocated_loops for loop in to_be_allocated_loops]):
+            return False
+        return True

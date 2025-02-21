@@ -1,0 +1,15 @@
+- id: 0
+  operator_type: Gemm
+  equation: O[d0][d1]+=I[d0][d2]*W[d2][d1]
+  dimension_relations: []
+  loop_dims: [D0, D1, D2]
+  loop_sizes: [128, 128, 128]
+  operand_precision:
+    W: 8
+    I: 8
+    O: 32
+    O_final: 8
+  operand_source:
+    I: 0
+    W: 0
+

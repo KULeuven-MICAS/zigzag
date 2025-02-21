@@ -5,6 +5,7 @@ from typing import Any, Literal
 from onnx import ModelProto
 
 from zigzag.cost_model.cost_model import CostModelEvaluationABC
+from zigzag.mapping.temporal_mapping import TemporalMappingType
 from zigzag.stages.evaluation.cost_model_evaluation import CostModelStage
 from zigzag.stages.exploit_data_locality_stages import (
     ExploitInterLayerDataLocalityStage,
@@ -25,11 +26,12 @@ from zigzag.stages.workload_iterator import WorkloadStage
 
 
 def get_hardware_performance_zigzag(
-    workload: str | ModelProto,
+    workload: str | list[dict[str, Any]] | ModelProto,
     accelerator: str,
     mapping: str,
     *,
     temporal_mapping_search_engine: Literal["loma"] | Literal["salsa"] = "loma",
+    temporal_mapping_type: Literal["uneven"] | Literal["even"] = "uneven",
     opt: str = "latency",
     dump_folder: str = f"outputs/{datetime.now()}",
     pickle_filename: str | None = None,
@@ -77,7 +79,7 @@ def get_hardware_performance_zigzag(
     # Check workload format and based on it select the correct workload parser stage
     workload_parser_stage = (
         ONNXModelParserStage
-        if isinstance(workload, ModelProto) or (workload.split(".")[-1] == "onnx")
+        if isinstance(workload, ModelProto) or (isinstance(workload, str) and workload.split(".")[-1] == "onnx")
         else WorkloadParserStage
     )
 
@@ -87,6 +89,7 @@ def get_hardware_performance_zigzag(
     do_mix_spatial_mapping_generation = in_memory_compute or enable_mix_spatial_mapping
     # Select temporal mapping engine based on the function input
     temporal_mapping_engine = SalsaStage if temporal_mapping_search_engine == "salsa" else TemporalMappingGeneratorStage
+    tm_type = TemporalMappingType(temporal_mapping_type)
 
     stages = [
         # Parse the ONNX Model into the workload
@@ -139,6 +142,7 @@ def get_hardware_performance_zigzag(
         # smaller than the memory read bw, # take into account only one-time access cost (assume the data can stay at
         # the output pins of the memory as long as it is needed).
         access_same_data_considered_as_no_access=True,
+        temporal_mapping_type=tm_type,
     )
 
     # Launch the MainStage

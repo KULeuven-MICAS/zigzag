@@ -14,6 +14,7 @@ class AcceleratorValidator:
     OPERAND_REGEX = r"^I[12]$|^O$|^S$"
     DIMENSION_REGEX = r"^D\d$"
     PORT_REGEX = r"^[r]?[w]?_port_\d+$"
+    ALLOCATION_REGEX = r"^(I[12]|O), (fh|tl|fl|th)$"
 
     SCHEMA = {
         "name": {"type": "string", "required": True},
@@ -24,8 +25,6 @@ class AcceleratorValidator:
                 "type": "dict",
                 "schema": {
                     "size": {"type": "integer", "required": True},
-                    "r_bw": {"type": "integer", "required": True},
-                    "w_bw": {"type": "integer", "required": True},
                     "r_cost": {
                         "type": "float",
                         "required": False,
@@ -44,22 +43,7 @@ class AcceleratorValidator:
                         "nullable": True,
                         "default": None,
                     },
-                    "r_port": {"type": "integer", "required": True},
-                    "w_port": {"type": "integer", "required": True},
-                    "rw_port": {"type": "integer", "required": True},
                     "latency": {"type": "integer", "required": True},
-                    "min_r_granularity": {
-                        "type": "integer",
-                        "required": False,
-                        "nullable": True,
-                        "default": None,
-                    },
-                    "min_w_granularity": {
-                        "type": "integer",
-                        "required": False,
-                        "nullable": True,
-                        "default": None,
-                    },
                     "mem_type": {
                         "type": "string",
                         "required": False,
@@ -77,25 +61,18 @@ class AcceleratorValidator:
                         "schema": {
                             "type": "dict",
                             "schema": {
-                                "fh": {
+                                "name": {"type": "string", "regex": PORT_REGEX, "required": True},
+                                "type": {
                                     "type": "string",
-                                    "required": False,
-                                    "regex": PORT_REGEX,
+                                    "allowed": ["read", "write", "read_write"],
+                                    "required": True,
                                 },
-                                "tl": {
-                                    "type": "string",
-                                    "required": False,
-                                    "regex": PORT_REGEX,
-                                },
-                                "fl": {
-                                    "type": "string",
-                                    "required": False,
-                                    "regex": PORT_REGEX,
-                                },
-                                "th": {
-                                    "type": "string",
-                                    "required": False,
-                                    "regex": PORT_REGEX,
+                                "bandwidth_min": {"type": "integer", "required": True},
+                                "bandwidth_max": {"type": "integer", "required": True},
+                                "allocation": {
+                                    "type": "list",
+                                    "required": True,
+                                    "schema": {"type": "string", "regex": ALLOCATION_REGEX},
                                 },
                             },
                         },
@@ -236,58 +213,24 @@ class AcceleratorValidator:
             if mem_data["area"] is None:
                 self.invalidate(f"`area` of {mem_name} is missing, and is not automatically extracted using CACTI.")
 
-        # Number of port allocations is consistent with memory operands
-        nb_operands = len(mem_data["operands"])
-        nb_ports = len(mem_data["ports"])
-        if nb_ports != nb_operands:
-            self.invalidate(
-                f"Number of memory ports ({nb_ports}) does not equal number of operands ({nb_operands}) for {mem_name}"
-            )
-
         # No unexpected served dimensions
         for served_dimension in mem_data["served_dimensions"]:
             if served_dimension not in expected_oa_dims:
                 self.invalidate(f"Invalid served dimension {served_dimension} in memory {mem_name}")
 
-        # Number of allocated ports per type equals given number of ports
-        port_data: list[dict[str, str]] = mem_data["ports"]
-        r_ports: set[str] = set()
-        w_ports: set[str] = set()
-        rw_ports: set[str] = set()
-        for port_dict in port_data:
-            for port_name in port_dict.values():
-                match port_name[0:2]:
-                    case "r_":
-                        r_ports.add(port_name)
-                    case "w_":
-                        w_ports.add(port_name)
-                    case "rw":
-                        rw_ports.add(port_name)
-                    case _:
-                        raise ValueError("Invalid port name")
-        if len(r_ports) != mem_data["r_port"]:
-            self.invalidate(
-                f"Number of given read ports ({mem_data['r_port']}) does not equal number of allocated read ports "
-                f"({len(r_ports)}) for {mem_name}"
-            )
-        if len(w_ports) != mem_data["w_port"]:
-            self.invalidate(
-                f"Number of given write ports ({mem_data['w_port']}) does not equal number of allocated write ports "
-                f"({len(w_ports)}) for {mem_name}"
-            )
-        if len(rw_ports) != mem_data["rw_port"]:
-            self.invalidate(
-                f"Number of given read/write ports ({mem_data['rw_port']}) does not equal number of allocated "
-                f"read/write ports ({len(rw_ports)}) for {mem_name}"
-            )
-
         # Direction of ports is valid
-        for port_dict in port_data:
-            for direction, port_name in port_dict.items():
-                if (direction == "fh" or direction == "fl") and (port_name.startswith("r_")):
+        for port in mem_data["ports"]:
+            for allocation in port["allocation"]:
+                _, direction = allocation.split(", ")
+                if direction in ["fh", "fl"] and port["type"] == "read":
                     self.invalidate(f"Read port given for write direction in {mem_name}")
-                if (direction == "th" or direction == "tl") and (port_name.startswith("w_")):
+                if direction in ["th", "tl"] and port["type"] == "write":
                     self.invalidate(f"Write port given for read direction in {mem_name}")
+
+        # Bandwidths of ports is valid
+        for port in mem_data["ports"]:
+            if port["bandwidth_min"] > port["bandwidth_max"]:
+                self.invalidate(f"Minimum bandwidth is greater than maximum bandwidth in {mem_name}")
 
     def validate_cells_imc(self):
         if "cells" not in self.data["memories"]:
@@ -310,7 +253,6 @@ class AcceleratorValidator:
         # For both IMC and non-IMC:
         oa_dims: list[str] = multiplier_data["dimensions"]
         if len(oa_dims) != len(multiplier_data["sizes"]):
-            # TODO Alternatively, you can force the user to not
             self.invalidate("Core dimensions and sizes do not match.")
 
         if self.is_imc:

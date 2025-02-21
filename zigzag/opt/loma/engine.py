@@ -10,7 +10,7 @@ from tqdm import tqdm
 from zigzag.datatypes import LayerDim, UnrollFactor
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
-from zigzag.mapping.temporal_mapping import TemporalMapping
+from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingType
 from zigzag.opt.loma.memory_allocator import (
     MemoryAllocator,
     MemoryHierarchyTooSmallException,
@@ -50,6 +50,7 @@ class LomaEngine:
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
+        mapping_type: TemporalMappingType,
         loma_lpf_limit: int | None = None,
         **kwargs: Any,
     ):
@@ -69,6 +70,7 @@ class LomaEngine:
         self.spatial_mapping = spatial_mapping
         self.constraints = []
         self.has_constraints = False
+        self.mapping_type = mapping_type
 
         # Extract the memory hierarchy from the accelerator
         # TODO: Take into account that data might be stored in lower level,
@@ -114,7 +116,13 @@ class LomaEngine:
             else:
                 valid = True
             if valid:
-                allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
+                allocator = MemoryAllocator(  # type: ignore
+                    self.accelerator,
+                    self.layer,
+                    self.spatial_mapping,
+                    ordering,  # type: ignore
+                    self.mapping_type,
+                )
                 # using try catch here because in the depth-first mode the highest level might not be big enough
                 try:
                     temporal_mapping = allocator.run()  # allocate this ordering to the memories

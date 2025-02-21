@@ -1,0 +1,73 @@
+name: gemm_l1
+
+memories:
+  reg_O:
+    size: 32
+    r_cost: 0.02  # TODO
+    w_cost: 0.02  # TODO
+    area: 0
+    latency: 1
+    auto_cost_extraction: False
+    operands: [O]
+    ports:
+      - name: w_port_1
+        type: write
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, fh
+      - name: r_port_1
+        type: read
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, tl
+      - name: w_port_2
+        type: write
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, fl
+      - name: r_port_2
+        type: read
+        bandwidth_min: 32
+        bandwidth_max: 32
+        allocation: 
+          - O, th
+    served_dimensions: [D2]
+
+  l1:
+    size: 4194304
+    r_cost: 22.9  # TODO
+    w_cost: 52.01 # TODO
+    area: 0
+    latency: 1
+    operands: [I1, I2, O]
+    ports:
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 512
+        allocation: 
+          - I1, tl
+      - name: rw_port_2
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 512
+        allocation: 
+          - I2, tl
+      - name: rw_port_3
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 2048
+        allocation: 
+          - O, tl
+          - O, fl
+    served_dimensions: [D1, D2, D3]
+
+operational_array:
+  input_precision: [8, 8]
+  unit_energy: 0.04 # pJ
+  unit_area: 1 # unit
+  dimensions: [D1, D2, D3]
+  sizes: [8, 8, 8]

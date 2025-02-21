@@ -17,22 +17,22 @@ class MappingValidator:
             "schema": {
                 "D1": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*, \d+$"},
                     "required": False,
                 },
                 "D2": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*, \d+$"},
                     "required": False,
                 },
                 "D3": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*, \d+$"},
                     "required": False,
                 },
                 "D4": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+, [0-9]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*, \d+$"},
                     "required": False,
                 },
             },
@@ -54,22 +54,22 @@ class MappingValidator:
             "schema": {
                 "D1": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*"},
                     "required": False,
                 },
                 "D2": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*"},
                     "required": False,
                 },
                 "D3": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*"},
                     "required": False,
                 },
                 "D4": {
                     "type": "list",
-                    "schema": {"type": "string", "regex": r"^[A-Z]+$"},
+                    "schema": {"type": "string", "regex": r"^[A-Z]+\d*"},
                     "required": False,
                 },
             },

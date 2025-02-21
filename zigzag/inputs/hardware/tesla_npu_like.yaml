@@ -3,142 +3,173 @@ name: npu_like
 memories:
   rf_1B:
     size: 8
-    r_bw: 8
-    w_bw: 8
     r_cost: 0.01
     w_cost: 0.01
     area: 0
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
-    auto_cost_extraction: False
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 8
+        bandwidth_max: 8
+        allocation: 
+          - I2, fh
     served_dimensions: [D2, D3]
 
   rf_4B:
     size: 32
-    r_bw: 16
-    w_bw: 16
     r_cost: 0.022
     w_cost: 0.022
     area: 0
-    r_port: 2
-    w_port: 2
-    rw_port: 0
     latency: 1
     operands: [O]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
-        fl: w_port_2
-        th: r_port_2
+      - name: r_port_1
+        type: read
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - O, tl
+      - name: r_port_2
+        type: read
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - O, th
+      - name: w_port_1
+        type: write
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - O, fh
+      - name: w_port_2
+        type: write
+        bandwidth_min: 16
+        bandwidth_max: 16
+        allocation: 
+          - O, fl
     served_dimensions: []
 
   sram_1KB_I:
     size: 8192
-    r_bw: 256
-    w_bw: 256
     r_cost: 4.78
     w_cost: 5.59
     area: 0
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
-    min_r_granularity: 64
-    min_w_granularity: 64
     operands: [I1]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 256
+        allocation: 
+          - I1, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 256
+        allocation: 
+          - I1, fh
     served_dimensions: [D1, D2, D3]
 
   sram_1KB_W:
     size: 8192
-    r_bw: 256
-    w_bw: 256
     r_cost: 4.78
     w_cost: 5.59
     area: 0
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
-    min_r_granularity: 64
-    min_w_granularity: 64
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 256
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 256
+        allocation: 
+          - I2, fh
     served_dimensions: [D1, D2, D3]
 
   sram_1MB_A:
     size: 8388608
-    r_bw: 1024
-    w_bw: 1024
     r_cost: 208.08
     w_cost: 189.2
     area: 0
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
-    min_r_granularity: 64
-    min_w_granularity: 64
     operands: [I1, O]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
-      - fh: w_port_1
-        tl: r_port_1
-        fl: w_port_1
-        th: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 1024
+        allocation: 
+          - I1, tl
+          - O, tl
+          - O, th
+      - name: w_port_1
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 1024
+        allocation: 
+          - I1, fh
+          - O, fh
+          - O, fl
     served_dimensions: [D1, D2, D3]
 
   sram_1MB_W:
     size: 8388608
-    r_bw: 1024
-    w_bw: 1024
     r_cost: 208.08
     w_cost: 189.2
     area: 0
-    r_port: 1
-    w_port: 1
-    rw_port: 0
     latency: 1
-    min_r_granularity: 64
-    min_w_granularity: 64
     operands: [I2]
     ports:
-      - fh: w_port_1
-        tl: r_port_1
+      - name: r_port_1
+        type: read
+        bandwidth_min: 64
+        bandwidth_max: 1024
+        allocation: 
+          - I2, tl
+      - name: w_port_1
+        type: write
+        bandwidth_min: 64
+        bandwidth_max: 1024
+        allocation: 
+          - I2, fh
     served_dimensions: [D1, D2, D3]
 
   dram:
     size: 10000000000
-    r_bw: 64
-    w_bw: 64
     r_cost: 700
     w_cost: 750
     area: 0
-    r_port: 0
-    w_port: 0
-    rw_port: 1
     latency: 1
     operands: [I1, I2, O]
     ports:
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-      - fh: rw_port_1
-        tl: rw_port_1
-        fl: rw_port_1
-        th: rw_port_1
+      - name: rw_port_1
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 64
+        allocation: 
+          - I1, fh
+          - I1, tl
+          - I2, fh
+          - I2, tl
+          - O, fh
+          - O, tl
+          - O, fl
+          - O, th
     served_dimensions: [D1, D2, D3]
 
 operational_array:

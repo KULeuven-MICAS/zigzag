@@ -3,7 +3,7 @@ from typing import Any, Generator
 
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
-from zigzag.mapping.temporal_mapping import TemporalMapping
+from zigzag.mapping.temporal_mapping import TemporalMapping, TemporalMappingType
 from zigzag.opt.loma.engine import LomaEngine
 from zigzag.opt.loma.memory_allocator import MemoryAllocator
 from zigzag.opt.loma.multipermute import PermutationConstraint
@@ -25,6 +25,7 @@ class TemporalMappingGeneratorStage(Stage):
         accelerator: Accelerator,
         layer: LayerNode,
         spatial_mapping: SpatialMappingInternal,
+        temporal_mapping_type: TemporalMappingType,
         **kwargs: Any,
     ):
         """
@@ -34,6 +35,7 @@ class TemporalMappingGeneratorStage(Stage):
         self.accelerator = accelerator
         self.layer = layer
         self.spatial_mapping = spatial_mapping
+        self.mapping_type = temporal_mapping_type
 
     def run(self):
         for temporal_mapping in self.generate_temporal_mappings():
@@ -51,6 +53,7 @@ class TemporalMappingGeneratorStage(Stage):
             accelerator=self.accelerator,
             layer=self.layer,
             spatial_mapping=self.spatial_mapping,
+            mapping_type=self.mapping_type,
             **self.kwargs,
         )
 
@@ -58,8 +61,13 @@ class TemporalMappingGeneratorStage(Stage):
         provided_ordering = self.layer.temporal_ordering
         all_temporal_loops = engine.get_temporal_loops()
         if provided_ordering.is_complete(all_temporal_loops):
+            legacy_provided_ordering = provided_ordering.to_legacy_format()
             allocator = MemoryAllocator(
-                self.accelerator, self.layer, self.spatial_mapping, provided_ordering.to_legacy_format()  # type: ignore
+                self.accelerator,
+                self.layer,
+                self.spatial_mapping,
+                legacy_provided_ordering,
+                self.mapping_type,  # type: ignore
             )
             temporal_mapping = allocator.run()
             yield temporal_mapping

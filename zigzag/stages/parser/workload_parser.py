@@ -18,14 +18,15 @@ class WorkloadParserStage(Stage):
         self,
         list_of_callables: list[StageCallable],
         *,
-        workload: str,
+        workload: str | list[dict[str, Any]],
         mapping: str,
         **kwargs: Any,
     ):
         assert mapping.endswith(".yaml"), "Mapping is not a yaml file path"
-        assert workload.endswith(".yaml"), "Workload is not a yaml file path"
+        if isinstance(workload, str):
+            assert workload.endswith(".yaml"), "Workload is not a yaml file path"
         super().__init__(list_of_callables, **kwargs)
-        self.workload_yaml_path = workload
+        self.workload = workload
         self.mapping_yaml_path = mapping
 
     def run(self):
@@ -42,7 +43,10 @@ class WorkloadParserStage(Stage):
 
     def _parse_workload_data(self) -> list[dict[str, Any]]:
         """! Parse, validate and normalize workload"""
-        workload_data = open_yaml(self.workload_yaml_path)
+        if isinstance(self.workload, str):
+            workload_data = open_yaml(self.workload)
+        else:
+            workload_data = self.workload
         workload_validator = WorkloadValidator(workload_data)
         workload_data = workload_validator.normalized_data
         workload_validate_succes = workload_validator.validate()

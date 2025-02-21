@@ -32,6 +32,7 @@ from zigzag.cost_model.cost_model import CostModelEvaluation
 from zigzag.datatypes import LayerDim, UnrollFactorInt
 from zigzag.hardware.architecture.accelerator import Accelerator
 from zigzag.mapping.spatial_mapping_internal import SpatialMappingInternal
+from zigzag.mapping.temporal_mapping import TemporalMappingType
 from zigzag.opt.loma.memory_allocator import MemoryAllocator
 from zigzag.workload.layer_node import LayerNode
 
@@ -46,6 +47,7 @@ class SalsaState:
         spatial_mapping: SpatialMappingInternal,
         ordering: list[tuple[LayerDim, UnrollFactorInt]],
         opt_criterion_name: str,
+        mapping_type: TemporalMappingType,
     ):
         assert opt_criterion_name in ("energy", "latency")  # TODO make this an enum?
         self.ordering = ordering
@@ -54,8 +56,9 @@ class SalsaState:
         self.spatial_mapping = spatial_mapping
         self.memory_hierarchy = self.accelerator.memory_hierarchy
         self.opt_criterion_name = opt_criterion_name
+        self.mapping_type = mapping_type
 
-        allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering)
+        allocator = MemoryAllocator(self.accelerator, self.layer, self.spatial_mapping, ordering, self.mapping_type)
 
         self.temporal_mapping = allocator.run()  # allocate this ordering to the memories
 
@@ -87,4 +90,5 @@ class SalsaState:
             self.spatial_mapping,
             swapped_ordering,
             self.opt_criterion_name,
+            self.mapping_type,
         )
