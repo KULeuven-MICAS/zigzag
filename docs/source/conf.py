@@ -75,7 +75,6 @@ html_theme_options = {
     "globaltoc_depth": 2,
     "color_primary": "blue-grey",
     "color_accent": "grey",
-    "logo_icon": "zigzag_logo_white_32x32.svg",
 }
 
 html_sidebars = {"**": ["logo-text.html", "globaltoc.html", "localtoc.html", "searchbox.html"]}
