@@ -1,4 +1,4 @@
-name: gemm_l1_l3
+name: gemm_lop_input_l3
 
 memories:
   reg_O:
@@ -36,13 +36,13 @@ memories:
           - O, fl
     served_dimensions: [D2]
 
-  l1:
-    size: 943718 # 128 kiB - 10% for the snitch stack
+  l1_input:
+    size: 849346 # 128 kiB - 10% for the snitch stack
     r_cost: 0.02 
     w_cost: 0.02
     area: 0
     latency: 1
-    operands: [I1, I2, O]
+    operands: [I1]
     ports:
       - name: rw_port_1
         type: read_write
@@ -50,12 +50,45 @@ memories:
         bandwidth_max: 512
         allocation: 
           - I1, tl
+
+      - name: rw_port_4  # DMA port
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 512
+        allocation: 
+          - I1, fh
+    served_dimensions: [D1, D2, D3]
+
+  l1_weights:
+    size: 47185 # 128 kiB - 10% for the snitch stack
+    r_cost: 0.02 
+    w_cost: 0.02
+    area: 0
+    latency: 1
+    operands: [I2]
+    ports:
       - name: rw_port_2
         type: read_write
         bandwidth_min: 64
         bandwidth_max: 512
         allocation: 
           - I2, tl
+      - name: rw_port_4  # DMA port
+        type: read_write
+        bandwidth_min: 64
+        bandwidth_max: 512
+        allocation: 
+          - I2, fh
+    served_dimensions: [D1, D2, D3]
+
+  l1_outputs:
+    size: 47185 # 128 kiB - 10% for the snitch stack
+    r_cost: 0.02 
+    w_cost: 0.02
+    area: 0
+    latency: 1
+    operands: [O]
+    ports:
       - name: rw_port_3
         type: read_write
         bandwidth_min: 64
@@ -68,8 +101,6 @@ memories:
         bandwidth_min: 64
         bandwidth_max: 512
         allocation: 
-          - I1, fh
-          - I2, fh
           - O, fh
           - O, th
     served_dimensions: [D1, D2, D3]

@@ -1,17 +1,12 @@
 - name: default
   spatial_mapping:
     D1:
-      - D0, 8
+      - K, 8
     D2:
-      - D2, 8
+      - C, 8
     D3:
-      - D1, 8
-  temporal_ordering:
-    - [D1, "*"]
-    - [D2, "*"]
-    - [D0, "*"]
+      - OX, 8
   memory_operand_links:
     O: O
     W: I2
     I: I1
-
