@@ -1,0 +1,23 @@
+- id: 0 # early conv
+  operator_type: Conv
+  equation: O[b][k][oy][ox]+=W[k][c][fy][fx]*I[b][c][iy][ix]
+  dimension_relations: [ix=1*ox+1*fx, iy=1*oy+1*fy]
+  loop_dims: [B, K, C, OY, OX, FY, FX]
+  loop_sizes: [1, 64, 64, 56, 56, 3, 3]
+  operand_precision:
+    W: 8
+    I: 8
+    O: 32
+    O_final: 32
+
+- id: 1 # late conv
+  operator_type: Conv
+  equation: O[b][k][oy][ox]+=W[k][c][fy][fx]*I[b][c][iy][ix]
+  dimension_relations: [ix=1*ox+1*fx, iy=1*oy+1*fy]
+  loop_dims: [B, K, C, OY, OX, FY, FX]
+  loop_sizes: [1, 512, 512, 7, 7, 3, 3]
+  operand_precision:
+    W: 8
+    I: 8
+    O: 32
+    O_final: 32
