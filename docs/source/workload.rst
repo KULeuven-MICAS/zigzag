@@ -29,7 +29,7 @@ To change the operand precision used in ZigZag, ONNX layers can be extended with
 .. code:: python
 
     import onnx
-    onnx_model = onnx.load(path)
+    onnx_model = onnx.load(path, load_external_data=False) # Load the onnx model from a file
     for node in onnx_model.graph.node:
         attr = onnx.helper.make_attribute("weight_size", 4) # 4bit weight quantization
         node.attribute.extend([attr])
