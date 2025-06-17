@@ -27,10 +27,13 @@ Controlling the quantization
 To change the operand precision used in ZigZag, ONNX layers can be extended with a custom attribute to define the number of bits for weights, activations (in- and output) and intermediate output activations. The attribute name must correspondingly match ``weight_size``, ``act_size`` or ``output_size``. Attributes can be added as follows:
 
 .. code:: python
+
+    import onnx
     onnx_model = onnx.load(path)
     for node in onnx_model.graph.node:
         attr = onnx.helper.make_attribute("weight_size", 4) # 4bit weight quantization
         node.attribute.extend([attr])
+    onnx.save(onnx_model, path)
 
 
 Saving your onnx model with external data
