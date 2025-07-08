@@ -28,6 +28,8 @@ class ONNXOperatorParser(metaclass=ABCMeta):
     ) -> None:
         self.node_id = node_id
         self.node = node
+        if not node.name:
+            self.node.name = f"Op{node_id}"
         self.nodes_outputs = nodes_outputs
         self.onnx_model = onnx_model
         self.mapping_data = mapping_data
