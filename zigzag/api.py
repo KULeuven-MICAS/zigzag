@@ -40,6 +40,7 @@ def get_hardware_performance_zigzag(
     in_memory_compute: bool = False,
     exploit_data_locality: bool = False,
     enable_mix_spatial_mapping: bool = False,
+    loma_show_progress_bar: bool = True,
 ) -> (
     tuple[float, float, list[tuple[CostModelEvaluationABC, Any]]]
     | tuple[float, float, float, float, list[tuple[CostModelEvaluationABC, Any]]]
@@ -135,7 +136,7 @@ def get_hardware_performance_zigzag(
         dump_folder=dump_folder,
         pickle_filename=pickle_filename,
         loma_lpf_limit=lpf_limit,
-        loma_show_progress_bar=True,
+        loma_show_progress_bar=loma_show_progress_bar,
         nb_mappings_generated=nb_spatial_mappings_generated,
         enable_mix_spatial_mapping_generation=do_mix_spatial_mapping_generation,
         # If we need access the same input data multiple times from the innermost memory level and the data size is
