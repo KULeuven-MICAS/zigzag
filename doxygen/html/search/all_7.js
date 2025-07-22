@@ -45,7 +45,7 @@ var searchData=
   ['get_5fend_347',['get_end',['../classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#ae9249453216fd373fafc231c70175754',1,'zigzag::workload::dummy_node::DummyNode']]],
   ['get_5fenergy_5farray_348',['get_energy_array',['../namespacezigzag_1_1visualization_1_1results_1_1plot__cme.html#a224fa62723511d36c3f9d409b008e0d4',1,'zigzag::visualization::results::plot_cme']]],
   ['get_5fenergy_5ffor_5fa_5flayer_349',['get_energy_for_a_layer',['../classarchitecture_1_1imc__array_1_1ImcArray.html#a17d7bd0f76f3df51cd89e3c526f708a5',1,'architecture::imc_array::ImcArray']]],
-  ['get_5fhardware_5fperformance_5fzigzag_350',['get_hardware_performance_zigzag',['../namespacezigzag_1_1api.html#ae1eb5cc5eb036f0be9f575ac1e5dc69a',1,'zigzag::api']]],
+  ['get_5fhardware_5fperformance_5fzigzag_350',['get_hardware_performance_zigzag',['../namespacezigzag_1_1api.html#a0f7082b75dea323e3d1b4696f1053c0b',1,'zigzag::api']]],
   ['get_5fhardware_5fperformance_5fzigzag_5fimc_351',['get_hardware_performance_zigzag_imc',['../namespacezigzag_1_1api.html#a97cf011d1ddc096ee6a44473345a5865',1,'zigzag::api']]],
   ['get_5finner_5fmemories_352',['get_inner_memories',['../classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html#a0006442df31e8bb6a5f89c11ccd9cef0',1,'architecture::memory_hierarchy::MemoryHierarchy']]],
   ['get_5finput_5foutput_5fweight_5fdata_5ftype_353',['get_input_output_weight_data_type',['../classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html#a41969c5f5e031c48fb8a91a78073bd28',1,'zigzag::parser::onnx::onnx_operator_parser::ONNXOperatorParser']]],
