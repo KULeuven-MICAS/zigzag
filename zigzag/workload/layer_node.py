@@ -205,16 +205,20 @@ class LayerNode(LayerNodeABC):
             # None constant: take the second one
             act_layer_op = self.input_operands[1]
         else:
-            pr_loop_key = next(iter(self.pr_loop.keys()))
-            related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
-                layer_op: self.equation.get_r_layer_dims(layer_op)
-                for layer_op in self.equation.get_contained_operands()
-            }
-            act_layer_op = [
-                operand_in_layer
-                for operand_in_layer, related_loop in related_loop_dict.items()
-                if pr_loop_key in related_loop
-            ].pop()
+            # Check if the pr_loop is empty (first gemm layer)
+            if len(self.pr_loop) == 0:
+                act_layer_op = self.input_operands[0] # first operand is I by default
+            else:
+                pr_loop_key = next(iter(self.pr_loop.keys()))
+                related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
+                    layer_op: self.equation.get_r_layer_dims(layer_op)
+                    for layer_op in self.equation.get_contained_operands()
+                }
+                act_layer_op = [
+                    operand_in_layer
+                    for operand_in_layer, related_loop in related_loop_dict.items()
+                    if pr_loop_key in related_loop
+                ].pop()
         return act_layer_op
 
     def get_weight_layer_op(
