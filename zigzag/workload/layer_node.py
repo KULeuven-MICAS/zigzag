@@ -207,7 +207,7 @@ class LayerNode(LayerNodeABC):
         else:
             # Check if the pr_loop is empty (first gemm layer)
             if len(self.pr_loop) == 0:
-                act_layer_op = self.input_operands[0] # first operand is I by default
+                act_layer_op = self.input_operands[0]  # first operand is I by default
             else:
                 pr_loop_key = next(iter(self.pr_loop.keys()))
                 related_loop_dict: dict[LayerOperand, list[LayerDim]] = {
