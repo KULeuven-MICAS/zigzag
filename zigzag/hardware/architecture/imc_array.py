@@ -1,5 +1,6 @@
 import logging
 import math
+from typing import Any
 
 from zigzag.datatypes import OADimension
 from zigzag.hardware.architecture.imc_unit import ImcUnit
@@ -43,6 +44,21 @@ class ImcArray(ImcUnit):
             self.topsw_peak,
             self.topsmm2_peak,
         ) = self.get_macro_level_peak_performance()
+
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, ImcArray)
+            and self.area_breakdown == other.area_breakdown
+            and self.tclk_breakdown == other.tclk_breakdown
+            and self.energy_breakdown == other.energy_breakdown
+            and self.bit_serial_precision == other.bit_serial_precision
+            and self.activation_precision == other.activation_precision
+            and self.weight_precision == other.weight_precision
+            and self.adc_resolution == other.adc_resolution
+            and self.cells_size == other.cells_size
+            and self.cells_area == other.cells_area
+            and self.dimension_sizes == other.dimension_sizes
+        )
 
     def get_adc_cost(self) -> tuple[float, float, float]:
         """single ADC and analog accumulation cost calculation"""

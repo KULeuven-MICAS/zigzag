@@ -91,7 +91,7 @@ class SpatialMappingGeneratorStage(Stage):
         for i, generated_mapping in enumerate(generated_mappings):
             self.layer.spatial_mapping = generated_mapping
             logger.info(
-                "%s: Launching spatial mapping %i/%i :%s.",
+                "%s: Launching spatial mapping %i/%i: %s.",
                 self.layer.name,
                 (i + 1),
                 nb_generated_mappings,
