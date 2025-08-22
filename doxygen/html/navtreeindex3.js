@@ -1,5 +1,11 @@
 var NAVTREEINDEX3 =
 {
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a45918c48aae072c98bc1fbd66e5174ac":[2,0,14,3,1,1,0,6],
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,14,3,1,1,0,4],
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a9633a6a95e13e957076a6800eeb191a7":[2,0,14,3,1,1,0,1],
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aa5d555210685086c19e5d08afca6685b":[2,0,14,3,1,1,0,9],
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aba8809ccf144a88b5fab7160888143ff":[2,0,14,3,1,1,0,5],
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#abad7d445eb555517f300b6de6986a765":[2,0,14,3,1,1,0,2],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#ac5b2a256bb93b42a50adee5fc41f5479":[2,0,14,3,1,1,0,7],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#ae3c6a5283e6e1961f1c6b696f5ebc65c":[2,0,14,3,1,1,0,3],
 "classzigzag_1_1parser_1_1accelerator__factory_1_1AcceleratorFactory.html":[2,0,14,4,0,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX3 =
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#ae9249453216fd373fafc231c70175754":[2,0,14,7,1,0,2],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#afa8749a569f6a1c70b7c35337e2a7000":[2,0,14,7,1,0,4],
 "classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#afb358f48b1646c750fb9da6c6585be2b":[2,0,14,7,1,0,8],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html":[2,0,14,7,2,0],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a23e8041ce1015febe4fdace3225714f9":[2,0,14,7,2,0,9],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a2e9fc70c8de6cdd1a35141e0cc3157dc":[2,0,14,7,2,0,2],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a3195ea87162f33a34d0079931a8194ca":[2,0,14,7,2,0,4],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a4b132b1a73b5f1f9711b2d6ee1135637":[2,0,14,7,2,0,5],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a511ae0b1c13f95e5f08f1a0dd3da3d93":[2,0,14,7,2,0,10],
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a7af70b33d567a482b9ee9ae7a03f110b":[2,0,14,7,2,0,6]
+"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html":[2,0,14,7,2,0]
 };

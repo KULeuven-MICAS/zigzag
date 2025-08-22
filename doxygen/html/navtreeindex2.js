@@ -1,5 +1,11 @@
 var NAVTREEINDEX2 =
 {
+"classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a39a96ea5606940591c07723dae78db6d":[2,0,14,2,0,2,0],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html":[2,0,14,2,0,3],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html":[2,0,14,2,0,4],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a23e8041ce1015febe4fdace3225714f9":[2,0,14,2,0,4,2],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,2,0,4,1],
+"classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ab74e6bf80237ddc4109968cedc58c151":[2,0,14,2,0,4,6],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac1e43e9bc5326ef7e48ec52c99e2a858":[2,0,14,2,0,4,3],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac29392721a4f906f815d38fd351045f0":[2,0,14,2,0,4,5],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMovePattern.html#ac91fd28d4927dae906080d569f9bd0d5":[2,0,14,2,0,4,0],
@@ -243,11 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,3,1,1,0,11],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a1a81b4276ed57e54580bef8cb37bb2e5":[2,0,14,3,1,1,0,10],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a3eb1cc0e95909d60387f2e8879977dfc":[2,0,14,3,1,1,0,0],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a426881a3bcefffb848ae2384261a9b7d":[2,0,14,3,1,1,0,8],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a45918c48aae072c98bc1fbd66e5174ac":[2,0,14,3,1,1,0,6],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a95f2e9e3b2b2d837f962bcfb58a2011e":[2,0,14,3,1,1,0,4],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a9633a6a95e13e957076a6800eeb191a7":[2,0,14,3,1,1,0,1],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aa5d555210685086c19e5d08afca6685b":[2,0,14,3,1,1,0,9],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#aba8809ccf144a88b5fab7160888143ff":[2,0,14,3,1,1,0,5],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#abad7d445eb555517f300b6de6986a765":[2,0,14,3,1,1,0,2]
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a426881a3bcefffb848ae2384261a9b7d":[2,0,14,3,1,1,0,8]
 };

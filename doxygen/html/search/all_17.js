@@ -1,7 +1,7 @@
 var searchData=
 [
   ['w_5fcost_885',['w_cost',['../classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a78d8307278252d887b53662040fa6004',1,'architecture::memory_instance::MemoryInstance']]],
-  ['weight_5fprecision_886',['weight_precision',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#af8b0163664ef96bf77172453dbb682ab',1,'architecture::imc_unit::ImcUnit']]],
+  ['weight_5fprecision_886',['weight_precision',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#af8b0163664ef96bf77172453dbb682ab',1,'architecture.imc_unit.ImcUnit.weight_precision()'],['../classarchitecture_1_1imc__array_1_1ImcArray.html#af8b0163664ef96bf77172453dbb682ab',1,'architecture.imc_array.ImcArray.weight_precision()']]],
   ['wl_5fdim_887',['wl_dim',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#a97e934f4ed91ca98b256b1421c700983',1,'architecture::imc_unit::ImcUnit']]],
   ['wordline_5fdim_5fsize_888',['wordline_dim_size',['../classarchitecture_1_1imc__unit_1_1ImcUnit.html#acf71679fa992e0522fe07e5fd8245a3c',1,'architecture::imc_unit::ImcUnit']]],
   ['worker_5flist_889',['worker_list',['../classsalsa_1_1SalsaStage.html#a49bfc5e7e3fb0d92a31ac8d8aa35392b',1,'salsa::SalsaStage']]],
