@@ -212,9 +212,11 @@ class ImcUnit(OperationalArrayABC):
         if bl_dim in spatial_mapping:
             spatial_mapping_on_bitline_dim: MappingSingleOADim = spatial_mapping[bl_dim]
             bl_dim_unroll_sizes: list[UnrollFactor] = list(spatial_mapping_on_bitline_dim.unroll_sizes)
-            # if False: mean there is no OX / OY unrolling on wl_dim, so no diagonal unrolling required
-            if not weight_ir_loop_on_wl_dim:
-                mapped_rows_total_per_macro = math.ceil(math.prod(bl_dim_unroll_sizes))
+            # Calculate the total unrolling factor of the bl dimension
+            total_bl_unroll_size = math.ceil(math.prod(bl_dim_unroll_sizes))
+            # if False: mean there is no OX / OY unrolling on wl_dim or unroll size of 1, so no diagonal unrolling
+            if not weight_ir_loop_on_wl_dim or total_bl_unroll_size == 1:
+                mapped_rows_total_per_macro = total_bl_unroll_size
                 mapped_rows_for_adder_per_macro = mapped_rows_total_per_macro
             else:
                 spatial_mapping_on_wordline_dim: MappingSingleOADim = spatial_mapping[wl_dim]
