@@ -392,7 +392,7 @@ class CactiConfig:
         # Change the directory to the cacti master directory as using absolute paths yields a "Segmentation fault"
         os.chdir(cacti_master_path)
         common_path = os.path.commonpath([cacti_master_path, self_gen_cfg_path])
-        if common_path != cacti_master_path:
+        if common_path != cacti_master_path and common_path not in cacti_master_path:
             raise NotImplementedError("Config path for cacti should be inside cacti_master folder.")
         self_gen_cfg_path_relative = f"./{os.path.relpath(self_gen_cfg_path, start=cacti_master_path)}"
         cacti_cmd = f"./cacti -infile {self_gen_cfg_path_relative}"
