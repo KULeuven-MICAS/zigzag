@@ -320,11 +320,13 @@ class MemoryAllocator:
     def is_valid_idx_combination_for_even_mapping_type(self, idx_comb: list[int], mem_ops: list[MemoryOperand]):
         """! Check if the idx_comb is a valid combination for the EVEN mapping type."""
         to_be_allocated_loops = [
-            loop for mem_op, idx in zip(mem_ops, idx_comb) for loop in self.unallocated[mem_op][idx:]
+            (i, loop) for mem_op, idx in zip(mem_ops, idx_comb) for i, loop in enumerate(self.unallocated[mem_op][:idx])
         ]
         to_remain_unallocated_loops = [
-            loop for mem_op, idx in zip(mem_ops, idx_comb) for loop in self.unallocated[mem_op][:idx]
+            (i, loop)
+            for mem_op, idx in zip(mem_ops, idx_comb)
+            for i, loop in enumerate(self.unallocated[mem_op][idx:], start=idx)
         ]
-        if any([loop in to_remain_unallocated_loops for loop in to_be_allocated_loops]):
+        if any([loop_and_idx in to_remain_unallocated_loops for loop_and_idx in to_be_allocated_loops]):
             return False
         return True
