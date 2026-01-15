@@ -177,6 +177,7 @@ class MemoryFactory:
             ports=memory_ports,
             auto_cost_extraction=self.data["auto_cost_extraction"],
             shared_memory_group_id=self.shared_mem_group_id,
+            force_double_buffering=self.data["force_double_buffering"],
         )
 
     def add_memory_to_graph(self, mem_graph: MemoryHierarchy) -> None:

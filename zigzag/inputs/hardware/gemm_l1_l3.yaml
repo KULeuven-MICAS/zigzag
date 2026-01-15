@@ -3,8 +3,8 @@ name: gemm_l1_l3
 memories:
   reg_O:
     size: 32
-    r_cost: 0.02  # TODO
-    w_cost: 0.02  # TODO
+    r_cost: 3
+    w_cost: 4
     area: 0
     latency: 1
     auto_cost_extraction: False
@@ -38,8 +38,8 @@ memories:
 
   l1:
     size: 943718 # 128 kiB - 10% for the snitch stack
-    r_cost: 22.9  # TODO
-    w_cost: 52.01 # TODO
+    r_cost: 118  # pJ/64B
+    w_cost: 141.6 # pJ/64B, 20% more than read cost
     area: 0
     latency: 1
     operands: [I1, I2, O]
@@ -73,11 +73,12 @@ memories:
           - O, fh
           - O, th
     served_dimensions: [D1, D2, D3]
+    force_double_buffering: True
 
   l3:
     size: 10000000000
-    r_cost: 700  # TODO
-    w_cost: 750  # TODO
+    r_cost: 16000  # LPDDR5/5X typical read cost in pJ/64B
+    w_cost: 24000  # LPDDR5/5X typical write cost in pJ/64B
     area: 0
     latency: 1
     operands: [I1, I2, O]

@@ -20,7 +20,7 @@ class MemoryInstance:
     ports: tuple[MemoryPort, ...]
     mem_type: str
     auto_cost_extraction: bool
-    double_buffering_support: bool
+    force_double_buffering: bool
     shared_memory_group_id: int
 
     def __init__(
@@ -37,7 +37,7 @@ class MemoryInstance:
         ports: tuple[MemoryPort, ...] = tuple(),
         mem_type: str = "sram",
         auto_cost_extraction: bool = False,
-        double_buffering_support: bool = False,
+        force_double_buffering: bool = False,
         shared_memory_group_id: int = -1,
     ):
         """
@@ -82,7 +82,7 @@ class MemoryInstance:
         self.area = area
         self.latency = latency
         self.ports = ports
-        self.double_buffering_support = double_buffering_support
+        self.force_double_buffering = force_double_buffering
         self.shared_memory_group_id = shared_memory_group_id
 
     def update_size(self, new_size: int) -> None:
@@ -105,7 +105,7 @@ class MemoryInstance:
             and self.w_cost == other.w_cost
             and self.latency == other.latency
             and self.ports == other.ports
-            and self.double_buffering_support == other.double_buffering_support
+            and self.force_double_buffering == other.force_double_buffering
         )
 
     def __hash__(self):

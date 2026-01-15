@@ -82,6 +82,11 @@ class AcceleratorValidator:
                         "required": True,
                         "schema": {"type": "string", "regex": DIMENSION_REGEX},
                     },
+                    "force_double_buffering": {
+                        "type": "boolean",
+                        "required": False,
+                        "default": False,
+                    },
                 },
             },
         },
