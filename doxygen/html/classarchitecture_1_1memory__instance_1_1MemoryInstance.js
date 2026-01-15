@@ -1,6 +1,6 @@
 var classarchitecture_1_1memory__instance_1_1MemoryInstance =
 [
-    [ "__init__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#aadd897cbfa564effaddc9901f95334e3", null ],
+    [ "__init__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6b58ff5183ea2daedd10c3d9b29573cc", null ],
     [ "__eq__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4ebc07e33d57e463c0e249dfce215d96", null ],
     [ "__hash__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a3195ea87162f33a34d0079931a8194ca", null ],
     [ "__jsonrepr__", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a0ab94b5e657e9550a1b27ace112c727d", null ],
@@ -9,7 +9,7 @@ var classarchitecture_1_1memory__instance_1_1MemoryInstance =
     [ "has_same_performance", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6b860acb11fbe745a80b327460e2e6b2", null ],
     [ "update_size", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a0d67ea128a26d2a3cebe0cd8d777e358", null ],
     [ "area", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a4329d2992f02e00a6e706a5443269afc", null ],
-    [ "double_buffering_support", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6018e152103e9e6473041dba3a23f818", null ],
+    [ "force_double_buffering", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a478ba71b07fc1e6c5a70398618826b86", null ],
     [ "latency", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a750524522833b141c7659fe21d485394", null ],
     [ "name", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ab74e6bf80237ddc4109968cedc58c151", null ],
     [ "ports", "classarchitecture_1_1memory__instance_1_1MemoryInstance.html#ac5a965d3aaf532842d02995e58c647e0", null ],

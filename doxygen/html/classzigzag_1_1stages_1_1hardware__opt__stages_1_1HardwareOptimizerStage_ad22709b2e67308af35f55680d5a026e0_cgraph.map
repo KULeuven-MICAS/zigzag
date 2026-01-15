@@ -1,0 +1,9 @@
+<map id="run" name="run">
+<area shape="rect" id="node1" title="Run the compare stage by comparing a new cost model output with the current best found result." alt="" coords="5,163,48,190"/>
+<area shape="rect" id="node2" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#a323a49291edc15f2c7aacaef4a44888b" title=" " alt="" coords="96,5,296,47"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#adcbe082e5c3d85024e1498079cbb083f" title=" " alt="" coords="107,71,285,98"/>
+<area shape="rect" id="node4" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#a3ac4a83752a4af06268dc5a6dbff3582" title=" " alt="" coords="118,123,274,164"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#a37fa43e3309fd08304edbe57f3af5331" title=" " alt="" coords="110,188,282,229"/>
+<area shape="rect" id="node6" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#aa9c5973d6e0021639c868e5cf3ef25de" title=" " alt="" coords="103,254,289,281"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html#a75c2925f65547938805f3efd1456eed1" title=" " alt="" coords="100,305,292,347"/>
+</map>

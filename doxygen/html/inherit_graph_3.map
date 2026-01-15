@@ -3,73 +3,74 @@
 <area shape="rect" id="node2" href="$classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html" title="Represents the memory access energy in four directions." alt="" coords="434,5,546,32"/>
 <area shape="rect" id="node3" title=" " alt="" coords="217,107,255,133"/>
 <area shape="rect" id="node4" href="$classzigzag_1_1mapping_1_1data__movement_1_1MemoryAccesses.html" title="Represents the number of memory accesses in four directions." alt="" coords="422,81,558,108"/>
-<area shape="rect" id="node5" title=" " alt="" coords="5,664,95,691"/>
-<area shape="rect" id="node6" href="$classarchitecture_1_1operational__array_1_1OperationalArrayABC.html" title="Abstract base class for every concept that can do computations." alt="" coords="156,537,316,564"/>
-<area shape="rect" id="node9" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html" title="Superclass for CostModelEvaluation and CumulativeCME." alt="" coords="143,588,329,615"/>
-<area shape="rect" id="node13" href="$classzigzag_1_1datatypes_1_1OperandABC.html" title="Abstract Base Class for all dimension&#45; and operand&#45;like classes." alt="" coords="184,664,288,691"/>
-<area shape="rect" id="node18" href="$classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html" title="Abstract base class that represents a parser of an onnx operator." alt="" coords="157,816,315,843"/>
-<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="207,1525,265,1552"/>
-<area shape="rect" id="node49" href="$classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html" title="Abstract Base Class to represent any layer attribute." alt="" coords="179,2449,293,2476"/>
-<area shape="rect" id="node59" href="$classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html" title="Represents a single layer of a workload in any form." alt="" coords="177,411,295,437"/>
-<area shape="rect" id="node62" href="$classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html" title=" " alt="" coords="663,360,843,387"/>
-<area shape="rect" id="node64" href="$classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html" title="Abstract Base Class for workloads, parameterizable with type T, which must be a (subclass from) Layer..." alt="" coords="435,259,545,285"/>
-<area shape="rect" id="node7" href="$classarchitecture_1_1operational__array_1_1OperationalArray.html" title="This class captures multi&#45;dimensional operational array size." alt="" coords="423,461,557,488"/>
-<area shape="rect" id="node8" href="$classarchitecture_1_1operational__array_1_1MultiplierArray.html" title=" " alt="" coords="694,461,813,488"/>
-<area shape="rect" id="node10" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html" title="Class that stores inputs and runs them through the zigzag cost model." alt="" coords="410,563,570,589"/>
-<area shape="rect" id="node12" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CumulativeCME.html" title="Represents the sum of multiple CMEs." alt="" coords="427,512,553,539"/>
-<area shape="rect" id="node11" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html" title="Class that stores inputs and runs them through the zigzag cost model." alt="" coords="651,563,856,589"/>
-<area shape="rect" id="node14" href="$classzigzag_1_1datatypes_1_1LayerDim.html" title="(for&#45;loop) dimension of a workload layer (e.g." alt="" coords="447,715,533,741"/>
-<area shape="rect" id="node15" href="$classzigzag_1_1datatypes_1_1LayerOperand.html" title="Operand from the layer definition, e.g." alt="" coords="433,765,547,792"/>
-<area shape="rect" id="node16" href="$classzigzag_1_1datatypes_1_1MemoryOperand.html" title="Operand from the memory definition, e.g." alt="" coords="425,613,555,640"/>
-<area shape="rect" id="node17" href="$classzigzag_1_1datatypes_1_1OADimension.html" title="Operational Array Dimension." alt="" coords="435,664,545,691"/>
-<area shape="rect" id="node19" href="$classzigzag_1_1parser_1_1onnx_1_1conv__parser_1_1ConvParser.html" title="Parser for ONNX Conv and QLinearConv nodes into LayerNode." alt="" coords="443,867,537,893"/>
-<area shape="rect" id="node20" href="$classzigzag_1_1parser_1_1onnx_1_1default__node__parser_1_1DefaultNodeParser.html" title="This class parses an ONNX node into a DummyNode." alt="" coords="418,816,562,843"/>
-<area shape="rect" id="node21" href="$classzigzag_1_1parser_1_1onnx_1_1gemm__parser_1_1GemmParser.html" title="Parses an ONNX Gemm operator into a LayerNode." alt="" coords="437,917,543,944"/>
-<area shape="rect" id="node22" href="$classzigzag_1_1parser_1_1onnx_1_1matmul__parser_1_1MatMulParser.html" title="Parses an ONNX MatMul operator into a LayerNode." alt="" coords="698,917,809,944"/>
-<area shape="rect" id="node24" href="$classaccelerator__parser_1_1AcceleratorParserStage.html" title="Parse to parse an accelerator from a user&#45;defined yaml file." alt="" coords="403,968,577,995"/>
-<area shape="rect" id="node25" href="$classcost__model__evaluation_1_1CostModelStage.html" title="Pipeline stage that calls a cost model to evaluate a mapping on a HW config." alt="" coords="426,1019,554,1045"/>
-<area shape="rect" id="node26" href="$classonnx__model__parser_1_1ONNXModelParserStage.html" title="Stage to parse ONNX model to internal representation." alt="" coords="401,1069,579,1096"/>
-<area shape="rect" id="node27" href="$classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html" title="Class that passes through all results yielded by substages, but keeps the TMs cme&#39;s and saves a plot." alt="" coords="387,1120,593,1147"/>
-<area shape="rect" id="node28" href="$classreduce__stages_1_1MinimalEDPStage.html" title="Class that keeps yields only the cost model evaluation that has minimal EDP of all cost model evaluat..." alt="" coords="421,1171,559,1197"/>
-<area shape="rect" id="node29" href="$classreduce__stages_1_1MinimalEnergyStage.html" title="Class that keeps yields only the cost model evaluation that has minimal energy of all cost model eval..." alt="" coords="411,1221,569,1248"/>
-<area shape="rect" id="node30" href="$classreduce__stages_1_1MinimalLatencyStage.html" title="Class that keeps yields only the cost model evaluation that has minimal latency of all cost model eva..." alt="" coords="409,1272,571,1299"/>
-<area shape="rect" id="node31" href="$classreduce__stages_1_1SumStage.html" title="Class that keeps yields only the sum of all cost model evaluations generated by its substages created..." alt="" coords="446,1323,534,1349"/>
-<area shape="rect" id="node32" href="$classsalsa_1_1SalsaStage.html" title="Class that return the best temporal mapping found by the Simulated Annealing Loop&#45;ordering Scheduler ..." alt="" coords="443,1373,537,1400"/>
-<area shape="rect" id="node33" href="$classsave_1_1CompleteSaveStage.html" title="Class that passes through all results yielded by substages, but saves the results as a json list to a..." alt="" coords="413,1424,567,1451"/>
-<area shape="rect" id="node34" href="$classsave_1_1PickleSaveStage.html" title="Class that dumps all received CMEs into a list and saves that list to a pickle file." alt="" coords="425,1475,555,1501"/>
-<area shape="rect" id="node35" href="$classsave_1_1SimpleSaveStage.html" title="Class that passes through results yielded by substages, but saves the results as a json list to a fil..." alt="" coords="422,1525,558,1552"/>
-<area shape="rect" id="node36" href="$classspatial__mapping__conversion_1_1SpatialMappingConversionStage.html" title="Pipeline stage that converts the spatial mapping from a user&#45;provided spatial mapping across operatio..." alt="" coords="392,1577,588,1618"/>
-<area shape="rect" id="node37" href="$classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html" title="Pipeline stage that finds spatial mappings given a:" alt="" coords="377,1643,603,1669"/>
-<area shape="rect" id="node38" href="$classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html" title="Class that iterates through the different temporal mappings generated through the loop order based me..." alt="" coords="389,1694,591,1735"/>
-<area shape="rect" id="node39" href="$classvisualization_1_1VisualizationStage.html" title="Class that passes through all results yielded by substages, and saves the visualizations of configura..." alt="" coords="419,1760,561,1787"/>
-<area shape="rect" id="node40" href="$classworkload__parser_1_1WorkloadParserStage.html" title="Parses a user&#45;provided workload from a yaml file." alt="" coords="410,1811,570,1837"/>
-<area shape="rect" id="node41" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html" title="This stage must be processed behind WorkloadStage." alt="" coords="383,1862,597,1903"/>
-<area shape="rect" id="node42" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html" title="Class for searching lowest allowed memory level per operand per layer." alt="" coords="383,1927,597,1969"/>
-<area shape="rect" id="node43" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html" title="Caches results in a list and then yields them." alt="" coords="403,1993,577,2020"/>
-<area shape="rect" id="node44" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html" title="Multiprocessing support stage." alt="" coords="387,2044,593,2071"/>
-<area shape="rect" id="node45" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html" title="Multiprocessing support stage." alt="" coords="387,2095,593,2121"/>
-<area shape="rect" id="node46" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html" title="Strips extra info for subcallables to save memory." alt="" coords="404,2145,576,2172"/>
-<area shape="rect" id="node47" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html" title="Check if the output file is already generated, skip the run if so." alt="" coords="403,2196,577,2223"/>
-<area shape="rect" id="node48" href="$classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html" title="Class that iterates through the nodes in a given workload graph." alt="" coords="430,2247,550,2273"/>
-<area shape="rect" id="node50" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html" title="Spatial unrollings defined for every operational array dimension." alt="" coords="429,2551,551,2577"/>
-<area shape="rect" id="node51" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html" title="Suggested LayerDims to be unrolled for every OADimension." alt="" coords="415,2601,565,2628"/>
-<area shape="rect" id="node52" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html" title="For the operand dimension that is not directly a loop dimension, a relation equations between them(op..." alt="" coords="421,2652,559,2679"/>
-<area shape="rect" id="node53" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html" title="Contains the size of each computation loop as defined in the workload, e.g." alt="" coords="431,2703,549,2729"/>
-<area shape="rect" id="node54" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation.html" title="&quot;! core computation equation, e.g." alt="" coords="433,2297,547,2324"/>
-<area shape="rect" id="node55" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerOperandPrecision.html" title="Contains the bit precision of each layer operand." alt="" coords="404,2348,576,2375"/>
-<area shape="rect" id="node56" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerPadding.html" title=" " alt="" coords="435,2399,545,2425"/>
-<area shape="rect" id="node57" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerTemporalOrdering.html" title="Represents a user&#45;defined temporal ordering." alt="" coords="403,2449,577,2476"/>
-<area shape="rect" id="node58" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html" title="Links LayerOperand to MemoryOperand." alt="" coords="407,2500,573,2527"/>
-<area shape="rect" id="node60" href="$classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html" title="A class to represent an ONNX node that is not &quot;accelerateable&quot;." alt="" coords="436,360,544,387"/>
-<area shape="rect" id="node61" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html" title="Represents a single layer in a workload." alt="" coords="444,411,536,437"/>
-<area shape="rect" id="node63" href="$classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="904,360,1017,387"/>
-<area shape="rect" id="node65" href="$classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html" title="Represents a workload graph parsed from ONNX." alt="" coords="692,259,815,285"/>
-<area shape="rect" id="node66" title=" " alt="" coords="31,132,69,159"/>
-<area shape="rect" id="node67" href="$classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html" title="Represents a standard four&#45;way data moving attribute of a memory interface." alt="" coords="157,56,315,83"/>
-<area shape="rect" id="node68" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html" title="Wraps the DiGraph class with type annotations for the nodes." alt="" coords="171,208,301,235"/>
-<area shape="rect" id="node69" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html" title="Class that represents a memory hierarchy as a directed networkx graph." alt="" coords="421,157,559,184"/>
-<area shape="rect" id="node70" title=" " alt="" coords="9,588,91,615"/>
-<area shape="rect" id="node71" title=" " alt="" coords="13,208,87,235"/>
-<area shape="rect" id="node72" title=" " alt="" coords="14,69,86,96"/>
-<area shape="rect" id="node73" title=" " alt="" coords="181,157,291,184"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,625,95,652"/>
+<area shape="rect" id="node6" href="$classarchitecture_1_1operational__array_1_1OperationalArrayABC.html" title="Abstract base class for every concept that can do computations." alt="" coords="156,701,316,728"/>
+<area shape="rect" id="node9" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluationABC.html" title="Superclass for CostModelEvaluation and CumulativeCME." alt="" coords="143,537,329,564"/>
+<area shape="rect" id="node13" href="$classzigzag_1_1datatypes_1_1OperandABC.html" title="Abstract Base Class for all dimension&#45; and operand&#45;like classes." alt="" coords="184,2627,288,2653"/>
+<area shape="rect" id="node18" href="$classzigzag_1_1parser_1_1onnx_1_1onnx__operator__parser_1_1ONNXOperatorParser.html" title="Abstract base class that represents a parser of an onnx operator." alt="" coords="157,625,315,652"/>
+<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1stage_1_1Stage.html" title="Abstract superclass for Runnables." alt="" coords="207,1411,265,1437"/>
+<area shape="rect" id="node50" href="$classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html" title="Abstract Base Class to represent any layer attribute." alt="" coords="179,2297,293,2324"/>
+<area shape="rect" id="node60" href="$classzigzag_1_1workload_1_1layer__node__abc_1_1LayerNodeABC.html" title="Represents a single layer of a workload in any form." alt="" coords="177,411,295,437"/>
+<area shape="rect" id="node63" href="$classzigzag_1_1workload_1_1workload__abc_1_1WorkloadNoDummyABC.html" title=" " alt="" coords="663,335,843,361"/>
+<area shape="rect" id="node65" href="$classzigzag_1_1workload_1_1workload__abc_1_1WorkloadABC.html" title="Abstract Base Class for workloads, parameterizable with type T, which must be a (subclass from) Layer..." alt="" coords="435,259,545,285"/>
+<area shape="rect" id="node7" href="$classarchitecture_1_1operational__array_1_1OperationalArray.html" title="This class captures multi&#45;dimensional operational array size." alt="" coords="423,715,557,741"/>
+<area shape="rect" id="node8" href="$classarchitecture_1_1operational__array_1_1MultiplierArray.html" title=" " alt="" coords="694,715,813,741"/>
+<area shape="rect" id="node10" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html" title="Class that stores inputs and runs them through the zigzag cost model." alt="" coords="410,512,570,539"/>
+<area shape="rect" id="node12" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CumulativeCME.html" title="Represents the sum of multiple CMEs." alt="" coords="427,461,553,488"/>
+<area shape="rect" id="node11" href="$classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html" title="Class that stores inputs and runs them through the zigzag cost model." alt="" coords="651,512,856,539"/>
+<area shape="rect" id="node14" href="$classzigzag_1_1datatypes_1_1LayerDim.html" title="(for&#45;loop) dimension of a workload layer (e.g." alt="" coords="447,2753,533,2780"/>
+<area shape="rect" id="node15" href="$classzigzag_1_1datatypes_1_1LayerOperand.html" title="Operand from the layer definition, e.g." alt="" coords="433,2601,547,2628"/>
+<area shape="rect" id="node16" href="$classzigzag_1_1datatypes_1_1MemoryOperand.html" title="Operand from the memory definition, e.g." alt="" coords="425,2652,555,2679"/>
+<area shape="rect" id="node17" href="$classzigzag_1_1datatypes_1_1OADimension.html" title="Operational Array Dimension." alt="" coords="435,2703,545,2729"/>
+<area shape="rect" id="node19" href="$classzigzag_1_1parser_1_1onnx_1_1conv__parser_1_1ConvParser.html" title="Parser for ONNX Conv and QLinearConv nodes into LayerNode." alt="" coords="443,563,537,589"/>
+<area shape="rect" id="node20" href="$classzigzag_1_1parser_1_1onnx_1_1default__node__parser_1_1DefaultNodeParser.html" title="This class parses an ONNX node into a DummyNode." alt="" coords="418,613,562,640"/>
+<area shape="rect" id="node21" href="$classzigzag_1_1parser_1_1onnx_1_1gemm__parser_1_1GemmParser.html" title="Parses an ONNX Gemm operator into a LayerNode." alt="" coords="437,664,543,691"/>
+<area shape="rect" id="node22" href="$classzigzag_1_1parser_1_1onnx_1_1matmul__parser_1_1MatMulParser.html" title="Parses an ONNX MatMul operator into a LayerNode." alt="" coords="698,664,809,691"/>
+<area shape="rect" id="node24" href="$classaccelerator__parser_1_1AcceleratorParserStage.html" title="Parse to parse an accelerator from a user&#45;defined yaml file." alt="" coords="403,1740,577,1767"/>
+<area shape="rect" id="node25" href="$classcost__model__evaluation_1_1CostModelStage.html" title="Pipeline stage that calls a cost model to evaluate a mapping on a HW config." alt="" coords="426,1791,554,1817"/>
+<area shape="rect" id="node26" href="$classonnx__model__parser_1_1ONNXModelParserStage.html" title="Stage to parse ONNX model to internal representation." alt="" coords="401,1841,579,1868"/>
+<area shape="rect" id="node27" href="$classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html" title="Class that passes through all results yielded by substages, but keeps the TMs cme&#39;s and saves a plot." alt="" coords="387,1892,593,1919"/>
+<area shape="rect" id="node28" href="$classreduce__stages_1_1MinimalEDPStage.html" title="Class that keeps yields only the cost model evaluation that has minimal EDP of all cost model evaluat..." alt="" coords="421,1943,559,1969"/>
+<area shape="rect" id="node29" href="$classreduce__stages_1_1MinimalEnergyStage.html" title="Class that keeps yields only the cost model evaluation that has minimal energy of all cost model eval..." alt="" coords="411,1993,569,2020"/>
+<area shape="rect" id="node30" href="$classreduce__stages_1_1MinimalLatencyStage.html" title="Class that keeps yields only the cost model evaluation that has minimal latency of all cost model eva..." alt="" coords="409,2044,571,2071"/>
+<area shape="rect" id="node31" href="$classreduce__stages_1_1SumStage.html" title="Class that keeps yields only the sum of all cost model evaluations generated by its substages created..." alt="" coords="446,2095,534,2121"/>
+<area shape="rect" id="node32" href="$classsalsa_1_1SalsaStage.html" title="Class that return the best temporal mapping found by the Simulated Annealing Loop&#45;ordering Scheduler ..." alt="" coords="443,765,537,792"/>
+<area shape="rect" id="node33" href="$classsave_1_1CompleteSaveStage.html" title="Class that passes through all results yielded by substages, but saves the results as a json list to a..." alt="" coords="413,816,567,843"/>
+<area shape="rect" id="node34" href="$classsave_1_1PickleSaveStage.html" title="Class that dumps all received CMEs into a list and saves that list to a pickle file." alt="" coords="425,867,555,893"/>
+<area shape="rect" id="node35" href="$classsave_1_1SimpleSaveStage.html" title="Class that passes through results yielded by substages, but saves the results as a json list to a fil..." alt="" coords="422,917,558,944"/>
+<area shape="rect" id="node36" href="$classspatial__mapping__conversion_1_1SpatialMappingConversionStage.html" title="Pipeline stage that converts the spatial mapping from a user&#45;provided spatial mapping across operatio..." alt="" coords="392,969,588,1010"/>
+<area shape="rect" id="node37" href="$classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html" title="Pipeline stage that finds spatial mappings given a:" alt="" coords="377,1035,603,1061"/>
+<area shape="rect" id="node38" href="$classtemporal__mapping__generator__stage_1_1TemporalMappingGeneratorStage.html" title="Class that iterates through the different temporal mappings generated through the loop order based me..." alt="" coords="389,1086,591,1127"/>
+<area shape="rect" id="node39" href="$classvisualization_1_1VisualizationStage.html" title="Class that passes through all results yielded by substages, and saves the visualizations of configura..." alt="" coords="419,1152,561,1179"/>
+<area shape="rect" id="node40" href="$classworkload__parser_1_1WorkloadParserStage.html" title="Parses a user&#45;provided workload from a yaml file." alt="" coords="410,1203,570,1229"/>
+<area shape="rect" id="node41" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html" title="This stage must be processed behind WorkloadStage." alt="" coords="383,1254,597,1295"/>
+<area shape="rect" id="node42" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html" title="Class for searching lowest allowed memory level per operand per layer." alt="" coords="383,1319,597,1361"/>
+<area shape="rect" id="node43" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html" title="Class that iterates through different memories for the l1 memory of the gemm_l1_l3 hardware." alt="" coords="397,1385,583,1412"/>
+<area shape="rect" id="node44" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html" title="Caches results in a list and then yields them." alt="" coords="403,1436,577,1463"/>
+<area shape="rect" id="node45" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html" title="Multiprocessing support stage." alt="" coords="387,1487,593,1513"/>
+<area shape="rect" id="node46" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html" title="Multiprocessing support stage." alt="" coords="387,1537,593,1564"/>
+<area shape="rect" id="node47" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html" title="Strips extra info for subcallables to save memory." alt="" coords="404,1588,576,1615"/>
+<area shape="rect" id="node48" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html" title="Check if the output file is already generated, skip the run if so." alt="" coords="403,1639,577,1665"/>
+<area shape="rect" id="node49" href="$classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html" title="Class that iterates through the nodes in a given workload graph." alt="" coords="430,1689,550,1716"/>
+<area shape="rect" id="node51" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html" title="Spatial unrollings defined for every operational array dimension." alt="" coords="429,2297,551,2324"/>
+<area shape="rect" id="node52" href="$classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMappingHint.html" title="Suggested LayerDims to be unrolled for every OADimension." alt="" coords="415,2348,565,2375"/>
+<area shape="rect" id="node53" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimRelation.html" title="For the operand dimension that is not directly a loop dimension, a relation equations between them(op..." alt="" coords="421,2399,559,2425"/>
+<area shape="rect" id="node54" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerDimSizes.html" title="Contains the size of each computation loop as defined in the workload, e.g." alt="" coords="431,2449,549,2476"/>
+<area shape="rect" id="node55" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerEquation.html" title="&quot;! core computation equation, e.g." alt="" coords="433,2500,547,2527"/>
+<area shape="rect" id="node56" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerOperandPrecision.html" title="Contains the bit precision of each layer operand." alt="" coords="404,2551,576,2577"/>
+<area shape="rect" id="node57" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerPadding.html" title=" " alt="" coords="435,2145,545,2172"/>
+<area shape="rect" id="node58" href="$classzigzag_1_1workload_1_1layer__attributes_1_1LayerTemporalOrdering.html" title="Represents a user&#45;defined temporal ordering." alt="" coords="403,2196,577,2223"/>
+<area shape="rect" id="node59" href="$classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html" title="Links LayerOperand to MemoryOperand." alt="" coords="407,2247,573,2273"/>
+<area shape="rect" id="node61" href="$classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html" title="A class to represent an ONNX node that is not &quot;accelerateable&quot;." alt="" coords="436,411,544,437"/>
+<area shape="rect" id="node62" href="$classzigzag_1_1workload_1_1layer__node_1_1LayerNode.html" title="Represents a single layer in a workload." alt="" coords="444,360,536,387"/>
+<area shape="rect" id="node64" href="$classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html" title="Extends the ABC for workloads." alt="" coords="904,335,1017,361"/>
+<area shape="rect" id="node66" href="$classzigzag_1_1workload_1_1onnx__workload_1_1ONNXWorkload.html" title="Represents a workload graph parsed from ONNX." alt="" coords="692,259,815,285"/>
+<area shape="rect" id="node67" title=" " alt="" coords="31,132,69,159"/>
+<area shape="rect" id="node68" href="$classzigzag_1_1mapping_1_1data__movement_1_1FourWayDataMoving.html" title="Represents a standard four&#45;way data moving attribute of a memory interface." alt="" coords="157,56,315,83"/>
+<area shape="rect" id="node69" href="$classzigzag_1_1utils_1_1DiGraphWrapper.html" title="Wraps the DiGraph class with type annotations for the nodes." alt="" coords="171,208,301,235"/>
+<area shape="rect" id="node70" href="$classarchitecture_1_1memory__hierarchy_1_1MemoryHierarchy.html" title="Class that represents a memory hierarchy as a directed networkx graph." alt="" coords="421,157,559,184"/>
+<area shape="rect" id="node71" title=" " alt="" coords="9,701,91,728"/>
+<area shape="rect" id="node72" title=" " alt="" coords="13,208,87,235"/>
+<area shape="rect" id="node73" title=" " alt="" coords="14,69,86,96"/>
+<area shape="rect" id="node74" title=" " alt="" coords="181,157,291,184"/>
 </map>

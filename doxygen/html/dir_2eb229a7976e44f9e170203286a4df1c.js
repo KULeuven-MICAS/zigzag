@@ -6,6 +6,7 @@ var dir_2eb229a7976e44f9e170203286a4df1c =
     [ "results", "dir_6d5b0f9d1917e5bef8b63dc6dd76969f.html", "dir_6d5b0f9d1917e5bef8b63dc6dd76969f" ],
     [ "__init__.py", "stages_2____init_____8py.html", null ],
     [ "exploit_data_locality_stages.py", "exploit__data__locality__stages_8py.html", "exploit__data__locality__stages_8py" ],
+    [ "hardware_opt_stages.py", "hardware__opt__stages_8py.html", "hardware__opt__stages_8py" ],
     [ "main.py", "main_8py.html", [
       [ "MainStage", "classzigzag_1_1stages_1_1main_1_1MainStage.html", "classzigzag_1_1stages_1_1main_1_1MainStage" ]
     ] ],

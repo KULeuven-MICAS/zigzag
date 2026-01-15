@@ -53,8 +53,8 @@ var NAVTREEINDEX =
 "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html",
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a39a96ea5606940591c07723dae78db6d",
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a45918c48aae072c98bc1fbd66e5174ac",
-"classzigzag_1_1workload_1_1layer__attribute_1_1LayerAttribute.html#a23e8041ce1015febe4fdace3225714f9",
-"layer__node__abc_8py.html"
+"classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html#a486c0f3a7960647e00ea890a1d197d51",
+"hardware_2architecture_2memory__hierarchy_8py.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -215,6 +215,9 @@ var annotated_dup =
           [ "SearchInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage" ],
           [ "ExploitInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage" ]
         ] ],
+        [ "hardware_opt_stages", "namespacezigzag_1_1stages_1_1hardware__opt__stages.html", [
+          [ "HardwareOptimizerStage", "classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html", "classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage" ]
+        ] ],
         [ "main", "namespacezigzag_1_1stages_1_1main.html", [
           [ "MainStage", "classzigzag_1_1stages_1_1main_1_1MainStage.html", "classzigzag_1_1stages_1_1main_1_1MainStage" ]
         ] ],

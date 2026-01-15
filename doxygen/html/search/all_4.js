@@ -47,8 +47,7 @@ var searchData=
   ['dnn_5fworkload_2epy_262',['dnn_workload.py',['../dnn__workload_8py.html',1,'']]],
   ['dnnworkload_263',['DNNWorkload',['../classzigzag_1_1workload_1_1dnn__workload_1_1DNNWorkload.html',1,'zigzag::workload::dnn_workload']]],
   ['double_5fbuffer_5ftrue_264',['double_buffer_true',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ad1ce005906d5f0df2652db257385a442',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
-  ['double_5fbuffering_5fsupport_265',['double_buffering_support',['../classarchitecture_1_1memory__instance_1_1MemoryInstance.html#a6018e152103e9e6473041dba3a23f818',1,'architecture::memory_instance::MemoryInstance']]],
-  ['dummy_5fnode_2epy_266',['dummy_node.py',['../dummy__node_8py.html',1,'']]],
-  ['dummynode_267',['DummyNode',['../classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html',1,'zigzag::workload::dummy_node']]],
-  ['dump_5ffolder_268',['dump_folder',['../classsave_1_1CompleteSaveStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'save.CompleteSaveStage.dump_folder()'],['../classsave_1_1SimpleSaveStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'save.SimpleSaveStage.dump_folder()'],['../classvisualization_1_1VisualizationStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'visualization.VisualizationStage.dump_folder()'],['../classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'zigzag.stages.run_opt_stages.SkipIfDumpExistsStage.dump_folder()']]]
+  ['dummy_5fnode_2epy_265',['dummy_node.py',['../dummy__node_8py.html',1,'']]],
+  ['dummynode_266',['DummyNode',['../classzigzag_1_1workload_1_1dummy__node_1_1DummyNode.html',1,'zigzag::workload::dummy_node']]],
+  ['dump_5ffolder_267',['dump_folder',['../classsave_1_1CompleteSaveStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'save.CompleteSaveStage.dump_folder()'],['../classsave_1_1SimpleSaveStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'save.SimpleSaveStage.dump_folder()'],['../classvisualization_1_1VisualizationStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'visualization.VisualizationStage.dump_folder()'],['../classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html#a3d8d91667eef95483bfb83b1f5947364',1,'zigzag.stages.run_opt_stages.SkipIfDumpExistsStage.dump_folder()']]]
 ];

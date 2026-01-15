@@ -1,5 +1,5 @@
 <map id="Stage" name="Stage">
-<area shape="rect" id="node1" title="Abstract superclass for Runnables." alt="" coords="143,621,201,648"/>
+<area shape="rect" id="node1" title="Abstract superclass for Runnables." alt="" coords="143,651,201,677"/>
 <area shape="rect" id="node4" href="$classaccelerator__parser_1_1AcceleratorParserStage.html" title="Parse to parse an accelerator from a user&#45;defined yaml file." alt="" coords="275,5,449,32"/>
 <area shape="rect" id="node5" href="$classcost__model__evaluation_1_1CostModelStage.html" title="Pipeline stage that calls a cost model to evaluate a mapping on a HW config." alt="" coords="298,56,426,83"/>
 <area shape="rect" id="node6" href="$classonnx__model__parser_1_1ONNXModelParserStage.html" title="Stage to parse ONNX model to internal representation." alt="" coords="273,107,451,133"/>
@@ -19,12 +19,13 @@
 <area shape="rect" id="node20" href="$classworkload__parser_1_1WorkloadParserStage.html" title="Parses a user&#45;provided workload from a yaml file." alt="" coords="282,848,442,875"/>
 <area shape="rect" id="node21" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html" title="This stage must be processed behind WorkloadStage." alt="" coords="255,899,469,941"/>
 <area shape="rect" id="node22" href="$classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html" title="Class for searching lowest allowed memory level per operand per layer." alt="" coords="255,965,469,1006"/>
-<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html" title="Caches results in a list and then yields them." alt="" coords="275,1031,449,1057"/>
-<area shape="rect" id="node24" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html" title="Multiprocessing support stage." alt="" coords="259,1081,465,1108"/>
-<area shape="rect" id="node25" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html" title="Multiprocessing support stage." alt="" coords="259,1132,465,1159"/>
-<area shape="rect" id="node26" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html" title="Strips extra info for subcallables to save memory." alt="" coords="276,1183,448,1209"/>
-<area shape="rect" id="node27" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html" title="Check if the output file is already generated, skip the run if so." alt="" coords="275,1233,449,1260"/>
-<area shape="rect" id="node28" href="$classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html" title="Class that iterates through the nodes in a given workload graph." alt="" coords="302,1284,422,1311"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,596,95,623"/>
-<area shape="rect" id="node3" title=" " alt="" coords="9,647,91,673"/>
+<area shape="rect" id="node23" href="$classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html" title="Class that iterates through different memories for the l1 memory of the gemm_l1_l3 hardware." alt="" coords="269,1031,455,1057"/>
+<area shape="rect" id="node24" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html" title="Caches results in a list and then yields them." alt="" coords="275,1081,449,1108"/>
+<area shape="rect" id="node25" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html" title="Multiprocessing support stage." alt="" coords="259,1132,465,1159"/>
+<area shape="rect" id="node26" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html" title="Multiprocessing support stage." alt="" coords="259,1183,465,1209"/>
+<area shape="rect" id="node27" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html" title="Strips extra info for subcallables to save memory." alt="" coords="276,1233,448,1260"/>
+<area shape="rect" id="node28" href="$classzigzag_1_1stages_1_1run__opt__stages_1_1SkipIfDumpExistsStage.html" title="Check if the output file is already generated, skip the run if so." alt="" coords="275,1284,449,1311"/>
+<area shape="rect" id="node29" href="$classzigzag_1_1stages_1_1workload__iterator_1_1WorkloadStage.html" title="Class that iterates through the nodes in a given workload graph." alt="" coords="302,1335,422,1361"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,625,95,652"/>
+<area shape="rect" id="node3" title=" " alt="" coords="9,676,91,703"/>
 </map>

@@ -83,6 +83,7 @@ var hierarchy =
         [ "WorkloadParserStage", "classworkload__parser_1_1WorkloadParserStage.html", null ],
         [ "ExploitInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1ExploitInterLayerDataLocalityStage.html", null ],
         [ "SearchInterLayerDataLocalityStage", "classzigzag_1_1stages_1_1exploit__data__locality__stages_1_1SearchInterLayerDataLocalityStage.html", null ],
+        [ "HardwareOptimizerStage", "classzigzag_1_1stages_1_1hardware__opt__stages_1_1HardwareOptimizerStage.html", null ],
         [ "CacheBeforeYieldStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1CacheBeforeYieldStage.html", null ],
         [ "MultiProcessingGatherStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingGatherStage.html", null ],
         [ "MultiProcessingSpawnStage", "classzigzag_1_1stages_1_1run__opt__stages_1_1MultiProcessingSpawnStage.html", null ],

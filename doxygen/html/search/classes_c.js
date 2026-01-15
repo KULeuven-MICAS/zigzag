@@ -1,4 +1,9 @@
 var searchData=
 [
-  ['removeextrainfostage_1060',['RemoveExtraInfoStage',['../classzigzag_1_1stages_1_1run__opt__stages_1_1RemoveExtraInfoStage.html',1,'zigzag::stages::run_opt_stages']]]
+  ['permutationconstraint_1063',['PermutationConstraint',['../classzigzag_1_1opt_1_1loma_1_1multipermute_1_1PermutationConstraint.html',1,'zigzag::opt::loma::multipermute']]],
+  ['picklesavestage_1064',['PickleSaveStage',['../classsave_1_1PickleSaveStage.html',1,'save']]],
+  ['plottemporalmappingsstage_1065',['PlotTemporalMappingsStage',['../classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html',1,'plot_temporal_mapping']]],
+  ['portactivity_1066',['PortActivity',['../classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html',1,'zigzag::cost_model::port_activity']]],
+  ['portallocation_1067',['PortAllocation',['../classarchitecture_1_1memory__port_1_1PortAllocation.html',1,'architecture::memory_port']]],
+  ['portbeginorendactivity_1068',['PortBeginOrEndActivity',['../classzigzag_1_1cost__model_1_1port__activity_1_1PortBeginOrEndActivity.html',1,'zigzag::cost_model::port_activity']]]
 ];
