@@ -833,7 +833,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
             0, ((port.bw_max - total_req_bw_aver_computation) / port.bw_max) * total_computation_cycles
         )
         # Reduce the loading cycles during loading with the surplus
-        remaining_loading_cycles, reductions = self.reduce_balanced(
+        remaining_loading_cycles, reductions = self.reduce_ordered(
             total_required_cycles, min_required_cycles, cycles_surplus
         )
         port_activities: list[PortBeginOrEndActivity] = []
@@ -1173,37 +1173,40 @@ class CostModelEvaluation(CostModelEvaluationABC):
         return str(self)
 
     @staticmethod
-    def reduce_balanced(c_list: list[float], m_list: list[float], s: float) -> tuple[list[float], list[float]]:
-        """Balance c_list towards minimums m_list with a total maximum reduction of s."""
-        c_result = c_list.copy()
-        reductions = [0.0] * len(c_list)
+    def reduce_ordered(c_list: list[float], m_list: list[float], s: float) -> tuple[list[float], list[float]]:
+        """Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s."""
         if s <= 0 or not c_list:
-            return c_list, reductions
+            return c_list, [0.0] * len(c_list)
 
-        # Sort indices by c_list values in descending order
+        # Sort indices by descending c_list
         indices = sorted(range(len(c_list)), key=lambda i: c_list[i], reverse=True)
+
         c_sorted = [c_list[i] for i in indices]
         m_sorted = [m_list[i] for i in indices]
 
-        n = len(c_sorted)
-        for i in range(n):
-            max_reducible = (c_sorted[i] - m_sorted[i]) * (i + 1)
-            if s >= max_reducible:
-                reduction = c_sorted[i] - m_sorted[i]
-                for j in range(i + 1):
-                    c_sorted[j] -= reduction
-                    reductions[indices[j]] += reduction
-                s -= max_reducible
-            else:
-                reduction = s / (i + 1)
-                for j in range(i + 1):
-                    c_sorted[j] -= reduction
-                    reductions[indices[j]] += reduction
-                s = 0
+        reductions = [0.0] * len(c_list)
+
+        # Greedy left-to-right reduction
+        for i in range(len(c_sorted)):
+            if s <= 0:
                 break
 
-        # Return the result in the original order
+            reducible = max(0.0, c_sorted[i] - m_sorted[i])
+            reduction = min(reducible, s)
+
+            c_sorted[i] -= reduction
+            reductions[indices[i]] += reduction
+            s -= reduction
+
+        # Restore original order
+        c_result = c_list.copy()
         for i, idx in enumerate(indices):
             c_result[idx] = c_sorted[i]
+
+        # Safety check
+        for i in range(len(c_result)):
+            assert (
+                c_result[i] >= m_list[i]
+            ), f"Reduction resulted in c_result[{i}] = {c_result[i]} < m_list[{i}] = {m_list[i]}"
 
         return c_result, reductions
