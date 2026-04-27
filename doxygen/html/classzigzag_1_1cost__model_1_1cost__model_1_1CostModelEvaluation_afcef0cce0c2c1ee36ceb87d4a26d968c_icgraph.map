@@ -1,5 +1,5 @@
-<map id="reduce_balanced" name="reduce_balanced">
-<area shape="rect" id="node1" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1513,39,1645,65"/>
+<map id="reduce_ordered" name="reduce_ordered">
+<area shape="rect" id="node1" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="1513,39,1636,65"/>
 <area shape="rect" id="node2" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="1304,31,1465,73"/>
 <area shape="rect" id="node3" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="1073,39,1256,65"/>
 <area shape="rect" id="node4" href="$classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0b067ef9c9f4a12be3421c7b011242e1" title="Calculate the number of data onloading/offloading cycles." alt="" coords="831,39,1025,65"/>

@@ -2,7 +2,7 @@ var searchData=
 [
   ['raise_5fexception_1560',['raise_exception',['../namespacezigzag_1_1stages_1_1run__opt__stages.html#a9ab3803d93ac10e112be0386ee3156e4',1,'zigzag::stages::run_opt_stages']]],
   ['recalculate_5fmemory_5fhierarchy_5finformation_1561',['recalculate_memory_hierarchy_information',['../classarchitecture_1_1accelerator_1_1Accelerator.html#a6e080bbbe923fb73ee7498b6bd2956fc',1,'architecture::accelerator::Accelerator']]],
-  ['reduce_5fbalanced_1562',['reduce_balanced',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
+  ['reduce_5fordered_1562',['reduce_ordered',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
   ['reduce_5fstatic_5ffps_1563',['reduce_static_fps',['../classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#aa7b99ab2c6b044c923183f9328a6d7c9',1,'zigzag::opt::loma::engine::LomaEngine']]],
   ['remove_5finvalid_5flayer_5fdims_1564',['remove_invalid_layer_dims',['../classzigzag_1_1workload_1_1layer__attributes_1_1LayerTemporalOrdering.html#adcfb1a2b24fcf880694f7e545829507b',1,'zigzag::workload::layer_attributes::LayerTemporalOrdering']]],
   ['remove_5fnodes_5ffrom_1565',['remove_nodes_from',['../classzigzag_1_1utils_1_1DiGraphWrapper.html#a0f5cd2ff4551bcffbf246515b624d4d8',1,'zigzag::utils::DiGraphWrapper']]],

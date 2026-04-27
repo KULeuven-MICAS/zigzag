@@ -15,7 +15,7 @@ var searchData=
   ['real_5fcycle_732',['real_cycle',['../classzigzag_1_1cost__model_1_1port__activity_1_1PortActivity.html#a70d2aa7bc0e5d64103a48627a7fe1937',1,'zigzag.cost_model.port_activity.PortActivity.real_cycle()'],['../classzigzag_1_1cost__model_1_1port__activity_1_1PortBeginOrEndActivity.html#a70d2aa7bc0e5d64103a48627a7fe1937',1,'zigzag.cost_model.port_activity.PortBeginOrEndActivity.real_cycle()']]],
   ['real_5fdata_5ftrans_5fcycle_733',['real_data_trans_cycle',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#af093ccb899c20f1b90e510d0db5d6d61',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
   ['recalculate_5fmemory_5fhierarchy_5finformation_734',['recalculate_memory_hierarchy_information',['../classarchitecture_1_1accelerator_1_1Accelerator.html#a6e080bbbe923fb73ee7498b6bd2956fc',1,'architecture::accelerator::Accelerator']]],
-  ['reduce_5fbalanced_735',['reduce_balanced',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
+  ['reduce_5fordered_735',['reduce_ordered',['../classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c',1,'zigzag::cost_model::cost_model::CostModelEvaluation']]],
   ['reduce_5fstages_736',['reduce_stages',['../namespacereduce__stages.html',1,'']]],
   ['reduce_5fstages_2epy_737',['reduce_stages.py',['../reduce__stages_8py.html',1,'']]],
   ['reduce_5fstatic_5ffps_738',['reduce_static_fps',['../classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#aa7b99ab2c6b044c923183f9328a6d7c9',1,'zigzag::opt::loma::engine::LomaEngine']]],

@@ -207,9 +207,9 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a8fcb680a83394e8e700c26c8f3f443ce"><td class="memItemLeft" align="right" valign="top">tuple[list[float], list[float]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce">reduce_balanced</a> (list[float] c_list, list[float] m_list, float s)</td></tr>
-<tr class="memdesc:a8fcb680a83394e8e700c26c8f3f443ce"><td class="mdescLeft">&#160;</td><td class="mdescRight">Balance c_list towards minimums m_list with a total maximum reduction of s.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce">More...</a><br /></td></tr>
-<tr class="separator:a8fcb680a83394e8e700c26c8f3f443ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcef0cce0c2c1ee36ceb87d4a26d968c"><td class="memItemLeft" align="right" valign="top">tuple[list[float], list[float]]&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c">reduce_ordered</a> (list[float] c_list, list[float] m_list, float s)</td></tr>
+<tr class="memdesc:afcef0cce0c2c1ee36ceb87d4a26d968c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s.  <a href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c">More...</a><br /></td></tr>
+<tr class="separator:afcef0cce0c2c1ee36ceb87d4a26d968c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -533,7 +533,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="248,99,439,126"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="506,5,667,47"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="487,71,687,127"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="735,13,867,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="735,13,857,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -686,7 +686,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="402,187,593,214"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="663,92,825,133"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="644,158,844,214"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="892,99,1024,126"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="892,99,1015,126"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2dc7f125d2f4382423715f6c781343fe" title=" " alt="" coords="409,238,585,265"/>
 </map>
 </div>
@@ -739,7 +739,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="5,50,188,77"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="255,5,417,47"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="236,71,436,127"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="484,13,616,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="484,13,607,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -804,7 +804,7 @@ Here is the call graph for this function:</div>
 <div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph" alt=""/></div>
 <map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a176ed41d9f8630158382bd864a743800_cgraph">
 <area shape="rect" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="5,5,167,47"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="215,13,347,39"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="215,13,337,39"/>
 </map>
 </div>
 <div class="dynheader">
@@ -1344,8 +1344,8 @@ Here is the call graph for this function:</div>
 
 </div>
 </div>
-<a id="a8fcb680a83394e8e700c26c8f3f443ce"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fcb680a83394e8e700c26c8f3f443ce">&#9670;&nbsp;</a></span>reduce_balanced()</h2>
+<a id="afcef0cce0c2c1ee36ceb87d4a26d968c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcef0cce0c2c1ee36ceb87d4a26d968c">&#9670;&nbsp;</a></span>reduce_ordered()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -1354,7 +1354,7 @@ Here is the call graph for this function:</div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"> tuple[list[float], list[float]] reduce_balanced </td>
+          <td class="memname"> tuple[list[float], list[float]] reduce_ordered </td>
           <td>(</td>
           <td class="paramtype">list[float]&#160;</td>
           <td class="paramname"><em>c_list</em>, </td>
@@ -1384,13 +1384,13 @@ Here is the call graph for this function:</div>
 </table>
 </div><div class="memdoc">
 
-<p>Balance c_list towards minimums m_list with a total maximum reduction of s. </p>
+<p>Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s. </p>
 <div class="dynheader">
 Here is the caller graph for this function:</div>
 <div class="dyncontent">
-<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph" alt=""/></div>
-<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_a8fcb680a83394e8e700c26c8f3f443ce_icgraph">
-<area shape="rect" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1513,39,1645,65"/>
+<div class="center"><img src="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_afcef0cce0c2c1ee36ceb87d4a26d968c_icgraph.png" border="0" usemap="#aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_afcef0cce0c2c1ee36ceb87d4a26d968c_icgraph" alt=""/></div>
+<map name="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_afcef0cce0c2c1ee36ceb87d4a26d968c_icgraph" id="aclasszigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation_afcef0cce0c2c1ee36ceb87d4a26d968c_icgraph">
+<area shape="rect" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="1513,39,1636,65"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="1304,31,1465,73"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a3fdc4752ff12861a99b16eb7fc42f74c" title="Calculate the loading and offloading activities for a single memory port." alt="" coords="1073,39,1256,65"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0b067ef9c9f4a12be3421c7b011242e1" title="Calculate the number of data onloading/offloading cycles." alt="" coords="831,39,1025,65"/>
@@ -1448,7 +1448,7 @@ Here is the call graph for this function:</div>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ac029d762fe964b6c0660c85e93192e92" title=" " alt="" coords="681,460,871,487"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a176ed41d9f8630158382bd864a743800" title="Calculate the loading activities for the memory port movement directions with period count of 1." alt="" coords="942,366,1103,407"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258" title="Calculate the loading and offloading activities with mem port movement directions period &gt; 1." alt="" coords="923,432,1123,488"/>
-<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a8fcb680a83394e8e700c26c8f3f443ce" title="Balance c_list towards minimums m_list with a total maximum reduction of s." alt="" coords="1171,373,1303,400"/>
+<area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#afcef0cce0c2c1ee36ceb87d4a26d968c" title="Reduce c_list towards m_list from largest to smallest, left to right, up to total reduction s." alt="" coords="1171,373,1293,400"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a2dc7f125d2f4382423715f6c781343fe" title=" " alt="" coords="688,187,864,213"/>
 <area shape="rect" href="classzigzag_1_1cost__model_1_1cost__model__imc_1_1CostModelEvaluationForIMC.html#aa18f60e79c7586e3499d3c82a7437230" title="This function calculate the Tclk for IMC (In&#45;Memory&#45;Computing)" alt="" coords="387,485,629,541"/>
 <area shape="rect" href="namespacezigzag_1_1utils.html#addfd6d573902614df054d7def823f0cb" title=" " alt="" coords="439,566,577,607"/>
