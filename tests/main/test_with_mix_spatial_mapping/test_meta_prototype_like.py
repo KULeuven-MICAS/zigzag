@@ -13,8 +13,8 @@ workloads = (
 ens_lats = {
     "zigzag/inputs/workload/alexnet.onnx": (5681909132.480001, 8279495.0),
     "zigzag/inputs/workload/mobilenetv2.onnx": (909647916.68, 2602479.0),
-    "zigzag/inputs/workload/resnet18.onnx": (1746642408.16, 2688913.66),
-    "zigzag/inputs/workload/resnet18.yaml": (2249214190.04, 3278925.33),
+    "zigzag/inputs/workload/resnet18.onnx": (1751507661.28, 2698392.0),
+    "zigzag/inputs/workload/resnet18.yaml": (2249214190.04, 3276491.0),
 }
 
 
