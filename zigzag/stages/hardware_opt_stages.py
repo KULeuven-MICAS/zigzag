@@ -54,7 +54,7 @@ class HardwareOptimizerStage(Stage):
         best_cme: CostModelEvaluationABC | None = None
         best_idx = None
         for accelerator_path, workload, i in self._accelerator_and_workload_iterator():
-            logger.info(f"Evaluating hardware configuration: {accelerator_path}")
+            logger.info("Evaluating hardware configuration: %s", accelerator_path)
             substage = self.list_of_callables[0](
                 sub_list_of_callables,
                 accelerator=accelerator_path,
@@ -62,7 +62,7 @@ class HardwareOptimizerStage(Stage):
                 **self.kwargs,
             )
 
-            for cumulative_cme, extra_info in substage.run():
+            for _, extra_info in substage.run():
                 cme = extra_info[0][0]
                 assert isinstance(cme, CostModelEvaluationABC)
                 if (
@@ -77,7 +77,8 @@ class HardwareOptimizerStage(Stage):
             assert best_cme is not None
             assert best_idx is not None
             print(
-                f"Finished architecture {i}. Optimal latency so far: {best_cme.latency_total2} cycles for architecture {best_idx}."
+                f"Finished architecture {i}. Optimal latency so far: "
+                f"{best_cme.latency_total2} cycles for architecture {best_idx}."
             )
 
         self._plot_cme_distributions(all_cmes, best_cme)
@@ -168,7 +169,8 @@ class HardwareOptimizerStage(Stage):
             _, rem = divmod(layer_dim_size, oa_dim_size)
             if rem != 0:
                 raise ValueError(
-                    f"Array size {oa_dim_size} does not evenly divide layer dimension size {layer_dim_size} for {layer_dim}."
+                    f"Array size {oa_dim_size} does not evenly divide layer dimension "
+                    f"size {layer_dim_size} for {layer_dim}."
                 )
             new_spatial_mapping[oa_dim] = MappingSingleOADim({layer_dim: oa_dim_size})
         return new_spatial_mapping
@@ -204,4 +206,4 @@ class HardwareOptimizerStage(Stage):
         plot_path = f"{self.output_path}/cme_distributions.png"
         plt.savefig(plot_path)
         plt.close()
-        logger.info(f"CME distributions saved to {plot_path}")
+        logger.info("CME distributions saved to %s", plot_path)
