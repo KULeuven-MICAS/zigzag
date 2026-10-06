@@ -196,6 +196,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
+                if not self.layer.memory_operand_links.contains_mem_op(mem_op):
+                    continue
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
                 # Either write BW (to write outputs away) or read BW (to read inputs)
                 data_dir = DataDirection.WR_IN_BY_LOW if layer_op.is_output() else DataDirection.RD_OUT_TO_LOW
@@ -262,6 +264,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
+                if not self.layer.memory_operand_links.contains_mem_op(mem_op):
+                    continue
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
                 # Either write BW (to write outputs away) or read BW (to read inputs)
                 mem_capacity = mem_level.memory_instance.size

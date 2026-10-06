@@ -930,6 +930,8 @@ class CostModelEvaluation(CostModelEvaluationABC):
         combs_period_count_1: list[tuple[MemoryOperand, int, DataDirection]] = []
         combs_period_count_greater_than_1: list[tuple[MemoryOperand, int, DataDirection]] = []
         for mem_op, mem_lv, mov_dir in port.served_op_lv_dir:
+            if not self.memory_operand_links.contains_mem_op(mem_op):
+                continue
             # don't consider partial sum flowing in the final data off-loading stage
             if mem_op == output_mem_op and (
                 mov_dir == DataDirection.RD_OUT_TO_LOW or mov_dir == DataDirection.WR_IN_BY_HIGH
