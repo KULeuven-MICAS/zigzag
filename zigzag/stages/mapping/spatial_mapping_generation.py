@@ -229,12 +229,11 @@ class SpatialMappingGeneratorStage(Stage):
             spatial_mapping: SpatialMapping, dims_to_limit: set[LayerDim], max_unrolling: float
         ) -> SpatialMapping:
             def adjust_unrolling_factors(factors: list[UnrollFactor], max_unrolling: float) -> list[UnrollFactor]:
-                product = math.prod(factors)
-                while product > max_unrolling:
-                    max_factor = max(factors)
-                    max_index = factors.index(max_factor)
+                """Shrink the largest factor until the product fits, never below one: a memory that cannot hold one
+                element of the operand leaves its dimensions unrolled once."""
+                while math.prod(factors) > max_unrolling and any(factor > 1 for factor in factors):
+                    max_index = factors.index(max(factors))
                     factors[max_index] -= 1
-                    product = math.prod(factors)
                 return factors
 
             # Extract the unrolling factors for the limited dimensions
