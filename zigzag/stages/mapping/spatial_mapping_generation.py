@@ -196,6 +196,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
+                if not self.layer.memory_operand_links.contains_mem_op(mem_op):
+                    continue
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
                 # Either write BW (to write outputs away) or read BW (to read inputs)
                 data_dir = DataDirection.WR_IN_BY_LOW if layer_op.is_output() else DataDirection.RD_OUT_TO_LOW
@@ -229,12 +231,11 @@ class SpatialMappingGeneratorStage(Stage):
             spatial_mapping: SpatialMapping, dims_to_limit: set[LayerDim], max_unrolling: float
         ) -> SpatialMapping:
             def adjust_unrolling_factors(factors: list[UnrollFactor], max_unrolling: float) -> list[UnrollFactor]:
-                product = math.prod(factors)
-                while product > max_unrolling:
-                    max_factor = max(factors)
-                    max_index = factors.index(max_factor)
+                """Shrink the largest factor until the product fits, never below one: a memory that cannot hold one
+                element of the operand leaves its dimensions unrolled once."""
+                while math.prod(factors) > max_unrolling and any(factor > 1 for factor in factors):
+                    max_index = factors.index(max(factors))
                     factors[max_index] -= 1
-                    product = math.prod(factors)
                 return factors
 
             # Extract the unrolling factors for the limited dimensions
@@ -263,6 +264,8 @@ class SpatialMappingGeneratorStage(Stage):
 
         for mem_level in self.memory_hierarchy.get_inner_memories():
             for mem_op in mem_level.operands:
+                if not self.layer.memory_operand_links.contains_mem_op(mem_op):
+                    continue
                 layer_op = self.layer.memory_operand_links.mem_to_layer_op(mem_op)
                 # Either write BW (to write outputs away) or read BW (to read inputs)
                 mem_capacity = mem_level.memory_instance.size
