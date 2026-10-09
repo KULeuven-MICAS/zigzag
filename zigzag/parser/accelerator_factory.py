@@ -83,7 +83,8 @@ class AcceleratorFactory:
         dimension_sizes: dict[OADimension, int] = {
             OADimension(oa_dim): op_array_data["sizes"][i] for i, oa_dim in enumerate(oa_dims)
         }
-        return MultiplierArray(multiplier, dimension_sizes)
+        systolic_dimensions = {OADimension(oa_dim) for oa_dim in op_array_data["systolic_dimensions"]}
+        return MultiplierArray(multiplier, dimension_sizes, systolic_dimensions=systolic_dimensions)
 
     def create_imc_array(self) -> ImcArray:
         # From operational_array

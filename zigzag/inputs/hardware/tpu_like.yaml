@@ -118,3 +118,5 @@ operational_array:
   unit_area: 1 # unit
   dimensions: [D1, D2]
   sizes: [32, 32]
+  # A weight-stationary systolic array, as in TPU v1: inputs move across it, partial sums down it
+  systolic_dimensions: [D1, D2]

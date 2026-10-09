@@ -31,6 +31,10 @@ The operational array object has the following attributes:
 * **operational_unit**: The operational unit from which the array is built.
 * **dimensions**: The dimensions of the array. The dimensions must be defined as 'D1', 'D2', ... and the values being the size of the corresponding dimension (i.e. the size of the array along that dimension).
 
+(optional)
+
+* **systolic_dimensions**: The dimensions along which operands move from one unit to the next, one unit per cycle, as in a systolic array, instead of being broadcast to all units at once. The last results then leave the array one cycle per unit in use along each such dimension after they are computed, which is added to the latency as ``systolic_drain_cycle``; successive tiles are assumed to follow each other through the array without a gap, as when the stationary operand is double buffered in the units. The registers the operands pass through are the memories of the hierarchy that serve a single unit, whose accesses are counted as usual.
+
 
 Memory Instance
 ---------------

@@ -101,6 +101,12 @@ class AcceleratorValidator:
                     "schema": {"type": "string", "regex": DIMENSION_REGEX},
                 },
                 "is_imc": {"type": "boolean", "default": False},
+                "systolic_dimensions": {
+                    "type": "list",
+                    "required": False,
+                    "default": [],
+                    "schema": {"type": "string", "regex": DIMENSION_REGEX},
+                },
                 "sizes": {
                     "type": "list",
                     "required": True,
@@ -259,6 +265,8 @@ class AcceleratorValidator:
         oa_dims: list[str] = multiplier_data["dimensions"]
         if len(oa_dims) != len(multiplier_data["sizes"]):
             self.invalidate("Core dimensions and sizes do not match.")
+        if not set(multiplier_data["systolic_dimensions"]) <= set(oa_dims):
+            self.invalidate("Systolic dimensions must be dimensions of the operational array.")
 
         if self.is_imc:
             self.validate_operational_array_imc()
