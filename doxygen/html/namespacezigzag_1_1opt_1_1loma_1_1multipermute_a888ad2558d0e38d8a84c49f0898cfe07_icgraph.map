@@ -1,6 +1,10 @@
 <map id="visit" name="visit">
-<area shape="rect" id="node1" title="Converts our bespoke linked list to a python list." alt="" coords="516,31,567,57"/>
-<area shape="rect" id="node2" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#ae159cba3a39da4e02b06e0c45bc8dd90" title="Generator providing all multiset permutations of a multiset with constraints." alt="" coords="268,5,468,32"/>
-<area shape="rect" id="node4" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="313,56,423,83"/>
-<area shape="rect" id="node3" href="$classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="5,23,220,65"/>
+<area shape="rect" id="node1" title="Converts our bespoke linked list to a python list." alt="" coords="1188,85,1239,112"/>
+<area shape="rect" id="node2" href="$classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a85954e7f248331c63a066b72d34ecf87" title="The nb_mappings_generated valid combinations of the given mappings per OA Dimension with the highest ..." alt="" coords="883,5,1140,61"/>
+<area shape="rect" id="node6" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#ae159cba3a39da4e02b06e0c45bc8dd90" title="Generator providing all multiset permutations of a multiset with constraints." alt="" coords="911,85,1111,112"/>
+<area shape="rect" id="node8" href="$namespacezigzag_1_1opt_1_1loma_1_1multipermute.html#abf46ca90c8f5a34ff3b9a8aa2bfbc96e" title="Generator providing all multiset permutations of a multiset." alt="" coords="957,136,1066,163"/>
+<area shape="rect" id="node3" href="$classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683" title="Generator that yields SpatialMappings." alt="" coords="548,5,835,61"/>
+<area shape="rect" id="node4" href="$classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#ad22709b2e67308af35f55680d5a026e0" title="Generate SpatialMappings and convert to internal representation." alt="" coords="249,13,500,54"/>
+<area shape="rect" id="node5" href="$classzigzag_1_1stages_1_1stage_1_1Stage.html#a45163c19b7c87f553c6f1d055d4668cb" title=" " alt="" coords="5,13,201,54"/>
+<area shape="rect" id="node7" href="$classzigzag_1_1opt_1_1loma_1_1engine_1_1LomaEngine.html#af17b2bf1589a6544a716ec9b49c2f42a" title="Generator that yields all orderings of the temporal loops." alt="" coords="584,107,799,149"/>
 </map>

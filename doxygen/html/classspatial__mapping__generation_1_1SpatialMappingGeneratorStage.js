@@ -2,6 +2,7 @@ var classspatial__mapping__generation_1_1SpatialMappingGeneratorStage =
 [
     [ "__init__", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#aea5fa5a994f7d21385e9d7b5f61c6c50", null ],
     [ "add_input_pr_spatial_loop", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#ac2546cbcde1e559a492baa99693f1072", null ],
+    [ "best_candidates", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a85954e7f248331c63a066b72d34ecf87", null ],
     [ "generate_mapping_single_oa_dim_mixed", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a627acb50e937742c87f3623486213718", null ],
     [ "generate_spatial_mapping_single_oa_dim", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a1214bc8e43bf94d69dddeeb9a4f81cf8", null ],
     [ "generate_spatial_mappings", "classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a8deb34b3d63c7b7a78262d3466550683", null ],
