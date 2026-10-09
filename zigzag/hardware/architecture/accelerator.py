@@ -46,9 +46,7 @@ class Accelerator:
 
     def get_memory_level(self, mem_op: MemoryOperand, mem_lv: int) -> MemoryLevel:
         """! Returns a specific memory level in the memory hierarchy for the memory operand"""
-        # Sort the nodes topologically and filter out all memories that don't store mem_op
-        memory = [node for node in self.memory_hierarchy.topological_sort() if mem_op in node.operands]
-        return memory[mem_lv]
+        return self.mem_hierarchy_dict[mem_op][mem_lv]
 
     def recalculate_memory_hierarchy_information(self) -> None:
         self.__generate_memory_hierarchy_dict()

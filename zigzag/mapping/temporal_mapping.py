@@ -3,7 +3,7 @@ from enum import StrEnum
 from typing import TypeAlias
 
 from zigzag.datatypes import LayerDim, LayerOperand, UnrollFactor
-from zigzag.utils import json_repr_handler, pickle_deepcopy
+from zigzag.utils import copy_loop_levels, json_repr_handler
 from zigzag.workload.layer_node import LayerNode
 
 TemporalMappingDict: TypeAlias = dict[LayerOperand, list[list[tuple[LayerDim, UnrollFactor]]]]
@@ -63,8 +63,8 @@ class TemporalMapping:
         Also calculate the MAC level data stationary cycle, i,e., the innermost memory level's bottom ir loops.
         """
         # Initialization
-        mapping_current: TemporalMappingDict = pickle_deepcopy(self.mapping_dic_origin)
-        mapping_previous: TemporalMappingDict = pickle_deepcopy(self.mapping_dic_origin)
+        mapping_current: TemporalMappingDict = copy_loop_levels(self.mapping_dic_origin)
+        mapping_previous: TemporalMappingDict = copy_loop_levels(self.mapping_dic_origin)
 
         if self.type == TemporalMappingType.EVEN and self.SKIP_STATIONARITY_MERGE_DOWN:
             # Skip the merging process, only calculate the mac level data stationary cycle
@@ -86,7 +86,7 @@ class TemporalMapping:
             for operand in self.mem_level.keys():
                 for level, current_level_loops in enumerate(mapping_previous[operand]):
                     if not current_level_loops:
-                        mapping_st[operand][level] = pickle_deepcopy(current_level_loops)
+                        mapping_st[operand][level] = list(current_level_loops)
                     else:
                         for loop_type, loop_dim in current_level_loops:
                             if loop_type in self.layer_node.loop_relevancy_info.get_ir_layer_dims(operand):
@@ -101,8 +101,8 @@ class TemporalMapping:
                                 mapping_st[operand][level].extend(mapping_current[operand][level])
                                 break
             if mapping_st != mapping_previous:
-                mapping_previous = pickle_deepcopy(mapping_st)
-                mapping_current = pickle_deepcopy(mapping_st)
+                mapping_previous = copy_loop_levels(mapping_st)
+                mapping_current = copy_loop_levels(mapping_st)
                 continue
             else:
                 done = True
