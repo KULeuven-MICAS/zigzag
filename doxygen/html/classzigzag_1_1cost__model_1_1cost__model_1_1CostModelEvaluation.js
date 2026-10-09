@@ -73,5 +73,6 @@ var classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation =
     [ "spatial_mapping_int", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a778f2cf0f748119eb8ecc9f95b5897b6", null ],
     [ "stall_slack_comb", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a927a2a45c2cae48a92efb48a16677678", null ],
     [ "stall_slack_comb_collect", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a69df9fb43452060a876375cb4177d3ea", null ],
+    [ "systolic_drain_cycle", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa64c14999a313af64e2a2467a36139fc", null ],
     [ "temporal_mapping", "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8", null ]
 ];

@@ -1,5 +1,6 @@
 var NAVTREEINDEX1 =
 {
+"classonnx__model__parser_1_1ONNXModelParserStage.html#ad22709b2e67308af35f55680d5a026e0":[2,0,4,0,1],
 "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html":[2,0,5,0],
 "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html#a6eea0bfdbe5111ee03de1a556e24b206":[2,0,5,0,2],
 "classplot__temporal__mapping_1_1PlotTemporalMappingsStage.html#a826ddfd70786504e468eec75c57ee1c6":[2,0,5,0,0],
@@ -103,7 +104,7 @@ var NAVTREEINDEX1 =
 "classworkload__parser_1_1WorkloadParserStage.html#af5f1d395e50b6a04e0052c6c9125b897":[2,0,13,0,4],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html":[2,0,14,0,0,3],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a03bd359d34c64ff656ae98ce3d05f913":[2,0,14,0,0,3,7],
-"classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,0,0,3,73],
+"classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,0,0,3,74],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a09c3d6ae12fe0469f495f0280f3c1730":[2,0,14,0,0,3,30],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0a7c56cfe2d93a828eb89bac51779d60":[2,0,14,0,0,3,15],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#a0b067ef9c9f4a12be3421c7b011242e1":[2,0,14,0,0,3,5],
@@ -155,6 +156,7 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa192ec0feee472fb02654eb92fc5d878":[2,0,14,0,0,3,57],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa209863329672dbf0472644e1f14bda9":[2,0,14,0,0,3,26],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa598644a72fb8338730ac670db4f98d8":[2,0,14,0,0,3,39],
+"classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aa64c14999a313af64e2a2467a36139fc":[2,0,14,0,0,3,73],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#aadaa91ed1e68a2856615bbf7f3e36bd8":[2,0,14,0,0,3,22],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#ab2b88606058b8eb430dc482be0c5a258":[2,0,14,0,0,3,11],
 "classzigzag_1_1cost__model_1_1cost__model_1_1CostModelEvaluation.html#abab06e56ef976744382680dadb157baf":[2,0,14,0,0,3,54],
@@ -247,7 +249,5 @@ var NAVTREEINDEX1 =
 "classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02":[2,0,14,1,0,8],
 "classzigzag_1_1datatypes_1_1OperandABC.html#a5aad20ac0a9df28a1bfbab5c9ae1daf2":[2,0,14,1,0,2],
 "classzigzag_1_1datatypes_1_1OperandABC.html#a62899b2921b8dce56eae23683b126261":[2,0,14,1,0,0],
-"classzigzag_1_1datatypes_1_1OperandABC.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,1,0,6],
-"classzigzag_1_1datatypes_1_1OperandABC.html#abc00343aa0378787ab29f21b71cb4809":[2,0,14,1,0,5],
-"classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html":[2,0,14,2,0,2]
+"classzigzag_1_1datatypes_1_1OperandABC.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,1,0,6]
 };

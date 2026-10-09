@@ -1,5 +1,7 @@
 var NAVTREEINDEX2 =
 {
+"classzigzag_1_1datatypes_1_1OperandABC.html#abc00343aa0378787ab29f21b71cb4809":[2,0,14,1,0,5],
+"classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html":[2,0,14,2,0,2],
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a281d464f7c67cd1992bd348eaffd07f9":[2,0,14,2,0,2,1],
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a39a96ea5606940591c07723dae78db6d":[2,0,14,2,0,2,0],
 "classzigzag_1_1mapping_1_1data__movement_1_1DataMoveAttr.html":[2,0,14,2,0,3],
@@ -247,7 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#aca2f4b7b4c0981f43f701f34406cd90e":[2,0,14,3,1,0,0,1],
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#af4b82dcd0bb10904fcc119a07f93196d":[2,0,14,3,1,0,0,6],
 "classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html":[2,0,14,3,1,1,0],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,3,1,1,0,11],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a1a81b4276ed57e54580bef8cb37bb2e5":[2,0,14,3,1,1,0,10],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a3eb1cc0e95909d60387f2e8879977dfc":[2,0,14,3,1,1,0,0]
+"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,3,1,1,0,11]
 };
