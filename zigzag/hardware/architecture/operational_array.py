@@ -17,30 +17,46 @@ class OperationalArrayABC(metaclass=ABCMeta):
     def __init__(self, dimension_sizes: dict[OADimension, int]):
         self.dimension_sizes = dimension_sizes
         self.total_unit_count: int
+        self.systolic_dimensions: set[OADimension] = set()
 
 
 class OperationalArray(OperationalArrayABC):
     """! This class captures multi-dimensional operational array size."""
 
-    def __init__(self, operational_unit: OperationalUnit, dimension_sizes: dict[OADimension, int]):
+    def __init__(
+        self,
+        operational_unit: OperationalUnit,
+        dimension_sizes: dict[OADimension, int],
+        systolic_dimensions: set[OADimension] | None = None,
+    ):
         """
         @param operational_unit: an OperationalUnit object including precision and single operation energy, later we
         can add idle energy also (e.g. for situations that one or two of the input operands is zero).
         @param dimensions: define the name and size of each multiplier array dimensions, e.g. {'D1': 3, 'D2': 5}.
+        @param systolic_dimensions: the dimensions along which operands move one unit per cycle, as in a systolic
+        array, instead of being broadcast. The registers they pass through are the per-unit memories of the hierarchy.
         """
         OperationalArrayABC.__init__(self, dimension_sizes=dimension_sizes)
         self.unit: OperationalUnit = operational_unit
+        self.systolic_dimensions: set[OADimension] = systolic_dimensions or set()
         self.total_unit_count = int(math.prod(list(dimension_sizes.values())))
         self.total_area = operational_unit.area * self.total_unit_count
 
     def __jsonrepr__(self):
-        return json_repr_handler({"operational_unit": self.unit, "dimensions": self.dimension_sizes})
+        return json_repr_handler(
+            {
+                "operational_unit": self.unit,
+                "dimensions": self.dimension_sizes,
+                "systolic_dimensions": sorted(self.systolic_dimensions),
+            }
+        )
 
     def __eq__(self, other: Any) -> bool:
         return (
             isinstance(other, OperationalArray)
             and self.unit == other.unit
             and self.dimension_sizes == other.dimension_sizes
+            and self.systolic_dimensions == other.systolic_dimensions
         )
 
 
@@ -50,7 +66,8 @@ class MultiplierArray(OperationalArray):
         multiplier: Multiplier,
         dimensions: dict[OADimension, int],
         operand_spatial_sharing: dict[str, set[tuple[int, ...]]] | None = None,
+        systolic_dimensions: set[OADimension] | None = None,
     ):
-        super(MultiplierArray, self).__init__(multiplier, dimensions)
+        super(MultiplierArray, self).__init__(multiplier, dimensions, systolic_dimensions)
         self.multiplier = self.unit
         self.operand_spatial_sharing = operand_spatial_sharing

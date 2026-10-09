@@ -46,6 +46,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         self.energy_total: float
         self.data_onloading_cycle: float
         self.data_offloading_cycle: float
+        self.systolic_drain_cycle: float
         self.ideal_cycle: float
         self.ideal_temporal_cycle: float
         self.latency_total0: float
@@ -123,6 +124,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         # Latency
         result.data_onloading_cycle = self.data_onloading_cycle + other.data_onloading_cycle
         result.data_offloading_cycle = self.data_offloading_cycle + other.data_offloading_cycle
+        result.systolic_drain_cycle = self.systolic_drain_cycle + other.systolic_drain_cycle
         result.ideal_cycle = self.ideal_cycle + other.ideal_cycle
         result.ideal_temporal_cycle = self.ideal_temporal_cycle + other.ideal_temporal_cycle
         result.latency_total0 = self.latency_total0 + other.latency_total0
@@ -187,6 +189,7 @@ class CostModelEvaluationABC(metaclass=ABCMeta):
         # Latency
         result.data_onloading_cycle *= number
         result.data_offloading_cycle *= number
+        result.systolic_drain_cycle *= number
         result.ideal_cycle *= number
         result.ideal_temporal_cycle *= number
         result.latency_total0 *= number
@@ -264,6 +267,7 @@ class CumulativeCME(CostModelEvaluationABC):
         self.energy_total: float = 0.0
         self.data_onloading_cycle: float = 0.0
         self.data_offloading_cycle: float = 0.0
+        self.systolic_drain_cycle: float = 0.0
         self.ideal_cycle: float = 0.0
         self.ideal_temporal_cycle: float = 0.0
         self.latency_total0: float = 0.0
@@ -1098,9 +1102,21 @@ class CostModelEvaluation(CostModelEvaluationABC):
         latency_total1 = ideal_temporal_cycle + self.stall_slack_comb + self.data_onloading_cycle
         mac_utilization1 = ideal_cycle / latency_total1
 
+        # Along a systolic dimension the last results leave the array a cycle per unit after they are computed
+        spatial_mapping = self.layer.spatial_mapping
+        systolic_drain_cycle = sum(
+            max(ceil(spatial_mapping[oa_dim].utilization) - 1, 0)
+            for oa_dim in self.accelerator.operational_array.systolic_dimensions
+            if oa_dim in spatial_mapping
+        )
+
         # Total latency with both the initial data loading and the final data off-loading
         latency_total2 = (
-            ideal_temporal_cycle + self.stall_slack_comb + self.data_onloading_cycle + self.data_offloading_cycle
+            ideal_temporal_cycle
+            + self.stall_slack_comb
+            + self.data_onloading_cycle
+            + self.data_offloading_cycle
+            + systolic_drain_cycle
         )
         mac_utilization2 = ideal_cycle / latency_total2
 
@@ -1110,6 +1126,7 @@ class CostModelEvaluation(CostModelEvaluationABC):
         self.latency_total0 = latency_total0
         self.latency_total1 = latency_total1
         self.latency_total2 = latency_total2
+        self.systolic_drain_cycle = systolic_drain_cycle
         self.mac_utilization0 = mac_utilization0
         self.mac_utilization1 = mac_utilization1
         self.mac_utilization2 = mac_utilization2
