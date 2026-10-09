@@ -150,32 +150,65 @@ class SpatialMappingGeneratorStage(Stage):
             for oa_dim in oa_dims_to_fill
         ]
 
-        candidate_mappings: list[SpatialMapping] = []
-        for combination in itertools.product(*mappings_per_oa_dim):
-            # Start from the user-defined mapping
-            candidate = mapping_template.copy()
-            for idx, oa_dim in enumerate(oa_dims_to_fill):
-                candidate[oa_dim] = combination[idx]
-            # Candidate can be invalid if unrollings of LayerDim exceed LayerDim size from workload
-            if candidate.is_valid(max_unrollings, self.layer_dim_sizes.data):
-                candidate_mappings.append(candidate)
-
+        candidate_mappings = self.best_candidates(
+            mapping_template, oa_dims_to_fill, mappings_per_oa_dim, max_unrollings
+        )
         assert len(candidate_mappings) > 0, "No valid SpatialMappings found"
 
-        # Sort according to expected performance
-        candidate_mappings = sorted(
-            candidate_mappings,
-            key=lambda x: x.get_performance_indicator(),
-            reverse=True,
-        )
-
-        # Limit the number of mappings generated
-        for i in range(min(self.nb_mappings_generated, len(candidate_mappings))):
-            candidate = candidate_mappings[i]
+        for candidate in candidate_mappings:
             if self.enable_weight_diagonal_mapping:
                 candidate = self.add_input_pr_spatial_loop(candidate)
             candidate = self.limit_unrolling_to_mem_capacity(candidate)
             yield candidate
+
+    def best_candidates(
+        self,
+        mapping_template: SpatialMapping,
+        oa_dims_to_fill: list[OADimension],
+        mappings_per_oa_dim: list[Generator[MappingSingleOADim, None, None]],
+        max_unrollings: dict[OADimension, dict[LayerDim, UnrollFactorInt]],
+    ) -> list[SpatialMapping]:
+        """! The `nb_mappings_generated` valid combinations of the given mappings per OA Dimension with the highest
+        performance indicator, in the order that sorting every combination by it would give.
+        The indicator of a mapping with hardware utilization u lies between u and 2u - 1, so a partial combination is
+        not extended once even the most utilized remaining choices cannot reach the indicator of the last mapping kept.
+        """
+        layer_dim_sizes = self.layer_dim_sizes.data
+        options = [sorted(enumerate(mappings), key=lambda x: -x[1].utilization) for mappings in mappings_per_oa_dim]
+        best_remaining = [math.prod(o[0][1].utilization if o else 0 for o in options[i:]) for i in range(len(options))]
+        best_remaining.append(1)
+        fixed = [mapping_template[oa_dim] for oa_dim in mapping_template if oa_dim not in oa_dims_to_fill]
+        kept: list[tuple[float, tuple[int, ...], SpatialMapping]] = []
+
+        def reachable(utilization: float, depth: int) -> bool:
+            return len(kept) < self.nb_mappings_generated or 2 * utilization * best_remaining[depth] - 1 >= -kept[-1][0]
+
+        def visit(depth: int, utilization: float, chosen: list[tuple[int, MappingSingleOADim]]) -> None:
+            if depth == len(options):
+                candidate = mapping_template.copy()
+                for oa_dim, (_, mapping) in zip(oa_dims_to_fill, chosen):
+                    candidate[oa_dim] = mapping
+                if not candidate.is_valid(max_unrollings, layer_dim_sizes):
+                    return
+                key = (-candidate.get_performance_indicator(), tuple(index for index, _ in chosen))
+                if len(kept) < self.nb_mappings_generated or key < kept[-1][:2]:
+                    kept.append((*key, candidate))
+                    kept.sort(key=lambda x: x[:2])
+                    del kept[self.nb_mappings_generated :]
+                return
+            for index, mapping in options[depth]:
+                if not reachable(utilization * mapping.utilization, depth + 1):
+                    break
+                totals = [*fixed, *(m for _, m in chosen), mapping]
+                unrolled: dict[LayerDim, UnrollFactor] = {}
+                for single in totals:
+                    for layer_dim, factor in single.items():
+                        unrolled[layer_dim] = unrolled.get(layer_dim, 1) * factor
+                if all(factor <= layer_dim_sizes.get(layer_dim, 0) for layer_dim, factor in unrolled.items()):
+                    visit(depth + 1, utilization * mapping.utilization, [*chosen, (index, mapping)])
+
+        visit(0, math.prod(m.utilization for m in fixed), [])
+        return [candidate for *_, candidate in kept]
 
     def limit_unrolling_to_mem_bandwidth(
         self, mapping: dict[OADimension, dict[LayerDim, int]]
