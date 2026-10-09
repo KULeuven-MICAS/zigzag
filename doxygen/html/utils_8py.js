@@ -2,6 +2,7 @@ var utils_8py =
 [
     [ "UniqueMessageFilter", "classzigzag_1_1utils_1_1UniqueMessageFilter.html", "classzigzag_1_1utils_1_1UniqueMessageFilter" ],
     [ "DiGraphWrapper", "classzigzag_1_1utils_1_1DiGraphWrapper.html", "classzigzag_1_1utils_1_1DiGraphWrapper" ],
+    [ "copy_loop_levels", "utils_8py.html#ae6f9062ecb98860cf5a78d5ea24d6783", null ],
     [ "hash_sha512", "utils_8py.html#aa5f0207606d7e164d68fd1a43818db14", null ],
     [ "json_repr_handler", "utils_8py.html#ab42dda6f6ce7e693f82e03b5764c5cd1", null ],
     [ "open_yaml", "utils_8py.html#a6b2b43a048896d1253d1d0a6274e8fa9", null ],

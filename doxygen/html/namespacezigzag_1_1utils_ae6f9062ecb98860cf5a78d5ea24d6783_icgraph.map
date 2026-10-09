@@ -1,0 +1,6 @@
+<map id="copy_loop_levels" name="copy_loop_levels">
+<area shape="rect" id="node1" title="Copy loops kept per memory level: a list of levels or a dict of them per operand, each level a list o..." alt="" coords="564,47,699,74"/>
+<area shape="rect" id="node2" href="$namespacezigzag_1_1mapping_1_1mapping__assist__funcs.html#a93a85a91d438a1bc260d32aef08a6180" title="This function decouples the pr loops into data size (r loops) and data reuse (ir loops)." alt="" coords="5,41,192,97"/>
+<area shape="rect" id="node3" href="$classzigzag_1_1mapping_1_1temporal__mapping_1_1TemporalMapping.html#a6011a006e0fd17f8d4459f1e3e7b1a15" title="Iteratively merging down the ir loops which located at the bottom position of each memory level." alt="" coords="240,33,516,89"/>
+<area shape="rect" id="node4" href="$namespacezigzag_1_1mapping_1_1mapping__assist__funcs.html#a98824e40fda888066262630f7fbf9a66" title="This function replaces all pr loops in a mapping of a single operand with r and ir loops." alt="" coords="285,113,471,169"/>
+</map>
