@@ -16,6 +16,14 @@ def hash_sha512(data: Any) -> int:
     return int(sha512(pickle.dumps(data)).hexdigest(), 16)  # type: ignore
 
 
+def copy_loop_levels(levels: Any) -> Any:
+    """! Copy loops kept per memory level: a list of levels or a dict of them per operand, each level a list of
+    (dimension, size) tuples. The lists are copied, the tuples are immutable and shared."""
+    if isinstance(levels, dict):
+        return {key: [list(level) for level in value] for key, value in levels.items()}  # type: ignore
+    return [list(level) for level in levels]
+
+
 def pickle_deepcopy(to_copy: Any) -> Any:
     try:
         copy = pickle.loads(pickle.dumps(to_copy, -1))

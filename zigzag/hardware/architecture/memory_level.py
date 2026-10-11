@@ -1,4 +1,5 @@
 import math
+from functools import cache
 from typing import Any
 
 from zigzag.datatypes import MemoryOperand, OADimension
@@ -10,6 +11,12 @@ from zigzag.hardware.architecture.memory_port import (
 )
 from zigzag.hardware.architecture.operational_array import OperationalArrayABC
 from zigzag.utils import hash_sha512, pickle_deepcopy
+
+
+@cache
+def _hash_of_id(identifier: int) -> int:
+    """The hash of a memory level, which is looked up whenever one keys a dict or a graph"""
+    return hash_sha512(identifier)
 
 
 class ServedMemDimensions:
@@ -172,4 +179,4 @@ class MemoryLevel:
         )
 
     def __hash__(self) -> int:
-        return hash_sha512(self.id)
+        return _hash_of_id(self.id)

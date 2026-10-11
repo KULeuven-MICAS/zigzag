@@ -2,7 +2,7 @@ from math import prod
 from typing import TypeAlias
 
 from zigzag.datatypes import LayerDim, LayerOperand, PrLoop, UnrollFactor
-from zigzag.utils import pickle_deepcopy
+from zigzag.utils import copy_loop_levels
 from zigzag.workload.layer_attributes import LayerDimSizes
 from zigzag.workload.layer_node import LayerNode
 
@@ -27,7 +27,7 @@ def decouple_pr_loop(mapping_dict: SpatialMappingPerMemLvl, layer_node: "LayerNo
     }
 
     pr_operand_list = list(pr_operand_loop_lut.keys())
-    mapping_dict_reform: SpatialMappingPerMemLvl = pickle_deepcopy(mapping_dict)
+    mapping_dict_reform: SpatialMappingPerMemLvl = copy_loop_levels(mapping_dict)
 
     # current and below level pr data size
     cabl_pr_data_size: dict[LayerOperand, dict[LayerDim, list[list[float]]]] = {}
@@ -123,7 +123,7 @@ def replace_pr_loop_in_mapping(
     r_ir_operand_loop_lut: list[LayerDim],
 ) -> list[list[tuple[LayerDim, UnrollFactor]]]:
     """! This function replaces all pr loops in a mapping of a single operand with r and ir loops."""
-    mapping_new: list[list[tuple[LayerDim, UnrollFactor]]] = pickle_deepcopy(single_operand_mapping)
+    mapping_new: list[list[tuple[LayerDim, UnrollFactor]]] = copy_loop_levels(single_operand_mapping)
 
     for level, loop_list in enumerate(single_operand_mapping):
         # Introduce the current level pr loop index to distinguish different pr loops at the same architectural level
