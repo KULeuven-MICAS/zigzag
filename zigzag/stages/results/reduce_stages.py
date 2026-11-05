@@ -1,10 +1,39 @@
 import logging
-from typing import Any
+from typing import Any, Callable, Sequence
 
-from zigzag.cost_model.cost_model import CostModelEvaluation, CumulativeCME
+from zigzag.cost_model.cost_model import CostModelEvaluation, CostModelEvaluationABC, CumulativeCME
 from zigzag.stages.stage import Stage, StageCallable
 
 logger = logging.getLogger(__name__)
+
+Latency = Callable[[CostModelEvaluationABC], float]
+SortKey = Callable[[CostModelEvaluationABC], tuple[float, float]]
+Ranking = Callable[[Sequence[CostModelEvaluationABC]], SortKey]
+"""Given the evaluations to rank, a sort key that puts the best first"""
+
+
+def total_latency(cme: CostModelEvaluationABC) -> float:
+    return cme.latency_total2
+
+
+def fastest_then_cheapest(latency: Latency = total_latency, tolerance: float = 0.02) -> Ranking:
+    """! Fastest first, those within `tolerance` of the fastest cheapest first"""
+
+    def ranking(cmes: Sequence[CostModelEvaluationABC]) -> SortKey:
+        bound = min(map(latency, cmes)) * (1 + tolerance)
+        return lambda cme: (0.0, cme.energy_total) if latency(cme) <= bound else (1.0, latency(cme))
+
+    return ranking
+
+
+def cheapest_then_fastest(latency: Latency = total_latency) -> Ranking:
+    """! Cheapest first, then fastest"""
+    return lambda cmes: lambda cme: (cme.energy_total, latency(cme))
+
+
+def lowest_energy_delay_product(latency: Latency = total_latency) -> Ranking:
+    """! Lowest energy-delay product first, then fastest"""
+    return lambda cmes: lambda cme: (cme.energy_total * latency(cme), latency(cme))
 
 
 class MinimalEnergyStage(Stage):
