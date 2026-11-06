@@ -1,5 +1,11 @@
 var NAVTREEINDEX2 =
 {
+"classzigzag_1_1datatypes_1_1OperandABC.html#a3195ea87162f33a34d0079931a8194ca":[2,0,14,1,0,3],
+"classzigzag_1_1datatypes_1_1OperandABC.html#a46ffc675ec8427ac0e4613f6e05dc081":[2,0,14,1,0,1],
+"classzigzag_1_1datatypes_1_1OperandABC.html#a5907ca3bbf8e7cd8f40c3007338f6d02":[2,0,14,1,0,8],
+"classzigzag_1_1datatypes_1_1OperandABC.html#a5aad20ac0a9df28a1bfbab5c9ae1daf2":[2,0,14,1,0,2],
+"classzigzag_1_1datatypes_1_1OperandABC.html#a62899b2921b8dce56eae23683b126261":[2,0,14,1,0,0],
+"classzigzag_1_1datatypes_1_1OperandABC.html#a9a47563093dfc5ba12274b66e368920c":[2,0,14,1,0,6],
 "classzigzag_1_1datatypes_1_1OperandABC.html#abc00343aa0378787ab29f21b71cb4809":[2,0,14,1,0,5],
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html":[2,0,14,2,0,2],
 "classzigzag_1_1mapping_1_1data__movement_1_1AccessEnergy.html#a281d464f7c67cd1992bd348eaffd07f9":[2,0,14,2,0,2,1],
@@ -243,11 +249,5 @@ var NAVTREEINDEX2 =
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#aba8809ccf144a88b5fab7160888143ff":[2,0,14,3,1,0,0,10],
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abad7d445eb555517f300b6de6986a765":[2,0,14,3,1,0,0,5],
 "classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abaf5f317a670bea71ee80c5254732965":[2,0,14,3,1,0,0,9],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abb61bc4f1668ed9a0d6236c7799cd08d":[2,0,14,3,1,0,0,14],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abd1e5bae637da295e27991d8c3a806e2":[2,0,14,3,1,0,0,3],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#ac043b09e6f6aa476ed2ea2de8c321b83":[2,0,14,3,1,0,0,15],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#aca2f4b7b4c0981f43f701f34406cd90e":[2,0,14,3,1,0,0,1],
-"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#af4b82dcd0bb10904fcc119a07f93196d":[2,0,14,3,1,0,0,6],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html":[2,0,14,3,1,1,0],
-"classzigzag_1_1opt_1_1salsa_1_1state_1_1SalsaState.html#a0760656b7fb9f44aefd5446d411cd7c8":[2,0,14,3,1,1,0,11]
+"classzigzag_1_1opt_1_1salsa_1_1engine_1_1SalsaEngine.html#abb61bc4f1668ed9a0d6236c7799cd08d":[2,0,14,3,1,0,0,14]
 };

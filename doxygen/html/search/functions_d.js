@@ -1,7 +1,8 @@
 var searchData=
 [
-  ['main_1537',['main',['../namespacezigzag_1_1____main____.html#aa7b039aef9c708f3f81801cb41a3b7ae',1,'zigzag::__main__']]],
-  ['mappings_1538',['mappings',['../classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c',1,'zigzag::mapping::spatial_mapping::SpatialMapping']]],
-  ['mem_5fto_5flayer_5fop_1539',['mem_to_layer_op',['../classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3',1,'zigzag::workload::layer_attributes::MemoryOperandLinks']]],
-  ['modify_5finnermost_5finput_5fmem_5fsize_1540',['modify_innermost_input_mem_size',['../classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd',1,'spatial_mapping_generation::SpatialMappingGeneratorStage']]]
+  ['main_1556',['main',['../namespacezigzag_1_1____main____.html#aa7b039aef9c708f3f81801cb41a3b7ae',1,'zigzag::__main__']]],
+  ['mappable_1557',['mappable',['../classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a64a67f446622f194a83d2f91952efd96',1,'spatial_mapping_generation::SpatialMappingGeneratorStage']]],
+  ['mappings_1558',['mappings',['../classzigzag_1_1mapping_1_1spatial__mapping_1_1SpatialMapping.html#a42420597f30daac2f80ecfc519731c5c',1,'zigzag::mapping::spatial_mapping::SpatialMapping']]],
+  ['mem_5fto_5flayer_5fop_1559',['mem_to_layer_op',['../classzigzag_1_1workload_1_1layer__attributes_1_1MemoryOperandLinks.html#a9082272095f32f465458aed4d10998b3',1,'zigzag::workload::layer_attributes::MemoryOperandLinks']]],
+  ['modify_5finnermost_5finput_5fmem_5fsize_1560',['modify_innermost_input_mem_size',['../classspatial__mapping__generation_1_1SpatialMappingGeneratorStage.html#a91704e970c239fc41b111d21a0aac0dd',1,'spatial_mapping_generation::SpatialMappingGeneratorStage']]]
 ];
