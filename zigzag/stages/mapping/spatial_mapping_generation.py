@@ -6,6 +6,7 @@ from typing import Any, Generator
 
 from sympy import divisors, primefactors  # type: ignore
 
+from zigzag.cost_model.cost_model import CostModelEvaluationABC
 from zigzag.datatypes import (
     LayerDim,
     LayerOperand,
@@ -22,15 +23,22 @@ from zigzag.mapping.spatial_mapping import (
     MappingSingleOADim,
     SpatialMapping,
 )
+from zigzag.opt.loma.engine import NoValidLoopOrderingFoundException
 from zigzag.stages.mapping.spatial_mapping_conversion import (
     SpatialMappingConversionStage,
 )
+from zigzag.stages.results.reduce_stages import Ranking, fastest_then_cheapest
 from zigzag.stages.stage import Stage, StageCallable
 from zigzag.utils import pickle_deepcopy
 from zigzag.workload.layer_attributes import MemoryOperandLinks
 from zigzag.workload.layer_node import LayerNode
 
 logger = logging.getLogger(__name__)
+
+QUICK_LPF_LIMIT = 1
+"""A LOMA loop prime factor limit that keeps one temporal loop per layer dimension"""
+
+Answer = tuple[CostModelEvaluationABC, Any]
 
 
 class SpatialMappingGeneratorStage(Stage):
@@ -52,12 +60,20 @@ class SpatialMappingGeneratorStage(Stage):
         enable_mix_spatial_mapping_generation: bool = False,
         enable_weight_diagonal_mapping: bool = False,
         nb_mappings_generated: int = 3,
+        shortlist_size: int | None = None,
+        shortlist_ranking: Ranking = fastest_then_cheapest(),
+        shortlist_keeps_fullest: bool = True,
         **kwargs: Any,
     ):
         """
         @param enable_mix_spatial_mapping_generation Indicate wether to generate `mixed` spatial mappings i.e. unroll
         multiple LayerDims over same OA Dim
         @param nb_mappings_generated Maximal number of mappings generated, to limit simulation time
+        @param shortlist_size If given, rank every mapping with a quick temporal search, one loop per layer dimension,
+        search the `shortlist_size` best in full and yield the best of those
+        @param shortlist_ranking How mappings are ranked, by default fastest first and within 2% by energy
+        @param shortlist_keeps_fullest Whether the fullest mapping is searched in full too, so the result is never
+        ranked below it
         """
         assert nb_mappings_generated > 0
 
@@ -71,6 +87,9 @@ class SpatialMappingGeneratorStage(Stage):
         self.enable_mix_spatial_mapping_generation = enable_mix_spatial_mapping_generation
         self.enable_weight_diagonal_mapping = enable_weight_diagonal_mapping
         self.nb_mappings_generated = nb_mappings_generated
+        self.shortlist_size = shortlist_size
+        self.shortlist_ranking = shortlist_ranking
+        self.shortlist_keeps_fullest = shortlist_keeps_fullest
 
         self.layer_dim_sizes = self.layer.layer_dim_sizes
         self.oa_dim_sizes = self.accelerator.operational_array.dimension_sizes
@@ -81,44 +100,64 @@ class SpatialMappingGeneratorStage(Stage):
         self.spatial_mapping_hint.clear_invalid_hits(self.layer.layer_dims)
         self.spatial_mapping_hint.complete_with_defaults(self.oa_dim_sizes, self.layer.layer_dims)
 
-    def run(self):
+    def run(self) -> Generator[Answer, None, None]:
         """! Generate SpatialMappings and convert to internal representation"""
-
         generated_mappings = list(self.generate_spatial_mappings())
-        nb_generated_mappings = len(generated_mappings)
-        assert nb_generated_mappings > 0, "No SpatialMappings found"
+        assert len(generated_mappings) > 0, "No SpatialMappings found"
+        if self.shortlist_size is None:
+            for generated_mapping in generated_mappings:
+                yield from self.evaluate(generated_mapping)
+            return
+        quick = [
+            mapping
+            for _, (mapping, _) in self.ranked(self.mappable(generated_mappings, loma_lpf_limit=QUICK_LPF_LIMIT))
+        ]
+        fullest = [generated_mappings[0]] if self.shortlist_keeps_fullest else []
+        shortlist = list(dict.fromkeys([*fullest, *quick]))[: len(fullest) + self.shortlist_size]
+        yield self.ranked(self.mappable(shortlist))[0]
 
-        for i, generated_mapping in enumerate(generated_mappings):
-            self.layer.spatial_mapping = generated_mapping
-            logger.info(
-                "%s: Launching spatial mapping %i/%i: %s.",
-                self.layer.name,
-                (i + 1),
-                nb_generated_mappings,
-                generated_mapping,
-            )
+    def evaluate(self, generated_mapping: SpatialMapping, **overrides: Any) -> Generator[Answer, None, None]:
+        """! Evaluate `generated_mapping`, passing `overrides` down in place of the given keyword arguments"""
+        self.layer.spatial_mapping = generated_mapping
+        logger.info("%s: Launching spatial mapping %s.", self.layer.name, generated_mapping)
 
-            # Modify the size of lower input mem to support weight diagonal spatial unrolling (for OX/OY)
-            accelerator_under_test = (
-                self.modify_innermost_input_mem_size(generated_mapping)
-                if self.enable_weight_diagonal_mapping
-                else self.accelerator
-            )
+        # Modify the size of lower input mem to support weight diagonal spatial unrolling (for OX/OY)
+        accelerator_under_test = (
+            self.modify_innermost_input_mem_size(generated_mapping)
+            if self.enable_weight_diagonal_mapping
+            else self.accelerator
+        )
 
-            spatial_mapping_conversion_stage = SpatialMappingConversionStage(
-                self.list_of_callables,
-                accelerator=accelerator_under_test,
-                layer=copy.copy(self.layer),
-                **self.kwargs,
-            )
+        spatial_mapping_conversion_stage = SpatialMappingConversionStage(
+            self.list_of_callables,
+            accelerator=accelerator_under_test,
+            layer=copy.copy(self.layer),
+            **(self.kwargs | overrides),
+        )
 
-            # Set the generated_mapping in the layer, as this is required by SpatialMappingConversionStage
-            self.layer.spatial_mapping = generated_mapping
+        # Set the generated_mapping in the layer, as this is required by SpatialMappingConversionStage
+        self.layer.spatial_mapping = generated_mapping
 
-            for cme, extra_info in spatial_mapping_conversion_stage.run():
-                # recover back the accelerator in case the memory size had been adjusted
-                cme.accelerator = self.accelerator
-                yield cme, (generated_mapping, extra_info)
+        for cme, extra_info in spatial_mapping_conversion_stage.run():
+            # recover back the accelerator in case the memory size had been adjusted
+            cme.accelerator = self.accelerator
+            yield cme, (generated_mapping, extra_info)
+
+    def mappable(self, generated_mappings: list[SpatialMapping], **overrides: Any) -> list[Answer]:
+        """! The evaluations of those of `generated_mappings` that some temporal mapping fits"""
+        answers: list[Answer] = []
+        for generated_mapping in generated_mappings:
+            try:
+                answers.extend(self.evaluate(generated_mapping, **overrides))
+            except NoValidLoopOrderingFoundException:
+                logger.info("%s: No temporal mapping fits spatial mapping %s.", self.layer.name, generated_mapping)
+        if not answers:
+            raise NoValidLoopOrderingFoundException(f"No temporal mapping fits a spatial mapping of {self.layer.name}")
+        return answers
+
+    def ranked(self, answers: list[Answer]) -> list[Answer]:
+        key = self.shortlist_ranking([cme for cme, _ in answers])
+        return sorted(answers, key=lambda answer: key(answer[0]))
 
     def generate_spatial_mappings(self) -> Generator[SpatialMapping, None, None]:
         """! Generator that yields SpatialMappings

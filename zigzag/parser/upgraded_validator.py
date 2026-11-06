@@ -6,7 +6,6 @@ import copy
 from typing import Any
 
 # using Cerberus 0.9.2
-import six
 from cerberus import Validator  # type: ignore
 
 
@@ -83,7 +82,7 @@ class UpgradedValidator(Validator):
         new_doc: dict[str, Any] = copy.deepcopy(document)
         for field, field_schema in doc_schema.items():
             if field not in document:
-                new_doc[six.u(field)] = self.get_default(field_schema)
+                new_doc[field] = self.get_default(field_schema)
 
         return new_doc
 
